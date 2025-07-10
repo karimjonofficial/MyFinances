@@ -39,6 +39,7 @@ fun MyFinancesContent(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(text = "Hello World!")
+
                 }
             }
         }
