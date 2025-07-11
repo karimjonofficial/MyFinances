@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.collectAsState
-import com.orka.myfinances.fixtures.DummySessionDataSource
+import com.orka.myfinances.fixtures.SessionDataSourceImpl
 import com.orka.myfinances.lib.AndroidLogger
 import com.orka.myfinances.ui.MyFinancesContent
 import com.orka.myfinances.ui.theme.MyFinancesTheme
@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val logger = AndroidLogger()
-            val sessionDataSource = DummySessionDataSource()
+            val sessionDataSource = SessionDataSourceImpl()
             val manager = UiManager(logger, sessionDataSource, Dispatchers.Default)
             val uiState = manager.uiState.collectAsState()
             manager.initialize()

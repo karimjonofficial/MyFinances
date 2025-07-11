@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens
+package com.orka.myfinances.ui.screens.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -28,8 +28,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.ui.HorizontalSpacer
-import com.orka.myfinances.ui.VerticalSpacer
+import com.orka.myfinances.lib.HorizontalSpacer
+import com.orka.myfinances.lib.VerticalSpacer
 
 @Composable
 fun LoginScreen(

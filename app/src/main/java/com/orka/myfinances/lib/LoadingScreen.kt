@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui
+package com.orka.myfinances.lib
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,7 +15,10 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 
 @Composable
-fun InitialScreen(modifier: Modifier = Modifier) {
+fun LoadingScreen(
+    modifier: Modifier = Modifier,
+    message: String = stringResource(R.string.loading)
+) {
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -25,7 +28,7 @@ fun InitialScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.weight(1f),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = stringResource(R.string.loading))
+            Text(text = message)
         }
 
         VerticalSpacer(4)

@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens
+package com.orka.myfinances.ui.screens.login
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.SessionManager
@@ -7,6 +7,7 @@ import com.orka.myfinances.datasources.CredentialDataSource
 import com.orka.myfinances.models.Credential
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.yield
 import kotlin.coroutines.CoroutineContext
 
 class LoginScreenViewModel(
@@ -39,6 +40,7 @@ class LoginScreenViewModel(
         onSuccess: suspend (Credential) -> Unit
     ) {
         updateState { LoginScreenState.Loading }
+        yield()
         val credential = dataSource.get(username, password)
         if (credential != null) {
             onSuccess(credential)

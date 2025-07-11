@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens
+package com.orka.myfinances.fixtures.datasources.credential
 
 import com.orka.myfinances.datasources.CredentialDataSource
 import com.orka.myfinances.models.Credential

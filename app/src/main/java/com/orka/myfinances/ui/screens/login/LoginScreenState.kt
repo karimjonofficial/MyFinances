@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens
+package com.orka.myfinances.ui.screens.login
 
 sealed interface LoginScreenState {
     data object Initial : LoginScreenState

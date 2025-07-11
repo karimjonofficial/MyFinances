@@ -1,4 +1,4 @@
-package com.orka.myfinances
+package com.orka.myfinances.core
 
 import com.orka.myfinances.models.Credential
 

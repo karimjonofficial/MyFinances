@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui
+package com.orka.myfinances.lib
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height

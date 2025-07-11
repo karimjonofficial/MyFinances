@@ -1,7 +1,7 @@
-package com.orka.myfinances.fixtures
+package com.orka.myfinances.fixtures.datasources.credential
 
-import com.orka.myfinances.models.Credential
 import com.orka.myfinances.datasources.CredentialDataSource
+import com.orka.myfinances.models.Credential
 
 class SpyCredentialDataSource : CredentialDataSource {
     var called = false

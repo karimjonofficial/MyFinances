@@ -1,15 +1,17 @@
 package com.orka.myfinances.fixtures
 
-import com.orka.myfinances.models.Session
 import com.orka.myfinances.core.SessionDataSource
-import com.orka.myfinances.credential
+import com.orka.myfinances.models.Session
+import kotlinx.coroutines.delay
 
-class StubSessionDataSource : SessionDataSource {
+class SessionDataSourceImpl : SessionDataSource {
+
     override suspend fun get(): Session? {
-        return Session(credential)
+        delay(5000)
+        return null
     }
 
     override suspend fun store(session: Session) {
-
+        delay(5000)
     }
 }

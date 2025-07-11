@@ -3,10 +3,10 @@ package com.orka.myfinances
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.models.Credential
 import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.DummySessionDataSource
-import com.orka.myfinances.fixtures.NoSessionSessionDataSource
-import com.orka.myfinances.fixtures.SpySessionDataSource
-import com.orka.myfinances.fixtures.StubSessionDataSource
+import com.orka.myfinances.fixtures.datasources.session.DummySessionDataSource
+import com.orka.myfinances.fixtures.datasources.session.NoSessionSessionDataSource
+import com.orka.myfinances.fixtures.datasources.session.SpySessionDataSource
+import com.orka.myfinances.fixtures.datasources.session.StubSessionDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import org.junit.jupiter.api.Assertions.assertEquals

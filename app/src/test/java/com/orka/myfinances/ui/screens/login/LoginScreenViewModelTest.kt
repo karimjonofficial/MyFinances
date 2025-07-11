@@ -1,18 +1,18 @@
-package com.orka.myfinances.ui.screens
+package com.orka.myfinances.ui.screens.login
 
 import com.orka.myfinances.core.MainDispatcherContext
-import com.orka.myfinances.fixtures.DummyCredentialDataSource
+import com.orka.myfinances.fixtures.datasources.credential.DummyCredentialDataSource
 import com.orka.myfinances.fixtures.DummyLogger
 import com.orka.myfinances.fixtures.DummySessionManager
-import com.orka.myfinances.fixtures.SpyCredentialDataSource
+import com.orka.myfinances.fixtures.datasources.credential.NoCredentialDataSource
+import com.orka.myfinances.fixtures.datasources.credential.SpyCredentialDataSource
 import com.orka.myfinances.fixtures.SpySessionManager
-import com.orka.myfinances.fixtures.StubCredentialDataSource
+import com.orka.myfinances.fixtures.datasources.credential.StubCredentialDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -30,7 +30,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
             val viewmodel = LoginScreenViewModel(logger, dataSource, manager)
             viewmodel.authorize("username", "password")
             testScope.advanceUntilIdle()
-            assertTrue(dataSource.called)
+            Assertions.assertTrue(dataSource.called)
         }
 
         @OptIn(ExperimentalCoroutinesApi::class)
@@ -41,7 +41,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
             viewmodel.authorize("username", "password")
             testScope.advanceUntilIdle()
             val state = viewmodel.uiState.value
-            assertTrue(state is LoginScreenState.Error)
+            Assertions.assertTrue(state is LoginScreenState.Error)
         }
 
         @OptIn(ExperimentalCoroutinesApi::class)
@@ -52,7 +52,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
             viewmodel.authorizeAndRemember("username", "password")
             testScope.advanceUntilIdle()
             val state = viewmodel.uiState.value
-            assertTrue(state is LoginScreenState.Error)
+            Assertions.assertTrue(state is LoginScreenState.Error)
         }
 
         @Nested
@@ -63,33 +63,31 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
             @Test
             fun `State is initial`() {
                 val state = viewModel.uiState.value
-                assertTrue(state is LoginScreenState.Initial)
+                Assertions.assertTrue(state is LoginScreenState.Initial)
             }
 
             @OptIn(ExperimentalCoroutinesApi::class)
             @Test
             fun `When authorization started state changes to loading`() = testScope.runTest {
                 val list = mutableListOf<LoginScreenState>()
-                val job = testScope.launch { viewModel.uiState.take(3).collect { list.add(it) } }
+                val job = testScope.launch { viewModel.uiState.collect { list.add(it) } }
                 viewModel.authorize("username", "password")
                 testScope.advanceUntilIdle()
                 job.cancel()
-                val index = list.indexOfFirst { it is LoginScreenState.Loading }
-                assertTrue(index > -1)
-                assertTrue { list[index + 1] is LoginScreenState.Error }
+                Assertions.assertTrue(list[0] is LoginScreenState.Initial)
+                Assertions.assertTrue(list[1] is LoginScreenState.Loading)
             }
 
             @OptIn(ExperimentalCoroutinesApi::class)
             @Test
             fun `When authorizeAndRemember started state changes to loading`() = testScope.runTest {
                 val list = mutableListOf<LoginScreenState>()
-                val job = launch { viewModel.uiState.take(3).collect { list.add(it) } }
+                val job = testScope.launch { viewModel.uiState.collect { list.add(it) } }
                 viewModel.authorizeAndRemember("username", "password")
                 testScope.advanceUntilIdle()
                 job.cancel()
-                val index = list.indexOfFirst { it is LoginScreenState.Loading }
-                assertTrue(index > -1)
-                assertTrue { list[index + 1] is LoginScreenState.Error }
+                Assertions.assertTrue(list[0] is LoginScreenState.Initial)
+                Assertions.assertTrue(list[1] is LoginScreenState.Loading)
             }
         }
     }
@@ -105,7 +103,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
         fun `When authorize successful create session`() {
             viewModel.authorize("username", "password")
             testScope.advanceUntilIdle()
-            assertTrue(manager.createCalled)
+            Assertions.assertTrue(manager.createCalled)
         }
 
         @OptIn(ExperimentalCoroutinesApi::class)
@@ -113,7 +111,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
         fun `When authorizeAndRemember called stores session`() {
             viewModel.authorizeAndRemember("username", "password")
             testScope.advanceUntilIdle()
-            assertTrue(manager.storeCalled)
+            Assertions.assertTrue(manager.storeCalled)
         }
 
         @OptIn(ExperimentalCoroutinesApi::class)
@@ -122,7 +120,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
             viewModel.authorize("username", "password")
             testScope.advanceUntilIdle()
             val state = viewModel.uiState.value
-            assertTrue(state is LoginScreenState.Initial)
+            Assertions.assertTrue(state is LoginScreenState.Initial)
         }
 
         @OptIn(ExperimentalCoroutinesApi::class)
@@ -131,7 +129,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
             viewModel.authorizeAndRemember("username", "password")
             testScope.advanceUntilIdle()
             val state = viewModel.uiState.value
-            assertTrue(state is LoginScreenState.Initial)
+            Assertions.assertTrue(state is LoginScreenState.Initial)
         }
     }
 }
