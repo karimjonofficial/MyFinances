@@ -7,4 +7,8 @@ class StubCategoryDataSource : CategoryDataSource {
     override suspend fun get(): List<Category>? {
         return emptyList()
     }
+
+    override suspend fun add(name: String): Category? {
+        TODO("Not yet implemented")
+    }
 }

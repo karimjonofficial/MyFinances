@@ -5,13 +5,15 @@ import com.orka.myfinances.models.Session
 import kotlinx.coroutines.delay
 
 class SessionDataSourceImpl : SessionDataSource {
+    private var session: Session? = null
 
     override suspend fun get(): Session? {
-        delay(5000)
-        return null
+        delay(delayDurationInMillis)
+        return session
     }
 
     override suspend fun store(session: Session) {
-        delay(5000)
+        delay(delayDurationInMillis)
+        this.session = session
     }
 }

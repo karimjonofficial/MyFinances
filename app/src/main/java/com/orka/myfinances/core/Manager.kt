@@ -6,10 +6,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-abstract class Manager(private val context: CoroutineContext) : ViewModel() {
+abstract class Manager(
+    protected val defaultCoroutineContext: CoroutineContext
+) : ViewModel() {
 
     protected fun launch(
-        coroutineContext: CoroutineContext = context,
+        coroutineContext: CoroutineContext = defaultCoroutineContext,
         callback: suspend () -> Unit
     ): Job {
         return viewModelScope.launch(coroutineContext) {

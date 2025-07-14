@@ -17,7 +17,7 @@ class LoginScreenViewModel(
     context: CoroutineContext = Dispatchers.Main
 ) : ViewModel<LoginScreenState>(
     initialState = LoginScreenState.Initial,
-    context = context,
+    defaultCoroutineContext = context,
     logger = logger
 ) {
     val uiState = state.asStateFlow()

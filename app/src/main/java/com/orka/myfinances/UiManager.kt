@@ -31,19 +31,22 @@ class UiManager(
                 manager = this,
                 context = Dispatchers.Default
             )
-            updateState { UiState.Guest(viewmodel) }
-        }
-        else {
+            setState(UiState.Guest(viewmodel))
+        } else {
             val categoryDataSource = CategoryDataSourceImpl()
             val viewModel = HomeScreenViewModel(logger, categoryDataSource)
-            updateState { UiState.SignedIn(session, viewModel) }
+            viewModel.initialize()
+            setState(UiState.SignedIn(session, viewModel))
         }
     }
 
     override fun createSession(credential: Credential) {
-        val categoryDataSource = CategoryDataSourceImpl()
-        val viewModel = HomeScreenViewModel(logger, categoryDataSource)
-        updateState { UiState.SignedIn(Session(credential), viewModel) }
+        launch {
+            val categoryDataSource = CategoryDataSourceImpl()
+            val viewModel = HomeScreenViewModel(logger, categoryDataSource)
+            viewModel.initialize()
+            setState(UiState.SignedIn(Session(credential), viewModel))
+        }
     }
 
     override fun storeSession(credential: Credential) {
@@ -51,7 +54,8 @@ class UiManager(
             val session = Session(credential)
             val categoryDataSource = CategoryDataSourceImpl()
             val viewModel = HomeScreenViewModel(logger, categoryDataSource)
-            updateState { UiState.SignedIn(session, viewModel) }
+            viewModel.initialize()
+            setState(UiState.SignedIn(session, viewModel))
             dataSource.store(session)
         }
     }

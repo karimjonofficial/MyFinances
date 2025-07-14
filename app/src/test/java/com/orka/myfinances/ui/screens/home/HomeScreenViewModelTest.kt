@@ -1,25 +1,23 @@
 package com.orka.myfinances.ui.screens.home
 
 import com.orka.myfinances.core.MainDispatcherContext
-import com.orka.myfinances.fixtures.datasources.category.DummyCategoryDataSource
 import com.orka.myfinances.fixtures.DummyLogger
+import com.orka.myfinances.fixtures.datasources.category.DummyCategoryDataSource
 import com.orka.myfinances.fixtures.datasources.category.EmptyCategoryDataSource
 import com.orka.myfinances.fixtures.datasources.category.StubCategoryDataSource
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.runTest
+import com.orka.myfinances.lib.assertStateTransition
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class HomeScreenViewModelTest : MainDispatcherContext() {
+    private val context = testScope.coroutineContext
     private val logger = DummyLogger()
 
     @Nested
     inner class DummyCategoryDataSourceContext {
         val dataSource = DummyCategoryDataSource()
-        val viewModel = HomeScreenViewModel(logger, dataSource)
+        val viewModel = HomeScreenViewModel(logger, dataSource, context)
 
         @Test
         fun `State is Initial`() {
@@ -27,46 +25,61 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
             assertTrue { uiState is HomeScreenState.Initial }
         }
 
-        @OptIn(ExperimentalCoroutinesApi::class)
         @Test
-        fun `When initialize called state changes to Loading`() = testScope.runTest {
-            var count = 0
-            val list = mutableListOf<HomeScreenState>()
-            val job = testScope.launch {
-                viewModel.uiState.collect {
-                    if(count == 1) list.add(it) else count++
-                }
-            }
+        fun `When initialize called state changes to Loading`() {
+            testScope.assertStateTransition(
+                stateFlow = viewModel.uiState,
+                isDesiredState = { it is HomeScreenState.Loading },
+                action = { viewModel.initialize() }
+            )
+        }
 
-            viewModel.initialize()
-            testScope.advanceUntilIdle()
-            job.cancel()
-
-            assertTrue { list.isNotEmpty() }
+        @Test
+        fun `When category is added state goes Loading`() {
+            testScope.assertStateTransition(
+                stateFlow = viewModel.uiState,
+                action = { viewModel.addCategory("test") },
+                isDesiredState = { it is HomeScreenState.Loading }
+            )
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Test
-    fun `When data source fails state goes to error`() {
+    @Nested
+    inner class EmptyCategoryDataSourceContext {
         val dataSource = EmptyCategoryDataSource()
-        val viewModel = HomeScreenViewModel(logger, dataSource)
+        val viewModel = HomeScreenViewModel(logger, dataSource, context)
 
-        viewModel.initialize()
-        testScope.advanceUntilIdle()
+        @Test
+        fun `When data source fails state goes to error`() {
+            testScope.assertStateTransition(
+                stateFlow = viewModel.uiState,
+                action = { viewModel.initialize() },
+                isDesiredState = { it is HomeScreenState.Error }
+            )
+        }
 
-        assertTrue { viewModel.uiState.value is HomeScreenState.Error }
+        @Test
+        fun `When add category fails state goes to previous state`() {
+            val state = viewModel.uiState.value
+
+            testScope.assertStateTransition(
+                stateFlow = viewModel.uiState,
+                action = { viewModel.addCategory("test") },
+                isDesiredState = { it === state },
+                skippedDesiredTransitions = 1
+            )
+        }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `When data source successes state goes to success`() {
         val dataSource = StubCategoryDataSource()
-        val viewModel = HomeScreenViewModel(logger, dataSource)
+        val viewModel = HomeScreenViewModel(logger, dataSource, context)
 
-        viewModel.initialize()
-        testScope.advanceUntilIdle()
-
-        assertTrue { viewModel.uiState.value is HomeScreenState.Success }
+        testScope.assertStateTransition(
+            stateFlow = viewModel.uiState,
+            action = { viewModel.initialize() },
+            isDesiredState = { it is HomeScreenState.Success }
+        )
     }
 }
