@@ -5,8 +5,8 @@ import com.orka.myfinances.core.SessionDataSource
 import com.orka.myfinances.core.SessionManager
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.fixtures.CategoryDataSourceImpl
-import com.orka.myfinances.models.Credential
 import com.orka.myfinances.fixtures.CredentialDataSourceImpl
+import com.orka.myfinances.models.Credential
 import com.orka.myfinances.models.Session
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel

@@ -71,15 +71,27 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
         }
     }
 
-    @Test
-    fun `When data source successes state goes to success`() {
+    @Nested
+    inner class StubCategoryDataSourceContext {
         val dataSource = StubCategoryDataSource()
         val viewModel = HomeScreenViewModel(logger, dataSource, context)
 
-        testScope.assertStateTransition(
-            stateFlow = viewModel.uiState,
-            action = { viewModel.initialize() },
-            isDesiredState = { it is HomeScreenState.Success }
-        )
+        @Test
+        fun `When data source successes state goes to success`() {
+            testScope.assertStateTransition(
+                stateFlow = viewModel.uiState,
+                action = { viewModel.initialize() },
+                isDesiredState = { it is HomeScreenState.Success }
+            )
+        }
+
+        @Test
+        fun `When add category successes state goes to success`() {
+            testScope.assertStateTransition(
+                stateFlow = viewModel.uiState,
+                action = { viewModel.addCategory("test") },
+                isDesiredState = { it is HomeScreenState.Success }
+            )
+        }
     }
 }

@@ -19,7 +19,7 @@ class HomeScreenViewModel(
     val uiState = state.asStateFlow()
 
     fun initialize() = launch {
-        setState(HomeScreenState.Loading)
+        setStateAsync(HomeScreenState.Loading)
         val categories = dataSource.get()
         if(categories != null) setState(HomeScreenState.Success(categories))
         else setState(HomeScreenState.Error("No categories found"))
@@ -28,6 +28,9 @@ class HomeScreenViewModel(
     fun addCategory(name: String) = launch {
         val previousState = state.value
         setStateAsync(HomeScreenState.Loading)
-        setStateAsync(previousState)
+        val category = dataSource.add(name)
+        if(category != null)
+            setState(HomeScreenState.Success(listOf(category)))
+        else setStateAsync(previousState)
     }
 }
