@@ -42,7 +42,7 @@ fun MainNavBar(
             selected = backStack.last() is Destinations.Profile,
             icon = {
                 val currentDestination = backStack.last()
-                val iconRes = if (currentDestination is Destinations.Home)
+                val iconRes = if (currentDestination is Destinations.Profile)
                     R.drawable.account_circle_filled
                 else R.drawable.account_circle_outlined
                 Icon(painter = painterResource(id = iconRes), contentDescription = null)
