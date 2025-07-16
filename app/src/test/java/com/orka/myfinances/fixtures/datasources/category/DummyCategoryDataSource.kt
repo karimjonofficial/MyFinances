@@ -1,14 +1,14 @@
 package com.orka.myfinances.fixtures.datasources.category
 
 import com.orka.myfinances.datasources.CategoryDataSource
-import com.orka.myfinances.models.Category
+import com.orka.myfinances.models.ProductTemplate
 
 class DummyCategoryDataSource : CategoryDataSource {
-    override suspend fun get(): List<Category>? {
+    override suspend fun get(): List<ProductTemplate>? {
         return null
     }
 
-    override suspend fun add(name: String): Category? {
+    override suspend fun add(name: String): ProductTemplate? {
         return null
     }
 }

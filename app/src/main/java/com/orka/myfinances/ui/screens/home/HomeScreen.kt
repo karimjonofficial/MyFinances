@@ -5,9 +5,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.orka.myfinances.lib.FailureScreen
-import com.orka.myfinances.lib.LoadingScreen
-import com.orka.myfinances.models.Category
+import com.orka.myfinances.ui.screens.main.FailureScreen
+import com.orka.myfinances.ui.screens.main.LoadingScreen
+import com.orka.myfinances.models.ProductTemplate
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,16 +43,16 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenPreview() {
     val data = listOf(
-        Category(1),
-        Category(2),
-        Category(3),
-        Category(4),
-        Category(5),
-        Category(6),
-        Category(7),
-        Category(8),
-        Category(9),
-        Category(10)
+        ProductTemplate(1),
+        ProductTemplate(2),
+        ProductTemplate(3),
+        ProductTemplate(4),
+        ProductTemplate(5),
+        ProductTemplate(6),
+        ProductTemplate(7),
+        ProductTemplate(8),
+        ProductTemplate(9),
+        ProductTemplate(10)
     )
     val state = HomeScreenState.Success(data)
 

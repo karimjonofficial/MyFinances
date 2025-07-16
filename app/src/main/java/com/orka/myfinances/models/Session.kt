@@ -1,5 +1,7 @@
 package com.orka.myfinances.models
 
 data class Session(
-    val credential: Credential
+    val user: User,
+    val credential: Credential,
+    val companyOffice: CompanyOffice
 )

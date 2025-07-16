@@ -8,6 +8,8 @@ import com.orka.myfinances.fixtures.datasources.session.SpySessionDataSource
 import com.orka.myfinances.fixtures.datasources.session.StubSessionDataSource
 import com.orka.myfinances.lib.assertStateTransition
 import com.orka.myfinances.models.Credential
+import com.orka.myfinances.ui.managers.UiManager
+import com.orka.myfinances.ui.managers.UiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import org.junit.jupiter.api.Assertions.assertTrue

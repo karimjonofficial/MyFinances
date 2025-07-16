@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.Dialog
+import com.orka.myfinances.lib.ui.Dialog
 
 @Composable
 fun AddProductDialog(

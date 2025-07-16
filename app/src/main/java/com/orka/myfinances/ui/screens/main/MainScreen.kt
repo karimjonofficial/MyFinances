@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui
+package com.orka.myfinances.ui.screens.main
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -9,7 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import com.orka.myfinances.UiState
+import com.orka.myfinances.ui.managers.UiState
 import com.orka.myfinances.ui.navigation.Destinations
 import com.orka.myfinances.ui.navigation.NavigationGraph
 import com.orka.myfinances.ui.parts.MainNavBar
@@ -30,7 +30,7 @@ fun MainScreen(
         topBar = {
             MainTopBar(
                 backStack = backStack,
-                dialogVisible = dialogVisible
+                session = state.session
             )
         },
         bottomBar = { MainNavBar(backStack = backStack) }

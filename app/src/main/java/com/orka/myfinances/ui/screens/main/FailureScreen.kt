@@ -1,4 +1,4 @@
-package com.orka.myfinances.lib
+package com.orka.myfinances.ui.screens.main
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
+import com.orka.myfinances.lib.ui.VerticalSpacer
 
 @Composable
 fun FailureScreen(

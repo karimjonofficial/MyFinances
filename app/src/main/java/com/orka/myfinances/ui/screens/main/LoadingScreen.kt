@@ -1,4 +1,4 @@
-package com.orka.myfinances.lib
+package com.orka.myfinances.ui.screens.main
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
+import com.orka.myfinances.lib.ui.VerticalSpacer
 
 @Composable
 fun LoadingScreen(

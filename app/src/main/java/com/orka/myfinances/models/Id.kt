@@ -1,5 +1,5 @@
 package com.orka.myfinances.models
 
-data class Category(
+data class Id(
     val id: Int
 )

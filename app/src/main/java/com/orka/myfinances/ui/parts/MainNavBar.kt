@@ -15,7 +15,6 @@ fun MainNavBar(
     modifier: Modifier = Modifier,
     backStack: SnapshotStateList<Destinations>
 ) {
-
     NavigationBar(modifier = modifier) {
         NavigationBarItem(
             selected = backStack.last() is Destinations.Home,
