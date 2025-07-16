@@ -18,9 +18,11 @@ import com.orka.myfinances.R
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun HomeScreenTopBar(
+    modifier: Modifier = Modifier,
     onAddCLick: () -> Unit
 ) {
     TopAppBar(
+        modifier = modifier,
         title = { Text(text = stringResource(R.string.app_name)) },
         navigationIcon = {
             Image(
@@ -38,6 +40,13 @@ fun HomeScreenTopBar(
             IconButton(onClick = { }) {
                 Icon(
                     painter = painterResource(id = R.drawable.search),
+                    contentDescription = null
+                )
+            }
+
+            IconButton(onClick = { }) {
+                Icon(
+                    painter = painterResource(R.drawable.notifications_unread),
                     contentDescription = null
                 )
             }

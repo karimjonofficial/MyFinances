@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import com.orka.myfinances.fixtures.SessionDataSourceImpl
 import com.orka.myfinances.lib.AndroidLogger
 import com.orka.myfinances.ui.MyFinancesContent
@@ -24,7 +26,10 @@ class MainActivity : ComponentActivity() {
             manager.initialize()
 
             MyFinancesTheme {
-                MyFinancesContent(state = uiState.value)
+                MyFinancesContent(
+                    modifier = Modifier.fillMaxSize(),
+                    state = uiState.value
+                )
             }
         }
     }

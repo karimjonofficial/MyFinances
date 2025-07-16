@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,20 +20,22 @@ fun LoadingScreen(
     modifier: Modifier = Modifier,
     message: String = stringResource(R.string.loading)
 ) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Bottom
-    ) {
-        Box(
-            modifier = Modifier.weight(1f),
-            contentAlignment = Alignment.Center
+    Surface(modifier = modifier) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Bottom
         ) {
-            Text(text = message)
-        }
+            Box(
+                modifier = Modifier.weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = message)
+            }
 
-        VerticalSpacer(4)
-        LinearProgressIndicator(modifier = Modifier.width(128.dp))
-        VerticalSpacer(64)
+            VerticalSpacer(4)
+            LinearProgressIndicator(modifier = Modifier.width(128.dp))
+            VerticalSpacer(64)
+        }
     }
 }
