@@ -1,0 +1,93 @@
+package com.orka.myfinances.ui.managers
+
+import com.orka.myfinances.core.MainDispatcherContext
+import com.orka.myfinances.fixtures.DummyLogger
+import com.orka.myfinances.fixtures.storages.DummySessionStorage
+import com.orka.myfinances.fixtures.storages.EmptySessionStorage
+import com.orka.myfinances.testLib.assertStateTransition
+import com.orka.myfinances.testLib.credential
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+
+class UiManagerTest : MainDispatcherContext() {
+    private val logger = DummyLogger()
+    private val provider = ConfigurableApiProvider()
+
+    @Test
+    fun `State is Guest when session is not found`() {
+        val storage = EmptySessionStorage()
+        val manager = UiManager(logger, storage, provider, testScope.coroutineContext)
+        testScope.assertStateTransition(
+            stateFlow = manager.uiState,
+            assertState = { it is UiState.Guest },
+            action = { manager.initialize() }
+        )
+    }
+
+    @Test
+    fun `State is SignedIn when session is found`() {
+        val storage = StubSessionStorage()
+        val manager = UiManager(logger, storage, provider, testScope.coroutineContext)
+
+        testScope.assertStateTransition(
+            stateFlow = manager.uiState,
+            assertState = { it is UiState.SignedIn },
+            action = { manager.initialize() }
+        )
+    }
+
+    @Nested
+    inner class EmptyUserApiServiceStubContext {
+        private val userApiService = EmptyUserApiServiceStub()
+
+        @BeforeEach
+        fun setup() {
+            provider.setUserApiService(userApiService)
+        }
+
+        @OptIn(ExperimentalCoroutinesApi::class)
+        @Test
+        fun `When user api service fails, state does not change`() {
+            val manager = UiManager(logger, DummySessionStorage(), provider, testScope.coroutineContext)
+            val state = manager.uiState.value
+            manager.open(credential)
+            testScope.advanceUntilIdle()
+            assertTrue(manager.uiState.value === state)
+        }
+
+        @Nested
+        inner class EmptyCompanyApiServiceStubContext {
+            private val companyApiService = EmptyCompanyApiServiceStub()
+
+            @BeforeEach
+            fun setup() {
+                provider.setCompanyApiService(companyApiService)
+            }
+
+            @OptIn(ExperimentalCoroutinesApi::class)
+            @Test
+            fun `When company api service fails, state does not change`() {
+                val manager = UiManager(logger, DummySessionStorage(), provider, testScope.coroutineContext)
+                val state = manager.uiState.value
+                manager.open(credential)
+                testScope.advanceUntilIdle()
+                assertTrue(manager.uiState.value === state)
+            }
+
+            @OptIn(ExperimentalCoroutinesApi::class)
+            @Test
+            fun `When companyOffice api service fails, state does not change`() {
+                provider.setCompanyOfficeApiService(companyOfficeApiService = EmptyCompanyOfficeApiServiceStub())
+                val manager = UiManager(logger, DummySessionStorage(), provider, testScope.coroutineContext)
+                val state = manager.uiState.value
+                manager.open(credential)
+                testScope.advanceUntilIdle()
+                assertTrue(manager.uiState.value === state)
+            }
+        }
+    }
+}

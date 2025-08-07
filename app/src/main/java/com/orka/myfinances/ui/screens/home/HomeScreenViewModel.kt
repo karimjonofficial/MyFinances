@@ -2,14 +2,14 @@ package com.orka.myfinances.ui.screens.home
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
-import com.orka.myfinances.datasources.CategoryDataSource
+import com.orka.myfinances.data.sources.ProductTemplateDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asStateFlow
 import kotlin.coroutines.CoroutineContext
 
 class HomeScreenViewModel(
     logger: Logger,
-    private val dataSource: CategoryDataSource,
+    private val dataSource: ProductTemplateDataSource,
     context: CoroutineContext = Dispatchers.Main
 ) : ViewModel<HomeScreenState>(
     initialState = HomeScreenState.Initial,

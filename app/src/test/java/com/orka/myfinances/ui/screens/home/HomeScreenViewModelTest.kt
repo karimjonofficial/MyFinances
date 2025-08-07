@@ -2,10 +2,10 @@ package com.orka.myfinances.ui.screens.home
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.datasources.category.DummyCategoryDataSource
-import com.orka.myfinances.fixtures.datasources.category.EmptyCategoryDataSource
-import com.orka.myfinances.fixtures.datasources.category.StubCategoryDataSource
-import com.orka.myfinances.lib.assertStateTransition
+import com.orka.myfinances.fixtures.data.sources.category.DummyProductTemplateDataSource
+import com.orka.myfinances.fixtures.data.sources.category.EmptyProductTemplateDataSource
+import com.orka.myfinances.fixtures.data.sources.category.StubProductTemplateDataSource
+import com.orka.myfinances.testLib.assertStateTransition
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -16,7 +16,7 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
 
     @Nested
     inner class DummyCategoryDataSourceContext {
-        val dataSource = DummyCategoryDataSource()
+        val dataSource = DummyProductTemplateDataSource()
         val viewModel = HomeScreenViewModel(logger, dataSource, context)
 
         @Test
@@ -29,7 +29,7 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
         fun `When initialize called state changes to Loading`() {
             testScope.assertStateTransition(
                 stateFlow = viewModel.uiState,
-                isDesiredState = { it is HomeScreenState.Loading },
+                assertState = { it is HomeScreenState.Loading },
                 action = { viewModel.initialize() }
             )
         }
@@ -39,14 +39,14 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
             testScope.assertStateTransition(
                 stateFlow = viewModel.uiState,
                 action = { viewModel.addCategory("test") },
-                isDesiredState = { it is HomeScreenState.Loading }
+                assertState = { it is HomeScreenState.Loading }
             )
         }
     }
 
     @Nested
     inner class EmptyCategoryDataSourceContext {
-        val dataSource = EmptyCategoryDataSource()
+        val dataSource = EmptyProductTemplateDataSource()
         val viewModel = HomeScreenViewModel(logger, dataSource, context)
 
         @Test
@@ -54,7 +54,7 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
             testScope.assertStateTransition(
                 stateFlow = viewModel.uiState,
                 action = { viewModel.initialize() },
-                isDesiredState = { it is HomeScreenState.Error }
+                assertState = { it is HomeScreenState.Error }
             )
         }
 
@@ -65,7 +65,7 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
             testScope.assertStateTransition(
                 stateFlow = viewModel.uiState,
                 action = { viewModel.addCategory("test") },
-                isDesiredState = { it === state },
+                assertState = { it === state },
                 skippedDesiredTransitions = 1
             )
         }
@@ -73,7 +73,7 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
 
     @Nested
     inner class StubCategoryDataSourceContext {
-        val dataSource = StubCategoryDataSource()
+        val dataSource = StubProductTemplateDataSource()
         val viewModel = HomeScreenViewModel(logger, dataSource, context)
 
         @Test
@@ -81,7 +81,7 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
             testScope.assertStateTransition(
                 stateFlow = viewModel.uiState,
                 action = { viewModel.initialize() },
-                isDesiredState = { it is HomeScreenState.Success }
+                assertState = { it is HomeScreenState.Success }
             )
         }
 
@@ -90,7 +90,7 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
             testScope.assertStateTransition(
                 stateFlow = viewModel.uiState,
                 action = { viewModel.addCategory("test") },
-                isDesiredState = { it is HomeScreenState.Success }
+                assertState = { it is HomeScreenState.Success }
             )
         }
     }

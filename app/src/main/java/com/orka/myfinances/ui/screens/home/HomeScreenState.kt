@@ -1,6 +1,6 @@
 package com.orka.myfinances.ui.screens.home
 
-import com.orka.myfinances.models.ProductTemplate
+import com.orka.myfinances.data.models.ProductTemplate
 
 sealed interface HomeScreenState {
     data object Initial : HomeScreenState

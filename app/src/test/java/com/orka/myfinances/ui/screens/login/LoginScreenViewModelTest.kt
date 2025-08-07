@@ -2,13 +2,13 @@ package com.orka.myfinances.ui.screens.login
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.DummySessionManager
-import com.orka.myfinances.fixtures.SpySessionManager
-import com.orka.myfinances.fixtures.datasources.credential.DummyCredentialDataSource
-import com.orka.myfinances.fixtures.datasources.credential.NoCredentialDataSource
-import com.orka.myfinances.fixtures.datasources.credential.SpyCredentialDataSource
-import com.orka.myfinances.fixtures.datasources.credential.StubCredentialDataSource
-import com.orka.myfinances.lib.assertStateTransition
+import com.orka.myfinances.fixtures.managers.DummySessionManager
+import com.orka.myfinances.fixtures.managers.SpySessionManager
+import com.orka.myfinances.fixtures.data.api.credential.DummyCredentialApiService
+import com.orka.myfinances.fixtures.data.api.credential.NoCredentialApiService
+import com.orka.myfinances.fixtures.data.api.credential.SpyCredentialApiService
+import com.orka.myfinances.fixtures.data.api.credential.StubCredentialApiService
+import com.orka.myfinances.testLib.assertStateTransition
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -25,43 +25,46 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
         @OptIn(ExperimentalCoroutinesApi::class)
         @Test
         fun `When authorize called gets credentials`() {
-            val dataSource = SpyCredentialDataSource()
-            val viewmodel = LoginScreenViewModel(logger, dataSource, manager)
+            val apiService = SpyCredentialApiService()
+            val viewmodel = LoginScreenViewModel(logger, apiService, manager)
             viewmodel.authorize("username", "password")
             testScope.advanceUntilIdle()
-            assertTrue(dataSource.called)
+            assertTrue(apiService.called)
         }
 
-        @OptIn(ExperimentalCoroutinesApi::class)
-        @Test
-        fun `When credential not found state is error`() {
-            val dataSource = NoCredentialDataSource()
-            val viewmodel = LoginScreenViewModel(logger, dataSource, manager)
+        @Nested
+        inner class NoCredentialApiServiceContext {
+            private val apiService = NoCredentialApiService()
 
-            testScope.assertStateTransition(
-                stateFlow = viewmodel.uiState,
-                isDesiredState = { it is LoginScreenState.Error },
-                action = { viewmodel.authorize("username", "password") }
-            )
-        }
+            @OptIn(ExperimentalCoroutinesApi::class)
+            @Test
+            fun `When credential not found state is error`() {
+                val viewmodel = LoginScreenViewModel(logger, apiService, manager)
 
-        @OptIn(ExperimentalCoroutinesApi::class)
-        @Test
-        fun `When authorizeAndRemember credential not found state is error`() {
-            val dataSource = NoCredentialDataSource()
-            val viewmodel = LoginScreenViewModel(logger, dataSource, manager)
+                testScope.assertStateTransition(
+                    stateFlow = viewmodel.uiState,
+                    assertState = { it is LoginScreenState.Error },
+                    action = { viewmodel.authorize("username", "password") }
+                )
+            }
 
-            testScope.assertStateTransition(
-                stateFlow = viewmodel.uiState,
-                isDesiredState = { it is LoginScreenState.Error },
-                action = { viewmodel.authorizeAndRemember("username", "password") }
-            )
+            @OptIn(ExperimentalCoroutinesApi::class)
+            @Test
+            fun `When authorizeAndRemember credential not found state is error`() {
+                val viewmodel = LoginScreenViewModel(logger, apiService, manager)
+
+                testScope.assertStateTransition(
+                    stateFlow = viewmodel.uiState,
+                    assertState = { it is LoginScreenState.Error },
+                    action = { viewmodel.authorizeAndRemember("username", "password") }
+                )
+            }
         }
 
         @Nested
         inner class DummyCredentialDataSourceContext {
-            private val dataSource = DummyCredentialDataSource()
-            private val viewModel = LoginScreenViewModel(logger, dataSource, manager)
+            private val apiService = DummyCredentialApiService()
+            private val viewModel = LoginScreenViewModel(logger, apiService, manager)
 
             @Test
             fun `State is initial`() {
@@ -74,7 +77,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
             fun `When authorization started state changes to loading`() {
                 testScope.assertStateTransition(
                     stateFlow = viewModel.uiState,
-                    isDesiredState = { it is LoginScreenState.Loading },
+                    assertState = { it is LoginScreenState.Loading },
                     action = { viewModel.authorize("username", "password") }
                 )
             }
@@ -84,7 +87,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
             fun `When authorizeAndRemember started state changes to loading`() {
                 testScope.assertStateTransition(
                     stateFlow = viewModel.uiState,
-                    isDesiredState = { it is LoginScreenState.Loading },
+                    assertState = { it is LoginScreenState.Loading },
                     action = { viewModel.authorizeAndRemember("username", "password") }
                 )
             }
@@ -93,9 +96,9 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
 
     @Nested
     inner class StubDataSource {
-        private val dataSource = StubCredentialDataSource()
+        private val apiService = StubCredentialApiService()
         private val manager = SpySessionManager()
-        private val viewModel = LoginScreenViewModel(logger, dataSource, manager)
+        private val viewModel = LoginScreenViewModel(logger, apiService, manager)
 
         @OptIn(ExperimentalCoroutinesApi::class)
         @Test

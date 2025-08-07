@@ -1,6 +1,6 @@
 package com.orka.myfinances.ui.managers
 
-import com.orka.myfinances.models.Session
+import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
 

@@ -6,7 +6,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
-import com.orka.myfinances.models.Session
+import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.ui.navigation.Destinations
 import com.orka.myfinances.ui.screens.home.parts.HomeScreenTopBar
 
@@ -26,7 +26,7 @@ fun MainTopBar(
 
         Destinations.Profile -> {
             TopAppBar(
-                title = { Text(session.credential.id.toString()) }
+                title = { Text(session.credential.toString()) }
             )
         }
 
