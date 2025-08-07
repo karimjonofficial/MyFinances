@@ -32,7 +32,7 @@ class UiManager(
 
         if (sessionModel != null) {
             val session = sessionModel.toSession()
-            createSession(session)
+            openSession(session)
         } else {
             val apiService = provider.getCredentialApiService()
             val viewModel = LoginScreenViewModel(logger, apiService, this, defaultCoroutineContext)
@@ -43,7 +43,7 @@ class UiManager(
     override fun open(credential: Credential) {
         launch {
             val session = getSession(credential)
-            if (session != null) createSession(session)
+            if (session != null) openSession(session)
         }
     }
 
@@ -53,18 +53,28 @@ class UiManager(
 
             if (session != null) {
                 storage.store(session.toModel())
-                createSession(session)
+                openSession(session)
             }
         }
     }
 
-    private fun createSession(session: Session) {
+    private fun openSession(session: Session) {
         val categoryDataSource = ProductTemplateDataSourceImpl()
         val viewModel = HomeScreenViewModel(logger, categoryDataSource, defaultCoroutineContext)
         viewModel.initialize()
         setState(UiState.SignedIn(session, viewModel))
     }
     private suspend fun getSession(credential: Credential): Session? {
-        return null
+        val userApiService = provider.getUserApiService()
+        val companyApiService = provider.getCompanyApiService()
+        val companyOfficeApiService = provider.getCompanyOfficeApiService()
+
+        val userModel = userApiService.get(credential)
+        val companyModel = companyApiService.get(credential)
+        val companyOfficeModel = companyOfficeApiService.get(credential)
+
+        return if (userModel != null && companyModel != null && companyOfficeModel != null) {
+            makeSession(credential, userModel, companyOfficeModel, companyModel)
+        } else null
     }
 }

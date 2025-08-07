@@ -9,6 +9,6 @@ class DummySessionStorage : LocalSessionStorage {
     }
 
     override suspend fun store(session: SessionModel) {
-        TODO("Not yet implemented")
+
     }
 }
