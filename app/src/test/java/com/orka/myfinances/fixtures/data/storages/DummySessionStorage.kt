@@ -1,6 +1,6 @@
-package com.orka.myfinances.fixtures.storages
+package com.orka.myfinances.fixtures.data.storages
 
-import com.orka.myfinances.data.local.LocalSessionStorage
+import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.data.zipped.SessionModel
 
 class DummySessionStorage : LocalSessionStorage {

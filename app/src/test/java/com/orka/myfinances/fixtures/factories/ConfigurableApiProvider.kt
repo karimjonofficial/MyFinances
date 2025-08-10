@@ -1,13 +1,13 @@
-package com.orka.myfinances.ui.managers
+package com.orka.myfinances.fixtures.factories
 
 import com.orka.myfinances.data.api.CompanyApiService
 import com.orka.myfinances.data.api.CompanyOfficeApiService
 import com.orka.myfinances.data.api.CredentialApiService
 import com.orka.myfinances.data.api.UserApiService
 import com.orka.myfinances.factories.ApiProvider
-import com.orka.myfinances.fixtures.data.api.DummyCompanyApiService
-import com.orka.myfinances.fixtures.data.api.DummyCompanyOfficeApiService
-import com.orka.myfinances.fixtures.data.api.DummyUserApiService
+import com.orka.myfinances.fixtures.data.api.company.DummyCompanyApiService
+import com.orka.myfinances.fixtures.data.api.companyOffice.DummyCompanyOfficeApiService
+import com.orka.myfinances.fixtures.data.api.user.DummyUserApiService
 import com.orka.myfinances.fixtures.data.api.credential.DummyCredentialApiService
 
 class ConfigurableApiProvider : ApiProvider {

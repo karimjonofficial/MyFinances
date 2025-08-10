@@ -1,4 +1,4 @@
-package com.orka.myfinances.data.local
+package com.orka.myfinances.data.storages
 
 import com.orka.myfinances.data.zipped.SessionModel
 

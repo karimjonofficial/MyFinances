@@ -1,10 +1,10 @@
-package com.orka.myfinances.fixtures.data.api
+package com.orka.myfinances.fixtures.data.api.companyOffice
 
 import com.orka.myfinances.data.api.CompanyOfficeApiService
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.zipped.CompanyOfficeModel
 
-class DummyCompanyOfficeApiService : CompanyOfficeApiService {
+class EmptyCompanyOfficeApiServiceStub : CompanyOfficeApiService {
     override suspend fun get(credential: Credential): CompanyOfficeModel? {
         return null
     }

@@ -2,8 +2,17 @@ package com.orka.myfinances.ui.managers
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.storages.DummySessionStorage
-import com.orka.myfinances.fixtures.storages.EmptySessionStorage
+import com.orka.myfinances.fixtures.data.api.company.CompanyApiServiceStub
+import com.orka.myfinances.fixtures.data.api.companyOffice.CompanyOfficeApiServiceStub
+import com.orka.myfinances.fixtures.data.api.company.EmptyCompanyApiServiceStub
+import com.orka.myfinances.fixtures.data.api.companyOffice.EmptyCompanyOfficeApiServiceStub
+import com.orka.myfinances.fixtures.data.api.user.EmptyUserApiServiceStub
+import com.orka.myfinances.fixtures.data.api.user.UserApiServiceStub
+import com.orka.myfinances.fixtures.data.storages.DummySessionStorage
+import com.orka.myfinances.fixtures.data.storages.EmptySessionStorage
+import com.orka.myfinances.fixtures.data.storages.SpySessionStorage
+import com.orka.myfinances.fixtures.data.storages.StubSessionStorage
+import com.orka.myfinances.fixtures.factories.ConfigurableApiProvider
 import com.orka.myfinances.testLib.assertStateTransition
 import com.orka.myfinances.testLib.credential
 import kotlinx.coroutines.ExperimentalCoroutinesApi

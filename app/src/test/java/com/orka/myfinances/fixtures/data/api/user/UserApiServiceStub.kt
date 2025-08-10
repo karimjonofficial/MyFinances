@@ -1,11 +1,13 @@
-package com.orka.myfinances.fixtures.data.api
+package com.orka.myfinances.fixtures.data.api.user
 
 import com.orka.myfinances.data.api.UserApiService
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.zipped.UserModel
+import com.orka.myfinances.lib.extensions.toModel
+import com.orka.myfinances.testLib.user
 
-class DummyUserApiService : UserApiService {
+class UserApiServiceStub : UserApiService {
     override suspend fun get(credential: Credential): UserModel? {
-        return null
+        return user.toModel()
     }
 }

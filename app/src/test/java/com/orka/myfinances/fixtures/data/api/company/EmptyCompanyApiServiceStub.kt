@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.managers
+package com.orka.myfinances.fixtures.data.api.company
 
 import com.orka.myfinances.data.api.CompanyApiService
 import com.orka.myfinances.data.models.Credential

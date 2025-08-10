@@ -1,6 +1,6 @@
-package com.orka.myfinances.ui.managers
+package com.orka.myfinances.fixtures.data.storages
 
-import com.orka.myfinances.data.local.LocalSessionStorage
+import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.zipped.SessionModel
 

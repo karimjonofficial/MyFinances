@@ -2,7 +2,7 @@ package com.orka.myfinances.ui.managers
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
-import com.orka.myfinances.data.local.LocalSessionStorage
+import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.ApiProvider
