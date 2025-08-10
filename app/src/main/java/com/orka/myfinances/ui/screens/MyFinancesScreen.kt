@@ -19,17 +19,21 @@ fun MyFinancesScreen(
         }
 
         is UiState.Guest -> {
-            val uiState = state.viewModel.uiState.collectAsState()
+            val viewModel = state.viewModel
+            val uiState = viewModel.uiState.collectAsState()
 
             LoginScreen(
                 modifier = modifier,
                 uiState = uiState.value,
-                viewModel = state.viewModel
+                viewModel = viewModel
             )
         }
 
         is UiState.SignedIn -> {
-            MainScreen(modifier, state)
+            val viewModel = state.viewModel
+            val session = state.session
+
+            MainScreen(modifier, viewModel, session)
         }
     }
 }

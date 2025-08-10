@@ -9,19 +9,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import com.orka.myfinances.ui.managers.UiState
+import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.ui.navigation.Destinations
 import com.orka.myfinances.ui.navigation.NavigationGraph
 import com.orka.myfinances.ui.parts.MainNavBar
 import com.orka.myfinances.ui.parts.MainTopBar
+import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun MainScreen(
     modifier: Modifier = Modifier,
-    state: UiState.SignedIn
+    viewModel: HomeScreenViewModel,
+    session: Session
 ) {
-    val viewModel = state.viewModel
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
     val backStack = remember { mutableStateListOf<Destinations>(Destinations.Home) }
 
@@ -30,7 +31,7 @@ fun MainScreen(
         topBar = {
             MainTopBar(
                 backStack = backStack,
-                session = state.session
+                session = session
             )
         },
         bottomBar = { MainNavBar(backStack = backStack) }

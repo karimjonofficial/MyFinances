@@ -3,15 +3,15 @@ package com.orka.myfinances.ui.managers
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.fixtures.DummyLogger
 import com.orka.myfinances.fixtures.data.api.company.CompanyApiServiceStub
-import com.orka.myfinances.fixtures.data.api.companyOffice.CompanyOfficeApiServiceStub
 import com.orka.myfinances.fixtures.data.api.company.EmptyCompanyApiServiceStub
+import com.orka.myfinances.fixtures.data.api.companyOffice.CompanyOfficeApiServiceStub
 import com.orka.myfinances.fixtures.data.api.companyOffice.EmptyCompanyOfficeApiServiceStub
 import com.orka.myfinances.fixtures.data.api.user.EmptyUserApiServiceStub
 import com.orka.myfinances.fixtures.data.api.user.UserApiServiceStub
 import com.orka.myfinances.fixtures.data.storages.DummySessionStorage
 import com.orka.myfinances.fixtures.data.storages.EmptySessionStorage
-import com.orka.myfinances.fixtures.data.storages.SpySessionStorage
 import com.orka.myfinances.fixtures.data.storages.SessionStorageStub
+import com.orka.myfinances.fixtures.data.storages.SpySessionStorage
 import com.orka.myfinances.fixtures.factories.ConfigurableApiProvider
 import com.orka.myfinances.testLib.assertStateTransition
 import com.orka.myfinances.testLib.credential
@@ -29,7 +29,8 @@ class UiManagerTest : MainDispatcherContext() {
     @Test
     fun `State is Guest when session is not found`() {
         val storage = EmptySessionStorage()
-        val manager = UiManager(logger, storage, provider, testScope.coroutineContext)
+        val manager = UiManager(logger, storage, provider, coroutineContext)
+
         testScope.assertStateTransition(
             stateFlow = manager.uiState,
             assertState = { it is UiState.Guest },
@@ -40,7 +41,7 @@ class UiManagerTest : MainDispatcherContext() {
     @Test
     fun `State is SignedIn when session is found`() {
         val storage = SessionStorageStub()
-        val manager = UiManager(logger, storage, provider, testScope.coroutineContext)
+        val manager = UiManager(logger, storage, provider, coroutineContext)
 
         testScope.assertStateTransition(
             stateFlow = manager.uiState,
@@ -55,141 +56,155 @@ class UiManagerTest : MainDispatcherContext() {
 
         @Nested
         inner class EmptyUserApiServiceStubContext {
-            private val userApiService = EmptyUserApiServiceStub()
-
             @BeforeEach
             fun setup() {
-                provider.setUserApiService(userApiService)
+                provider.setUserApiService(EmptyUserApiServiceStub())
+                provider.setCompanyApiService(CompanyApiServiceStub())
+                provider.setCompanyOfficeApiService(CompanyOfficeApiServiceStub())
             }
 
             @OptIn(ExperimentalCoroutinesApi::class)
             @Test
             fun `When open called and user api service fails, state does not change`() {
-                val manager = UiManager(logger, storage, provider, testScope.coroutineContext)
+                val manager = UiManager(logger, storage, provider, coroutineContext)
                 val state = manager.uiState.value
+
                 manager.open(credential)
                 testScope.advanceUntilIdle()
+
                 assertTrue(manager.uiState.value === state)
             }
 
             @OptIn(ExperimentalCoroutinesApi::class)
             @Test
             fun `When store called and user api service fails, state does not change`() {
-                val manager =
-                    UiManager(logger, storage, provider, testScope.coroutineContext)
+                val manager = UiManager(logger, storage, provider, coroutineContext)
                 val state = manager.uiState.value
+
                 manager.store(credential)
                 testScope.advanceUntilIdle()
+
+                assertTrue(manager.uiState.value === state)
+            }
+        }
+
+        @Nested
+        inner class EmptyCompanyApiServiceStubContext {
+            @BeforeEach
+            fun setup() {
+                provider.setUserApiService(UserApiServiceStub())
+                provider.setCompanyApiService(EmptyCompanyApiServiceStub())
+                provider.setCompanyOfficeApiService(CompanyOfficeApiServiceStub())
+            }
+
+            @OptIn(ExperimentalCoroutinesApi::class)
+            @Test
+            fun `When open called and company api service fails, state does not change`() {
+                val manager = UiManager(logger, storage, provider, coroutineContext)
+                val state = manager.uiState.value
+
+                manager.open(credential)
+                testScope.advanceUntilIdle()
+
                 assertTrue(manager.uiState.value === state)
             }
 
-            @Nested
-            inner class EmptyCompanyApiServiceStubContext {
-                private val companyApiService = EmptyCompanyApiServiceStub()
+            @OptIn(ExperimentalCoroutinesApi::class)
+            @Test
+            fun `When store called and company api service fails, state does not change`() {
+                val manager = UiManager(logger, storage, provider, coroutineContext)
+                val state = manager.uiState.value
 
-                @BeforeEach
-                fun setup() {
-                    provider.setUserApiService(UserApiServiceStub())
-                    provider.setCompanyApiService(companyApiService)
-                }
+                manager.store(credential)
+                testScope.advanceUntilIdle()
 
-                @OptIn(ExperimentalCoroutinesApi::class)
-                @Test
-                fun ` open called and company api service fails, state does not change`() {
-                    val manager = UiManager(logger, storage, provider, testScope.coroutineContext)
-                    val state = manager.uiState.value
-                    manager.open(credential)
-                    testScope.advanceUntilIdle()
-                    assertTrue(manager.uiState.value === state)
-                }
-
-                @OptIn(ExperimentalCoroutinesApi::class)
-                @Test
-                fun `When store called and company api service fails, state does not change`() {
-                    val manager = UiManager(logger, storage, provider, testScope.coroutineContext)
-                    val state = manager.uiState.value
-                    manager.store(credential)
-                    testScope.advanceUntilIdle()
-                    assertTrue(manager.uiState.value === state)
-                }
-
-                @Nested
-                inner class EmptyCompanyOfficeApiServiceStubContext {
-
-                    @BeforeEach
-                    fun setup() {
-                        provider.setCompanyApiService(CompanyApiServiceStub())
-                        provider.setCompanyOfficeApiService(EmptyCompanyOfficeApiServiceStub())
-                    }
-
-                    @OptIn(ExperimentalCoroutinesApi::class)
-                    @Test
-                    fun `When open called and companyOffice api service fails, state does not change`() {
-                        val manager = UiManager(logger, storage, provider, testScope.coroutineContext)
-                        val state = manager.uiState.value
-                        manager.open(credential)
-                        testScope.advanceUntilIdle()
-                        assertTrue(manager.uiState.value === state)
-                    }
-
-                    @OptIn(ExperimentalCoroutinesApi::class)
-                    @Test
-                    fun `When store called and companyOffice api service fails, state does not change`() {
-                        val manager = UiManager(logger, storage, provider, testScope.coroutineContext)
-                        val state = manager.uiState.value
-                        manager.store(credential)
-                        testScope.advanceUntilIdle()
-                        assertTrue(manager.uiState.value === state)
-                    }
-                }
+                assertTrue(manager.uiState.value === state)
             }
         }
 
-        @OptIn(ExperimentalCoroutinesApi::class)
-        @Test
-        fun `When open called and all api services success, state changes into SignedIn`() {
-            provider.setUserApiService(UserApiServiceStub())
-            provider.setCompanyApiService(CompanyApiServiceStub())
-            provider.setCompanyOfficeApiService(CompanyOfficeApiServiceStub())
-            val manager = UiManager(logger, storage, provider, testScope.coroutineContext)
+        @Nested
+        inner class EmptyCompanyOfficeApiServiceStubContext {
+            @BeforeEach
+            fun setup() {
+                provider.setUserApiService(UserApiServiceStub())
+                provider.setCompanyApiService(CompanyApiServiceStub())
+                provider.setCompanyOfficeApiService(EmptyCompanyOfficeApiServiceStub())
+            }
 
-            testScope.assertStateTransition(
-                stateFlow = manager.uiState,
-                assertState = { it is UiState.SignedIn },
-                action = {
-                    manager.open(credential)
-                    testScope.advanceUntilIdle()
-                }
-            )
+            @OptIn(ExperimentalCoroutinesApi::class)
+            @Test
+            fun `When open called and companyOffice api service fails, state does not change`() {
+                val manager = UiManager(logger, storage, provider, coroutineContext)
+                val state = manager.uiState.value
+
+                manager.open(credential)
+                testScope.advanceUntilIdle()
+
+                assertTrue(manager.uiState.value === state)
+            }
+
+            @OptIn(ExperimentalCoroutinesApi::class)
+            @Test
+            fun `When store called and companyOffice api service fails, state does not change`() {
+                val manager = UiManager(logger, storage, provider, coroutineContext)
+                val state = manager.uiState.value
+
+                manager.store(credential)
+                testScope.advanceUntilIdle()
+
+                assertTrue(manager.uiState.value === state)
+            }
         }
 
-        @OptIn(ExperimentalCoroutinesApi::class)
-        @Test
-        fun `When store called and all api services success, state changes into SignedIn`() {
-            provider.setUserApiService(UserApiServiceStub())
-            provider.setCompanyApiService(CompanyApiServiceStub())
-            provider.setCompanyOfficeApiService(CompanyOfficeApiServiceStub())
-            val manager = UiManager(logger, storage, provider, testScope.coroutineContext)
+        @Nested
+        inner class SuccessContext {
+            @BeforeEach
+            fun setup() {
+                provider.setUserApiService(UserApiServiceStub())
+                provider.setCompanyApiService(CompanyApiServiceStub())
+                provider.setCompanyOfficeApiService(CompanyOfficeApiServiceStub())
+            }
 
-            testScope.assertStateTransition(
-                stateFlow = manager.uiState,
-                assertState = { it is UiState.SignedIn },
-                action = {
-                    manager.store(credential)
-                    testScope.advanceUntilIdle()
-                }
-            )
+            @OptIn(ExperimentalCoroutinesApi::class)
+            @Test
+            fun `When open called and all api services success, state changes into SignedIn`() {
+                val manager = UiManager(logger, storage, provider, coroutineContext)
+
+                testScope.assertStateTransition(
+                    stateFlow = manager.uiState,
+                    assertState = { it is UiState.SignedIn },
+                    action = {
+                        manager.open(credential)
+                        testScope.advanceUntilIdle()
+                    }
+                )
+            }
+
+            @OptIn(ExperimentalCoroutinesApi::class)
+            @Test
+            fun `When store called and all api services success, state changes into SignedIn`() {
+                val manager = UiManager(logger, storage, provider, coroutineContext)
+
+                testScope.assertStateTransition(
+                    stateFlow = manager.uiState,
+                    assertState = { it is UiState.SignedIn },
+                    action = {
+                        manager.store(credential)
+                        testScope.advanceUntilIdle()
+                    }
+                )
+            }
         }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `When store called and all api services success, stores into storage`() {
+        val storage = SpySessionStorage()
         provider.setUserApiService(UserApiServiceStub())
         provider.setCompanyApiService(CompanyApiServiceStub())
         provider.setCompanyOfficeApiService(CompanyOfficeApiServiceStub())
-        val storage = SpySessionStorage()
-        val manager = UiManager(logger, storage, provider, testScope.coroutineContext)
+        val manager = UiManager(logger, storage, provider, coroutineContext)
 
         manager.store(credential)
         testScope.advanceUntilIdle()

@@ -15,6 +15,7 @@ abstract class MainDispatcherContext {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val testScope: TestScope = TestScope(testDispatcher)
+    val coroutineContext = testScope.coroutineContext
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @BeforeEach
