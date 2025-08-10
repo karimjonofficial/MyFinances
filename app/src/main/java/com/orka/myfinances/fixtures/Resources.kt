@@ -9,19 +9,16 @@ import com.orka.myfinances.data.models.User
 const val delayDurationInMillis = 1000L
 
 val id = Id(1)
-
 val credential = Credential(
     token = "token",
     refresh = "refresh"
 )
-
 val company = Company(
     id = id,
     name = "Name",
     address = "Address",
     phone = "1234567890"
 )
-
 val companyOffice = CompanyOffice(
     id = id,
     name = "Name",
@@ -30,7 +27,6 @@ val companyOffice = CompanyOffice(
     address = "Address",
     phone = "1234567890"
 )
-
 val user = User(
     id = id,
     firstName = "User",

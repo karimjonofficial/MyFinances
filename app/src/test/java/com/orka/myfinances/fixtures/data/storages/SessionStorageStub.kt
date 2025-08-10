@@ -5,7 +5,7 @@ import com.orka.myfinances.data.zipped.SessionModel
 import com.orka.myfinances.lib.extensions.toModel
 import com.orka.myfinances.testLib.session
 
-class StubSessionStorage : LocalSessionStorage {
+class SessionStorageStub : LocalSessionStorage {
     override suspend fun get(): SessionModel {
         return session.toModel()
     }

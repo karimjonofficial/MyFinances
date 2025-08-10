@@ -11,7 +11,7 @@ import com.orka.myfinances.fixtures.data.api.user.UserApiServiceStub
 import com.orka.myfinances.fixtures.data.storages.DummySessionStorage
 import com.orka.myfinances.fixtures.data.storages.EmptySessionStorage
 import com.orka.myfinances.fixtures.data.storages.SpySessionStorage
-import com.orka.myfinances.fixtures.data.storages.StubSessionStorage
+import com.orka.myfinances.fixtures.data.storages.SessionStorageStub
 import com.orka.myfinances.fixtures.factories.ConfigurableApiProvider
 import com.orka.myfinances.testLib.assertStateTransition
 import com.orka.myfinances.testLib.credential
@@ -39,7 +39,7 @@ class UiManagerTest : MainDispatcherContext() {
 
     @Test
     fun `State is SignedIn when session is found`() {
-        val storage = StubSessionStorage()
+        val storage = SessionStorageStub()
         val manager = UiManager(logger, storage, provider, testScope.coroutineContext)
 
         testScope.assertStateTransition(
