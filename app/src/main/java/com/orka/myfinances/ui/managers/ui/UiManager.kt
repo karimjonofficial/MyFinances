@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.managers
+package com.orka.myfinances.ui.managers.ui
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
@@ -6,9 +6,10 @@ import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.factories.ApiProvider
-import com.orka.myfinances.fixtures.ProductTemplateDataSourceImpl
+import com.orka.myfinances.fixtures.data.repositories.FolderRepositoryImpl
 import com.orka.myfinances.lib.extensions.makeSession
 import com.orka.myfinances.lib.extensions.toModel
+import com.orka.myfinances.ui.managers.session.SessionManager
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
 import kotlinx.coroutines.Dispatchers
@@ -59,8 +60,8 @@ class UiManager(
     }
 
     private fun openSession(session: Session) {
-        val categoryDataSource = ProductTemplateDataSourceImpl()
-        val viewModel = HomeScreenViewModel(logger, categoryDataSource, defaultCoroutineContext)
+        val repository = FolderRepositoryImpl()
+        val viewModel = HomeScreenViewModel(logger, repository, defaultCoroutineContext)
         viewModel.initialize()
         setState(UiState.SignedIn(session, viewModel))
     }

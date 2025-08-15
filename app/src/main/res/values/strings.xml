@@ -17,4 +17,10 @@
     <string name="fill_the_lines_below_to_add_a_new_category">Fill the lines below to add a new category</string>
     <string name="add">Add</string>
     <string name="name">Nomi</string>
+    <string name="select_folder_type">Papka turini tanlang</string>
+    <string name="catalog">Katalog</string>
+    <string name="product_folder">Maxsulotlar papkasi</string>
+    <string name="select">Tanlang</string>
+    <string name="templates">Shablonlar</string>
+    <string name="error">Error</string>
 </resources>

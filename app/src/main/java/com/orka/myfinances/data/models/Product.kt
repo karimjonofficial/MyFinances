@@ -1,5 +1,8 @@
 package com.orka.myfinances.data.models
 
-interface Product {
-    val template: ProductTemplate
-}
+import com.orka.myfinances.data.models.template.Template
+
+data class Product(
+    val id: Id,
+    val template: Template
+)

@@ -1,20 +1,17 @@
 package com.orka.myfinances.ui.screens.home
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.carousel.HorizontalMultiBrowseCarousel
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import com.orka.myfinances.R
+import androidx.compose.ui.tooling.preview.Preview
+import com.orka.myfinances.lib.ui.VerticalSpacer
+import com.orka.myfinances.ui.screens.home.parts.CategoriesList
+import com.orka.myfinances.ui.screens.home.parts.HomeScreenCarousel
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,25 +21,27 @@ fun HomeScreenContent(
 ) {
     val carouselState = rememberCarouselState { 3 }
 
-    LazyColumn(modifier = modifier) {
-        item {
-            HorizontalMultiBrowseCarousel(
-                state = carouselState,
-                preferredItemWidth = 240.dp,
-                itemSpacing = 8.dp,
-                contentPadding = PaddingValues(horizontal = 8.dp)
-            ) { index ->
-                Image(
-                    modifier = Modifier.maskClip(MaterialTheme.shapes.extraLarge),
-                    painter = painterResource(R.drawable.furniture),
-                    contentScale = ContentScale.FillWidth,
-                    contentDescription = null
-                )
-            }
-        }
+    Column(modifier = modifier) {
+        HomeScreenCarousel(state = carouselState)
+        VerticalSpacer(24)
+        CategoriesList(items = state.folders)
+    }
+}
 
-        items(items = state.data) {
-            Text(text = it.id.toString())
-        }
+@Preview(
+    showBackground = true,
+    showSystemUi = true
+)
+@Composable
+private fun HomeContentPreview() {
+    val state = HomeScreenState.Success(folders = emptyList())
+
+    Scaffold { innerPadding ->
+        HomeScreenContent(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            state = state
+        )
     }
 }

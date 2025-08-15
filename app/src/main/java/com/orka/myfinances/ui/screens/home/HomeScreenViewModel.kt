@@ -2,14 +2,16 @@ package com.orka.myfinances.ui.screens.home
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
-import com.orka.myfinances.data.sources.ProductTemplateDataSource
+import com.orka.myfinances.data.repositories.AddFolderRequest
+import com.orka.myfinances.data.repositories.FolderRepository
+import com.orka.myfinances.data.repositories.FolderType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asStateFlow
 import kotlin.coroutines.CoroutineContext
 
 class HomeScreenViewModel(
     logger: Logger,
-    private val dataSource: ProductTemplateDataSource,
+    private val repository: FolderRepository,
     context: CoroutineContext = Dispatchers.Main
 ) : ViewModel<HomeScreenState>(
     initialState = HomeScreenState.Initial,
@@ -20,17 +22,19 @@ class HomeScreenViewModel(
 
     fun initialize() = launch {
         setStateAsync(HomeScreenState.Loading)
-        val categories = dataSource.get()
-        if(categories != null) setState(HomeScreenState.Success(categories))
-        else setState(HomeScreenState.Error("No categories found"))
+        val folders = repository.get()
+        if(folders != null)
+            setState(HomeScreenState.Success(folders))
+        else setState(HomeScreenState.Error)
     }
 
-    fun addCategory(name: String) = launch {
+    fun addFolder(name: String, type: FolderType) = launch {
         val previousState = state.value
         setStateAsync(HomeScreenState.Loading)
-        val category = dataSource.add(name)
-        if(category != null)
-            setState(HomeScreenState.Success(listOf(category)))
+        val request = AddFolderRequest(name, type)
+        val folder = repository.add(request)
+        if(folder != null)
+            setState(HomeScreenState.Success(listOf(folder)))
         else setStateAsync(previousState)
     }
 }

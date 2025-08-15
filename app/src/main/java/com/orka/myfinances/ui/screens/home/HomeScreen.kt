@@ -3,6 +3,8 @@ package com.orka.myfinances.ui.screens.home
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.orka.myfinances.R
 import com.orka.myfinances.ui.screens.main.FailureScreen
 import com.orka.myfinances.ui.screens.main.LoadingScreen
 
@@ -18,7 +20,7 @@ fun HomeScreen(
         }
 
         is HomeScreenState.Error -> {
-            FailureScreen(modifier, state.message) {}
+            FailureScreen(modifier, stringResource(R.string.error)) {}
         }
 
         HomeScreenState.Loading -> {

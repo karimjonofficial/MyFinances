@@ -3,7 +3,7 @@ package com.orka.myfinances.ui.screens
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import com.orka.myfinances.ui.managers.UiState
+import com.orka.myfinances.ui.managers.ui.UiState
 import com.orka.myfinances.ui.screens.main.LoadingScreen
 import com.orka.myfinances.ui.screens.main.MainScreen
 import com.orka.myfinances.ui.screens.login.LoginScreen

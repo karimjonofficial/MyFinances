@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.managers
+package com.orka.myfinances.ui.managers.ui
 
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel

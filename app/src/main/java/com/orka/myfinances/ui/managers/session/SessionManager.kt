@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.managers
+package com.orka.myfinances.ui.managers.session
 
 import com.orka.myfinances.data.models.Credential
 

@@ -28,25 +28,4 @@ abstract class MainDispatcherContext {
     fun teardown() {
         Dispatchers.resetMain()
     }
-
-    /*companion object {
-        val testDispatcher: TestDispatcher = StandardTestDispatcher()
-
-        @OptIn(ExperimentalCoroutinesApi::class)
-        val testScope: TestScope = TestScope(testDispatcher)
-
-        @OptIn(ExperimentalCoroutinesApi::class)
-        @BeforeAll
-        @JvmStatic
-        fun setup() {
-            Dispatchers.setMain(testDispatcher)
-        }
-
-        @OptIn(ExperimentalCoroutinesApi::class)
-        @AfterAll
-        @JvmStatic
-        fun teardown() {
-            Dispatchers.resetMain()
-        }
-    }*/
 }

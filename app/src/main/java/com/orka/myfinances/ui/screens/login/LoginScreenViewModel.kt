@@ -4,7 +4,7 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.api.CredentialApiService
 import com.orka.myfinances.data.models.Credential
-import com.orka.myfinances.ui.managers.SessionManager
+import com.orka.myfinances.ui.managers.session.SessionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.yield

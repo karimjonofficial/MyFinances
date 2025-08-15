@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.managers
+package com.orka.myfinances.ui.managers.ui
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.fixtures.DummyLogger
@@ -17,7 +17,7 @@ import com.orka.myfinances.testLib.assertStateTransition
 import com.orka.myfinances.testLib.credential
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -72,7 +72,7 @@ class UiManagerTest : MainDispatcherContext() {
                 manager.open(credential)
                 testScope.advanceUntilIdle()
 
-                assertTrue(manager.uiState.value === state)
+                Assertions.assertTrue(manager.uiState.value === state)
             }
 
             @OptIn(ExperimentalCoroutinesApi::class)
@@ -84,7 +84,7 @@ class UiManagerTest : MainDispatcherContext() {
                 manager.store(credential)
                 testScope.advanceUntilIdle()
 
-                assertTrue(manager.uiState.value === state)
+                Assertions.assertTrue(manager.uiState.value === state)
             }
         }
 
@@ -106,7 +106,7 @@ class UiManagerTest : MainDispatcherContext() {
                 manager.open(credential)
                 testScope.advanceUntilIdle()
 
-                assertTrue(manager.uiState.value === state)
+                Assertions.assertTrue(manager.uiState.value === state)
             }
 
             @OptIn(ExperimentalCoroutinesApi::class)
@@ -118,7 +118,7 @@ class UiManagerTest : MainDispatcherContext() {
                 manager.store(credential)
                 testScope.advanceUntilIdle()
 
-                assertTrue(manager.uiState.value === state)
+                Assertions.assertTrue(manager.uiState.value === state)
             }
         }
 
@@ -140,7 +140,7 @@ class UiManagerTest : MainDispatcherContext() {
                 manager.open(credential)
                 testScope.advanceUntilIdle()
 
-                assertTrue(manager.uiState.value === state)
+                Assertions.assertTrue(manager.uiState.value === state)
             }
 
             @OptIn(ExperimentalCoroutinesApi::class)
@@ -152,7 +152,7 @@ class UiManagerTest : MainDispatcherContext() {
                 manager.store(credential)
                 testScope.advanceUntilIdle()
 
-                assertTrue(manager.uiState.value === state)
+                Assertions.assertTrue(manager.uiState.value === state)
             }
         }
 
@@ -209,6 +209,6 @@ class UiManagerTest : MainDispatcherContext() {
         manager.store(credential)
         testScope.advanceUntilIdle()
 
-        assertTrue(credential === storage.credential)
+        Assertions.assertTrue(credential === storage.credential)
     }
 }

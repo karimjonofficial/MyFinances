@@ -1,5 +1,9 @@
 package com.orka.myfinances.ui.navigation
 
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.SizeTransform
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
@@ -12,7 +16,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import com.orka.myfinances.ui.screens.home.HomeScreen
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
-import com.orka.myfinances.ui.screens.home.parts.AddProductDialog
+import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
 
 @Composable
 fun NavigationGraph(
@@ -27,6 +31,14 @@ fun NavigationGraph(
         onBack = {
             backStack.removeRange(1, backStack.size - 1)
         },
+        transitionSpec = {
+            ContentTransform(
+                targetContentEnter = EnterTransition.None,
+                initialContentExit = ExitTransition.None,
+                targetContentZIndex = 0f,
+                sizeTransform = SizeTransform()
+            )
+        },
         entryProvider = entryProvider {
             entry<Destinations.Home> {
                 val uiState = viewModel.uiState.collectAsState()
@@ -37,17 +49,17 @@ fun NavigationGraph(
                 )
 
                 if (dialogVisible.value) {
-                    AddProductDialog(
+                    AddFolderDialog(
+                        templates = emptyList(),
                         dismissRequest = { dialogVisible.value = false },
-                        onSuccess = {
-                            viewModel.addCategory(it)
+                        onSuccess = { name, type ->
+                            viewModel.addFolder(name, type)
                             dialogVisible.value = false
                         },
                         onCancel = { dialogVisible.value = false }
                     )
                 }
             }
-
             entry<Destinations.Category> { category ->
                 val categoryNavBackStack = remember {
                     mutableStateListOf<CategoryDestinations>(CategoryDestinations.Warehouse)
@@ -67,7 +79,6 @@ fun NavigationGraph(
                     }
                 )
             }
-
             entry<Destinations.Profile> { profile ->
 
             }
