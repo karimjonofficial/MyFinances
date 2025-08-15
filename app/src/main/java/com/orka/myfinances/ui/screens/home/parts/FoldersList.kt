@@ -23,7 +23,7 @@ import com.orka.myfinances.ui.screens.home.components.NotLastCategoryButton
 import com.orka.myfinances.ui.screens.home.components.SecondCategoryButton
 
 @Composable
-fun CategoriesList(
+fun FoldersList(
     modifier: Modifier = Modifier,
     items: List<Folder>
 ) {
@@ -36,7 +36,9 @@ fun CategoriesList(
     ) {
         val size = items.size
 
-        item(span = { GridItemSpan(2) }) {
+        item(
+            span = { GridItemSpan(2) }
+        ) {
             Column {
                 Text(
                     text = stringResource(R.string.categories),
@@ -46,15 +48,21 @@ fun CategoriesList(
             }
         }
 
-        item { FirstCategoryButton(folder = items[0]) {} }
-        if (size > 1) item { SecondCategoryButton(folder = items[1]) {} }
-        if (size > 4) items(
-            items = items.subList(
-                2,
-                size - 3
-            )
-        ) { item -> CategoryButton(folder = item) {} }
-        if (size > 2) item { NotLastCategoryButton(folder = items[size - 3]) {} }
-        if (size > 3) item { LastCategoryButton(folder = items[size - 2]) {} }
+        if(size > 0) {
+            item { FirstCategoryButton(folder = items[0]) {} }
+            if (size > 1) item { SecondCategoryButton(folder = items[1]) {} }
+            if (size > 4) items(
+                items = items.subList(2, size - 3)
+            ) { item -> CategoryButton(folder = item) {} }
+            if (size > 2) item {
+                if(size == 3) NotLastCategoryButton(folder = items[size - 1]) {}
+                else NotLastCategoryButton(folder = items[size - 2]) {}
+            }
+            if (size > 3) item { LastCategoryButton(folder = items[size - 1]) {} }
+        } else {
+            item {
+                Text(text = stringResource(R.string.no_folders_found))
+            }
+        }
     }
 }

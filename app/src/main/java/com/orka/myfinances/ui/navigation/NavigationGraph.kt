@@ -14,9 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import com.orka.myfinances.data.models.folder.Catalog
+import com.orka.myfinances.data.models.folder.ProductFolder
 import com.orka.myfinances.ui.screens.home.HomeScreen
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
+import com.orka.myfinances.ui.screens.home.parts.FoldersList
 
 @Composable
 fun NavigationGraph(
@@ -28,9 +31,7 @@ fun NavigationGraph(
 
     NavDisplay(
         backStack = backStack,
-        onBack = {
-            backStack.removeRange(1, backStack.size - 1)
-        },
+        onBack = { backStack.removeRange(1, backStack.size - 1) },
         transitionSpec = {
             ContentTransform(
                 targetContentEnter = EnterTransition.None,
@@ -60,24 +61,24 @@ fun NavigationGraph(
                     )
                 }
             }
-            entry<Destinations.Category> { category ->
-                val categoryNavBackStack = remember {
-                    mutableStateListOf<CategoryDestinations>(CategoryDestinations.Warehouse)
-                }
-
-                NavDisplay(
-                    backStack = categoryNavBackStack,
-                    onBack = { categoryNavBackStack.removeLastOrNull() },
-                    entryProvider = entryProvider {
-                        entry<CategoryDestinations.Warehouse> {
-
-                        }
-
-                        entry<CategoryDestinations.Products> {
-
+            entry<Destinations.Folder> { destination ->
+                val folder = destination.folder
+                when (folder) {
+                    is Catalog -> {
+                        if (folder.folders != null) {
+                            FoldersList(
+                                modifier = modifier,
+                                items = folder.folders
+                            )
+                        } else {
+                            //TODO error
                         }
                     }
-                )
+
+                    is ProductFolder -> {
+
+                    }
+                }
             }
             entry<Destinations.Profile> { profile ->
 

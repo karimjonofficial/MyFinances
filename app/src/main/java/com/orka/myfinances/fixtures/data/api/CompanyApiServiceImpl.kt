@@ -10,5 +10,4 @@ class CompanyApiServiceImpl : CompanyApiService {
     override suspend fun get(credential: Credential): CompanyModel? {
         return company.toModel()
     }
-
 }

@@ -4,7 +4,10 @@ import com.orka.myfinances.data.models.Company
 import com.orka.myfinances.data.models.CompanyOffice
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.data.models.Product
 import com.orka.myfinances.data.models.User
+import com.orka.myfinances.data.models.folder.Catalog
+import com.orka.myfinances.data.models.folder.ProductFolder
 import com.orka.myfinances.data.models.template.FieldType
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.models.template.TemplateField
@@ -210,6 +213,56 @@ val templates = listOf(
                 name = "test",
                 type = FieldType.Text
             )
+        )
+    )
+)
+val folders = listOf(
+    Catalog(
+        id = Id(1),
+        name = "Electronics",
+        folders = listOf(
+            ProductFolder(
+                id = Id(101),
+                name = "Smartphones",
+                template = templates[0],
+                products = listOf(
+                    Product(Id(9001), templates[0]),
+                    Product(Id(9002), templates[0])
+                )
+            ),
+            ProductFolder(
+                id = Id(102),
+                name = "Laptops",
+                template = templates[1],
+                products = listOf(
+                    Product(Id(9003), templates[1]),
+                    Product(Id(9004), templates[1])
+                )
+            )
+        )
+    ),
+    Catalog(
+        id = Id(2),
+        name = "Home Appliances",
+        folders = listOf(
+            ProductFolder(
+                id = Id(201),
+                name = "Refrigerators",
+                template = templates[2],
+                products = listOf(
+                    Product(Id(9101), templates[2]),
+                    Product(Id(9102), templates[2])
+                )
+            )
+        )
+    ),
+    ProductFolder(
+        id = Id(300),
+        name = "Standalone Gadgets",
+        template = templates[3],
+        products = listOf(
+            Product(Id(9201), templates[3]),
+            Product(Id(9202), templates[3])
         )
     )
 )

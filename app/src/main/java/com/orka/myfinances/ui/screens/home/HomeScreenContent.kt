@@ -9,8 +9,9 @@ import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.orka.myfinances.fixtures.folders
 import com.orka.myfinances.lib.ui.VerticalSpacer
-import com.orka.myfinances.ui.screens.home.parts.CategoriesList
+import com.orka.myfinances.ui.screens.home.parts.FoldersList
 import com.orka.myfinances.ui.screens.home.parts.HomeScreenCarousel
 
 @Composable
@@ -24,7 +25,7 @@ fun HomeScreenContent(
     Column(modifier = modifier) {
         HomeScreenCarousel(state = carouselState)
         VerticalSpacer(24)
-        CategoriesList(items = state.folders)
+        FoldersList(items = state.folders)
     }
 }
 
@@ -34,7 +35,7 @@ fun HomeScreenContent(
 )
 @Composable
 private fun HomeContentPreview() {
-    val state = HomeScreenState.Success(folders = emptyList())
+    val state = HomeScreenState.Success(folders = folders)
 
     Scaffold { innerPadding ->
         HomeScreenContent(

@@ -23,4 +23,6 @@
     <string name="select">Tanlang</string>
     <string name="templates">Shablonlar</string>
     <string name="error">Error</string>
+    <string name="no_folders_found">Papkalar topilmadi</string>
+    <string name="products">Maxsulotlar</string>
 </resources>

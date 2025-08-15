@@ -10,5 +10,4 @@ class CompanyOfficeApiServiceImpl : CompanyOfficeApiService {
     override suspend fun get(credential: Credential): CompanyOfficeModel? {
         return companyOffice.toModel()
     }
-
 }

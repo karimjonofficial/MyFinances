@@ -10,5 +10,4 @@ class UserApiServiceImpl : UserApiService {
     override suspend fun get(credential: Credential): UserModel? {
         return user.toModel()
     }
-
 }
