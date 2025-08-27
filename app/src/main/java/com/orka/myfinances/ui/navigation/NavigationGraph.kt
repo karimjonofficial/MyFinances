@@ -7,8 +7,6 @@ import androidx.compose.animation.SizeTransform
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.entry
@@ -28,7 +26,6 @@ fun NavigationGraph(
     backStack: SnapshotStateList<Destinations>,
     viewModel: HomeScreenViewModel
 ) {
-
     NavDisplay(
         backStack = backStack,
         onBack = { backStack.removeRange(1, backStack.size - 1) },
@@ -41,7 +38,7 @@ fun NavigationGraph(
             )
         },
         entryProvider = entryProvider {
-            entry<Destinations.Home> {
+            entry<Destinations.Home> { destination ->
                 val uiState = viewModel.uiState.collectAsState()
 
                 HomeScreen(
@@ -49,7 +46,7 @@ fun NavigationGraph(
                     state = uiState.value
                 )
 
-                if (dialogVisible.value) {
+                if (destination.dialogState is DialogState.AddProduct) {
                     AddFolderDialog(
                         templates = emptyList(),
                         dismissRequest = { dialogVisible.value = false },
@@ -63,16 +60,13 @@ fun NavigationGraph(
             }
             entry<Destinations.Folder> { destination ->
                 val folder = destination.folder
+
                 when (folder) {
                     is Catalog -> {
-                        if (folder.folders != null) {
-                            FoldersList(
-                                modifier = modifier,
-                                items = folder.folders
-                            )
-                        } else {
-                            //TODO error
-                        }
+                        FoldersList(
+                            modifier = modifier,
+                            items = folder.folders
+                        )
                     }
 
                     is ProductFolder -> {

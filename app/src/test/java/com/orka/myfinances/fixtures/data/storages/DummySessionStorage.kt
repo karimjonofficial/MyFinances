@@ -5,7 +5,7 @@ import com.orka.myfinances.data.zipped.SessionModel
 
 class DummySessionStorage : LocalSessionStorage {
     override suspend fun get(): SessionModel? {
-        TODO("Not yet implemented")
+        return null
     }
 
     override suspend fun store(session: SessionModel) {

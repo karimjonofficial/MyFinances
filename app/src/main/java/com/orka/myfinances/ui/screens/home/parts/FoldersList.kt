@@ -16,11 +16,11 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Folder
 import com.orka.myfinances.lib.ui.VerticalSpacer
-import com.orka.myfinances.ui.screens.home.components.CategoryButton
-import com.orka.myfinances.ui.screens.home.components.FirstCategoryButton
-import com.orka.myfinances.ui.screens.home.components.LastCategoryButton
-import com.orka.myfinances.ui.screens.home.components.NotLastCategoryButton
-import com.orka.myfinances.ui.screens.home.components.SecondCategoryButton
+import com.orka.myfinances.ui.screens.home.components.FolderButton
+import com.orka.myfinances.ui.screens.home.components.FirstFolderButton
+import com.orka.myfinances.ui.screens.home.components.LastFolderButton
+import com.orka.myfinances.ui.screens.home.components.NotLastFolderButton
+import com.orka.myfinances.ui.screens.home.components.SecondFolderButton
 
 @Composable
 fun FoldersList(
@@ -49,16 +49,16 @@ fun FoldersList(
         }
 
         if(size > 0) {
-            item { FirstCategoryButton(folder = items[0]) {} }
-            if (size > 1) item { SecondCategoryButton(folder = items[1]) {} }
+            item { FirstFolderButton(folder = items[0]) {} }
+            if (size > 1) item { SecondFolderButton(folder = items[1]) {} }
             if (size > 4) items(
                 items = items.subList(2, size - 3)
-            ) { item -> CategoryButton(folder = item) {} }
+            ) { item -> FolderButton(folder = item) {} }
             if (size > 2) item {
-                if(size == 3) NotLastCategoryButton(folder = items[size - 1]) {}
-                else NotLastCategoryButton(folder = items[size - 2]) {}
+                if(size == 3) NotLastFolderButton(folder = items[size - 1]) {}
+                else NotLastFolderButton(folder = items[size - 2]) {}
             }
-            if (size > 3) item { LastCategoryButton(folder = items[size - 1]) {} }
+            if (size > 3) item { LastFolderButton(folder = items[size - 1]) {} }
         } else {
             item {
                 Text(text = stringResource(R.string.no_folders_found))

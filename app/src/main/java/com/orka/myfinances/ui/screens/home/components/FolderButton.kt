@@ -27,7 +27,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Folder
 import com.orka.myfinances.data.models.folder.ProductFolder
-import com.orka.myfinances.fixtures.folders
+import com.orka.myfinances.fixtures.resources.models.folder.folder1
 import com.orka.myfinances.lib.ui.HorizontalSpacer
 import com.orka.myfinances.lib.ui.VerticalSpacer
 import com.orka.myfinances.ui.theme.MyFinancesTheme
@@ -36,12 +36,12 @@ private const val roundedCornerRadius = 16
 private const val normalCornerRadius = 4
 
 @Composable
-fun CategoryButton(
+fun FolderButton(
     modifier: Modifier = Modifier,
     folder: Folder,
     onClick: () -> Unit = {}
 ) {
-    BaseCategoryButton(
+    BaseFolderButton(
         modifier = modifier,
         folder = folder,
         onClick = onClick
@@ -49,12 +49,12 @@ fun CategoryButton(
 }
 
 @Composable
-fun FirstCategoryButton(
+fun FirstFolderButton(
     modifier: Modifier = Modifier,
     folder: Folder,
     onClick: () -> Unit = {}
 ) {
-    BaseCategoryButton(
+    BaseFolderButton(
         modifier = modifier,
         topStart = roundedCornerRadius.dp,
         folder = folder,
@@ -63,12 +63,12 @@ fun FirstCategoryButton(
 }
 
 @Composable
-fun SecondCategoryButton(
+fun SecondFolderButton(
     modifier: Modifier = Modifier,
     folder: Folder,
     onClick: () -> Unit = {}
 ) {
-    BaseCategoryButton(
+    BaseFolderButton(
         modifier = modifier,
         topEnd = roundedCornerRadius.dp,
         folder = folder,
@@ -77,12 +77,12 @@ fun SecondCategoryButton(
 }
 
 @Composable
-fun NotLastCategoryButton(
+fun NotLastFolderButton(
     modifier: Modifier = Modifier,
     folder: Folder,
     onClick: () -> Unit = {}
 ) {
-    BaseCategoryButton(
+    BaseFolderButton(
         modifier = modifier,
         bottomStart = roundedCornerRadius.dp,
         folder = folder,
@@ -91,12 +91,12 @@ fun NotLastCategoryButton(
 }
 
 @Composable
-fun LastCategoryButton(
+fun LastFolderButton(
     modifier: Modifier = Modifier,
     folder: Folder,
     onClick: () -> Unit = {}
 ) {
-    BaseCategoryButton(
+    BaseFolderButton(
         modifier = modifier,
         bottomEnd = roundedCornerRadius.dp,
         folder = folder,
@@ -105,7 +105,7 @@ fun LastCategoryButton(
 }
 
 @Composable
-private fun BaseCategoryButton(
+private fun BaseFolderButton(
     modifier: Modifier = Modifier,
     topStart: Dp = normalCornerRadius.dp,
     topEnd: Dp = normalCornerRadius.dp,
@@ -152,7 +152,7 @@ private fun BaseCategoryButton(
                     VerticalSpacer(4)
 
                     Text(
-                        text = "${folder.products?.size} ${stringResource(R.string.products)}",
+                        text = "${folder.products.size} ${stringResource(R.string.products)}",
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 }
@@ -183,8 +183,8 @@ private fun CatalogPreview() {
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            CategoryButton(
-                folder = folders[0]
+            FolderButton(
+                folder = folder1
             )
         }
     }
@@ -204,8 +204,8 @@ private fun ProductFolderPreview() {
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            CategoryButton(
-                folder = folders[2]
+            FolderButton(
+                folder = folder1
             )
         }
     }

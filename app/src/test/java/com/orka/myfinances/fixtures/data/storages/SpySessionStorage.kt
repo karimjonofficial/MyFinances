@@ -8,7 +8,7 @@ class SpySessionStorage : LocalSessionStorage {
     var credential: Credential? = null
 
     override suspend fun get(): SessionModel? {
-        TODO("Not yet implemented")
+        return null
     }
 
     override suspend fun store(session: SessionModel) {

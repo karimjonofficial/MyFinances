@@ -9,7 +9,7 @@ import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.orka.myfinances.fixtures.folders
+import com.orka.myfinances.fixtures.resources.models.folder.folders
 import com.orka.myfinances.lib.ui.VerticalSpacer
 import com.orka.myfinances.ui.screens.home.parts.FoldersList
 import com.orka.myfinances.ui.screens.home.parts.HomeScreenCarousel

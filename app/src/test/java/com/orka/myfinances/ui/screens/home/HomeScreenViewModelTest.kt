@@ -67,7 +67,7 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
                 stateFlow = viewModel.uiState,
                 action = { viewModel.addFolder(name, catalogFolderType) },
                 assertState = { it === state },
-                skippedDesiredTransitions = 1
+                skippedSameTransitions = 1
             )
         }
     }

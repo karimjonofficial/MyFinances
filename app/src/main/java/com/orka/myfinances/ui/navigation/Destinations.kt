@@ -6,12 +6,17 @@ import kotlinx.serialization.Serializable
 typealias MFolder = com.orka.myfinances.data.models.folder.Folder
 
 sealed interface Destinations {
-    @Serializable
-    data object Home : Destinations
+    val dialogState: DialogState?
 
     @Serializable
-    data class Folder(@Contextual val folder: MFolder) : Destinations
+    data class Home(override val dialogState: DialogState? = null) : Destinations
 
     @Serializable
-    data object Profile : Destinations
+    data class Folder(
+        @Contextual val folder: MFolder,
+        override val dialogState: DialogState? = null
+    ) : Destinations
+
+    @Serializable
+    data class Profile(override val dialogState: DialogState? = null) : Destinations
 }

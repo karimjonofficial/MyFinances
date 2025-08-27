@@ -1,8 +1,11 @@
 package com.orka.myfinances.data.models
 
-import com.orka.myfinances.data.models.template.Template
+import com.orka.myfinances.data.models.folder.ProductFolder
 
 data class Product(
     val id: Id,
-    val template: Template
+    val name: String,
+    val price: Double,
+    val salePrice: Double,
+    val folder: ProductFolder
 )

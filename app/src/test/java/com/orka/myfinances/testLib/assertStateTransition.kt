@@ -13,7 +13,7 @@ import org.junit.jupiter.api.assertNotNull
 fun <T> TestScope.assertStateTransition(
     stateFlow: StateFlow<T>,
     assertState: (T) -> Boolean,
-    skippedDesiredTransitions: Int = 0,
+    skippedSameTransitions: Int = 0,
     action: () -> Unit,
 ) = this.runTest {
     var count = 0
@@ -37,5 +37,5 @@ fun <T> TestScope.assertStateTransition(
     println("Assert: $result")
     assertNotNull(result)
     println("Final count: $count")
-    assertEquals(1 + skippedDesiredTransitions, count)
+    assertEquals(1 + skippedSameTransitions, count)
 }
