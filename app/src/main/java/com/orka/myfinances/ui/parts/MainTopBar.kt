@@ -23,7 +23,7 @@ fun MainTopBar(
             HomeScreenTopBar(modifier = modifier) {  }
         }
 
-        Destinations.Profile -> {
+        is Destinations.Profile -> {
             TopAppBar(
                 modifier = modifier,
                 title = { Text(session.user.firstName) }

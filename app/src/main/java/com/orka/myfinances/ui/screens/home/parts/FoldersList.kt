@@ -25,12 +25,13 @@ import com.orka.myfinances.ui.screens.home.components.SecondFolderButton
 @Composable
 fun FoldersList(
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(horizontal = 8.dp),
     items: List<Folder>
 ) {
     LazyVerticalGrid(
         modifier = modifier,
         columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(horizontal = 8.dp),
+        contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(2.dp),
         horizontalArrangement = Arrangement.spacedBy(2.dp)
     ) {

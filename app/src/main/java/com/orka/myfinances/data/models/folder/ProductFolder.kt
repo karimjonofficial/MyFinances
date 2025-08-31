@@ -1,7 +1,7 @@
 package com.orka.myfinances.data.models.folder
 
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.data.models.Product
+import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.data.models.template.Template
 

@@ -25,4 +25,5 @@
     <string name="error">Error</string>
     <string name="no_folders_found">Papkalar topilmadi</string>
     <string name="products">Maxsulotlar</string>
+    <string name="folders">Folders</string>
 </resources>

@@ -31,7 +31,7 @@ fun MainNavBar(
                     if(backStack.find { it is Destinations.Home } != null) {
                         backStack.removeAll { it !is Destinations.Home }
                     } else {
-                        backStack.add(Destinations.Home)
+                        backStack.add(Destinations.Home(null))
                     }
                 }
             },
@@ -53,7 +53,7 @@ fun MainNavBar(
                     if(index > 0) {
                         backStack.removeRange(index + 1, backStack.size - 1)
                     } else {
-                        backStack.add(Destinations.Profile)
+                        backStack.add(Destinations.Profile(null))
                     }
                 }
             },

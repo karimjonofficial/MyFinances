@@ -24,7 +24,7 @@ fun MainScreen(
     session: Session
 ) {
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
-    val backStack = remember { mutableStateListOf<Destinations>(Destinations.Home) }
+    val backStack = remember { mutableStateListOf<Destinations>(Destinations.Home(null)) }
 
     Scaffold(
         modifier = modifier,

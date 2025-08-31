@@ -6,7 +6,6 @@ import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.models.User
-import com.orka.myfinances.data.models.template.FieldType
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.models.template.TemplateField
 import com.orka.myfinances.data.repositories.FolderType
@@ -50,12 +49,12 @@ val session = Session(
 val textTemplateField = TemplateField(
     id = id,
     name = name,
-    type = FieldType.Text
+    type = Int::class
 )
 val intTemplateField = TemplateField(
     id = id,
     name = name,
-    type = FieldType.Integer
+    type = String::class
 )
 val templateFields = listOf(
     textTemplateField,

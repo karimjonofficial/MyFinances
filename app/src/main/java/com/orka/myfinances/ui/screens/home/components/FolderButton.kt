@@ -134,28 +134,26 @@ private fun BaseFolderButton(
                 .fillMaxSize()
                 .padding(8.dp)
         ) {
-            if (folder is Catalog) {
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.Center
+            ) {
+                val text = when (folder) {
+                    is Catalog -> "${stringResource(R.string.folders)} ${folder.folders.size}"
+                    is ProductFolder -> "${stringResource(R.string.products)} ${folder.products.size}"
+                }
+
                 Text(
-                    modifier = Modifier.weight(1f),
                     text = folder.name,
                     color = MaterialTheme.colorScheme.onSurface
                 )
-            } else if (folder is ProductFolder) {
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = folder.name,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    VerticalSpacer(4)
 
-                    Text(
-                        text = "${folder.products.size} ${stringResource(R.string.products)}",
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
+                VerticalSpacer(4)
+
+                Text(
+                    text = text,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
             }
 
             HorizontalSpacer(8)
