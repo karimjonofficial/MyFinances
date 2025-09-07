@@ -1,13 +1,15 @@
 package com.orka.myfinances.testLib
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.assertNotNull
 
 @OptIn(ExperimentalCoroutinesApi::class)
 fun <T> TestScope.assertStateTransition(
@@ -19,23 +21,29 @@ fun <T> TestScope.assertStateTransition(
     var count = 0
     var result: T? = null
 
-    val job = this.launch {
+    val job = this.launch(UnconfinedTestDispatcher(testScheduler)) {
         stateFlow.collect {
-            println("Collect: $it")
+            this@runTest.advanceUntilIdle()
+            println("Collecting: $it")
+
             if (assertState(it)) {
-                println("Add: $it")
+                println("Counting for: $it")
                 result = it
                 count++
+                if(count == skippedSameTransitions + 1) {
+                    println("Expected $skippedSameTransitions matching emissions reached. Cancelling collection.")
+                    this@launch.cancel()
+                }
             }
         }
     }
 
     action()
+    delay(100)
+    job.join()
     this.advanceUntilIdle()
-    job.cancel()
 
     println("Assert: $result")
-    assertNotNull(result)
     println("Final count: $count")
     assertEquals(1 + skippedSameTransitions, count)
 }

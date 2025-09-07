@@ -10,10 +10,14 @@ import com.orka.myfinances.fixtures.data.repositories.FolderRepositoryImpl
 import com.orka.myfinances.lib.extensions.makeSession
 import com.orka.myfinances.lib.extensions.toModel
 import com.orka.myfinances.ui.managers.session.SessionManager
+import com.orka.myfinances.ui.managers.dialog.DialogManager
+import com.orka.myfinances.ui.managers.dialog.DialogState
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlin.coroutines.CoroutineContext
 
 class UiManager(
@@ -25,8 +29,11 @@ class UiManager(
     initialState = UiState.Initial,
     defaultCoroutineContext = context,
     logger = logger
-), SessionManager {
+), SessionManager, DialogManager {
+    private val _dialogState = MutableStateFlow<DialogState?>(null)
+
     val uiState = state.asStateFlow()
+    override val dialogState = _dialogState.asStateFlow()
 
     fun initialize() = launch {
         val sessionModel = storage.get()
@@ -57,6 +64,16 @@ class UiManager(
                 openSession(session)
             }
         }
+    }
+
+
+    override fun show(dialog: DialogState) {
+        //TODO the problem with concurrent state changes is not solved yet
+        launch { _dialogState.update { dialog } }
+    }
+
+    override fun hide() {
+        launch { _dialogState.update { null } }
     }
 
     private fun openSession(session: Session) {

@@ -30,13 +30,13 @@ import com.orka.myfinances.lib.ui.VerticalSpacer
 fun StockItemCard(
     modifier: Modifier = Modifier,
     item: StockItem,
-    click: (Int) -> Unit
+    click: (StockItem) -> Unit
 ) {
     Column(
         modifier = modifier
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(24.dp))
-            .clickable { click(item.id.value) }
+            .clickable { click(item) }
     ) {
         Box(
             modifier = Modifier

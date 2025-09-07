@@ -9,5 +9,6 @@ data class Product(
     val price: Double,
     val salePrice: Double,
     val folder: ProductFolder,
-    val properties: List<Property<*>>
+    val properties: List<Property<*>>,
+    val description: String = ""
 )

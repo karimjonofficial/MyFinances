@@ -7,6 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.ui.navigation.Destinations
+import com.orka.myfinances.ui.managers.dialog.DialogManager
+import com.orka.myfinances.ui.managers.dialog.DialogState
 import com.orka.myfinances.ui.screens.home.parts.HomeScreenTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -14,13 +16,18 @@ import com.orka.myfinances.ui.screens.home.parts.HomeScreenTopBar
 fun MainTopBar(
     modifier: Modifier = Modifier,
     backStack: List<Destinations>,
+    dialogManager: DialogManager,
     session: Session
 ) {
     val currentDestination = backStack.last()
 
     when (currentDestination) {
         is Destinations.Home -> {
-            HomeScreenTopBar(modifier = modifier) {  }
+            HomeScreenTopBar(modifier = modifier) {
+                val viewModel = currentDestination.viewModel
+                val dialog = DialogState.AddFolder(viewModel)
+                dialogManager.show(dialog)
+            }
         }
 
         is Destinations.Profile -> {

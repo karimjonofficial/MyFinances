@@ -63,7 +63,7 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
         fun `When add category fails state goes to previous state`() {
             val state = viewModel.uiState.value
 
-            testScope.assertStateTransition(
+            assertStateTransition(
                 stateFlow = viewModel.uiState,
                 action = { viewModel.addFolder(name, catalogFolderType) },
                 assertState = { it === state },

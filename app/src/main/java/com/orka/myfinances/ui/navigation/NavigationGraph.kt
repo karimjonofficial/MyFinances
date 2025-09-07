@@ -5,7 +5,6 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.SizeTransform
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
@@ -14,17 +13,19 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.ProductFolder
+import com.orka.myfinances.ui.managers.dialog.DialogManager
+import com.orka.myfinances.ui.managers.dialog.DialogState
 import com.orka.myfinances.ui.screens.home.HomeScreen
-import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
 import com.orka.myfinances.ui.screens.home.parts.FoldersList
+import com.orka.myfinances.ui.screens.home.parts.WarehouseGrid
 
 @Composable
 fun NavigationGraph(
     modifier: Modifier = Modifier,
-    dialogVisible: MutableState<Boolean>,
+    dialogState: DialogState?,
     backStack: SnapshotStateList<Destinations>,
-    viewModel: HomeScreenViewModel
+    dialogManager: DialogManager
 ) {
     NavDisplay(
         backStack = backStack,
@@ -39,24 +40,12 @@ fun NavigationGraph(
         },
         entryProvider = entryProvider {
             entry<Destinations.Home> { destination ->
-                val uiState = viewModel.uiState.collectAsState()
+                val uiState = destination.viewModel.uiState.collectAsState()
 
                 HomeScreen(
                     modifier = modifier,
                     state = uiState.value
                 )
-
-                if (destination.dialogState is DialogState.AddProduct) {
-                    AddFolderDialog(
-                        templates = emptyList(),
-                        dismissRequest = { dialogVisible.value = false },
-                        onSuccess = { name, type ->
-                            viewModel.addFolder(name, type)
-                            dialogVisible.value = false
-                        },
-                        onCancel = { dialogVisible.value = false }
-                    )
-                }
             }
             entry<Destinations.Folder> { destination ->
                 val folder = destination.folder
@@ -70,7 +59,11 @@ fun NavigationGraph(
                     }
 
                     is ProductFolder -> {
-
+                        WarehouseGrid(
+                            modifier = modifier,
+                            products = folder.products,
+                            stockItems = folder.stockItems
+                        )
                     }
                 }
             }
@@ -79,4 +72,15 @@ fun NavigationGraph(
             }
         }
     )
+    if (dialogState is DialogState.AddFolder) {
+        AddFolderDialog(
+            templates = emptyList(),
+            dismissRequest = { dialogManager.hide() },
+            onSuccess = { name, type ->
+                dialogState.viewModel.addFolder(name, type)
+            },
+            onCancel = { dialogManager.hide() }
+        )
+    }
 }
+

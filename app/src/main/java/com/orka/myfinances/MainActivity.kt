@@ -23,6 +23,7 @@ class MainActivity : ComponentActivity() {
             MyFinancesTheme {
                 MyFinancesScreen(
                     modifier = Modifier.fillMaxSize(),
+                    dialogManager = manager,
                     state = uiState.value
                 )
             }

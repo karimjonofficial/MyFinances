@@ -31,7 +31,8 @@ fun MainNavBar(
                     if(backStack.find { it is Destinations.Home } != null) {
                         backStack.removeAll { it !is Destinations.Home }
                     } else {
-                        backStack.add(Destinations.Home(null))
+                        //TODO navigate
+                        //backStack.add(Destinations.Home(null))
                     }
                 }
             },

@@ -35,6 +35,6 @@ class HomeScreenViewModel(
         val folder = repository.add(request)
         if(folder != null)
             setState(HomeScreenState.Success(listOf(folder)))
-        else setStateAsync(previousState)
+        else setState(previousState)
     }
 }
