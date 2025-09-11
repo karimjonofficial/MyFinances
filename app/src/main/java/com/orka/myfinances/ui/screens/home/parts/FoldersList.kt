@@ -26,7 +26,8 @@ import com.orka.myfinances.ui.screens.home.components.SecondFolderButton
 fun FoldersList(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(horizontal = 8.dp),
-    items: List<Folder>
+    items: List<Folder>,
+    onFolderSelected: (Folder) -> Unit
 ) {
     LazyVerticalGrid(
         modifier = modifier,
@@ -49,17 +50,47 @@ fun FoldersList(
             }
         }
 
-        if(size > 0) {
-            item { FirstFolderButton(folder = items[0]) {} }
-            if (size > 1) item { SecondFolderButton(folder = items[1]) {} }
+        if (size > 0) {
+            item {
+                FirstFolderButton(
+                    folder = items[0],
+                    onClick = onFolderSelected
+                )
+            }
+            if (size > 1) item {
+                SecondFolderButton(
+                    folder = items[1],
+                    onClick = onFolderSelected
+                )
+            }
+
             if (size > 4) items(
                 items = items.subList(2, size - 3)
-            ) { item -> FolderButton(folder = item) {} }
-            if (size > 2) item {
-                if(size == 3) NotLastFolderButton(folder = items[size - 1]) {}
-                else NotLastFolderButton(folder = items[size - 2]) {}
+            ) { item ->
+                FolderButton(folder = item, onClick = onFolderSelected)
             }
-            if (size > 3) item { LastFolderButton(folder = items[size - 1]) {} }
+
+            if (size > 2) item {
+
+                if (size == 3) {
+                    NotLastFolderButton(
+                        folder = items[size - 1],
+                        onClick = onFolderSelected
+                    )
+                } else {
+                    NotLastFolderButton(
+                        folder = items[size - 2],
+                        onClick = onFolderSelected
+                    )
+                }
+            }
+
+            if (size > 3) item {
+                LastFolderButton(
+                    folder = items[size - 1],
+                    onClick = onFolderSelected
+                )
+            }
         } else {
             item {
                 Text(text = stringResource(R.string.no_folders_found))

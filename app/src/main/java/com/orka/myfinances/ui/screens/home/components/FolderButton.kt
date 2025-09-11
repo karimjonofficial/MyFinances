@@ -39,7 +39,7 @@ private const val normalCornerRadius = 4
 fun FolderButton(
     modifier: Modifier = Modifier,
     folder: Folder,
-    onClick: () -> Unit = {}
+    onClick: (Folder) -> Unit
 ) {
     BaseFolderButton(
         modifier = modifier,
@@ -52,7 +52,7 @@ fun FolderButton(
 fun FirstFolderButton(
     modifier: Modifier = Modifier,
     folder: Folder,
-    onClick: () -> Unit = {}
+    onClick: (Folder) -> Unit
 ) {
     BaseFolderButton(
         modifier = modifier,
@@ -66,7 +66,7 @@ fun FirstFolderButton(
 fun SecondFolderButton(
     modifier: Modifier = Modifier,
     folder: Folder,
-    onClick: () -> Unit = {}
+    onClick: (Folder) -> Unit
 ) {
     BaseFolderButton(
         modifier = modifier,
@@ -80,7 +80,7 @@ fun SecondFolderButton(
 fun NotLastFolderButton(
     modifier: Modifier = Modifier,
     folder: Folder,
-    onClick: () -> Unit = {}
+    onClick: (Folder) -> Unit
 ) {
     BaseFolderButton(
         modifier = modifier,
@@ -94,7 +94,7 @@ fun NotLastFolderButton(
 fun LastFolderButton(
     modifier: Modifier = Modifier,
     folder: Folder,
-    onClick: () -> Unit = {}
+    onClick: (Folder) -> Unit
 ) {
     BaseFolderButton(
         modifier = modifier,
@@ -112,7 +112,7 @@ private fun BaseFolderButton(
     bottomStart: Dp = normalCornerRadius.dp,
     bottomEnd: Dp = normalCornerRadius.dp,
     folder: Folder,
-    onClick: () -> Unit = {}
+    onClick: (Folder) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -125,7 +125,7 @@ private fun BaseFolderButton(
                 )
             )
             .background(MaterialTheme.colorScheme.surfaceContainer)
-            .clickable(onClick = onClick)
+            .clickable { onClick(folder) }
             .padding(horizontal = 4.dp, vertical = 8.dp)
     ) {
         Row(
@@ -181,9 +181,7 @@ private fun CatalogPreview() {
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            FolderButton(
-                folder = folder1
-            )
+            FolderButton(folder = folder1) {}
         }
     }
 }
@@ -202,9 +200,7 @@ private fun ProductFolderPreview() {
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            FolderButton(
-                folder = folder1
-            )
+            FolderButton(folder = folder1) {}
         }
     }
 }

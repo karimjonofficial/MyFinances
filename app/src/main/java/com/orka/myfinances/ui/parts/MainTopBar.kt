@@ -6,7 +6,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.orka.myfinances.data.models.Session
-import com.orka.myfinances.ui.navigation.Destinations
+import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.managers.dialog.DialogManager
 import com.orka.myfinances.ui.managers.dialog.DialogState
 import com.orka.myfinances.ui.screens.home.parts.HomeScreenTopBar
@@ -15,14 +15,13 @@ import com.orka.myfinances.ui.screens.home.parts.HomeScreenTopBar
 @Composable
 fun MainTopBar(
     modifier: Modifier = Modifier,
-    backStack: List<Destinations>,
+    currentDestination: Destination,
     dialogManager: DialogManager,
     session: Session
 ) {
-    val currentDestination = backStack.last()
 
     when (currentDestination) {
-        is Destinations.Home -> {
+        is Destination.Home -> {
             HomeScreenTopBar(modifier = modifier) {
                 val viewModel = currentDestination.viewModel
                 val dialog = DialogState.AddFolder(viewModel)
@@ -30,13 +29,13 @@ fun MainTopBar(
             }
         }
 
-        is Destinations.Profile -> {
+        is Destination.Profile -> {
             TopAppBar(
                 modifier = modifier,
                 title = { Text(session.user.firstName) }
             )
         }
 
-        is Destinations.Folder -> {}
+        is Destination.Folder -> {}
     }
 }

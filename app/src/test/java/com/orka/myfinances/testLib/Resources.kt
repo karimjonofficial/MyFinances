@@ -49,12 +49,12 @@ val session = Session(
 val textTemplateField = TemplateField(
     id = id,
     name = name,
-    type = Int::class
+    type = "int"
 )
 val intTemplateField = TemplateField(
     id = id,
     name = name,
-    type = String::class
+    type = "string"
 )
 val templateFields = listOf(
     textTemplateField,
@@ -62,4 +62,4 @@ val templateFields = listOf(
 )
 val template = Template(id, name, templateFields)
 val catalogFolderType = FolderType.Catalog
-val productFolderType = FolderType.ProductFolder(template)
+val productFolderType = FolderType.ProductFolder(template.id.value)

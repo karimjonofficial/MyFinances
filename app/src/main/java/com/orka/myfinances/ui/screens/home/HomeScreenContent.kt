@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.orka.myfinances.data.models.folder.Folder
 import com.orka.myfinances.fixtures.resources.models.folder.folders
 import com.orka.myfinances.lib.ui.VerticalSpacer
 import com.orka.myfinances.ui.screens.home.parts.FoldersList
@@ -20,7 +21,8 @@ import com.orka.myfinances.ui.screens.home.parts.HomeScreenCarousel
 @OptIn(ExperimentalMaterial3Api::class)
 fun HomeScreenContent(
     modifier: Modifier,
-    state: HomeScreenState.Success
+    state: HomeScreenState.Success,
+    onNavigateToFolder: (Folder) -> Unit
 ) {
     val carouselState = rememberCarouselState { 3 }
 
@@ -29,7 +31,8 @@ fun HomeScreenContent(
         VerticalSpacer(24)
         FoldersList(
             items = state.folders,
-            contentPadding = PaddingValues(horizontal = 16.dp)
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            onFolderSelected = onNavigateToFolder
         )
     }
 }
@@ -48,6 +51,6 @@ private fun HomeContentPreview() {
                 .fillMaxSize()
                 .padding(innerPadding),
             state = state
-        )
+        ) {}
     }
 }

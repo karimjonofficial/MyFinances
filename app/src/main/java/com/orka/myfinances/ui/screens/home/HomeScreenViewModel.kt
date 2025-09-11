@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlin.coroutines.CoroutineContext
 
 class HomeScreenViewModel(
-    logger: Logger,
     private val repository: FolderRepository,
+    logger: Logger,
     context: CoroutineContext = Dispatchers.Main
 ) : ViewModel<HomeScreenState>(
     initialState = HomeScreenState.Initial,
@@ -33,8 +33,10 @@ class HomeScreenViewModel(
         setStateAsync(HomeScreenState.Loading)
         val request = AddFolderRequest(name, type)
         val folder = repository.add(request)
-        if(folder != null)
-            setState(HomeScreenState.Success(listOf(folder)))
+        if(folder != null) {
+            val folders = repository.get()
+            setState(HomeScreenState.Success(folders!!))
+        }
         else setState(previousState)
     }
 }

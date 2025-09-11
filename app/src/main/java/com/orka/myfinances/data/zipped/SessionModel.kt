@@ -5,7 +5,7 @@ import com.orka.myfinances.data.models.CompanyOffice
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.models.User
-import com.orka.myfinances.lib.extensions.toId
+import com.orka.myfinances.lib.extensions.models.toId
 
 data class SessionModel(
     val user: UserModel,

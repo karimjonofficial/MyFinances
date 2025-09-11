@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
+import com.orka.myfinances.data.models.folder.Folder
 import com.orka.myfinances.ui.screens.main.FailureScreen
 import com.orka.myfinances.ui.screens.main.LoadingScreen
 
@@ -12,7 +13,8 @@ import com.orka.myfinances.ui.screens.main.LoadingScreen
 @OptIn(ExperimentalMaterial3Api::class)
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    state: HomeScreenState
+    state: HomeScreenState,
+    onNavigateToFolder: (Folder) -> Unit
 ) {
     when (state) {
         HomeScreenState.Initial -> {
@@ -28,9 +30,7 @@ fun HomeScreen(
         }
 
         is HomeScreenState.Success -> {
-            HomeScreenContent(modifier, state)
+            HomeScreenContent(modifier, state, onNavigateToFolder)
         }
     }
-
-
 }

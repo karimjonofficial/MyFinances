@@ -1,8 +1,9 @@
 package com.orka.myfinances.data.repositories
 
-import com.orka.myfinances.data.models.template.Template
+import kotlinx.serialization.Serializable
 
+@Serializable
 sealed interface FolderType {
-    data object Catalog : FolderType
-    data class ProductFolder(val template: Template) : FolderType
+    @Serializable data object Catalog : FolderType
+    @Serializable data class ProductFolder(val templateId: Int) : FolderType
 }

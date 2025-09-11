@@ -10,7 +10,6 @@ import com.orka.myfinances.fixtures.data.api.companyOffice.CompanyOfficeApiServi
 import com.orka.myfinances.fixtures.data.api.companyOffice.EmptyCompanyOfficeApiServiceStub
 import com.orka.myfinances.fixtures.data.api.user.EmptyUserApiServiceStub
 import com.orka.myfinances.fixtures.data.api.user.UserApiServiceStub
-import com.orka.myfinances.fixtures.data.repositories.DummyFolderRepository
 import com.orka.myfinances.fixtures.data.storages.DummySessionStorage
 import com.orka.myfinances.fixtures.data.storages.EmptySessionStorage
 import com.orka.myfinances.fixtures.data.storages.SessionStorageStub
@@ -19,8 +18,7 @@ import com.orka.myfinances.fixtures.factories.ConfigurableApiProvider
 import com.orka.myfinances.fixtures.factories.DummyApiProvider
 import com.orka.myfinances.testLib.assertStateTransition
 import com.orka.myfinances.testLib.credential
-import com.orka.myfinances.ui.managers.dialog.DialogState
-import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
+import com.orka.myfinances.ui.managers.session.UiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -37,46 +35,6 @@ class UiManagerTest : MainDispatcherContext() {
     @Nested
     inner class DummyApiProviderContext {
         private val provider = DummyApiProvider()
-
-        @Nested
-        inner class DummySessionStorageContext {
-            private val storage = DummySessionStorage()
-            private val manager = uiManager(storage, provider)
-
-            @Test
-            fun `Dialog state is null when initialized`() {
-                assertTrue { manager.dialogState.value == null }
-            }
-
-            @Nested
-            inner class HomeScreenViewModelContext {
-                val repository = DummyFolderRepository()
-                val viewModel = HomeScreenViewModel(logger, repository, coroutineContext)
-                val dialog = DialogState.AddFolder(viewModel)
-
-                @Test
-                fun `When show is called, then state changes`() {
-                    assertStateTransition(
-                        stateFlow = manager.dialogState,
-                        assertState = { it == dialog },
-                        action = { manager.show(dialog) }
-                    )
-                }
-
-                @Test
-                fun `When hide is called, dialog state is null`() {
-                    assertStateTransition(
-                        stateFlow = manager.dialogState,
-                        assertState = { it == null },
-                        action = {
-                            manager.show(dialog)
-                            manager.hide()
-                        },
-                        skippedSameTransitions = 1
-                    )
-                }
-            }
-        }
 
         @Test
         fun `State is Guest when session is not found`() {

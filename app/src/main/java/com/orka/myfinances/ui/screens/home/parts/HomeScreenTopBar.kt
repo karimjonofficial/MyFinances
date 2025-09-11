@@ -19,7 +19,7 @@ import com.orka.myfinances.R
 @OptIn(ExperimentalMaterial3Api::class)
 fun HomeScreenTopBar(
     modifier: Modifier = Modifier,
-    onAddCLick: () -> Unit
+    onAddClick: () -> Unit
 ) {
     TopAppBar(
         modifier = modifier,
@@ -33,7 +33,7 @@ fun HomeScreenTopBar(
             )
         },
         actions = {
-            IconButton(onClick = onAddCLick) {
+            IconButton(onClick = onAddClick) {
                 Icon(painter = painterResource(id = R.drawable.add), contentDescription = null)
             }
 

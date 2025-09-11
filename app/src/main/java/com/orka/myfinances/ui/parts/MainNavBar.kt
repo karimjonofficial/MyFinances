@@ -4,58 +4,51 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.orka.myfinances.R
-import com.orka.myfinances.ui.navigation.Destinations
+import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.ui.screens.main.NavigationManager
 
 @Composable
 fun MainNavBar(
     modifier: Modifier = Modifier,
-    backStack: SnapshotStateList<Destinations>
+    navigationManager: NavigationManager
 ) {
     NavigationBar(modifier = modifier) {
+        val backStack = navigationManager.backStack.collectAsState()
+
         NavigationBarItem(
-            selected = backStack.last() is Destinations.Home,
+            selected = backStack.value.last() is Destination.Home,
             icon = {
-                val currentDestination = backStack.last()
-                val iconRes = if (currentDestination is Destinations.Home)
+                val currentDestination = backStack.value.last()
+                val iconRes = if (currentDestination is Destination.Home)
                     R.drawable.home_filled
                 else R.drawable.home_outlined
                 Icon(painter = painterResource(id = iconRes), contentDescription = null)
             },
             onClick = {
-                val currentDestination = backStack.last()
-                if(currentDestination !is Destinations.Home) {
-                    if(backStack.find { it is Destinations.Home } != null) {
-                        backStack.removeAll { it !is Destinations.Home }
-                    } else {
-                        //TODO navigate
-                        //backStack.add(Destinations.Home(null))
-                    }
+                val currentDestination = backStack.value.last()
+                if(currentDestination !is Destination.Home) {
+                    navigationManager.navigateToHome()
                 }
-            },
+            }
         )
 
         NavigationBarItem(
-            selected = backStack.last() is Destinations.Profile,
+            selected = backStack.value.last() is Destination.Profile,
             icon = {
-                val currentDestination = backStack.last()
-                val iconRes = if (currentDestination is Destinations.Profile)
+                val currentDestination = backStack.value.last()
+                val iconRes = if (currentDestination is Destination.Profile)
                     R.drawable.account_circle_filled
                 else R.drawable.account_circle_outlined
                 Icon(painter = painterResource(id = iconRes), contentDescription = null)
             },
             onClick = {
-                val currentDestination = backStack.last()
-                if(currentDestination !is Destinations.Profile) {
-                    val index = backStack.indexOfFirst { it is Destinations.Profile }
-                    if(index > 0) {
-                        backStack.removeRange(index + 1, backStack.size - 1)
-                    } else {
-                        backStack.add(Destinations.Profile(null))
-                    }
+                val currentDestination = backStack.value.last()
+                if(currentDestination !is Destination.Profile) {
+                    navigationManager.navigateToProfile()
                 }
             },
         )

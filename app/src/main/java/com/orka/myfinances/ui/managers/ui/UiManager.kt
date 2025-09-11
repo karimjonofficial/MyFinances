@@ -1,5 +1,7 @@
 package com.orka.myfinances.ui.managers.ui
 
+import com.orka.myfinances.DialogManagerImpl
+import com.orka.myfinances.NavigationManagerImpl
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.Credential
@@ -7,17 +9,14 @@ import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.factories.ApiProvider
 import com.orka.myfinances.fixtures.data.repositories.FolderRepositoryImpl
-import com.orka.myfinances.lib.extensions.makeSession
-import com.orka.myfinances.lib.extensions.toModel
+import com.orka.myfinances.lib.extensions.models.makeSession
+import com.orka.myfinances.lib.extensions.models.toModel
 import com.orka.myfinances.ui.managers.session.SessionManager
-import com.orka.myfinances.ui.managers.dialog.DialogManager
-import com.orka.myfinances.ui.managers.dialog.DialogState
+import com.orka.myfinances.ui.managers.session.UiState
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlin.coroutines.CoroutineContext
 
 class UiManager(
@@ -29,11 +28,8 @@ class UiManager(
     initialState = UiState.Initial,
     defaultCoroutineContext = context,
     logger = logger
-), SessionManager, DialogManager {
-    private val _dialogState = MutableStateFlow<DialogState?>(null)
-
+), SessionManager {
     val uiState = state.asStateFlow()
-    override val dialogState = _dialogState.asStateFlow()
 
     fun initialize() = launch {
         val sessionModel = storage.get()
@@ -66,21 +62,13 @@ class UiManager(
         }
     }
 
-
-    override fun show(dialog: DialogState) {
-        //TODO the problem with concurrent state changes is not solved yet
-        launch { _dialogState.update { dialog } }
-    }
-
-    override fun hide() {
-        launch { _dialogState.update { null } }
-    }
-
     private fun openSession(session: Session) {
         val repository = FolderRepositoryImpl()
-        val viewModel = HomeScreenViewModel(logger, repository, defaultCoroutineContext)
+        val viewModel = HomeScreenViewModel(repository, logger, defaultCoroutineContext)
+        val dialogManager = DialogManagerImpl(defaultCoroutineContext, logger)
+        val navigationManager = NavigationManagerImpl(viewModel, logger, defaultCoroutineContext)
         viewModel.initialize()
-        setState(UiState.SignedIn(session, viewModel))
+        setState(UiState.SignedIn(session, dialogManager, navigationManager))
     }
     private suspend fun getSession(credential: Credential): Session? {
         val userApiService = provider.getUserApiService()

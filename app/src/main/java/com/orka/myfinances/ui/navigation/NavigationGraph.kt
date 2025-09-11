@@ -6,7 +6,6 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.SizeTransform
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
@@ -19,17 +18,19 @@ import com.orka.myfinances.ui.screens.home.HomeScreen
 import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
 import com.orka.myfinances.ui.screens.home.parts.FoldersList
 import com.orka.myfinances.ui.screens.home.parts.WarehouseGrid
+import com.orka.myfinances.ui.screens.main.NavigationManager
 
 @Composable
 fun NavigationGraph(
     modifier: Modifier = Modifier,
     dialogState: DialogState?,
-    backStack: SnapshotStateList<Destinations>,
+    backStack: List<Destination>,
+    navigationManager: NavigationManager,
     dialogManager: DialogManager
 ) {
     NavDisplay(
         backStack = backStack,
-        onBack = { backStack.removeRange(1, backStack.size - 1) },
+        onBack = { navigationManager.back() },
         transitionSpec = {
             ContentTransform(
                 targetContentEnter = EnterTransition.None,
@@ -39,15 +40,17 @@ fun NavigationGraph(
             )
         },
         entryProvider = entryProvider {
-            entry<Destinations.Home> { destination ->
+            entry<Destination.Home> { destination ->
                 val uiState = destination.viewModel.uiState.collectAsState()
 
                 HomeScreen(
                     modifier = modifier,
                     state = uiState.value
-                )
+                ) {
+                    navigationManager.navigateToFolder(it)
+                }
             }
-            entry<Destinations.Folder> { destination ->
+            entry<Destination.Folder> { destination ->
                 val folder = destination.folder
 
                 when (folder) {
@@ -55,7 +58,9 @@ fun NavigationGraph(
                         FoldersList(
                             modifier = modifier,
                             items = folder.folders
-                        )
+                        ) {
+                            navigationManager.navigateToFolder(it)
+                        }
                     }
 
                     is ProductFolder -> {
@@ -67,7 +72,7 @@ fun NavigationGraph(
                     }
                 }
             }
-            entry<Destinations.Profile> { profile ->
+            entry<Destination.Profile> { profile ->
 
             }
         }
@@ -78,6 +83,7 @@ fun NavigationGraph(
             dismissRequest = { dialogManager.hide() },
             onSuccess = { name, type ->
                 dialogState.viewModel.addFolder(name, type)
+                dialogManager.hide()
             },
             onCancel = { dialogManager.hide() }
         )

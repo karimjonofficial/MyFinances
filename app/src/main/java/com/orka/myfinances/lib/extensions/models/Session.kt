@@ -1,4 +1,4 @@
-package com.orka.myfinances.lib.extensions
+package com.orka.myfinances.lib.extensions.models
 
 import com.orka.myfinances.data.models.Company
 import com.orka.myfinances.data.models.CompanyOffice
