@@ -1,11 +1,12 @@
 package com.orka.myfinances.ui.screens.home.parts
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material3.SecondaryTabRow
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,46 +28,45 @@ fun WarehouseGrid(
     products: List<Product>,
     stockItems: List<StockItem>
 ) {
-    val selectedTab = rememberSaveable { mutableIntStateOf(0) }
-    val selectedTabValue = selectedTab.intValue
+    Column(modifier = modifier) {
+        val selectedTab = rememberSaveable { mutableIntStateOf(0) }
+        val selectedTabValue = selectedTab.intValue
 
-    SecondaryTabRow(selectedTabIndex = selectedTab.intValue) {
-        Tab(
-            selected = selectedTabValue == 0,
-            onClick = { selectedTab.intValue = 0 }
-        ) {
-            Text(text = stringResource(R.string.products))
+        PrimaryTabRow(selectedTabIndex = selectedTabValue) {
+
+            Tab(
+                selected = selectedTabValue == 0,
+                onClick = { selectedTab.intValue = 0 },
+                text = { Text(text = stringResource(R.string.products)) }
+            )
+
+            Tab(
+                selected = selectedTabValue == 1,
+                onClick = { selectedTab.intValue = 1 },
+                text = { Text(text = stringResource(R.string.stock_items)) }
+            )
         }
 
-        Tab(
-            selected = selectedTabValue == 1,
-            onClick = { selectedTab.intValue = 1 }
-        ) {
-            Text(text = stringResource(R.string.stock_items))
-        }
-    }
 
-
-    if (selectedTabValue == 0) {
-        LazyColumn(
-            modifier = modifier,
-            contentPadding = contentPadding,
-            verticalArrangement = Arrangement.spacedBy(2.dp)
-        ) {
-            items(products.size) { index ->
-                ProductCard(product = products[index]) {}//TODO implement click
+        if (selectedTabValue == 0) {
+            LazyColumn(
+                contentPadding = contentPadding,
+                verticalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                items(products.size) { index ->
+                    ProductCard(product = products[index]) {}//TODO implement click
+                }
             }
-        }
-    } else {
-        LazyVerticalGrid(
-            modifier = modifier,
-            columns = GridCells.Fixed(2),
-            contentPadding = contentPadding,
-            verticalArrangement = Arrangement.spacedBy(2.dp),
-            horizontalArrangement = Arrangement.spacedBy(2.dp)
-        ) {
-            items(stockItems.size) { index ->
-                StockItemCard(item = stockItems[index]) {}//TODO implement click
+        } else {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = contentPadding,
+                verticalArrangement = Arrangement.spacedBy(2.dp),
+                horizontalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                items(stockItems.size) { index ->
+                    StockItemCard(item = stockItems[index]) {}//TODO implement click
+                }
             }
         }
     }

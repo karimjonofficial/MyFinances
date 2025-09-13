@@ -7,10 +7,11 @@ import com.orka.myfinances.data.models.folder.ProductFolder
 import com.orka.myfinances.data.repositories.AddFolderRequest
 import com.orka.myfinances.data.repositories.FolderRepository
 import com.orka.myfinances.data.repositories.FolderType
+import com.orka.myfinances.fixtures.resources.models.folder.folder2
 import com.orka.myfinances.fixtures.resources.models.template.template1
 
 class FolderRepositoryImpl : FolderRepository {
-    private val folders = mutableListOf<Folder>()
+    private val folders = mutableListOf<Folder>(folder2)
 
     override suspend fun get(): List<Folder>? {
         return folders.toList()
