@@ -8,6 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Session
+import com.orka.myfinances.data.models.folder.Catalog
+import com.orka.myfinances.data.models.folder.ProductFolder
 import com.orka.myfinances.ui.managers.dialog.DialogManager
 import com.orka.myfinances.ui.managers.dialog.DialogState.AddFolder
 import com.orka.myfinances.ui.navigation.Destination
@@ -48,7 +50,24 @@ fun MainTopBar(
             )
         }
 
-        is Destination.Folder -> {}
+        is Destination.Folder -> {
+            when(currentDestination.folder) {
+
+                is Catalog -> {
+                    TopAppBar(
+                        modifier = modifier,
+                        title = { Text(text = stringResource(R.string.catalog)) }
+                    )
+                }
+
+                is ProductFolder -> {
+                    TopAppBar(
+                        modifier = modifier,
+                        title = { Text(text = stringResource(R.string.products)) }
+                    )
+                }
+            }
+        }
 
         Destination.Notifications -> {
             TopAppBar(

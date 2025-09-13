@@ -5,8 +5,8 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.orka.myfinances.R
@@ -18,14 +18,14 @@ fun MainNavBar(
     modifier: Modifier = Modifier,
     navigationManager: NavigationManager
 ) {
-    val visible = rememberSaveable { mutableStateOf(true) }
     val destination = navigationManager.backStack.collectAsState()
-
-    if (destination.value.last() is Destination.Notifications) {
-        visible.value = false
-    } else {
-        val visibleValue = visible.value
-        if (!visibleValue) visible.value = true
+    val visible = remember {
+        derivedStateOf {
+            when(destination.value.last()) {
+                is Destination.Notifications, is Destination.Folder -> false
+                else -> true
+            }
+        }
     }
 
     if (visible.value) {

@@ -1,7 +1,6 @@
 package com.orka.myfinances.lib.ui
 
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -30,22 +29,7 @@ fun RadioButton(
             selected = selected,
             onClick = null
         )
+        HorizontalSpacer(4)
         Text(text = text)
-    }
-}
-
-@Composable
-fun RadioButton(
-    modifier: Modifier = Modifier,
-    selected: Boolean,
-    onClick: () -> Unit,
-    content: @Composable RowScope.() -> Unit
-) {
-    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-        RadioButton(
-            selected = selected,
-            onClick = onClick
-        )
-        content()
     }
 }
