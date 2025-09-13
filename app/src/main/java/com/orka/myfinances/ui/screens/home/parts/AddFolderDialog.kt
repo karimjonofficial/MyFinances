@@ -1,6 +1,7 @@
 package com.orka.myfinances.ui.screens.home.parts
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -8,6 +9,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.template.Template
@@ -15,6 +17,7 @@ import com.orka.myfinances.data.repositories.FolderType
 import com.orka.myfinances.lib.ui.Dialog
 import com.orka.myfinances.lib.ui.ExposedDropDownTextField
 import com.orka.myfinances.lib.ui.RadioButton
+import com.orka.myfinances.lib.ui.VerticalSpacer
 
 val FolderTypeSaver = Saver<FolderType, Pair<String, Int?>>(
     save = {
@@ -65,9 +68,12 @@ fun AddFolderDialog(
             label = { Text(stringResource(R.string.name)) }
         )
 
-        Column {
+        VerticalSpacer(16)
+
+        Column(modifier = Modifier.selectableGroup()) {
             Text(text = stringResource(R.string.select_folder_type))
 
+            VerticalSpacer(8)
             RadioButton(
                 text = stringResource(R.string.catalog),
                 selected = folderType.intValue == 0,
@@ -77,6 +83,8 @@ fun AddFolderDialog(
                     templatesVisible.value = false
                 }
             )
+
+            VerticalSpacer(4)
 
             RadioButton(
                 text = stringResource(R.string.product_folder),
@@ -92,6 +100,7 @@ fun AddFolderDialog(
                 val dropDownMenuExpanded = rememberSaveable { mutableStateOf(false) }
                 val templateValue = template.value
 
+                VerticalSpacer(8)
                 ExposedDropDownTextField(
                     text = templateValue?.name ?: stringResource(R.string.select),
                     label = stringResource(R.string.templates),

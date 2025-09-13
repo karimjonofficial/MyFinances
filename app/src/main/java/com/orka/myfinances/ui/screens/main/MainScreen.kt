@@ -29,7 +29,8 @@ fun MainScreen(
             MainTopBar(
                 currentDestination = backStack.value.last(),
                 session = session,
-                dialogManager = dialogManager
+                dialogManager = dialogManager,
+                navigationManager = navigationManager
             )
         },
         bottomBar = { MainNavBar(navigationManager = navigationManager) }

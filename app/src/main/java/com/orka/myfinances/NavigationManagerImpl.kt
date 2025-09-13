@@ -29,7 +29,9 @@ class NavigationManagerImpl(
 
     override fun navigateToProfile() {
         if (state.value.last() !is Destination.Profile) {
-            state.update { createBackStack(Destination.Profile) }
+            state.update {
+                createBackStack(Destination.Profile)
+            }
         }
     }
 
@@ -40,6 +42,11 @@ class NavigationManagerImpl(
             val new = backstack + Destination.Folder(folder)
             state.update { new }
         }
+    }
+
+    override fun navigateToNotifications() {
+        val backstack = createBackStack(Destination.Notifications)
+        state.update { backstack }
     }
 
     override fun back() {

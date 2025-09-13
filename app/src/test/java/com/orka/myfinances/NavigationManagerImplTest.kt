@@ -124,4 +124,25 @@ class NavigationManagerImplTest : MainDispatcherContext() {
             assertTrue { manager.backStack.value.size == 1 }
         }
     }
+
+    @Nested
+    inner class NavigateToNotifications {
+        @BeforeEach
+        fun setup() {
+            manager.navigateToNotifications()
+        }
+
+        @Test
+        fun `Should have Notifications`() {
+            val last = manager.backStack.value.last()
+            assertTrue { last is Destination.Notifications }
+        }
+
+        @Test
+        fun `Does not allow duplicate Notifications`() {
+            manager.navigateToNotifications()
+            val backStack = manager.backStack.value
+            assertEquals(1, backStack.count { it is Destination.Notifications })
+        }
+    }
 }

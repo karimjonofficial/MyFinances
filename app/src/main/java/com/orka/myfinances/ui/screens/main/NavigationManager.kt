@@ -10,5 +10,6 @@ interface NavigationManager {
     fun navigateToHome()
     fun navigateToProfile()
     fun navigateToFolder(folder: Folder)
+    fun navigateToNotifications()
     fun back()
 }

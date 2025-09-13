@@ -5,11 +5,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Session
-import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.managers.dialog.DialogManager
-import com.orka.myfinances.ui.managers.dialog.DialogState
+import com.orka.myfinances.ui.managers.dialog.DialogState.AddFolder
+import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.screens.home.parts.HomeScreenTopBar
+import com.orka.myfinances.ui.screens.main.NavigationManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -17,16 +20,25 @@ fun MainTopBar(
     modifier: Modifier = Modifier,
     currentDestination: Destination,
     dialogManager: DialogManager,
+    navigationManager: NavigationManager,
     session: Session
 ) {
 
     when (currentDestination) {
         is Destination.Home -> {
-            HomeScreenTopBar(modifier = modifier) {
-                val viewModel = currentDestination.viewModel
-                val dialog = DialogState.AddFolder(viewModel)
-                dialogManager.show(dialog)
-            }
+            HomeScreenTopBar(
+                modifier = modifier,
+                onAddClick = {
+                    val dialog = AddFolder(currentDestination.viewModel)
+                    dialogManager.show(dialog)
+                },
+                onNotificationsClick = {
+                    navigationManager.navigateToNotifications()
+                },
+                onSearchClick = {
+
+                }
+            )
         }
 
         is Destination.Profile -> {
@@ -37,5 +49,12 @@ fun MainTopBar(
         }
 
         is Destination.Folder -> {}
+
+        Destination.Notifications -> {
+            TopAppBar(
+                modifier = modifier,
+                title = { Text(text = stringResource(R.string.notifications)) }
+            )
+        }
     }
 }

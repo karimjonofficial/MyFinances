@@ -50,6 +50,7 @@ fun NavigationGraph(
                     navigationManager.navigateToFolder(it)
                 }
             }
+
             entry<Destination.Folder> { destination ->
                 val folder = destination.folder
 
@@ -72,8 +73,13 @@ fun NavigationGraph(
                     }
                 }
             }
+
             entry<Destination.Profile> { profile ->
 
+            }
+
+            entry<Destination.Notifications> {
+                
             }
         }
     )

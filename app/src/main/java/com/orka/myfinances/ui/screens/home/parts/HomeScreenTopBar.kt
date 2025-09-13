@@ -19,7 +19,9 @@ import com.orka.myfinances.R
 @OptIn(ExperimentalMaterial3Api::class)
 fun HomeScreenTopBar(
     modifier: Modifier = Modifier,
-    onAddClick: () -> Unit
+    onAddClick: () -> Unit,
+    onNotificationsClick: () -> Unit,
+    onSearchClick: () -> Unit
 ) {
     TopAppBar(
         modifier = modifier,
@@ -34,17 +36,20 @@ fun HomeScreenTopBar(
         },
         actions = {
             IconButton(onClick = onAddClick) {
-                Icon(painter = painterResource(id = R.drawable.add), contentDescription = null)
+                Icon(
+                    painter = painterResource(id = R.drawable.add),
+                    contentDescription = null
+                )
             }
 
-            IconButton(onClick = { }) {
+            IconButton(onClick = { onSearchClick() }) {
                 Icon(
                     painter = painterResource(id = R.drawable.search),
                     contentDescription = null
                 )
             }
 
-            IconButton(onClick = { }) {
+            IconButton(onClick = { onNotificationsClick() }) {
                 Icon(
                     painter = painterResource(R.drawable.notifications_unread),
                     contentDescription = null

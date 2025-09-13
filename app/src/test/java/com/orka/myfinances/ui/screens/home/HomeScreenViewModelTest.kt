@@ -109,6 +109,6 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
         testScope.advanceUntilIdle()
         val state = viewModel.uiState.value
         assertTrue { state is HomeScreenState.Success }
-        assertTrue { (state as HomeScreenState.Success).folders === folders }
+        if(state is HomeScreenState.Success) assertTrue { state.folders === folders }
     }
 }
