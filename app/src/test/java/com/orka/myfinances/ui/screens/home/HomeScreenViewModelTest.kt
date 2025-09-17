@@ -2,9 +2,10 @@ package com.orka.myfinances.ui.screens.home
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.data.repositories.DummyFolderRepository
-import com.orka.myfinances.fixtures.data.repositories.EmptyFolderRepositoryStub
-import com.orka.myfinances.fixtures.data.repositories.FolderRepositoryStub
+import com.orka.myfinances.fixtures.data.repositories.folder.DummyFolderRepository
+import com.orka.myfinances.fixtures.data.repositories.folder.EmptyFolderRepositoryStub
+import com.orka.myfinances.fixtures.data.repositories.folder.FolderRepositoryStub
+import com.orka.myfinances.fixtures.data.repositories.folder.SpyFolderRepository
 import com.orka.myfinances.testLib.assertStateTransition
 import com.orka.myfinances.testLib.catalogFolderType
 import com.orka.myfinances.testLib.name

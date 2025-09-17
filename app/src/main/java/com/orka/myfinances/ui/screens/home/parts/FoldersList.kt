@@ -15,7 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Folder
-import com.orka.myfinances.lib.ui.VerticalSpacer
+import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.screens.home.components.FolderButton
 import com.orka.myfinances.ui.screens.home.components.FirstFolderButton
 import com.orka.myfinances.ui.screens.home.components.LastFolderButton

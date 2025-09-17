@@ -28,4 +28,8 @@
     <string name="folders">Folders</string>
     <string name="stock_items">Ombor</string>
     <string name="notifications">Notifications</string>
+    <string name="save">Save</string>
+    <string name="remove">Remove</string>
+    <string name="name_of_template">Shablon nomi</string>
+    <string name="properties_of_template">Shablon xususiyatlari</string>
 </resources>

@@ -1,23 +1,27 @@
 package com.orka.myfinances.ui.screens.home.parts
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.template.Template
-import com.orka.myfinances.data.repositories.FolderType
-import com.orka.myfinances.lib.ui.Dialog
-import com.orka.myfinances.lib.ui.ExposedDropDownTextField
-import com.orka.myfinances.lib.ui.RadioButton
-import com.orka.myfinances.lib.ui.VerticalSpacer
+import com.orka.myfinances.data.repositories.folder.FolderType
+import com.orka.myfinances.lib.ui.components.Dialog
+import com.orka.myfinances.lib.ui.components.ExposedDropDownTextField
+import com.orka.myfinances.lib.ui.components.RadioButton
+import com.orka.myfinances.lib.ui.components.VerticalSpacer
 
 val FolderTypeSaver = Saver<FolderType, Pair<String, Int?>>(
     save = {
@@ -39,6 +43,7 @@ val FolderTypeSaver = Saver<FolderType, Pair<String, Int?>>(
 fun AddFolderDialog(
     templates: List<Template>,
     dismissRequest: () -> Unit,
+    onAddTemplateClick: () -> Unit,
     onSuccess: (String, FolderType) -> Unit,
     onCancel: () -> Unit
 ) {
@@ -101,19 +106,29 @@ fun AddFolderDialog(
                 val templateValue = template.value
 
                 VerticalSpacer(8)
-                ExposedDropDownTextField(
-                    text = templateValue?.name ?: stringResource(R.string.select),
-                    label = stringResource(R.string.templates),
-                    menuExpanded = dropDownMenuExpanded.value,
-                    onExpandChange = { dropDownMenuExpanded.value = it },
-                    onDismissRequested = { dropDownMenuExpanded.value = false },
-                    items = templates,
-                    itemText = { it.name },
-                    onItemSelected = {
-                        template.value = it
-                        folder.value = FolderType.ProductFolder(it.id.value)
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    ExposedDropDownTextField(
+                        modifier = Modifier.weight(1f),
+                        text = templateValue?.name ?: stringResource(R.string.select),
+                        label = stringResource(R.string.templates),
+                        menuExpanded = dropDownMenuExpanded.value,
+                        onExpandChange = { dropDownMenuExpanded.value = it },
+                        onDismissRequested = { dropDownMenuExpanded.value = false },
+                        items = templates,
+                        itemText = { it.name },
+                        onItemSelected = {
+                            template.value = it
+                            folder.value = FolderType.ProductFolder(it.id.value)
+                        }
+                    )
+
+                    TextButton(onClick = onAddTemplateClick) {
+                        Text(text = stringResource(R.string.add))
                     }
-                )
+                }
             }
         }
     }

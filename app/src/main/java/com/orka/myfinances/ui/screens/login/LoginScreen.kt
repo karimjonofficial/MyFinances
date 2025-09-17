@@ -29,8 +29,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.ui.HorizontalSpacer
-import com.orka.myfinances.lib.ui.VerticalSpacer
+import com.orka.myfinances.lib.ui.components.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.VerticalSpacer
 
 @Composable
 fun LoginScreen(

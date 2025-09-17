@@ -1,4 +1,4 @@
-package com.orka.myfinances.data.repositories
+package com.orka.myfinances.data.repositories.folder
 
 data class AddFolderRequest(
     val name: String,

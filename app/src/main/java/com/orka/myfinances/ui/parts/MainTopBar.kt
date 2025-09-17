@@ -12,9 +12,9 @@ import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.ProductFolder
 import com.orka.myfinances.ui.managers.dialog.DialogManager
 import com.orka.myfinances.ui.managers.dialog.DialogState.AddFolder
-import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.screens.home.parts.HomeScreenTopBar
-import com.orka.myfinances.ui.screens.main.NavigationManager
+import com.orka.myfinances.ui.managers.navigation.NavigationManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,8 +50,8 @@ fun MainTopBar(
             )
         }
 
-        is Destination.Folder -> {
-            when(currentDestination.folder) {
+        is Destination.Catalog -> {
+            when(currentDestination.catalog) {
 
                 is Catalog -> {
                     TopAppBar(
@@ -73,6 +73,13 @@ fun MainTopBar(
             TopAppBar(
                 modifier = modifier,
                 title = { Text(text = stringResource(R.string.notifications)) }
+            )
+        }
+
+        is Destination.AddTemplate -> {
+            TopAppBar(
+                modifier = modifier,
+                title = { Text(text = stringResource(R.string.templates)) }
             )
         }
     }

@@ -5,8 +5,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.orka.myfinances.ui.managers.session.UiState
 import com.orka.myfinances.ui.screens.login.LoginScreen
-import com.orka.myfinances.ui.screens.main.LoadingScreen
-import com.orka.myfinances.ui.screens.main.MainScreen
+import com.orka.myfinances.lib.ui.LoadingScreen
+import com.orka.myfinances.ui.parts.MainScreen
 
 @Composable
 fun MyFinancesScreen(

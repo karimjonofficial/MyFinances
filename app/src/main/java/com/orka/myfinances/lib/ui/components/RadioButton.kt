@@ -1,4 +1,4 @@
-package com.orka.myfinances.lib.ui
+package com.orka.myfinances.lib.ui.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.selection.selectable

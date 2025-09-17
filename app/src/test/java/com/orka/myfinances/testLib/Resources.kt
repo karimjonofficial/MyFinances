@@ -8,7 +8,7 @@ import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.models.User
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.models.template.TemplateField
-import com.orka.myfinances.data.repositories.FolderType
+import com.orka.myfinances.data.repositories.folder.FolderType
 
 const val name = "Name"
 

@@ -10,8 +10,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.orka.myfinances.R
-import com.orka.myfinances.ui.navigation.Destination
-import com.orka.myfinances.ui.screens.main.NavigationManager
+import com.orka.myfinances.ui.managers.navigation.Destination
+import com.orka.myfinances.ui.managers.navigation.NavigationManager
 
 @Composable
 fun MainNavBar(
@@ -22,7 +22,7 @@ fun MainNavBar(
     val visible = remember {
         derivedStateOf {
             when(destination.value.last()) {
-                is Destination.Notifications, is Destination.Folder -> false
+                is Destination.Notifications, is Destination.Catalog -> false
                 else -> true
             }
         }

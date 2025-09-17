@@ -2,7 +2,7 @@ package com.orka.myfinances
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.data.repositories.DummyFolderRepository
+import com.orka.myfinances.fixtures.data.repositories.folder.DummyFolderRepository
 import com.orka.myfinances.ui.managers.dialog.DialogState
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 import org.junit.jupiter.api.Assertions.*

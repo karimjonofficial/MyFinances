@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens
+package com.orka.myfinances.ui.screens.warehouse
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.fixtures.resources.models.stockItem1
-import com.orka.myfinances.lib.ui.VerticalSpacer
-//TODO put into an appropriate package
+import com.orka.myfinances.lib.ui.components.VerticalSpacer
+
 @Composable
 fun StockItemCard(
     modifier: Modifier = Modifier,

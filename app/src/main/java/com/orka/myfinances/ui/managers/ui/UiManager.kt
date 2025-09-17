@@ -8,13 +8,17 @@ import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.factories.ApiProvider
+import com.orka.myfinances.factories.ViewModelProvider
 import com.orka.myfinances.fixtures.data.repositories.FolderRepositoryImpl
 import com.orka.myfinances.lib.extensions.models.makeSession
 import com.orka.myfinances.lib.extensions.models.toModel
 import com.orka.myfinances.ui.managers.session.SessionManager
 import com.orka.myfinances.ui.managers.session.UiState
+import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
+import com.orka.myfinances.fixtures.data.repositories.TemplateRepositoryImpl
+import com.orka.myfinances.ui.screens.template.TemplateScreenViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asStateFlow
 import kotlin.coroutines.CoroutineContext
@@ -63,10 +67,14 @@ class UiManager(
     }
 
     private fun openSession(session: Session) {
-        val repository = FolderRepositoryImpl()
-        val viewModel = HomeScreenViewModel(repository, logger, defaultCoroutineContext)
+        val folderRepository = FolderRepositoryImpl()
+        val templateRepository = TemplateRepositoryImpl()
+        val viewModel = HomeScreenViewModel(folderRepository, logger, defaultCoroutineContext)
         val dialogManager = DialogManagerImpl(defaultCoroutineContext, logger)
-        val navigationManager = NavigationManagerImpl(viewModel, logger, defaultCoroutineContext)
+        val initialBackStack = listOf(Destination.Home(viewModel))
+        val templateScreenViewModel = TemplateScreenViewModel(templateRepository, defaultCoroutineContext)
+        val provider = ViewModelProvider(templateScreenViewModel)
+        val navigationManager = NavigationManagerImpl(initialBackStack, provider, logger, defaultCoroutineContext)
         viewModel.initialize()
         setState(UiState.SignedIn(session, dialogManager, navigationManager))
     }

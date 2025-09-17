@@ -3,24 +3,26 @@ package com.orka.myfinances
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.folder.Folder
-import com.orka.myfinances.ui.navigation.Destination
-import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
-import com.orka.myfinances.ui.screens.main.NavigationManager
+import com.orka.myfinances.factories.ViewModelProvider
+import com.orka.myfinances.ui.managers.navigation.Destination
+import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlin.coroutines.CoroutineContext
 
 class NavigationManagerImpl(
-    private val homeScreenViewModel: HomeScreenViewModel,
+    initialBackStack: List<Destination>,
+    private val provider: ViewModelProvider,
     logger: Logger,
     defaultCoroutineContext: CoroutineContext = Dispatchers.Default
 ) : ViewModel<List<Destination>>(
-    initialState = listOf(Destination.Home(homeScreenViewModel)),
+    initialState = initialBackStack,
     defaultCoroutineContext = defaultCoroutineContext,
     logger = logger
 ), NavigationManager {
     override val backStack = state.asStateFlow()
+    private val types = listOf("text", "number", "range")
 
     override fun navigateToHome() {
         val list = createBackStack()
@@ -37,9 +39,9 @@ class NavigationManagerImpl(
 
     override fun navigateToFolder(folder: Folder) {
         val last = state.value.last()
-        if (!(last is Destination.Folder && last.folder == folder)) {
+        if (!(last is Destination.Catalog && last.catalog == folder)) {
             val backstack = state.value
-            val new = backstack + Destination.Folder(folder)
+            val new = backstack + Destination.Catalog(folder)
             state.update { new }
         }
     }
@@ -57,8 +59,16 @@ class NavigationManagerImpl(
         }
     }
 
+    override fun navigateToAddTemplate() {
+        val viewModel = provider.templateScreenViewModel()//TODO check code coverage
+        val destination = Destination.AddTemplate(viewModel, types)
+        val list = createBackStack(destination)
+        state.update { list }
+    }
+
     private fun createBackStack(vararg destinations: Destination = emptyArray()): List<Destination> {
-        val list = listOf(Destination.Home(homeScreenViewModel)) + destinations
+        val home = state.value.first()
+        val list = listOf(home) + destinations
         return list
     }
 }

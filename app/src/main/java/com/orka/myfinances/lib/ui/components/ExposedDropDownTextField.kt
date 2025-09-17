@@ -1,4 +1,4 @@
-package com.orka.myfinances.lib.ui
+package com.orka.myfinances.lib.ui.components
 
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -49,6 +49,52 @@ fun <T> ExposedDropDownTextField(
                     text = { Text(itemText(item)) },
                     onClick = {
                         onItemSelected(item)
+                        onDismissRequested()
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun <T> ExposedDropDownTextField(
+    modifier: Modifier = Modifier,
+    text: String,
+    label: String,
+    menuExpanded: Boolean,
+    onExpandChange: (Boolean) -> Unit,
+    onDismissRequested: () -> Unit,
+    items: List<T>?,
+    itemText: (T) -> String,
+    onItemSelected: (Int, T) -> Unit
+) {
+
+    ExposedDropdownMenuBox(
+        modifier = modifier,
+        expanded = menuExpanded,
+        onExpandedChange = { onExpandChange(it) }
+    ) {
+        OutlinedTextField(
+            value = text,
+            onValueChange = {},
+            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+            readOnly = true,
+            label = { Text(text = label) },
+            singleLine = true,
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = menuExpanded) }
+        )
+
+        ExposedDropdownMenu(
+            expanded = menuExpanded,
+            onDismissRequest = onDismissRequested
+        ) {
+            items?.forEachIndexed { index, item ->
+                DropdownMenuItem(
+                    text = { Text(itemText(item)) },
+                    onClick = {
+                        onItemSelected(index, item)
                         onDismissRequested()
                     }
                 )

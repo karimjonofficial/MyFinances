@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.main
+package com.orka.myfinances.ui.parts
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -8,9 +8,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.ui.managers.dialog.DialogManager
+import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import com.orka.myfinances.ui.navigation.NavigationGraph
-import com.orka.myfinances.ui.parts.MainNavBar
-import com.orka.myfinances.ui.parts.MainTopBar
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)

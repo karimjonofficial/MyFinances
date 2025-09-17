@@ -2,9 +2,9 @@ package com.orka.myfinances.ui.screens.home
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
-import com.orka.myfinances.data.repositories.AddFolderRequest
-import com.orka.myfinances.data.repositories.FolderRepository
-import com.orka.myfinances.data.repositories.FolderType
+import com.orka.myfinances.data.repositories.folder.AddFolderRequest
+import com.orka.myfinances.data.repositories.folder.FolderRepository
+import com.orka.myfinances.data.repositories.folder.FolderType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asStateFlow
 import kotlin.coroutines.CoroutineContext

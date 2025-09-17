@@ -1,7 +1,6 @@
-package com.orka.myfinances.ui.screens.main
+package com.orka.myfinances.ui.managers.navigation
 
 import com.orka.myfinances.data.models.folder.Folder
-import com.orka.myfinances.ui.navigation.Destination
 import kotlinx.coroutines.flow.StateFlow
 
 interface NavigationManager {
@@ -11,5 +10,6 @@ interface NavigationManager {
     fun navigateToProfile()
     fun navigateToFolder(folder: Folder)
     fun navigateToNotifications()
+    fun navigateToAddTemplate()
     fun back()
 }

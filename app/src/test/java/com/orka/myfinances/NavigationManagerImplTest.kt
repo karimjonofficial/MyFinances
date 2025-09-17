@@ -3,11 +3,12 @@ package com.orka.myfinances
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.folder.Catalog
+import com.orka.myfinances.factories.ViewModelProvider
 import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.data.repositories.DummyFolderRepository
+import com.orka.myfinances.fixtures.data.repositories.folder.DummyFolderRepository
 import com.orka.myfinances.testLib.id
 import com.orka.myfinances.testLib.name
-import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -16,10 +17,12 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class NavigationManagerImplTest : MainDispatcherContext() {
-    val logger = DummyLogger()
-    val repository = DummyFolderRepository()
-    val viewModel = HomeScreenViewModel(repository, logger, coroutineContext)
-    val manager = NavigationManagerImpl(viewModel, logger, coroutineContext)
+    private val provider = ViewModelProvider()
+    private val logger = DummyLogger()
+    private val repository = DummyFolderRepository()
+    private val viewModel = HomeScreenViewModel(repository, logger, coroutineContext)
+    private val initialBackStack = listOf(Destination.Home(viewModel))
+    private val manager = NavigationManagerImpl(initialBackStack, provider, logger, coroutineContext)
 
     @Test
     fun nothing() {
@@ -79,8 +82,8 @@ class NavigationManagerImplTest : MainDispatcherContext() {
 
         @Test
         fun `When navigate to folder, add Folder`() {
-            val last = manager.backStack.value.last() as Destination.Folder
-            assertTrue { last.folder == folder }
+            val last = manager.backStack.value.last() as Destination.Catalog
+            assertTrue { last.catalog == folder }
             assertEquals(2, manager.backStack.value.size)
         }
 
@@ -95,25 +98,25 @@ class NavigationManagerImplTest : MainDispatcherContext() {
 
             @Test
             fun `Allow multiple folders in backstack`() {
-                val last = manager.backStack.value.last() as Destination.Folder
-                assertTrue { last.folder == folder2 }
+                val last = manager.backStack.value.last() as Destination.Catalog
+                assertTrue { last.catalog == folder2 }
                 assertEquals(3, manager.backStack.value.size)
             }
 
             @Test
             fun `Back navigates to Folder`() {
                 manager.back()
-                val last = manager.backStack.value.last() as Destination.Folder
-                assertTrue { last.folder == folder }
+                val last = manager.backStack.value.last() as Destination.Catalog
+                assertTrue { last.catalog == folder }
                 assertTrue { manager.backStack.value.size == 2 }
             }
         }
 
         @Test
         fun `Does not allow similar folders in backstack`() {
-            val last = manager.backStack.value.last() as Destination.Folder
+            val last = manager.backStack.value.last() as Destination.Catalog
             manager.navigateToFolder(folder)
-            assertTrue { last.folder == folder }
+            assertTrue { last.catalog == folder }
             assertEquals(2, manager.backStack.value.size)
         }
 
@@ -144,5 +147,12 @@ class NavigationManagerImplTest : MainDispatcherContext() {
             val backStack = manager.backStack.value
             assertEquals(1, backStack.count { it is Destination.Notifications })
         }
+    }
+
+    @Test
+    fun `When navigate to add template, should have add template`() {
+        manager.navigateToAddTemplate()
+        assertTrue { manager.backStack.value.last() is Destination.AddTemplate }
+        assertTrue { manager.backStack.value.size == 2 }
     }
 }

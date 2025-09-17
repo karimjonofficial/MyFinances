@@ -28,8 +28,8 @@ import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Folder
 import com.orka.myfinances.data.models.folder.ProductFolder
 import com.orka.myfinances.fixtures.resources.models.folder.folder1
-import com.orka.myfinances.lib.ui.HorizontalSpacer
-import com.orka.myfinances.lib.ui.VerticalSpacer
+import com.orka.myfinances.lib.ui.components.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 private const val roundedCornerRadius = 16

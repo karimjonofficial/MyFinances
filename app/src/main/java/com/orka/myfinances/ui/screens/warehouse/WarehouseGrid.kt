@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.home.parts
+package com.orka.myfinances.ui.screens.warehouse
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,15 +18,14 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.data.models.product.Product
-import com.orka.myfinances.ui.screens.StockItemCard
 import com.orka.myfinances.ui.screens.home.components.ProductCard
 
 @Composable
 fun WarehouseGrid(
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(horizontal = 8.dp),
     products: List<Product>,
-    stockItems: List<StockItem>
+    stockItems: List<StockItem>,
+    contentPadding: PaddingValues = PaddingValues(horizontal = 8.dp)
 ) {
     Column(modifier = modifier) {
         val selectedTab = rememberSaveable { mutableIntStateOf(0) }
