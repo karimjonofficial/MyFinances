@@ -2,7 +2,8 @@ package com.orka.myfinances
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
-import com.orka.myfinances.data.models.folder.Folder
+import com.orka.myfinances.data.models.folder.Catalog
+import com.orka.myfinances.data.models.folder.ProductFolder
 import com.orka.myfinances.factories.ViewModelProvider
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
@@ -37,11 +38,20 @@ class NavigationManagerImpl(
         }
     }
 
-    override fun navigateToFolder(folder: Folder) {
+    override fun navigateToCatalog(catalog: Catalog) {
         val last = state.value.last()
-        if (!(last is Destination.Catalog && last.catalog == folder)) {
+        if (!(last is Destination.Catalog && last.catalog == catalog)) {
             val backstack = state.value
-            val new = backstack + Destination.Catalog(folder)
+            val new = backstack + Destination.Catalog(catalog)
+            state.update { new }
+        }
+    }
+
+    override fun navigateToProductFolder(folder: ProductFolder) {
+        val last = state.value.last()
+        if (!(last is Destination.ProductFolder && last.productFolder == folder)) {
+            val backstack = state.value
+            val new = backstack + Destination.ProductFolder(folder)
             state.update { new }
         }
     }

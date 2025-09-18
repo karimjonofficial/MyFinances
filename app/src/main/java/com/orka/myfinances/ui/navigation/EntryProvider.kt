@@ -5,12 +5,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
+import com.orka.myfinances.data.models.folder.Catalog
+import com.orka.myfinances.data.models.folder.ProductFolder
 import com.orka.myfinances.ui.managers.navigation.Destination
+import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import com.orka.myfinances.ui.screens.home.HomeScreen
 import com.orka.myfinances.ui.screens.home.parts.FoldersList
-import com.orka.myfinances.ui.screens.warehouse.WarehouseGrid
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import com.orka.myfinances.ui.screens.template.TemplateScreen
+import com.orka.myfinances.ui.screens.warehouse.WarehouseGrid
 
 fun entryProvider(
     modifier: Modifier,
@@ -37,7 +39,12 @@ private fun homeScreenEntry(
     HomeScreen(
         modifier = modifier,
         state = uiState.value,
-        onNavigateToFolder = navigationManager::navigateToFolder
+        onNavigateToFolder = { folder ->
+            when(folder) {
+                is Catalog -> navigationManager.navigateToCatalog(folder)
+                is ProductFolder -> navigationManager.navigateToProductFolder(folder)
+            }
+        }
     )
 }
 
@@ -65,7 +72,12 @@ private fun catalogScreenEntry(
         modifier = modifier,
         contentPadding = PaddingValues(horizontal = 16.dp),
         items = folder.folders,
-        onFolderSelected = navigationManager::navigateToFolder
+        onFolderSelected = { folder ->
+            when(folder) {
+                is Catalog -> navigationManager.navigateToCatalog(folder)
+                is ProductFolder -> navigationManager.navigateToProductFolder(folder)
+            }
+        }
     )
 }
 
