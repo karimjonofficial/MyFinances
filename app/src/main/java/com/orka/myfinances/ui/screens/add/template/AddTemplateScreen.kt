@@ -1,8 +1,6 @@
-package com.orka.myfinances.ui.screens.template
+package com.orka.myfinances.ui.screens.add.template
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,40 +19,37 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.orka.myfinances.NavigationManagerImpl
 import com.orka.myfinances.R
-import com.orka.myfinances.data.repositories.template.TemplateFieldModel
 import com.orka.myfinances.data.repositories.template.AddTemplateRequest
-import com.orka.myfinances.factories.ViewModelProvider
+import com.orka.myfinances.data.repositories.template.TemplateFieldModel
+import com.orka.myfinances.fixtures.DummyNavigationManager
 import com.orka.myfinances.fixtures.data.repositories.TemplateRepositoryImpl
-import com.orka.myfinances.lib.LoggerImpl
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
-import com.orka.myfinances.ui.screens.template.components.TemplateFieldCard
+import com.orka.myfinances.ui.screens.add.template.components.TemplateFieldCard
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
-fun TemplateScreen(
+fun AddTemplateScreen(
     modifier: Modifier = Modifier,
     types: List<String>,
-    viewModel: TemplateScreenViewModel,
+    viewModel: AddTemplateScreenViewModel,
     navigationManager: NavigationManager
 ) {
     val name = rememberSaveable { mutableStateOf("") }
     val names = rememberSaveable { mutableStateListOf("") }
     val fieldTypes = rememberSaveable { mutableStateListOf<Int?>(null) }
-    val count = rememberSaveable { mutableIntStateOf(4) }
+    val count = rememberSaveable { mutableIntStateOf(1) }
 
-    Box(modifier = modifier) {
+    Column(modifier = modifier) {
         Column(
             modifier = Modifier
                 .padding(horizontal = 8.dp)
-                .animateContentSize()
+                .weight(1f)
         ) {
 
             val countValue = count.intValue
@@ -115,7 +110,6 @@ fun TemplateScreen(
 
         BottomAppBar(
             modifier = Modifier
-                .align(Alignment.BottomCenter)
                 .fillMaxWidth()
         ) {
             Row(
@@ -149,12 +143,9 @@ fun TemplateScreen(
 @Composable
 private fun TemplateScreenPreview() {
     val types = listOf("text", "number", "range")
-    val logger = LoggerImpl()
-
     val repository = TemplateRepositoryImpl()
-    val viewModel = TemplateScreenViewModel(repository)
-    val provider = ViewModelProvider(viewModel)
-    val navigationManager = NavigationManagerImpl(emptyList(), provider, logger)
+    val addTemplateScreenViewModel = AddTemplateScreenViewModel(repository)
+    val navigationManager = DummyNavigationManager()
 
     MyFinancesTheme {
         Scaffold(
@@ -164,12 +155,12 @@ private fun TemplateScreenPreview() {
                 )
             }
         ) { innerPadding ->
-            TemplateScreen(
+            AddTemplateScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding),
                 types = types,
-                viewModel = viewModel,
+                viewModel = addTemplateScreenViewModel,
                 navigationManager = navigationManager
             )
         }

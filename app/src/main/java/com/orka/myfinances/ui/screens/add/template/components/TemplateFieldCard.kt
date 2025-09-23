@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.template.components
+package com.orka.myfinances.ui.screens.add.template.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
@@ -60,7 +60,7 @@ fun TemplateFieldCard(
             onExpandChange = { exposed.value = it },
             onDismissRequested = { exposed.value = false },
             text = type,
-            label = "Type",//TODO extract
+            label = stringResource(R.string.type),
             items = types,
             itemText = { it },
             onItemSelected = { index, _ -> onTypeIndexChange(index) }

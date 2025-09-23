@@ -2,6 +2,7 @@ package com.orka.myfinances
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
+import com.orka.myfinances.factories.ViewModelProviderImpl
 import com.orka.myfinances.ui.managers.dialog.DialogManager
 import com.orka.myfinances.ui.managers.dialog.DialogState
 import kotlinx.coroutines.Dispatchers
@@ -11,8 +12,9 @@ import kotlinx.coroutines.flow.update
 import kotlin.coroutines.CoroutineContext
 
 class DialogManagerImpl(
+    private val provider: ViewModelProviderImpl,
+    logger: Logger,
     defaultCoroutineContext: CoroutineContext = Dispatchers.Default,
-    logger: Logger
 ) : ViewModel<DialogState?>(
     initialState = null,
     defaultCoroutineContext = defaultCoroutineContext,
@@ -20,9 +22,12 @@ class DialogManagerImpl(
 ), DialogManager {
     override val dialogState: StateFlow<DialogState?> = state.asStateFlow()
 
-    override fun show(dialog: DialogState) {
-        //TODO the problem with concurrent state changes is not solved yet
-        launch { state.update { dialog } }
+    override fun addFolderDialog() {
+        launch {
+            val homeViewModel = provider.homeViewModel()
+            val templatesViewModel = provider.templatesViewModel()
+            state.update { DialogState.AddFolder(homeViewModel, templatesViewModel) }
+        }
     }
 
     override fun hide() {

@@ -4,6 +4,7 @@ import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.SizeTransform
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation3.ui.NavDisplay
@@ -22,6 +23,7 @@ fun NavigationGraph(
     dialogManager: DialogManager
 ) {
     NavDisplay(
+        modifier = modifier,
         backStack = backStack,
         onBack = { navigationManager.back() },
         transitionSpec = {
@@ -33,7 +35,7 @@ fun NavigationGraph(
             )
         },
         entryProvider = { destination ->
-            entryProvider(modifier, destination, navigationManager)
+            entryProvider(Modifier.fillMaxSize(), destination, navigationManager)
         }
     )
     if(dialogState != null) {

@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Folder
-import com.orka.myfinances.data.models.folder.ProductFolder
+import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.fixtures.resources.models.folder.folder1
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
@@ -140,7 +140,7 @@ private fun BaseFolderButton(
             ) {
                 val text = when (folder) {
                     is Catalog -> "${stringResource(R.string.folders)} ${folder.folders.size}"
-                    is ProductFolder -> "${stringResource(R.string.products)} ${folder.products.size}"
+                    is Warehouse -> "${stringResource(R.string.products)} ${folder.products.size}"
                 }
 
                 Text(

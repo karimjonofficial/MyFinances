@@ -13,7 +13,7 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 @Composable
 fun FailureScreen(
     modifier: Modifier,
-    message: String,
+    message: String = stringResource(R.string.failure),
     retry: () -> Unit
 ) {
     Column(

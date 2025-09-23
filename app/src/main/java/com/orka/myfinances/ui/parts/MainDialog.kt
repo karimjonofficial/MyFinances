@@ -1,10 +1,12 @@
 package com.orka.myfinances.ui.parts
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import com.orka.myfinances.ui.managers.dialog.DialogManager
 import com.orka.myfinances.ui.managers.dialog.DialogState
 import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.screens.templates.TemplatesScreenState
 
 @Composable
 fun MainDialog(
@@ -12,18 +14,26 @@ fun MainDialog(
     dialogManager: DialogManager,
     navigationManager: NavigationManager
 ) {
-    when(dialogState) {
+    when (dialogState) {
         is DialogState.AddFolder -> {
-            AddFolderDialog(
-                templates = emptyList(),
-                dismissRequest = { dialogManager.hide() },
-                onAddTemplateClick = { navigationManager.navigateToAddTemplate() },
-                onSuccess = { name, type ->
-                    dialogState.viewModel.addFolder(name, type)
-                    dialogManager.hide()
-                },
-                onCancel = { dialogManager.hide() }
-            )
+            val uiState = dialogState.templatesViewModel.uiState.collectAsState()
+            val state = uiState.value
+
+            if (state is TemplatesScreenState.Success) {
+                AddFolderDialog(
+                    templates = state.templates,
+                    dismissRequest = { dialogManager.hide() },
+                    onAddTemplateClick = {
+                        navigationManager.navigateToAddTemplate()
+                        dialogManager.hide()
+                    },
+                    onSuccess = { name, type ->
+                        dialogState.viewModel.addFolder(name, type)
+                        dialogManager.hide()
+                    },
+                    onCancel = { dialogManager.hide() }
+                )
+            }
         }
     }
 }

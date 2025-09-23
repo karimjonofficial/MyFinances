@@ -4,4 +4,5 @@ import com.orka.myfinances.data.models.template.Template
 
 interface TemplateRepository {
     suspend fun add(request: AddTemplateRequest): Template?
+    suspend fun get(): List<Template>?
 }

@@ -38,9 +38,7 @@ fun FoldersList(
     ) {
         val size = items.size
 
-        item(
-            span = { GridItemSpan(2) }
-        ) {
+        item(span = { GridItemSpan(2) }) {
             Column {
                 Text(
                     text = stringResource(R.string.categories),
@@ -57,6 +55,7 @@ fun FoldersList(
                     onClick = onFolderSelected
                 )
             }
+
             if (size > 1) item {
                 SecondFolderButton(
                     folder = items[1],
@@ -67,7 +66,10 @@ fun FoldersList(
             if (size > 4) items(
                 items = items.subList(2, size - 3)
             ) { item ->
-                FolderButton(folder = item, onClick = onFolderSelected)
+                FolderButton(
+                    folder = item,
+                    onClick = onFolderSelected
+                )
             }
 
             if (size > 2) item {

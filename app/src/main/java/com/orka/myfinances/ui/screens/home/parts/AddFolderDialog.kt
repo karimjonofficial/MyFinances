@@ -10,7 +10,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,26 +17,11 @@ import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.repositories.folder.FolderType
+import com.orka.myfinances.lib.extensions.models.FolderTypeSaver
 import com.orka.myfinances.lib.ui.components.Dialog
 import com.orka.myfinances.lib.ui.components.ExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.RadioButton
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-
-val FolderTypeSaver = Saver<FolderType, Pair<String, Int?>>(
-    save = {
-        when (it) {
-            is FolderType.Catalog -> "catalog" to null
-            is FolderType.ProductFolder -> "product" to it.templateId
-        }
-    },
-    restore = {
-        when (it.first) {
-            "catalog" -> FolderType.Catalog
-            "product" -> FolderType.ProductFolder(it.second!!)
-            else -> error("Unknown FolderType")
-        }
-    }
-)
 
 @Composable
 fun AddFolderDialog(

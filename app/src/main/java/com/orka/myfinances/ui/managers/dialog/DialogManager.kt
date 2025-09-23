@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface DialogManager {
     val dialogState: StateFlow<DialogState?>
-    fun show(dialog: DialogState)
+
+    fun addFolderDialog()
     fun hide()
 }

@@ -3,8 +3,9 @@ package com.orka.myfinances
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.folder.Catalog
-import com.orka.myfinances.data.models.folder.ProductFolder
-import com.orka.myfinances.factories.ViewModelProvider
+import com.orka.myfinances.data.models.folder.Warehouse
+import com.orka.myfinances.factories.ViewModelProviderImpl
+import com.orka.myfinances.fixtures.resources.types
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +15,7 @@ import kotlin.coroutines.CoroutineContext
 
 class NavigationManagerImpl(
     initialBackStack: List<Destination>,
-    private val provider: ViewModelProvider,
+    private val provider: ViewModelProviderImpl,
     logger: Logger,
     defaultCoroutineContext: CoroutineContext = Dispatchers.Default
 ) : ViewModel<List<Destination>>(
@@ -23,7 +24,6 @@ class NavigationManagerImpl(
     logger = logger
 ), NavigationManager {
     override val backStack = state.asStateFlow()
-    private val types = listOf("text", "number", "range")
 
     override fun navigateToHome() {
         val list = createBackStack()
@@ -31,7 +31,7 @@ class NavigationManagerImpl(
     }
 
     override fun navigateToProfile() {
-        if (state.value.last() !is Destination.Profile) {
+        if (!isDuplicate<Destination.Profile>()) {
             state.update {
                 createBackStack(Destination.Profile)
             }
@@ -41,18 +41,14 @@ class NavigationManagerImpl(
     override fun navigateToCatalog(catalog: Catalog) {
         val last = state.value.last()
         if (!(last is Destination.Catalog && last.catalog == catalog)) {
-            val backstack = state.value
-            val new = backstack + Destination.Catalog(catalog)
-            state.update { new }
+            state.update { it + Destination.Catalog(catalog) }
         }
     }
 
-    override fun navigateToProductFolder(folder: ProductFolder) {
+    override fun navigateToProductFolder(folder: Warehouse) {
         val last = state.value.last()
-        if (!(last is Destination.ProductFolder && last.productFolder == folder)) {
-            val backstack = state.value
-            val new = backstack + Destination.ProductFolder(folder)
-            state.update { new }
+        if (!(last is Destination.Warehouse && last.warehouse == folder)) {
+            state.update { it + Destination.Warehouse(folder) }
         }
     }
 
@@ -70,12 +66,28 @@ class NavigationManagerImpl(
     }
 
     override fun navigateToAddTemplate() {
-        val viewModel = provider.templateScreenViewModel()//TODO check code coverage
+        val viewModel = provider.addTemplateViewModel()//TODO check code coverage
         val destination = Destination.AddTemplate(viewModel, types)
-        val list = createBackStack(destination)
-        state.update { list }
+        state.update { createBackStack(destination) }
     }
 
+    override fun navigateToSettings() {
+        if(!isDuplicate<Destination.Settings>()) {
+            state.update {
+                createBackStack(Destination.Settings)
+            }
+        }
+    }
+
+    override fun navigateToTemplates() {
+        if(!isDuplicate<Destination.Templates>()) {
+            val templatesViewModel = provider.templatesViewModel()
+            templatesViewModel.initialize()
+            state.update { it + Destination.Templates(templatesViewModel) }
+        }
+    }
+
+    private inline fun <reified T: Destination> isDuplicate(): Boolean = state.value.last() is T
     private fun createBackStack(vararg destinations: Destination = emptyArray()): List<Destination> {
         val home = state.value.first()
         val list = listOf(home) + destinations

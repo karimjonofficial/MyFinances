@@ -6,9 +6,15 @@ import com.orka.myfinances.data.repositories.template.TemplateRepository
 
 class SpyTemplateRepository : TemplateRepository {
     var addCalled = false
+    var getCalled = false
 
     override suspend fun add(request: AddTemplateRequest): Template? {
         addCalled = true
+        return null
+    }
+
+    override suspend fun get(): List<Template>? {
+        getCalled = true
         return null
     }
 }

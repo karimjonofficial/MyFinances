@@ -8,6 +8,6 @@ val product1 = Product(
     name = "Product 1",
     price = 100.0,
     salePrice = 110.0,
-    folder = folder1,
+    warehouse = folder1,
     properties = emptyList()
 )

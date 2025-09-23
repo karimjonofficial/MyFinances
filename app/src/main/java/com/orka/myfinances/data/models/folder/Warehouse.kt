@@ -5,7 +5,7 @@ import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.data.models.template.Template
 
-data class ProductFolder(
+data class Warehouse(
     override val id: Id,
     override val name: String,
     val template: Template,

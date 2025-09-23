@@ -1,3 +1,3 @@
 package com.orka.myfinances.fixtures.resources
 
-const val standardDelayDurationInMillis = 1000L
+val types = listOf("text", "number", "range")

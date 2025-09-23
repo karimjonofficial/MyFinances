@@ -9,34 +9,29 @@ import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.ui.managers.dialog.DialogManager
-import com.orka.myfinances.ui.managers.dialog.DialogState.AddFolder
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import com.orka.myfinances.ui.screens.home.parts.HomeScreenTopBar
+import com.orka.myfinances.ui.screens.warehouse.WarehouseScreenTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainTopBar(
     modifier: Modifier = Modifier,
-    currentDestination: Destination,
+    destination: Destination,
     dialogManager: DialogManager,
     navigationManager: NavigationManager,
     session: Session
 ) {
 
-    when (currentDestination) {
+    when (destination) {
         is Destination.Home -> {
             HomeScreenTopBar(
                 modifier = modifier,
-                onAddClick = {
-                    val dialog = AddFolder(currentDestination.viewModel)
-                    dialogManager.show(dialog)
-                },
-                onNotificationsClick = {
-                    navigationManager.navigateToNotifications()
-                },
+                onAddClick = { dialogManager.addFolderDialog() },
+                onNotificationsClick = { navigationManager.navigateToNotifications() },
                 onSearchClick = {
-
+                    //TODO implement something
                 }
             )
         }
@@ -51,7 +46,7 @@ fun MainTopBar(
         is Destination.Catalog -> {
             TopAppBar(
                 modifier = modifier,
-                title = { Text(text = stringResource(R.string.catalog)) }
+                title = { Text(text = destination.catalog.name) }
             )
         }
 
@@ -69,10 +64,33 @@ fun MainTopBar(
             )
         }
 
-        is Destination.ProductFolder -> {
+        is Destination.Warehouse -> {
+            WarehouseScreenTopBar(
+                modifier = modifier,
+                warehouse = destination.warehouse,
+                onAddProductClick = { /**navigationManager.navigateToAddProduct(it)**/ },
+                onAddStockItemClick = { /**navigationManager.navigateToAddStockItem(it)**/ }
+            )
+        }
+
+        Destination.Settings -> {
             TopAppBar(
                 modifier = modifier,
-                title = { Text(text = stringResource(R.string.products)) }
+                title = { Text(text = stringResource(R.string.settings)) }
+            )
+        }
+
+        is Destination.Templates -> {
+            TopAppBar(
+                modifier = modifier,
+                title = { Text(text = stringResource(R.string.templates)) }
+            )
+        }
+
+        is Destination.AddProduct -> {
+            TopAppBar(
+                modifier = modifier,
+                title = { Text(text = stringResource(R.string.add_product)) }
             )
         }
     }

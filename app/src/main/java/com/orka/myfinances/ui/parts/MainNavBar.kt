@@ -19,14 +19,7 @@ fun MainNavBar(
     navigationManager: NavigationManager
 ) {
     val destination = navigationManager.backStack.collectAsState()
-    val visible = remember {
-        derivedStateOf {
-            when(destination.value.last()) {
-                is Destination.Notifications, is Destination.Catalog -> false
-                else -> true
-            }
-        }
-    }
+    val visible = remember { derivedStateOf { destination.value.last().hasNavBar } }
 
     if (visible.value) {
         NavigationBar(modifier = modifier) {
@@ -64,6 +57,23 @@ fun MainNavBar(
                         navigationManager.navigateToProfile()
                     }
                 },
+            )
+
+            NavigationBarItem(
+                selected = backStack.value.last() is Destination.Settings,
+                icon = {
+                    val currentDestination = backStack.value.last()
+                    val iconRes = if (currentDestination is Destination.Settings)
+                        R.drawable.settings_filled
+                    else R.drawable.settings_outlined
+                    Icon(painter = painterResource(id = iconRes), contentDescription = null)
+                },
+                onClick = {
+                    val currentDestination = backStack.value.last()
+                    if (currentDestination !is Destination.Settings) {
+                        navigationManager.navigateToSettings()
+                    }
+                }
             )
         }
     }
