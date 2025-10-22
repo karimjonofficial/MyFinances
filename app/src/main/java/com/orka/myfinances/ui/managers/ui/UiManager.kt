@@ -6,19 +6,25 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Session
+import com.orka.myfinances.data.repositories.WarehouseRepository
+import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.factories.ApiProvider
+import com.orka.myfinances.factories.ViewModelProvider
 import com.orka.myfinances.factories.ViewModelProviderImpl
+import com.orka.myfinances.fixtures.data.api.ProductApiServiceImpl
+import com.orka.myfinances.fixtures.data.api.WarehouseApiServiceImpl
 import com.orka.myfinances.fixtures.data.repositories.FolderRepositoryImpl
+import com.orka.myfinances.fixtures.data.repositories.TemplateRepositoryImpl
 import com.orka.myfinances.lib.extensions.models.makeSession
 import com.orka.myfinances.lib.extensions.models.toModel
+import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.session.SessionManager
 import com.orka.myfinances.ui.managers.session.UiState
-import com.orka.myfinances.ui.managers.navigation.Destination
+import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenViewModel
+import com.orka.myfinances.ui.screens.add.template.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
-import com.orka.myfinances.fixtures.data.repositories.TemplateRepositoryImpl
-import com.orka.myfinances.ui.screens.add.template.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asStateFlow
@@ -69,16 +75,12 @@ class UiManager(
 
     private fun openSession(session: Session) {
         val folderRepository = FolderRepositoryImpl()
-        val templateRepository = TemplateRepositoryImpl()
         val homeScreenViewModel = HomeScreenViewModel(folderRepository, logger, defaultCoroutineContext)
+        homeScreenViewModel.initialize()
         val initialBackStack = listOf(Destination.Home(homeScreenViewModel))
-        val addTemplateScreenViewModel = AddTemplateScreenViewModel(templateRepository, defaultCoroutineContext)
-        val templatesScreenViewModel = TemplatesScreenViewModel(templateRepository, logger, defaultCoroutineContext)
-        templatesScreenViewModel.initialize()
-        val provider = ViewModelProviderImpl(addTemplateScreenViewModel, templatesScreenViewModel, homeScreenViewModel)
+        val provider = viewModelProvider(homeScreenViewModel)
         val dialogManager = DialogManagerImpl(provider, logger, defaultCoroutineContext)
         val navigationManager = NavigationManagerImpl(initialBackStack, provider, logger, defaultCoroutineContext)
-        homeScreenViewModel.initialize()
         setState(UiState.SignedIn(session, dialogManager, navigationManager))
     }
     private suspend fun getSession(credential: Credential): Session? {
@@ -93,5 +95,21 @@ class UiManager(
         return if (userModel != null && companyModel != null && companyOfficeModel != null) {
             makeSession(credential, userModel, companyOfficeModel, companyModel)
         } else null
+    }
+    private fun viewModelProvider(homeScreenViewModel: HomeScreenViewModel): ViewModelProvider {
+        val productApiService = ProductApiServiceImpl()
+        val warehouseApiService = WarehouseApiServiceImpl()
+        val templateRepository = TemplateRepositoryImpl()
+        val warehouseRepository = WarehouseRepository(warehouseApiService)
+        val productRepository = ProductRepository(productApiService)
+        val addTemplateScreenViewModel = AddTemplateScreenViewModel(templateRepository, defaultCoroutineContext)
+        val templatesScreenViewModel = TemplatesScreenViewModel(templateRepository, logger, defaultCoroutineContext)
+        val addProductScreenViewModel = AddProductScreenViewModel(productRepository, warehouseRepository, logger, defaultCoroutineContext)
+        return ViewModelProviderImpl(
+            addTemplateScreenViewModel = addTemplateScreenViewModel,
+            templatesScreenViewModel = templatesScreenViewModel,
+            homeScreenViewModel = homeScreenViewModel,
+            addProductScreenViewModel = addProductScreenViewModel
+        )
     }
 }

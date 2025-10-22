@@ -6,9 +6,12 @@ import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.models.User
+import com.orka.myfinances.data.models.folder.Warehouse
+import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.models.template.TemplateField
 import com.orka.myfinances.data.repositories.folder.FolderType
+import com.orka.myfinances.data.repositories.product.models.AddProductRequest
 
 const val name = "Name"
 
@@ -62,4 +65,27 @@ val templateFields = listOf(
 )
 val template = Template(id, name, templateFields)
 val catalogFolderType = FolderType.Catalog
-val productFolderType = FolderType.ProductFolder(template.id.value)
+val addProductRequest = AddProductRequest(
+    name = name,
+    warehouseId = 1,
+    price = 0,
+    salePrice = 0,
+    properties = emptyList(),
+    description = ""
+)
+val warehouse = Warehouse(
+    id = id,
+    name = name,
+    template = template,
+    products = emptyList(),
+    stockItems = emptyList()
+)
+val product = Product(
+    id = id,
+    name = name,
+    price = 0.0,
+    salePrice = 0.0,
+    warehouse = warehouse,
+    properties = emptyList(),
+    description = ""
+)

@@ -2,7 +2,7 @@ package com.orka.myfinances
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
-import com.orka.myfinances.factories.ViewModelProviderImpl
+import com.orka.myfinances.factories.ViewModelProvider
 import com.orka.myfinances.ui.managers.dialog.DialogManager
 import com.orka.myfinances.ui.managers.dialog.DialogState
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.update
 import kotlin.coroutines.CoroutineContext
 
 class DialogManagerImpl(
-    private val provider: ViewModelProviderImpl,
+    private val provider: ViewModelProvider,
     logger: Logger,
     defaultCoroutineContext: CoroutineContext = Dispatchers.Default,
 ) : ViewModel<DialogState?>(

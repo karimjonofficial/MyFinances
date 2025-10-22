@@ -16,10 +16,14 @@ import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import com.orka.myfinances.ui.screens.add.product.AddProductScreen
+import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.screens.add.template.AddTemplateScreen
+import com.orka.myfinances.ui.screens.add.template.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.home.HomeScreen
+import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 import com.orka.myfinances.ui.screens.home.parts.FoldersList
 import com.orka.myfinances.ui.screens.templates.TemplatesScreen
+import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
 import com.orka.myfinances.ui.screens.warehouse.WarehouseGrid
 
 fun entryProvider(
@@ -45,7 +49,7 @@ private fun homeEntry(
     destination: Destination.Home,
     navigationManager: NavigationManager
 ): NavEntry<Destination> = NavEntry(key = destination) {
-    val uiState = destination.viewModel.uiState.collectAsState()
+    val uiState = (destination.viewModel as HomeScreenViewModel).uiState.collectAsState()
 
     HomeScreen(
         modifier = modifier,
@@ -101,7 +105,7 @@ private fun addTemplateEntry(
     AddTemplateScreen(
         modifier = modifier,
         types = destination.types,
-        viewModel = destination.viewModel,
+        viewModel = destination.viewModel as AddTemplateScreenViewModel,
         navigationManager = navigationManager
     )
 }
@@ -137,7 +141,7 @@ private fun templatesEntry(
     modifier: Modifier,
     destination: Destination.Templates
 ): NavEntry<Destination> = NavEntry(key = destination) {
-    val uiState = destination.viewModel.uiState.collectAsState()
+    val uiState = (destination.viewModel as TemplatesScreenViewModel).uiState.collectAsState()
 
     TemplatesScreen(modifier, uiState.value)
 }
@@ -158,7 +162,7 @@ private fun addProductEntry(
     modifier: Modifier = Modifier,
     destination: Destination.AddProduct
 ): NavEntry<Destination> = NavEntry(key = destination) {
-    val uiState = destination.viewModel.uiState.collectAsState()
+    val uiState = (destination.viewModel as AddProductScreenViewModel).uiState.collectAsState()
 
     AddProductScreen(
         modifier = modifier,

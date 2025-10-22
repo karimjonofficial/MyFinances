@@ -68,7 +68,7 @@ fun MainTopBar(
             WarehouseScreenTopBar(
                 modifier = modifier,
                 warehouse = destination.warehouse,
-                onAddProductClick = { /**navigationManager.navigateToAddProduct(it)**/ },
+                onAddProductClick = { navigationManager.navigateToAddProduct(it) },
                 onAddStockItemClick = { /**navigationManager.navigateToAddStockItem(it)**/ }
             )
         }

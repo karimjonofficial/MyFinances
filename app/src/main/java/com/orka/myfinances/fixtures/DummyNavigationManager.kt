@@ -15,6 +15,7 @@ class DummyNavigationManager : NavigationManager {
     override fun navigateToProductFolder(folder: Warehouse) {}
     override fun navigateToNotifications() {}
     override fun navigateToAddTemplate() {}
+    override fun navigateToAddProduct(warehouse: Warehouse) {}
     override fun navigateToSettings() {}
     override fun navigateToTemplates() {}
     override fun back() {}

@@ -4,10 +4,11 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
-import com.orka.myfinances.factories.ViewModelProviderImpl
+import com.orka.myfinances.factories.ViewModelProvider
 import com.orka.myfinances.fixtures.resources.types
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -15,7 +16,7 @@ import kotlin.coroutines.CoroutineContext
 
 class NavigationManagerImpl(
     initialBackStack: List<Destination>,
-    private val provider: ViewModelProviderImpl,
+    private val provider: ViewModelProvider,
     logger: Logger,
     defaultCoroutineContext: CoroutineContext = Dispatchers.Default
 ) : ViewModel<List<Destination>>(
@@ -57,18 +58,15 @@ class NavigationManagerImpl(
         state.update { backstack }
     }
 
-    override fun back() {
-        val backstack = state.value
-        if (backstack.size > 1) {
-            val list = backstack.dropLast(1)
-            state.update { list }
-        }
-    }
-
     override fun navigateToAddTemplate() {
         val viewModel = provider.addTemplateViewModel()//TODO check code coverage
         val destination = Destination.AddTemplate(viewModel, types)
         state.update { createBackStack(destination) }
+    }
+
+    override fun navigateToAddProduct(warehouse: Warehouse) {
+        val viewModel = provider.addProductViewModel()
+        state.update { it + Destination.AddProduct(warehouse, viewModel) }
     }
 
     override fun navigateToSettings() {
@@ -82,8 +80,17 @@ class NavigationManagerImpl(
     override fun navigateToTemplates() {
         if(!isDuplicate<Destination.Templates>()) {
             val templatesViewModel = provider.templatesViewModel()
-            templatesViewModel.initialize()
+            if(templatesViewModel is TemplatesScreenViewModel)
+                templatesViewModel.initialize()
             state.update { it + Destination.Templates(templatesViewModel) }
+        }
+    }
+
+    override fun back() {
+        val backstack = state.value
+        if (backstack.size > 1) {
+            val list = backstack.dropLast(1)
+            state.update { list }
         }
     }
 

@@ -8,17 +8,17 @@ import com.orka.myfinances.fixtures.resources.models.id3
 val templateField1 = TemplateField(
     id = id1,
     name = "TemplateField 1",
-    type = "int"
+    type = "number"
 )
 val templateField2 = TemplateField(
     id = id2,
     name = "TemplateField 2",
-    type = "string"
+    type = "text"
 )
 val templateField3 = TemplateField(
     id = id3,
     name = "TemplateField 3",
-    type = "double"
+    type = "range"
 )
 
 val templateFields = listOf(

@@ -24,6 +24,7 @@ fun RangeField(
         horizontalArrangement = Arrangement.Center
     ) {
         OutlinedTextField(
+            modifier = Modifier.weight(1f),
             value = min.toString(),
             onValueChange = {
                 val minValue = it.toIntOrNull()
@@ -36,6 +37,7 @@ fun RangeField(
 
         HorizontalSpacer(8)
         OutlinedTextField(
+            modifier = Modifier.weight(1f),
             value = max.toString(),
             onValueChange = {
                 val maxValue = it.toIntOrNull()

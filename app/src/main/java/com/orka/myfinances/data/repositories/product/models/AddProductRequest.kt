@@ -1,4 +1,6 @@
-package com.orka.myfinances.ui.screens.add.product
+package com.orka.myfinances.data.repositories.product.models
+
+import com.orka.myfinances.data.repositories.product.models.PropertyModel
 
 data class AddProductRequest(
     val name: String,

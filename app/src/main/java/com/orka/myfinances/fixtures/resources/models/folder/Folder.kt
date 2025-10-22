@@ -53,3 +53,4 @@ val folder5 = Catalog(
 )
 
 val folders = listOf(folder1, folder2, folder5)
+val warehouses = listOf(folder1, folder2, folder4)
