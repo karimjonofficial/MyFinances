@@ -7,7 +7,7 @@ import com.orka.myfinances.data.repositories.template.TemplateRepository
 class TemplateRepositoryStub : TemplateRepository {
 
     override suspend fun add(request: AddTemplateRequest): Template? {
-        TODO("Not yet implemented")
+        return null
     }
 
     override suspend fun get(): List<Template>? {

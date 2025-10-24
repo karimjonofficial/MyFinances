@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.warehouse
+package com.orka.myfinances.ui.screens.warehouse.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.warehouse
+package com.orka.myfinances.ui.screens.warehouse.parts
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon

@@ -11,6 +11,10 @@ class ProductApiServiceImpl : ProductApiService {
     override suspend fun add(request: AddProductRequest): Product? {
         return request.toProduct(id1)
     }
+
+    override suspend fun get(): List<Product>? {
+        return null
+    }
 }
 
 fun AddProductRequest.toProduct(id: Id): Product {

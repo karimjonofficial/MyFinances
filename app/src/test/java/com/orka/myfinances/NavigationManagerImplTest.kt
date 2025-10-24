@@ -10,6 +10,7 @@ import com.orka.myfinances.fixtures.data.repositories.folder.DummyFolderReposito
 import com.orka.myfinances.testLib.id
 import com.orka.myfinances.testLib.name
 import com.orka.myfinances.testLib.template
+import com.orka.myfinances.testLib.viewModel
 import com.orka.myfinances.testLib.warehouse
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
@@ -100,7 +101,7 @@ class NavigationManagerImplTest : MainDispatcherContext() {
 
         @Test
         fun `When navigate to folder, add Folder`() {
-            assertTopEquals(Destination.Warehouse(folder), size = 2)
+            assertTopEquals(Destination.Warehouse(folder, viewModel), size = 2)
         }
 
         @Nested
@@ -112,20 +113,20 @@ class NavigationManagerImplTest : MainDispatcherContext() {
 
             @Test
             fun `Allow multiple folders in backstack`() {
-                assertTopEquals(Destination.Warehouse(folder2), size = 3)
+                assertTopEquals(Destination.Warehouse(folder2, viewModel), size = 3)
             }
 
             @Test
             fun `Back navigates to Folder`() {
                 navigationManager.back()
-                assertTopEquals(Destination.Warehouse(folder), size = 2)
+                assertTopEquals(Destination.Warehouse(folder, viewModel), size = 2)
             }
         }
 
         @Test
         fun `Does not allow similar folders in backstack`() {
             navigationManager.navigateToProductFolder(folder)
-            assertTopEquals(Destination.Warehouse(folder), size = 2)
+            assertTopEquals(Destination.Warehouse(folder, viewModel), size = 2)
         }
 
         @Test

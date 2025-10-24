@@ -9,14 +9,14 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import com.orka.myfinances.NavigationManagerImpl
 import com.orka.myfinances.R
 import com.orka.myfinances.ui.managers.navigation.Destination
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
 
 @Composable
 fun MainNavBar(
     modifier: Modifier = Modifier,
-    navigationManager: NavigationManager
+    navigationManager: NavigationManagerImpl
 ) {
     val destination = navigationManager.backStack.collectAsState()
     val visible = remember { derivedStateOf { destination.value.last().hasNavBar } }

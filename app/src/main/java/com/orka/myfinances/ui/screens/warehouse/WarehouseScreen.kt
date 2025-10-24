@@ -1,32 +1,31 @@
 package com.orka.myfinances.ui.screens.warehouse
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.StockItem
-import com.orka.myfinances.data.models.product.Product
-import com.orka.myfinances.ui.screens.home.components.ProductCard
+import com.orka.myfinances.ui.screens.warehouse.parts.ProductsContent
+import com.orka.myfinances.ui.screens.warehouse.parts.StockItemsContent
+import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
 
 @Composable
-fun WarehouseGrid(
+fun WarehouseScreen(
     modifier: Modifier = Modifier,
-    products: List<Product>,
-    stockItems: List<StockItem>,
+    viewModel: WarehouseScreenViewModel,
     contentPadding: PaddingValues = PaddingValues(horizontal = 8.dp)
 ) {
+    val productsState = viewModel.productsState.collectAsState()
+    val warehouseState = viewModel.warehouseState.collectAsState()
+
     Column(modifier = modifier) {
         val selectedTab = rememberSaveable { mutableIntStateOf(0) }
         val selectedTabValue = selectedTab.intValue
@@ -48,25 +47,18 @@ fun WarehouseGrid(
 
 
         if (selectedTabValue == 0) {
-            LazyColumn(
+            ProductsContent(
                 contentPadding = contentPadding,
-                verticalArrangement = Arrangement.spacedBy(2.dp)
-            ) {
-                items(products.size) { index ->
-                    ProductCard(product = products[index]) {}//TODO implement click
-                }
-            }
+                state = productsState.value,
+                viewModel = viewModel
+            )
         } else {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                contentPadding = contentPadding,
-                verticalArrangement = Arrangement.spacedBy(2.dp),
-                horizontalArrangement = Arrangement.spacedBy(2.dp)
-            ) {
-                items(stockItems.size) { index ->
-                    StockItemCard(item = stockItems[index]) {}//TODO implement click
-                }
-            }
+            StockItemsContent(
+                state = warehouseState.value,
+                viewModel = viewModel,
+                contentPadding = contentPadding
+            )
         }
     }
 }
+

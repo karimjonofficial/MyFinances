@@ -1,9 +1,9 @@
 package com.orka.myfinances.ui.managers.session
 
+import com.orka.myfinances.NavigationManagerImpl
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.ui.managers.dialog.DialogManager
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
 
 sealed interface UiState {
     data object Initial : UiState
@@ -11,6 +11,6 @@ sealed interface UiState {
     data class SignedIn(
         val session: Session,
         val dialogManager: DialogManager,
-        val navigationManager: NavigationManager
+        val navigationManager: NavigationManagerImpl
     ) : UiState
 }

@@ -22,8 +22,8 @@ class AddProductScreenViewModel(
     val uiState = state.asStateFlow()
 
     fun initialize() = launch {
-        val warehouses = warehouseRepository.get()
-        if(warehouses != null) updateState { AddProductScreenState.Success(warehouses) }
+        val warehouse = warehouseRepository.get()
+        if(warehouse != null) updateState { AddProductScreenState.Success(warehouse) }
         else updateState { AddProductScreenState.Failure }
     }
 

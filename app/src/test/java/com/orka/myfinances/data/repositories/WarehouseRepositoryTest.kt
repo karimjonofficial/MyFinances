@@ -3,6 +3,7 @@ package com.orka.myfinances.data.repositories
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.fixtures.data.api.warehouse.EmptyWarehouseApiServiceStub
 import com.orka.myfinances.fixtures.data.api.warehouse.WarehouseApiServiceStub
+import com.orka.myfinances.testLib.id
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -15,14 +16,14 @@ class WarehouseRepositoryTest : MainDispatcherContext() {
     @Test
     fun `When api fails, return null`() = testScope.runTest {
         val repository = repository(EmptyWarehouseApiServiceStub())
-        val result = repository.get()
+        val result = repository.get(id)
         assertNull(result)
     }
 
     @Test
     fun `When api successes, return what api returns`() = testScope.runTest {
         val repository = repository(WarehouseApiServiceStub())
-        val result = repository.get()
+        val result = repository.get(id)
         assertNotNull(result)
     }
 }

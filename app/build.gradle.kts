@@ -70,6 +70,7 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
 
     testImplementation(libs.junit.jupiter)
     testImplementation(platform(libs.junit.bom))

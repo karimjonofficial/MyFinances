@@ -24,7 +24,7 @@ class NavigationManagerImpl(
     defaultCoroutineContext = defaultCoroutineContext,
     logger = logger
 ), NavigationManager {
-    override val backStack = state.asStateFlow()
+    val backStack = state.asStateFlow()
 
     override fun navigateToHome() {
         val list = createBackStack()
@@ -49,7 +49,7 @@ class NavigationManagerImpl(
     override fun navigateToProductFolder(folder: Warehouse) {
         val last = state.value.last()
         if (!(last is Destination.Warehouse && last.warehouse == folder)) {
-            state.update { it + Destination.Warehouse(folder) }
+            state.update { it + Destination.Warehouse(folder, "viewModel") }//TODO
         }
     }
 
@@ -59,7 +59,7 @@ class NavigationManagerImpl(
     }
 
     override fun navigateToAddTemplate() {
-        val viewModel = provider.addTemplateViewModel()//TODO check code coverage
+        val viewModel = provider.addTemplateViewModel()
         val destination = Destination.AddTemplate(viewModel, types)
         state.update { createBackStack(destination) }
     }

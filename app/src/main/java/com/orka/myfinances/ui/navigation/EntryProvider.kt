@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
+import com.orka.myfinances.NavigationManagerImpl
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
@@ -24,12 +25,13 @@ import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 import com.orka.myfinances.ui.screens.home.parts.FoldersList
 import com.orka.myfinances.ui.screens.templates.TemplatesScreen
 import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
-import com.orka.myfinances.ui.screens.warehouse.WarehouseGrid
+import com.orka.myfinances.ui.screens.warehouse.WarehouseScreen
+import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
 
 fun entryProvider(
     modifier: Modifier,
     destination: Destination,
-    navigationManager: NavigationManager
+    navigationManager: NavigationManagerImpl
 ): NavEntry<Destination> {
     return when (destination) {
         is Destination.Home -> homeEntry(modifier, destination, navigationManager)
@@ -40,7 +42,7 @@ fun entryProvider(
         is Destination.AddTemplate -> addTemplateEntry(modifier, destination, navigationManager)
         is Destination.Settings -> settingsEntry(modifier, destination, navigationManager)
         is Destination.Templates -> templatesEntry(modifier, destination)
-        is Destination.AddProduct -> addProductEntry(modifier, destination)
+        is Destination.AddProduct -> addProductEntry(modifier, destination, navigationManager)
     }
 }
 
@@ -67,12 +69,11 @@ private fun warehouseEntry(
     modifier: Modifier,
     destination: Destination.Warehouse
 ): NavEntry<Destination> = NavEntry(key = destination) {
-    val productFolder = destination.warehouse
+    val viewModel = destination.viewModel as WarehouseScreenViewModel
 
-    WarehouseGrid(
+    WarehouseScreen(
         modifier = modifier,
-        products = productFolder.products,
-        stockItems = productFolder.stockItems
+        viewModel = viewModel
     )
 }
 
@@ -160,7 +161,8 @@ private fun notificationsEntry(
 
 private fun addProductEntry(
     modifier: Modifier = Modifier,
-    destination: Destination.AddProduct
+    destination: Destination.AddProduct,
+    navigationManager: NavigationManager
 ): NavEntry<Destination> = NavEntry(key = destination) {
     val uiState = (destination.viewModel as AddProductScreenViewModel).uiState.collectAsState()
 
@@ -168,6 +170,7 @@ private fun addProductEntry(
         modifier = modifier,
         warehouse = destination.warehouse,
         state = uiState.value,
-        viewModel = destination.viewModel
+        viewModel = destination.viewModel,
+        navigationManager = navigationManager
     )
 }

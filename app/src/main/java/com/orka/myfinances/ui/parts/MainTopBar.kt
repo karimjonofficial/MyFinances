@@ -12,7 +12,7 @@ import com.orka.myfinances.ui.managers.dialog.DialogManager
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import com.orka.myfinances.ui.screens.home.parts.HomeScreenTopBar
-import com.orka.myfinances.ui.screens.warehouse.WarehouseScreenTopBar
+import com.orka.myfinances.ui.screens.warehouse.parts.WarehouseScreenTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

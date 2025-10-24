@@ -11,6 +11,6 @@ class DummyTemplateRepository : TemplateRepository {
     }
 
     override suspend fun get(): List<Template>? {
-        TODO("Not yet implemented")
+        return null
     }
 }

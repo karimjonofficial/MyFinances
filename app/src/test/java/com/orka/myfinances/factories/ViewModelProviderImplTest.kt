@@ -4,7 +4,8 @@ import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.repositories.WarehouseRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.data.api.DummyProductApiService
+import com.orka.myfinances.fixtures.data.api.product.DummyProductApiService
+import com.orka.myfinances.fixtures.data.api.warehouse.SpyWarehouseApiService
 import com.orka.myfinances.fixtures.data.repositories.folder.DummyFolderRepository
 import com.orka.myfinances.fixtures.data.repositories.template.SpyTemplateRepository
 import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenViewModel

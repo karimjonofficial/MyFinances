@@ -5,7 +5,11 @@ import com.orka.myfinances.data.repositories.WarehouseApiService
 import com.orka.myfinances.fixtures.resources.models.folder.warehouses
 
 class WarehouseApiServiceImpl : WarehouseApiService {
-    override suspend fun get(): List<Warehouse>? {
+    override suspend fun get(id: Int): Warehouse {
+        return warehouses[0]
+    }
+
+    override suspend fun get(): List<Warehouse> {
         return warehouses
     }
 }

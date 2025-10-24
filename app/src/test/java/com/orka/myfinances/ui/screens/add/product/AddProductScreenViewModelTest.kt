@@ -4,8 +4,8 @@ import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.repositories.WarehouseRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.data.api.DummyProductApiService
-import com.orka.myfinances.fixtures.data.api.SpyProductApiService
+import com.orka.myfinances.fixtures.data.api.product.DummyProductApiService
+import com.orka.myfinances.fixtures.data.api.product.SpyProductApiService
 import com.orka.myfinances.fixtures.data.api.warehouse.DummyWarehouseApiService
 import com.orka.myfinances.fixtures.data.api.warehouse.EmptyWarehouseApiServiceStub
 import com.orka.myfinances.fixtures.data.api.warehouse.WarehouseApiServiceStub
@@ -23,7 +23,10 @@ import org.junit.jupiter.api.Test
 class AddProductScreenViewModelTest : MainDispatcherContext() {
     private val logger = DummyLogger()
 
-    private fun viewModel(productRepository: ProductRepository, warehouseRepository: WarehouseRepository): AddProductScreenViewModel {
+    private fun viewModel(
+        productRepository: ProductRepository,
+        warehouseRepository: WarehouseRepository
+    ): AddProductScreenViewModel {
         return AddProductScreenViewModel(
             productRepository = productRepository,
             warehouseRepository = warehouseRepository,
@@ -33,7 +36,7 @@ class AddProductScreenViewModelTest : MainDispatcherContext() {
     }
 
     @Nested
-    inner class DummyRepository {
+    inner class DummyProductApiContext {
         private fun viewModel(warehouseRepository: WarehouseRepository): AddProductScreenViewModel {
             val productRepository = ProductRepository(DummyProductApiService())
             return viewModel(productRepository, warehouseRepository)

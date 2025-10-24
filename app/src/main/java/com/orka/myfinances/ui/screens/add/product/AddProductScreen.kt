@@ -25,6 +25,7 @@ import com.orka.myfinances.data.repositories.product.models.PropertyModel
 import com.orka.myfinances.lib.ui.LoadingScreen
 import com.orka.myfinances.lib.ui.components.ExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenState
 import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenViewModel
 
@@ -33,7 +34,8 @@ fun AddProductScreen(
     modifier: Modifier = Modifier,
     warehouse: Warehouse,
     state: AddProductScreenState,
-    viewModel: AddProductScreenViewModel
+    viewModel: AddProductScreenViewModel,
+    navigationManager: NavigationManager
 ) {
     when (state) {
         is AddProductScreenState.Loading -> {
@@ -141,6 +143,7 @@ fun AddProductScreen(
                                         description = descriptionValue
                                     )
                                     viewModel.addProduct(request)
+                                    navigationManager.back()
                                 }
                             }
                         ) {

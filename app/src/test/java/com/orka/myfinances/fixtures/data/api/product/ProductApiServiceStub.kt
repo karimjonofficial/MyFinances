@@ -1,15 +1,17 @@
-package com.orka.myfinances.fixtures.data.api
+package com.orka.myfinances.fixtures.data.api.product
 
 import com.orka.myfinances.data.api.ProductApiService
 import com.orka.myfinances.data.models.product.Product
-import com.orka.myfinances.testLib.product
 import com.orka.myfinances.data.repositories.product.models.AddProductRequest
+import com.orka.myfinances.testLib.product
+import com.orka.myfinances.testLib.products
 
-class SpyProductApiService : ProductApiService {
-    var addCalled = false
-
+class ProductApiServiceStub : ProductApiService {
     override suspend fun add(request: AddProductRequest): Product? {
-        addCalled = true
         return product
+    }
+
+    override suspend fun get(): List<Product> {
+        return products
     }
 }

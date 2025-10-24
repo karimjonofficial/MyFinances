@@ -14,6 +14,7 @@ import com.orka.myfinances.data.repositories.folder.FolderType
 import com.orka.myfinances.data.repositories.product.models.AddProductRequest
 
 const val name = "Name"
+const val viewModel = "viewModel"
 
 val id = Id(1)
 val credential = Credential(
@@ -89,3 +90,4 @@ val product = Product(
     properties = emptyList(),
     description = ""
 )
+val products = listOf(product)
