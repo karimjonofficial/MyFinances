@@ -5,18 +5,18 @@ import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.repositories.folder.AddFolderRequest
 import com.orka.myfinances.data.repositories.folder.FolderRepository
 import com.orka.myfinances.data.repositories.folder.FolderType
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asStateFlow
-import kotlin.coroutines.CoroutineContext
 
 class HomeScreenViewModel(
     private val repository: FolderRepository,
     logger: Logger,
-    context: CoroutineContext = Dispatchers.Main
+    coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
 ) : ViewModel<HomeScreenState>(
     initialState = HomeScreenState.Initial,
     logger = logger,
-    defaultCoroutineContext = context
+    coroutineScope = coroutineScope
 ) {
     val uiState = state.asStateFlow()
 

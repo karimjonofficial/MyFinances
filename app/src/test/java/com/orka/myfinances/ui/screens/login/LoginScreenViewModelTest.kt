@@ -26,7 +26,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
         @Test
         fun `When authorize called gets credentials`() {
             val apiService = SpyCredentialApiService()
-            val viewmodel = LoginScreenViewModel(logger, apiService, manager)
+            val viewmodel = LoginScreenViewModel(logger, apiService, manager, testScope)
             viewmodel.authorize("username", "password")
             testScope.advanceUntilIdle()
             assertTrue(apiService.called)
@@ -39,7 +39,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
             @OptIn(ExperimentalCoroutinesApi::class)
             @Test
             fun `When credential not found state is error`() {
-                val viewmodel = LoginScreenViewModel(logger, apiService, manager)
+                val viewmodel = LoginScreenViewModel(logger, apiService, manager, testScope)
 
                 testScope.assertStateTransition(
                     stateFlow = viewmodel.uiState,
@@ -51,7 +51,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
             @OptIn(ExperimentalCoroutinesApi::class)
             @Test
             fun `When authorizeAndRemember credential not found state is error`() {
-                val viewmodel = LoginScreenViewModel(logger, apiService, manager)
+                val viewmodel = LoginScreenViewModel(logger, apiService, manager, testScope)
 
                 testScope.assertStateTransition(
                     stateFlow = viewmodel.uiState,
@@ -64,7 +64,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
         @Nested
         inner class DummyCredentialDataSourceContext {
             private val apiService = DummyCredentialApiService()
-            private val viewModel = LoginScreenViewModel(logger, apiService, manager)
+            private val viewModel = LoginScreenViewModel(logger, apiService, manager, testScope)
 
             @Test
             fun `State is initial`() {
@@ -98,7 +98,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
     inner class StubDataSource {
         private val apiService = StubCredentialApiService()
         private val manager = SpySessionManager()
-        private val viewModel = LoginScreenViewModel(logger, apiService, manager)
+        private val viewModel = LoginScreenViewModel(logger, apiService, manager, testScope)
 
         @OptIn(ExperimentalCoroutinesApi::class)
         @Test

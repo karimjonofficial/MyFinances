@@ -2,6 +2,7 @@ package com.orka.myfinances.ui.screens.warehouse
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
@@ -48,12 +49,14 @@ fun WarehouseScreen(
 
         if (selectedTabValue == 0) {
             ProductsContent(
+                modifier = Modifier.fillMaxSize(),
                 contentPadding = contentPadding,
                 state = productsState.value,
                 viewModel = viewModel
             )
         } else {
             StockItemsContent(
+                modifier = Modifier.fillMaxSize(),
                 state = warehouseState.value,
                 viewModel = viewModel,
                 contentPadding = contentPadding

@@ -14,4 +14,8 @@ class ProductApiServiceStub : ProductApiService {
     override suspend fun get(): List<Product> {
         return products
     }
+
+    override suspend fun get(id: Int): List<Product>? {
+        return products
+    }
 }

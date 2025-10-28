@@ -31,7 +31,7 @@ class AddProductScreenViewModelTest : MainDispatcherContext() {
             productRepository = productRepository,
             warehouseRepository = warehouseRepository,
             logger = logger,
-            context = coroutineContext
+            coroutineScope = testScope
         )
     }
 

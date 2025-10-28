@@ -3,6 +3,8 @@ package com.orka.myfinances.core
 import com.orka.myfinances.testLib.assertStateTransition
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestDispatcher
@@ -17,7 +19,6 @@ abstract class MainDispatcherContext {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val testScope: TestScope = TestScope(testDispatcher)
-    val coroutineContext = testScope.coroutineContext
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @BeforeEach

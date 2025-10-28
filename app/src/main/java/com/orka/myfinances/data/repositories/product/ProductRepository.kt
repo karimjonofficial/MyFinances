@@ -1,6 +1,7 @@
 package com.orka.myfinances.data.repositories.product
 
 import com.orka.myfinances.data.api.ProductApiService
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.data.repositories.product.models.AddProductRequest
 import kotlinx.coroutines.flow.Flow
@@ -10,6 +11,10 @@ class ProductRepository(private val apiService: ProductApiService) {
 
     private val events = MutableSharedFlow<ProductRepositoryEvent>(replay = 1)
     fun events(): Flow<ProductRepositoryEvent> = events
+
+    suspend fun get(id: Id): List<Product>? {
+        return apiService.get(id.value)
+    }
 
     suspend fun get(): List<Product>? {
         return apiService.get()

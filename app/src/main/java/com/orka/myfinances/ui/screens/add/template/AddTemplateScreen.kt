@@ -32,6 +32,8 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import com.orka.myfinances.ui.screens.add.template.components.TemplateFieldCard
 import com.orka.myfinances.ui.theme.MyFinancesTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 @Composable
 fun AddTemplateScreen(
@@ -144,7 +146,7 @@ fun AddTemplateScreen(
 private fun TemplateScreenPreview() {
     val types = listOf("text", "number", "range")
     val repository = TemplateRepositoryImpl()
-    val addTemplateScreenViewModel = AddTemplateScreenViewModel(repository)
+    val addTemplateScreenViewModel = AddTemplateScreenViewModel(repository, CoroutineScope(Dispatchers.Main))
     val navigationManager = DummyNavigationManager()
 
     MyFinancesTheme {

@@ -1,15 +1,15 @@
 package com.orka.myfinances.core
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.yield
-import kotlin.coroutines.CoroutineContext
 
 abstract class ViewModel<T>(
     initialState: T,
-    defaultCoroutineContext: CoroutineContext,
+    coroutineScope: CoroutineScope,
     protected val logger: Logger
-) : Manager(defaultCoroutineContext) {
+) : Manager(coroutineScope) {
     protected val state = MutableStateFlow(initialState)
 
     protected fun updateState(

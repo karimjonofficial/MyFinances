@@ -1,8 +1,12 @@
 package com.orka.myfinances.fixtures
 
+import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.factories.ViewModelProvider
+import com.orka.myfinances.testLib.viewModel
 
-class ViewModelProviderStub : ViewModelProvider {
+class SpyViewModelProvider : ViewModelProvider {
+    var warehouseRequired = false
+
     override fun homeViewModel(): Any {
         return "home"
     }
@@ -17,5 +21,10 @@ class ViewModelProviderStub : ViewModelProvider {
 
     override fun addProductViewModel(): Any {
         return "add product"
+    }
+
+    override fun warehouseViewModel(warehouse: Warehouse): Any {
+        warehouseRequired = true
+        return viewModel
     }
 }

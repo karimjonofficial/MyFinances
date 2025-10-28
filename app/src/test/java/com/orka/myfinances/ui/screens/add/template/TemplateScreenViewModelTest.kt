@@ -15,7 +15,7 @@ class TemplateScreenViewModelTest : MainDispatcherContext() {
     @Test
     fun nothing() {
         val repository = DummyTemplateRepository()
-        AddTemplateScreenViewModel(repository, coroutineContext)
+        AddTemplateScreenViewModel(repository, testScope)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -26,7 +26,7 @@ class TemplateScreenViewModelTest : MainDispatcherContext() {
             fields = listOf(TemplateFieldModel("name", 1))
         )
         val repository = SpyTemplateRepository()
-        val viewModel = AddTemplateScreenViewModel(repository, coroutineContext)
+        val viewModel = AddTemplateScreenViewModel(repository, testScope)
 
         viewModel.addTemplate(template)
         testScope.advanceUntilIdle()

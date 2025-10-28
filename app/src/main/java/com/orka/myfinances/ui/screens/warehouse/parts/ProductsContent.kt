@@ -19,6 +19,7 @@ fun ProductsContent(
         WarehouseScreenProductsState.Loading -> {
             LoadingScreen(modifier)
         }
+
         WarehouseScreenProductsState.Failure -> {
             FailureScreen(
                 modifier = modifier,
@@ -28,6 +29,7 @@ fun ProductsContent(
 
         is WarehouseScreenProductsState.Success -> {
             ProductsList(
+                modifier = modifier,
                 contentPadding = contentPadding,
                 products = state.products
             )

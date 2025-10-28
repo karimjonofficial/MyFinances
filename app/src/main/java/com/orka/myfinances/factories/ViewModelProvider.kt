@@ -4,4 +4,5 @@ interface ViewModelProvider :
     HomeScreenViewModelProvider,
     TemplatesScreenViewModelProvider,
     AddTemplateScreenViewModelProvider,
-    AddProductScreenViewModelProvider
+    AddProductScreenViewModelProvider,
+    WarehouseScreenViewModelProvider

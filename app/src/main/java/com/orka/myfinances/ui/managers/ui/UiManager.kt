@@ -26,19 +26,18 @@ import com.orka.myfinances.ui.screens.add.template.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
 import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.asStateFlow
-import kotlin.coroutines.CoroutineContext
 
 class UiManager(
     logger: Logger,
     private val storage: LocalSessionStorage,
     private val provider: ApiProvider,
-    context: CoroutineContext = Dispatchers.Main
+    coroutineScope: CoroutineScope
 ) : ViewModel<UiState>(
     initialState = UiState.Initial,
-    defaultCoroutineContext = context,
-    logger = logger
+    logger = logger,
+    coroutineScope = coroutineScope
 ), SessionManager {
     val uiState = state.asStateFlow()
 
@@ -50,7 +49,7 @@ class UiManager(
             openSession(session)
         } else {
             val apiService = provider.getCredentialApiService()
-            val viewModel = LoginScreenViewModel(logger, apiService, this, defaultCoroutineContext)
+            val viewModel = LoginScreenViewModel(logger, apiService, this, newScope())
             setState(UiState.Guest(viewModel))
         }
     }
@@ -75,12 +74,12 @@ class UiManager(
 
     private fun openSession(session: Session) {
         val folderRepository = FolderRepositoryImpl()
-        val homeScreenViewModel = HomeScreenViewModel(folderRepository, logger, defaultCoroutineContext)
+        val homeScreenViewModel = HomeScreenViewModel(folderRepository, logger, newScope())
         homeScreenViewModel.initialize()
         val initialBackStack = listOf(Destination.Home(homeScreenViewModel))
         val provider = viewModelProvider(homeScreenViewModel)
-        val dialogManager = DialogManagerImpl(provider, logger, defaultCoroutineContext)
-        val navigationManager = NavigationManagerImpl(initialBackStack, provider, logger, defaultCoroutineContext)
+        val dialogManager = DialogManagerImpl(provider, logger, newScope())
+        val navigationManager = NavigationManagerImpl(initialBackStack, provider, logger, newScope())
         setState(UiState.SignedIn(session, dialogManager, navigationManager))
     }
     private suspend fun getSession(credential: Credential): Session? {
@@ -102,14 +101,21 @@ class UiManager(
         val templateRepository = TemplateRepositoryImpl()
         val warehouseRepository = WarehouseRepository(warehouseApiService)
         val productRepository = ProductRepository(productApiService)
-        val addTemplateScreenViewModel = AddTemplateScreenViewModel(templateRepository, defaultCoroutineContext)
-        val templatesScreenViewModel = TemplatesScreenViewModel(templateRepository, logger, defaultCoroutineContext)
-        val addProductScreenViewModel = AddProductScreenViewModel(productRepository, warehouseRepository, logger, defaultCoroutineContext)
+        val addTemplateScreenViewModel = AddTemplateScreenViewModel(templateRepository, newScope())
+        val templatesScreenViewModel = TemplatesScreenViewModel(templateRepository, logger, newScope())
+        val addProductScreenViewModel = AddProductScreenViewModel(productRepository, warehouseRepository, logger, newScope())
+        val provider = WarehouseScreenViewModelProviderImpl(
+            productRepository = productRepository,
+            warehouseRepository = warehouseRepository,
+            logger = logger,
+            coroutineScope = newScope()
+        )
         return ViewModelProviderImpl(
             addTemplateScreenViewModel = addTemplateScreenViewModel,
             templatesScreenViewModel = templatesScreenViewModel,
             homeScreenViewModel = homeScreenViewModel,
-            addProductScreenViewModel = addProductScreenViewModel
+            addProductScreenViewModel = addProductScreenViewModel,
+            warehouseScreenViewModelProvider = provider
         )
     }
 }

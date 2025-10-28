@@ -9,20 +9,20 @@ import com.orka.myfinances.fixtures.resources.types
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlin.coroutines.CoroutineContext
 
 class NavigationManagerImpl(
     initialBackStack: List<Destination>,
     private val provider: ViewModelProvider,
     logger: Logger,
-    defaultCoroutineContext: CoroutineContext = Dispatchers.Default
+    coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
 ) : ViewModel<List<Destination>>(
     initialState = initialBackStack,
-    defaultCoroutineContext = defaultCoroutineContext,
-    logger = logger
+    logger = logger,
+    coroutineScope = coroutineScope
 ), NavigationManager {
     val backStack = state.asStateFlow()
 
@@ -46,10 +46,10 @@ class NavigationManagerImpl(
         }
     }
 
-    override fun navigateToProductFolder(folder: Warehouse) {
+    override fun navigateToWarehouse(folder: Warehouse) {
         val last = state.value.last()
         if (!(last is Destination.Warehouse && last.warehouse == folder)) {
-            state.update { it + Destination.Warehouse(folder, "viewModel") }//TODO
+            state.update { it + Destination.Warehouse(folder, provider.warehouseViewModel(folder)) }
         }
     }
 

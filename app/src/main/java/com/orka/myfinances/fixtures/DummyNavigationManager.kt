@@ -8,7 +8,7 @@ class DummyNavigationManager : NavigationManager {
     override fun navigateToHome() {}
     override fun navigateToProfile() {}
     override fun navigateToCatalog(catalog: Catalog) {}
-    override fun navigateToProductFolder(folder: Warehouse) {}
+    override fun navigateToWarehouse(folder: Warehouse) {}
     override fun navigateToNotifications() {}
     override fun navigateToAddTemplate() {}
     override fun navigateToAddProduct(warehouse: Warehouse) {}

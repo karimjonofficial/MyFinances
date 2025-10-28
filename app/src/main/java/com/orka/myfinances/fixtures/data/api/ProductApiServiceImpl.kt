@@ -12,8 +12,12 @@ class ProductApiServiceImpl : ProductApiService {
         return request.toProduct(id1)
     }
 
-    override suspend fun get(): List<Product>? {
-        return null
+    override suspend fun get(): List<Product> {
+        return emptyList()
+    }
+
+    override suspend fun get(id: Int): List<Product> {
+        return emptyList()
     }
 }
 

@@ -5,7 +5,7 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.ViewModelProviderStub
+import com.orka.myfinances.fixtures.SpyViewModelProvider
 import com.orka.myfinances.fixtures.data.repositories.folder.DummyFolderRepository
 import com.orka.myfinances.testLib.id
 import com.orka.myfinances.testLib.name
@@ -24,10 +24,10 @@ import kotlin.reflect.KClass
 class NavigationManagerImplTest : MainDispatcherContext() {
     private val logger = DummyLogger()
     private val folderRepository = DummyFolderRepository()
-    private val homeScreenViewModel = HomeScreenViewModel(folderRepository, logger, coroutineContext)
+    private val homeScreenViewModel = HomeScreenViewModel(folderRepository, logger)
     private val initialBackStack = listOf(Destination.Home(homeScreenViewModel))
-    private val provider = ViewModelProviderStub()
-    private val navigationManager = NavigationManagerImpl(initialBackStack, provider, logger, coroutineContext)
+    private val provider = SpyViewModelProvider()
+    private val navigationManager = NavigationManagerImpl(initialBackStack, provider, logger)
 
     private fun assertTopIs(expected: KClass<out Destination>, size: Int? = null) {
         val last = navigationManager.backStack.value.last()
@@ -93,23 +93,28 @@ class NavigationManagerImplTest : MainDispatcherContext() {
     }
 
     @Nested
-    inner class NavigateToProductFolderContext {
+    inner class NavigateToWarehouseContext {
         private val folder = Warehouse(id, name, template, emptyList(), emptyList())
 
         @BeforeEach
-        fun setup() = navigationManager.navigateToProductFolder(folder)
+        fun setup() = navigationManager.navigateToWarehouse(folder)
 
         @Test
         fun `When navigate to folder, add Folder`() {
             assertTopEquals(Destination.Warehouse(folder, viewModel), size = 2)
         }
 
+        @Test
+        fun `When navigate to warehouse, provider gets called`() {
+            assertTrue { provider.warehouseRequired }
+        }
+
         @Nested
-        inner class NavigateToProductFolder2Context {
+        inner class NavigateToWarehouse2Context {
             private val folder2 = Warehouse(Id(2), name, template, emptyList(), emptyList())
 
             @BeforeEach
-            fun setup() = navigationManager.navigateToProductFolder(folder2)
+            fun setup() = navigationManager.navigateToWarehouse(folder2)
 
             @Test
             fun `Allow multiple folders in backstack`() {
@@ -125,7 +130,7 @@ class NavigationManagerImplTest : MainDispatcherContext() {
 
         @Test
         fun `Does not allow similar folders in backstack`() {
-            navigationManager.navigateToProductFolder(folder)
+            navigationManager.navigateToWarehouse(folder)
             assertTopEquals(Destination.Warehouse(folder, viewModel), size = 2)
         }
 

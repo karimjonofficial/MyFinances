@@ -2,33 +2,40 @@ package com.orka.myfinances.ui.screens.warehouse.viewmodel
 
 import com.orka.myfinances.core.DualStateViewModel
 import com.orka.myfinances.core.Logger
+import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.data.repositories.WarehouseRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
-import com.orka.myfinances.fixtures.resources.models.id1
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.asStateFlow
-import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class WarehouseScreenViewModel(
+    private val warehouse: Warehouse,
     private val productRepository: ProductRepository,
     private val warehouseRepository: WarehouseRepository,
     logger: Logger,
-    context: CoroutineContext
+    coroutineScope: CoroutineScope
 ) : DualStateViewModel<WarehouseScreenProductsState, WarehouseScreenWarehouseState>(
     initialState1 = WarehouseScreenProductsState.Loading,
     initialState2 = WarehouseScreenWarehouseState.Loading,
     logger = logger,
-    defaultCoroutineContext = context
+    coroutineScope = coroutineScope
 ) {
     val productsState = state1.asStateFlow()
     val warehouseState = state2.asStateFlow()
 
+    init {
+        productRepository.events().onEach { initialize() }.launchIn(coroutineScope)
+    }
+
     fun initialize() = launch {
-        val products = productRepository.get()
-        val warehouse = warehouseRepository.get(id1)//TODO implement
+        val products = productRepository.get(warehouse.id)
+        val warehouse = warehouseRepository.get(warehouse.id)
         if (products != null)
             setState1(WarehouseScreenProductsState.Success(products))
         else setState1(WarehouseScreenProductsState.Failure)
-        if(warehouse != null)
+        if (warehouse != null)
             setState2(WarehouseScreenWarehouseState.Success(warehouse))
         else setState2(WarehouseScreenWarehouseState.Failure)
     }

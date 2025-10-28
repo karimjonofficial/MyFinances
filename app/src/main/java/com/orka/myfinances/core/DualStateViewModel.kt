@@ -1,16 +1,16 @@
 package com.orka.myfinances.core
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.yield
-import kotlin.coroutines.CoroutineContext
 
 abstract class DualStateViewModel<T1, T2>(
     initialState1: T1,
     initialState2: T2,
-    defaultCoroutineContext: CoroutineContext,
+    coroutineScope: CoroutineScope,
     protected val logger: Logger
-) : Manager(defaultCoroutineContext) {
+) : Manager(coroutineScope) {
 
     protected val state1 = MutableStateFlow(initialState1)
     protected val state2 = MutableStateFlow(initialState2)

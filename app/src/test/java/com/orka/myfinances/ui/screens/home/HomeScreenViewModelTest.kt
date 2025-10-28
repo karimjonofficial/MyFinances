@@ -22,7 +22,7 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
     @Nested
     inner class DummyFolderRepositoryContext {
         private val repository = DummyFolderRepository()
-        private val viewModel = HomeScreenViewModel(repository, logger, coroutineContext)
+        private val viewModel = HomeScreenViewModel(repository, logger, testScope)
 
         @Test
         fun `State is Initial`() {
@@ -52,7 +52,7 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
     @Nested
     inner class EmptyFolderRepositoryStubContext {
         private val repository = EmptyFolderRepositoryStub()
-        private val viewModel = HomeScreenViewModel(repository, logger, coroutineContext)
+        private val viewModel = HomeScreenViewModel(repository, logger, testScope)
 
         @Test
         fun `When data source fails state goes to error`() {
@@ -79,7 +79,7 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
     @Nested
     inner class FolderRepositoryStubContext {
         private val repository = FolderRepositoryStub()
-        private val viewModel = HomeScreenViewModel(repository, logger, coroutineContext)
+        private val viewModel = HomeScreenViewModel(repository, logger, testScope)
 
         @Test
         fun `When data source successes state goes to success`() {
@@ -105,7 +105,7 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
     fun `When add folder successes, calls get`() = runTest {
         val repository = SpyFolderRepository()
         val folders = repository.folders
-        val viewModel = HomeScreenViewModel(repository, logger, coroutineContext)
+        val viewModel = HomeScreenViewModel(repository, logger, testScope)
         viewModel.addFolder(name, catalogFolderType)
         testScope.advanceUntilIdle()
         val state = viewModel.uiState.value

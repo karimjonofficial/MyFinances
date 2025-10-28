@@ -41,27 +41,11 @@ class ProductRepositoryTest : MainDispatcherContext() {
         assertEquals(response, products)
     }
 
-    /**
-
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `When add invoked, initializes`() = testScope.runTest {
-    val apiService = ProductApiServiceStub()
-    val repository = ProductRepository(apiService)
-    val viewModel = viewModel(
-    productRepository = repository,
-    warehouseRepository = WarehouseRepository(DummyWarehouseApiService())
-    )
-    repository.add(addProductRequest)
-    testScope.advanceUntilIdle()
-    viewModel.uiState.test {
-    assertTrue {
-    val state = awaitItem()
-    if(state is AddProductScreenState.Success) {
-    state.
+    fun `Get by id returns what api returns`() = testScope.runTest {
+        val apiService = SpyProductApiService()
+        val repository = ProductRepository(apiService)
+        val response = repository.get()
+        assertEquals(response, products)
     }
-
-    }
-    }
-    }**/
 }

@@ -5,20 +5,19 @@ import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.api.CredentialApiService
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.ui.managers.session.SessionManager
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.yield
-import kotlin.coroutines.CoroutineContext
 
 class LoginScreenViewModel(
     logger: Logger,
     private val apiService: CredentialApiService,
     private val manager: SessionManager,
-    defaultCoroutineContext: CoroutineContext = Dispatchers.Main
+    coroutineScope: CoroutineScope
 ) : ViewModel<LoginScreenState>(
     initialState = LoginScreenState.Initial,
-    defaultCoroutineContext = defaultCoroutineContext,
-    logger = logger
+    logger = logger,
+    coroutineScope = coroutineScope
 ) {
     val uiState = state.asStateFlow()
 

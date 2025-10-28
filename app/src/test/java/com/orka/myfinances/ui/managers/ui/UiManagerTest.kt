@@ -187,7 +187,7 @@ class UiManagerTest : MainDispatcherContext() {
                 @OptIn(ExperimentalCoroutinesApi::class)
                 @Test
                 fun `When open called and all api services success, state changes into SignedIn`() {
-                    val manager = UiManager(logger, storage, provider, coroutineContext)
+                    val manager = UiManager(logger, storage, provider, testScope)
 
                     testScope.assertStateTransition(
                         stateFlow = manager.uiState,
@@ -202,7 +202,7 @@ class UiManagerTest : MainDispatcherContext() {
                 @OptIn(ExperimentalCoroutinesApi::class)
                 @Test
                 fun `When store called and all api services success, state changes into SignedIn`() {
-                    val manager = UiManager(logger, storage, provider, coroutineContext)
+                    val manager = UiManager(logger, storage, provider, testScope)
 
                     testScope.assertStateTransition(
                         stateFlow = manager.uiState,
@@ -223,7 +223,7 @@ class UiManagerTest : MainDispatcherContext() {
             provider.setUserApiService(UserApiServiceStub())
             provider.setCompanyApiService(CompanyApiServiceStub())
             provider.setCompanyOfficeApiService(CompanyOfficeApiServiceStub())
-            val manager = UiManager(logger, storage, provider, coroutineContext)
+            val manager = UiManager(logger, storage, provider, testScope)
 
             manager.store(credential)
             testScope.advanceUntilIdle()
@@ -236,12 +236,12 @@ class UiManagerTest : MainDispatcherContext() {
                 logger = logger,
                 storage = storage,
                 provider = provider,
-                context = coroutineContext
+                coroutineScope = testScope
             )
         }
     }
 
     private fun uiManager(storage: Storage, provider: Provider): UiManager {
-        return UiManager(logger, storage, provider, coroutineContext)
+        return UiManager(logger, storage, provider, testScope)
     }
 }

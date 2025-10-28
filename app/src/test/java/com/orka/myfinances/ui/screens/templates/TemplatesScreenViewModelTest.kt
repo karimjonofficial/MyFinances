@@ -13,7 +13,7 @@ class TemplatesScreenViewModelTest : MainDispatcherContext() {
     private val logger = DummyLogger()
 
     private fun viewModel(repository: TemplateRepository): TemplatesScreenViewModel {
-        return TemplatesScreenViewModel(repository, logger, coroutineContext)
+        return TemplatesScreenViewModel(repository, logger, testScope)
     }
 
     @Test

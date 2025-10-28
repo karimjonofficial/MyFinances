@@ -8,6 +8,7 @@ import com.orka.myfinances.testLib.products
 
 class SpyProductApiService : ProductApiService {
     var addCalled = false
+    var getCalled = false
 
     override suspend fun add(request: AddProductRequest): Product? {
         addCalled = true
@@ -15,6 +16,12 @@ class SpyProductApiService : ProductApiService {
     }
 
     override suspend fun get(): List<Product>? {
+        getCalled = true
+        return products
+    }
+
+    override suspend fun get(id: Int): List<Product>? {
+        getCalled = true
         return products
     }
 }

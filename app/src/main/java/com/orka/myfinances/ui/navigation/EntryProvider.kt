@@ -59,7 +59,7 @@ private fun homeEntry(
         onNavigateToFolder = { folder ->
             when (folder) {
                 is Catalog -> navigationManager.navigateToCatalog(folder)
-                is Warehouse -> navigationManager.navigateToProductFolder(folder)
+                is Warehouse -> navigationManager.navigateToWarehouse(folder)
             }
         }
     )
@@ -91,7 +91,7 @@ private fun catalogEntry(
         onFolderSelected = { folder ->
             when (folder) {
                 is Catalog -> navigationManager.navigateToCatalog(folder)
-                is Warehouse -> navigationManager.navigateToProductFolder(folder)
+                is Warehouse -> navigationManager.navigateToWarehouse(folder)
             }
         }
     )

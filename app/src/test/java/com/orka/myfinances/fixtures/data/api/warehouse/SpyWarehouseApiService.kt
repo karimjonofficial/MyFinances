@@ -12,6 +12,7 @@ class SpyWarehouseApiService : WarehouseApiService {
     }
 
     override suspend fun get(): List<Warehouse>? {
+        getCalled = true
         return null
     }
 }

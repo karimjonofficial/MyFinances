@@ -2,15 +2,15 @@ package com.orka.myfinances
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.ViewModelProviderStub
+import com.orka.myfinances.fixtures.SpyViewModelProvider
 import com.orka.myfinances.ui.managers.dialog.DialogState
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class DialogManagerImplTest : MainDispatcherContext() {
     private val logger = DummyLogger()
-    private val provider = ViewModelProviderStub()
-    private val manager = DialogManagerImpl(provider, logger, coroutineContext)
+    private val provider = SpyViewModelProvider()
+    private val manager = DialogManagerImpl(provider, logger)
 
     @Test
     fun `Dialog state is null when initialized`() {

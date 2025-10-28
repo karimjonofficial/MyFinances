@@ -12,4 +12,8 @@ class DummyProductApiService : ProductApiService {
     override suspend fun get(): List<Product>? {
         return null
     }
+
+    override suspend fun get(id: Int): List<Product>? {
+        return null
+    }
 }
