@@ -12,6 +12,6 @@ class FolderRepositoryStub : FolderRepository {
     }
 
     override suspend fun add(request: AddFolderRequest): Folder? {
-        return Catalog(id, "name", emptyList())
+        return Catalog(id, "name")
     }
 }

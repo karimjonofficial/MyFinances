@@ -14,8 +14,8 @@ import com.orka.myfinances.fixtures.data.storages.DummySessionStorage
 import com.orka.myfinances.fixtures.data.storages.EmptySessionStorage
 import com.orka.myfinances.fixtures.data.storages.SessionStorageStub
 import com.orka.myfinances.fixtures.data.storages.SpySessionStorage
-import com.orka.myfinances.fixtures.factories.ConfigurableApiProvider
-import com.orka.myfinances.fixtures.factories.DummyApiProvider
+import com.orka.myfinances.fixtures.factories.api.ConfigurableApiProvider
+import com.orka.myfinances.fixtures.factories.api.DummyApiProvider
 import com.orka.myfinances.testLib.assertStateTransition
 import com.orka.myfinances.testLib.credential
 import com.orka.myfinances.ui.managers.session.UiState

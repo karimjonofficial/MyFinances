@@ -1,4 +1,4 @@
-package com.orka.myfinances.factories
+package com.orka.myfinances.factories.viewmodel
 
 import com.orka.myfinances.data.models.folder.Warehouse
 

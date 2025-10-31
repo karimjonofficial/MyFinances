@@ -13,7 +13,8 @@ import com.orka.myfinances.ui.screens.home.components.ProductCard
 fun ProductsList(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
-    products: List<Product>
+    products: List<Product>,
+    onProductClick: (Product) -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
@@ -21,7 +22,10 @@ fun ProductsList(
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         items(products.size) { index ->
-            ProductCard(product = products[index]) {}//TODO implement click
+            ProductCard(
+                product = products[index],
+                onClick = { onProductClick(it) }
+            )
         }
     }
 }

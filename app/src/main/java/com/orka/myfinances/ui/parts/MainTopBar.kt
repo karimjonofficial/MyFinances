@@ -93,5 +93,12 @@ fun MainTopBar(
                 title = { Text(text = stringResource(R.string.add_product)) }
             )
         }
+
+        is Destination.Product -> {
+            TopAppBar(
+                modifier = modifier,
+                title = { Text(text = destination.product.name) }
+            )
+        }
     }
 }

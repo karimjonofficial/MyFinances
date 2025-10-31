@@ -3,17 +3,17 @@ package com.orka.myfinances.ui.screens.warehouse
 import app.cash.turbine.test
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.api.ProductApiService
-import com.orka.myfinances.data.repositories.WarehouseApiService
-import com.orka.myfinances.data.repositories.WarehouseRepository
+import com.orka.myfinances.data.repositories.StockApiService
+import com.orka.myfinances.data.repositories.StockRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.fixtures.DummyLogger
 import com.orka.myfinances.fixtures.data.api.product.DummyProductApiService
 import com.orka.myfinances.fixtures.data.api.product.EmptyProductApiServiceStub
 import com.orka.myfinances.fixtures.data.api.product.ProductApiServiceStub
 import com.orka.myfinances.fixtures.data.api.product.SpyProductApiService
-import com.orka.myfinances.fixtures.data.api.warehouse.DummyWarehouseApiService
-import com.orka.myfinances.fixtures.data.api.warehouse.EmptyWarehouseApiServiceStub
-import com.orka.myfinances.fixtures.data.api.warehouse.WarehouseApiServiceStub
+import com.orka.myfinances.fixtures.data.api.warehouse.DummyStockApiService
+import com.orka.myfinances.fixtures.data.api.warehouse.EmptyStockApiServiceStub
+import com.orka.myfinances.fixtures.data.api.warehouse.StockApiServiceStub
 import com.orka.myfinances.fixtures.resources.models.folder.folder1
 import com.orka.myfinances.fixtures.resources.models.folder.warehouses
 import com.orka.myfinances.testLib.addProductRequest
@@ -34,14 +34,14 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
 
     private fun viewModel(
         productApiService: ProductApiService,
-        warehouseApiService: WarehouseApiService
+        stockApiService: StockApiService
     ): WarehouseScreenViewModel {
         val productRepository = ProductRepository(productApiService)
-        val warehouseRepository = WarehouseRepository(warehouseApiService)
+        val stockRepository = StockRepository(stockApiService)
         return WarehouseScreenViewModel(
             warehouse = folder1,
             productRepository = productRepository,
-            warehouseRepository = warehouseRepository,
+            stockRepository = stockRepository,
             logger = logger,
             coroutineScope = testScope
         )
@@ -49,14 +49,14 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
 
     @Nested
     inner class DummyProductApiServiceContext {
-        private fun viewModel(warehouseApiService: WarehouseApiService): WarehouseScreenViewModel {
+        private fun viewModel(stockApiService: StockApiService): WarehouseScreenViewModel {
             val productApiService = DummyProductApiService()
-            return viewModel(productApiService, warehouseApiService)
+            return viewModel(productApiService, stockApiService)
         }
 
         @Test
         fun `When created states are Loading`() {
-            val warehouseApiService = DummyWarehouseApiService()
+            val warehouseApiService = DummyStockApiService()
             val viewModel = viewModel(warehouseApiService)
             assertTrue { viewModel.productsState.value is WarehouseScreenProductsState.Loading }
             assertTrue { viewModel.warehouseState.value is WarehouseScreenWarehouseState.Loading }
@@ -65,7 +65,7 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
         @OptIn(ExperimentalCoroutinesApi::class)
         @Test
         fun `When api fails, warehouse state is failure`() = testScope.runTest {
-            val warehouseApiService = EmptyWarehouseApiServiceStub()
+            val warehouseApiService = EmptyStockApiServiceStub()
             val viewModel = viewModel(warehouseApiService)
 
             viewModel.initialize()
@@ -82,7 +82,7 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
         @OptIn(ExperimentalCoroutinesApi::class)
         @Test
         fun `When api success, warehouse state is success`() = testScope.runTest {
-            val warehouseApiService = WarehouseApiServiceStub()
+            val warehouseApiService = StockApiServiceStub()
             val viewModel = viewModel(warehouseApiService)
 
             viewModel.initialize()
@@ -101,7 +101,7 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
     @Nested
     inner class DummyWarehouseApiServiceContext {
         private fun viewModel(productApiService: ProductApiService): WarehouseScreenViewModel {
-            val warehouseApiService = DummyWarehouseApiService()
+            val warehouseApiService = DummyStockApiService()
             return viewModel(productApiService, warehouseApiService)
         }
 
@@ -146,13 +146,13 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
     @Test
     fun `Api triggers initialize`() = testScope.runTest {
         val productApiService = SpyProductApiService()
-        val warehouseApiService = DummyWarehouseApiService()
+        val warehouseApiService = DummyStockApiService()
         val productRepository = ProductRepository(productApiService)
-        val warehouseRepository = WarehouseRepository(warehouseApiService)
+        val stockRepository = StockRepository(warehouseApiService)
         WarehouseScreenViewModel(
             warehouse = folder1,
             productRepository = productRepository,
-            warehouseRepository = warehouseRepository,
+            stockRepository = stockRepository,
             logger = logger,
             coroutineScope = this
         )
@@ -161,5 +161,6 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
         testScope.advanceUntilIdle()
 
         assertTrue { productApiService.getCalled }
+        testScope.coroutineContext.cancelChildren()
     }
 }

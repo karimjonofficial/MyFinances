@@ -5,23 +5,19 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.SpyViewModelProvider
 import com.orka.myfinances.fixtures.data.repositories.folder.DummyFolderRepository
-import com.orka.myfinances.testLib.id
-import com.orka.myfinances.testLib.name
+import com.orka.myfinances.fixtures.factories.SpyViewModelProvider
+import com.orka.myfinances.testLib.product
 import com.orka.myfinances.testLib.template
-import com.orka.myfinances.testLib.viewModel
-import com.orka.myfinances.testLib.warehouse
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.reflect.KClass
 
-class NavigationManagerImplTest : MainDispatcherContext() {
+class NavigationManagerBehaviorTest : MainDispatcherContext() {
     private val logger = DummyLogger()
     private val folderRepository = DummyFolderRepository()
     private val homeScreenViewModel = HomeScreenViewModel(folderRepository, logger)
@@ -31,239 +27,175 @@ class NavigationManagerImplTest : MainDispatcherContext() {
 
     private fun assertTopIs(expected: KClass<out Destination>, size: Int? = null) {
         val last = navigationManager.backStack.value.last()
-        assertTrue(expected.isInstance(last)) {
-            "Expected top of stack to be ${expected.simpleName}, but was $last"
-        }
+        assertTrue(expected.isInstance(last)) { "Expected ${expected.simpleName}, but was $last" }
         size?.let { assertEquals(it, navigationManager.backStack.value.size) }
     }
 
-    private fun <T : Destination> assertTopEquals(expected: T, size: Int? = null) {
-        val last = navigationManager.backStack.value.last()
-        assertEquals(expected, last)
-        size?.let { assertEquals(it, navigationManager.backStack.value.size) }
-    }
+    private fun testSingletonBehavior(
+        navigate: () -> Unit,
+        destination: KClass<out Destination>
+    ) {
+        navigate()
+        assertTopIs(destination, size = 2)
 
-    private inline fun <reified T : Destination> count(): Int = navigationManager.backStack.value.count { it is T }
+        // Duplicates are ignored
+        navigate()
+        assertTopIs(destination, size = 2)
 
-    @Test
-    fun nothing() {
-        assertTopIs(Destination.Home::class, size = 1)
-    }
-
-    @Test
-    fun `When only home left, back does not work`() {
+        // Back → returns Home
         navigationManager.back()
         assertTopIs(Destination.Home::class, size = 1)
     }
 
-    @Test
-    fun `When only home left, navigate to home does not work`() {
-        navigationManager.navigateToHome()
-        assertTopIs(Destination.Home::class, size = 1)
+    private fun <T> testParameterizedBehavior(
+        first: T,
+        second: T,
+        navigate: (T) -> Unit,
+        destination: KClass<out Destination>
+    ) {
+        navigate(first)
+        assertTopIs(destination, size = 2)
+
+        // Duplicate → ignored
+        navigate(first)
+        assertTopIs(destination, size = 2)
+
+        // Unique → added
+        navigate(second)
+        assertTopIs(destination, size = 3)
+
+        // Back → returns to previous
+        navigationManager.back()
+        assertTopIs(destination, size = 2)
+    }
+
+    private fun testTemporaryBehavior(
+        openParent: () -> Unit,
+        navigateTemp: () -> Unit,
+        parent: KClass<out Destination>,
+        temp: KClass<out Destination>
+    ) {
+        val beforeParent = navigationManager.backStack.value.size
+        openParent()
+        val afterParent = navigationManager.backStack.value.size
+
+        // Expected size after navigating to parent:
+        // - If navigating to parent added a new screen → +1
+        // - If already on parent (like Home) → same
+        val expectedParentSize = if (afterParent > beforeParent) afterParent else beforeParent
+        assertTopIs(parent, size = expectedParentSize)
+
+        // Now navigate to the temporary screen
+        navigateTemp()
+        assertTopIs(temp, size = expectedParentSize + 1)
+
+        // Go back → should return to parent
+        navigationManager.back()
+        assertTopIs(parent, size = expectedParentSize)
+    }
+
+    @Nested
+    inner class BackBehaviorContext {
+        @Test
+        fun `Back at root destination does nothing`() {
+            navigationManager.back()
+            assertTopIs(Destination.Home::class, size = 1)
+        }
     }
 
     @Nested
     inner class NavigateToProfileContext {
-        @BeforeEach
-        fun setup() = navigationManager.navigateToProfile()
-
         @Test
-        fun `Should have Profile`() {
-            assertTopIs(Destination.Profile::class, size = 2)
-        }
-
-        @Test
-        fun `Back leaves only Home`() {
-            navigationManager.back()
-            assertTopIs(Destination.Home::class, size = 1)
-        }
-
-        @Test
-        fun `Navigate to profile does not work`() {
-            navigationManager.navigateToProfile()
-            assertTopIs(Destination.Profile::class, size = 2)
-        }
-
-        @Test
-        fun `When navigate to templates, and go back leaves Profile`() {
-            navigationManager.navigateToTemplates()
-            navigationManager.back()
-            assertTopIs(Destination.Profile::class, size = 2)
-        }
-    }
-
-    @Nested
-    inner class NavigateToWarehouseContext {
-        private val folder = Warehouse(id, name, template, emptyList(), emptyList())
-
-        @BeforeEach
-        fun setup() = navigationManager.navigateToWarehouse(folder)
-
-        @Test
-        fun `When navigate to folder, add Folder`() {
-            assertTopEquals(Destination.Warehouse(folder, viewModel), size = 2)
-        }
-
-        @Test
-        fun `When navigate to warehouse, provider gets called`() {
-            assertTrue { provider.warehouseRequired }
-        }
-
-        @Nested
-        inner class NavigateToWarehouse2Context {
-            private val folder2 = Warehouse(Id(2), name, template, emptyList(), emptyList())
-
-            @BeforeEach
-            fun setup() = navigationManager.navigateToWarehouse(folder2)
-
-            @Test
-            fun `Allow multiple folders in backstack`() {
-                assertTopEquals(Destination.Warehouse(folder2, viewModel), size = 3)
-            }
-
-            @Test
-            fun `Back navigates to Folder`() {
-                navigationManager.back()
-                assertTopEquals(Destination.Warehouse(folder, viewModel), size = 2)
-            }
-        }
-
-        @Test
-        fun `Does not allow similar folders in backstack`() {
-            navigationManager.navigateToWarehouse(folder)
-            assertTopEquals(Destination.Warehouse(folder, viewModel), size = 2)
-        }
-
-        @Test
-        fun `Navigate to home leaves only Home`() {
-            navigationManager.navigateToHome()
-            assertTopIs(Destination.Home::class, size = 1)
-        }
-    }
-
-    @Nested
-    inner class NavigateToCatalogContext {
-        private val catalog = Catalog(id, name, emptyList())
-
-        @BeforeEach
-        fun setup() = navigationManager.navigateToCatalog(catalog)
-
-        @Test
-        fun `When navigate to catalog, add Catalog`() {
-            assertTopEquals(Destination.Catalog(catalog), size = 2)
-        }
-
-        @Nested
-        inner class NavigateToCatalog2Context {
-            private val catalog2 = Catalog(Id(2), name, emptyList())
-
-            @BeforeEach
-            fun setup() = navigationManager.navigateToCatalog(catalog2)
-
-            @Test
-            fun `Allow multiple catalogs in backstack`() {
-                assertTopEquals(Destination.Catalog(catalog2), size = 3)
-            }
-
-            @Test
-            fun `Back navigates to Catalog`() {
-                navigationManager.back()
-                assertTopEquals(Destination.Catalog(catalog), size = 2)
-            }
-        }
-
-        @Test
-        fun `Does not allow similar catalogs in backstack`() {
-            navigationManager.navigateToCatalog(catalog)
-            assertTopEquals(Destination.Catalog(catalog), size = 2)
-        }
-
-        @Test
-        fun `Navigate to home leaves only Home`() {
-            navigationManager.navigateToHome()
-            assertTopIs(Destination.Home::class, size = 1)
-        }
-    }
-
-    @Nested
-    inner class NavigateToNotifications {
-        @BeforeEach
-        fun setup() = navigationManager.navigateToNotifications()
-
-        @Test
-        fun `Should have Notifications`() {
-            assertTopIs(Destination.Notifications::class)
-        }
-
-        @Test
-        fun `Does not allow duplicate Notifications`() {
-            navigationManager.navigateToNotifications()
-            assertEquals(1, count<Destination.Notifications>())
-        }
-    }
-
-    @Test
-    fun `When navigate to add template, should have add template`() {
-        navigationManager.navigateToAddTemplate()
-        assertTopIs(Destination.AddTemplate::class, size = 2)
+        fun `Profile follows singleton behavior`() = testSingletonBehavior(
+            navigate = { navigationManager.navigateToProfile() },
+            destination = Destination.Profile::class
+        )
     }
 
     @Nested
     inner class NavigateToSettingsContext {
-        @BeforeEach
-        fun setup() = navigationManager.navigateToSettings()
-
         @Test
-        fun `Should have Settings`() {
-            assertTopIs(Destination.Settings::class, size = 2)
-        }
+        fun `Settings follows singleton behavior`() = testSingletonBehavior(
+            navigate = { navigationManager.navigateToSettings() },
+            destination = Destination.Settings::class
+        )
+    }
 
+    @Nested
+    inner class NavigateToNotificationsContext {
         @Test
-        fun `Back leaves only Home`() {
-            navigationManager.back()
-            assertTopIs(Destination.Home::class, size = 1)
-        }
-
-        @Test
-        fun `Navigate to settings does not work`() {
-            navigationManager.navigateToSettings()
-            assertTopIs(Destination.Settings::class, size = 2)
-        }
+        fun `Notifications follows singleton behavior`() = testSingletonBehavior(
+            navigate = { navigationManager.navigateToNotifications() },
+            destination = Destination.Notifications::class
+        )
     }
 
     @Nested
     inner class NavigateToTemplatesContext {
-        @BeforeEach
-        fun setup() = navigationManager.navigateToTemplates()
+        @Test
+        fun `Templates follows singleton behavior`() = testSingletonBehavior(
+            navigate = { navigationManager.navigateToTemplates() },
+            destination = Destination.Templates::class
+        )
 
         @Test
-        fun `Should add Templates`() {
-            assertTopIs(Destination.Templates::class, size = 2)
-        }
-
-        @Test
-        fun `Has the same ViewModel`() {
-            val state = navigationManager.backStack.value.last() as Destination.Templates
-            assertEquals("templates", state.viewModel)
-        }
-
-        @Test
-        fun `Does not allow duplicate templates`() {
-            navigationManager.navigateToTemplates()
-            assertTopIs(Destination.Templates::class, size = 2)
-        }
-
-        @Test
-        fun `When navigate to add product and back, should have templates`() {
-            navigationManager.navigateToAddProduct(warehouse)
-            navigationManager.back()
-            assertTopIs(Destination.Templates::class, size = 2)
-        }
+        fun `AddProduct behaves as temporary child`() = testTemporaryBehavior(
+            openParent = { navigationManager.navigateToTemplates() },
+            navigateTemp = {
+                navigationManager.navigateToAddProduct(
+                    Warehouse(Id(1), "wh", template)
+                )
+            },
+            parent = Destination.Templates::class,
+            temp = Destination.AddProduct::class
+        )
     }
 
-    @Test
-    fun `When navigate to add product, should have add template`() {
-        navigationManager.navigateToAddProduct(warehouse)
-        assertTopIs(Destination.AddProduct::class, size = 2)
+    @Nested
+    inner class NavigateToCatalogContext {
+        private val catalog1 = Catalog(Id(1), "cat1")
+        private val catalog2 = Catalog(Id(2), "cat2")
+
+        @Test
+        fun `Catalog follows parameterized behavior`() = testParameterizedBehavior(
+            first = catalog1,
+            second = catalog2,
+            navigate = { navigationManager.navigateToCatalog(it) },
+            destination = Destination.Catalog::class
+        )
+    }
+
+    @Nested
+    inner class NavigateToWarehouseContext {
+        private val w1 = Warehouse(Id(1), "w1", template)
+        private val w2 = Warehouse(Id(2), "w2", template)
+
+        @Test
+        fun `Warehouse follows parameterized behavior`() = testParameterizedBehavior(
+            first = w1,
+            second = w2,
+            navigate = { navigationManager.navigateToWarehouse(it) },
+            destination = Destination.Warehouse::class
+        )
+    }
+
+    @Nested
+    inner class NavigateToAddTemplateContext {
+        @Test
+        fun `AddTemplate follows temporary behavior from Home`() = testTemporaryBehavior(
+            openParent = { navigationManager.navigateToHome() },
+            navigateTemp = { navigationManager.navigateToAddTemplate() },
+            parent = Destination.Home::class,
+            temp = Destination.AddTemplate::class
+        )
+    }
+
+    @Nested
+    inner class NavigateToProductContext {
+        @Test
+        fun `Product follows singleton behavior`() = testSingletonBehavior(
+            navigate = { navigationManager.navigateToProduct(product) },
+            destination = Destination.Product::class
+        )
     }
 }

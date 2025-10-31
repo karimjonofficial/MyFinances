@@ -1,17 +1,22 @@
 package com.orka.myfinances.factories
 
 import com.orka.myfinances.core.MainDispatcherContext
+import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
-import com.orka.myfinances.data.repositories.WarehouseRepository
+import com.orka.myfinances.data.repositories.StockRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
+import com.orka.myfinances.factories.viewmodel.CatalogScreenViewModelProvider
+import com.orka.myfinances.factories.viewmodel.WarehouseScreenViewModelProvider
 import com.orka.myfinances.fixtures.DummyLogger
 import com.orka.myfinances.fixtures.data.api.product.DummyProductApiService
-import com.orka.myfinances.fixtures.data.api.warehouse.SpyWarehouseApiService
+import com.orka.myfinances.fixtures.data.api.warehouse.SpyStockApiService
 import com.orka.myfinances.fixtures.data.repositories.folder.DummyFolderRepository
 import com.orka.myfinances.fixtures.data.repositories.template.SpyTemplateRepository
 import com.orka.myfinances.fixtures.resources.models.folder.folder1
+import com.orka.myfinances.testLib.catalog
 import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.screens.add.template.AddTemplateScreenViewModel
+import com.orka.myfinances.ui.screens.catalog.CatalogScreenViewModel
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
@@ -25,10 +30,10 @@ import org.junit.jupiter.api.assertNotNull
 class ViewModelProviderImplTest : MainDispatcherContext() {
     private val logger = DummyLogger()
     private val productApiService = DummyProductApiService()
-    private val warehouseApiService = SpyWarehouseApiService()
+    private val warehouseApiService = SpyStockApiService()
     private val templateRepository = SpyTemplateRepository()
     private val folderRepository = DummyFolderRepository()
-    private val warehouseRepository = WarehouseRepository(warehouseApiService)
+    private val stockRepository = StockRepository(warehouseApiService)
     private val productRepository = ProductRepository(productApiService)
     private val addTemplateScreenViewModel = AddTemplateScreenViewModel(
         repository = templateRepository,
@@ -46,7 +51,12 @@ class ViewModelProviderImplTest : MainDispatcherContext() {
         )
     private val addProductScreenViewModel = AddProductScreenViewModel(
         productRepository = productRepository,
-        warehouseRepository = warehouseRepository,
+        stockRepository = stockRepository,
+        logger = logger,
+        coroutineScope = testScope
+    )
+    private val catalogScreenViewModel = CatalogScreenViewModel(
+        repository = folderRepository,
         logger = logger,
         coroutineScope = testScope
     )
@@ -55,10 +65,15 @@ class ViewModelProviderImplTest : MainDispatcherContext() {
             return WarehouseScreenViewModel(
                 warehouse = warehouse,
                 productRepository = productRepository,
-                warehouseRepository = warehouseRepository,
+                stockRepository = stockRepository,
                 logger = logger,
                 coroutineScope = testScope
             )
+        }
+    }
+    private val catalogScreenViewModelProvider = object : CatalogScreenViewModelProvider {
+        override fun catalogViewModel(catalog: Catalog): Any {
+            return catalogScreenViewModel
         }
     }
     private val provider = ViewModelProviderImpl(
@@ -66,7 +81,8 @@ class ViewModelProviderImplTest : MainDispatcherContext() {
         addProductScreenViewModel = addProductScreenViewModel,
         templatesScreenViewModel = templatesScreenViewModel,
         homeScreenViewModel = homeScreenViewModel,
-        warehouseScreenViewModelProvider = warehouseScreenViewModelProvider
+        warehouseScreenViewModelProvider = warehouseScreenViewModelProvider,
+        catalogScreenViewModelProvider = catalogScreenViewModelProvider
     )
 
     @Test
@@ -116,5 +132,10 @@ class ViewModelProviderImplTest : MainDispatcherContext() {
         provider.warehouseViewModel(folder1)
         testScope.advanceUntilIdle()
         assertTrue(warehouseApiService.getCalled)
+    }
+
+    @Test
+    fun `Returns what catalog provider returns`() {
+        assertEquals(catalogScreenViewModel, provider.catalogViewModel(catalog))
     }
 }

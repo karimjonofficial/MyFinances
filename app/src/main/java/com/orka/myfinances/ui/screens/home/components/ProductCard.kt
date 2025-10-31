@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.product.Product
@@ -22,10 +23,12 @@ fun ProductCard(
     product: Product,
     onClick: (Product) -> Unit
 ) {
+    val d = product.description.ifEmpty { stringResource(R.string.no_description_provided) }
+
     ListItem(
         modifier = modifier.clickable { onClick(product) },
         headlineContent = { Text(text = product.name) },
-        supportingContent = { Text(text = product.description) },
+        supportingContent = { Text(text = d) },
         leadingContent = {
             Icon(
                 painter = painterResource(R.drawable.star_outlined),

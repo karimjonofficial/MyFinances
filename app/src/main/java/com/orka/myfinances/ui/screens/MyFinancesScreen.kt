@@ -4,9 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.orka.myfinances.ui.managers.session.UiState
-import com.orka.myfinances.ui.screens.login.LoginScreen
-import com.orka.myfinances.lib.ui.LoadingScreen
 import com.orka.myfinances.ui.parts.MainScreen
+import com.orka.myfinances.ui.screens.login.LoginScreen
 
 @Composable
 fun MyFinancesScreen(
@@ -15,7 +14,7 @@ fun MyFinancesScreen(
 ) {
     when (state) {
         UiState.Initial -> {
-            LoadingScreen(modifier = modifier)
+            LoadingSplashScreen(modifier = modifier)
         }
 
         is UiState.Guest -> {

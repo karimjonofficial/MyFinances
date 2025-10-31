@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
+import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import com.orka.myfinances.ui.screens.warehouse.parts.ProductsContent
 import com.orka.myfinances.ui.screens.warehouse.parts.StockItemsContent
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
@@ -22,7 +23,7 @@ import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewMod
 fun WarehouseScreen(
     modifier: Modifier = Modifier,
     viewModel: WarehouseScreenViewModel,
-    contentPadding: PaddingValues = PaddingValues(horizontal = 8.dp)
+    navigationManager: NavigationManager
 ) {
     val productsState = viewModel.productsState.collectAsState()
     val warehouseState = viewModel.warehouseState.collectAsState()
@@ -50,16 +51,17 @@ fun WarehouseScreen(
         if (selectedTabValue == 0) {
             ProductsContent(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = contentPadding,
+                contentPadding = PaddingValues(0.dp),
                 state = productsState.value,
-                viewModel = viewModel
+                viewModel = viewModel,
+                navigationManager = navigationManager
             )
         } else {
             StockItemsContent(
                 modifier = Modifier.fillMaxSize(),
                 state = warehouseState.value,
                 viewModel = viewModel,
-                contentPadding = contentPadding
+                contentPadding = PaddingValues(horizontal = 8.dp)
             )
         }
     }

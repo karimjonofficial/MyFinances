@@ -6,14 +6,16 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Session
-import com.orka.myfinances.data.repositories.WarehouseRepository
+import com.orka.myfinances.data.repositories.StockRepository
+import com.orka.myfinances.data.repositories.folder.FolderRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.factories.ApiProvider
-import com.orka.myfinances.factories.ViewModelProvider
+import com.orka.myfinances.factories.viewmodel.ViewModelProvider
 import com.orka.myfinances.factories.ViewModelProviderImpl
+import com.orka.myfinances.factories.WarehouseScreenViewModelProviderImpl
 import com.orka.myfinances.fixtures.data.api.ProductApiServiceImpl
-import com.orka.myfinances.fixtures.data.api.WarehouseApiServiceImpl
+import com.orka.myfinances.fixtures.data.api.StockApiServiceImpl
 import com.orka.myfinances.fixtures.data.repositories.FolderRepositoryImpl
 import com.orka.myfinances.fixtures.data.repositories.TemplateRepositoryImpl
 import com.orka.myfinances.lib.extensions.models.makeSession
@@ -77,7 +79,7 @@ class UiManager(
         val homeScreenViewModel = HomeScreenViewModel(folderRepository, logger, newScope())
         homeScreenViewModel.initialize()
         val initialBackStack = listOf(Destination.Home(homeScreenViewModel))
-        val provider = viewModelProvider(homeScreenViewModel)
+        val provider = viewModelProvider(homeScreenViewModel, folderRepository)
         val dialogManager = DialogManagerImpl(provider, logger, newScope())
         val navigationManager = NavigationManagerImpl(initialBackStack, provider, logger, newScope())
         setState(UiState.SignedIn(session, dialogManager, navigationManager))
@@ -95,18 +97,26 @@ class UiManager(
             makeSession(credential, userModel, companyOfficeModel, companyModel)
         } else null
     }
-    private fun viewModelProvider(homeScreenViewModel: HomeScreenViewModel): ViewModelProvider {
+    private fun viewModelProvider(
+        homeScreenViewModel: HomeScreenViewModel,
+        folderRepository: FolderRepository
+    ): ViewModelProvider {
         val productApiService = ProductApiServiceImpl()
-        val warehouseApiService = WarehouseApiServiceImpl()
+        val warehouseApiService = StockApiServiceImpl()
         val templateRepository = TemplateRepositoryImpl()
-        val warehouseRepository = WarehouseRepository(warehouseApiService)
+        val stockRepository = StockRepository(warehouseApiService)
         val productRepository = ProductRepository(productApiService)
         val addTemplateScreenViewModel = AddTemplateScreenViewModel(templateRepository, newScope())
         val templatesScreenViewModel = TemplatesScreenViewModel(templateRepository, logger, newScope())
-        val addProductScreenViewModel = AddProductScreenViewModel(productRepository, warehouseRepository, logger, newScope())
-        val provider = WarehouseScreenViewModelProviderImpl(
+        val addProductScreenViewModel = AddProductScreenViewModel(productRepository, stockRepository, logger, newScope())
+        val warehouseScreenViewModelProvider = WarehouseScreenViewModelProviderImpl(
             productRepository = productRepository,
-            warehouseRepository = warehouseRepository,
+            stockRepository = stockRepository,
+            logger = logger,
+            coroutineScope = newScope()
+        )
+        val catalogScreenViewModelProvider = CatalogScreenViewModelProviderImpl(
+            repository = folderRepository,
             logger = logger,
             coroutineScope = newScope()
         )
@@ -115,7 +125,8 @@ class UiManager(
             templatesScreenViewModel = templatesScreenViewModel,
             homeScreenViewModel = homeScreenViewModel,
             addProductScreenViewModel = addProductScreenViewModel,
-            warehouseScreenViewModelProvider = provider
+            warehouseScreenViewModelProvider = warehouseScreenViewModelProvider,
+            catalogScreenViewModelProvider = catalogScreenViewModelProvider
         )
     }
 }

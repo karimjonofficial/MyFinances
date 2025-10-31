@@ -4,7 +4,8 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
-import com.orka.myfinances.factories.ViewModelProvider
+import com.orka.myfinances.data.models.product.Product
+import com.orka.myfinances.factories.viewmodel.ViewModelProvider
 import com.orka.myfinances.fixtures.resources.types
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
@@ -42,7 +43,8 @@ class NavigationManagerImpl(
     override fun navigateToCatalog(catalog: Catalog) {
         val last = state.value.last()
         if (!(last is Destination.Catalog && last.catalog == catalog)) {
-            state.update { it + Destination.Catalog(catalog) }
+            val viewModel = provider.catalogViewModel(catalog)
+            state.update { it + Destination.Catalog(catalog, viewModel) }
         }
     }
 
@@ -70,7 +72,7 @@ class NavigationManagerImpl(
     }
 
     override fun navigateToSettings() {
-        if(!isDuplicate<Destination.Settings>()) {
+        if (!isDuplicate<Destination.Settings>()) {
             state.update {
                 createBackStack(Destination.Settings)
             }
@@ -78,12 +80,16 @@ class NavigationManagerImpl(
     }
 
     override fun navigateToTemplates() {
-        if(!isDuplicate<Destination.Templates>()) {
+        if (!isDuplicate<Destination.Templates>()) {
             val templatesViewModel = provider.templatesViewModel()
-            if(templatesViewModel is TemplatesScreenViewModel)
+            if (templatesViewModel is TemplatesScreenViewModel)
                 templatesViewModel.initialize()
             state.update { it + Destination.Templates(templatesViewModel) }
         }
+    }
+
+    override fun navigateToProduct(product: Product) {
+        state.update { createBackStack(Destination.Product(product)) }
     }
 
     override fun back() {
@@ -94,7 +100,7 @@ class NavigationManagerImpl(
         }
     }
 
-    private inline fun <reified T: Destination> isDuplicate(): Boolean = state.value.last() is T
+    private inline fun <reified T : Destination> isDuplicate(): Boolean = state.value.last() is T
     private fun createBackStack(vararg destinations: Destination = emptyArray()): List<Destination> {
         val home = state.value.first()
         val list = listOf(home) + destinations

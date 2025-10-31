@@ -6,6 +6,7 @@ import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.models.User
+import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.data.models.template.Template
@@ -77,9 +78,7 @@ val addProductRequest = AddProductRequest(
 val warehouse = Warehouse(
     id = id,
     name = name,
-    template = template,
-    products = emptyList(),
-    stockItems = emptyList()
+    template = template
 )
 val product = Product(
     id = id,
@@ -91,3 +90,7 @@ val product = Product(
     description = ""
 )
 val products = listOf(product)
+val catalog = Catalog(
+    id = id,
+    name = name
+)

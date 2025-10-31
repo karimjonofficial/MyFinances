@@ -6,6 +6,7 @@ import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.data.repositories.product.models.AddProductRequest
 import com.orka.myfinances.fixtures.resources.models.folder.folder2
 import com.orka.myfinances.fixtures.resources.models.id1
+import com.orka.myfinances.fixtures.resources.models.product1
 
 class ProductApiServiceImpl : ProductApiService {
     override suspend fun add(request: AddProductRequest): Product? {
@@ -13,11 +14,11 @@ class ProductApiServiceImpl : ProductApiService {
     }
 
     override suspend fun get(): List<Product> {
-        return emptyList()
+        return listOf(product1)
     }
 
     override suspend fun get(id: Int): List<Product> {
-        return emptyList()
+        return listOf(product1)
     }
 }
 

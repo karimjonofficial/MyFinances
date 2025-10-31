@@ -1,4 +1,4 @@
-package com.orka.myfinances.fixtures.factories
+package com.orka.myfinances.fixtures.factories.api
 
 import com.orka.myfinances.data.api.CompanyApiService
 import com.orka.myfinances.data.api.CompanyOfficeApiService

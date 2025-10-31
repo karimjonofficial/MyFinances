@@ -46,4 +46,6 @@
     <string name="max">Max</string>
     <string name="select_warehouse">Select a warehouse</string>
     <string name="properties">Properties</string>
+    <string name="no_description_provided">No description provided</string>
+    <string name="product">Product</string>
 </resources>

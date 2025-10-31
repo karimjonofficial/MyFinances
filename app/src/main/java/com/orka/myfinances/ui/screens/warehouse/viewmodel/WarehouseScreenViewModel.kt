@@ -3,7 +3,7 @@ package com.orka.myfinances.ui.screens.warehouse.viewmodel
 import com.orka.myfinances.core.DualStateViewModel
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.folder.Warehouse
-import com.orka.myfinances.data.repositories.WarehouseRepository
+import com.orka.myfinances.data.repositories.StockRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.onEach
 class WarehouseScreenViewModel(
     private val warehouse: Warehouse,
     private val productRepository: ProductRepository,
-    private val warehouseRepository: WarehouseRepository,
+    private val stockRepository: StockRepository,
     logger: Logger,
     coroutineScope: CoroutineScope
 ) : DualStateViewModel<WarehouseScreenProductsState, WarehouseScreenWarehouseState>(
@@ -31,12 +31,12 @@ class WarehouseScreenViewModel(
 
     fun initialize() = launch {
         val products = productRepository.get(warehouse.id)
-        val warehouse = warehouseRepository.get(warehouse.id)
+        val stockItems = stockRepository.get(warehouse.id)
         if (products != null)
             setState1(WarehouseScreenProductsState.Success(products))
         else setState1(WarehouseScreenProductsState.Failure)
-        if (warehouse != null)
-            setState2(WarehouseScreenWarehouseState.Success(warehouse))
+        if (stockItems != null)
+            setState2(WarehouseScreenWarehouseState.Success(warehouse, stockItems))
         else setState2(WarehouseScreenWarehouseState.Failure)
     }
 }

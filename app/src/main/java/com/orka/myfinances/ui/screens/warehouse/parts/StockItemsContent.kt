@@ -31,7 +31,7 @@ fun StockItemsContent(
             StockItemsGrid(
                 modifier = modifier,
                 contentPadding = contentPadding,
-                stockItems = state.warehouse.stockItems
+                stockItems = state.stockItems
             )
         }
     }

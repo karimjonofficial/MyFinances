@@ -2,7 +2,7 @@ package com.orka.myfinances
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.SpyViewModelProvider
+import com.orka.myfinances.fixtures.factories.SpyViewModelProvider
 import com.orka.myfinances.ui.managers.dialog.DialogState
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

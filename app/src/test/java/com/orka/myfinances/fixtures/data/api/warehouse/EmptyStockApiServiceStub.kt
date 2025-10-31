@@ -1,10 +1,11 @@
 package com.orka.myfinances.fixtures.data.api.warehouse
 
+import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.data.models.folder.Warehouse
-import com.orka.myfinances.data.repositories.WarehouseApiService
+import com.orka.myfinances.data.repositories.StockApiService
 
-class EmptyWarehouseApiServiceStub : WarehouseApiService {
-    override suspend fun get(id: Int): Warehouse? {
+class EmptyStockApiServiceStub : StockApiService {
+    override suspend fun get(id: Int): List<StockItem>? {
         return null
     }
 

@@ -1,14 +1,12 @@
 package com.orka.myfinances.ui.navigation
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.NavigationManagerImpl
 import com.orka.myfinances.R
@@ -20,9 +18,10 @@ import com.orka.myfinances.ui.screens.add.product.AddProductScreen
 import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.screens.add.template.AddTemplateScreen
 import com.orka.myfinances.ui.screens.add.template.AddTemplateScreenViewModel
+import com.orka.myfinances.ui.screens.catalog.CatalogScreen
+import com.orka.myfinances.ui.screens.catalog.CatalogScreenViewModel
 import com.orka.myfinances.ui.screens.home.HomeScreen
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
-import com.orka.myfinances.ui.screens.home.parts.FoldersList
 import com.orka.myfinances.ui.screens.templates.TemplatesScreen
 import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
 import com.orka.myfinances.ui.screens.warehouse.WarehouseScreen
@@ -36,13 +35,18 @@ fun entryProvider(
     return when (destination) {
         is Destination.Home -> homeEntry(modifier, destination, navigationManager)
         is Destination.Catalog -> catalogEntry(modifier, destination, navigationManager)
-        is Destination.Warehouse -> warehouseEntry(modifier, destination)
+        is Destination.Warehouse -> warehouseEntry(modifier, destination, navigationManager)
         is Destination.Profile -> profileEntry(modifier, destination)
         is Destination.Notifications -> notificationsEntry(modifier, destination)
         is Destination.AddTemplate -> addTemplateEntry(modifier, destination, navigationManager)
         is Destination.Settings -> settingsEntry(modifier, destination, navigationManager)
         is Destination.Templates -> templatesEntry(modifier, destination)
         is Destination.AddProduct -> addProductEntry(modifier, destination, navigationManager)
+        is Destination.Product -> NavEntry(destination) {
+            Box(modifier = modifier, contentAlignment = Alignment.Center) {
+                Text(text = stringResource(R.string.product))
+            }
+        }
     }
 }
 
@@ -67,13 +71,15 @@ private fun homeEntry(
 
 private fun warehouseEntry(
     modifier: Modifier,
-    destination: Destination.Warehouse
+    destination: Destination.Warehouse,
+    navigationManager: NavigationManager
 ): NavEntry<Destination> = NavEntry(key = destination) {
     val viewModel = destination.viewModel as WarehouseScreenViewModel
 
     WarehouseScreen(
         modifier = modifier,
-        viewModel = viewModel
+        viewModel = viewModel,
+        navigationManager = navigationManager
     )
 }
 
@@ -82,18 +88,14 @@ private fun catalogEntry(
     destination: Destination.Catalog,
     navigationManager: NavigationManager
 ): NavEntry<Destination> = NavEntry(key = destination) {
-    val folder = destination.catalog
+    val viewModel = destination.viewModel as CatalogScreenViewModel
+    val uiState = viewModel.uiState.collectAsState()
 
-    FoldersList(
+    CatalogScreen(
         modifier = modifier,
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        items = folder.folders,
-        onFolderSelected = { folder ->
-            when (folder) {
-                is Catalog -> navigationManager.navigateToCatalog(folder)
-                is Warehouse -> navigationManager.navigateToWarehouse(folder)
-            }
-        }
+        state = uiState.value,
+        viewModel = viewModel,
+        navigationManager = navigationManager
     )
 }
 

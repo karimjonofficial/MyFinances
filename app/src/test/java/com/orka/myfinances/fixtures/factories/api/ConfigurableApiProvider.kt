@@ -1,4 +1,4 @@
-package com.orka.myfinances.fixtures.factories
+package com.orka.myfinances.fixtures.factories.api
 
 import com.orka.myfinances.data.api.CompanyApiService
 import com.orka.myfinances.data.api.CompanyOfficeApiService
@@ -7,8 +7,8 @@ import com.orka.myfinances.data.api.UserApiService
 import com.orka.myfinances.factories.ApiProvider
 import com.orka.myfinances.fixtures.data.api.company.DummyCompanyApiService
 import com.orka.myfinances.fixtures.data.api.companyOffice.DummyCompanyOfficeApiService
-import com.orka.myfinances.fixtures.data.api.user.DummyUserApiService
 import com.orka.myfinances.fixtures.data.api.credential.DummyCredentialApiService
+import com.orka.myfinances.fixtures.data.api.user.DummyUserApiService
 
 class ConfigurableApiProvider : ApiProvider {
     private var userApiService: UserApiService? = null
@@ -26,10 +26,6 @@ class ConfigurableApiProvider : ApiProvider {
 
     fun setCompanyOfficeApiService(companyOfficeApiService: CompanyOfficeApiService) {
         this.companyOfficeApiService = companyOfficeApiService
-    }
-
-    fun setCredentialApiService(credentialApiService: CredentialApiService) {
-        this.credentialApiService = credentialApiService
     }
 
     override fun getUserApiService(): UserApiService {

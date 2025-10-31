@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -29,7 +28,6 @@ import com.orka.myfinances.data.models.folder.Folder
 import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.fixtures.resources.models.folder.folder1
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
-import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 private const val roundedCornerRadius = 16
@@ -126,7 +124,7 @@ private fun BaseFolderButton(
             )
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .clickable { onClick(folder) }
-            .padding(horizontal = 4.dp, vertical = 8.dp)
+            .padding(8.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -138,28 +136,21 @@ private fun BaseFolderButton(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.Center
             ) {
-                val text = when (folder) {
-                    is Catalog -> "${stringResource(R.string.folders)} ${folder.folders.size}"
-                    is Warehouse -> "${stringResource(R.string.products)} ${folder.products.size}"
-                }
-
                 Text(
                     text = folder.name,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                VerticalSpacer(4)
-
-                Text(
-                    text = text,
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
             HorizontalSpacer(8)
             Icon(
-                modifier = Modifier.size(36.dp),
-                painter = painterResource(R.drawable.star_filled),
+                modifier = Modifier.size(36.dp).padding(4.dp),
+                painter = painterResource(
+                    id = when (folder) {
+                        is Catalog -> R.drawable.folder_filled
+                        is Warehouse -> R.drawable.lists_filled
+                    }
+                ),
                 tint = MaterialTheme.colorScheme.onSurface,
                 contentDescription = null
             )

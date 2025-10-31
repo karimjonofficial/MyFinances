@@ -2,7 +2,7 @@ package com.orka.myfinances
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
-import com.orka.myfinances.factories.ViewModelProvider
+import com.orka.myfinances.factories.viewmodel.ViewModelProvider
 import com.orka.myfinances.ui.managers.dialog.DialogManager
 import com.orka.myfinances.ui.managers.dialog.DialogState
 import kotlinx.coroutines.CoroutineScope

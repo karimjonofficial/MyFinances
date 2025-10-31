@@ -20,16 +20,13 @@ class FolderRepositoryImpl : FolderRepository {
         val folder = if(request.type is FolderType.Catalog) {
             Catalog(
                 id = Id(1),
-                name = request.name,
-                folders = emptyList()
+                name = request.name
             )
         } else {
             Warehouse(
                 id = Id(1),
                 name = request.name,
-                template = template1,
-                products = emptyList(),
-                stockItems = emptyList()
+                template = template1
             )
         }
         folders.add(folder)

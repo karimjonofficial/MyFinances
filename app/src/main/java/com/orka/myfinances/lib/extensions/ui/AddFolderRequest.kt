@@ -12,16 +12,13 @@ fun AddFolderRequest.toModel(id: Id): Folder {
     val folder = if(this.type is FolderType.Catalog) {
         Catalog(
             id = id,
-            name = this.name,
-            folders = emptyList()
+            name = this.name
         )
     } else {
         Warehouse(
             id = id,
             name = this.name,
-            template = template1,
-            products = emptyList(),
-            stockItems = emptyList()
+            template = template1
         )
     }
     return folder

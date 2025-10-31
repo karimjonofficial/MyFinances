@@ -1,14 +1,14 @@
 package com.orka.myfinances.ui.screens.add.product
 
 import com.orka.myfinances.core.MainDispatcherContext
-import com.orka.myfinances.data.repositories.WarehouseRepository
+import com.orka.myfinances.data.repositories.StockRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.fixtures.DummyLogger
 import com.orka.myfinances.fixtures.data.api.product.DummyProductApiService
 import com.orka.myfinances.fixtures.data.api.product.SpyProductApiService
-import com.orka.myfinances.fixtures.data.api.warehouse.DummyWarehouseApiService
-import com.orka.myfinances.fixtures.data.api.warehouse.EmptyWarehouseApiServiceStub
-import com.orka.myfinances.fixtures.data.api.warehouse.WarehouseApiServiceStub
+import com.orka.myfinances.fixtures.data.api.warehouse.DummyStockApiService
+import com.orka.myfinances.fixtures.data.api.warehouse.EmptyStockApiServiceStub
+import com.orka.myfinances.fixtures.data.api.warehouse.StockApiServiceStub
 import com.orka.myfinances.testLib.addProductRequest
 import com.orka.myfinances.testLib.assertStateTransition
 import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenState
@@ -25,11 +25,11 @@ class AddProductScreenViewModelTest : MainDispatcherContext() {
 
     private fun viewModel(
         productRepository: ProductRepository,
-        warehouseRepository: WarehouseRepository
+        stockRepository: StockRepository
     ): AddProductScreenViewModel {
         return AddProductScreenViewModel(
             productRepository = productRepository,
-            warehouseRepository = warehouseRepository,
+            stockRepository = stockRepository,
             logger = logger,
             coroutineScope = testScope
         )
@@ -37,20 +37,20 @@ class AddProductScreenViewModelTest : MainDispatcherContext() {
 
     @Nested
     inner class DummyProductApiContext {
-        private fun viewModel(warehouseRepository: WarehouseRepository): AddProductScreenViewModel {
+        private fun viewModel(stockRepository: StockRepository): AddProductScreenViewModel {
             val productRepository = ProductRepository(DummyProductApiService())
-            return viewModel(productRepository, warehouseRepository)
+            return viewModel(productRepository, stockRepository)
         }
 
         @Test
         fun `When initialized, state is Loading`() {
-            val viewModel = viewModel(WarehouseRepository(DummyWarehouseApiService()))
+            val viewModel = viewModel(StockRepository(DummyStockApiService()))
             assertEquals(AddProductScreenState.Loading, viewModel.uiState.value)
         }
 
         @Test
         fun `When initializing api fails, state is Failure`() {
-            val viewModel = viewModel(WarehouseRepository(EmptyWarehouseApiServiceStub()))
+            val viewModel = viewModel(StockRepository(EmptyStockApiServiceStub()))
             testScope.assertStateTransition(
                 stateFlow = viewModel.uiState,
                 assertState = { it is AddProductScreenState.Failure },
@@ -60,7 +60,7 @@ class AddProductScreenViewModelTest : MainDispatcherContext() {
 
         @Test
         fun `When initializing api successes, state is Success`() {
-            val viewModel = viewModel(WarehouseRepository(WarehouseApiServiceStub()))
+            val viewModel = viewModel(StockRepository(StockApiServiceStub()))
             testScope.assertStateTransition(
                 stateFlow = viewModel.uiState,
                 assertState = { it is AddProductScreenState.Success },
@@ -75,7 +75,7 @@ class AddProductScreenViewModelTest : MainDispatcherContext() {
         val apiService = SpyProductApiService()
         val viewModel = viewModel(
             productRepository = ProductRepository(apiService),
-            warehouseRepository = WarehouseRepository(DummyWarehouseApiService())
+            stockRepository = StockRepository(DummyStockApiService())
         )
         viewModel.addProduct(addProductRequest)
         testScope.advanceUntilIdle()

@@ -42,7 +42,7 @@ fun PropertiesList(
                         onValueChange = {
                             value.value = it
                             if (it.isNotEmpty()) {
-                                properties.add(PropertyModel(field, it))
+                                properties[index] = PropertyModel(field, it)
                             }
                         },
                         label = { Text(text = field.name) }
@@ -58,7 +58,7 @@ fun PropertiesList(
                             val n = it.toIntOrNull()
                             if (n != null && n > 0) {
                                 value.intValue = n
-                                properties.add(PropertyModel(field, n))
+                                properties[index] = PropertyModel(field, n)
                             }
                         },
                         label = { Text(text = field.name) }
@@ -77,12 +77,10 @@ fun PropertiesList(
                         max = max.intValue,
                         onMinValueChange = {
                             val maxValue = max.intValue
-                            if (it > 0 && it < maxValue) {
-                                properties.add(
-                                    PropertyModel(
-                                        field = field,
-                                        value = Range(it, maxValue)
-                                    )
+                            if (it > 0) {
+                                properties[index] = PropertyModel(
+                                    field = field,
+                                    value = Range(it, maxValue)
                                 )
                                 min.intValue = it
                             }
@@ -90,12 +88,10 @@ fun PropertiesList(
                         onMaxValueChange = {
                             val minValue = min.intValue
 
-                            if (minValue > 0 && minValue < it) {
-                                properties.add(
-                                    PropertyModel(
-                                        field = field,
-                                        value = Range(minValue, it)
-                                    )
+                            if (minValue > 0) {
+                                properties[index] = PropertyModel(
+                                    field = field,
+                                    value = Range(minValue, it)
                                 )
                                 max.intValue = it
                             }

@@ -1,28 +1,28 @@
 package com.orka.myfinances.data.repositories
 
 import com.orka.myfinances.core.MainDispatcherContext
-import com.orka.myfinances.fixtures.data.api.warehouse.EmptyWarehouseApiServiceStub
-import com.orka.myfinances.fixtures.data.api.warehouse.WarehouseApiServiceStub
+import com.orka.myfinances.fixtures.data.api.warehouse.EmptyStockApiServiceStub
+import com.orka.myfinances.fixtures.data.api.warehouse.StockApiServiceStub
 import com.orka.myfinances.testLib.id
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
-class WarehouseRepositoryTest : MainDispatcherContext() {
-    private fun repository(apiService: WarehouseApiService): WarehouseRepository {
-        return WarehouseRepository(apiService)
+class StockRepositoryTest : MainDispatcherContext() {
+    private fun repository(apiService: StockApiService): StockRepository {
+        return StockRepository(apiService)
     }
 
     @Test
     fun `When api fails, return null`() = testScope.runTest {
-        val repository = repository(EmptyWarehouseApiServiceStub())
+        val repository = repository(EmptyStockApiServiceStub())
         val result = repository.get(id)
         assertNull(result)
     }
 
     @Test
     fun `When api successes, return what api returns`() = testScope.runTest {
-        val repository = repository(WarehouseApiServiceStub())
+        val repository = repository(StockApiServiceStub())
         val result = repository.get(id)
         assertNotNull(result)
     }
