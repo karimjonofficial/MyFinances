@@ -18,6 +18,8 @@ import com.orka.myfinances.ui.screens.add.product.AddProductScreen
 import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.screens.add.template.AddTemplateScreen
 import com.orka.myfinances.ui.screens.add.template.AddTemplateScreenViewModel
+import com.orka.myfinances.ui.screens.basket.BasketScreen
+import com.orka.myfinances.ui.screens.basket.BasketScreenViewModel
 import com.orka.myfinances.ui.screens.catalog.CatalogScreen
 import com.orka.myfinances.ui.screens.catalog.CatalogScreenViewModel
 import com.orka.myfinances.ui.screens.home.HomeScreen
@@ -47,7 +49,22 @@ fun entryProvider(
                 Text(text = stringResource(R.string.product))
             }
         }
+        is Destination.Basket -> basketEntry(destination, modifier)
     }
+}
+
+private fun basketEntry(
+    destination: Destination.Basket,
+    modifier: Modifier
+): NavEntry<Destination> = NavEntry(destination) {
+    val viewModel = destination.viewModel as BasketScreenViewModel
+    val uiState = viewModel.uiState.collectAsState()
+
+    BasketScreen(
+        modifier = modifier,
+        state = uiState.value,
+        viewModel = viewModel
+    )
 }
 
 private fun homeEntry(

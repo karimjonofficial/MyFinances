@@ -1,23 +1,24 @@
 package com.orka.myfinances
 
 import com.orka.myfinances.core.MainDispatcherContext
+import com.orka.myfinances.core.assertTopIs
+import com.orka.myfinances.core.testParameterizedBehavior
+import com.orka.myfinances.core.testSingletonBehavior
+import com.orka.myfinances.core.testTemporaryBehavior
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.fixtures.DummyLogger
 import com.orka.myfinances.fixtures.data.repositories.folder.DummyFolderRepository
 import com.orka.myfinances.fixtures.factories.SpyViewModelProvider
-import com.orka.myfinances.testLib.product
+import com.orka.myfinances.testLib.product1
 import com.orka.myfinances.testLib.template
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import kotlin.reflect.KClass
 
-class NavigationManagerBehaviorTest : MainDispatcherContext() {
+class NavigationManagerImplTest : MainDispatcherContext() {
     private val logger = DummyLogger()
     private val folderRepository = DummyFolderRepository()
     private val homeScreenViewModel = HomeScreenViewModel(folderRepository, logger)
@@ -25,81 +26,12 @@ class NavigationManagerBehaviorTest : MainDispatcherContext() {
     private val provider = SpyViewModelProvider()
     private val navigationManager = NavigationManagerImpl(initialBackStack, provider, logger)
 
-    private fun assertTopIs(expected: KClass<out Destination>, size: Int? = null) {
-        val last = navigationManager.backStack.value.last()
-        assertTrue(expected.isInstance(last)) { "Expected ${expected.simpleName}, but was $last" }
-        size?.let { assertEquals(it, navigationManager.backStack.value.size) }
-    }
-
-    private fun testSingletonBehavior(
-        navigate: () -> Unit,
-        destination: KClass<out Destination>
-    ) {
-        navigate()
-        assertTopIs(destination, size = 2)
-
-        // Duplicates are ignored
-        navigate()
-        assertTopIs(destination, size = 2)
-
-        // Back → returns Home
-        navigationManager.back()
-        assertTopIs(Destination.Home::class, size = 1)
-    }
-
-    private fun <T> testParameterizedBehavior(
-        first: T,
-        second: T,
-        navigate: (T) -> Unit,
-        destination: KClass<out Destination>
-    ) {
-        navigate(first)
-        assertTopIs(destination, size = 2)
-
-        // Duplicate → ignored
-        navigate(first)
-        assertTopIs(destination, size = 2)
-
-        // Unique → added
-        navigate(second)
-        assertTopIs(destination, size = 3)
-
-        // Back → returns to previous
-        navigationManager.back()
-        assertTopIs(destination, size = 2)
-    }
-
-    private fun testTemporaryBehavior(
-        openParent: () -> Unit,
-        navigateTemp: () -> Unit,
-        parent: KClass<out Destination>,
-        temp: KClass<out Destination>
-    ) {
-        val beforeParent = navigationManager.backStack.value.size
-        openParent()
-        val afterParent = navigationManager.backStack.value.size
-
-        // Expected size after navigating to parent:
-        // - If navigating to parent added a new screen → +1
-        // - If already on parent (like Home) → same
-        val expectedParentSize = if (afterParent > beforeParent) afterParent else beforeParent
-        assertTopIs(parent, size = expectedParentSize)
-
-        // Now navigate to the temporary screen
-        navigateTemp()
-        assertTopIs(temp, size = expectedParentSize + 1)
-
-        // Go back → should return to parent
-        navigationManager.back()
-        assertTopIs(parent, size = expectedParentSize)
-    }
-
     @Nested
     inner class BackBehaviorContext {
         @Test
         fun `Back at root destination does nothing`() {
             navigationManager.back()
-            assertTopIs(Destination.Home::class, size = 1)
+            assertTopIs(Destination.Home::class, size = 1, navigationManager)
         }
     }
 
@@ -108,7 +40,7 @@ class NavigationManagerBehaviorTest : MainDispatcherContext() {
         @Test
         fun `Profile follows singleton behavior`() = testSingletonBehavior(
             navigate = { navigationManager.navigateToProfile() },
-            destination = Destination.Profile::class
+            destination = Destination.Profile::class, navigationManager
         )
     }
 
@@ -117,7 +49,7 @@ class NavigationManagerBehaviorTest : MainDispatcherContext() {
         @Test
         fun `Settings follows singleton behavior`() = testSingletonBehavior(
             navigate = { navigationManager.navigateToSettings() },
-            destination = Destination.Settings::class
+            destination = Destination.Settings::class, navigationManager
         )
     }
 
@@ -126,7 +58,7 @@ class NavigationManagerBehaviorTest : MainDispatcherContext() {
         @Test
         fun `Notifications follows singleton behavior`() = testSingletonBehavior(
             navigate = { navigationManager.navigateToNotifications() },
-            destination = Destination.Notifications::class
+            destination = Destination.Notifications::class, navigationManager
         )
     }
 
@@ -135,7 +67,7 @@ class NavigationManagerBehaviorTest : MainDispatcherContext() {
         @Test
         fun `Templates follows singleton behavior`() = testSingletonBehavior(
             navigate = { navigationManager.navigateToTemplates() },
-            destination = Destination.Templates::class
+            destination = Destination.Templates::class, navigationManager
         )
 
         @Test
@@ -147,7 +79,7 @@ class NavigationManagerBehaviorTest : MainDispatcherContext() {
                 )
             },
             parent = Destination.Templates::class,
-            temp = Destination.AddProduct::class
+            temp = Destination.AddProduct::class, navigationManager
         )
     }
 
@@ -161,7 +93,7 @@ class NavigationManagerBehaviorTest : MainDispatcherContext() {
             first = catalog1,
             second = catalog2,
             navigate = { navigationManager.navigateToCatalog(it) },
-            destination = Destination.Catalog::class
+            destination = Destination.Catalog::class, navigationManager
         )
     }
 
@@ -175,7 +107,7 @@ class NavigationManagerBehaviorTest : MainDispatcherContext() {
             first = w1,
             second = w2,
             navigate = { navigationManager.navigateToWarehouse(it) },
-            destination = Destination.Warehouse::class
+            destination = Destination.Warehouse::class, navigationManager
         )
     }
 
@@ -186,7 +118,7 @@ class NavigationManagerBehaviorTest : MainDispatcherContext() {
             openParent = { navigationManager.navigateToHome() },
             navigateTemp = { navigationManager.navigateToAddTemplate() },
             parent = Destination.Home::class,
-            temp = Destination.AddTemplate::class
+            temp = Destination.AddTemplate::class, navigationManager
         )
     }
 
@@ -194,8 +126,8 @@ class NavigationManagerBehaviorTest : MainDispatcherContext() {
     inner class NavigateToProductContext {
         @Test
         fun `Product follows singleton behavior`() = testSingletonBehavior(
-            navigate = { navigationManager.navigateToProduct(product) },
-            destination = Destination.Product::class
+            navigate = { navigationManager.navigateToProduct(product1) },
+            destination = Destination.Product::class, navigationManager
         )
     }
 }

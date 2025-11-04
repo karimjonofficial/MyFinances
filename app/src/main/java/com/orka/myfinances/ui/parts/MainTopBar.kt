@@ -57,6 +57,13 @@ fun MainTopBar(
             )
         }
 
+        is Destination.Basket -> {
+            TopAppBar(
+                modifier = modifier,
+                title = { Text(text = stringResource(R.string.basket)) }
+            )
+        }
+
         is Destination.AddTemplate -> {
             TopAppBar(
                 modifier = modifier,

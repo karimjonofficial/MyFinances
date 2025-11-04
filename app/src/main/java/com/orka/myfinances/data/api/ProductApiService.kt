@@ -6,5 +6,6 @@ import com.orka.myfinances.data.repositories.product.models.AddProductRequest
 interface ProductApiService {
     suspend fun add(request: AddProductRequest): Product?
     suspend fun get(): List<Product>?
+    suspend fun getById(id: Int): Product?
     suspend fun get(id: Int): List<Product>?
 }

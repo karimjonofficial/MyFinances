@@ -14,6 +14,7 @@ class CatalogScreenViewModelProviderImpl(
 ) : CatalogScreenViewModelProvider {
     override fun catalogViewModel(catalog: Catalog): Any {
         return CatalogScreenViewModel(
+            catalog = catalog,
             repository = repository,
             logger = logger,
             coroutineScope = coroutineScope

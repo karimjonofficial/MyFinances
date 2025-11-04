@@ -20,6 +20,10 @@ class ProductRepository(private val apiService: ProductApiService) {
         return apiService.get()
     }
 
+    suspend fun getById(id: Id): Product? {
+        return apiService.getById(id.value)
+    }
+
     suspend fun add(request: AddProductRequest): Product? {
         val product = apiService.add(request)
         if(product != null)

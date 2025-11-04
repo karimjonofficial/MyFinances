@@ -1,4 +1,4 @@
-package com.orka.myfinances.data.repositories
+package com.orka.myfinances.data.api
 
 import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.data.models.folder.Warehouse

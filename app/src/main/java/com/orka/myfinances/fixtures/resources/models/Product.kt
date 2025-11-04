@@ -6,8 +6,8 @@ import com.orka.myfinances.fixtures.resources.models.folder.folder1
 val product1 = Product(
     id = id1,
     name = "Product 1",
-    price = 100.0,
-    salePrice = 110.0,
+    price = 100,
+    salePrice = 110,
     warehouse = folder1,
     properties = emptyList()
 )

@@ -69,18 +69,20 @@ fun StockItemCard(
 
         VerticalSpacer(8)
 
-        Text(
-            text = item.product.name,
-            style = MaterialTheme.typography.bodySmall,
-            fontWeight = FontWeight.Bold
-        )
+        Column(modifier = Modifier.padding(horizontal = 8.dp)) {
+            Text(
+                text = item.product.name,
+                style = MaterialTheme.typography.bodySmall,
+                fontWeight = FontWeight.Bold
+            )
 
-        VerticalSpacer(4)
+            VerticalSpacer(4)
 
-        Text(
-            text = "${item.product.salePrice}",
-            style = MaterialTheme.typography.titleMedium
-        )
+            Text(
+                text = "${item.product.salePrice}",
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
 
         VerticalSpacer(12)
     }

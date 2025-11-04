@@ -6,15 +6,18 @@ import com.orka.myfinances.fixtures.DummyLogger
 import com.orka.myfinances.fixtures.data.repositories.folder.DummyFolderRepository
 import com.orka.myfinances.fixtures.data.repositories.folder.EmptyFolderRepositoryStub
 import com.orka.myfinances.fixtures.data.repositories.folder.FolderRepositoryStub
+import com.orka.myfinances.fixtures.data.repositories.folder.SpyFolderRepository
+import com.orka.myfinances.testLib.catalog
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class CatalogScreenViewModelTest : MainDispatcherContext() {
     private val logger = DummyLogger()
     private fun viewModel(repository: FolderRepository): CatalogScreenViewModel {
         return CatalogScreenViewModel(
+            catalog = catalog,
             repository = repository,
             logger = logger,
             coroutineScope = testScope
@@ -50,5 +53,17 @@ class CatalogScreenViewModelTest : MainDispatcherContext() {
         testScope.advanceUntilIdle()
 
         assertTrue { v.uiState.value is CatalogScreenState.Success }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `When initializing, gets from repository using catalog`() {
+        val repository = SpyFolderRepository()
+        val v = viewModel(repository)
+
+        v.initialize()
+        testScope.advanceUntilIdle()
+
+        assertTrue { catalog.id == repository.id }
     }
 }

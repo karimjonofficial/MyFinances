@@ -13,6 +13,7 @@ sealed class Destination(val hasNavBar: Boolean) {
     data class Catalog(val catalog: CatalogModel, val viewModel: Any) : Destination(false)
     data class Warehouse(val warehouse: WarehouseModel, val viewModel: Any) : Destination(false)
     data object Profile : Destination(true)
+    data class Basket(val viewModel: Any) : Destination(true)
     data object Notifications : Destination(false)
     data object Settings : Destination(true)
     data class Templates(val viewModel: Any) : Destination(false)

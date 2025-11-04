@@ -61,7 +61,7 @@ fun WarehouseScreen(
                 modifier = Modifier.fillMaxSize(),
                 state = warehouseState.value,
                 viewModel = viewModel,
-                contentPadding = PaddingValues(horizontal = 8.dp)
+                contentPadding = PaddingValues(8.dp)
             )
         }
     }

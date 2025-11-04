@@ -9,7 +9,6 @@ import com.orka.myfinances.factories.viewmodel.ViewModelProvider
 import com.orka.myfinances.fixtures.resources.types
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
-import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asStateFlow
@@ -82,8 +81,6 @@ class NavigationManagerImpl(
     override fun navigateToTemplates() {
         if (!isDuplicate<Destination.Templates>()) {
             val templatesViewModel = provider.templatesViewModel()
-            if (templatesViewModel is TemplatesScreenViewModel)
-                templatesViewModel.initialize()
             state.update { it + Destination.Templates(templatesViewModel) }
         }
     }

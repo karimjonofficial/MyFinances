@@ -10,7 +10,7 @@ import com.orka.myfinances.factories.viewmodel.WarehouseScreenViewModelProvider
 import com.orka.myfinances.fixtures.DummyLogger
 import com.orka.myfinances.fixtures.data.api.product.DummyProductApiService
 import com.orka.myfinances.fixtures.data.api.warehouse.SpyStockApiService
-import com.orka.myfinances.fixtures.data.repositories.folder.DummyFolderRepository
+import com.orka.myfinances.fixtures.data.repositories.folder.SpyFolderRepository
 import com.orka.myfinances.fixtures.data.repositories.template.SpyTemplateRepository
 import com.orka.myfinances.fixtures.resources.models.folder.folder1
 import com.orka.myfinances.testLib.catalog
@@ -32,7 +32,7 @@ class ViewModelProviderImplTest : MainDispatcherContext() {
     private val productApiService = DummyProductApiService()
     private val warehouseApiService = SpyStockApiService()
     private val templateRepository = SpyTemplateRepository()
-    private val folderRepository = DummyFolderRepository()
+    private val folderRepository = SpyFolderRepository()
     private val stockRepository = StockRepository(warehouseApiService)
     private val productRepository = ProductRepository(productApiService)
     private val addTemplateScreenViewModel = AddTemplateScreenViewModel(
@@ -56,6 +56,7 @@ class ViewModelProviderImplTest : MainDispatcherContext() {
         coroutineScope = testScope
     )
     private val catalogScreenViewModel = CatalogScreenViewModel(
+        catalog = catalog,
         repository = folderRepository,
         logger = logger,
         coroutineScope = testScope
@@ -137,5 +138,13 @@ class ViewModelProviderImplTest : MainDispatcherContext() {
     @Test
     fun `Returns what catalog provider returns`() {
         assertEquals(catalogScreenViewModel, provider.catalogViewModel(catalog))
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `Initializes catalog view model`() {
+        provider.catalogViewModel(catalog)
+        testScope.advanceUntilIdle()
+        assertTrue(folderRepository.id == catalog.id)
     }
 }

@@ -3,7 +3,7 @@ package com.orka.myfinances.ui.screens.warehouse
 import app.cash.turbine.test
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.api.ProductApiService
-import com.orka.myfinances.data.repositories.StockApiService
+import com.orka.myfinances.data.api.StockApiService
 import com.orka.myfinances.data.repositories.StockRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.fixtures.DummyLogger

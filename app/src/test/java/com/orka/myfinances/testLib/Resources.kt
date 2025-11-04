@@ -16,20 +16,25 @@ import com.orka.myfinances.data.repositories.product.models.AddProductRequest
 
 const val name = "Name"
 const val viewModel = "viewModel"
+const val description = "description"
+const val price = 100
+const val salePrice = 110
+const val amount = 1
 
-val id = Id(1)
+val id1 = Id(1)
+val id2 = Id(2)
 val credential = Credential(
     token = "token",
     refresh = "refresh"
 )
 val company = Company(
-    id = id,
+    id = id1,
     name = "Name",
     address = "Address",
     phone = "1234567890"
 )
 val companyOffice = CompanyOffice(
-    id = id,
+    id = id1,
     name = "Name",
     company = company,
     templates = emptyList(),
@@ -37,7 +42,7 @@ val companyOffice = CompanyOffice(
     phone = "1234567890"
 )
 val user = User(
-    id = id,
+    id = id1,
     firstName = "User",
     userName = "admin",
     company = company,
@@ -52,12 +57,12 @@ val session = Session(
     user = user
 )
 val textTemplateField = TemplateField(
-    id = id,
+    id = id1,
     name = name,
     type = "int"
 )
 val intTemplateField = TemplateField(
-    id = id,
+    id = id1,
     name = name,
     type = "string"
 )
@@ -65,7 +70,7 @@ val templateFields = listOf(
     textTemplateField,
     intTemplateField
 )
-val template = Template(id, name, templateFields)
+val template = Template(id1, name, templateFields)
 val catalogFolderType = FolderType.Catalog
 val addProductRequest = AddProductRequest(
     name = name,
@@ -76,21 +81,30 @@ val addProductRequest = AddProductRequest(
     description = ""
 )
 val warehouse = Warehouse(
-    id = id,
+    id = id1,
     name = name,
     template = template
 )
-val product = Product(
-    id = id,
+val product1 = Product(
+    id = id1,
     name = name,
-    price = 0.0,
-    salePrice = 0.0,
+    price = price,
+    salePrice = salePrice,
     warehouse = warehouse,
     properties = emptyList(),
     description = ""
 )
-val products = listOf(product)
+val product2 = Product(
+    id = id2,
+    name = name,
+    price = price,
+    salePrice = salePrice,
+    warehouse = warehouse,
+    properties = emptyList(),
+    description = ""
+)
+val products = listOf(product1)
 val catalog = Catalog(
-    id = id,
+    id = id1,
     name = name
 )

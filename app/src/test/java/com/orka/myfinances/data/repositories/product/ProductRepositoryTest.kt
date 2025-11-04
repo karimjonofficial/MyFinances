@@ -4,9 +4,10 @@ import app.cash.turbine.test
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.fixtures.data.api.product.SpyProductApiService
 import com.orka.myfinances.testLib.addProductRequest
-import com.orka.myfinances.testLib.product
+import com.orka.myfinances.testLib.product1
 import com.orka.myfinances.testLib.products
 import com.orka.myfinances.fixtures.data.api.product.ProductApiServiceStub
+import com.orka.myfinances.testLib.id1
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -19,7 +20,7 @@ class ProductRepositoryTest : MainDispatcherContext() {
         val apiService = SpyProductApiService()
         val repository = ProductRepository(apiService)
         val result = repository.add(addProductRequest)
-        assertTrue { product === result }
+        assertTrue { product1 === result }
     }
 
     @Test
@@ -29,7 +30,7 @@ class ProductRepositoryTest : MainDispatcherContext() {
 
         repository.events().test {
             repository.add(addProductRequest)
-            assertEquals(ProductRepositoryEvent.Add(product.id), awaitItem())
+            assertEquals(ProductRepositoryEvent.Add(product1.id), awaitItem())
         }
     }
 
@@ -42,10 +43,18 @@ class ProductRepositoryTest : MainDispatcherContext() {
     }
 
     @Test
+    fun `Get by warehouse id returns what api returns`() = testScope.runTest {
+        val apiService = SpyProductApiService()
+        val repository = ProductRepository(apiService)
+        val response = repository.get(id1)
+        assertEquals(response, products)
+    }
+
+    @Test
     fun `Get by id returns what api returns`() = testScope.runTest {
         val apiService = SpyProductApiService()
         val repository = ProductRepository(apiService)
-        val response = repository.get()
-        assertEquals(response, products)
+        val response = repository.getById(id1)
+        assertEquals(response, product1)
     }
 }

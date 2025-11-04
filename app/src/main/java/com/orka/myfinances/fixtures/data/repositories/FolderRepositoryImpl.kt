@@ -12,8 +12,12 @@ import com.orka.myfinances.fixtures.resources.models.template.template1
 class FolderRepositoryImpl : FolderRepository {
     private val folders = com.orka.myfinances.fixtures.resources.models.folder.folders.toMutableList()
 
-    override suspend fun get(): List<Folder>? {
+    override suspend fun get(): List<Folder> {
         return folders.toList()
+    }
+
+    override suspend fun get(id: Id): List<Folder> {
+        return folders
     }
 
     override suspend fun add(request: AddFolderRequest): Folder {

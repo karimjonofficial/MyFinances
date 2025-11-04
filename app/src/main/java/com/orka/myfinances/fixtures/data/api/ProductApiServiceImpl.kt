@@ -9,7 +9,7 @@ import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.product1
 
 class ProductApiServiceImpl : ProductApiService {
-    override suspend fun add(request: AddProductRequest): Product? {
+    override suspend fun add(request: AddProductRequest): Product {
         return request.toProduct(id1)
     }
 
@@ -20,14 +20,18 @@ class ProductApiServiceImpl : ProductApiService {
     override suspend fun get(id: Int): List<Product> {
         return listOf(product1)
     }
+
+    override suspend fun getById(id: Int): Product {
+        return product1
+    }
 }
 
 fun AddProductRequest.toProduct(id: Id): Product {
     return Product(
         id = id,
         name = name,
-        price = price.toDouble(),
-        salePrice = salePrice.toDouble(),
+        price = price,
+        salePrice = salePrice,
         warehouse = folder2,
         properties = emptyList(),
         description = description
