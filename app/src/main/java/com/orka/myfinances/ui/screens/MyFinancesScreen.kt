@@ -14,7 +14,7 @@ fun MyFinancesScreen(
 ) {
     when (state) {
         UiState.Initial -> {
-            LoadingSplashScreen(modifier = modifier)
+            SplashScreen(modifier = modifier)
         }
 
         is UiState.Guest -> {

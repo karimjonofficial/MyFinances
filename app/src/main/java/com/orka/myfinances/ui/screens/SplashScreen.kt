@@ -1,23 +1,27 @@
 package com.orka.myfinances.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.ui.theme.MyFinancesTheme
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun LoadingSplashScreen(
+fun SplashScreen(
     modifier: Modifier = Modifier,
     message: String = stringResource(R.string.loading)
 ) {
@@ -25,18 +29,20 @@ fun LoadingSplashScreen(
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Bottom
+            verticalArrangement = Arrangement.Center
         ) {
-            Box(
-                modifier = Modifier.weight(1f),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(text = message)
-            }
+            LoadingIndicator(modifier = Modifier.size(96.dp))
+            Text(text = message)
+        }
+    }
+}
 
-            VerticalSpacer(4)
-            LinearProgressIndicator(modifier = Modifier.width(128.dp))
-            VerticalSpacer(64)
+@Preview
+@Composable
+private fun SplashScreenPreview() {
+    MyFinancesTheme {
+        Scaffold { innerPadding ->
+            SplashScreen(Modifier.padding(innerPadding))
         }
     }
 }
