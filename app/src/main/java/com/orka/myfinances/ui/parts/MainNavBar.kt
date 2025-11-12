@@ -43,6 +43,23 @@ fun MainNavBar(
             )
 
             NavigationBarItem(
+                selected = backStack.value.last() is Destination.Basket,
+                icon = {
+                    val currentDestination = backStack.value.last()
+                    val iconRes = if (currentDestination is Destination.Basket)
+                        R.drawable.shopping_cart_filled
+                    else R.drawable.shopping_cart_outlined
+                    Icon(painter = painterResource(id = iconRes), contentDescription = null)
+                },
+                onClick = {
+                    val currentDestination = backStack.value.last()
+                    if (currentDestination !is Destination.Basket) {
+                        navigationManager.navigateToBasket()
+                    }
+                }
+            )
+
+            NavigationBarItem(
                 selected = backStack.value.last() is Destination.Profile,
                 icon = {
                     val currentDestination = backStack.value.last()

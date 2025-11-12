@@ -52,4 +52,6 @@
     <string name="no_properties">No properties</string>
     <string name="sell">Sell</string>
     <string name="items">Items</string>
+    <string name="decrease">Decrease</string>
+    <string name="increase">Increase</string>
 </resources>

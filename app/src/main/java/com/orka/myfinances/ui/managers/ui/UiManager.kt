@@ -7,6 +7,7 @@ import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.repositories.StockRepository
+import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.folder.FolderRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.data.storages.LocalSessionStorage
@@ -25,6 +26,7 @@ import com.orka.myfinances.ui.managers.session.SessionManager
 import com.orka.myfinances.ui.managers.session.UiState
 import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.screens.add.template.AddTemplateScreenViewModel
+import com.orka.myfinances.ui.screens.basket.BasketScreenViewModel
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
 import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
@@ -106,12 +108,19 @@ class UiManager(
         val templateRepository = TemplateRepositoryImpl()
         val stockRepository = StockRepository(warehouseApiService)
         val productRepository = ProductRepository(productApiService)
+        val basketRepository = BasketRepository(productRepository)
+        val basketScreenViewModel = BasketScreenViewModel(
+            repository = basketRepository,
+            logger = logger,
+            coroutineScope = newScope()
+        )
         val addTemplateScreenViewModel = AddTemplateScreenViewModel(templateRepository, newScope())
         val templatesScreenViewModel = TemplatesScreenViewModel(templateRepository, logger, newScope())
         val addProductScreenViewModel = AddProductScreenViewModel(productRepository, stockRepository, logger, newScope())
         val warehouseScreenViewModelProvider = WarehouseScreenViewModelProviderImpl(
             productRepository = productRepository,
             stockRepository = stockRepository,
+            addToBasket = { basketScreenViewModel.increase(it.product.id) },
             logger = logger,
             coroutineScope = newScope()
         )
@@ -126,7 +135,8 @@ class UiManager(
             homeScreenViewModel = homeScreenViewModel,
             addProductScreenViewModel = addProductScreenViewModel,
             warehouseScreenViewModelProvider = warehouseScreenViewModelProvider,
-            catalogScreenViewModelProvider = catalogScreenViewModelProvider
+            catalogScreenViewModelProvider = catalogScreenViewModelProvider,
+            basketScreenViewModel = basketScreenViewModel
         )
     }
 }

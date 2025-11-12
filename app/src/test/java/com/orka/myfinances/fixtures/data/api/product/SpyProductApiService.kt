@@ -24,7 +24,7 @@ class SpyProductApiService : ProductApiService {
         return product1
     }
 
-    override suspend fun get(id: Int): List<Product>? {
+    override suspend fun get(id: Int): List<Product> {
         getCalled = true
         return products
     }

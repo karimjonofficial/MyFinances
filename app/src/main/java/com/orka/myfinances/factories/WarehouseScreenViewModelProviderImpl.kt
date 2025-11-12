@@ -1,6 +1,7 @@
 package com.orka.myfinances.factories
 
 import com.orka.myfinances.core.Logger
+import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.data.repositories.StockRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
@@ -11,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 class WarehouseScreenViewModelProviderImpl(
     private val productRepository: ProductRepository,
     private val stockRepository: StockRepository,
+    private val addToBasket: (StockItem) -> Unit,
     private val logger: Logger,
     private val coroutineScope: CoroutineScope
 ) : WarehouseScreenViewModelProvider {
@@ -19,6 +21,7 @@ class WarehouseScreenViewModelProviderImpl(
             warehouse = warehouse,
             productRepository = productRepository,
             stockRepository = stockRepository,
+            add = addToBasket,
             logger = logger,
             coroutineScope = coroutineScope
         )

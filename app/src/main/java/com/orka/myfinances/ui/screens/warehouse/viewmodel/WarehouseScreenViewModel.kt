@@ -2,6 +2,7 @@ package com.orka.myfinances.ui.screens.warehouse.viewmodel
 
 import com.orka.myfinances.core.DualStateViewModel
 import com.orka.myfinances.core.Logger
+import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.data.repositories.StockRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
@@ -14,6 +15,7 @@ class WarehouseScreenViewModel(
     private val warehouse: Warehouse,
     private val productRepository: ProductRepository,
     private val stockRepository: StockRepository,
+    private val add: (StockItem) -> Unit,
     logger: Logger,
     coroutineScope: CoroutineScope
 ) : DualStateViewModel<WarehouseScreenProductsState, WarehouseScreenWarehouseState>(
@@ -38,5 +40,9 @@ class WarehouseScreenViewModel(
         if (stockItems != null)
             setState2(WarehouseScreenWarehouseState.Success(warehouse, stockItems))
         else setState2(WarehouseScreenWarehouseState.Failure)
+    }
+
+    fun addToBasket(stockItem: StockItem) {
+        this.add(stockItem)
     }
 }

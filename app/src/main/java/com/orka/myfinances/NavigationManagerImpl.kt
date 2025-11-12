@@ -89,6 +89,11 @@ class NavigationManagerImpl(
         state.update { createBackStack(Destination.Product(product)) }
     }
 
+    override fun navigateToBasket() {
+        val viewModel = provider.basketViewModel()
+        state.update { createBackStack(Destination.Basket(viewModel)) }
+    }
+
     override fun back() {
         val backstack = state.value
         if (backstack.size > 1) {

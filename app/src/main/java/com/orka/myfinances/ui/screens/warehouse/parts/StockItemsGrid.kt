@@ -14,7 +14,8 @@ import com.orka.myfinances.ui.screens.warehouse.components.StockItemCard
 fun StockItemsGrid(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
-    stockItems: List<StockItem>
+    stockItems: List<StockItem>,
+    onItemClick: (StockItem) -> Unit
 ) {
     LazyVerticalGrid(
         modifier = modifier,
@@ -24,7 +25,10 @@ fun StockItemsGrid(
         horizontalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         items(stockItems.size) { index ->
-            StockItemCard(item = stockItems[index]) {}//TODO implement click
+            StockItemCard(
+                item = stockItems[index],
+                click = onItemClick
+            )
         }
     }
 }

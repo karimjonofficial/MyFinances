@@ -30,4 +30,10 @@ class BasketScreenViewModel(
         yield()
         initialize()
     }
+
+    fun decrease(id: Id) = launch {
+        repository.remove(id, 1)
+        yield()
+        initialize()
+    }
 }

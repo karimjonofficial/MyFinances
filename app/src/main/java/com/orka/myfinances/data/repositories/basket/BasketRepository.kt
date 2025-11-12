@@ -11,14 +11,29 @@ class BasketRepository(private val productRepository: ProductRepository) {
         return items.toList()
     }
 
-    suspend fun add(productId: Id, amount: Int) {
-        val index = items.indexOfFirst { it.product.id == productId }
-        if(index != -1) {
+    suspend fun add(id: Id, amount: Int) {
+        val index = getIndex(id)
+        if(index != null) {
             val i = items[index]
             items[index] = i.copy(amount = i.amount + amount)
         } else {
-            val product = productRepository.getById(productId)
+            val product = productRepository.getById(id)
             items.add(BasketItem(product!!, amount))
         }
+    }
+
+    fun remove(id: Id, amount: Int) {
+        val index = getIndex(id)
+        if(index != null) {
+            val i = items[index]
+            if(i.amount > amount)
+                items[index] = i.copy(amount = i.amount - amount)
+            else items.removeAt(index)
+        }
+    }
+
+    private fun getIndex(id: Id): Int? {
+        val index = items.indexOfFirst { it.product.id == id }
+        return if(index == -1) null else index
     }
 }

@@ -3,6 +3,7 @@ package com.orka.myfinances.ui.screens.warehouse.parts
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.lib.ui.FailureScreen
 import com.orka.myfinances.lib.ui.LoadingScreen
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
@@ -13,7 +14,8 @@ fun StockItemsContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     viewModel: WarehouseScreenViewModel,
-    state: WarehouseScreenWarehouseState
+    state: WarehouseScreenWarehouseState,
+    onStockItemClick: (StockItem) -> Unit,
 ) {
     when (state) {
         is WarehouseScreenWarehouseState.Loading -> {
@@ -31,7 +33,8 @@ fun StockItemsContent(
             StockItemsGrid(
                 modifier = modifier,
                 contentPadding = contentPadding,
-                stockItems = state.stockItems
+                stockItems = state.stockItems,
+                onItemClick = onStockItemClick
             )
         }
     }

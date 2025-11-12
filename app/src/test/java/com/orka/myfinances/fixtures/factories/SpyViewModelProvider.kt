@@ -32,4 +32,8 @@ class SpyViewModelProvider : ViewModelProvider {
     override fun catalogViewModel(catalog: Catalog): Any {
         return "catalog"
     }
+
+    override fun basketViewModel(): Any {
+        return "basket"
+    }
 }

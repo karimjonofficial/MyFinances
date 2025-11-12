@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -93,22 +94,29 @@ fun BasketItemCard(
                     )
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        product.properties.dropLast(1).forEach { property ->
+                        if(product.properties.isNotEmpty()) {
+                            product.properties.dropLast(1).forEach { property ->
+                                Text(
+                                    text = "${property.type.name}: ${property.value}",
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+
+                                HorizontalSpacer(4)
+                                Text(text = "|")
+                                HorizontalSpacer(4)
+                            }
+
                             Text(
-                                text = "${property.type.name}: ${property.value}",
+                                text = "${product.properties.last().type.name}: ${product.properties.last().value}",
                                 style = MaterialTheme.typography.bodySmall
                             )
-
                             HorizontalSpacer(4)
-                            Text(text = "|")
-                            HorizontalSpacer(4)
+                        } else {
+                            Text(
+                                text = stringResource(R.string.no_description_provided),
+                                style = MaterialTheme.typography.bodySmall
+                            )
                         }
-
-                        Text(
-                            text = "${product.properties.last().type.name}: ${product.properties.last().value}",
-                            style = MaterialTheme.typography.bodySmall
-                        )
-                        HorizontalSpacer(4)
                     }
 
                     if (product.description.isNotBlank()) {
@@ -167,7 +175,10 @@ fun BasketItemCard(
                                     containerColor = MaterialTheme.colorScheme.surfaceVariant
                                 )
                             ) {
-                                Icon(Icons.Default.Remove, contentDescription = "Decrease")
+                                Icon(
+                                    imageVector = Icons.Default.Remove,
+                                    contentDescription = stringResource(R.string.decrease)
+                                )
                             }
 
                             Text(
@@ -184,7 +195,10 @@ fun BasketItemCard(
                                     contentColor = MaterialTheme.colorScheme.onPrimary
                                 )
                             ) {
-                                Icon(Icons.Default.Add, contentDescription = "Increase")
+                                Icon(
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription = stringResource(R.string.increase)
+                                )
                             }
                         }
                     //}
@@ -196,7 +210,10 @@ fun BasketItemCard(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
             ) {
-                Icon(Icons.Default.Close, contentDescription = "Remove")
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(R.string.remove)
+                )
             }
         }
     }

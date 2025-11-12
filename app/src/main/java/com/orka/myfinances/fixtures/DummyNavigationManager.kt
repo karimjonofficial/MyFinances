@@ -16,5 +16,6 @@ class DummyNavigationManager : NavigationManager {
     override fun navigateToSettings() {}
     override fun navigateToTemplates() {}
     override fun navigateToProduct(product: Product) {}
+    override fun navigateToBasket() {}
     override fun back() {}
 }

@@ -130,4 +130,10 @@ class NavigationManagerImplTest : MainDispatcherContext() {
             destination = Destination.Product::class, navigationManager
         )
     }
+
+    @Test
+    fun `Test Basket navigation`() = testSingletonBehavior(
+        navigate = { navigationManager.navigateToBasket() },
+        destination = Destination.Basket::class, navigationManager
+    )
 }

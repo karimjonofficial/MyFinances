@@ -15,5 +15,6 @@ interface NavigationManager {
     fun navigateToSettings()
     fun navigateToTemplates()
     fun navigateToProduct(product: Product)
+    fun navigateToBasket()
     fun back()
 }

@@ -10,4 +10,5 @@ interface ViewModelProvider {
     fun addProductViewModel(): Any
     fun warehouseViewModel(warehouse: Warehouse): Any
     fun catalogViewModel(catalog: Catalog): Any
+    fun basketViewModel(): Any
 }
