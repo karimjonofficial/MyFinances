@@ -11,6 +11,7 @@ import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
@@ -24,18 +25,20 @@ class NavigationManagerImpl(
     logger = logger,
     coroutineScope = coroutineScope
 ), NavigationManager {
+    private val navState = MutableStateFlow(initialBackStack[0])
     val backStack = state.asStateFlow()
+    val navigationState = navState.asStateFlow()
 
     override fun navigateToHome() {
         val list = createBackStack()
         state.update { list }
+        navState.value = list[0]
     }
 
     override fun navigateToProfile() {
         if (!isDuplicate<Destination.Profile>()) {
-            state.update {
-                createBackStack(Destination.Profile)
-            }
+            state.update { createBackStack(Destination.Profile) }
+            navState.value = Destination.Profile
         }
     }
 
@@ -75,6 +78,7 @@ class NavigationManagerImpl(
             state.update {
                 createBackStack(Destination.Settings)
             }
+            navState.value = Destination.Settings
         }
     }
 
@@ -91,7 +95,9 @@ class NavigationManagerImpl(
 
     override fun navigateToBasket() {
         val viewModel = provider.basketViewModel()
-        state.update { createBackStack(Destination.Basket(viewModel)) }
+        val destination = Destination.Basket(viewModel)
+        state.update { createBackStack(destination) }
+        navState.value = destination
     }
 
     override fun back() {
@@ -100,6 +106,7 @@ class NavigationManagerImpl(
             val list = backstack.dropLast(1)
             state.update { list }
         }
+        navState.value = backstack[0]
     }
 
     private inline fun <reified T : Destination> isDuplicate(): Boolean = state.value.last() is T

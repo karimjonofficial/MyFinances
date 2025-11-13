@@ -10,8 +10,8 @@ class DummyFolderRepository : FolderRepository {
         return null
     }
 
-    override suspend fun get(id: Id): List<Folder> {
-        TODO("Not yet implemented")
+    override suspend fun get(id: Id): List<Folder>? {
+        return null
     }
 
     override suspend fun add(request: AddFolderRequest): Folder? {

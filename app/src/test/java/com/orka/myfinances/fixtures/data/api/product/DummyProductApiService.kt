@@ -13,8 +13,8 @@ class DummyProductApiService : ProductApiService {
         return null
     }
 
-    override suspend fun getById(id: Int): Product {
-        TODO("Not yet implemented")
+    override suspend fun getById(id: Int): Product? {
+        return null
     }
 
     override suspend fun get(id: Int): List<Product>? {

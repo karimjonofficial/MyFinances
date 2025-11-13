@@ -142,7 +142,7 @@ fun BasketItemCard(
                     } else {**/
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
-                                text = "$${product.salePrice / 100.0}",
+                                text = "$${product.salePrice}",
                                 style = MaterialTheme.typography.bodyMedium.copy(
                                     fontWeight = FontWeight.Bold
                                 )

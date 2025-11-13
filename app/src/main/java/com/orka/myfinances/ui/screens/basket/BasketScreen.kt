@@ -47,22 +47,24 @@ fun BasketScreen(
         }
 
         is BasketScreenState.Success -> {
-            Column(modifier = modifier.padding(horizontal = 8.dp)) {
-                Text(text = stringResource(R.string.items))
+            Column(modifier = modifier) {
+                Column(modifier = Modifier.padding(horizontal = 8.dp)) {
+                    Text(text = stringResource(R.string.items))
 
-                VerticalSpacer(4)
-                LazyColumn(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    if(state.items.isNotEmpty()) {
-                        items(items = state.items) {
-                            BasketItemCard(
-                                item = it,
-                                imageRes = R.drawable.furniture,
-                                increase = { item -> viewModel.increase(item.product.id) },
-                                decrease = { item -> viewModel.decrease(item.product.id) },
-                                remove = { _ -> /**viewModel.remove(item)**/ }
-                            )
+                    VerticalSpacer(4)
+                    LazyColumn(
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        if (state.items.isNotEmpty()) {
+                            items(items = state.items) {
+                                BasketItemCard(
+                                    item = it,
+                                    imageRes = R.drawable.furniture,
+                                    increase = { item -> viewModel.increase(item.product.id) },
+                                    decrease = { item -> viewModel.decrease(item.product.id) },
+                                    remove = { _ -> /**viewModel.remove(item)**/ }
+                                )
+                            }
                         }
                     }
                 }
