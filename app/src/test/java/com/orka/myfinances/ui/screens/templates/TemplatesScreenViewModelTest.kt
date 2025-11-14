@@ -1,12 +1,15 @@
 package com.orka.myfinances.ui.screens.templates
 
+import app.cash.turbine.test
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.repositories.template.TemplateRepository
 import com.orka.myfinances.fixtures.DummyLogger
 import com.orka.myfinances.fixtures.data.repositories.template.DummyTemplateRepository
 import com.orka.myfinances.fixtures.data.repositories.template.EmptyTemplateRepositoryStub
 import com.orka.myfinances.fixtures.data.repositories.template.TemplateRepositoryStub
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class TemplatesScreenViewModelTest : MainDispatcherContext() {
@@ -24,24 +27,28 @@ class TemplatesScreenViewModelTest : MainDispatcherContext() {
     }
 
     @Test
-    fun `When repository fails, state is Error`() {
+    fun `When repository fails, state is Error`() = testScope.runTest {
         val repository = EmptyTemplateRepositoryStub()
         val viewModel = viewModel(repository)
-        assertStateTransition(
-            stateFlow = viewModel.uiState,
-            assertState = { it is TemplatesScreenState.Error },
-            action = { viewModel.initialize() }
-        )
+
+        runAndAdvance { viewModel.initialize() }
+
+        viewModel.uiState.test {
+            val state = awaitItem()
+            assertTrue { state is TemplatesScreenState.Error }
+        }
     }
 
     @Test
-    fun `When repository success, state is Success`() {
+    fun `When repository success, state is Success`() = testScope.runTest {
         val repository = TemplateRepositoryStub()
         val viewModel = viewModel(repository)
-        assertStateTransition(
-            stateFlow = viewModel.uiState,
-            assertState = { it is TemplatesScreenState.Success },
-            action = { viewModel.initialize() }
-        )
+
+        runAndAdvance { viewModel.initialize() }
+
+        viewModel.uiState.test {
+            val state = awaitItem()
+            assertTrue { state is TemplatesScreenState.Success }
+        }
     }
 }

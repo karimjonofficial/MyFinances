@@ -6,13 +6,16 @@ import com.orka.myfinances.core.testParameterizedBehavior
 import com.orka.myfinances.core.testSingletonBehavior
 import com.orka.myfinances.core.testTemporaryBehavior
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.fixtures.DummyLogger
 import com.orka.myfinances.fixtures.data.repositories.folder.DummyFolderRepository
 import com.orka.myfinances.fixtures.factories.SpyViewModelProvider
+import com.orka.myfinances.testLib.catalog1
+import com.orka.myfinances.testLib.catalog2
 import com.orka.myfinances.testLib.product1
 import com.orka.myfinances.testLib.template
+import com.orka.myfinances.testLib.warehouse1
+import com.orka.myfinances.testLib.warehouse2
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -27,10 +30,6 @@ class NavigationManagerImplTest : MainDispatcherContext() {
     private val initialBackStack = listOf(Destination.Home(homeScreenViewModel))
     private val provider = SpyViewModelProvider()
     private val navigationManager = NavigationManagerImpl(initialBackStack, provider, logger)
-    private val catalog1 = Catalog(Id(1), "cat1")
-    private val catalog2 = Catalog(Id(2), "cat2")
-    private val w1 = Warehouse(Id(1), "w1", template)
-    private val w2 = Warehouse(Id(2), "w2", template)
 
     @Test
     fun `Back at root destination does nothing`() {
@@ -85,8 +84,8 @@ class NavigationManagerImplTest : MainDispatcherContext() {
 
     @Test
     fun `Warehouse follows parameterized behavior`() = testParameterizedBehavior(
-        first = w1,
-        second = w2,
+        first = warehouse1,
+        second = warehouse2,
         navigate = { navigationManager.navigateToWarehouse(it) },
         destination = Destination.Warehouse::class, navigationManager
     )

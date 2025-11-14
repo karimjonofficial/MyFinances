@@ -1,10 +1,8 @@
 package com.orka.myfinances.core
 
-import com.orka.myfinances.testLib.assertStateTransition
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.TestScope
@@ -33,19 +31,12 @@ abstract class MainDispatcherContext {
         Dispatchers.resetMain()
     }
 
-    fun <T> assertStateTransition(
-        stateFlow: StateFlow<T>,
-        assertState: (T) -> Boolean,
-        skippedSameTransitions: Int = 0,
-        action: () -> Unit,
-    ) {
-        testScope.assertStateTransition(
-            stateFlow = stateFlow,
-            assertState = assertState,
-            skippedSameTransitions = skippedSameTransitions,
-            action = action
-        )
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun advanceUntilIdle() {
+        testScope.advanceUntilIdle()
     }
+
+    fun runTest(body: suspend TestScope.() -> Unit) = testScope.runTest(testBody = body)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun runAndAdvance(action: suspend () -> Unit) {

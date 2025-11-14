@@ -15,7 +15,7 @@ import com.orka.myfinances.fixtures.data.api.warehouse.SpyStockApiService
 import com.orka.myfinances.fixtures.data.repositories.folder.SpyFolderRepository
 import com.orka.myfinances.fixtures.data.repositories.template.SpyTemplateRepository
 import com.orka.myfinances.fixtures.resources.models.folder.folder1
-import com.orka.myfinances.testLib.catalog
+import com.orka.myfinances.testLib.catalog1
 import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.screens.add.template.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.basket.BasketScreenState
@@ -62,7 +62,7 @@ class ViewModelProviderImplTest : MainDispatcherContext() {
         coroutineScope = testScope
     )
     private val catalogScreenViewModel = CatalogScreenViewModel(
-        catalog = catalog,
+        catalog = catalog1,
         repository = folderRepository,
         logger = logger,
         coroutineScope = testScope
@@ -150,15 +150,15 @@ class ViewModelProviderImplTest : MainDispatcherContext() {
 
     @Test
     fun `Returns what catalog provider returns`() {
-        assertEquals(catalogScreenViewModel, provider.catalogViewModel(catalog))
+        assertEquals(catalogScreenViewModel, provider.catalogViewModel(catalog1))
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `Initializes catalog view model`() {
-        provider.catalogViewModel(catalog)
+        provider.catalogViewModel(catalog1)
         testScope.advanceUntilIdle()
-        assertTrue(folderRepository.id == catalog.id)
+        assertTrue(folderRepository.id == catalog1.id)
     }
 
     @Test

@@ -7,7 +7,7 @@ import com.orka.myfinances.fixtures.data.repositories.folder.DummyFolderReposito
 import com.orka.myfinances.fixtures.data.repositories.folder.EmptyFolderRepositoryStub
 import com.orka.myfinances.fixtures.data.repositories.folder.FolderRepositoryStub
 import com.orka.myfinances.fixtures.data.repositories.folder.SpyFolderRepository
-import com.orka.myfinances.testLib.catalog
+import com.orka.myfinances.testLib.catalog1
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -17,7 +17,7 @@ class CatalogScreenViewModelTest : MainDispatcherContext() {
     private val logger = DummyLogger()
     private fun viewModel(repository: FolderRepository): CatalogScreenViewModel {
         return CatalogScreenViewModel(
-            catalog = catalog,
+            catalog = catalog1,
             repository = repository,
             logger = logger,
             coroutineScope = testScope
@@ -64,6 +64,6 @@ class CatalogScreenViewModelTest : MainDispatcherContext() {
         v.initialize()
         testScope.advanceUntilIdle()
 
-        assertTrue { catalog.id == repository.id }
+        assertTrue { catalog1.id == repository.id }
     }
 }

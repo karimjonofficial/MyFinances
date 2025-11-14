@@ -1,70 +1,87 @@
 package com.orka.myfinances.ui.screens.login
 
+import app.cash.turbine.test
 import com.orka.myfinances.core.MainDispatcherContext
+import com.orka.myfinances.data.api.CredentialApiService
 import com.orka.myfinances.fixtures.DummyLogger
+import com.orka.myfinances.fixtures.data.api.credential.CredentialApiServiceStub
+import com.orka.myfinances.fixtures.data.api.credential.DummyCredentialApiService
+import com.orka.myfinances.fixtures.data.api.credential.EmptyCredentialApiServiceStub
+import com.orka.myfinances.fixtures.data.api.credential.SpyCredentialApiService
 import com.orka.myfinances.fixtures.managers.DummySessionManager
 import com.orka.myfinances.fixtures.managers.SpySessionManager
-import com.orka.myfinances.fixtures.data.api.credential.DummyCredentialApiService
-import com.orka.myfinances.fixtures.data.api.credential.NoCredentialApiService
-import com.orka.myfinances.fixtures.data.api.credential.SpyCredentialApiService
-import com.orka.myfinances.fixtures.data.api.credential.StubCredentialApiService
-import com.orka.myfinances.testLib.assertStateTransition
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.advanceUntilIdle
+import com.orka.myfinances.testLib.password
+import com.orka.myfinances.testLib.username
+import com.orka.myfinances.ui.managers.session.SessionManager
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class LoginScreenViewModelTest : MainDispatcherContext() {
+typealias ViewModel = LoginScreenViewModel
+typealias ApiService = CredentialApiService
+
+class LoginScreeViewModelTest : MainDispatcherContext() {
     private val logger = DummyLogger()
+    private fun viewModel(apiService: ApiService, manager: SessionManager): ViewModel {
+        return ViewModel(
+            apiService = apiService,
+            manager = manager,
+            logger = logger,
+            coroutineScope = testScope
+        )
+    }
 
     @Nested
     inner class DummySessionManagerContext {
         private val manager = DummySessionManager()
+        private fun viewModel(apiService: ApiService): ViewModel {
+            return viewModel(apiService, manager)
+        }
 
-        @OptIn(ExperimentalCoroutinesApi::class)
         @Test
         fun `When authorize called gets credentials`() {
             val apiService = SpyCredentialApiService()
-            val viewmodel = LoginScreenViewModel(logger, apiService, manager, testScope)
-            viewmodel.authorize("username", "password")
-            testScope.advanceUntilIdle()
+            val viewModel = viewModel(apiService)
+
+            viewModel.authorize(username, password)
+            advanceUntilIdle()
+
             assertTrue(apiService.called)
         }
 
         @Nested
-        inner class NoCredentialApiServiceContext {
-            private val apiService = NoCredentialApiService()
+        inner class NoApiServiceContext {
+            private val apiService = EmptyCredentialApiServiceStub()
+            private val viewModel = viewModel(apiService)
 
-            @OptIn(ExperimentalCoroutinesApi::class)
             @Test
-            fun `When credential not found state is error`() {
-                val viewmodel = LoginScreenViewModel(logger, apiService, manager, testScope)
-
-                testScope.assertStateTransition(
-                    stateFlow = viewmodel.uiState,
-                    assertState = { it is LoginScreenState.Error },
-                    action = { viewmodel.authorize("username", "password") }
-                )
+            fun `When credential not found state is Error`() {
+                viewModel.authorize(username, password)
+                advanceUntilIdle()
+                assertTrue { viewModel.uiState.value is LoginScreenState.Error }
             }
 
-            @OptIn(ExperimentalCoroutinesApi::class)
             @Test
-            fun `When authorizeAndRemember credential not found state is error`() {
-                val viewmodel = LoginScreenViewModel(logger, apiService, manager, testScope)
-
-                testScope.assertStateTransition(
-                    stateFlow = viewmodel.uiState,
-                    assertState = { it is LoginScreenState.Error },
-                    action = { viewmodel.authorizeAndRemember("username", "password") }
-                )
+            fun `When authorizeAndRemember credential not found state is Error`() {
+                viewModel.authorizeAndRemember(username, password)
+                advanceUntilIdle()
+                assertTrue { viewModel.uiState.value is LoginScreenState.Error }
             }
         }
 
         @Nested
         inner class DummyCredentialDataSourceContext {
             private val apiService = DummyCredentialApiService()
-            private val viewModel = LoginScreenViewModel(logger, apiService, manager, testScope)
+            private val viewModel = viewModel(apiService)
+            private suspend fun assertLoadingTransition(action: () -> Unit) = viewModel.uiState.test {
+                awaitItem()
+                action()
+                val state = awaitItem()
+                awaitItem()
+
+                assertTrue { state is LoginScreenState.Loading }
+            }
 
             @Test
             fun `State is initial`() {
@@ -72,66 +89,62 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
                 assertTrue(state is LoginScreenState.Initial)
             }
 
-            @OptIn(ExperimentalCoroutinesApi::class)
             @Test
-            fun `When authorization started state changes to loading`() {
-                testScope.assertStateTransition(
-                    stateFlow = viewModel.uiState,
-                    assertState = { it is LoginScreenState.Loading },
-                    action = { viewModel.authorize("username", "password") }
-                )
+            fun `When authorization started state changes to Loading`() = runTest {
+                assertLoadingTransition { viewModel.authorize(username, password) }
             }
 
-            @OptIn(ExperimentalCoroutinesApi::class)
             @Test
-            fun `When authorizeAndRemember started state changes to loading`() {
-                testScope.assertStateTransition(
-                    stateFlow = viewModel.uiState,
-                    assertState = { it is LoginScreenState.Loading },
-                    action = { viewModel.authorizeAndRemember("username", "password") }
-                )
+            fun `When authorizeAndRemember started state changes to Loading`() = runTest {
+                assertLoadingTransition { viewModel.authorizeAndRemember(username, password) }
             }
         }
     }
 
     @Nested
-    inner class StubDataSource {
-        private val apiService = StubCredentialApiService()
+    inner class StubDataSourceContext {
+        private val apiService = CredentialApiServiceStub()
         private val manager = SpySessionManager()
-        private val viewModel = LoginScreenViewModel(logger, apiService, manager, testScope)
+        private val viewModel = viewModel(apiService, manager)
 
-        @OptIn(ExperimentalCoroutinesApi::class)
-        @Test
-        fun `When authorize successful create session`() {
-            viewModel.authorize("username", "password")
-            testScope.advanceUntilIdle()
-            assertTrue(manager.createCalled)
+        @Nested
+        inner class AuthorizeCalledContext {
+            @BeforeEach
+            fun setup() {
+                viewModel.authorize(username, password)
+                advanceUntilIdle()
+            }
+
+            @Test
+            fun `When authorize successful create session`() = runTest {
+                assertTrue(manager.createCalled)
+            }
+
+            @Test
+            fun `When authorize successful state is initial`() = runTest {
+                val state = viewModel.uiState.value
+                assertTrue(state is LoginScreenState.Initial)
+            }
         }
 
-        @OptIn(ExperimentalCoroutinesApi::class)
-        @Test
-        fun `When authorizeAndRemember called stores session`() {
-            viewModel.authorizeAndRemember("username", "password")
-            testScope.advanceUntilIdle()
-            assertTrue(manager.storeCalled)
-        }
+        @Nested
+        inner class AuthorizeAndRememberCalledContext {
+            @BeforeEach
+            fun setup() {
+                viewModel.authorizeAndRemember(username, password)
+                advanceUntilIdle()
+            }
 
-        @OptIn(ExperimentalCoroutinesApi::class)
-        @Test
-        fun `When authorize successful state is initial`() {
-            viewModel.authorize("username", "password")
-            testScope.advanceUntilIdle()
-            val state = viewModel.uiState.value
-            assertTrue(state is LoginScreenState.Initial)
-        }
+            @Test
+            fun `When authorizeAndRemember called stores session`() {
+                assertTrue(manager.storeCalled)
+            }
 
-        @OptIn(ExperimentalCoroutinesApi::class)
-        @Test
-        fun `When authorizeAndRemember successful state is initial`() {
-            viewModel.authorizeAndRemember("username", "password")
-            testScope.advanceUntilIdle()
-            val state = viewModel.uiState.value
-            assertTrue(state is LoginScreenState.Initial)
+            @Test
+            fun `When authorizeAndRemember successful state is initial`() {
+                val state = viewModel.uiState.value
+                assertTrue(state is LoginScreenState.Initial)
+            }
         }
     }
 }

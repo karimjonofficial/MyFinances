@@ -21,7 +21,7 @@ class HomeScreenViewModel(
     val uiState = state.asStateFlow()
 
     fun initialize() = launch {
-        setStateAsync(HomeScreenState.Loading)
+        setState(HomeScreenState.Loading)
         val folders = repository.get()
         if(folders != null)
             setState(HomeScreenState.Success(folders))
@@ -30,7 +30,7 @@ class HomeScreenViewModel(
 
     fun addFolder(name: String, type: FolderType) = launch {
         val previousState = state.value
-        setStateAsync(HomeScreenState.Loading)
+        setState(HomeScreenState.Loading)
         val request = AddFolderRequest(name, type)
         val folder = repository.add(request)
         if(folder != null) {

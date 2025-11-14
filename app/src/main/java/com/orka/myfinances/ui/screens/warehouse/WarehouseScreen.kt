@@ -37,32 +37,31 @@ fun WarehouseScreen(
             Tab(
                 selected = selectedTabValue == 0,
                 onClick = { selectedTab.intValue = 0 },
-                text = { Text(text = stringResource(R.string.products)) }
+                text = { Text(text = stringResource(R.string.warehouse)) }
             )
 
             Tab(
                 selected = selectedTabValue == 1,
                 onClick = { selectedTab.intValue = 1 },
-                text = { Text(text = stringResource(R.string.stock_items)) }
+                text = { Text(text = stringResource(R.string.products)) }
             )
         }
 
-
         if (selectedTabValue == 0) {
-            ProductsContent(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(0.dp),
-                state = productsState.value,
-                viewModel = viewModel,
-                navigationManager = navigationManager
-            )
-        } else {
             StockItemsContent(
                 modifier = Modifier.fillMaxSize(),
                 state = warehouseState.value,
                 viewModel = viewModel,
                 contentPadding = PaddingValues(8.dp),
                 onStockItemClick = viewModel::addToBasket
+            )
+        } else {
+            ProductsContent(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(0.dp),
+                state = productsState.value,
+                viewModel = viewModel,
+                navigationManager = navigationManager
             )
         }
     }

@@ -38,9 +38,7 @@ fun MainScreen(
             val state = navigationManager.navigationState.collectAsState()
             val backstack = navigationManager.backStack.collectAsState()
             val visible = remember {
-                derivedStateOf {
-                    backstack.value.last().hasNavBar
-                }
+                derivedStateOf { backstack.value.last().hasNavBar }
             }
 
             if(visible.value) {
