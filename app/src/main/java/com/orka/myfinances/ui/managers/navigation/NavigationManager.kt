@@ -8,7 +8,7 @@ interface NavigationManager {
     fun navigateToHome()
     fun navigateToProfile()
     fun navigateToCatalog(catalog: Catalog)
-    fun navigateToWarehouse(folder: Warehouse)
+    fun navigateToWarehouse(warehouse: Warehouse)
     fun navigateToNotifications()
     fun navigateToAddTemplate()
     fun navigateToAddProduct(warehouse: Warehouse)

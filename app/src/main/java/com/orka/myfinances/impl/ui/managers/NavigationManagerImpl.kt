@@ -14,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlin.collections.plus
 
 class NavigationManagerImpl(
     initialBackStack: List<Destination>,
@@ -31,72 +30,58 @@ class NavigationManagerImpl(
     val navigationState = navState.asStateFlow()
 
     override fun navigateToHome() {
-        val list = createBackStack()
-        state.update { list }
-        navState.value = list[0]
+        navigate(backStack.value[0])
+        setNavState(backStack.value[0])
     }
 
     override fun navigateToProfile() {
-        if (!isDuplicate<Destination.Profile>()) {
-            state.update { createBackStack(Destination.Profile) }
-            navState.value = Destination.Profile
-        }
+        navigate(Destination.Profile)
+        setNavState(Destination.Profile)
     }
 
     override fun navigateToCatalog(catalog: Catalog) {
-        val last = state.value.last()
-        if (!(last is Destination.Catalog && last.catalog == catalog)) {
-            val viewModel = provider.catalogViewModel(catalog)
-            state.update { it + Destination.Catalog(catalog, viewModel) }
-        }
+        val viewModel = provider.catalogViewModel(catalog)
+        navigate(Destination.Catalog(catalog, viewModel))
     }
 
-    override fun navigateToWarehouse(folder: Warehouse) {
-        val last = state.value.last()
-        if (!(last is Destination.Warehouse && last.warehouse == folder)) {
-            state.update { it + Destination.Warehouse(folder, provider.warehouseViewModel(folder)) }
-        }
+    override fun navigateToWarehouse(warehouse: Warehouse) {
+        val viewModel = provider.warehouseViewModel(warehouse)
+        navigate(Destination.Warehouse(warehouse, viewModel))
     }
 
     override fun navigateToNotifications() {
-        val backstack = createBackStack(Destination.Notifications)
-        state.update { backstack }
+        navigate(Destination.Notifications)
     }
 
     override fun navigateToAddTemplate() {
         val viewModel = provider.addTemplateViewModel()
-        val destination = Destination.AddTemplate(viewModel, types)
-        state.update { createBackStack(destination) }
+        navigate(Destination.AddTemplate(viewModel, types))
     }
 
     override fun navigateToAddProduct(warehouse: Warehouse) {
         val viewModel = provider.addProductViewModel()
-        state.update { it + Destination.AddProduct(warehouse, viewModel) }
+        navigate(Destination.AddProduct(warehouse, viewModel))
     }
 
     override fun navigateToSettings() {
-        if (!isDuplicate<Destination.Settings>()) {
-            state.update { createBackStack(Destination.Settings) }
-            navState.value = Destination.Settings
-        }
+        navigate(Destination.Settings)
+        setNavState(Destination.Settings)
     }
 
     override fun navigateToTemplates() {
-        if (!isDuplicate<Destination.Templates>()) {
-            val templatesViewModel = provider.templatesViewModel()
-            state.update { it + Destination.Templates(templatesViewModel) }
-        }
+        val templatesViewModel = provider.templatesViewModel()
+        navigate(Destination.Templates(templatesViewModel))
     }
 
     override fun navigateToProduct(product: Product) {
-        state.update { createBackStack(Destination.Product(product)) }
+        navigate(Destination.Product(product))
     }
 
     override fun navigateToBasket() {
         val viewModel = provider.basketViewModel()
-        val destination = Destination.Basket(viewModel)
-        state.update { createBackStack(destination) }
-        navState.value = destination
+        val d = Destination.Basket(viewModel)
+        navigate(d)
+        setNavState(d)
     }
 
     override fun back() {
@@ -106,10 +91,12 @@ class NavigationManagerImpl(
         navState.value = backstack[0]
     }
 
-    private inline fun <reified T : Destination> isDuplicate(): Boolean = state.value.last() is T
-    private fun createBackStack(vararg destinations: Destination = emptyArray()): List<Destination> {
-        val home = state.value.first()
-        val list = listOf(home) + destinations
-        return list
+    private fun navigate(destination: Destination) {
+        if(destination.hasNavBar)
+            updateState { listOf(backStack.value[0], destination) }
+        else updateState { backStack.value + destination }
+    }
+    private fun setNavState(destination: Destination) {
+        navState.value = destination
     }
 }

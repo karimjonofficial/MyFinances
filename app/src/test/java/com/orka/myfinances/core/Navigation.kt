@@ -18,63 +18,6 @@ fun NavigationManagerImpl.assertSize(size: Int) {
     assertEquals(size, backStack.value.size)
 }
 
-inline fun <reified T: Destination> NavigationManagerImpl.testNavigationItems(
-    navigate: NavigationManagerImpl.() -> Unit
-) {
-    navigate()
-    assertTopIs<T>()
-    assertSize(2)
-    assertNavState<T>()
-
-    navigate()
-    assertTopIs<T>()
-    assertSize(2)
-    assertNavState<T>()
-}
-
-inline fun <reified T: Destination> NavigationManagerImpl.testSingleton(
-    navigateToAnotherDestination: NavigationManagerImpl.() -> Unit = { navigateToAddTemplate() },
-    navigate: NavigationManagerImpl.() -> Unit
-) {
-    navigateToAnotherDestination()
-    val size = backStack.value.size
-    navigate()
-    assertTopIs<T>()
-    assertSize(size + 1)
-
-    navigate()
-    assertTopIs<T>()
-    assertSize(size + 1)
-}
-
-inline fun <reified T: Destination, TArg> NavigationManagerImpl.testParameterizedBehavior(
-    first: TArg,
-    second: TArg,
-    navigate: NavigationManagerImpl.(TArg) -> Unit
-) {
-    val size = backStack.value.size
-    navigate(first)
-    assertTopIs<T>()
-    assertSize(size + 1)
-
-    navigate(first)
-    assertTopIs<T>()
-    assertSize(size + 1)
-
-    navigate(second)
-    assertTopIs<T>()
-    assertSize(size + 2)
-}
-
-inline fun <reified TInner: Destination> NavigationManagerImpl.testTemporaryBehavior(
-    navigateTemp: NavigationManagerImpl.() -> Unit
-) {
-    val size = backStack.value.size
-    navigateTemp()
-    assertTopIs<TInner>()
-    assertSize(size + 1)
-}
-
 fun NavigationManagerImpl.test(body: NavigationManagerImpl.() -> Unit) {
     return body()
 }
