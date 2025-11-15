@@ -13,21 +13,21 @@ import org.junit.jupiter.api.Test
 class IsEmptyTest {
     @Test
     fun `Returns true when no description`() {
-        assertTrue { Basket().isEmpty() }
+        assertTrue(Basket().isEmpty())
     }
 
     @Test
     fun `Returns false when no description`() {
-        assertFalse { Basket(description = description).isEmpty() }
+        assertFalse(Basket(description = description).isEmpty())
     }
 
     @Test
     fun `Returns false when price is not 0`() {
-        assertFalse { Basket(price = price).isEmpty() }
+        assertFalse(Basket(price = price).isEmpty())
     }
 
     @Test
     fun `Returns false when items are not empty`() {
-        assertFalse { Basket(items = listOf(BasketItem(product1, amount))).isEmpty() }
+        assertFalse(Basket(items = listOf(BasketItem(product1, amount))).isEmpty())
     }
 }

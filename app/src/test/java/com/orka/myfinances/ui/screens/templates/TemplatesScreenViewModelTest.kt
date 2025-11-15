@@ -1,6 +1,5 @@
 package com.orka.myfinances.ui.screens.templates
 
-import app.cash.turbine.test
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.repositories.template.TemplateRepository
 import com.orka.myfinances.fixtures.DummyLogger
@@ -31,24 +30,20 @@ class TemplatesScreenViewModelTest : MainDispatcherContext() {
         val repository = EmptyTemplateRepositoryStub()
         val viewModel = viewModel(repository)
 
-        runAndAdvance { viewModel.initialize() }
+        viewModel.initialize()
+        advanceUntilIdle()
 
-        viewModel.uiState.test {
-            val state = awaitItem()
-            assertTrue { state is TemplatesScreenState.Error }
-        }
+        assertTrue(viewModel.uiState.value is TemplatesScreenState.Error)
     }
 
     @Test
-    fun `When repository success, state is Success`() = testScope.runTest {
+    fun `When repository success, state is Success`() {
         val repository = TemplateRepositoryStub()
         val viewModel = viewModel(repository)
 
-        runAndAdvance { viewModel.initialize() }
+        viewModel.initialize()
+        advanceUntilIdle()
 
-        viewModel.uiState.test {
-            val state = awaitItem()
-            assertTrue { state is TemplatesScreenState.Success }
-        }
+        assertTrue(viewModel.uiState.value is TemplatesScreenState.Success)
     }
 }

@@ -14,6 +14,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.repositories.folder.FolderType
@@ -60,7 +61,10 @@ fun AddFolderDialog(
         VerticalSpacer(16)
 
         Column(modifier = Modifier.selectableGroup()) {
-            Text(text = stringResource(R.string.select_folder_type))
+            Text(
+                text = stringResource(R.string.select_folder_type),
+                fontWeight = FontWeight.Bold
+            )
 
             VerticalSpacer(8)
             RadioButton(

@@ -52,7 +52,7 @@ class AddProductScreenViewModelTest : MainDispatcherContext() {
             val viewModel = viewModel(EmptyStockApiServiceStub())
             viewModel.initialize()
             advanceUntilIdle()
-            assertTrue { viewModel.uiState.value is AddProductScreenState.Failure }
+            assertTrue(viewModel.uiState.value is AddProductScreenState.Failure)
         }
 
         @Test
@@ -60,7 +60,7 @@ class AddProductScreenViewModelTest : MainDispatcherContext() {
             val viewModel = viewModel(StockApiServiceStub())
             viewModel.initialize()
             advanceUntilIdle()
-            assertTrue { viewModel.uiState.value is AddProductScreenState.Success }
+            assertTrue(viewModel.uiState.value is AddProductScreenState.Success)
         }
     }
 
@@ -73,6 +73,6 @@ class AddProductScreenViewModelTest : MainDispatcherContext() {
         viewModel.addProduct(addProductRequest)
         advanceUntilIdle()
 
-        assertTrue { productApiService.addCalled }
+        assertTrue(productApiService.addCalled)
     }
 }

@@ -5,14 +5,13 @@ import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.fixtures.DummyLogger
+import com.orka.myfinances.fixtures.data.api.product.MockProductApiService
 import com.orka.myfinances.testLib.amount
 import com.orka.myfinances.testLib.id1
 import com.orka.myfinances.testLib.id2
 import com.orka.myfinances.testLib.price
 import com.orka.myfinances.testLib.product1
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -20,7 +19,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class BasketScreenViewModelTest : MainDispatcherContext() {
     private val logger = DummyLogger()
     private val apiService = MockProductApiService()
@@ -34,7 +32,7 @@ class BasketScreenViewModelTest : MainDispatcherContext() {
 
     @Test
     fun `State is Loading`() {
-        assertTrue { viewModel.uiState.value is BasketScreenState.Loading }
+        assertTrue(viewModel.uiState.value is BasketScreenState.Loading)
     }
 
     @Nested
@@ -43,23 +41,24 @@ class BasketScreenViewModelTest : MainDispatcherContext() {
         fun setup() {
             testScope.launch {
                 repository.add(id1, amount)
-                testScope.advanceUntilIdle()
+                advanceUntilIdle()
             }
         }
 
         @Test
-        fun `When initialized gets basket`() = testScope.runTest {
-            repository.add(id1, amount)
-            viewModel.initialize()
-            testScope.advanceUntilIdle()
+        fun `When initialized gets basket`() = runTest {
+            runAndAdvance {
+                repository.add(id1, amount)
+                viewModel.initialize()
+            }
 
             viewModel.uiState.test {
                 val state = awaitItem()
-                assertTrue {
+                assertTrue(
                     state is BasketScreenState.Success
                             && state.items.size == 1
                             && state.price == product1.price * 2 * amount
-                }
+                )
             }
         }
 
@@ -70,15 +69,15 @@ class BasketScreenViewModelTest : MainDispatcherContext() {
                 testScope.launch {
                     repository.add(id2, amount)
                     viewModel.initialize()
-                    testScope.advanceUntilIdle()
+                    advanceUntilIdle()
                 }
             }
             @Test
-            fun `When increase, increases amount of item`() = testScope.runTest {
-                viewModel.increase(id1)
-                testScope.advanceUntilIdle()
-                viewModel.increase(id2)
-                testScope.advanceUntilIdle()
+            fun `When increase, increases amount of item`() = runTest {
+                runAndAdvance {
+                    viewModel.increase(id1)
+                    viewModel.increase(id2)
+                }
 
                 viewModel.uiState.test {
                     val state = awaitItem() as BasketScreenState.Success
@@ -94,15 +93,16 @@ class BasketScreenViewModelTest : MainDispatcherContext() {
             fun setup() {
                 testScope.launch {
                     viewModel.initialize()
-                    testScope.advanceUntilIdle()
+                    advanceUntilIdle()
                 }
             }
 
             @Test
             fun `When decrease, decreases amount of item`() = testScope.runTest {
-                viewModel.increase(id1)
-                viewModel.decrease(id1)
-                testScope.advanceUntilIdle()
+                runAndAdvance {
+                    viewModel.increase(id1)
+                    viewModel.decrease(id1)
+                }
 
                 viewModel.uiState.test {
                     val state = awaitItem() as BasketScreenState.Success
@@ -113,8 +113,7 @@ class BasketScreenViewModelTest : MainDispatcherContext() {
 
             @Test
             fun `When decrease, removes item`() = testScope.runTest {
-                viewModel.decrease(id1)
-                testScope.advanceUntilIdle()
+                runAndAdvance { viewModel.decrease(id1) }
 
                 viewModel.uiState.test {
                     val state = awaitItem() as BasketScreenState.Success

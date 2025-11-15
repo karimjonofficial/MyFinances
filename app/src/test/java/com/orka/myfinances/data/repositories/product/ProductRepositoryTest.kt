@@ -20,7 +20,7 @@ class ProductRepositoryTest : MainDispatcherContext() {
         val apiService = SpyProductApiService()
         val repository = ProductRepository(apiService)
         val result = repository.add(addProductRequest)
-        assertTrue { product1 === result }
+        assertTrue(product1 === result)
     }
 
     @Test

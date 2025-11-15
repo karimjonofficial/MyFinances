@@ -1,6 +1,5 @@
 package com.orka.myfinances.ui.screens.login
 
-import app.cash.turbine.test
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.api.CredentialApiService
 import com.orka.myfinances.fixtures.DummyLogger
@@ -10,6 +9,7 @@ import com.orka.myfinances.fixtures.data.api.credential.EmptyCredentialApiServic
 import com.orka.myfinances.fixtures.data.api.credential.SpyCredentialApiService
 import com.orka.myfinances.fixtures.managers.DummySessionManager
 import com.orka.myfinances.fixtures.managers.SpySessionManager
+import com.orka.myfinances.testLib.assertLoadingTransition
 import com.orka.myfinances.testLib.password
 import com.orka.myfinances.testLib.username
 import com.orka.myfinances.ui.managers.session.SessionManager
@@ -59,14 +59,14 @@ class LoginScreeViewModelTest : MainDispatcherContext() {
             fun `When credential not found state is Error`() {
                 viewModel.authorize(username, password)
                 advanceUntilIdle()
-                assertTrue { viewModel.uiState.value is LoginScreenState.Error }
+                assertTrue(viewModel.uiState.value is LoginScreenState.Error)
             }
 
             @Test
             fun `When authorizeAndRemember credential not found state is Error`() {
                 viewModel.authorizeAndRemember(username, password)
                 advanceUntilIdle()
-                assertTrue { viewModel.uiState.value is LoginScreenState.Error }
+                assertTrue(viewModel.uiState.value is LoginScreenState.Error)
             }
         }
 
@@ -74,14 +74,8 @@ class LoginScreeViewModelTest : MainDispatcherContext() {
         inner class DummyCredentialDataSourceContext {
             private val apiService = DummyCredentialApiService()
             private val viewModel = viewModel(apiService)
-            private suspend fun assertLoadingTransition(action: () -> Unit) = viewModel.uiState.test {
-                awaitItem()
-                action()
-                val state = awaitItem()
-                awaitItem()
-
-                assertTrue { state is LoginScreenState.Loading }
-            }
+            private suspend fun assertLoadingTransition(action: () -> Unit) =
+                viewModel.uiState.assertLoadingTransition<LoginScreenState, LoginScreenState.Loading>(action)
 
             @Test
             fun `State is initial`() {

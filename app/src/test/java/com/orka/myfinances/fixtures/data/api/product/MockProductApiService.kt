@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.basket
+package com.orka.myfinances.fixtures.data.api.product
 
 import com.orka.myfinances.data.api.ProductApiService
 import com.orka.myfinances.data.models.product.Product

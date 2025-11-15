@@ -20,7 +20,7 @@ class BasketRepositoryTest : MainDispatcherContext() {
     @Test
     fun `Returns an empty basket`() {
         val basket = repository.get()
-        assertTrue { basket.isEmpty() }
+        assertTrue(basket.isEmpty())
     }
 
     @Nested
@@ -35,7 +35,7 @@ class BasketRepositoryTest : MainDispatcherContext() {
         @Test
         fun `Add items adds items`() = testScope.runTest {
             val items = repository.get()
-            assertTrue { items.find { it.product.id == id1 } != null && items.size == 1 }
+            assertTrue(items.find { it.product.id == id1 } != null && items.size == 1)
         }
 
         @Nested
@@ -46,25 +46,26 @@ class BasketRepositoryTest : MainDispatcherContext() {
                     repository.add(id1, amount)
                 }
             }
+
             @Test
             fun `Add increases when item already exists`() = testScope.runTest {
                 val items = repository.get()
-                assertTrue {
+                assertTrue(
                     items.find { it.product.id == id1 } != null
                             && items.size == 1
                             && items[0].amount == 2 * amount
-                }
+                )
             }
 
             @Test
             fun `Remove decreases when item already exists`() = testScope.runTest {
                 repository.remove(id1, amount)
                 val items = repository.get()
-                assertTrue {
+                assertTrue(
                     items.find { it.product.id == id1 } != null
                             && items.size == 1
                             && items[0].amount == amount
-                }
+                )
             }
         }
 
@@ -72,9 +73,7 @@ class BasketRepositoryTest : MainDispatcherContext() {
         fun `Remove removes when item already exists and amount is 1`() = testScope.runTest {
             repository.remove(id1, amount)
             val items = repository.get()
-            assertTrue {
-                items.find { it.product.id == id1 } == null
-            }
+            assertTrue(items.find { it.product.id == id1 } == null)
         }
     }
 }

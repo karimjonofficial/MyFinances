@@ -112,19 +112,19 @@ class NavigationManagerImplTest : MainDispatcherContext() {
 
     @Test
     fun `Navigation state is Home when initialized`() {
-        assertTrue { navigationManager.navigationState.value is Destination.Home }
+        assertTrue(navigationManager.navigationState.value is Destination.Home)
     }
 
     @Test
     fun `When navigate to profile, state is profile`() {
         navigationManager.navigateToProfile()
-        assertTrue { navigationManager.navigationState.value is Destination.Profile }
+        assertTrue(navigationManager.navigationState.value is Destination.Profile)
     }
 
     @Test
     fun `When navigate to settings, state is settings`() {
         navigationManager.navigateToSettings()
-        assertTrue { navigationManager.navigationState.value is Destination.Settings }
+        assertTrue(navigationManager.navigationState.value is Destination.Settings)
     }
 
     @Nested
@@ -136,19 +136,19 @@ class NavigationManagerImplTest : MainDispatcherContext() {
 
         @Test
         fun `When navigate to basket, state is basket`() {
-            assertTrue { navigationManager.navigationState.value is Destination.Basket }
+            assertTrue(navigationManager.navigationState.value is Destination.Basket)
         }
 
         @Test
         fun `When navigate to basket and back, state is home`() {
             navigationManager.back()
-            assertTrue { navigationManager.navigationState.value is Destination.Home }
+            assertTrue(navigationManager.navigationState.value is Destination.Home)
         }
 
         @Test
         fun `When navigate to basket and home, state is home`() {
             navigationManager.navigateToHome()
-            assertTrue { navigationManager.navigationState.value is Destination.Home }
+            assertTrue(navigationManager.navigationState.value is Destination.Home)
         }
     }
 }
