@@ -1,4 +1,4 @@
-package com.orka.myfinances
+package com.orka.myfinances.impl.ui.managers
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlin.collections.plus
 
 class NavigationManagerImpl(
     initialBackStack: List<Destination>,
@@ -75,9 +76,7 @@ class NavigationManagerImpl(
 
     override fun navigateToSettings() {
         if (!isDuplicate<Destination.Settings>()) {
-            state.update {
-                createBackStack(Destination.Settings)
-            }
+            state.update { createBackStack(Destination.Settings) }
             navState.value = Destination.Settings
         }
     }
@@ -102,10 +101,8 @@ class NavigationManagerImpl(
 
     override fun back() {
         val backstack = state.value
-        if (backstack.size > 1) {
-            val list = backstack.dropLast(1)
-            state.update { list }
-        }
+        if (backstack.size > 1)
+            state.update { backstack.dropLast(1) }
         navState.value = backstack[0]
     }
 

@@ -1,12 +1,11 @@
-package com.orka.myfinances
+package com.orka.myfinances.impl.ui.managers
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.fixtures.DummyLogger
 import com.orka.myfinances.fixtures.factories.SpyViewModelProvider
 import com.orka.myfinances.ui.managers.dialog.DialogState
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertNull
 
 class DialogManagerImplTest : MainDispatcherContext() {
     private val logger = DummyLogger()

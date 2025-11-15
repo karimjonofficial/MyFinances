@@ -1,73 +1,86 @@
 package com.orka.myfinances.core
 
-import com.orka.myfinances.NavigationManagerImpl
+import com.orka.myfinances.impl.ui.managers.NavigationManagerImpl
 import com.orka.myfinances.ui.managers.navigation.Destination
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import kotlin.reflect.KClass
 
-fun assertTopIs(
-    expected: KClass<out Destination>,
-    size: Int? = null,
-    navigationManager: NavigationManagerImpl
-) {
-    val last = navigationManager.backStack.value.last()
-    assertTrue(expected.isInstance(last)) { "Expected ${expected.simpleName}, but was $last" }
-    size?.let { assertEquals(it, navigationManager.backStack.value.size) }
+inline fun <reified T: Destination> NavigationManagerImpl.assertTopIs(message: String = "") {
+    val last = backStack.value.last()
+    assertTrue(last is T, "The current destination is $last\n$message")
 }
 
-fun testSingletonBehavior(
-    navigate: () -> Unit,
-    destination: KClass<out Destination>,
-    navigationManager: NavigationManagerImpl
-) {
-    navigate()
-    assertTopIs(destination, size = 2, navigationManager = navigationManager)
-
-    navigate()
-    assertTopIs(destination, size = 2, navigationManager)
-
-    navigationManager.back()
-    assertTopIs(Destination.Home::class, size = 1, navigationManager)
+inline fun <reified T: Destination> NavigationManagerImpl.assertNavState() {
+    assertTrue(navigationState.value is T, "Navigation Bar state error")
 }
 
-fun <T> testParameterizedBehavior(
-    first: T,
-    second: T,
-    navigate: (T) -> Unit,
-    destination: KClass<out Destination>,
-    navigationManager: NavigationManagerImpl
+fun NavigationManagerImpl.assertSize(size: Int) {
+    assertEquals(size, backStack.value.size)
+}
+
+inline fun <reified T: Destination> NavigationManagerImpl.testNavigationItems(
+    navigate: NavigationManagerImpl.() -> Unit
 ) {
+    navigate()
+    assertTopIs<T>()
+    assertSize(2)
+    assertNavState<T>()
+
+    navigate()
+    assertTopIs<T>()
+    assertSize(2)
+    assertNavState<T>()
+}
+
+inline fun <reified T: Destination> NavigationManagerImpl.testSingleton(
+    navigateToAnotherDestination: NavigationManagerImpl.() -> Unit = { navigateToAddTemplate() },
+    navigate: NavigationManagerImpl.() -> Unit
+) {
+    navigateToAnotherDestination()
+    val size = backStack.value.size
+    navigate()
+    assertTopIs<T>()
+    assertSize(size + 1)
+
+    navigate()
+    assertTopIs<T>()
+    assertSize(size + 1)
+}
+
+inline fun <reified T: Destination, TArg> NavigationManagerImpl.testParameterizedBehavior(
+    first: TArg,
+    second: TArg,
+    navigate: NavigationManagerImpl.(TArg) -> Unit
+) {
+    val size = backStack.value.size
     navigate(first)
-    assertTopIs(destination, size = 2, navigationManager)
+    assertTopIs<T>()
+    assertSize(size + 1)
 
     navigate(first)
-    assertTopIs(destination, size = 2, navigationManager)
+    assertTopIs<T>()
+    assertSize(size + 1)
 
     navigate(second)
-    assertTopIs(destination, size = 3, navigationManager)
-
-    navigationManager.back()
-    assertTopIs(destination, size = 2, navigationManager)
+    assertTopIs<T>()
+    assertSize(size + 2)
 }
 
-fun testTemporaryBehavior(
-    openParent: () -> Unit,
-    navigateTemp: () -> Unit,
-    parent: KClass<out Destination>,
-    temp: KClass<out Destination>,
-    navigationManager: NavigationManagerImpl
+inline fun <reified TInner: Destination> NavigationManagerImpl.testTemporaryBehavior(
+    navigateTemp: NavigationManagerImpl.() -> Unit
 ) {
-    val beforeParent = navigationManager.backStack.value.size
-    openParent()
-    val afterParent = navigationManager.backStack.value.size
-
-    val expectedParentSize = if (afterParent > beforeParent) afterParent else beforeParent
-    assertTopIs(parent, size = expectedParentSize, navigationManager)
-
+    val size = backStack.value.size
     navigateTemp()
-    assertTopIs(temp, size = expectedParentSize + 1, navigationManager)
+    assertTopIs<TInner>()
+    assertSize(size + 1)
+}
 
-    navigationManager.back()
-    assertTopIs(parent, size = expectedParentSize, navigationManager)
+fun NavigationManagerImpl.test(body: NavigationManagerImpl.() -> Unit) {
+    return body()
+}
+
+fun NavigationManagerImpl.assertHome() {
+    assertTopIs<Destination.Home>()
+    assertNavState<Destination.Home>()
+    assertSize(1)
 }

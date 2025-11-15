@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.managers.ui
+package com.orka.myfinances.impl.ui.managers
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.storages.LocalSessionStorage

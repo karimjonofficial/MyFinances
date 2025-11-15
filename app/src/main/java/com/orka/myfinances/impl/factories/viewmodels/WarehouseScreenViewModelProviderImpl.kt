@@ -1,4 +1,4 @@
-package com.orka.myfinances.factories
+package com.orka.myfinances.impl.factories.viewmodels
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.StockItem

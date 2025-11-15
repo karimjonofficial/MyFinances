@@ -1,7 +1,5 @@
-package com.orka.myfinances.ui.managers.ui
+package com.orka.myfinances.impl.ui.managers
 
-import com.orka.myfinances.DialogManagerImpl
-import com.orka.myfinances.NavigationManagerImpl
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.Credential
@@ -12,9 +10,9 @@ import com.orka.myfinances.data.repositories.folder.FolderRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.factories.ApiProvider
+import com.orka.myfinances.impl.factories.viewmodels.ViewModelProviderImpl
+import com.orka.myfinances.impl.factories.viewmodels.WarehouseScreenViewModelProviderImpl
 import com.orka.myfinances.factories.viewmodel.ViewModelProvider
-import com.orka.myfinances.factories.ViewModelProviderImpl
-import com.orka.myfinances.factories.WarehouseScreenViewModelProviderImpl
 import com.orka.myfinances.fixtures.data.api.ProductApiServiceImpl
 import com.orka.myfinances.fixtures.data.api.StockApiServiceImpl
 import com.orka.myfinances.fixtures.data.repositories.FolderRepositoryImpl
@@ -24,6 +22,7 @@ import com.orka.myfinances.lib.extensions.models.toModel
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.session.SessionManager
 import com.orka.myfinances.ui.managers.session.UiState
+import com.orka.myfinances.impl.factories.viewmodels.CatalogScreenViewModelProviderImpl
 import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.screens.add.template.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.basket.BasketScreenViewModel
@@ -115,8 +114,10 @@ class UiManager(
             coroutineScope = newScope()
         )
         val addTemplateScreenViewModel = AddTemplateScreenViewModel(templateRepository, newScope())
-        val templatesScreenViewModel = TemplatesScreenViewModel(templateRepository, logger, newScope())
-        val addProductScreenViewModel = AddProductScreenViewModel(productRepository, stockRepository, logger, newScope())
+        val templatesScreenViewModel =
+            TemplatesScreenViewModel(templateRepository, logger, newScope())
+        val addProductScreenViewModel =
+            AddProductScreenViewModel(productRepository, stockRepository, logger, newScope())
         val warehouseScreenViewModelProvider = WarehouseScreenViewModelProviderImpl(
             productRepository = productRepository,
             stockRepository = stockRepository,

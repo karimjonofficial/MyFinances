@@ -1,4 +1,4 @@
-package com.orka.myfinances.factories
+package com.orka.myfinances.impl.factories.viewmodels
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.models.folder.Catalog
@@ -23,8 +23,7 @@ import com.orka.myfinances.ui.screens.catalog.CatalogScreenViewModel
 import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
 import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNotNull
 

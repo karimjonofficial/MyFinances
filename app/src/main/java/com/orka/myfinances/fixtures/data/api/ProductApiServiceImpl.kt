@@ -24,16 +24,16 @@ class ProductApiServiceImpl : ProductApiService {
     override suspend fun getById(id: Int): Product {
         return product1
     }
-}
 
-fun AddProductRequest.toProduct(id: Id): Product {
-    return Product(
-        id = id,
-        name = name,
-        price = price,
-        salePrice = salePrice,
-        warehouse = folder2,
-        properties = emptyList(),
-        description = description
-    )
+    fun AddProductRequest.toProduct(id: Id): Product {
+        return Product(
+            id = id,
+            name = name,
+            price = price,
+            salePrice = salePrice,
+            warehouse = folder2,
+            properties = emptyList(),
+            description = description
+        )
+    }
 }

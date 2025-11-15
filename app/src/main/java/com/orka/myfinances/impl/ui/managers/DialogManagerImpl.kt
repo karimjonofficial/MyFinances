@@ -1,4 +1,4 @@
-package com.orka.myfinances
+package com.orka.myfinances.impl.ui.managers
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel

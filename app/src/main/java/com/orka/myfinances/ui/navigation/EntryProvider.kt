@@ -8,7 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavEntry
-import com.orka.myfinances.NavigationManagerImpl
+import com.orka.myfinances.impl.ui.managers.NavigationManagerImpl
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse

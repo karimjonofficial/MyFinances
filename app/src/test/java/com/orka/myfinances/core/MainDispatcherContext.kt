@@ -38,10 +38,9 @@ abstract class MainDispatcherContext {
 
     fun runTest(body: suspend TestScope.() -> Unit) = testScope.runTest(testBody = body)
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun runAndAdvance(action: suspend () -> Unit) {
         action()
-        testScope.advanceUntilIdle()
+        advanceUntilIdle()
     }
 
     fun runAndCancelChildren(action: suspend () -> Unit) = testScope.runTest {
