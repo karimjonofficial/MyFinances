@@ -11,6 +11,7 @@ import com.orka.myfinances.ui.screens.MyFinancesScreen
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -21,6 +22,7 @@ class MainActivity : ComponentActivity() {
             manager.initialize()
 
             MyFinancesTheme {
+
                 MyFinancesScreen(
                     modifier = Modifier.fillMaxSize(),
                     state = uiState.value

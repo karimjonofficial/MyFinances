@@ -38,7 +38,6 @@ fun NavigationGraph(
             entryProvider(Modifier.fillMaxSize(), destination, navigationManager)
         }
     )
-    if(dialogState != null) {
+    if(dialogState != null)
         MainDialog(dialogState, dialogManager, navigationManager)
-    }
 }

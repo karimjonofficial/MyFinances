@@ -24,7 +24,11 @@ fun MainNavBar(
                     val iconRes = if (destination is Destination.Home)
                         R.drawable.home_filled
                     else R.drawable.home_outlined
-                    Icon(painter = painterResource(id = iconRes), contentDescription = null)
+
+                    Icon(
+                        painter = painterResource(id = iconRes),
+                        contentDescription = null
+                    )
                 },
                 onClick = {
                     if (destination !is Destination.Home)
@@ -38,7 +42,11 @@ fun MainNavBar(
                     val iconRes = if (destination is Destination.Basket)
                         R.drawable.shopping_cart_filled
                     else R.drawable.shopping_cart_outlined
-                    Icon(painter = painterResource(id = iconRes), contentDescription = null)
+
+                    Icon(
+                        painter = painterResource(id = iconRes),
+                        contentDescription = null
+                    )
                 },
                 onClick = {
                     if (destination !is Destination.Basket)
@@ -52,7 +60,11 @@ fun MainNavBar(
                     val iconRes = if (destination is Destination.Profile)
                         R.drawable.account_circle_filled
                     else R.drawable.account_circle_outlined
-                    Icon(painter = painterResource(id = iconRes), contentDescription = null)
+
+                    Icon(
+                        painter = painterResource(id = iconRes),
+                        contentDescription = null
+                    )
                 },
                 onClick = {
                     if (destination !is Destination.Profile)
@@ -66,7 +78,11 @@ fun MainNavBar(
                     val iconRes = if (destination is Destination.Settings)
                         R.drawable.settings_filled
                     else R.drawable.settings_outlined
-                    Icon(painter = painterResource(id = iconRes), contentDescription = null)
+
+                    Icon(
+                        painter = painterResource(id = iconRes),
+                        contentDescription = null
+                    )
                 },
                 onClick = {
                     if (destination !is Destination.Settings)

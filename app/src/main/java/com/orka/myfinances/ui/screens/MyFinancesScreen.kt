@@ -29,6 +29,7 @@ fun MyFinancesScreen(
         }
 
         is UiState.SignedIn -> {
+
             MainScreen(
                 modifier = modifier,
                 dialogManager = state.dialogManager,

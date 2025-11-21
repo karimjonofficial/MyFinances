@@ -41,7 +41,7 @@ fun MainScreen(
                 derivedStateOf { backstack.value.last().hasNavBar }
             }
 
-            if(visible.value) {
+            if (visible.value) {
                 MainNavBar(
                     destination = state.value,
                     navigationManager = navigationManager
