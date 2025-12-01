@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.navigation
+package com.orka.myfinances.lib.ui.entry
 
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
