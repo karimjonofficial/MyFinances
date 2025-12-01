@@ -18,6 +18,7 @@ sealed class Destination(val hasNavBar: Boolean) {
     data object Settings : Destination(true)
     data class Templates(val viewModel: Any) : Destination(false)
     data class Product(val product: ProductModel) : Destination(false)
+    data class Clients(val viewModel: Any) : Destination(false)
 
     data class AddTemplate(
         val viewModel: Any,

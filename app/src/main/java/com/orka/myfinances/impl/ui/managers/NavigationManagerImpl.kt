@@ -91,6 +91,10 @@ class NavigationManagerImpl(
         navState.value = backstack[0]
     }
 
+    override fun navigateToClients() {
+
+    }
+
     private fun navigate(destination: Destination) {
         if(destination.hasNavBar)
             updateState { listOf(backStack.value[0], destination) }

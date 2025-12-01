@@ -16,5 +16,6 @@ interface NavigationManager {
     fun navigateToTemplates()
     fun navigateToProduct(product: Product)
     fun navigateToBasket()
+    fun navigateToClients()
     fun back()
 }
