@@ -6,8 +6,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.orka.myfinances.data.models.template.Template
-import com.orka.myfinances.lib.ui.FailureScreen
-import com.orka.myfinances.lib.ui.LoadingScreen
+import com.orka.myfinances.lib.ui.screens.FailureScreen
+import com.orka.myfinances.lib.ui.screens.LoadingScreen
 
 @Composable
 fun TemplatesScreen(

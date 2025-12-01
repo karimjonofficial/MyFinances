@@ -30,7 +30,7 @@ import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.fixtures.data.api.ProductApiServiceImpl
 import com.orka.myfinances.lib.LoggerImpl
-import com.orka.myfinances.lib.ui.LoadingScreen
+import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -22,7 +22,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.data.repositories.product.models.AddProductRequest
 import com.orka.myfinances.data.repositories.product.models.PropertyModel
-import com.orka.myfinances.lib.ui.LoadingScreen
+import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.components.ExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.managers.navigation.NavigationManager

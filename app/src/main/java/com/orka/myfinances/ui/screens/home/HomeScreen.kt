@@ -6,8 +6,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Folder
-import com.orka.myfinances.lib.ui.FailureScreen
-import com.orka.myfinances.lib.ui.LoadingScreen
+import com.orka.myfinances.lib.ui.screens.FailureScreen
+import com.orka.myfinances.lib.ui.screens.LoadingScreen
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
