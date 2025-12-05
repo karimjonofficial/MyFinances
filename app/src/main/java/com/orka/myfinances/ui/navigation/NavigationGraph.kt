@@ -1,9 +1,5 @@
 package com.orka.myfinances.ui.navigation
 
-import androidx.compose.animation.ContentTransform
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.SizeTransform
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,14 +19,6 @@ fun NavigationGraph(
         modifier = modifier,
         backStack = backStack,
         onBack = { navigationManager.back() },
-        transitionSpec = {
-            ContentTransform(
-                targetContentEnter = EnterTransition.None,
-                initialContentExit = ExitTransition.None,
-                targetContentZIndex = 0f,
-                sizeTransform = SizeTransform()
-            )
-        },
         entryProvider = { destination ->
             entryProvider(Modifier.fillMaxSize(), user, destination, navigationManager)
         }
