@@ -51,7 +51,7 @@ fun HomeScreenTopBar(
 
             IconButton(onClick = { onNotificationsClick() }) {
                 Icon(
-                    painter = painterResource(R.drawable.notifications_unread),
+                    painter = painterResource(R.drawable.notifications),
                     contentDescription = null
                 )
             }

@@ -12,7 +12,7 @@ fun addTemplateEntry(
     modifier: Modifier,
     destination: Destination.AddTemplate,
     navigationManager: NavigationManager
-): NavEntry<Destination> = entry(modifier, destination) {
+): NavEntry<Destination> = entry(destination) {
 
     AddTemplateScreen(
         modifier = modifier,

@@ -13,7 +13,7 @@ fun addProductEntry(
     modifier: Modifier = Modifier.Companion,
     destination: Destination.AddProduct,
     navigationManager: NavigationManager
-): NavEntry<Destination> = entry(modifier, destination) {
+): NavEntry<Destination> = entry(destination) {
     val uiState = (destination.viewModel as AddProductScreenViewModel).uiState.collectAsState()
 
     AddProductScreen(

@@ -5,20 +5,22 @@ import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.factories.viewmodel.CatalogScreenViewModelProvider
 import com.orka.myfinances.factories.viewmodel.ViewModelProvider
 import com.orka.myfinances.factories.viewmodel.WarehouseScreenViewModelProvider
+import com.orka.myfinances.ui.screens.clients.ClientsScreenViewModel
 import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.screens.add.template.AddTemplateScreenViewModel
-import com.orka.myfinances.ui.screens.basket.BasketScreenViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import com.orka.myfinances.ui.screens.catalog.CatalogScreenViewModel
-import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
 import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
 
 class ViewModelProviderImpl(
     private val addTemplateScreenViewModel: AddTemplateScreenViewModel,
     private val addProductScreenViewModel: AddProductScreenViewModel,
-    private val basketScreenViewModel: BasketScreenViewModel,
+    private val basketContentViewModel: BasketContentViewModel,
     private val templatesScreenViewModel: TemplatesScreenViewModel,
-    private val homeScreenViewModel: HomeScreenViewModel,
+    private val foldersContentViewModel: FoldersContentViewModel,
+    private val clientsScreenViewModel: ClientsScreenViewModel,
     private val warehouseScreenViewModelProvider: WarehouseScreenViewModelProvider,
     private val catalogScreenViewModelProvider: CatalogScreenViewModelProvider
 ) : ViewModelProvider {
@@ -31,8 +33,9 @@ class ViewModelProviderImpl(
         return templatesScreenViewModel
     }
 
-    override fun homeViewModel(): HomeScreenViewModel {
-        return homeScreenViewModel
+    override fun foldersViewModel(): FoldersContentViewModel {
+        foldersContentViewModel.initialize()
+        return foldersContentViewModel
     }
 
     override fun addProductViewModel(): AddProductScreenViewModel {
@@ -52,8 +55,13 @@ class ViewModelProviderImpl(
         return viewModel
     }
 
-    override fun basketViewModel(): BasketScreenViewModel {
-        basketScreenViewModel.initialize()
-        return basketScreenViewModel
+    override fun basketViewModel(): BasketContentViewModel {
+        basketContentViewModel.initialize()
+        return basketContentViewModel
+    }
+
+    override fun clientsViewModel(): Any {
+        clientsScreenViewModel.initialize()
+        return clientsScreenViewModel
     }
 }

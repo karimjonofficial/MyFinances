@@ -12,12 +12,13 @@ fun warehouseEntry(
     modifier: Modifier,
     destination: Destination.Warehouse,
     navigationManager: NavigationManager
-): NavEntry<Destination> = entry(modifier, destination) {
+): NavEntry<Destination> = entry(destination) {
     val viewModel = destination.viewModel as WarehouseScreenViewModel
 
     WarehouseScreen(
         modifier = modifier,
         viewModel = viewModel,
+        warehouse = destination.warehouse,
         navigationManager = navigationManager
     )
 }

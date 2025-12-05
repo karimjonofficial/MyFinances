@@ -18,9 +18,9 @@ class WarehouseScreenViewModel(
     private val add: (StockItem) -> Unit,
     logger: Logger,
     coroutineScope: CoroutineScope
-) : DualStateViewModel<WarehouseScreenProductsState, WarehouseScreenWarehouseState>(
-    initialState1 = WarehouseScreenProductsState.Loading,
-    initialState2 = WarehouseScreenWarehouseState.Loading,
+) : DualStateViewModel<ProductsState, WarehouseState>(
+    initialState1 = ProductsState.Loading,
+    initialState2 = WarehouseState.Loading,
     logger = logger,
     coroutineScope = coroutineScope
 ) {
@@ -35,11 +35,11 @@ class WarehouseScreenViewModel(
         val products = productRepository.get(warehouse.id)
         val stockItems = stockRepository.get(warehouse.id)
         if (products != null)
-            setState1(WarehouseScreenProductsState.Success(products))
-        else setState1(WarehouseScreenProductsState.Failure)
+            setState1(ProductsState.Success(products))
+        else setState1(ProductsState.Failure)
         if (stockItems != null)
-            setState2(WarehouseScreenWarehouseState.Success(warehouse, stockItems))
-        else setState2(WarehouseScreenWarehouseState.Failure)
+            setState2(WarehouseState.Success(warehouse, stockItems))
+        else setState2(WarehouseState.Failure)
     }
 
     fun addToBasket(stockItem: StockItem) {

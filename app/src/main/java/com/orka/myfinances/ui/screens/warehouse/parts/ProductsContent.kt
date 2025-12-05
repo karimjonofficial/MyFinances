@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
-import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenProductsState
+import com.orka.myfinances.ui.screens.warehouse.viewmodel.ProductsState
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
 
 @Composable
@@ -14,22 +14,22 @@ fun ProductsContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     viewModel: WarehouseScreenViewModel,
-    state: WarehouseScreenProductsState,
+    state: ProductsState,
     navigationManager: NavigationManager
 ) {
     when (state) {
-        WarehouseScreenProductsState.Loading -> {
+        ProductsState.Loading -> {
             LoadingScreen(modifier)
         }
 
-        WarehouseScreenProductsState.Failure -> {
+        ProductsState.Failure -> {
             FailureScreen(
                 modifier = modifier,
                 retry = { viewModel.initialize() }
             )
         }
 
-        is WarehouseScreenProductsState.Success -> {
+        is ProductsState.Success -> {
             ProductsList(
                 modifier = modifier,
                 contentPadding = contentPadding,

@@ -19,9 +19,9 @@ import com.orka.myfinances.fixtures.resources.models.folder.folder1
 import com.orka.myfinances.fixtures.resources.models.stockItem1
 import com.orka.myfinances.testLib.addProductRequest
 import com.orka.myfinances.testLib.products
-import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenProductsState
+import com.orka.myfinances.ui.screens.warehouse.viewmodel.ProductsState
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
-import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenWarehouseState
+import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseState
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -85,8 +85,8 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
                 fun `When created states are Loading`() {
                     val stockApiService = DummyStockApiService()
                     val viewModel = viewModel(stockApiService)
-                    assertTrue(viewModel.productsState.value is WarehouseScreenProductsState.Loading)
-                    assertTrue(viewModel.warehouseState.value is WarehouseScreenWarehouseState.Loading)
+                    assertTrue(viewModel.productsState.value is ProductsState.Loading)
+                    assertTrue(viewModel.warehouseState.value is WarehouseState.Loading)
                 }
 
                 @Test
@@ -95,7 +95,7 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
                     val viewModel = viewModel(stockApiService)
                     viewModel.initialize()
                     advanceUntilIdle()
-                    assertTrue(viewModel.warehouseState.value is WarehouseScreenWarehouseState.Failure)
+                    assertTrue(viewModel.warehouseState.value is WarehouseState.Failure)
                 }
 
                     @Test
@@ -104,7 +104,7 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
                         val viewModel = viewModel(stockApiService)
                         viewModel.initialize()
                         advanceUntilIdle()
-                        assertTrue(viewModel.warehouseState.value is WarehouseScreenWarehouseState.Success)
+                        assertTrue(viewModel.warehouseState.value is WarehouseState.Success)
                     }
                 }
 
@@ -124,7 +124,7 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
 
                         viewModel.productsState.test {
                             val state = awaitItem()
-                            assertTrue (state is WarehouseScreenProductsState.Failure)
+                            assertTrue (state is ProductsState.Failure)
                         }
                     }
 
@@ -138,7 +138,7 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
                         viewModel.productsState.test {
                             val state = awaitItem()
                             assertTrue(
-                                state is WarehouseScreenProductsState.Success
+                                state is ProductsState.Success
                                     && state.products === products
                             )
                         }

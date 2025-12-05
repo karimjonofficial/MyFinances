@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.basket
+package com.orka.myfinances.ui.screens.home.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,10 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -176,7 +172,7 @@ fun BasketItemCard(
                                 )
                             ) {
                                 Icon(
-                                    imageVector = Icons.Default.Remove,
+                                    painter = painterResource(R.drawable.remove),
                                     contentDescription = stringResource(R.string.decrease)
                                 )
                             }
@@ -196,7 +192,7 @@ fun BasketItemCard(
                                 )
                             ) {
                                 Icon(
-                                    imageVector = Icons.Default.Add,
+                                    painter = painterResource(R.drawable.add),
                                     contentDescription = stringResource(R.string.increase)
                                 )
                             }
@@ -211,7 +207,7 @@ fun BasketItemCard(
                     .align(Alignment.TopEnd)
             ) {
                 Icon(
-                    imageVector = Icons.Default.Close,
+                    painter = painterResource(R.drawable.close),
                     contentDescription = stringResource(R.string.remove)
                 )
             }

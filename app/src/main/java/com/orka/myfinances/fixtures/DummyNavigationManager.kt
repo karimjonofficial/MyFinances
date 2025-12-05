@@ -7,7 +7,6 @@ import com.orka.myfinances.ui.managers.navigation.NavigationManager
 
 class DummyNavigationManager : NavigationManager {
     override fun navigateToHome() {}
-    override fun navigateToProfile() {}
     override fun navigateToCatalog(catalog: Catalog) {}
     override fun navigateToWarehouse(warehouse: Warehouse) {}
     override fun navigateToNotifications() {}
@@ -16,7 +15,6 @@ class DummyNavigationManager : NavigationManager {
     override fun navigateToSettings() {}
     override fun navigateToTemplates() {}
     override fun navigateToProduct(product: Product) {}
-    override fun navigateToBasket() {}
     override fun navigateToClients() {}
     override fun back() {}
 }

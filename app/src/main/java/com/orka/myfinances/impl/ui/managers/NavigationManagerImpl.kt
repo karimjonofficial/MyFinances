@@ -34,11 +34,6 @@ class NavigationManagerImpl(
         setNavState(backStack.value[0])
     }
 
-    override fun navigateToProfile() {
-        navigate(Destination.Profile)
-        setNavState(Destination.Profile)
-    }
-
     override fun navigateToCatalog(catalog: Catalog) {
         val viewModel = provider.catalogViewModel(catalog)
         navigate(Destination.Catalog(catalog, viewModel))
@@ -77,13 +72,6 @@ class NavigationManagerImpl(
         navigate(Destination.Product(product))
     }
 
-    override fun navigateToBasket() {
-        val viewModel = provider.basketViewModel()
-        val d = Destination.Basket(viewModel)
-        navigate(d)
-        setNavState(d)
-    }
-
     override fun back() {
         val backstack = state.value
         if (backstack.size > 1)
@@ -92,7 +80,8 @@ class NavigationManagerImpl(
     }
 
     override fun navigateToClients() {
-
+        val viewModel = provider.clientsViewModel()
+        navigate(Destination.Clients(viewModel))
     }
 
     private fun navigate(destination: Destination) {

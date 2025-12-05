@@ -8,11 +8,9 @@ import com.orka.myfinances.fixtures.resources.models.credential
 import com.orka.myfinances.fixtures.resources.models.user1
 import com.orka.myfinances.lib.extensions.models.makeSession
 import com.orka.myfinances.lib.extensions.models.toModel
-import kotlinx.coroutines.delay
 
 class LocalSessionStorageImpl : LocalSessionStorage {
     override suspend fun get(): SessionModel {
-        delay(5000)
         return makeSession(
             credential,
             userModel = user1.toModel(),

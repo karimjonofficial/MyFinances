@@ -6,7 +6,6 @@ import com.orka.myfinances.data.models.product.Product
 
 interface NavigationManager {
     fun navigateToHome()
-    fun navigateToProfile()
     fun navigateToCatalog(catalog: Catalog)
     fun navigateToWarehouse(warehouse: Warehouse)
     fun navigateToNotifications()
@@ -15,7 +14,6 @@ interface NavigationManager {
     fun navigateToSettings()
     fun navigateToTemplates()
     fun navigateToProduct(product: Product)
-    fun navigateToBasket()
     fun navigateToClients()
     fun back()
 }

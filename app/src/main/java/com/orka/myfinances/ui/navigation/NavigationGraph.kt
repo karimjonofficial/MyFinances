@@ -8,19 +8,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation3.ui.NavDisplay
+import com.orka.myfinances.data.models.User
 import com.orka.myfinances.impl.ui.managers.NavigationManagerImpl
-import com.orka.myfinances.ui.managers.dialog.DialogManager
-import com.orka.myfinances.ui.managers.dialog.DialogState
 import com.orka.myfinances.ui.managers.navigation.Destination
-import com.orka.myfinances.ui.parts.MainDialog
 
 @Composable
 fun NavigationGraph(
     modifier: Modifier = Modifier,
-    dialogState: DialogState?,
+    user: User,
     backStack: List<Destination>,
-    navigationManager: NavigationManagerImpl,
-    dialogManager: DialogManager
+    navigationManager: NavigationManagerImpl
 ) {
     NavDisplay(
         modifier = modifier,
@@ -35,9 +32,7 @@ fun NavigationGraph(
             )
         },
         entryProvider = { destination ->
-            entryProvider(Modifier.fillMaxSize(), destination, navigationManager)
+            entryProvider(Modifier.fillMaxSize(), user, destination, navigationManager)
         }
     )
-    if(dialogState != null)
-        MainDialog(dialogState, dialogManager, navigationManager)
 }

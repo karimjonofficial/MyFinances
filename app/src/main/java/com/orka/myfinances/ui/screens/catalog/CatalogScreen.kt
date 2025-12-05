@@ -19,29 +19,19 @@ fun CatalogScreen(
     navigationManager: NavigationManager
 ) {
     when (state) {
-        is CatalogScreenState.Loading -> {
-            LoadingScreen(modifier)
-        }
+        is CatalogScreenState.Loading -> LoadingScreen(modifier = modifier)
+        is CatalogScreenState.Failure -> FailureScreen(modifier = modifier) { viewModel.initialize() }
 
-        is CatalogScreenState.Success -> {
-            FoldersList(
-                modifier = modifier,
-                contentPadding = PaddingValues(horizontal = 16.dp),
-                items = state.folders,
-                onFolderSelected = {
-                    when (it) {
-                        is Catalog -> navigationManager.navigateToCatalog(it)
-                        is Warehouse -> navigationManager.navigateToWarehouse(it)
-                    }
+        is CatalogScreenState.Success -> FoldersList(
+            modifier = modifier,
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            items = state.folders,
+            onFolderSelected = {
+                when (it) {
+                    is Catalog -> navigationManager.navigateToCatalog(it)
+                    is Warehouse -> navigationManager.navigateToWarehouse(it)
                 }
-            )
-        }
-
-        is CatalogScreenState.Failure -> {
-            FailureScreen(
-                modifier = modifier,
-                retry = { viewModel.initialize() }
-            )
-        }
+            }
+        )
     }
 }

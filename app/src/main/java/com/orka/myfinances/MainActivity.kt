@@ -4,9 +4,24 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.ui.NavDisplay
+import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
+import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.ui.screens.MyFinancesScreen
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
@@ -32,44 +47,51 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-/**@Preview(
-    showSystemUi = true,
-    showBackground = true
-)
+sealed interface Dest {
+    data class Dest1(val id: Int) : Dest
+    data class Dest2(val id: Int) : Dest
+}
+
+@Preview
 @Composable
-private fun TextFieldTransformations() {
-//                onValueChange = {
-//                    val doubleOrNull = it.parseFromFormatted()
-//                    double.value = doubleOrNull ?: 0.0
-//                    text.value = if(it.isBlank()) it else doubleOrNull?.format() ?: "0"
-//                },
-//                maxLines = 1,
+private fun PredictivePreview() {
+    val backStack = rememberSaveable { mutableStateListOf<Dest>(Dest.Dest1(1)) }
 
     MyFinancesTheme {
-
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            val double = rememberSaveable { mutableStateOf(0.0) }
-            val text = rememberSaveable { mutableStateOf(double.value.format()) }
-            val state = rememberTextFieldState()
-
-            TextField(
-                state = state,
-                label = { Text(text = stringResource(R.string.price)) },
-                lineLimits = TextFieldLineLimits.SingleLine,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Decimal
-                ),
-                outputTransformation = OutputTransformation {
-                    val d = originalText.toString().toDoubleOrNull()
-                    
-                    if(d != null) {
-
+        NavDisplay(
+            backStack = backStack,
+            onBack = { backStack.removeLastOrNull() },
+            entryProvider = entryProvider {
+                entry<Dest.Dest1> { key ->
+                    Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
+                        Column(
+                            modifier = Modifier.scaffoldPadding(paddingValues).background(Color.Green),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(text = key.id.toString())
+                            Button(onClick = { backStack.add(Dest.Dest2(key.id + 1)) }) {
+                                Text(text = "Navigate to ${key.id + 1}")
+                            }
+                        }
                     }
                 }
-            )
-        }
+
+                entry<Dest.Dest2> { key ->
+                    Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
+                        Column(
+                            modifier = Modifier.scaffoldPadding(paddingValues).background(Color.Green),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(text = key.id.toString())
+                            Button(onClick = { backStack.add(Dest.Dest1(key.id + 1)) }) {
+                                Text(text = "Navigate to ${key.id + 1}")
+                            }
+                        }
+                    }
+                }
+            }
+        )
     }
-}**/
+}

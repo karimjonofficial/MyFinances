@@ -11,14 +11,16 @@ import com.orka.myfinances.fixtures.data.repositories.folder.FolderRepositoryStu
 import com.orka.myfinances.fixtures.data.repositories.folder.SpyFolderRepository
 import com.orka.myfinances.testLib.assertLoadingTransition
 import com.orka.myfinances.testLib.name
+import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.FoldersState
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class HomeScreenViewModelTest : MainDispatcherContext() {
     private val logger = DummyLogger()
-    private fun viewModel(repository: FolderRepository): HomeScreenViewModel {
-        return HomeScreenViewModel(
+    private fun viewModel(repository: FolderRepository): FoldersContentViewModel {
+        return FoldersContentViewModel(
             repository = repository,
             logger = logger,
             coroutineScope = testScope
@@ -30,12 +32,12 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
         private val repository = DummyFolderRepository()
         private val viewModel = viewModel(repository)
         private suspend fun assertLoadingTransition(action: () -> Unit) =
-            viewModel.uiState.assertLoadingTransition<HomeScreenState, HomeScreenState.Loading>(action)
+            viewModel.uiState.assertLoadingTransition<FoldersState, FoldersState.Loading>(action)
 
         @Test
         fun `State is Initial`() {
             val uiState = viewModel.uiState.value
-            assertTrue(uiState is HomeScreenState.Initial)
+            assertTrue(uiState is FoldersState.Initial)
         }
 
         @Test
@@ -59,7 +61,7 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
             runAndAdvance { viewModel.initialize() }
 
             viewModel.uiState.test {
-                assertTrue(awaitItem() is HomeScreenState.Error)
+                assertTrue(awaitItem() is FoldersState.Error)
             }
         }
 
@@ -85,7 +87,7 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
             runAndAdvance { viewModel.initialize() }
 
             viewModel.uiState.test {
-                assertTrue(awaitItem() is HomeScreenState.Success)
+                assertTrue(awaitItem() is FoldersState.Success)
             }
         }
 
@@ -94,7 +96,7 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
             runAndAdvance { viewModel.addFolder(name, FolderType.Catalog) }
 
             viewModel.uiState.test {
-                assertTrue(awaitItem() is HomeScreenState.Success)
+                assertTrue(awaitItem() is FoldersState.Success)
             }
         }
     }
@@ -109,7 +111,7 @@ class HomeScreenViewModelTest : MainDispatcherContext() {
 
         viewModel.uiState.test {
             val state = awaitItem()
-            assertTrue(state is HomeScreenState.Success && state.folders === folders)
+            assertTrue(state is FoldersState.Success && state.folders === folders)
         }
     }
 }

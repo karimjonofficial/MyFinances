@@ -16,7 +16,7 @@ import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WarehouseScreenTopBar(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     warehouse: Warehouse,
     onAddProductClick: (Warehouse) -> Unit,
     onAddStockItemClick: (Warehouse) -> Unit

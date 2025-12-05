@@ -14,7 +14,7 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 fun FailureScreen(
     modifier: Modifier,
     message: String = stringResource(R.string.failure),
-    retry: () -> Unit
+    retry: (() -> Unit)? = null
 ) {
     Column(
         modifier = modifier,
@@ -22,7 +22,7 @@ fun FailureScreen(
     ) {
         Text(text = message)
         VerticalSpacer(8)
-        Button(onClick = retry) {
+        Button(onClick = { retry?.invoke() }) {
             Text(text = stringResource(R.string.retry))
         }
     }

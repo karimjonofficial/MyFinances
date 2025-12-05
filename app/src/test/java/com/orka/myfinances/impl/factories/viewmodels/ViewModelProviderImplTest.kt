@@ -3,6 +3,7 @@ package com.orka.myfinances.impl.factories.viewmodels
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
+import com.orka.myfinances.data.repositories.ClientRepository
 import com.orka.myfinances.data.repositories.StockRepository
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
@@ -17,10 +18,11 @@ import com.orka.myfinances.fixtures.resources.models.folder.folder1
 import com.orka.myfinances.testLib.catalog1
 import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.screens.add.template.AddTemplateScreenViewModel
-import com.orka.myfinances.ui.screens.basket.BasketScreenState
-import com.orka.myfinances.ui.screens.basket.BasketScreenViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.BasketState
+import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import com.orka.myfinances.ui.screens.catalog.CatalogScreenViewModel
-import com.orka.myfinances.ui.screens.home.HomeScreenViewModel
+import com.orka.myfinances.ui.screens.clients.ClientsScreenViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
 import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
 import org.junit.jupiter.api.Assertions.*
@@ -45,7 +47,7 @@ class ViewModelProviderImplTest : MainDispatcherContext() {
         logger = logger,
         coroutineScope = testScope
     )
-    private val homeScreenViewModel = HomeScreenViewModel(
+    private val foldersContentViewModel = FoldersContentViewModel(
         repository = folderRepository,
         logger = logger,
         coroutineScope = testScope
@@ -79,19 +81,22 @@ class ViewModelProviderImplTest : MainDispatcherContext() {
             return catalogScreenViewModel
         }
     }
-    private val basketScreenViewModel = BasketScreenViewModel(
+    private val basketContentViewModel = BasketContentViewModel(
         repository = basketRepository,
         logger = logger,
         coroutineScope = testScope
     )
+    private val clientsScreenViewModel = ClientsScreenViewModel("Loading", "Failure",
+        ClientRepository(), logger, testScope)
     private val provider = ViewModelProviderImpl(
         addTemplateScreenViewModel = addTemplateScreenViewModel,
         addProductScreenViewModel = addProductScreenViewModel,
         templatesScreenViewModel = templatesScreenViewModel,
-        homeScreenViewModel = homeScreenViewModel,
+        foldersContentViewModel = foldersContentViewModel,
         warehouseScreenViewModelProvider = warehouseScreenViewModelProvider,
         catalogScreenViewModelProvider = catalogScreenViewModelProvider,
-        basketScreenViewModel = basketScreenViewModel
+        basketContentViewModel = basketContentViewModel,
+        clientsScreenViewModel = clientsScreenViewModel
     )
 
     @Test
@@ -106,7 +111,7 @@ class ViewModelProviderImplTest : MainDispatcherContext() {
 
     @Test
     fun `Return same home viewmodel`() {
-        assertEquals(homeScreenViewModel, provider.homeViewModel())
+        assertEquals(foldersContentViewModel, provider.foldersViewModel())
     }
 
     @Test
@@ -154,13 +159,13 @@ class ViewModelProviderImplTest : MainDispatcherContext() {
 
     @Test
     fun `Return same basket viewmodel`() {
-        assertEquals(basketScreenViewModel, provider.basketViewModel())
+        assertEquals(basketContentViewModel, provider.basketViewModel())
     }
 
     @Test
     fun `When basket viewmodel required, initializes it`() {
         provider.basketViewModel()
         advanceUntilIdle()
-        assertTrue(basketScreenViewModel.uiState.value is BasketScreenState.Success)
+        assertTrue(basketContentViewModel.uiState.value is BasketState.Success)
     }
 }

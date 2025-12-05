@@ -10,7 +10,6 @@ sealed interface UiState {
     data class Guest(val viewModel: LoginScreenViewModel) : UiState
     data class SignedIn(
         val session: Session,
-        val dialogManager: DialogManager,
         val navigationManager: NavigationManagerImpl
     ) : UiState
 }

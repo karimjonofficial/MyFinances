@@ -11,7 +11,7 @@ import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
 fun templatesEntry(
     modifier: Modifier,
     destination: Destination.Templates
-): NavEntry<Destination> = entry(modifier, destination) {
+): NavEntry<Destination> = entry(destination) {
     val uiState = (destination.viewModel as TemplatesScreenViewModel).uiState.collectAsState()
 
     TemplatesScreen(modifier, uiState.value)

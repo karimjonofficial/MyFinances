@@ -13,9 +13,7 @@ fun MyFinancesScreen(
     state: UiState
 ) {
     when (state) {
-        UiState.Initial -> {
-            SplashScreen(modifier = modifier)
-        }
+        UiState.Initial -> SplashScreen(modifier = modifier)
 
         is UiState.Guest -> {
             val viewModel = state.viewModel
@@ -32,7 +30,6 @@ fun MyFinancesScreen(
 
             MainScreen(
                 modifier = modifier,
-                dialogManager = state.dialogManager,
                 navigationManager = state.navigationManager,
                 session = state.session
             )

@@ -8,7 +8,7 @@ import com.orka.myfinances.testLib.viewModel
 class SpyViewModelProvider : ViewModelProvider {
     var warehouseRequired = false
 
-    override fun homeViewModel(): Any {
+    override fun foldersViewModel(): Any {
         return "home"
     }
 
@@ -35,5 +35,9 @@ class SpyViewModelProvider : ViewModelProvider {
 
     override fun basketViewModel(): Any {
         return "basket"
+    }
+
+    override fun clientsViewModel(): Any {
+        return "clients"
     }
 }

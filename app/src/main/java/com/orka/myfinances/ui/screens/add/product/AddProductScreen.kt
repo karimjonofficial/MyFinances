@@ -8,8 +8,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -22,6 +24,8 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.data.repositories.product.models.AddProductRequest
 import com.orka.myfinances.data.repositories.product.models.PropertyModel
+import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
+import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.components.ExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
@@ -29,6 +33,7 @@ import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenState
 import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProductScreen(
     modifier: Modifier = Modifier,
@@ -37,117 +42,129 @@ fun AddProductScreen(
     viewModel: AddProductScreenViewModel,
     navigationManager: NavigationManager
 ) {
-    when (state) {
-        is AddProductScreenState.Loading -> {
-            LoadingScreen(modifier = modifier)
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                title = { Text(text = stringResource(R.string.add_product)) }
+            )
         }
+    ) { paddingValues ->
+        val m = Modifier.scaffoldPadding(paddingValues)
 
-        is AddProductScreenState.Success -> {
-            val warehouses = state.warehouses
-            val scrollState = rememberScrollState()
-            val menuVisible = rememberSaveable { mutableStateOf(false) }
+        when (state) {
+            is AddProductScreenState.Loading -> LoadingScreen(modifier = m)
 
-            val name = rememberSaveable { mutableStateOf("") }
-            val price = rememberSaveable { mutableIntStateOf(0) }
-            val salePrice = rememberSaveable { mutableIntStateOf(0) }
-            val description = rememberSaveable { mutableStateOf("") }
-            val warehouseId = rememberSaveable { mutableIntStateOf(warehouse.id.value) }
+            is AddProductScreenState.Success -> {
+                val warehouses = state.warehouses
+                val scrollState = rememberScrollState()
+                val menuVisible = rememberSaveable { mutableStateOf(false) }
 
-            val selectedWarehouse = warehouses.find { it.id.value == warehouseId.intValue }
-            val fields = selectedWarehouse!!.template.fields
-            val properties =
-                rememberSaveable { mutableStateListOf<PropertyModel<*>?>() }.apply {
-                    repeat(fields.size) { add(null) }
-                }
+                val name = rememberSaveable { mutableStateOf("") }
+                val price = rememberSaveable { mutableIntStateOf(0) }
+                val salePrice = rememberSaveable { mutableIntStateOf(0) }
+                val description = rememberSaveable { mutableStateOf("") }
+                val warehouseId = rememberSaveable { mutableIntStateOf(warehouse.id.value) }
 
-            Column(modifier = modifier) {
-
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(scrollState),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    OutlinedTextField(
-                        value = name.value,
-                        onValueChange = { name.value = it },
-                        label = { Text(text = stringResource(R.string.name)) }
-                    )
-
-                    ExposedDropDownTextField(
-                        text = selectedWarehouse.name,
-                        label = stringResource(R.string.warehouse),
-                        menuExpanded = menuVisible.value,
-                        onExpandChange = { menuVisible.value = it },
-                        onDismissRequested = { menuVisible.value = false },
-                        items = warehouses,
-                        itemText = { it.name },
-                        onItemSelected = { warehouseId.intValue = it.id.value }
-                    )
-
-                    if(fields.isNotEmpty()) {
-                        VerticalSpacer(8)
-                        Text(modifier = Modifier.align(Alignment.Start), text = stringResource(R.string.properties))
-                        VerticalSpacer(4)
-                        PropertiesList(fields = fields, properties = properties)
-                        VerticalSpacer(8)
+                val selectedWarehouse = warehouses.find { it.id.value == warehouseId.intValue }
+                val fields = selectedWarehouse!!.template.fields
+                val properties =
+                    rememberSaveable { mutableStateListOf<PropertyModel<*>?>() }.apply {
+                        repeat(fields.size) { add(null) }
                     }
 
-                    OutlinedTextField(
-                        value = price.intValue.toString(),
-                        onValueChange = { price.intValue = it.toInt() },
-                        label = { Text(text = stringResource(R.string.price)) }
-                    )
+                Column(modifier = m) {
 
-                    OutlinedTextField(
-                        value = salePrice.intValue.toString(),
-                        onValueChange = { salePrice.intValue = it.toInt() },
-                        label = { Text(text = stringResource(R.string.sale_price)) }
-                    )
-
-                    OutlinedTextField(
-                        value = description.value,
-                        onValueChange = { description.value = it },
-                        label = { Text(text = stringResource(R.string.description)) }
-                    )
-                }
-
-                BottomAppBar {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .verticalScroll(scrollState),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Button(
-                            onClick = {
-                                val nameValue = name.value
-                                val priceValue = price.intValue
-                                val salePriceValue = salePrice.intValue
-                                val descriptionValue = description.value
-                                val warehouseValue = warehouseId.intValue
-                                val propertiesValue = properties.filterNotNull()
+                        OutlinedTextField(
+                            value = name.value,
+                            onValueChange = { name.value = it },
+                            label = { Text(text = stringResource(R.string.name)) }
+                        )
 
-                                if (
-                                    propertiesValue.size == fields.size &&
-                                    nameValue.isNotEmpty() &&
-                                    priceValue > 0 &&
-                                    salePriceValue > 0 && salePriceValue > priceValue &&
-                                    descriptionValue.isNotEmpty() &&
-                                    warehouseValue > 0
-                                ) {
-                                    val request = AddProductRequest(
-                                        name = nameValue,
-                                        warehouseId = warehouseValue,
-                                        price = priceValue,
-                                        salePrice = salePriceValue,
-                                        properties = propertiesValue,
-                                        description = descriptionValue
-                                    )
-                                    viewModel.addProduct(request)
-                                    navigationManager.back()
-                                }
-                            }
+                        ExposedDropDownTextField(
+                            text = selectedWarehouse.name,
+                            label = stringResource(R.string.warehouse),
+                            menuExpanded = menuVisible.value,
+                            onExpandChange = { menuVisible.value = it },
+                            onDismissRequested = { menuVisible.value = false },
+                            items = warehouses,
+                            itemText = { it.name },
+                            onItemSelected = { warehouseId.intValue = it.id.value }
+                        )
+
+                        if (fields.isNotEmpty()) {
+                            VerticalSpacer(8)
+                            Text(
+                                modifier = Modifier.align(Alignment.Start),
+                                text = stringResource(R.string.properties)
+                            )
+                            VerticalSpacer(4)
+                            PropertiesList(fields = fields, properties = properties)
+                            VerticalSpacer(8)
+                        }
+
+                        OutlinedTextField(
+                            value = price.intValue.toString(),
+                            onValueChange = { price.intValue = it.toInt() },
+                            label = { Text(text = stringResource(R.string.price)) }
+                        )
+
+                        OutlinedTextField(
+                            value = salePrice.intValue.toString(),
+                            onValueChange = { salePrice.intValue = it.toInt() },
+                            label = { Text(text = stringResource(R.string.sale_price)) }
+                        )
+
+                        OutlinedTextField(
+                            value = description.value,
+                            onValueChange = { description.value = it },
+                            label = { Text(text = stringResource(R.string.description)) }
+                        )
+                    }
+
+                    BottomAppBar {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End
                         ) {
-                            Text(text = stringResource(R.string.save))
+                            Button(
+                                onClick = {
+                                    val nameValue = name.value
+                                    val priceValue = price.intValue
+                                    val salePriceValue = salePrice.intValue
+                                    val descriptionValue = description.value
+                                    val warehouseValue = warehouseId.intValue
+                                    val propertiesValue = properties.filterNotNull()
+
+                                    if (
+                                        propertiesValue.size == fields.size &&
+                                        nameValue.isNotEmpty() &&
+                                        priceValue > 0 &&
+                                        salePriceValue > 0 && salePriceValue > priceValue &&
+                                        descriptionValue.isNotEmpty() &&
+                                        warehouseValue > 0
+                                    ) {
+                                        val request = AddProductRequest(
+                                            name = nameValue,
+                                            warehouseId = warehouseValue,
+                                            price = priceValue,
+                                            salePrice = salePriceValue,
+                                            properties = propertiesValue,
+                                            description = descriptionValue
+                                        )
+                                        viewModel.addProduct(request)
+                                        navigationManager.back()
+                                    }
+                                }
+                            ) {
+                                Text(text = stringResource(R.string.save))
+                            }
                         }
                     }
                 }

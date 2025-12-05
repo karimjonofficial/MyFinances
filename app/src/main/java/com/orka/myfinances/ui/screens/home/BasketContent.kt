@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.basket
+package com.orka.myfinances.ui.screens.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,21 +32,24 @@ import com.orka.myfinances.fixtures.data.api.ProductApiServiceImpl
 import com.orka.myfinances.lib.LoggerImpl
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.ui.screens.home.components.BasketItemCard
+import com.orka.myfinances.ui.screens.home.viewmodel.BasketState
+import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
 @Composable
-fun BasketScreen(
+fun BasketContent(
     modifier: Modifier = Modifier,
-    state: BasketScreenState,
-    viewModel: BasketScreenViewModel
+    state: BasketState,
+    viewModel: BasketContentViewModel
 ) {
     when (state) {
-        is BasketScreenState.Loading -> {
+        is BasketState.Loading -> {
             LoadingScreen(modifier)
         }
 
-        is BasketScreenState.Success -> {
+        is BasketState.Success -> {
             Column(modifier = modifier) {
                 Column(modifier = Modifier.padding(horizontal = 8.dp)) {
                     Text(text = stringResource(R.string.items))
@@ -94,13 +97,13 @@ fun BasketScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-private fun BasketScreenPreview() {
+private fun BasketContentPreview() {
     val logger = LoggerImpl()
     val apiService = ProductApiServiceImpl()
     val productRepository = ProductRepository(apiService)
     val basketRepository = BasketRepository(productRepository)
     val viewModel =
-        BasketScreenViewModel(basketRepository, logger, CoroutineScope(Dispatchers.Default))
+        BasketContentViewModel(basketRepository, logger, CoroutineScope(Dispatchers.Default))
     viewModel.initialize()
     val uiState = viewModel.uiState.collectAsState()
 
@@ -125,7 +128,7 @@ private fun BasketScreenPreview() {
             }
         }
     ) { innerPadding ->
-        BasketScreen(
+        BasketContent(
             modifier = Modifier.padding(innerPadding),
             state = uiState.value,
             viewModel = viewModel

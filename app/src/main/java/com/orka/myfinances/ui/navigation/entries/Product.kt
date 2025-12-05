@@ -15,25 +15,24 @@ import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.managers.navigation.Destination
 
 @OptIn(ExperimentalMaterial3Api::class)
-fun notificationsEntry(
+fun productEntry(
     modifier: Modifier,
-    destination: Destination.Notifications
+    destination: Destination.Product
 ): NavEntry<Destination> = entry(destination) {
 
     Scaffold(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(R.string.notifications)) }
+                title = { Text(text = destination.product.name) }
             )
         }
     ) { paddingValues ->
-
         Box(
             modifier = Modifier.scaffoldPadding(paddingValues),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = stringResource(R.string.notifications))
+            Text(text = stringResource(R.string.product))
         }
     }
 }

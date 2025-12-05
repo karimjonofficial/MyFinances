@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.home
+package com.orka.myfinances.ui.screens.home.viewmodel
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
@@ -9,33 +9,33 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asStateFlow
 
-class HomeScreenViewModel(
+class FoldersContentViewModel(
     private val repository: FolderRepository,
     logger: Logger,
     coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
-) : ViewModel<HomeScreenState>(
-    initialState = HomeScreenState.Initial,
+) : ViewModel<FoldersState>(
+    initialState = FoldersState.Initial,
     logger = logger,
     coroutineScope = coroutineScope
 ) {
     val uiState = state.asStateFlow()
 
     fun initialize() = launch {
-        setState(HomeScreenState.Loading)
+        setState(FoldersState.Loading)
         val folders = repository.get()
         if(folders != null)
-            setState(HomeScreenState.Success(folders))
-        else setState(HomeScreenState.Error)
+            setState(FoldersState.Success(folders))
+        else setState(FoldersState.Error)
     }
 
     fun addFolder(name: String, type: FolderType) = launch {
         val previousState = state.value
-        setState(HomeScreenState.Loading)
+        setState(FoldersState.Loading)
         val request = AddFolderRequest(name, type)
         val folder = repository.add(request)
         if(folder != null) {
             val folders = repository.get()
-            setState(HomeScreenState.Success(folders!!))
+            setState(FoldersState.Success(folders!!))
         }
         else setState(previousState)
     }

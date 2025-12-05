@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.basket
+package com.orka.myfinances.ui.screens.home.viewmodel
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
@@ -8,12 +8,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.yield
 
-class BasketScreenViewModel(
+class BasketContentViewModel(
     private val repository: BasketRepository,
     logger: Logger,
     coroutineScope: CoroutineScope
-) : ViewModel<BasketScreenState>(
-    initialState = BasketScreenState.Loading,
+) : ViewModel<BasketState>(
+    initialState = BasketState.Loading,
     logger = logger,
     coroutineScope = coroutineScope
     ) {
@@ -22,7 +22,7 @@ class BasketScreenViewModel(
     fun initialize() = launch {
         val items = repository.get()
         val price = items.sumOf { it.product.price * it.amount }
-        setState(BasketScreenState.Success(items, price))
+        setState(BasketState.Success(items, price))
     }
 
     fun increase(id: Id) = launch {

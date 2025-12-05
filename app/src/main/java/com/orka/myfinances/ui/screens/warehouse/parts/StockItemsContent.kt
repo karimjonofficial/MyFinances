@@ -7,29 +7,29 @@ import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
-import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenWarehouseState
+import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseState
 
 @Composable
 fun StockItemsContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     viewModel: WarehouseScreenViewModel,
-    state: WarehouseScreenWarehouseState,
+    state: WarehouseState,
     onStockItemClick: (StockItem) -> Unit,
 ) {
     when (state) {
-        is WarehouseScreenWarehouseState.Loading -> {
+        is WarehouseState.Loading -> {
             LoadingScreen(modifier)
         }
 
-        is WarehouseScreenWarehouseState.Failure -> {
+        is WarehouseState.Failure -> {
             FailureScreen(
                 modifier = modifier,
                 retry = { viewModel.initialize() }
             )
         }
 
-        is WarehouseScreenWarehouseState.Success -> {
+        is WarehouseState.Success -> {
             StockItemsGrid(
                 modifier = modifier,
                 contentPadding = contentPadding,

@@ -10,7 +10,6 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -28,6 +27,7 @@ import com.orka.myfinances.data.repositories.template.AddTemplateRequest
 import com.orka.myfinances.data.repositories.template.TemplateFieldModel
 import com.orka.myfinances.fixtures.DummyNavigationManager
 import com.orka.myfinances.fixtures.data.repositories.TemplateRepositoryImpl
+import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import com.orka.myfinances.ui.screens.add.template.components.TemplateFieldCard
@@ -35,6 +35,7 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddTemplateScreen(
     modifier: Modifier = Modifier,
@@ -47,93 +48,101 @@ fun AddTemplateScreen(
     val fieldTypes = rememberSaveable { mutableStateListOf<Int?>(null) }
     val count = rememberSaveable { mutableIntStateOf(1) }
 
-    Column(modifier = modifier) {
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .weight(1f)
-        ) {
-
-            val countValue = count.intValue
-
-            if (countValue > names.size) {
-                repeat(countValue - names.size) {
-                    names.add("")
-                    fieldTypes.add(null)
-                }
-            } else if (countValue < names.size) {
-                repeat(names.size - countValue) {
-                    names.removeAt(names.lastIndex)
-                    fieldTypes.removeAt(fieldTypes.lastIndex)
-                }
-            }
-
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = name.value,
-                onValueChange = { name.value = it },
-                label = { Text(text = stringResource(R.string.name_of_template)) }
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                title = { Text(text = stringResource(R.string.templates)) }
             )
-
-            VerticalSpacer(16)
-            Text(text = stringResource(R.string.properties_of_template))
-            VerticalSpacer(8)
-
-            repeat(countValue) { index ->
-                val typeIndex = fieldTypes[index]
-                val name = names[index]
-
-                TemplateFieldCard(
-                    modifier = Modifier.padding(horizontal = 4.dp),
-                    index = index + 1,
-                    name = name,
-                    type = if (typeIndex == null) "" else types[typeIndex],
-                    onNameChange = { names[index] = it },
-                    onTypeIndexChange = { fieldTypes[index] = it },
-                    types = types,
-                    onRemove = {
-                        names.removeAt(index)
-                        fieldTypes.removeAt(index)
-                        count.intValue = names.size
+        },
+        bottomBar = {
+            BottomAppBar(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(
+                        onClick = {
+                            if (name.value.isNotBlank() && names.all { it.isNotBlank() } && fieldTypes.all { it != null }) {
+                                val fields = names.mapIndexed { i, name ->
+                                    TemplateFieldModel(
+                                        name,
+                                        fieldTypes[i]!!
+                                    )
+                                }
+                                val template = AddTemplateRequest(name.value, fields)
+                                viewModel.addTemplate(template)
+                                navigationManager.back()
+                            }
+                        }
+                    ) {
+                        Text(text = stringResource(R.string.save))
                     }
-                )
-
-                VerticalSpacer(4)
-            }
-
-            VerticalSpacer(8)
-            TextButton(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { count.intValue++ }
-            ) {
-                Text(text = stringResource(R.string.add))
+                }
             }
         }
+    ) { paddingValues ->
 
-        BottomAppBar(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
+        Column(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .weight(1f)
             ) {
-                Button(
-                    onClick = {
-                        if (name.value.isNotBlank() && names.all { it.isNotBlank() } && fieldTypes.all { it != null }) {
-                            val fields = names.mapIndexed { i, name ->
-                                TemplateFieldModel(
-                                    name,
-                                    fieldTypes[i]!!
-                                )
-                            }
-                            val template = AddTemplateRequest(name.value, fields)
-                            viewModel.addTemplate(template)
-                            navigationManager.back()
-                        }
+
+                val countValue = count.intValue
+
+                if (countValue > names.size) {
+                    repeat(countValue - names.size) {
+                        names.add("")
+                        fieldTypes.add(null)
                     }
+                } else if (countValue < names.size) {
+                    repeat(names.size - countValue) {
+                        names.removeAt(names.lastIndex)
+                        fieldTypes.removeAt(fieldTypes.lastIndex)
+                    }
+                }
+
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = name.value,
+                    onValueChange = { name.value = it },
+                    label = { Text(text = stringResource(R.string.name_of_template)) }
+                )
+
+                VerticalSpacer(16)
+                Text(text = stringResource(R.string.properties_of_template))
+                VerticalSpacer(8)
+
+                repeat(countValue) { index ->
+                    val typeIndex = fieldTypes[index]
+                    val name = names[index]
+
+                    TemplateFieldCard(
+                        modifier = Modifier.padding(horizontal = 4.dp),
+                        index = index + 1,
+                        name = name,
+                        type = if (typeIndex == null) "" else types[typeIndex],
+                        onNameChange = { names[index] = it },
+                        onTypeIndexChange = { fieldTypes[index] = it },
+                        types = types,
+                        onRemove = {
+                            names.removeAt(index)
+                            fieldTypes.removeAt(index)
+                            count.intValue = names.size
+                        }
+                    )
+
+                    VerticalSpacer(4)
+                }
+
+                VerticalSpacer(8)
+                TextButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { count.intValue++ }
                 ) {
-                    Text(text = stringResource(R.string.save))
+                    Text(text = stringResource(R.string.add))
                 }
             }
         }

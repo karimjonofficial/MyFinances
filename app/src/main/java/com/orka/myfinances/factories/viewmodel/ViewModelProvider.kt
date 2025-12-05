@@ -4,11 +4,12 @@ import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
 
 interface ViewModelProvider {
-    fun homeViewModel(): Any
+    fun foldersViewModel(): Any
     fun templatesViewModel(): Any
     fun addTemplateViewModel(): Any
     fun addProductViewModel(): Any
     fun warehouseViewModel(warehouse: Warehouse): Any
     fun catalogViewModel(catalog: Catalog): Any
     fun basketViewModel(): Any
+    fun clientsViewModel(): Any
 }

@@ -15,7 +15,7 @@ import com.orka.myfinances.R
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun HomeScreenCarousel(
+fun FoldersContentCarousel(
     modifier: Modifier = Modifier,
     state: CarouselState
 ) {

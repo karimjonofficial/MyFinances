@@ -1,36 +1,147 @@
 package com.orka.myfinances.ui.screens.home
 
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
+import com.orka.myfinances.data.models.User
 import com.orka.myfinances.data.models.folder.Folder
-import com.orka.myfinances.lib.ui.screens.FailureScreen
-import com.orka.myfinances.lib.ui.screens.LoadingScreen
+import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
+import com.orka.myfinances.lib.ui.Scaffold
+import com.orka.myfinances.lib.ui.models.IconRes
+import com.orka.myfinances.lib.ui.models.NavItem
+import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
+import com.orka.myfinances.ui.screens.home.parts.HomeScreenTopBar
+import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
 
-@Composable
 @OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    state: HomeScreenState,
-    onNavigateToFolder: (Folder) -> Unit
+    user: User,
+    foldersViewModel: FoldersContentViewModel,
+    basketViewModel: BasketContentViewModel,
+    navigationManager: NavigationManager,
+    selectFolder: (Folder) -> Unit
 ) {
-    when (state) {
-        HomeScreenState.Initial -> {
-            LoadingScreen(modifier)
-        }
+    val navItems = listOf(
+        NavItem(
+            index = 0,
+            name = stringResource(R.string.home),
+            iconRes = IconRes(
+                selected = R.drawable.home_filled,
+                unSelected = R.drawable.home_outlined
+            )
+        ),
+        NavItem(
+            index = 1,
+            name = stringResource(R.string.basket),
+            iconRes = IconRes(
+                unSelected = R.drawable.shopping_cart_outlined,
+                selected = R.drawable.shopping_cart_filled
+            )
+        ),
+        NavItem(
+            index = 2,
+            name = stringResource(R.string.profile),
+            iconRes = IconRes(
+                unSelected = R.drawable.account_circle_outlined,
+                selected = R.drawable.account_circle_filled
+            )
+        )
+    )
+    val appName = stringResource(R.string.app_name)
+    val navState = rememberSaveable { mutableIntStateOf(0) }
+    val dialogVisible = rememberSaveable { mutableStateOf(false) }
+    val title = remember { derivedStateOf { if (navState.intValue == 2) user.userName else appName } }
+    fun NavItem.getIconRes() = if (navState.intValue == index) iconRes.selected else iconRes.unSelected
+    fun showDialog() { dialogVisible.value = true }
+    fun hideDialog() { dialogVisible.value = false }
 
-        is HomeScreenState.Error -> {
-            FailureScreen(modifier, stringResource(R.string.error)) {}
-        }
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            when (navState.intValue) {
 
-        HomeScreenState.Loading -> {
-            LoadingScreen(modifier)
-        }
+                0 -> HomeScreenTopBar(
+                    onAddClick = { showDialog() },
+                    onNotificationsClick = { navigationManager.navigateToNotifications() },
+                    onSearchClick = {}
+                )
 
-        is HomeScreenState.Success -> {
-            HomeScreenContent(modifier, state, onNavigateToFolder)
+                else -> TopAppBar(title = { Text(text = title.value) })
+            }
+        },
+        bottomBar = {
+            NavigationBar {
+                navItems.forEach {
+                    NavigationBarItem(
+                        selected = it.index == navState.intValue,
+                        onClick = { navState.intValue = it.index },
+                        icon = {
+                            Icon(
+                                painter = painterResource(it.getIconRes()),
+                                contentDescription = it.name
+                            )
+                        }
+                    )
+                }
+            }
+        }
+    ) { paddingValues ->
+        val m = Modifier.scaffoldPadding(paddingValues)
+
+        when(navState.intValue) {
+            0 -> {
+                val state = foldersViewModel.uiState.collectAsState()
+
+                FoldersContent(
+                    modifier = m,
+                    state = state.value,
+                    onNavigateToFolder = selectFolder
+                )
+
+                if(dialogVisible.value) {
+                    AddFolderDialog(
+                        templates = emptyList(),
+                        dismissRequest = { hideDialog() },
+                        onAddTemplateClick = {
+                            navigationManager.navigateToAddTemplate()
+                            hideDialog()
+                        },
+                        onSuccess = { name, type ->
+                            foldersViewModel.addFolder(name, type)
+                            hideDialog()
+                        },
+                        onCancel = { hideDialog() }
+                    )
+                }
+            }
+
+            1 -> {
+                val state = basketViewModel.uiState.collectAsState()
+
+                BasketContent(
+                    modifier = m,
+                    state = state.value,
+                    viewModel = basketViewModel
+                )
+            }
         }
     }
 }
