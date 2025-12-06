@@ -9,10 +9,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -66,10 +64,8 @@ fun HomeScreen(
             )
         )
     )
-    val appName = stringResource(R.string.app_name)
     val navState = rememberSaveable { mutableIntStateOf(0) }
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
-    val title = remember { derivedStateOf { if (navState.intValue == 2) user.userName else appName } }
 
     fun NavItem.getIconRes() = if(navState.intValue == index) iconRes.selected else iconRes.unSelected
     fun showDialog() { dialogVisible.value = true }
@@ -86,8 +82,12 @@ fun HomeScreen(
                     onSearchClick = {}
                 )
 
-                else -> TopAppBar(
-                    title = { Text(text = title.value) },
+                1 -> TopAppBar(
+                    title = { Text(text = stringResource(R.string.basket)) }
+                )
+
+                2 -> TopAppBar(
+                    title = { Text(text = "${user.firstName} ${user.lastName}") },
                     actions = {
                         IconButton(onClick = { navigationManager.navigateToSettings() }) {
                             Icon(
