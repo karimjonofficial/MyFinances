@@ -14,7 +14,7 @@ fun <T : Any, TLoading, TSuccess, TFailure> lazyColumnEntry(
     destination: T,
     viewModel: ListViewModel<TLoading, TSuccess, TFailure>,
     topBar: @Composable () -> Unit = {},
-    item: @Composable (TSuccess) -> Unit,
+    item: @Composable (Modifier, TSuccess) -> Unit,
 ): NavEntry<T> = NavEntry(key = destination) {
 
     Scaffold(
