@@ -2,6 +2,7 @@ package com.orka.myfinances.impl.ui.managers
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
+import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.data.models.product.Product
@@ -11,7 +12,6 @@ import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
@@ -25,13 +25,10 @@ class NavigationManagerImpl(
     logger = logger,
     coroutineScope = coroutineScope
 ), NavigationManager {
-    private val navState = MutableStateFlow(initialBackStack[0])
     val backStack = state.asStateFlow()
-    val navigationState = navState.asStateFlow()
 
     override fun navigateToHome() {
         navigate(backStack.value[0])
-        setNavState(backStack.value[0])
     }
 
     override fun navigateToCatalog(catalog: Catalog) {
@@ -60,7 +57,6 @@ class NavigationManagerImpl(
 
     override fun navigateToSettings() {
         navigate(Destination.Settings)
-        setNavState(Destination.Settings)
     }
 
     override fun navigateToTemplates() {
@@ -76,7 +72,6 @@ class NavigationManagerImpl(
         val backstack = state.value
         if (backstack.size > 1)
             state.update { backstack.dropLast(1) }
-        navState.value = backstack[0]
     }
 
     override fun navigateToClients() {
@@ -84,12 +79,11 @@ class NavigationManagerImpl(
         navigate(Destination.Clients(viewModel))
     }
 
-    private fun navigate(destination: Destination) {
-        if(destination.hasNavBar)
-            updateState { listOf(backStack.value[0], destination) }
-        else updateState { backStack.value + destination }
+    override fun navigateToClient(client: Client) {
+        navigate(Destination.Client(client))
     }
-    private fun setNavState(destination: Destination) {
-        navState.value = destination
+
+    private fun navigate(destination: Destination) {
+        updateState { backStack.value + destination }
     }
 }

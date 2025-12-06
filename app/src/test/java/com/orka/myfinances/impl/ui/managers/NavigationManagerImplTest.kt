@@ -15,7 +15,6 @@ import com.orka.myfinances.testLib.product1
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class NavigationManagerImplTest : MainDispatcherContext() {
@@ -52,17 +51,5 @@ class NavigationManagerImplTest : MainDispatcherContext() {
         navigateToProduct(product1)
         back()
         assertTopIs<Destination.Settings>()
-    }
-
-    @Test
-    fun `Navigate to home sets NavState Home`() = navigationManager.test {
-        navigateToHome()
-        assertTrue(navigationState.value is Destination.Home)
-    }
-
-    @Test
-    fun `Navigate to settings sets navigation state Settings`() = navigationManager.test {
-        navigateToSettings()
-        assertTrue(navigationState.value is Destination.Settings)
     }
 }

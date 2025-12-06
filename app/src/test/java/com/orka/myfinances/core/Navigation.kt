@@ -10,10 +10,6 @@ inline fun <reified T: Destination> NavigationManagerImpl.assertTopIs(message: S
     assertTrue(last is T, "The current destination is $last\n$message")
 }
 
-inline fun <reified T: Destination> NavigationManagerImpl.assertNavState() {
-    assertTrue(navigationState.value is T, "Navigation Bar state error")
-}
-
 fun NavigationManagerImpl.assertSize(size: Int) {
     assertEquals(size, backStack.value.size)
 }
@@ -24,6 +20,5 @@ fun NavigationManagerImpl.test(body: NavigationManagerImpl.() -> Unit) {
 
 fun NavigationManagerImpl.assertHome() {
     assertTopIs<Destination.Home>()
-    assertNavState<Destination.Home>()
     assertSize(1)
 }
