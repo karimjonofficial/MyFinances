@@ -56,4 +56,8 @@
     <string name="increase">Increase</string>
     <string name="clients">Mijozlar</string>
     <string name="home">Home</string>
+    <string name="message">Message</string>
+    <string name="call">Call</string>
+    <string name="address">Address</string>
+    <string name="phone_number">Phone Number</string>
 </resources>
