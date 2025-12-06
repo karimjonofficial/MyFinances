@@ -6,13 +6,39 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
+import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
 import com.orka.myfinances.lib.ui.viewmodel.State
 
 @Composable
-fun <TLoading, TSuccess, TFailure> Screen(
+fun <TLoading, TSuccess, TFailure> LazyColumnScreen(
+    modifier: Modifier = Modifier,
+    topBar: @Composable () -> Unit = {},
+    item: @Composable (Modifier, TSuccess) -> Unit,
+    viewModel: ListViewModel<TLoading, TSuccess, TFailure>
+
+) {
+    Scaffold(
+        modifier = modifier,
+        topBar = topBar
+    ) { paddingValues ->
+        val state = viewModel.uiState.collectAsState()
+
+        Screen(
+            modifier = Modifier.scaffoldPadding(paddingValues),
+            state = state.value,
+            viewModel = viewModel,
+            item = item
+        )
+    }
+}
+
+@Composable
+private fun <TLoading, TSuccess, TFailure> Screen(
     modifier: Modifier = Modifier,
     state: State<TLoading, List<TSuccess>, TFailure>,
     viewModel: ListViewModel<TLoading, TSuccess, TFailure>,

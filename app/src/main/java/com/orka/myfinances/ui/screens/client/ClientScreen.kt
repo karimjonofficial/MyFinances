@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.client
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,18 +10,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,6 +31,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.fixtures.resources.models.client1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
+import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 
@@ -55,12 +58,16 @@ fun ClientScreen(
             ) {
 
                 Icon(
-                    modifier = Modifier.size(160.dp),
+                    modifier = Modifier
+                        .size(160.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.surfaceVariant),
                     painter = painterResource(R.drawable.account_circle_outlined),
                     tint = MaterialTheme.colorScheme.secondary,
                     contentDescription = null
                 )
 
+                VerticalSpacer(8)
                 Text(text = client.phone)
 
                 VerticalSpacer(8)
