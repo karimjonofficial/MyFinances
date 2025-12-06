@@ -1,5 +1,6 @@
 package com.orka.myfinances.fixtures
 
+import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.data.models.product.Product
@@ -16,5 +17,6 @@ class DummyNavigationManager : NavigationManager {
     override fun navigateToTemplates() {}
     override fun navigateToProduct(product: Product) {}
     override fun navigateToClients() {}
+    override fun navigateToClient(client: Client) {}
     override fun back() {}
 }
