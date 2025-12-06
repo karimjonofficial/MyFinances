@@ -21,19 +21,14 @@ fun TemplatesScreen(
     modifier: Modifier = Modifier,
     state: TemplatesScreenState
 ) {
-    when(state) {
+    when (state) {
         is TemplatesScreenState.Loading -> LoadingScreen(modifier)
         is TemplatesScreenState.Error -> FailureScreen(modifier)
 
         is TemplatesScreenState.Success -> {
-
             Scaffold(
                 modifier = modifier,
-                topBar = {
-                    TopAppBar(
-                        title = { Text(text = stringResource(R.string.settings)) }
-                    )
-                }
+                topBar = { TopAppBar(title = { Text(text = stringResource(R.string.templates)) }) }
             ) { paddingValues ->
 
                 LazyColumn(modifier = Modifier.scaffoldPadding(paddingValues)) {
