@@ -2,6 +2,7 @@ package com.orka.myfinances.ui.screens.home
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -69,7 +70,8 @@ fun HomeScreen(
     val navState = rememberSaveable { mutableIntStateOf(0) }
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
     val title = remember { derivedStateOf { if (navState.intValue == 2) user.userName else appName } }
-    fun NavItem.getIconRes() = if (navState.intValue == index) iconRes.selected else iconRes.unSelected
+
+    fun NavItem.getIconRes() = if(navState.intValue == index) iconRes.selected else iconRes.unSelected
     fun showDialog() { dialogVisible.value = true }
     fun hideDialog() { dialogVisible.value = false }
 
@@ -84,7 +86,17 @@ fun HomeScreen(
                     onSearchClick = {}
                 )
 
-                else -> TopAppBar(title = { Text(text = title.value) })
+                else -> TopAppBar(
+                    title = { Text(text = title.value) },
+                    actions = {
+                        IconButton(onClick = { navigationManager.navigateToSettings() }) {
+                            Icon(
+                                painter = painterResource(R.drawable.settings_outlined),
+                                contentDescription = stringResource(R.string.settings)
+                            )
+                        }
+                    }
+                )
             }
         },
         bottomBar = {
@@ -92,7 +104,10 @@ fun HomeScreen(
                 navItems.forEach {
                     NavigationBarItem(
                         selected = it.index == navState.intValue,
-                        onClick = { navState.intValue = it.index },
+                        onClick = {
+                            if (navState.intValue != it.index)
+                                navState.intValue = it.index
+                        },
                         icon = {
                             Icon(
                                 painter = painterResource(it.getIconRes()),
@@ -106,7 +121,7 @@ fun HomeScreen(
     ) { paddingValues ->
         val m = Modifier.scaffoldPadding(paddingValues)
 
-        when(navState.intValue) {
+        when (navState.intValue) {
             0 -> {
                 val state = foldersViewModel.uiState.collectAsState()
 
@@ -116,7 +131,7 @@ fun HomeScreen(
                     onNavigateToFolder = selectFolder
                 )
 
-                if(dialogVisible.value) {
+                if (dialogVisible.value) {
                     AddFolderDialog(
                         templates = emptyList(),
                         dismissRequest = { hideDialog() },
