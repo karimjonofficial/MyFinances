@@ -73,12 +73,11 @@ class UiManagerTest : MainDispatcherContext() {
 
         @Nested
         inner class DummySessionStorageContext {
-            val storage = DummySessionStorage()
+            private val storage = DummySessionStorage()
+            private val manager = uiManager(storage)
 
             @Nested
             inner class EmptyUserApiServiceStubContext {
-                private val manager = uiManager(storage)
-
                 @BeforeEach
                 fun setup() {
                     provider.setUserApiService(EmptyUserApiServiceStub())
@@ -105,8 +104,6 @@ class UiManagerTest : MainDispatcherContext() {
 
             @Nested
             inner class EmptyCompanyApiServiceStubContext {
-                private val manager = uiManager(storage)
-
                 @BeforeEach
                 fun setup() {
                     provider.setUserApiService(UserApiServiceStub())
@@ -133,8 +130,6 @@ class UiManagerTest : MainDispatcherContext() {
 
             @Nested
             inner class EmptyCompanyOfficeApiServiceStubContext {
-                private val manager = uiManager(storage)
-
                 @BeforeEach
                 fun setup() {
                     provider.setUserApiService(UserApiServiceStub())
@@ -170,7 +165,6 @@ class UiManagerTest : MainDispatcherContext() {
 
                 @Test
                 fun `When open called and all api services success, state changes into SignedIn`() {
-                    val manager = UiManager(logger, storage, provider, testScope)
                     manager.open(credential)
                     advanceUntilIdle()
                     assertTrue(manager.uiState.value is UiState.SignedIn)
@@ -178,7 +172,6 @@ class UiManagerTest : MainDispatcherContext() {
 
                 @Test
                 fun `When store called and all api services success, state changes into SignedIn`() {
-                    val manager = UiManager(logger, storage, provider, testScope)
                     manager.store(credential)
                     advanceUntilIdle()
                     assertTrue(manager.uiState.value is UiState.SignedIn)
