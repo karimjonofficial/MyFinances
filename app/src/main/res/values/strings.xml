@@ -60,4 +60,7 @@
     <string name="call">Call</string>
     <string name="address">Address</string>
     <string name="phone_number">Phone Number</string>
+    <string name="add_a_new_client">Add a new client</string>
+    <string name="fill_the_lines_below_to_add_a_new_client">Fill the lines below to add a new client</string>
+    <string name="lastname">Lastname</string>
 </resources>

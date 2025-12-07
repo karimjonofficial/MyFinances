@@ -7,9 +7,9 @@ import com.orka.myfinances.data.models.Client
 import kotlinx.coroutines.CoroutineScope
 
 class ClientsScreenViewModel(
+    val repository: ClientRepository,
     loading: String,
     failure: String,
-    repository: ClientRepository,
     logger: Logger,
     coroutineScope: CoroutineScope
 ) : ListViewModel<String, Client, String>(
@@ -18,4 +18,16 @@ class ClientsScreenViewModel(
     repository = repository,
     logger = logger,
     coroutineScope = coroutineScope
-)
+) {
+    fun add(name: String, lastName: String?, phone: String?, address: String?) = launch {
+        val request = AddClientRequest(
+            name = name,
+            lastName = lastName,
+            phone = phone,
+            address = address
+        )
+
+        if(repository.add(request) != null)
+            initialize()
+    }
+}

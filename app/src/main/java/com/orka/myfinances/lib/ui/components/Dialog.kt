@@ -27,10 +27,10 @@ fun Dialog(
     dismissRequest: () -> Unit,
     title: String,
     supportingText: String,
-    cancelTitle: String = stringResource(R.string.cancel),
-    successTitle: String = stringResource(R.string.ok),
-    onCancel: (() -> Unit)? = null,
     onSuccess: () -> Unit,
+    successTitle: String = stringResource(R.string.ok),
+    cancelTitle: String = stringResource(R.string.cancel),
+    onCancel: (() -> Unit)? = null,
     content: (@Composable ColumnScope.() -> Unit)? = null,
 ) {
 
