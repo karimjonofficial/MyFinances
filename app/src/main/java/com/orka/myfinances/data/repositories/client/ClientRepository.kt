@@ -4,7 +4,6 @@ import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.fixtures.resources.models.client2
 import com.orka.myfinances.fixtures.resources.models.clients
 import com.orka.myfinances.lib.data.Repository
-import com.orka.myfinances.data.repositories.client.AddClientRequest
 import kotlinx.coroutines.delay
 
 class ClientRepository : Repository<Client> {

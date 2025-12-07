@@ -7,7 +7,7 @@ val client1 = Client(
     firstName = "John",
     lastName = "Doe",
     address = "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-    phone = "+998(91) 661-33-50"
+    phone = "The phone number of user 1"
 )
 
 val client2 = Client(
@@ -15,7 +15,7 @@ val client2 = Client(
     firstName = "John",
     lastName = "Doe",
     address = "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-    phone = "+998(91) 661-33-50"
+    phone = "The phone number of user2"
 )
 
 val clients = listOf(client1, client2)

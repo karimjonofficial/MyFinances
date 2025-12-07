@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -53,7 +54,7 @@ fun ClientCard(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "${client.firstName[0].uppercase()}${client.lastName.firstOrNull()?.uppercase() ?: ""}",
+                text = "${client.firstName[0].uppercase()}${client.lastName?.firstOrNull()?.uppercase() ?: ""}",
                 style = MaterialTheme.typography.titleMedium
             )
         }
@@ -69,7 +70,7 @@ fun ClientCard(
             )
 
             VerticalSpacer(4)
-            Text(text = client.phone)
+            Text(text = client.phone ?: stringResource(R.string.no_phone_number))
         }
 
         HorizontalSpacer(8)
@@ -80,7 +81,10 @@ fun ClientCard(
     }
 }
 
-@Preview(showSystemUi = true, showBackground = true)
+@Preview(
+    showSystemUi = true,
+    showBackground = true
+)
 @Composable
 private fun ClientCardPreview() {
     Scaffold { paddingValues ->

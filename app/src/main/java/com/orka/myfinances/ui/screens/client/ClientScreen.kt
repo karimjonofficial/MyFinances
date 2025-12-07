@@ -68,7 +68,7 @@ fun ClientScreen(
                 )
 
                 VerticalSpacer(8)
-                Text(text = client.phone)
+                Text(text = client.phone ?: stringResource(R.string.no_phone_number))
 
                 VerticalSpacer(8)
                 Row(
@@ -104,7 +104,7 @@ fun ClientScreen(
                     )
                 },
                 headlineContent = { Text(text = stringResource(R.string.phone_number)) },
-                supportingContent = { Text(text = client.phone) },
+                supportingContent = { Text(text = client.phone ?: stringResource(R.string.no_phone_number)) },
                 trailingContent = {
                     Icon(
                         painter = painterResource(R.drawable.arrow_right),
@@ -122,7 +122,7 @@ fun ClientScreen(
                     )
                 },
                 headlineContent = { Text(text = stringResource(R.string.address)) },
-                supportingContent = { Text(text = client.address) },
+                supportingContent = { Text(text = client.address ?: stringResource(R.string.no_address)) },
                 trailingContent = {
                     Icon(
                         painter = painterResource(R.drawable.arrow_right),
