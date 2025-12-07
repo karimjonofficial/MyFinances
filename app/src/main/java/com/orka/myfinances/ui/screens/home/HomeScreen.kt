@@ -2,7 +2,6 @@ package com.orka.myfinances.ui.screens.home
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -25,6 +24,7 @@ import com.orka.myfinances.lib.ui.models.NavItem
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
 import com.orka.myfinances.ui.screens.home.parts.HomeScreenTopBar
+import com.orka.myfinances.ui.screens.home.parts.ProfileTopBar
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
 
@@ -82,21 +82,8 @@ fun HomeScreen(
                     onSearchClick = {}
                 )
 
-                1 -> TopAppBar(
-                    title = { Text(text = stringResource(R.string.basket)) }
-                )
-
-                2 -> TopAppBar(
-                    title = { Text(text = "${user.firstName} ${user.lastName}") },
-                    actions = {
-                        IconButton(onClick = { navigationManager.navigateToSettings() }) {
-                            Icon(
-                                painter = painterResource(R.drawable.settings_outlined),
-                                contentDescription = stringResource(R.string.settings)
-                            )
-                        }
-                    }
-                )
+                1 -> TopAppBar(title = { Text(text = stringResource(R.string.basket)) })
+                2 -> ProfileTopBar(user = user)
             }
         },
         bottomBar = {
@@ -155,6 +142,14 @@ fun HomeScreen(
                     modifier = m,
                     state = state.value,
                     viewModel = basketViewModel
+                )
+            }
+
+            2 -> {
+                ProfileContent(
+                    modifier = m,
+                    user = user,
+                    navigationManager = navigationManager
                 )
             }
         }

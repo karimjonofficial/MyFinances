@@ -86,8 +86,13 @@ class ViewModelProviderImplTest : MainDispatcherContext() {
         logger = logger,
         coroutineScope = testScope
     )
-    private val clientsScreenViewModel = ClientsScreenViewModel("Loading", "Failure",
-        ClientRepository(), logger, testScope)
+    private val clientsScreenViewModel = ClientsScreenViewModel(
+        repository = ClientRepository(),
+        loading = "Loading",
+        failure = "Failure",
+        logger = logger,
+        coroutineScope = testScope
+    )
     private val provider = ViewModelProviderImpl(
         addTemplateScreenViewModel = addTemplateScreenViewModel,
         addProductScreenViewModel = addProductScreenViewModel,
