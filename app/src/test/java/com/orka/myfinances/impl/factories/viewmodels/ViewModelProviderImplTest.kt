@@ -3,7 +3,7 @@ package com.orka.myfinances.impl.factories.viewmodels
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
-import com.orka.myfinances.data.repositories.ClientRepository
+import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.data.repositories.StockRepository
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository

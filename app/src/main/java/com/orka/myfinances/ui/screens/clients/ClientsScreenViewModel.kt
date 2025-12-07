@@ -1,9 +1,10 @@
 package com.orka.myfinances.ui.screens.clients
 
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.data.repositories.ClientRepository
+import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
 import com.orka.myfinances.data.models.Client
+import com.orka.myfinances.data.repositories.client.AddClientRequest
 import kotlinx.coroutines.CoroutineScope
 
 class ClientsScreenViewModel(

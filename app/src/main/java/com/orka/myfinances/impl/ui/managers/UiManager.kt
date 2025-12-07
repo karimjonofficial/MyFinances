@@ -4,7 +4,7 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Session
-import com.orka.myfinances.data.repositories.ClientRepository
+import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.data.repositories.StockRepository
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository

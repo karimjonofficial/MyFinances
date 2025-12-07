@@ -13,7 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.R
-import com.orka.myfinances.data.repositories.ClientRepository
+import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.fixtures.DummyNavigationManager
 import com.orka.myfinances.lib.LoggerImpl
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen

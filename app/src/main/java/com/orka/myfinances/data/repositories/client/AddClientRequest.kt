@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.clients
+package com.orka.myfinances.data.repositories.client
 
 data class AddClientRequest(
     val name: String,
