@@ -27,7 +27,6 @@ class ClientsScreenViewModel(
             phone = phone,
             address = address
         )
-
         if(repository.add(request) != null)
             initialize()
     }

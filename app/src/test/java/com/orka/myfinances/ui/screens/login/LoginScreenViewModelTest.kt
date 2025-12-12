@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test
 typealias ViewModel = LoginScreenViewModel
 typealias ApiService = CredentialApiService
 
-class LoginScreeViewModelTest : MainDispatcherContext() {
+class LoginScreenViewModelTest : MainDispatcherContext() {
     private val logger = DummyLogger()
     private fun viewModel(apiService: ApiService, manager: SessionManager): ViewModel {
         return ViewModel(

@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.add.template.components
+package com.orka.myfinances.ui.screens.templates.add.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row

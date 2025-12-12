@@ -23,8 +23,8 @@ import com.orka.myfinances.lib.extensions.models.toModel
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.session.SessionManager
 import com.orka.myfinances.ui.managers.session.UiState
-import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenViewModel
-import com.orka.myfinances.ui.screens.add.template.AddTemplateScreenViewModel
+import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
+import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import com.orka.myfinances.ui.screens.clients.ClientsScreenViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel

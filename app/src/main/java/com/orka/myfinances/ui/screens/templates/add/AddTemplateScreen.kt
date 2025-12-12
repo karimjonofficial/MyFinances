@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.add.template
+package com.orka.myfinances.ui.screens.templates.add
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,7 +30,7 @@ import com.orka.myfinances.fixtures.data.repositories.TemplateRepositoryImpl
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
-import com.orka.myfinances.ui.screens.add.template.components.TemplateFieldCard
+import com.orka.myfinances.ui.screens.templates.add.components.TemplateFieldCard
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

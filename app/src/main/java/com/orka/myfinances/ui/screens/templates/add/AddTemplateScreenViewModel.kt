@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.add.template
+package com.orka.myfinances.ui.screens.templates.add
 
 import com.orka.myfinances.core.Manager
 import com.orka.myfinances.data.repositories.template.AddTemplateRequest

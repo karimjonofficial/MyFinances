@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.add.product
+package com.orka.myfinances.ui.screens.products.add
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,8 +30,8 @@ import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.components.ExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
-import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenState
-import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenViewModel
+import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenState
+import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -16,8 +16,8 @@ import com.orka.myfinances.fixtures.data.repositories.folder.SpyFolderRepository
 import com.orka.myfinances.fixtures.data.repositories.template.SpyTemplateRepository
 import com.orka.myfinances.fixtures.resources.models.folder.folder1
 import com.orka.myfinances.testLib.catalog1
-import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenViewModel
-import com.orka.myfinances.ui.screens.add.template.AddTemplateScreenViewModel
+import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
+import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketState
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import com.orka.myfinances.ui.screens.catalog.CatalogScreenViewModel

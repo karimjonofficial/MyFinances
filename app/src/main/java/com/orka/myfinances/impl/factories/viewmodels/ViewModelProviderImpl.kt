@@ -6,8 +6,8 @@ import com.orka.myfinances.factories.viewmodel.CatalogScreenViewModelProvider
 import com.orka.myfinances.factories.viewmodel.ViewModelProvider
 import com.orka.myfinances.factories.viewmodel.WarehouseScreenViewModelProvider
 import com.orka.myfinances.ui.screens.clients.ClientsScreenViewModel
-import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenViewModel
-import com.orka.myfinances.ui.screens.add.template.AddTemplateScreenViewModel
+import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
+import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import com.orka.myfinances.ui.screens.catalog.CatalogScreenViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel

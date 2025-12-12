@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.add.product.viewmodel
+package com.orka.myfinances.ui.screens.products.add.viewmodel
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel

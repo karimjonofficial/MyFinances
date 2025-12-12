@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.warehouse
+package com.orka.myfinances.ui.screens.warehouse.viewmodel
 
 import app.cash.turbine.test
 import com.orka.myfinances.core.MainDispatcherContext
@@ -19,9 +19,6 @@ import com.orka.myfinances.fixtures.resources.models.folder.folder1
 import com.orka.myfinances.fixtures.resources.models.stockItem1
 import com.orka.myfinances.testLib.addProductRequest
 import com.orka.myfinances.testLib.products
-import com.orka.myfinances.ui.screens.warehouse.viewmodel.ProductsState
-import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
-import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseState
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

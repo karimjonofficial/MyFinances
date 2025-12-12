@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.add.product
+package com.orka.myfinances.ui.screens.products.add.viewmodel
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.api.ProductApiService
@@ -12,10 +12,7 @@ import com.orka.myfinances.fixtures.data.api.warehouse.DummyStockApiService
 import com.orka.myfinances.fixtures.data.api.warehouse.EmptyStockApiServiceStub
 import com.orka.myfinances.fixtures.data.api.warehouse.StockApiServiceStub
 import com.orka.myfinances.testLib.addProductRequest
-import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenState
-import com.orka.myfinances.ui.screens.add.product.viewmodel.AddProductScreenViewModel
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 

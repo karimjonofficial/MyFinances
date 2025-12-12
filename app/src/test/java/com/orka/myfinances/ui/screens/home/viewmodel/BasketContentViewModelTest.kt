@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.basket
+package com.orka.myfinances.ui.screens.home.viewmodel
 
 import app.cash.turbine.test
 import com.orka.myfinances.core.MainDispatcherContext
@@ -11,17 +11,14 @@ import com.orka.myfinances.testLib.id1
 import com.orka.myfinances.testLib.id2
 import com.orka.myfinances.testLib.price
 import com.orka.myfinances.testLib.product1
-import com.orka.myfinances.ui.screens.home.viewmodel.BasketState
-import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class BasketScreenViewModelTest : MainDispatcherContext() {
+class BasketContentViewModelTest : MainDispatcherContext() {
     private val logger = DummyLogger()
     private val apiService = MockProductApiService()
     private val productRepository = ProductRepository(apiService)
@@ -34,7 +31,7 @@ class BasketScreenViewModelTest : MainDispatcherContext() {
 
     @Test
     fun `State is Loading`() {
-        assertTrue(viewModel.uiState.value is BasketState.Loading)
+        Assertions.assertTrue(viewModel.uiState.value is BasketState.Loading)
     }
 
     @Nested
@@ -56,7 +53,7 @@ class BasketScreenViewModelTest : MainDispatcherContext() {
 
             viewModel.uiState.test {
                 val state = awaitItem()
-                assertTrue(
+                Assertions.assertTrue(
                     state is BasketState.Success
                             && state.items.size == 1
                             && state.price == product1.price * 2 * amount
@@ -83,8 +80,8 @@ class BasketScreenViewModelTest : MainDispatcherContext() {
 
                 viewModel.uiState.test {
                     val state = awaitItem() as BasketState.Success
-                    assertEquals(state.items.size, 2)
-                    assertEquals(price * amount * 4, state.price)
+                    Assertions.assertEquals(state.items.size, 2)
+                    Assertions.assertEquals(price * amount * 4, state.price)
                 }
             }
         }
@@ -108,8 +105,8 @@ class BasketScreenViewModelTest : MainDispatcherContext() {
 
                 viewModel.uiState.test {
                     val state = awaitItem() as BasketState.Success
-                    assertEquals(1, state.items.size)
-                    assertEquals(price * amount, state.price)
+                    Assertions.assertEquals(1, state.items.size)
+                    Assertions.assertEquals(price * amount, state.price)
                 }
             }
 
@@ -119,11 +116,10 @@ class BasketScreenViewModelTest : MainDispatcherContext() {
 
                 viewModel.uiState.test {
                     val state = awaitItem() as BasketState.Success
-                    assertEquals(0, state.items.size)
-                    assertEquals(0, state.price)
+                    Assertions.assertEquals(0, state.items.size)
+                    Assertions.assertEquals(0, state.price)
                 }
             }
         }
     }
 }
-

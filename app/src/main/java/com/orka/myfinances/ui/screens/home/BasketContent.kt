@@ -45,9 +45,7 @@ fun BasketContent(
     viewModel: BasketContentViewModel
 ) {
     when (state) {
-        is BasketState.Loading -> {
-            LoadingScreen(modifier)
-        }
+        is BasketState.Loading -> LoadingScreen(modifier)
 
         is BasketState.Success -> {
             Column(modifier = modifier) {
@@ -81,7 +79,7 @@ fun BasketContent(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "$"+state.price.toString(),
+                        text = "$${state.price}",
                         style = MaterialTheme.typography.headlineMedium
                     )
 
