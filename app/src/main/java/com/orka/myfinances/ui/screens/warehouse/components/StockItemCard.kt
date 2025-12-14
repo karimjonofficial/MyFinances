@@ -49,7 +49,7 @@ fun StockItemCard(
                 modifier = Modifier.size(200.dp),
                 painter = painterResource(R.drawable.furniture1),
                 contentScale = ContentScale.Crop,
-                contentDescription = item.product.name,
+                contentDescription = item.product.title.name,
             )
 
             Box(
@@ -71,7 +71,7 @@ fun StockItemCard(
 
         Column(modifier = Modifier.padding(horizontal = 8.dp)) {
             Text(
-                text = item.product.name,
+                text = item.product.title.name,
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.Bold
             )

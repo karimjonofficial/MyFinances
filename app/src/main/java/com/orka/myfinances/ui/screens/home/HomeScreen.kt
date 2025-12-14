@@ -120,7 +120,7 @@ fun HomeScreen(
 
                 if (dialogVisible.value) {
                     AddFolderDialog(
-                        templates = emptyList(),
+                        templates = emptyList(),//TODO
                         dismissRequest = { hideDialog() },
                         onAddTemplateClick = {
                             navigationManager.navigateToAddTemplate()

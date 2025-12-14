@@ -17,5 +17,6 @@ interface NavigationManager {
     fun navigateToProduct(product: Product)
     fun navigateToClients()
     fun navigateToClient(client: Client)
+    fun navigateToHistory()
     fun back()
 }

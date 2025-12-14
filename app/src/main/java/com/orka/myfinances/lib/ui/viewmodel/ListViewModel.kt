@@ -13,20 +13,21 @@ abstract class ListViewModel<TLoading, TSuccess, TFailure>(
     logger: Logger,
     coroutineScope: CoroutineScope
 ) : ViewModel<State<TLoading, List<TSuccess>, TFailure>>(
-    initialState = State.initial(),
+    initialState = State.Initial(),
     logger = logger,
     coroutineScope = coroutineScope
 ) {
     val uiState = state.asStateFlow()
 
     fun initialize() = launch {
-        setStateLoading()
-        setState(fetchState() ?: State.failure(failure))
+        if(state.value !is State.Loading<TLoading, List<TSuccess>, TFailure>)
+            setStateLoading()
+        setState(fetchState() ?: State.Failure(failure))
     }
 
     protected open suspend fun fetchState(): State.Success<TLoading, List<TSuccess>, TFailure>? {
         val response = repository.get()
-        return if(response != null) State.success(filterData(response)) else null
+        return if(response != null) State.Success(filterData(response)) else null
     }
 
     protected open fun setStateLoading() {

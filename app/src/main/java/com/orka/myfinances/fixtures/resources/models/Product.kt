@@ -1,22 +1,31 @@
 package com.orka.myfinances.fixtures.resources.models
 
-import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.product.Product
-import com.orka.myfinances.data.models.product.Property
-import com.orka.myfinances.data.models.template.TemplateField
-import com.orka.myfinances.fixtures.resources.models.folder.folder1
+import com.orka.myfinances.fixtures.resources.dateTime
+import com.orka.myfinances.fixtures.resources.models.folder.warehouse1
+import com.orka.myfinances.fixtures.resources.price
+import com.orka.myfinances.fixtures.resources.salePrice
+import kotlin.time.ExperimentalTime
 
-val sizeField = TemplateField(id1, "Size", "String")
-val colorField = TemplateField(id1, "Color", "String")
+@OptIn(ExperimentalTime::class)
 val product1 = Product(
     id = id1,
-    name = "Classic Canvas Sneakers",
-    price = 0,
-    salePrice = 0,
-    warehouse = folder1,
-    properties = listOf(
-        Property(Id(304), sizeField, "9"),
-        Property(Id(305), colorField, "Red")
-    ),
-    description = "A timeless sneaker design for any casual occasion."
+    title = productTitle1,
+    price = price,
+    salePrice = salePrice,
+    warehouse = warehouse1,
+    dateTime = dateTime,
+    properties = properties,
 )
+@OptIn(ExperimentalTime::class)
+val product2 = Product(
+    id = id2,
+    title = productTitle2,
+    price = price,
+    salePrice = salePrice,
+    warehouse = warehouse1,
+    dateTime = dateTime,
+    properties = properties
+)
+
+val products = listOf(product1, product2)

@@ -2,12 +2,12 @@ package com.orka.myfinances.ui.screens.catalog
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.repositories.folder.FolderRepository
-import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.data.repositories.folder.DummyFolderRepository
-import com.orka.myfinances.fixtures.data.repositories.folder.EmptyFolderRepositoryStub
-import com.orka.myfinances.fixtures.data.repositories.folder.FolderRepositoryStub
-import com.orka.myfinances.fixtures.data.repositories.folder.SpyFolderRepository
-import com.orka.myfinances.testLib.catalog1
+import com.orka.myfinances.testFixtures.DummyLogger
+import com.orka.myfinances.testFixtures.data.repositories.folder.DummyFolderRepository
+import com.orka.myfinances.testFixtures.data.repositories.folder.EmptyFolderRepositoryStub
+import com.orka.myfinances.testFixtures.data.repositories.folder.FolderRepositoryStub
+import com.orka.myfinances.testFixtures.data.repositories.folder.SpyFolderRepository
+import com.orka.myfinances.testFixtures.resources.models.folder.catalog1
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 

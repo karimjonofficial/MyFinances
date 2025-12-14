@@ -26,7 +26,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Folder
 import com.orka.myfinances.data.models.folder.Warehouse
-import com.orka.myfinances.fixtures.resources.models.folder.folder1
+import com.orka.myfinances.fixtures.resources.models.folder.warehouse1
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
@@ -172,7 +172,7 @@ private fun CatalogPreview() {
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            FolderButton(folder = folder1) {}
+            FolderButton(folder = warehouse1) {}
         }
     }
 }
@@ -191,7 +191,7 @@ private fun ProductFolderPreview() {
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            FolderButton(folder = folder1) {}
+            FolderButton(folder = warehouse1) {}
         }
     }
 }

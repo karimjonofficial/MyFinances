@@ -1,0 +1,47 @@
+package com.orka.myfinances.testFixtures.factories
+
+import com.orka.myfinances.data.models.folder.Catalog
+import com.orka.myfinances.data.models.folder.Warehouse
+import com.orka.myfinances.factories.viewmodel.ViewModelProvider
+import com.orka.myfinances.testFixtures.resources.viewModel
+
+class SpyViewModelProvider : ViewModelProvider {
+    var warehouseRequired = false
+
+    override fun foldersViewModel(): Any {
+        return "home"
+    }
+
+    override fun templatesViewModel(): Any {
+        return "templates"
+    }
+
+    override fun addTemplateViewModel(): Any {
+        return "add template"
+    }
+
+    override fun addProductViewModel(): Any {
+        return "add product"
+    }
+
+    override fun warehouseViewModel(warehouse: Warehouse): Any {
+        warehouseRequired = true
+        return viewModel
+    }
+
+    override fun catalogViewModel(catalog: Catalog): Any {
+        return "catalog"
+    }
+
+    override fun basketViewModel(): Any {
+        return "basket"
+    }
+
+    override fun clientsViewModel(): Any {
+        return "clients"
+    }
+
+    override fun saleViewModel(): Any {
+        return "sale"
+    }
+}

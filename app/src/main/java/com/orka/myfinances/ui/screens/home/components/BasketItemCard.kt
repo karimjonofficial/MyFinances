@@ -36,10 +36,16 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.data.models.product.Product
+import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.data.models.product.Property
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.models.template.TemplateField
+import com.orka.myfinances.fixtures.resources.dateTime
+import com.orka.myfinances.fixtures.resources.models.id1
+import com.orka.myfinances.fixtures.resources.models.id2
+import com.orka.myfinances.fixtures.resources.models.id3
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
+import kotlin.time.ExperimentalTime
 
 @Composable
 fun BasketItemCard(
@@ -68,7 +74,7 @@ fun BasketItemCard(
             ) {
                 Image(
                     painter = painterResource(id = imageRes),
-                    contentDescription = product.name,
+                    contentDescription = product.title.name,
                     modifier = Modifier
                         .size(80.dp)
                         .clip(RoundedCornerShape(12.dp)),
@@ -83,14 +89,14 @@ fun BasketItemCard(
                         .align(Alignment.CenterVertically)
                 ) {
                     Text(
-                        text = product.name,
+                        text = product.title.name,
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Bold
                         )
                     )
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        if(product.properties.isNotEmpty()) {
+                        if (product.properties.isNotEmpty()) {
                             product.properties.dropLast(1).forEach { property ->
                                 Text(
                                     text = "${property.type.name}: ${property.value}",
@@ -115,7 +121,7 @@ fun BasketItemCard(
                         }
                     }
 
-                    if (product.description.isNotBlank()) {
+                    if (product.description?.isNotBlank() ?: false) {
                         Text(
                             text = product.description,
                             style = MaterialTheme.typography.bodySmall,
@@ -128,75 +134,75 @@ fun BasketItemCard(
                     Spacer(modifier = Modifier.height(8.dp))
 
                     /**if (item.isOutOfStock) {
+                    Text(
+                    text = "Out of Stock",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                    fontWeight = FontWeight.Bold
+                    )
+                    )
+                    } else {**/
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            text = "Out of Stock",
-                            color = MaterialTheme.colorScheme.error,
+                            text = "$${product.salePrice}",
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontWeight = FontWeight.Bold
                             )
                         )
-                    } else {**/
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = "$${product.salePrice}",
-                                style = MaterialTheme.typography.bodyMedium.copy(
-                                    fontWeight = FontWeight.Bold
-                                )
-                            )
-                            /**if (hasDiscount) {
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(
-                                    text = "$${product.price / 100.0}",
-                                    style = MaterialTheme.typography.bodySmall.copy(
-                                        textDecoration = TextDecoration.LineThrough,
-                                        color = MaterialTheme.colorScheme.outline
-                                    )
-                                )
-                            }**/
-                        }
+                        /**if (hasDiscount) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                        text = "$${product.price / 100.0}",
+                        style = MaterialTheme.typography.bodySmall.copy(
+                        textDecoration = TextDecoration.LineThrough,
+                        color = MaterialTheme.colorScheme.outline
+                        )
+                        )
+                        }**/
+                    }
                     //}
 
                     Spacer(modifier = Modifier.height(8.dp))
 
                     //if(!item.isOutOfStock) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.End
-                        ) {
-                            IconButton(
-                                onClick = { decrease(item) },
-                                //enabled = !item.isOutOfStock,
-                                colors = IconButtonDefaults.iconButtonColors(
-                                    containerColor = MaterialTheme.colorScheme.surfaceVariant
-                                )
-                            ) {
-                                Icon(
-                                    painter = painterResource(R.drawable.remove),
-                                    contentDescription = stringResource(R.string.decrease)
-                                )
-                            }
-
-                            Text(
-                                text = item.amount.toString(),
-                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.padding(horizontal = 8.dp)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        IconButton(
+                            onClick = { decrease(item) },
+                            //enabled = !item.isOutOfStock,
+                            colors = IconButtonDefaults.iconButtonColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant
                             )
-
-                            IconButton(
-                                onClick = { increase(item) },
-                                //enabled = !item.isOutOfStock,
-                                colors = IconButtonDefaults.iconButtonColors(
-                                    containerColor = MaterialTheme.colorScheme.primary,
-                                    contentColor = MaterialTheme.colorScheme.onPrimary
-                                )
-                            ) {
-                                Icon(
-                                    painter = painterResource(R.drawable.add),
-                                    contentDescription = stringResource(R.string.increase)
-                                )
-                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.remove),
+                                contentDescription = stringResource(R.string.decrease)
+                            )
                         }
+
+                        Text(
+                            text = item.amount.toString(),
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+
+                        IconButton(
+                            onClick = { increase(item) },
+                            //enabled = !item.isOutOfStock,
+                            colors = IconButtonDefaults.iconButtonColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = MaterialTheme.colorScheme.onPrimary
+                            )
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.add),
+                                contentDescription = stringResource(R.string.increase)
+                            )
+                        }
+                    }
                     //}
                 }
             }
@@ -216,9 +222,7 @@ fun BasketItemCard(
 }
 
 
-
-
-
+@OptIn(ExperimentalTime::class)
 @Preview(showBackground = true)
 @Composable
 fun BasketItemCardPreview() {
@@ -250,9 +254,14 @@ fun BasketItemCardPreview() {
             val sampleTShirt = BasketItem(
                 product = Product(
                     id = Id(1),
-                    name = "Organic Cotton T-Shirt",
+                    title = ProductTitle(
+                        id = id1,
+                        name = "Organic Cotton T-Shirt",
+                        description = "Made with 100% GOTS certified organic cotton for a soft feel and comfortable fit."
+                    ),
                     price = 2500,
                     salePrice = 2500,
+                    dateTime = dateTime,
                     warehouse = Warehouse(
                         id = Id(21),
                         name = "Clothes Warehouse",
@@ -269,9 +278,14 @@ fun BasketItemCardPreview() {
             val sampleHeadphones = BasketItem(
                 product = Product(
                     id = Id(2),
-                    name = "Wireless Noise-Cancelling Headphones",
+                    title = ProductTitle(
+                        id = id2,
+                        name = "Wireless Noise-Cancelling Headphones",
+                        description = "Immerse yourself in sound with active noise cancellation and up to 30 hours of battery."
+                    ),
                     price = 19999,
                     salePrice = 14999,
+                    dateTime = dateTime,
                     warehouse = Warehouse(
                         id = Id(22),
                         name = "Electronics Warehouse",
@@ -287,9 +301,14 @@ fun BasketItemCardPreview() {
             val sampleSneakers = BasketItem(
                 product = Product(
                     id = Id(3),
-                    name = "Classic Canvas Sneakers",
+                    title = ProductTitle(
+                        id = id3,
+                        name = "Classic Canvas Sneakers",
+                        description = "A timeless sneaker design for any casual occasion."
+                    ),
                     price = 0,
                     salePrice = 0,
+                    dateTime = dateTime,
                     warehouse = Warehouse(
                         id = Id(23),
                         name = "Shoes Warehouse",
@@ -311,7 +330,6 @@ fun BasketItemCardPreview() {
                 decrease = {},
                 remove = {}
             )
-
             BasketItemCard(
                 imageRes = R.drawable.headphone,
                 item = sampleHeadphones,
@@ -319,7 +337,6 @@ fun BasketItemCardPreview() {
                 decrease = {},
                 remove = {}
             )
-
             BasketItemCard(
                 imageRes = R.drawable.sneakers,
                 item = sampleSneakers,

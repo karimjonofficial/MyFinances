@@ -7,5 +7,5 @@ data class StockItem(
     val product: Product,
     val amount: Int,
     val companyOffice: CompanyOffice,
-    val description: String = ""
+    val description: String? = null
 )

@@ -2,10 +2,10 @@ package com.orka.myfinances.ui.screens.templates
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.repositories.template.TemplateRepository
-import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.data.repositories.template.DummyTemplateRepository
-import com.orka.myfinances.fixtures.data.repositories.template.EmptyTemplateRepositoryStub
-import com.orka.myfinances.fixtures.data.repositories.template.TemplateRepositoryStub
+import com.orka.myfinances.testFixtures.DummyLogger
+import com.orka.myfinances.testFixtures.data.repositories.template.DummyTemplateRepository
+import com.orka.myfinances.testFixtures.data.repositories.template.EmptyTemplateRepositoryStub
+import com.orka.myfinances.testFixtures.data.repositories.template.TemplateRepositoryStub
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue

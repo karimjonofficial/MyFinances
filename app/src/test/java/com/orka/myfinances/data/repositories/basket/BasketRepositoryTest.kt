@@ -2,12 +2,13 @@ package com.orka.myfinances.data.repositories.basket
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.repositories.product.ProductRepository
-import com.orka.myfinances.fixtures.data.api.product.ProductApiServiceStub
-import com.orka.myfinances.testLib.amount
-import com.orka.myfinances.testLib.id1
-import com.orka.myfinances.testLib.product2
+import com.orka.myfinances.testFixtures.resources.amount
+import com.orka.myfinances.testFixtures.resources.models.id1
+import com.orka.myfinances.testFixtures.data.api.product.ProductApiServiceStub
+import com.orka.myfinances.testFixtures.resources.models.product.product2
 import kotlinx.coroutines.launch
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

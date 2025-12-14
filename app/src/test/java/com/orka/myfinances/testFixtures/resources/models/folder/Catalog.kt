@@ -1,0 +1,15 @@
+package com.orka.myfinances.testFixtures.resources.models.folder
+
+import com.orka.myfinances.data.models.folder.Catalog
+import com.orka.myfinances.testFixtures.resources.models.id1
+import com.orka.myfinances.testFixtures.resources.models.id2
+import com.orka.myfinances.testFixtures.resources.name
+
+val catalog1 = Catalog(
+    id = id1,
+    name = name
+)
+val catalog2 = Catalog(
+    id = id2,
+    name = name
+)

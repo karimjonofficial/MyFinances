@@ -5,6 +5,7 @@ import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.factories.viewmodel.CatalogScreenViewModelProvider
 import com.orka.myfinances.factories.viewmodel.ViewModelProvider
 import com.orka.myfinances.factories.viewmodel.WarehouseScreenViewModelProvider
+import com.orka.myfinances.ui.screens.history.SaleContentViewModel
 import com.orka.myfinances.ui.screens.clients.ClientsScreenViewModel
 import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
@@ -22,7 +23,8 @@ class ViewModelProviderImpl(
     private val foldersContentViewModel: FoldersContentViewModel,
     private val clientsScreenViewModel: ClientsScreenViewModel,
     private val warehouseScreenViewModelProvider: WarehouseScreenViewModelProvider,
-    private val catalogScreenViewModelProvider: CatalogScreenViewModelProvider
+    private val catalogScreenViewModelProvider: CatalogScreenViewModelProvider,
+    private val saleViewModel: SaleContentViewModel
 ) : ViewModelProvider {
     override fun addTemplateViewModel(): AddTemplateScreenViewModel {
         return addTemplateScreenViewModel
@@ -63,5 +65,10 @@ class ViewModelProviderImpl(
     override fun clientsViewModel(): Any {
         clientsScreenViewModel.initialize()
         return clientsScreenViewModel
+    }
+
+    override fun saleViewModel(): Any {
+        saleViewModel.initialize()
+        return saleViewModel
     }
 }

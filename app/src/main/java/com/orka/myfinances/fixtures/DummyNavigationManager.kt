@@ -18,5 +18,6 @@ class DummyNavigationManager : NavigationManager {
     override fun navigateToProduct(product: Product) {}
     override fun navigateToClients() {}
     override fun navigateToClient(client: Client) {}
+    override fun navigateToHistory() {}
     override fun back() {}
 }

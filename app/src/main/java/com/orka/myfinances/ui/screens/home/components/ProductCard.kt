@@ -16,6 +16,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.fixtures.resources.models.product1
 import com.orka.myfinances.ui.theme.MyFinancesTheme
+import kotlin.time.ExperimentalTime
 
 @Composable
 fun ProductCard(
@@ -23,27 +24,29 @@ fun ProductCard(
     product: Product,
     onClick: (Product) -> Unit
 ) {
-    val d = product.description.ifEmpty { stringResource(R.string.no_description_provided) }
+    val d = product.description?.ifEmpty { stringResource(R.string.no_description_provided) }
+        ?: stringResource(R.string.no_description_provided)
 
     ListItem(
         modifier = modifier.clickable { onClick(product) },
-        headlineContent = { Text(text = product.name) },
+        headlineContent = { Text(text = product.title.name) },
         supportingContent = { Text(text = d) },
         leadingContent = {
             Icon(
                 painter = painterResource(R.drawable.star_outlined),
-                contentDescription = product.name
+                contentDescription = product.title.name
             )
         },
         trailingContent = {
             Icon(
                 painter = painterResource(R.drawable.arrow_right),
-                contentDescription = product.name
+                contentDescription = product.title.name
             )
         }
     )
 }
 
+@OptIn(ExperimentalTime::class)
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 private fun ProductCardPreview() {
@@ -53,10 +56,9 @@ private fun ProductCardPreview() {
             contentAlignment = Alignment.Center
         ) {
             ProductCard(
-                product = product1.copy(description = "Some product is there")
-            ) {
-
-            }
+                product = product1.copy(description = "Some product is there"),
+                onClick = {}
+            )
         }
     }
 }

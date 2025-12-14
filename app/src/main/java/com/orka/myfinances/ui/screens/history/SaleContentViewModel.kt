@@ -1,0 +1,21 @@
+package com.orka.myfinances.ui.screens.history
+
+import com.orka.myfinances.core.Logger
+import com.orka.myfinances.data.models.sale.Sale
+import com.orka.myfinances.data.repositories.SaleRepository
+import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
+import kotlinx.coroutines.CoroutineScope
+
+class SaleContentViewModel(
+    loading: String,
+    failure: String,
+    repository: SaleRepository,
+    logger: Logger,
+    coroutineScope: CoroutineScope
+) : ListViewModel<String, Sale, String>(
+    loading = loading,
+    failure = failure,
+    repository = repository,
+    logger = logger,
+    coroutineScope = coroutineScope
+)

@@ -5,14 +5,15 @@ import com.orka.myfinances.data.api.ProductApiService
 import com.orka.myfinances.data.api.StockApiService
 import com.orka.myfinances.data.repositories.StockRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
-import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.data.api.product.DummyProductApiService
-import com.orka.myfinances.fixtures.data.api.product.SpyProductApiService
-import com.orka.myfinances.fixtures.data.api.warehouse.DummyStockApiService
-import com.orka.myfinances.fixtures.data.api.warehouse.EmptyStockApiServiceStub
-import com.orka.myfinances.fixtures.data.api.warehouse.StockApiServiceStub
-import com.orka.myfinances.testLib.addProductRequest
-import org.junit.jupiter.api.Assertions.*
+import com.orka.myfinances.testFixtures.DummyLogger
+import com.orka.myfinances.testFixtures.data.api.product.DummyProductApiService
+import com.orka.myfinances.testFixtures.data.api.product.SpyProductApiService
+import com.orka.myfinances.testFixtures.data.api.warehouse.DummyStockApiService
+import com.orka.myfinances.testFixtures.data.api.warehouse.EmptyStockApiServiceStub
+import com.orka.myfinances.testFixtures.data.api.warehouse.StockApiServiceStub
+import com.orka.myfinances.testFixtures.resources.addProductRequest
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 

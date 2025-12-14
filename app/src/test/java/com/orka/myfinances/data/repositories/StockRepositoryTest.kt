@@ -2,9 +2,9 @@ package com.orka.myfinances.data.repositories
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.api.StockApiService
-import com.orka.myfinances.fixtures.data.api.warehouse.EmptyStockApiServiceStub
-import com.orka.myfinances.fixtures.data.api.warehouse.StockApiServiceStub
-import com.orka.myfinances.testLib.id1
+import com.orka.myfinances.testFixtures.data.api.warehouse.EmptyStockApiServiceStub
+import com.orka.myfinances.testFixtures.data.api.warehouse.StockApiServiceStub
+import com.orka.myfinances.testFixtures.resources.models.id1
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test

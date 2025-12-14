@@ -23,6 +23,8 @@ import com.orka.myfinances.lib.extensions.models.toModel
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.session.SessionManager
 import com.orka.myfinances.ui.managers.session.UiState
+import com.orka.myfinances.ui.screens.history.SaleContentViewModel
+import com.orka.myfinances.data.repositories.SaleRepository
 import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
@@ -145,6 +147,13 @@ class UiManager(
             logger = logger,
             coroutineScope = newScope()
         )
+        val saleViewModel = SaleContentViewModel(
+            loading = "Loading",
+            failure = "Failure",
+            repository = SaleRepository(),
+            logger = logger,
+            coroutineScope = newScope()
+        )
 
         return ViewModelProviderImpl(
             addTemplateScreenViewModel = addTemplateScreenViewModel,
@@ -154,7 +163,8 @@ class UiManager(
             warehouseScreenViewModelProvider = warehouseScreenViewModelProvider,
             catalogScreenViewModelProvider = catalogScreenViewModelProvider,
             basketContentViewModel = basketContentViewModel,
-            clientsScreenViewModel = clientsScreenViewModel
+            clientsScreenViewModel = clientsScreenViewModel,
+            saleViewModel = saleViewModel
         )
     }
 }

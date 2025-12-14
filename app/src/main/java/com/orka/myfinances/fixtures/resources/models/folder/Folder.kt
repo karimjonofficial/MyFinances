@@ -10,7 +10,7 @@ import com.orka.myfinances.fixtures.resources.models.template.template1
 import com.orka.myfinances.fixtures.resources.models.template.template2
 import com.orka.myfinances.fixtures.resources.models.template.template3
 
-val folder1 = Warehouse(
+val warehouse1 = Warehouse(
     id = id1,
     name = "Smartphones",
     template = template1
@@ -25,10 +25,10 @@ val folder3 = Warehouse(
     name = "Standalone Gadgets",
     template = template3
 )
-val folder4 = Catalog(
+val catalog1 = Catalog(
     id = id3,
     name = "Electronics"
 )
 
-val folders = listOf(folder1, folder2, folder4)
-val warehouses = listOf(folder1, folder2, folder3)
+val folders = listOf(warehouse1, folder2, catalog1)
+val warehouses = listOf(warehouse1, folder2, folder3)

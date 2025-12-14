@@ -20,14 +20,7 @@ sealed interface Destination {
     data class Product(val product: ProductModel) : Destination
     data class Clients(val viewModel: Any) : Destination
     data class Client(val client: ClientModel) : Destination
-
-    data class AddTemplate(
-        val viewModel: Any,
-        val types: List<String>
-    ) : Destination
-
-    data class AddProduct(
-        val warehouse: WarehouseModel,
-        val viewModel: Any
-    ) : Destination
+    data class AddTemplate(val viewModel: Any, val types: List<String>) : Destination
+    data class AddProduct(val warehouse: WarehouseModel, val viewModel: Any) : Destination
+    data class History(val saleViewModel: Any) : Destination
 }

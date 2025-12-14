@@ -2,13 +2,13 @@ package com.orka.myfinances.data.repositories.product
 
 import app.cash.turbine.test
 import com.orka.myfinances.core.MainDispatcherContext
-import com.orka.myfinances.fixtures.data.api.product.EmptyProductApiServiceStub
-import com.orka.myfinances.fixtures.data.api.product.SpyProductApiService
-import com.orka.myfinances.testLib.addProductRequest
-import com.orka.myfinances.testLib.product1
-import com.orka.myfinances.testLib.products
-import com.orka.myfinances.fixtures.data.api.product.ProductApiServiceStub
-import com.orka.myfinances.testLib.id1
+import com.orka.myfinances.testFixtures.data.api.product.EmptyProductApiServiceStub
+import com.orka.myfinances.testFixtures.data.api.product.ProductApiServiceStub
+import com.orka.myfinances.testFixtures.data.api.product.SpyProductApiService
+import com.orka.myfinances.testFixtures.resources.addProductRequest
+import com.orka.myfinances.testFixtures.resources.models.id1
+import com.orka.myfinances.testFixtures.resources.models.product.product1
+import com.orka.myfinances.testFixtures.resources.models.product.products
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue

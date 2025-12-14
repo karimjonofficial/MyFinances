@@ -7,11 +7,11 @@ import com.orka.myfinances.core.assertTopIs
 import com.orka.myfinances.core.test
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
-import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.data.api.product.DummyProductApiService
-import com.orka.myfinances.fixtures.data.repositories.folder.DummyFolderRepository
-import com.orka.myfinances.fixtures.factories.SpyViewModelProvider
-import com.orka.myfinances.testLib.product1
+import com.orka.myfinances.testFixtures.DummyLogger
+import com.orka.myfinances.testFixtures.data.api.product.DummyProductApiService
+import com.orka.myfinances.testFixtures.data.repositories.folder.DummyFolderRepository
+import com.orka.myfinances.testFixtures.factories.SpyViewModelProvider
+import com.orka.myfinances.testFixtures.resources.models.product.product1
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel

@@ -3,10 +3,13 @@ package com.orka.myfinances.fixtures.data.api
 import com.orka.myfinances.data.api.ProductApiService
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.product.Product
+import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.data.repositories.product.models.AddProductRequest
 import com.orka.myfinances.fixtures.resources.models.folder.folder2
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.product1
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 class ProductApiServiceImpl : ProductApiService {
     override suspend fun add(request: AddProductRequest): Product {
@@ -25,14 +28,16 @@ class ProductApiServiceImpl : ProductApiService {
         return product1
     }
 
+    @OptIn(ExperimentalTime::class)
     fun AddProductRequest.toProduct(id: Id): Product {
         return Product(
             id = id,
-            name = name,
+            title = ProductTitle(id, name, description),
             price = price,
             salePrice = salePrice,
             warehouse = folder2,
             properties = emptyList(),
+            dateTime = Clock.System.now(),
             description = description
         )
     }

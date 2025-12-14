@@ -4,16 +4,16 @@ import app.cash.turbine.test
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
-import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.data.api.product.MockProductApiService
-import com.orka.myfinances.testLib.amount
-import com.orka.myfinances.testLib.id1
-import com.orka.myfinances.testLib.id2
-import com.orka.myfinances.testLib.price
-import com.orka.myfinances.testLib.product1
+import com.orka.myfinances.testFixtures.DummyLogger
+import com.orka.myfinances.testFixtures.data.api.product.MockProductApiService
+import com.orka.myfinances.testFixtures.resources.amount
+import com.orka.myfinances.testFixtures.resources.models.id1
+import com.orka.myfinances.testFixtures.resources.models.id2
+import com.orka.myfinances.testFixtures.resources.models.product.product1
+import com.orka.myfinances.testFixtures.resources.price
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -31,7 +31,7 @@ class BasketContentViewModelTest : MainDispatcherContext() {
 
     @Test
     fun `State is Loading`() {
-        Assertions.assertTrue(viewModel.uiState.value is BasketState.Loading)
+        assertTrue(viewModel.uiState.value is BasketState.Loading)
     }
 
     @Nested
@@ -53,7 +53,7 @@ class BasketContentViewModelTest : MainDispatcherContext() {
 
             viewModel.uiState.test {
                 val state = awaitItem()
-                Assertions.assertTrue(
+                assertTrue(
                     state is BasketState.Success
                             && state.items.size == 1
                             && state.price == product1.price * 2 * amount
@@ -71,6 +71,7 @@ class BasketContentViewModelTest : MainDispatcherContext() {
                     advanceUntilIdle()
                 }
             }
+
             @Test
             fun `When increase, increases amount of item`() = runTest {
                 runAndAdvance {
@@ -80,8 +81,8 @@ class BasketContentViewModelTest : MainDispatcherContext() {
 
                 viewModel.uiState.test {
                     val state = awaitItem() as BasketState.Success
-                    Assertions.assertEquals(state.items.size, 2)
-                    Assertions.assertEquals(price * amount * 4, state.price)
+                    assertEquals(state.items.size, 2)
+                    assertEquals(price * amount * 4, state.price)
                 }
             }
         }
@@ -97,7 +98,7 @@ class BasketContentViewModelTest : MainDispatcherContext() {
             }
 
             @Test
-            fun `When decrease, decreases amount of item`() = testScope.runTest {
+            fun `When decrease, decreases amount of item`() = runTest {
                 runAndAdvance {
                     viewModel.increase(id1)
                     viewModel.decrease(id1)
@@ -105,19 +106,19 @@ class BasketContentViewModelTest : MainDispatcherContext() {
 
                 viewModel.uiState.test {
                     val state = awaitItem() as BasketState.Success
-                    Assertions.assertEquals(1, state.items.size)
-                    Assertions.assertEquals(price * amount, state.price)
+                    assertEquals(1, state.items.size)
+                    assertEquals(price * amount, state.price)
                 }
             }
 
             @Test
-            fun `When decrease, removes item`() = testScope.runTest {
+            fun `When decrease, removes item`() = runTest {
                 runAndAdvance { viewModel.decrease(id1) }
 
                 viewModel.uiState.test {
                     val state = awaitItem() as BasketState.Success
-                    Assertions.assertEquals(0, state.items.size)
-                    Assertions.assertEquals(0, state.price)
+                    assertEquals(0, state.items.size)
+                    assertEquals(0, state.price)
                 }
             }
         }

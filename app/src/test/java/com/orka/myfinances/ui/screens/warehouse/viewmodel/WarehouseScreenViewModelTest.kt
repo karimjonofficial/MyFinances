@@ -7,18 +7,18 @@ import com.orka.myfinances.data.api.StockApiService
 import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.data.repositories.StockRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
-import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.data.api.product.DummyProductApiService
-import com.orka.myfinances.fixtures.data.api.product.EmptyProductApiServiceStub
-import com.orka.myfinances.fixtures.data.api.product.ProductApiServiceStub
-import com.orka.myfinances.fixtures.data.api.product.SpyProductApiService
-import com.orka.myfinances.fixtures.data.api.warehouse.DummyStockApiService
-import com.orka.myfinances.fixtures.data.api.warehouse.EmptyStockApiServiceStub
-import com.orka.myfinances.fixtures.data.api.warehouse.StockApiServiceStub
-import com.orka.myfinances.fixtures.resources.models.folder.folder1
-import com.orka.myfinances.fixtures.resources.models.stockItem1
-import com.orka.myfinances.testLib.addProductRequest
-import com.orka.myfinances.testLib.products
+import com.orka.myfinances.testFixtures.DummyLogger
+import com.orka.myfinances.testFixtures.data.api.product.DummyProductApiService
+import com.orka.myfinances.testFixtures.data.api.product.EmptyProductApiServiceStub
+import com.orka.myfinances.testFixtures.data.api.product.ProductApiServiceStub
+import com.orka.myfinances.testFixtures.data.api.product.SpyProductApiService
+import com.orka.myfinances.testFixtures.data.api.warehouse.DummyStockApiService
+import com.orka.myfinances.testFixtures.data.api.warehouse.EmptyStockApiServiceStub
+import com.orka.myfinances.testFixtures.data.api.warehouse.StockApiServiceStub
+import com.orka.myfinances.testFixtures.resources.addProductRequest
+import com.orka.myfinances.testFixtures.resources.models.folder.warehouse1
+import com.orka.myfinances.testFixtures.resources.models.product.products
+import com.orka.myfinances.testFixtures.resources.models.stock.stockItem
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -33,7 +33,7 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
         add: (StockItem) -> Unit
     ): ViewModel {
         return ViewModel(
-            warehouse = folder1,
+            warehouse = warehouse1,
             productRepository = productRepository,
             stockRepository = stockRepository,
             add = add,
@@ -155,7 +155,7 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
                     add = { invoked = true }
                 )
 
-                runAndAdvance { viewModel.addToBasket(stockItem1) }
+                runAndAdvance { viewModel.addToBasket(stockItem) }
 
                 assertTrue(invoked)
             }

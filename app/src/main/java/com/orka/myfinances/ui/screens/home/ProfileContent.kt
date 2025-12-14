@@ -81,7 +81,7 @@ fun ProfileContent(
 
                 Button(
                     modifier = Modifier.weight(1f),
-                    onClick = {}
+                    onClick = { navigationManager.navigateToHistory() }
                 ) {
                     Text(text = stringResource(R.string.history))
                 }

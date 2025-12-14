@@ -2,16 +2,16 @@ package com.orka.myfinances.ui.screens.login
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.api.CredentialApiService
-import com.orka.myfinances.fixtures.DummyLogger
-import com.orka.myfinances.fixtures.data.api.credential.CredentialApiServiceStub
-import com.orka.myfinances.fixtures.data.api.credential.DummyCredentialApiService
-import com.orka.myfinances.fixtures.data.api.credential.EmptyCredentialApiServiceStub
-import com.orka.myfinances.fixtures.data.api.credential.SpyCredentialApiService
-import com.orka.myfinances.fixtures.managers.DummySessionManager
-import com.orka.myfinances.fixtures.managers.SpySessionManager
+import com.orka.myfinances.testFixtures.DummyLogger
+import com.orka.myfinances.testFixtures.data.api.credential.CredentialApiServiceStub
+import com.orka.myfinances.testFixtures.data.api.credential.DummyCredentialApiService
+import com.orka.myfinances.testFixtures.data.api.credential.EmptyCredentialApiServiceStub
+import com.orka.myfinances.testFixtures.data.api.credential.SpyCredentialApiService
+import com.orka.myfinances.testFixtures.managers.DummySessionManager
+import com.orka.myfinances.testFixtures.managers.SpySessionManager
+import com.orka.myfinances.testFixtures.resources.password
+import com.orka.myfinances.testFixtures.resources.username
 import com.orka.myfinances.testLib.assertLoadingTransition
-import com.orka.myfinances.testLib.password
-import com.orka.myfinances.testLib.username
 import com.orka.myfinances.ui.managers.session.SessionManager
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach

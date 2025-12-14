@@ -86,4 +86,9 @@ class NavigationManagerImpl(
     private fun navigate(destination: Destination) {
         updateState { backStack.value + destination }
     }
+
+    override fun navigateToHistory() {
+        val saleViewModel = provider.saleViewModel()
+        navigate(Destination.History(saleViewModel))
+    }
 }
