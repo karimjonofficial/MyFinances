@@ -1,6 +1,7 @@
 package com.orka.myfinances.ui.managers.navigation
 
 import com.orka.myfinances.data.models.Client
+import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.data.models.product.Product
@@ -22,5 +23,6 @@ sealed interface Destination {
     data class Client(val client: ClientModel) : Destination
     data class AddTemplate(val viewModel: Any, val types: List<String>) : Destination
     data class AddProduct(val warehouse: WarehouseModel, val viewModel: Any) : Destination
-    data class History(val saleViewModel: Any) : Destination
+    data class History(val saleViewModel: Any, val receiveViewModel: Any) : Destination
+    data class Checkout(val items: List<BasketItem>) : Destination
 }

@@ -8,9 +8,11 @@ import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.lib.ui.screens.MultipleTabScreen
-import com.orka.myfinances.ui.screens.history.SaleContentViewModel
+import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
 import com.orka.myfinances.lib.ui.models.ScreenTab
+import com.orka.myfinances.ui.screens.history.ReceiveContent
 import com.orka.myfinances.ui.screens.history.SaleContent
+import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun historyEntry(
@@ -21,11 +23,16 @@ fun historyEntry(
         ScreenTab(
             index = 0,
             title = stringResource(R.string.sale),
-            content = { modifier -> SaleContent(modifier, destination.saleViewModel as SaleContentViewModel) }
+            content = { modifier ->
+                SaleContent(modifier, destination.saleViewModel as SaleContentViewModel)
+            }
         ),
         ScreenTab(
             index = 1,
-            title = stringResource(R.string.receive)
+            title = stringResource(R.string.receive),
+            content = { modifier ->
+                ReceiveContent(modifier, destination.receiveViewModel as ReceiveContentViewModel)
+            }
         )
     )
 

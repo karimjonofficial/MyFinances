@@ -5,12 +5,13 @@ import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.factories.viewmodel.CatalogScreenViewModelProvider
 import com.orka.myfinances.factories.viewmodel.ViewModelProvider
 import com.orka.myfinances.factories.viewmodel.WarehouseScreenViewModelProvider
-import com.orka.myfinances.ui.screens.history.SaleContentViewModel
+import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
 import com.orka.myfinances.ui.screens.clients.ClientsScreenViewModel
 import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import com.orka.myfinances.ui.screens.catalog.CatalogScreenViewModel
+import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
 import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
@@ -24,7 +25,8 @@ class ViewModelProviderImpl(
     private val clientsScreenViewModel: ClientsScreenViewModel,
     private val warehouseScreenViewModelProvider: WarehouseScreenViewModelProvider,
     private val catalogScreenViewModelProvider: CatalogScreenViewModelProvider,
-    private val saleViewModel: SaleContentViewModel
+    private val saleViewModel: SaleContentViewModel,
+    private val receiveViewModel: ReceiveContentViewModel
 ) : ViewModelProvider {
     override fun addTemplateViewModel(): AddTemplateScreenViewModel {
         return addTemplateScreenViewModel
@@ -70,5 +72,10 @@ class ViewModelProviderImpl(
     override fun saleViewModel(): Any {
         saleViewModel.initialize()
         return saleViewModel
+    }
+
+    override fun receiveViewModel(): Any {
+        receiveViewModel.initialize()
+        return receiveViewModel
     }
 }

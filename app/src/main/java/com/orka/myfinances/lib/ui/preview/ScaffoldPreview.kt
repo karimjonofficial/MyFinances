@@ -12,16 +12,16 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScaffoldPreview(
-    modifier: Modifier = Modifier.Companion,
+    modifier: Modifier = Modifier,
     title: String,
+    bottomBar: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit
 ) {
     MyFinancesTheme {
         Scaffold(
             modifier = modifier,
-            topBar = {
-                TopAppBar(title = { Text(text = title) })
-            }
+            topBar = { TopAppBar(title = { Text(text = title) }) },
+            bottomBar = bottomBar
         ) { paddingValues ->
             content(paddingValues)
         }

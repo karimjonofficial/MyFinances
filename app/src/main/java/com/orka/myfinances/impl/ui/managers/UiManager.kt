@@ -4,6 +4,7 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Session
+import com.orka.myfinances.data.repositories.ReceiveRepository
 import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.data.repositories.StockRepository
 import com.orka.myfinances.data.repositories.basket.BasketRepository
@@ -23,12 +24,13 @@ import com.orka.myfinances.lib.extensions.models.toModel
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.session.SessionManager
 import com.orka.myfinances.ui.managers.session.UiState
-import com.orka.myfinances.ui.screens.history.SaleContentViewModel
+import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
 import com.orka.myfinances.data.repositories.SaleRepository
 import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import com.orka.myfinances.ui.screens.clients.ClientsScreenViewModel
+import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
 import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
@@ -154,6 +156,13 @@ class UiManager(
             logger = logger,
             coroutineScope = newScope()
         )
+        val receiveViewModel = ReceiveContentViewModel(
+            loading = "Loading",
+            failure = "Failure",
+            repository = ReceiveRepository(),
+            logger = logger,
+            coroutineScope = newScope()
+        )
 
         return ViewModelProviderImpl(
             addTemplateScreenViewModel = addTemplateScreenViewModel,
@@ -164,7 +173,8 @@ class UiManager(
             catalogScreenViewModelProvider = catalogScreenViewModelProvider,
             basketContentViewModel = basketContentViewModel,
             clientsScreenViewModel = clientsScreenViewModel,
-            saleViewModel = saleViewModel
+            saleViewModel = saleViewModel,
+            receiveViewModel = receiveViewModel
         )
     }
 }

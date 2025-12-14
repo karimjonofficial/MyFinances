@@ -1,14 +1,9 @@
-package com.orka.myfinances.ui.screens.history
+package com.orka.myfinances.ui.screens.history.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,21 +23,14 @@ fun SaleCard(
     onClick: (Sale) -> Unit
 ) {
     ListItem(
-        modifier = modifier.clickable { onClick(sale) },
-        leadingContent = {
-            Icon(
-                painter = painterResource(R.drawable.shopping_bag_outlined),
-                contentDescription = null
-            )
-        },
-        headlineContent = { Text(text = sale.items[0].product.title.name, softWrap = false) },
-        supportingContent = { Text(text = "${sale.items.size} items") },
-        trailingContent = {
-            Column(horizontalAlignment = Alignment.End) {
-                Text(text = sale.price.toString())
-                Text(text = sale.dateTime.toString())
-            }
-        }
+        modifier = modifier,
+        model = sale,
+        painter = painterResource(R.drawable.shopping_bag_outlined),
+        headlineText = sale.items[0].product.title.name,
+        supportingText = "${sale.items.size} items",
+        price = sale.price.toString(),
+        dateTime = sale.dateTime.toString(),
+        onClick = onClick
     )
 }
 

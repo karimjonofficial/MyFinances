@@ -141,7 +141,8 @@ fun HomeScreen(
                 BasketContent(
                     modifier = m,
                     state = state.value,
-                    viewModel = basketViewModel
+                    viewModel = basketViewModel,
+                    navigationManager = navigationManager
                 )
             }
 

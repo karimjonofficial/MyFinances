@@ -69,4 +69,6 @@
     <string name="edit">Edit</string>
     <string name="sale">Sale</string>
     <string name="receive">Receive</string>
+    <string name="checkout">Checkout</string>
+    <string name="basket_is_empty">Basket is empty</string>
 </resources>

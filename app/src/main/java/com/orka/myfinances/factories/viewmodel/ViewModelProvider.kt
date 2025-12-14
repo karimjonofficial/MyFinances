@@ -13,4 +13,5 @@ interface ViewModelProvider {
     fun basketViewModel(): Any
     fun clientsViewModel(): Any
     fun saleViewModel(): Any
+    fun receiveViewModel(): Any
 }

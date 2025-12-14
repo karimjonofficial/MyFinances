@@ -3,6 +3,7 @@ package com.orka.myfinances.impl.ui.managers
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.Client
+import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.data.models.product.Product
@@ -83,12 +84,17 @@ class NavigationManagerImpl(
         navigate(Destination.Client(client))
     }
 
+    override fun navigateToCheckout(items: List<BasketItem>) {
+        navigate(Destination.Checkout(items))
+    }
+
     private fun navigate(destination: Destination) {
         updateState { backStack.value + destination }
     }
 
     override fun navigateToHistory() {
         val saleViewModel = provider.saleViewModel()
-        navigate(Destination.History(saleViewModel))
+        val receiveViewModel = provider.receiveViewModel()
+        navigate(Destination.History(saleViewModel, receiveViewModel))
     }
 }
