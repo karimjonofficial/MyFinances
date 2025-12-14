@@ -7,7 +7,7 @@ import com.orka.myfinances.lib.extensions.models.toModel
 import com.orka.myfinances.testFixtures.resources.models.user
 
 class UserApiServiceStub : UserApiService {
-    override suspend fun get(credential: Credential): UserModel? {
+    override suspend fun get(credential: Credential): UserModel {
         return user.toModel()
     }
 }

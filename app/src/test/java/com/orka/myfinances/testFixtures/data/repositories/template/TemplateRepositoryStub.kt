@@ -5,12 +5,11 @@ import com.orka.myfinances.data.repositories.template.AddTemplateRequest
 import com.orka.myfinances.data.repositories.template.TemplateRepository
 
 class TemplateRepositoryStub : TemplateRepository {
-
     override suspend fun add(request: AddTemplateRequest): Template? {
         return null
     }
 
-    override suspend fun get(): List<Template>? {
+    override suspend fun get(): List<Template> {
         return emptyList()
     }
 }

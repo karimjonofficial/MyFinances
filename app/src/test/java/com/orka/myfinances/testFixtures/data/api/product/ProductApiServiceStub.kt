@@ -7,7 +7,7 @@ import com.orka.myfinances.testFixtures.resources.models.product.product1
 import com.orka.myfinances.testFixtures.resources.models.product.products
 
 class ProductApiServiceStub : ProductApiService {
-    override suspend fun add(request: AddProductRequest): Product? {
+    override suspend fun add(request: AddProductRequest): Product {
         return product1
     }
 
@@ -15,11 +15,11 @@ class ProductApiServiceStub : ProductApiService {
         return products
     }
 
-    override suspend fun getById(id: Int): Product? {
+    override suspend fun getById(id: Int): Product {
         return product1
     }
 
-    override suspend fun get(id: Int): List<Product>? {
+    override suspend fun get(id: Int): List<Product> {
         return products
     }
 }
