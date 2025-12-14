@@ -17,6 +17,7 @@ fun SaleContent(
     LazyColumnContent(
         modifier = modifier,
         contentPadding = PaddingValues(0.dp),
+        arrangementSpace = 0.dp,
         state = state.value,
         viewModel = viewModel,
         item = { modifier, sale -> SaleCard(modifier, sale) {} }
