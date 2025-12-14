@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -15,6 +16,7 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 fun <TLoading, TSuccess, TFailure> LazyColumnContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(horizontal = 4.dp),
+    arrangementSpace: Dp = 4.dp,
     state: State<TLoading, List<TSuccess>, TFailure>,
     viewModel: ListViewModel<TLoading, TSuccess, TFailure>,
     item: @Composable (modifier: Modifier, item: TSuccess) -> Unit
@@ -32,7 +34,7 @@ fun <TLoading, TSuccess, TFailure> LazyColumnContent(
             LazyColumn(
                 modifier = modifier,
                 contentPadding = contentPadding,
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(arrangementSpace)
             ) {
                 items(items = state.value) {
                     item(Modifier.fillMaxWidth(), it)
