@@ -32,6 +32,8 @@ class BasketRepository(private val productRepository: ProductRepository) {
         }
     }
 
+    fun clear() { items.clear() }
+
     private fun getIndex(id: Id): Int? {
         val index = items.indexOfFirst { it.product.id == id }
         return if(index == -1) null else index

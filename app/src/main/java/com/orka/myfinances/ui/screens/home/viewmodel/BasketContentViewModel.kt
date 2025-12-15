@@ -16,13 +16,18 @@ class BasketContentViewModel(
     initialState = BasketState.Loading,
     logger = logger,
     coroutineScope = coroutineScope
-    ) {
+) {
     val uiState = state.asStateFlow()
 
     fun initialize() = launch {
         val items = repository.get()
         val price = items.sumOf { it.product.price * it.amount }
         setState(BasketState.Success(items, price))
+    }
+
+    fun clear() = launch {
+        repository.clear()
+        initialize()
     }
 
     fun increase(id: Id) = launch {

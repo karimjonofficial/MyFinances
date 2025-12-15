@@ -24,5 +24,5 @@ sealed interface Destination {
     data class AddTemplate(val viewModel: Any, val types: List<String>) : Destination
     data class AddProduct(val warehouse: WarehouseModel, val viewModel: Any) : Destination
     data class History(val saleViewModel: Any, val receiveViewModel: Any) : Destination
-    data class Checkout(val items: List<BasketItem>) : Destination
+    data class Checkout(val items: List<BasketItem>, val viewModel: Any) : Destination
 }

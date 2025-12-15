@@ -11,7 +11,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Warehouse
-import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,7 +31,6 @@ fun WarehouseScreenTopBar(
                 )
             }
 
-            HorizontalSpacer(4)
             IconButton(onClick = { onAddStockItemClick(warehouse) }) {
                 Icon(
                     painter = painterResource(R.drawable.download),

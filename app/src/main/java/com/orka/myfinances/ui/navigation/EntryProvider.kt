@@ -37,5 +37,5 @@ fun entryProvider(
     is Destination.Clients -> clientsEntry(modifier, destination, navigationManager)
     is Destination.Client -> clientEntry(modifier, destination)
     is Destination.History -> historyEntry(modifier, destination)
-    is Destination.Checkout -> checkoutEntry(modifier, destination)
+    is Destination.Checkout -> checkoutEntry(modifier, destination, navigationManager)
 }

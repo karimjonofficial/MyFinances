@@ -85,7 +85,8 @@ class NavigationManagerImpl(
     }
 
     override fun navigateToCheckout(items: List<BasketItem>) {
-        navigate(Destination.Checkout(items))
+        val viewModel = provider.checkoutViewModel()
+        navigate(Destination.Checkout(items, viewModel))
     }
 
     private fun navigate(destination: Destination) {

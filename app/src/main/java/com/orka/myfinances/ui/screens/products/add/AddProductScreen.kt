@@ -77,6 +77,7 @@ fun AddProductScreen(
 
                     Column(
                         modifier = Modifier
+                            .fillMaxWidth()
                             .weight(1f)
                             .verticalScroll(scrollState),
                         horizontalAlignment = Alignment.CenterHorizontally

@@ -26,6 +26,7 @@ import com.orka.myfinances.ui.managers.session.SessionManager
 import com.orka.myfinances.ui.managers.session.UiState
 import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
 import com.orka.myfinances.data.repositories.SaleRepository
+import com.orka.myfinances.ui.screens.checkout.CheckoutScreenViewModel
 import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
@@ -110,6 +111,8 @@ class UiManager(
         val stockRepository = StockRepository(warehouseApiService)
         val productRepository = ProductRepository(productApiService)
         val basketRepository = BasketRepository(productRepository)
+        val saleRepository = SaleRepository()
+
         val basketContentViewModel = BasketContentViewModel(
             repository = basketRepository,
             logger = logger,
@@ -152,7 +155,7 @@ class UiManager(
         val saleViewModel = SaleContentViewModel(
             loading = "Loading",
             failure = "Failure",
-            repository = SaleRepository(),
+            repository = saleRepository,
             logger = logger,
             coroutineScope = newScope()
         )
@@ -161,6 +164,11 @@ class UiManager(
             failure = "Failure",
             repository = ReceiveRepository(),
             logger = logger,
+            coroutineScope = newScope()
+        )
+        val checkoutScreenViewModel = CheckoutScreenViewModel(
+            repository = saleRepository,
+            clearBasket = { basketContentViewModel.clear() },
             coroutineScope = newScope()
         )
 
@@ -174,7 +182,8 @@ class UiManager(
             basketContentViewModel = basketContentViewModel,
             clientsScreenViewModel = clientsScreenViewModel,
             saleViewModel = saleViewModel,
-            receiveViewModel = receiveViewModel
+            receiveViewModel = receiveViewModel,
+            checkoutViewModel = checkoutScreenViewModel
         )
     }
 }

@@ -11,6 +11,7 @@ import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenVie
 import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import com.orka.myfinances.ui.screens.catalog.CatalogScreenViewModel
+import com.orka.myfinances.ui.screens.checkout.CheckoutScreenViewModel
 import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
 import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
@@ -26,7 +27,8 @@ class ViewModelProviderImpl(
     private val warehouseScreenViewModelProvider: WarehouseScreenViewModelProvider,
     private val catalogScreenViewModelProvider: CatalogScreenViewModelProvider,
     private val saleViewModel: SaleContentViewModel,
-    private val receiveViewModel: ReceiveContentViewModel
+    private val receiveViewModel: ReceiveContentViewModel,
+    private val checkoutViewModel: CheckoutScreenViewModel
 ) : ViewModelProvider {
     override fun addTemplateViewModel(): AddTemplateScreenViewModel {
         return addTemplateScreenViewModel
@@ -64,18 +66,22 @@ class ViewModelProviderImpl(
         return basketContentViewModel
     }
 
-    override fun clientsViewModel(): Any {
+    override fun clientsViewModel(): ClientsScreenViewModel {
         clientsScreenViewModel.initialize()
         return clientsScreenViewModel
     }
 
-    override fun saleViewModel(): Any {
+    override fun saleViewModel(): SaleContentViewModel {
         saleViewModel.initialize()
         return saleViewModel
     }
 
-    override fun receiveViewModel(): Any {
+    override fun receiveViewModel(): ReceiveContentViewModel {
         receiveViewModel.initialize()
         return receiveViewModel
+    }
+
+    override fun checkoutViewModel(): CheckoutScreenViewModel {
+        return checkoutViewModel
     }
 }
