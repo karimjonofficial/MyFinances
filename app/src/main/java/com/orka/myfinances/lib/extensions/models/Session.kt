@@ -1,7 +1,7 @@
 package com.orka.myfinances.lib.extensions.models
 
 import com.orka.myfinances.data.models.Company
-import com.orka.myfinances.data.models.CompanyOffice
+import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.models.User
@@ -14,8 +14,8 @@ fun Session.toModel(): SessionModel {
     return SessionModel(
         user = this.user.toModel(),
         credential = this.credential,
-        companyOffice = this.companyOffice.toModel(),
-        company = this.companyOffice.company.toModel()
+        companyOffice = this.office.toModel(),
+        company = this.office.company.toModel()
     )
 }
 
@@ -31,7 +31,7 @@ fun makeSession(
         address = companyModel.address,
         phone = companyModel.phone
     )
-    val companyOffice = CompanyOffice(
+    val office = Office(
         id = companyOfficeModel.id.toId(),
         name = companyOfficeModel.name,
         templates = companyOfficeModel.templates,
@@ -48,5 +48,5 @@ fun makeSession(
         patronymic = userModel.patronymic,
     )
 
-    return Session(user, credential, companyOffice)
+    return Session(user, credential, office)
 }

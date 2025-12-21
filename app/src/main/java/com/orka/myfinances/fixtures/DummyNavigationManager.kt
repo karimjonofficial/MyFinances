@@ -4,6 +4,7 @@ import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
+import com.orka.myfinances.data.models.order.Order
 import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
 
@@ -21,5 +22,8 @@ class DummyNavigationManager : NavigationManager {
     override fun navigateToClient(client: Client) {}
     override fun navigateToHistory() {}
     override fun navigateToCheckout(items: List<BasketItem>) {}
+    override fun navigateToAddStockItem(warehouse: Warehouse) {}
+    override fun navigateToOrders() {}
+    override fun navigateToOrder(order: Order) {}
     override fun back() {}
 }

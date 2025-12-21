@@ -27,7 +27,7 @@ import com.orka.myfinances.data.repositories.product.models.PropertyModel
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.lib.ui.components.ExposedDropDownTextField
+import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenState
@@ -44,11 +44,7 @@ fun AddProductScreen(
 ) {
     Scaffold(
         modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(R.string.add_product)) }
-            )
-        }
+        topBar = { TopAppBar(title = { Text(text = stringResource(R.string.add_product)) }) }
     ) { paddingValues ->
         val m = Modifier.scaffoldPadding(paddingValues)
 
@@ -88,7 +84,7 @@ fun AddProductScreen(
                             label = { Text(text = stringResource(R.string.name)) }
                         )
 
-                        ExposedDropDownTextField(
+                        OutlinedExposedDropDownTextField(
                             text = selectedWarehouse.name,
                             label = stringResource(R.string.warehouse),
                             menuExpanded = menuVisible.value,

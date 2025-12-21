@@ -15,4 +15,6 @@ interface ViewModelProvider {
     fun saleViewModel(): Any
     fun receiveViewModel(): Any
     fun checkoutViewModel(): Any
+    fun addStockItemViewModel(): Any
+    fun ordersViewModel(): Any
 }

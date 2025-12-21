@@ -6,6 +6,7 @@ import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
+import com.orka.myfinances.data.models.order.Order
 import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.factories.viewmodel.ViewModelProvider
 import com.orka.myfinances.fixtures.resources.types
@@ -89,13 +90,27 @@ class NavigationManagerImpl(
         navigate(Destination.Checkout(items, viewModel))
     }
 
-    private fun navigate(destination: Destination) {
-        updateState { backStack.value + destination }
-    }
-
     override fun navigateToHistory() {
         val saleViewModel = provider.saleViewModel()
         val receiveViewModel = provider.receiveViewModel()
         navigate(Destination.History(saleViewModel, receiveViewModel))
+    }
+
+    override fun navigateToAddStockItem(warehouse: Warehouse) {
+        val viewModel = provider.addStockItemViewModel()
+        navigate(Destination.AddStockItem(warehouse, viewModel))
+    }
+
+    override fun navigateToOrders() {
+        val viewModel = provider.ordersViewModel()
+        navigate(Destination.Orders(viewModel))
+    }
+
+    override fun navigateToOrder(order: Order) {
+        navigate(Destination.Order(order))
+    }
+
+    private fun navigate(destination: Destination) {
+        updateState { backStack.value + destination }
     }
 }

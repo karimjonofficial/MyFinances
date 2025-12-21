@@ -1,7 +1,7 @@
 package com.orka.myfinances.data.zipped
 
 import com.orka.myfinances.data.models.Company
-import com.orka.myfinances.data.models.CompanyOffice
+import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.models.User
@@ -30,7 +30,7 @@ data class SessionModel(
             phone = this.user.phone,
             address = this.user.address,
         )
-        val companyOffice = CompanyOffice(
+        val office = Office(
             id = this.companyOffice.id.toId(),
             name = this.companyOffice.name,
             company = company,
@@ -42,7 +42,7 @@ data class SessionModel(
         return Session(
             user = user,
             credential = credential,
-            companyOffice = companyOffice
+            office = office
         )
     }
 }

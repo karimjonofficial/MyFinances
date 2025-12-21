@@ -20,7 +20,7 @@ import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.repositories.folder.FolderType
 import com.orka.myfinances.lib.extensions.models.FolderTypeSaver
 import com.orka.myfinances.lib.ui.components.Dialog
-import com.orka.myfinances.lib.ui.components.ExposedDropDownTextField
+import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.RadioButton
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 
@@ -98,7 +98,7 @@ fun AddFolderDialog(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    ExposedDropDownTextField(
+                    OutlinedExposedDropDownTextField(
                         modifier = Modifier.weight(1f),
                         text = templateValue?.name ?: stringResource(R.string.select),
                         label = stringResource(R.string.templates),

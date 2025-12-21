@@ -44,4 +44,20 @@ class SpyViewModelProvider : ViewModelProvider {
     override fun saleViewModel(): Any {
         return "sale"
     }
+
+    override fun receiveViewModel(): Any {
+        return "receive"
+    }
+
+    override fun checkoutViewModel(): Any {
+        return "checkout"
+    }
+
+    override fun addStockItemViewModel(): Any {
+        return "add stock"
+    }
+
+    override fun ordersViewModel(): Any {
+        return "orders"
+    }
 }

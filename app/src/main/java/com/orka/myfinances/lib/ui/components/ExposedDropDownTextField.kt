@@ -7,6 +7,7 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
@@ -29,10 +30,10 @@ fun <T> ExposedDropDownTextField(
         expanded = menuExpanded,
         onExpandedChange = { onExpandChange(it) }
     ) {
-        OutlinedTextField(
+        TextField(
             value = text,
             onValueChange = {},
-            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+            modifier = modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
             readOnly = true,
             label = { Text(text = label) },
             singleLine = true,
@@ -59,7 +60,54 @@ fun <T> ExposedDropDownTextField(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun <T> ExposedDropDownTextField(
+fun <T> OutlinedExposedDropDownTextField(
+    modifier: Modifier = Modifier,
+    text: String,
+    label: String,
+    menuExpanded: Boolean,
+    onExpandChange: (Boolean) -> Unit,
+    onDismissRequested: () -> Unit,
+    items: List<T>?,
+    itemText: (T) -> String,
+    onItemSelected: (T) -> Unit
+) {
+
+    ExposedDropdownMenuBox(
+        modifier = modifier,
+        expanded = menuExpanded,
+        onExpandedChange = { onExpandChange(it) }
+    ) {
+        OutlinedTextField(
+            value = text,
+            onValueChange = {},
+            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+            readOnly = true,
+            label = { Text(text = label) },
+            singleLine = true,
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = menuExpanded) },
+            colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+        )
+
+        ExposedDropdownMenu(
+            expanded = menuExpanded,
+            onDismissRequest = onDismissRequested
+        ) {
+            items?.forEach { item ->
+                DropdownMenuItem(
+                    text = { Text(itemText(item)) },
+                    onClick = {
+                        onItemSelected(item)
+                        onDismissRequested()
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun <T> OutlinedExposedDropDownTextField(
     modifier: Modifier = Modifier,
     text: String,
     label: String,

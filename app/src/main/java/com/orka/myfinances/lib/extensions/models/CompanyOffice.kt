@@ -1,9 +1,9 @@
 package com.orka.myfinances.lib.extensions.models
 
-import com.orka.myfinances.data.models.CompanyOffice
+import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.data.zipped.CompanyOfficeModel
 
-fun CompanyOffice.toModel(): CompanyOfficeModel {
+fun Office.toModel(): CompanyOfficeModel {
     return CompanyOfficeModel(
         id = this.id.value,
         name = this.name,

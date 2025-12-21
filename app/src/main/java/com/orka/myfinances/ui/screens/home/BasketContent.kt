@@ -71,7 +71,7 @@ fun BasketContent(
                                     imageRes = R.drawable.furniture,
                                     increase = { item -> viewModel.increase(item.product.id) },
                                     decrease = { item -> viewModel.decrease(item.product.id) },
-                                    remove = { _ -> /**viewModel.remove(item)**/ }
+                                    remove = { item -> viewModel.remove(item) }
                                 )
                             }
                         }
@@ -148,10 +148,10 @@ private fun BasketContentPreview() {
                 )
             }
         }
-    ) { innerPadding ->
+    ) { paddingValues ->
 
         BasketContent(
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier.padding(paddingValues),
             state = uiState.value,
             viewModel = viewModel,
             navigationManager = DummyNavigationManager()

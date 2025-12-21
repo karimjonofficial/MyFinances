@@ -3,11 +3,13 @@ package com.orka.myfinances.ui.screens.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
@@ -42,6 +44,33 @@ fun ProfileContent(
     user: User,
     navigationManager: NavigationManager
 ) {
+    val options = listOf(
+        ProfileOption(
+            index = 0,
+            name = stringResource(R.string.settings),
+            action = { navigationManager.navigateToSettings() }
+        ),
+        ProfileOption(
+            index = 1,
+            name = stringResource(R.string.history),
+            action = { navigationManager.navigateToHistory() }
+        ),
+        ProfileOption(
+            index = 2,
+            name = stringResource(R.string.templates),
+            action = { navigationManager.navigateToTemplates() }
+        ),
+        ProfileOption(
+            index = 3,
+            name = stringResource(R.string.clients),
+            action = { navigationManager.navigateToClients() }
+        ),
+        ProfileOption(
+            index = 4,
+            name = stringResource(R.string.orders),
+            action = { navigationManager.navigateToOrders() }
+        )
+    )
 
     Column(
         modifier = modifier,
@@ -68,39 +97,18 @@ fun ProfileContent(
             .padding(horizontal = 16.dp))
         
         VerticalSpacer(16)
-        Column(modifier = Modifier.padding(horizontal = 8.dp)) {
-
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-
+        LazyVerticalGrid(
+            modifier = Modifier.padding(horizontal = 8.dp),
+            columns = GridCells.Fixed(2),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(items = options) {
                 Button(
                     modifier = Modifier.weight(1f),
-                    onClick = { navigationManager.navigateToSettings() }
+                    onClick = it.action
                 ) {
-                    Text(text = stringResource(R.string.settings))
-                }
-
-                Button(
-                    modifier = Modifier.weight(1f),
-                    onClick = { navigationManager.navigateToHistory() }
-                ) {
-                    Text(text = stringResource(R.string.history))
-                }
-            }
-
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-
-                Button(
-                    modifier = Modifier.weight(1f),
-                    onClick = { navigationManager.navigateToTemplates() }
-                ) {
-                    Text(text = stringResource(R.string.templates))
-                }
-
-                Button(
-                    modifier = Modifier.weight(1f),
-                    onClick = { navigationManager.navigateToClients() }
-                ) {
-                    Text(text = stringResource(R.string.clients))
+                    Text(text = it.name)
                 }
             }
         }

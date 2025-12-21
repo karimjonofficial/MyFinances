@@ -18,7 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.ui.components.ExposedDropDownTextField
+import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 
 @Composable
@@ -54,7 +54,7 @@ fun TemplateFieldCard(
         )
 
         HorizontalSpacer(4)
-        ExposedDropDownTextField(
+        OutlinedExposedDropDownTextField(
             modifier = Modifier.width(120.dp),
             menuExpanded = exposed.value,
             onExpandChange = { exposed.value = it },

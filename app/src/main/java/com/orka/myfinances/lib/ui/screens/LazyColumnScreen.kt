@@ -1,5 +1,8 @@
 package com.orka.myfinances.lib.ui.screens
 
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -56,5 +59,25 @@ fun <TLoading, TSuccess, TFailure> LazyColumnScreen(
             dialog()
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun <TLoading, TSuccess, TFailure> LazyColumnScreen(
+    modifier: Modifier = Modifier,
+    title: String,
+    item: @Composable (Modifier, TSuccess) -> Unit,
+    viewModel: ListViewModel<TLoading, TSuccess, TFailure>
+) {
+    LazyColumnScreen(
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                title = { Text(title) }
+            )
+        },
+        item = item,
+        viewModel = viewModel
+    )
 }
 

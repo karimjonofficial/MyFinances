@@ -12,9 +12,12 @@ import com.orka.myfinances.ui.navigation.entries.clientsEntry
 import com.orka.myfinances.ui.navigation.entries.historyEntry
 import com.orka.myfinances.ui.navigation.entries.homeEntry
 import com.orka.myfinances.ui.navigation.entries.notificationsEntry
+import com.orka.myfinances.ui.navigation.entries.order.orderEntry
+import com.orka.myfinances.ui.navigation.entries.ordersEntry
 import com.orka.myfinances.ui.navigation.entries.product.addProductEntry
 import com.orka.myfinances.ui.navigation.entries.product.productEntry
 import com.orka.myfinances.ui.navigation.entries.settingsEntry
+import com.orka.myfinances.ui.navigation.entries.stock.addStockItemEntry
 import com.orka.myfinances.ui.navigation.entries.template.addTemplateEntry
 import com.orka.myfinances.ui.navigation.entries.template.templatesEntry
 import com.orka.myfinances.ui.navigation.entries.warehouseEntry
@@ -38,4 +41,7 @@ fun entryProvider(
     is Destination.Client -> clientEntry(modifier, destination)
     is Destination.History -> historyEntry(modifier, destination)
     is Destination.Checkout -> checkoutEntry(modifier, destination, navigationManager)
+    is Destination.AddStockItem -> addStockItemEntry(modifier, destination, navigationManager)
+    is Destination.Orders -> ordersEntry(modifier, destination, navigationManager)
+    is Destination.Order -> orderEntry(destination)
 }

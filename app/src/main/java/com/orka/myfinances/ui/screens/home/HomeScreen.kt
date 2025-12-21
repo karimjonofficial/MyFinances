@@ -1,11 +1,8 @@
 package com.orka.myfinances.ui.screens.home
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableIntStateOf
@@ -23,12 +20,12 @@ import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
+import com.orka.myfinances.ui.screens.home.parts.BasketScreenTopBar
 import com.orka.myfinances.ui.screens.home.parts.HomeScreenTopBar
 import com.orka.myfinances.ui.screens.home.parts.ProfileTopBar
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -79,10 +76,10 @@ fun HomeScreen(
                 0 -> HomeScreenTopBar(
                     onAddClick = { showDialog() },
                     onNotificationsClick = { navigationManager.navigateToNotifications() },
-                    onSearchClick = {}
+                    onSearchClick = { /**TODO navigationManager.navigateToSearch() **/ }
                 )
 
-                1 -> TopAppBar(title = { Text(text = stringResource(R.string.basket)) })
+                1 -> BasketScreenTopBar(viewModel = basketViewModel)
                 2 -> ProfileTopBar(user = user)
             }
         },

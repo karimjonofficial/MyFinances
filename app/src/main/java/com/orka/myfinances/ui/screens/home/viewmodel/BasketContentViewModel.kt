@@ -3,6 +3,7 @@ package com.orka.myfinances.ui.screens.home.viewmodel
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,7 +22,7 @@ class BasketContentViewModel(
 
     fun initialize() = launch {
         val items = repository.get()
-        val price = items.sumOf { it.product.price * it.amount }
+        val price = items.sumOf { it.product.salePrice * it.amount }
         setState(BasketState.Success(items, price))
     }
 
@@ -39,6 +40,11 @@ class BasketContentViewModel(
     fun decrease(id: Id) = launch {
         repository.remove(id, 1)
         yield()
+        initialize()
+    }
+
+    fun remove(item: BasketItem) = launch {
+        repository.remove(item.product.id, item.amount)
         initialize()
     }
 }

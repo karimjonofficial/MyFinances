@@ -2,7 +2,7 @@ package com.orka.myfinances.data.models
 
 import com.orka.myfinances.data.models.template.Template
 
-data class CompanyOffice(
+data class Office(
     val id: Id,
     val name: String,
     val company: Company,

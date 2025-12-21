@@ -4,12 +4,14 @@ import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
+import com.orka.myfinances.data.models.order.Order
 import com.orka.myfinances.data.models.product.Product
 
 typealias CatalogModel = Catalog
 typealias WarehouseModel = Warehouse
 typealias ProductModel = Product
 typealias ClientModel = Client
+typealias OrderModel = Order
 
 sealed interface Destination {
     data class Home(val foldersViewModel: Any, val basketViewModel: Any) : Destination
@@ -25,4 +27,7 @@ sealed interface Destination {
     data class AddProduct(val warehouse: WarehouseModel, val viewModel: Any) : Destination
     data class History(val saleViewModel: Any, val receiveViewModel: Any) : Destination
     data class Checkout(val items: List<BasketItem>, val viewModel: Any) : Destination
+    data class AddStockItem(val warehouse: WarehouseModel, val viewModel: Any) : Destination
+    data class Orders(val viewModel: Any) : Destination
+    data class Order(val order: OrderModel) : Destination
 }

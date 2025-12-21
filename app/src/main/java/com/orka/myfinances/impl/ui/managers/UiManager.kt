@@ -4,7 +4,7 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Session
-import com.orka.myfinances.data.repositories.ReceiveRepository
+import com.orka.myfinances.data.repositories.ReceiveMockRepository
 import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.data.repositories.StockRepository
 import com.orka.myfinances.data.repositories.basket.BasketRepository
@@ -26,6 +26,8 @@ import com.orka.myfinances.ui.managers.session.SessionManager
 import com.orka.myfinances.ui.managers.session.UiState
 import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
 import com.orka.myfinances.data.repositories.SaleRepository
+import com.orka.myfinances.ui.navigation.OrderRepository
+import com.orka.myfinances.ui.navigation.OrdersScreenViewModel
 import com.orka.myfinances.ui.screens.checkout.CheckoutScreenViewModel
 import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
@@ -34,6 +36,7 @@ import com.orka.myfinances.ui.screens.clients.ClientsScreenViewModel
 import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
+import com.orka.myfinances.ui.screens.stock.AddStockItemScreenViewModel
 import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.asStateFlow
@@ -104,7 +107,6 @@ class UiManager(
     }
     private fun viewModelProvider(): ViewModelProvider {
         val folderRepository = FolderRepositoryImpl()
-        val foldersContentViewModel = FoldersContentViewModel(folderRepository, logger, newScope())
         val productApiService = ProductApiServiceImpl()
         val warehouseApiService = StockApiServiceImpl()
         val templateRepository = TemplateRepositoryImpl()
@@ -112,7 +114,14 @@ class UiManager(
         val productRepository = ProductRepository(productApiService)
         val basketRepository = BasketRepository(productRepository)
         val saleRepository = SaleRepository()
+        val receiveRepository = ReceiveMockRepository()
+        val orderRepository = OrderRepository()
 
+        val foldersContentViewModel = FoldersContentViewModel(
+            repository = folderRepository,
+            logger = logger,
+            coroutineScope = newScope()
+        )
         val basketContentViewModel = BasketContentViewModel(
             repository = basketRepository,
             logger = logger,
@@ -162,13 +171,24 @@ class UiManager(
         val receiveViewModel = ReceiveContentViewModel(
             loading = "Loading",
             failure = "Failure",
-            repository = ReceiveRepository(),
+            repository = receiveRepository,
             logger = logger,
             coroutineScope = newScope()
         )
         val checkoutScreenViewModel = CheckoutScreenViewModel(
             repository = saleRepository,
             clearBasket = { basketContentViewModel.clear() },
+            coroutineScope = newScope()
+        )
+        val addStockItemScreenViewModel = AddStockItemScreenViewModel(
+            repository = receiveRepository,
+            coroutineScope = newScope()
+        )
+        val ordersScreenViewModel = OrdersScreenViewModel(
+            repository = orderRepository,
+            loading = "Loading",
+            failure = "Failure",
+            logger = logger,
             coroutineScope = newScope()
         )
 
@@ -183,7 +203,9 @@ class UiManager(
             clientsScreenViewModel = clientsScreenViewModel,
             saleViewModel = saleViewModel,
             receiveViewModel = receiveViewModel,
-            checkoutViewModel = checkoutScreenViewModel
+            checkoutViewModel = checkoutScreenViewModel,
+            addStockItemViewModel = addStockItemScreenViewModel,
+            ordersViewModel = ordersScreenViewModel
         )
     }
 }

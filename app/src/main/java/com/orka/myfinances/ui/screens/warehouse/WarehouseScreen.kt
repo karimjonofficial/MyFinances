@@ -39,7 +39,7 @@ fun WarehouseScreen(
             WarehouseScreenTopBar(
                 warehouse = warehouse,
                 onAddProductClick = { navigationManager.navigateToAddProduct(it) },
-                onAddStockItemClick = { /**navigationManager.navigateToAddStockItem(it)**/ }
+                onAddStockItemClick = { navigationManager.navigateToAddStockItem(it) }
             )
         }
     ) { paddingValues ->

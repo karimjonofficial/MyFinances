@@ -20,6 +20,7 @@ fun WarehouseScreenTopBar(
     onAddProductClick: (Warehouse) -> Unit,
     onAddStockItemClick: (Warehouse) -> Unit
 ) {
+
     TopAppBar(
         modifier = modifier,
         title = { Text(text = warehouse.name) },

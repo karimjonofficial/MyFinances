@@ -1,9 +1,9 @@
 package com.orka.myfinances.fixtures.resources.models
 
-import com.orka.myfinances.data.models.CompanyOffice
+import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.fixtures.resources.models.template.templates
 
-val companyOffice1 = CompanyOffice(
+val office1 = Office(
     id = id1,
     name = "CompanyOffice 1",
     company = company1,
