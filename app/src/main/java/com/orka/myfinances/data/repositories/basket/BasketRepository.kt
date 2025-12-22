@@ -3,9 +3,14 @@ package com.orka.myfinances.data.repositories.basket
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.repositories.product.ProductRepository
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
 class BasketRepository(private val productRepository: ProductRepository) {
     private val items = mutableListOf<BasketItem>()
+
+    private val _events = MutableSharedFlow<BasketEvent>()
+    val events = _events.asSharedFlow()
 
     fun get(): List<BasketItem> {
         return items.toList()
@@ -32,7 +37,10 @@ class BasketRepository(private val productRepository: ProductRepository) {
         }
     }
 
-    fun clear() { items.clear() }
+    suspend fun clear() {
+        items.clear()
+        _events.emit(BasketEvent.Clear)
+    }
 
     private fun getIndex(id: Id): Int? {
         val index = items.indexOfFirst { it.product.id == id }

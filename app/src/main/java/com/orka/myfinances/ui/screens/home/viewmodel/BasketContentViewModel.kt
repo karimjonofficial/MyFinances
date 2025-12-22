@@ -4,9 +4,11 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
+import com.orka.myfinances.data.repositories.basket.BasketEvent
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.yield
 
 class BasketContentViewModel(
@@ -20,6 +22,16 @@ class BasketContentViewModel(
 ) {
     val uiState = state.asStateFlow()
 
+    init {
+        launch {
+            repository.events.collectLatest { event ->
+                when (event) {
+                    is BasketEvent.Clear -> initialize()
+                }
+            }
+        }
+    }
+
     fun initialize() = launch {
         val items = repository.get()
         val price = items.sumOf { it.product.salePrice * it.amount }
@@ -28,7 +40,6 @@ class BasketContentViewModel(
 
     fun clear() = launch {
         repository.clear()
-        initialize()
     }
 
     fun increase(id: Id) = launch {

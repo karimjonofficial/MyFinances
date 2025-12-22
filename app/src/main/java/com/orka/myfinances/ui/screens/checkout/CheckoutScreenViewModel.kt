@@ -43,7 +43,7 @@ class CheckoutScreenViewModel(
         }
     }
 
-    fun clearBasket() {
+    suspend fun clearBasket() {
         basketRepository.clear()
     }
 
