@@ -24,7 +24,7 @@ class CheckoutScreenViewModel(
 ) : ListViewModel<Unit, Client, Unit>(
     loading = Unit,
     failure = Unit,
-    getRepository = clientRepository,
+    repository = clientRepository,
     logger = logger,
     coroutineScope = coroutineScope
 ) {
@@ -43,10 +43,9 @@ class CheckoutScreenViewModel(
         }
     }
 
-    suspend fun clearBasket() {
+    private suspend fun clearBasket() {
         basketRepository.clear()
     }
-
     private fun Basket.toOrderRequest(client: Client): AddOrderRequest {
         return AddOrderRequest(
             client = client.id.value,

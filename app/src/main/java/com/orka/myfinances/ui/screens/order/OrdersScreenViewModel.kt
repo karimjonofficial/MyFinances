@@ -15,7 +15,7 @@ class OrdersScreenViewModel(
 ) : ListViewModel<String, Order, String>(
     loading = loading,
     failure = failure,
-    getRepository = repository,
+    repository = repository,
     logger = logger,
     coroutineScope = coroutineScope
 )

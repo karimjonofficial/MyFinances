@@ -17,7 +17,7 @@ sealed interface Destination {
     data class Home(val foldersViewModel: Any, val basketViewModel: Any) : Destination
     data class Catalog(val catalog: CatalogModel, val viewModel: Any) : Destination
     data class Warehouse(val warehouse: WarehouseModel, val viewModel: Any) : Destination
-    data object Notifications : Destination
+    data class Notifications(val viewModel: Any) : Destination
     data object Settings : Destination
     data class Templates(val viewModel: Any) : Destination
     data class Product(val product: ProductModel) : Destination

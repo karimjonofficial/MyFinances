@@ -8,6 +8,7 @@ import com.orka.myfinances.data.repositories.receive.ReceiveRepository
 import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.repositories.basket.BasketRepository
+import com.orka.myfinances.data.repositories.notification.NotificationRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.factories.ApiProvider
@@ -36,6 +37,7 @@ import com.orka.myfinances.ui.screens.clients.ClientsScreenViewModel
 import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
+import com.orka.myfinances.ui.screens.notification.NotificationScreenViewModel
 import com.orka.myfinances.ui.screens.stock.AddStockItemScreenViewModel
 import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -89,7 +91,8 @@ class UiManager(
         val foldersViewModel = provider.foldersViewModel()
         val basketViewModel = provider.basketViewModel()
         val initialBackStack = listOf(Destination.Home(foldersViewModel, basketViewModel))
-        val navigationManager = NavigationManagerImpl(initialBackStack, provider, logger, newScope())
+        val navigationManager =
+            NavigationManagerImpl(initialBackStack, provider, logger, newScope())
         setState(UiState.SignedIn(session, navigationManager))
     }
     private suspend fun getSession(credential: Credential): Session? {
@@ -133,10 +136,10 @@ class UiManager(
             coroutineScope = newScope()
         )
         val templatesScreenViewModel = TemplatesScreenViewModel(
-                repository = templateRepository,
-                logger = logger,
-                coroutineScope = newScope()
-            )
+            repository = templateRepository,
+            logger = logger,
+            coroutineScope = newScope()
+        )
         val addProductScreenViewModel = AddProductScreenViewModel(
             productRepository = productRepository,
             stockRepository = stockRepository,
@@ -195,6 +198,11 @@ class UiManager(
             logger = logger,
             coroutineScope = newScope()
         )
+        val notificationScreenViewModel = NotificationScreenViewModel(
+            repository = NotificationRepository(),
+            logger = logger,
+            coroutineScope = newScope()
+        )
 
         return ViewModelProviderImpl(
             addTemplateScreenViewModel = addTemplateScreenViewModel,
@@ -209,7 +217,8 @@ class UiManager(
             receiveViewModel = receiveViewModel,
             checkoutViewModel = checkoutScreenViewModel,
             addStockItemViewModel = addStockItemScreenViewModel,
-            ordersViewModel = ordersScreenViewModel
+            ordersViewModel = ordersScreenViewModel,
+            notificationsViewModel = notificationScreenViewModel
         )
     }
 }

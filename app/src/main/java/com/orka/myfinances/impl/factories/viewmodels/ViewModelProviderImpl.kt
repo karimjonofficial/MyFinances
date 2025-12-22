@@ -15,6 +15,7 @@ import com.orka.myfinances.ui.screens.catalog.CatalogScreenViewModel
 import com.orka.myfinances.ui.screens.checkout.CheckoutScreenViewModel
 import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
+import com.orka.myfinances.ui.screens.notification.NotificationScreenViewModel
 import com.orka.myfinances.ui.screens.stock.AddStockItemScreenViewModel
 import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
@@ -32,7 +33,8 @@ class ViewModelProviderImpl(
     private val receiveViewModel: ReceiveContentViewModel,
     private val checkoutViewModel: CheckoutScreenViewModel,
     private val addStockItemViewModel: AddStockItemScreenViewModel,
-    private val ordersViewModel: OrdersScreenViewModel
+    private val ordersViewModel: OrdersScreenViewModel,
+    private val notificationsViewModel: NotificationScreenViewModel
 ) : ViewModelProvider {
     override fun addTemplateViewModel(): AddTemplateScreenViewModel {
         return addTemplateScreenViewModel
@@ -97,5 +99,10 @@ class ViewModelProviderImpl(
     override fun ordersViewModel(): OrdersScreenViewModel {
         ordersViewModel.initialize()
         return ordersViewModel
+    }
+
+    override fun notificationsViewModel(): Any {
+        notificationsViewModel.initialize()
+        return notificationsViewModel
     }
 }

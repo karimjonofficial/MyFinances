@@ -16,5 +16,6 @@ interface ViewModelProvider {
     fun receiveViewModel(): Any
     fun checkoutViewModel(): Any
     fun addStockItemViewModel(): Any
+    fun notificationsViewModel(): Any
     fun ordersViewModel(): Any
 }

@@ -44,7 +44,7 @@ class NavigationManagerImpl(
     }
 
     override fun navigateToNotifications() {
-        navigate(Destination.Notifications)
+        navigate(Destination.Notifications(provider.notificationsViewModel()))
     }
 
     override fun navigateToAddTemplate() {

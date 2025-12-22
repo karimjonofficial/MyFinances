@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 abstract class ListViewModel<TLoading, TSuccess, TFailure>(
     private val loading: TLoading,
     private val failure: TFailure,
-    private val getRepository: GetRepository<TSuccess>,
+    private val repository: GetRepository<TSuccess>,
     logger: Logger,
     coroutineScope: CoroutineScope
 ) : ViewModel<State<TLoading, List<TSuccess>, TFailure>>(
@@ -26,7 +26,7 @@ abstract class ListViewModel<TLoading, TSuccess, TFailure>(
     }
 
     protected open suspend fun fetchState(): State.Success<TLoading, List<TSuccess>, TFailure>? {
-        val response = getRepository.get()
+        val response = repository.get()
         return if(response != null) State.Success(filterData(response)) else null
     }
 

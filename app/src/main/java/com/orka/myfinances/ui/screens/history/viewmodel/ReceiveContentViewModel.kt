@@ -13,7 +13,7 @@ class ReceiveContentViewModel(
     logger: Logger,
     coroutineScope: CoroutineScope
 ) : ListViewModel<String, Receive, String>(
-    getRepository = repository,
+    repository = repository,
     loading = loading,
     failure = failure,
     logger = logger,

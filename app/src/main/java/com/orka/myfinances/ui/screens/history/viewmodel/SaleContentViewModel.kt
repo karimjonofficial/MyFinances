@@ -15,7 +15,7 @@ class SaleContentViewModel(
 ) : ListViewModel<String, Sale, String>(
     loading = loading,
     failure = failure,
-    getRepository = repository,
+    repository = repository,
     logger = logger,
     coroutineScope = coroutineScope
 )
