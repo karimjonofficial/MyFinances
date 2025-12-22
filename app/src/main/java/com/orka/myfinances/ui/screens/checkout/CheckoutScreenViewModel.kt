@@ -57,7 +57,7 @@ class CheckoutScreenViewModel(
     }
     private fun Basket.toSaleRequest(client: Client): AddSaleRequest {
         return AddSaleRequest(
-            client = client.id.value,
+            clientId = client.id.value,
             items = items.map { it.toItem() },
             price = price,
             description = description

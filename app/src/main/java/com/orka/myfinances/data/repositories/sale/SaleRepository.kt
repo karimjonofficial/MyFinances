@@ -13,10 +13,6 @@ import com.orka.myfinances.lib.fixtures.data.repositories.MockRepository
 import kotlin.time.ExperimentalTime
 
 class SaleRepository : MockRepository<Sale, AddSaleRequest>(items = sales) {
-    override fun acceptable(request: AddSaleRequest): Boolean {
-        return request.client > 0
-    }
-
     override fun map(request: AddSaleRequest): Sale {
         return request.toSale()
     }
@@ -33,7 +29,6 @@ class SaleRepository : MockRepository<Sale, AddSaleRequest>(items = sales) {
             description = description
         )
     }
-
     private fun Item.toSaleItem(): SaleItem {
         return SaleItem(
             id = id1,

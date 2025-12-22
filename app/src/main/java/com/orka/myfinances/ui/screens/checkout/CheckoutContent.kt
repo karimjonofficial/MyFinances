@@ -51,7 +51,8 @@ fun CheckoutContent(
 ) {
     val price = rememberSaveable { mutableIntStateOf(items.getPrice()) }
     val description = rememberSaveable { mutableStateOf("") }
-    val selectedClient = rememberSaveable { mutableStateOf<Client?>(null) }
+    val selectedClientId = rememberSaveable(clients) { mutableStateOf(clients.firstOrNull()?.id?.value) }
+    val selectedClient = clients.find { it.id.value == selectedClientId.value }
     val menuExpanded = rememberSaveable { mutableStateOf(false) }
     val splitButtonMenuExpanded = rememberSaveable { mutableStateOf(false) }
 
@@ -86,7 +87,7 @@ fun CheckoutContent(
                         leadingButton = {
                             SplitButtonDefaults.LeadingButton(
                                 onClick = {
-                                    selectedClient.value?.let {
+                                    selectedClient?.let {
                                         viewModel.sell(
                                             basket = Basket(price.intValue, description.value, items),
                                             client = it
@@ -109,6 +110,7 @@ fun CheckoutContent(
                             }
                         }
                     )
+
                     DropdownMenu(
                         expanded = splitButtonMenuExpanded.value,
                         onDismissRequest = { splitButtonMenuExpanded.value = false }
@@ -116,7 +118,7 @@ fun CheckoutContent(
                         DropdownMenuItem(
                             text = { Text(text = stringResource(R.string.order)) },
                             onClick = {
-                                selectedClient.value?.let {
+                                selectedClient?.let {
                                     viewModel.order(
                                         basket = Basket(price.intValue, description.value, items),
                                         client = it
@@ -152,14 +154,14 @@ fun CheckoutContent(
 
             ExposedDropDownTextField(
                 modifier = Modifier.fillMaxWidth(),
-                text = selectedClient.value?.firstName ?: stringResource(R.string.clients),
+                text = selectedClient?.firstName ?: stringResource(R.string.clients),
                 label = stringResource(R.string.clients),
                 menuExpanded = menuExpanded.value,
                 onExpandChange = { menuExpanded.value = it },
                 onDismissRequested = { menuExpanded.value = false },
                 items = clients,
                 itemText = { it.firstName },
-                onItemSelected = { selectedClient.value = it }
+                onItemSelected = { selectedClientId.value = it.id.value }
             )
 
             VerticalSpacer(4)
