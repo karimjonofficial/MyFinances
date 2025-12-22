@@ -25,7 +25,7 @@ import kotlin.time.Instant
 
 @OptIn(ExperimentalTime::class)
 @Composable
-fun NotificationItem(
+fun NotificationCard(
     modifier: Modifier,
     notification: Notification,
     onClick: (Notification) -> Unit

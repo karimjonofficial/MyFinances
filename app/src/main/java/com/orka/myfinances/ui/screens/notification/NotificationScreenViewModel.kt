@@ -20,7 +20,7 @@ class NotificationScreenViewModel(
     fun read(notification: Notification) = launch {
         if(!notification.read) {
             repository.read(notification.id)
+            initialize()
         }
-        initialize()
     }
 }

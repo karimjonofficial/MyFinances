@@ -23,9 +23,10 @@ fun NotificationScreen(
             )
         },
         viewModel = viewModel,
-        item = { itemModifier, item ->
-            NotificationItem(
-                modifier = itemModifier,
+        item = { modifier, item ->
+
+            NotificationCard(
+                modifier = modifier,
                 notification = item,
                 onClick = { viewModel.read(item) }
             )
