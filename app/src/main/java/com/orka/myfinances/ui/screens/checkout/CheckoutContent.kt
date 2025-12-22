@@ -1,10 +1,13 @@
 package com.orka.myfinances.ui.screens.checkout
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -50,6 +53,7 @@ fun CheckoutContent(
     val description = rememberSaveable { mutableStateOf("") }
     val selectedClient = rememberSaveable { mutableStateOf<Client?>(null) }
     val menuExpanded = rememberSaveable { mutableStateOf(false) }
+    val splitButtonMenuExpanded = rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         modifier = modifier,
@@ -77,9 +81,40 @@ fun CheckoutContent(
                 }
 
                 HorizontalSpacer(8)
-                SplitButtonLayout(
-                    leadingButton = {
-                        SplitButtonDefaults.LeadingButton(
+                Box {
+                    SplitButtonLayout(
+                        leadingButton = {
+                            SplitButtonDefaults.LeadingButton(
+                                onClick = {
+                                    selectedClient.value?.let {
+                                        viewModel.sell(
+                                            basket = Basket(price.intValue, description.value, items),
+                                            client = it
+                                        )
+                                        navigationManager.back()
+                                    }
+                                }
+                            ) {
+                                Text(text = stringResource(R.string.sell))
+                            }
+                        },
+                        trailingButton = {
+                            SplitButtonDefaults.TrailingButton(
+                                onClick = { splitButtonMenuExpanded.value = true }
+                            ) {
+                                Icon(
+                                    painter = painterResource(R.drawable.arrow_drop_down),
+                                    contentDescription = stringResource(R.string.down)
+                                )
+                            }
+                        }
+                    )
+                    DropdownMenu(
+                        expanded = splitButtonMenuExpanded.value,
+                        onDismissRequest = { splitButtonMenuExpanded.value = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text(text = stringResource(R.string.order)) },
                             onClick = {
                                 selectedClient.value?.let {
                                     viewModel.order(
@@ -88,35 +123,11 @@ fun CheckoutContent(
                                     )
                                     navigationManager.back()
                                 }
+                                splitButtonMenuExpanded.value = false
                             }
-                        ) {
-                            Text(text = stringResource(R.string.order))
-                        }
-                        SplitButtonDefaults.LeadingButton(
-                            onClick = {
-                                selectedClient.value?.let {
-                                    viewModel.sell(
-                                        basket = Basket(price.intValue, description.value, items),
-                                        client = it
-                                    )
-                                    navigationManager.back()
-                                }
-                            }
-                        ) {
-                            Text(text = stringResource(R.string.sell))
-                        }
-                    },
-                    trailingButton = {
-                        SplitButtonDefaults.TrailingButton(
-                            onClick = { menuExpanded.value = !menuExpanded.value }
-                        ) {
-                            Icon(
-                                painter = painterResource(R.drawable.arrow_drop_down),
-                                contentDescription = stringResource(R.string.down)
-                            )
-                        }
+                        )
                     }
-                )
+                }
             }
         }
     ) { paddingValues ->
