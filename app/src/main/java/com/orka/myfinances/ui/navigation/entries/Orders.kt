@@ -5,7 +5,7 @@ import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
-import com.orka.myfinances.ui.navigation.OrdersScreenViewModel
+import com.orka.myfinances.ui.screens.order.OrdersScreenViewModel
 import com.orka.myfinances.ui.screens.order.OrdersScreen
 
 fun ordersEntry(

@@ -5,7 +5,7 @@ import com.orka.myfinances.data.models.folder.Warehouse
 import com.orka.myfinances.factories.viewmodel.CatalogScreenViewModelProvider
 import com.orka.myfinances.factories.viewmodel.ViewModelProvider
 import com.orka.myfinances.factories.viewmodel.WarehouseScreenViewModelProvider
-import com.orka.myfinances.ui.navigation.OrdersScreenViewModel
+import com.orka.myfinances.ui.screens.order.OrdersScreenViewModel
 import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
 import com.orka.myfinances.ui.screens.clients.ClientsScreenViewModel
 import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
@@ -86,6 +86,7 @@ class ViewModelProviderImpl(
     }
 
     override fun checkoutViewModel(): CheckoutScreenViewModel {
+        checkoutViewModel.initialize()
         return checkoutViewModel
     }
 

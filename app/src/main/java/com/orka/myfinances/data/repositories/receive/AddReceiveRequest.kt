@@ -1,4 +1,4 @@
-package com.orka.myfinances.data.repositories
+package com.orka.myfinances.data.repositories.receive
 
 data class AddReceiveRequest(
     val items: List<ReceiveItemModel>,

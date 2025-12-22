@@ -1,7 +1,8 @@
-package com.orka.myfinances.ui.navigation
+package com.orka.myfinances.ui.screens.order
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.order.Order
+import com.orka.myfinances.data.repositories.order.OrderRepository
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
 import kotlinx.coroutines.CoroutineScope
 
@@ -14,7 +15,7 @@ class OrdersScreenViewModel(
 ) : ListViewModel<String, Order, String>(
     loading = loading,
     failure = failure,
-    repository = repository,
+    getRepository = repository,
     logger = logger,
     coroutineScope = coroutineScope
 )

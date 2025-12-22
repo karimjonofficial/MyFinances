@@ -16,7 +16,7 @@ class ClientsScreenViewModel(
 ) : ListViewModel<String, Client, String>(
     loading = loading,
     failure = failure,
-    repository = repository,
+    getRepository = repository,
     logger = logger,
     coroutineScope = coroutineScope
 ) {

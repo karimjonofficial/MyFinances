@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
-import com.orka.myfinances.fixtures.DummyNavigationManager
+import com.orka.myfinances.fixtures.managers.DummyNavigationManager
 import com.orka.myfinances.fixtures.data.api.ProductApiServiceImpl
 import com.orka.myfinances.lib.LoggerImpl
 import com.orka.myfinances.lib.ui.components.VerticalSpacer

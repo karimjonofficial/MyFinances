@@ -3,24 +3,10 @@ package com.orka.myfinances.data.repositories.client
 import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.fixtures.resources.models.client2
 import com.orka.myfinances.fixtures.resources.models.clients
-import com.orka.myfinances.lib.data.Repository
-import kotlinx.coroutines.delay
+import com.orka.myfinances.lib.fixtures.data.repositories.MockRepository
 
-class ClientRepository : Repository<Client> {
-    private var requests = 0
-
-    override suspend fun get(): List<Client> {
-        requests++
-        val list = clients.toMutableList()
-        repeat(requests) {
-            list.add(client2)
-        }
-        delay(1000)
-        return list.toList()
-    }
-
-    suspend fun add(request: AddClientRequest): Client? {
-        delay(1000)
+class ClientRepository : MockRepository<Client, AddClientRequest>(clients) {
+    override fun map(request: AddClientRequest): Client {
         return client2
     }
 }

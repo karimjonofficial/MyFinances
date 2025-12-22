@@ -1,4 +1,8 @@
-package com.orka.myfinances.lib.data
+package com.orka.myfinances.lib.data.source
+
+import com.orka.myfinances.lib.data.ApiService
+import com.orka.myfinances.lib.data.Mapper
+import com.orka.myfinances.lib.data.Storage
 
 abstract class AbstractDataSource<T, R>(
     private val apiService: ApiService<R>,

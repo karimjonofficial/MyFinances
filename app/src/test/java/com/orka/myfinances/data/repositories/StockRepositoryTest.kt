@@ -2,6 +2,7 @@ package com.orka.myfinances.data.repositories
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.api.StockApiService
+import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.testFixtures.data.api.warehouse.EmptyStockApiServiceStub
 import com.orka.myfinances.testFixtures.data.api.warehouse.StockApiServiceStub
 import com.orka.myfinances.testFixtures.resources.models.id1

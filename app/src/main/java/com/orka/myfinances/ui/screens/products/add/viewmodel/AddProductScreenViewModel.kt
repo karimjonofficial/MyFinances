@@ -2,7 +2,7 @@ package com.orka.myfinances.ui.screens.products.add.viewmodel
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
-import com.orka.myfinances.data.repositories.StockRepository
+import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.data.repositories.product.models.AddProductRequest
 import kotlinx.coroutines.CoroutineScope

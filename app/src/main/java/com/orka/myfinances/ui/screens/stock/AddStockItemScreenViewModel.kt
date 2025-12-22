@@ -2,13 +2,13 @@ package com.orka.myfinances.ui.screens.stock
 
 import com.orka.myfinances.core.Manager
 import com.orka.myfinances.data.models.product.Product
-import com.orka.myfinances.data.repositories.AddReceiveRequest
-import com.orka.myfinances.data.repositories.ReceiveItemModel
-import com.orka.myfinances.data.repositories.ReceiveMockRepository
+import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
+import com.orka.myfinances.data.repositories.receive.ReceiveItemModel
+import com.orka.myfinances.data.repositories.receive.ReceiveRepository
 import kotlinx.coroutines.CoroutineScope
 
 class AddStockItemScreenViewModel(
-    private val repository: ReceiveMockRepository,
+    private val repository: ReceiveRepository,
     coroutineScope: CoroutineScope
 ) : Manager(coroutineScope) {
 

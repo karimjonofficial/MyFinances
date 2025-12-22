@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.repositories.template.AddTemplateRequest
 import com.orka.myfinances.data.repositories.template.TemplateFieldModel
-import com.orka.myfinances.fixtures.DummyNavigationManager
+import com.orka.myfinances.fixtures.managers.DummyNavigationManager
 import com.orka.myfinances.fixtures.data.repositories.TemplateRepositoryImpl
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.VerticalSpacer

@@ -1,4 +1,4 @@
-package com.orka.myfinances.data.repositories
+package com.orka.myfinances.data.repositories.stock
 
 import com.orka.myfinances.data.api.StockApiService
 import com.orka.myfinances.data.models.Id

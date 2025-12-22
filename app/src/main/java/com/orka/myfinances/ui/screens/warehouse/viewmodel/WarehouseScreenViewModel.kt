@@ -4,7 +4,7 @@ import com.orka.myfinances.core.DualStateViewModel
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.data.models.folder.Warehouse
-import com.orka.myfinances.data.repositories.StockRepository
+import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.asStateFlow

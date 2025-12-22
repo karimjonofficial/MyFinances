@@ -1,4 +1,4 @@
-package com.orka.myfinances.fixtures
+package com.orka.myfinances.fixtures.managers
 
 import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.basket.BasketItem

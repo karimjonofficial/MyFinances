@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.User
-import com.orka.myfinances.fixtures.DummyNavigationManager
+import com.orka.myfinances.fixtures.managers.DummyNavigationManager
 import com.orka.myfinances.fixtures.resources.models.user1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold

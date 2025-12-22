@@ -3,7 +3,7 @@ package com.orka.myfinances.impl.factories.viewmodels
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.data.models.folder.Warehouse
-import com.orka.myfinances.data.repositories.StockRepository
+import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.factories.viewmodel.WarehouseScreenViewModelProvider
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel

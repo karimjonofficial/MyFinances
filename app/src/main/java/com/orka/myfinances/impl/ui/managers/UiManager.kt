@@ -4,9 +4,9 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Session
-import com.orka.myfinances.data.repositories.ReceiveMockRepository
+import com.orka.myfinances.data.repositories.receive.ReceiveRepository
 import com.orka.myfinances.data.repositories.client.ClientRepository
-import com.orka.myfinances.data.repositories.StockRepository
+import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.data.storages.LocalSessionStorage
@@ -25,9 +25,9 @@ import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.session.SessionManager
 import com.orka.myfinances.ui.managers.session.UiState
 import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
-import com.orka.myfinances.data.repositories.SaleRepository
-import com.orka.myfinances.ui.navigation.OrderRepository
-import com.orka.myfinances.ui.navigation.OrdersScreenViewModel
+import com.orka.myfinances.data.repositories.sale.SaleRepository
+import com.orka.myfinances.data.repositories.order.OrderRepository
+import com.orka.myfinances.ui.screens.order.OrdersScreenViewModel
 import com.orka.myfinances.ui.screens.checkout.CheckoutScreenViewModel
 import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
@@ -114,8 +114,9 @@ class UiManager(
         val productRepository = ProductRepository(productApiService)
         val basketRepository = BasketRepository(productRepository)
         val saleRepository = SaleRepository()
-        val receiveRepository = ReceiveMockRepository()
+        val receiveRepository = ReceiveRepository()
         val orderRepository = OrderRepository()
+        val clientRepository = ClientRepository()
 
         val foldersContentViewModel = FoldersContentViewModel(
             repository = folderRepository,
@@ -157,7 +158,7 @@ class UiManager(
         val clientsScreenViewModel = ClientsScreenViewModel(
             loading = "Loading",
             failure = "Failure",
-            repository = ClientRepository(),
+            repository = clientRepository,
             logger = logger,
             coroutineScope = newScope()
         )
@@ -176,8 +177,11 @@ class UiManager(
             coroutineScope = newScope()
         )
         val checkoutScreenViewModel = CheckoutScreenViewModel(
-            repository = saleRepository,
-            clearBasket = { basketContentViewModel.clear() },
+            saleRepository = saleRepository,
+            orderRepository = orderRepository,
+            basketRepository = basketRepository,
+            clientRepository = clientRepository,
+            logger = logger,
             coroutineScope = newScope()
         )
         val addStockItemScreenViewModel = AddStockItemScreenViewModel(
