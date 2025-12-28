@@ -28,9 +28,7 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
 @Composable
 fun OrderCard(
     modifier: Modifier = Modifier,
@@ -56,7 +54,6 @@ fun OrderCard(
 }
 
 @Composable
-@OptIn(ExperimentalTime::class)
 private fun OrderCardContent(
     modifier: Modifier = Modifier,
     order: Order

@@ -1,6 +1,7 @@
 package com.orka.myfinances.ui.managers.navigation
 
 import com.orka.myfinances.data.models.Client
+import com.orka.myfinances.data.models.Debt
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
@@ -12,6 +13,7 @@ typealias WarehouseModel = Warehouse
 typealias ProductModel = Product
 typealias ClientModel = Client
 typealias OrderModel = Order
+typealias DebtModel = Debt
 
 sealed interface Destination {
     data class Home(val foldersViewModel: Any, val basketViewModel: Any) : Destination
@@ -30,4 +32,6 @@ sealed interface Destination {
     data class AddStockItem(val warehouse: WarehouseModel, val viewModel: Any) : Destination
     data class Orders(val viewModel: Any) : Destination
     data class Order(val order: OrderModel) : Destination
+    data class Debts(val viewModel: Any) : Destination
+    data class Debt(val debt: DebtModel) : Destination
 }

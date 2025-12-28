@@ -13,9 +13,7 @@ import com.orka.myfinances.data.models.sale.Sale
 import com.orka.myfinances.fixtures.resources.models.sale.sale1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
 @Composable
 fun SaleCard(
     modifier: Modifier = Modifier,

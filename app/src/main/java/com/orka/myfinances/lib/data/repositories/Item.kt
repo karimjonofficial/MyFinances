@@ -1,4 +1,4 @@
-package com.orka.myfinances.data.repositories
+package com.orka.myfinances.lib.data.repositories
 
 data class Item(
     val id: Int,

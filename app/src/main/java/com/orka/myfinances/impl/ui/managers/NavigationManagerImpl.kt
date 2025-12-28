@@ -3,6 +3,7 @@ package com.orka.myfinances.impl.ui.managers
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.Client
+import com.orka.myfinances.data.models.Debt
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
@@ -108,6 +109,14 @@ class NavigationManagerImpl(
 
     override fun navigateToOrder(order: Order) {
         navigate(Destination.Order(order))
+    }
+
+    override fun navigateToDebts() {
+        navigate(Destination.Debts(provider.debtsViewModel()))
+    }
+
+    override fun navigateToDebt(debt: Debt) {
+        navigate(Destination.Debt(debt))
     }
 
     private fun navigate(destination: Destination) {

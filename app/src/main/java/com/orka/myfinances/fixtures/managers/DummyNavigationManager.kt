@@ -1,6 +1,7 @@
 package com.orka.myfinances.fixtures.managers
 
 import com.orka.myfinances.data.models.Client
+import com.orka.myfinances.data.models.Debt
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
@@ -25,5 +26,7 @@ class DummyNavigationManager : NavigationManager {
     override fun navigateToAddStockItem(warehouse: Warehouse) {}
     override fun navigateToOrders() {}
     override fun navigateToOrder(order: Order) {}
+    override fun navigateToDebts() {}
+    override fun navigateToDebt(debt: Debt) {}
     override fun back() {}
 }

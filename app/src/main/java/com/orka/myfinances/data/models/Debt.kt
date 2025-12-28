@@ -1,9 +1,7 @@
 package com.orka.myfinances.data.models
 
-import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-@OptIn(ExperimentalTime::class)
 data class Debt(
     val id: Id,
     val user: User,

@@ -45,7 +45,6 @@ import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.id2
 import com.orka.myfinances.fixtures.resources.models.id3
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
-import kotlin.time.ExperimentalTime
 
 @Composable
 fun BasketItemCard(
@@ -222,7 +221,6 @@ fun BasketItemCard(
 }
 
 
-@OptIn(ExperimentalTime::class)
 @Preview(showBackground = true)
 @Composable
 fun BasketItemCardPreview() {

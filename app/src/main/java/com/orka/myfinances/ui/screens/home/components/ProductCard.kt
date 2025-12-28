@@ -16,7 +16,6 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.fixtures.resources.models.product1
 import com.orka.myfinances.ui.theme.MyFinancesTheme
-import kotlin.time.ExperimentalTime
 
 @Composable
 fun ProductCard(
@@ -46,7 +45,6 @@ fun ProductCard(
     )
 }
 
-@OptIn(ExperimentalTime::class)
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 private fun ProductCardPreview() {

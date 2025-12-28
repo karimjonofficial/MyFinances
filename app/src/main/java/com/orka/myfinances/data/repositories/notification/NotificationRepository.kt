@@ -5,11 +5,9 @@ import com.orka.myfinances.data.models.Notification
 import com.orka.myfinances.fixtures.resources.models.notifications
 import com.orka.myfinances.lib.fixtures.data.repositories.MockGetRepository
 import kotlinx.coroutines.delay
-import kotlin.time.ExperimentalTime
 
 class NotificationRepository : MockGetRepository<Notification>(notifications) {
 
-    @OptIn(ExperimentalTime::class)
     suspend fun read(id: Id) {
         delay(duration)
         val index = items.indexOfFirst { it.id == id }

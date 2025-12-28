@@ -6,6 +6,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
@@ -15,6 +17,7 @@ import androidx.compose.runtime.State as RState
 fun <TLoading, TSuccess, TFailure> LazyColumnScreen(
     modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit = {},
+    arrangementSpace: Dp = 0.dp,
     item: @Composable (Modifier, TSuccess) -> Unit,
     viewModel: ListViewModel<TLoading, TSuccess, TFailure>
 ) {
@@ -26,6 +29,7 @@ fun <TLoading, TSuccess, TFailure> LazyColumnScreen(
 
         LazyColumnContent(
             modifier = Modifier.scaffoldPadding(paddingValues),
+            arrangementSpace = arrangementSpace,
             state = state.value,
             viewModel = viewModel,
             item = item
@@ -37,6 +41,7 @@ fun <TLoading, TSuccess, TFailure> LazyColumnScreen(
 fun <TLoading, TSuccess, TFailure> LazyColumnScreen(
     modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit = {},
+    arrangementSpace: Dp = 0.dp,
     dialogState: RState<Boolean>,
     dialog: @Composable () -> Unit,
     item: @Composable (Modifier, TSuccess) -> Unit,
@@ -51,6 +56,7 @@ fun <TLoading, TSuccess, TFailure> LazyColumnScreen(
         LazyColumnContent(
             modifier = Modifier.scaffoldPadding(paddingValues),
             state = state.value,
+            arrangementSpace = arrangementSpace,
             viewModel = viewModel,
             item = item
         )
@@ -66,6 +72,7 @@ fun <TLoading, TSuccess, TFailure> LazyColumnScreen(
 fun <TLoading, TSuccess, TFailure> LazyColumnScreen(
     modifier: Modifier = Modifier,
     title: String,
+    arrangementSpace: Dp = 0.dp,
     item: @Composable (Modifier, TSuccess) -> Unit,
     viewModel: ListViewModel<TLoading, TSuccess, TFailure>
 ) {
@@ -77,6 +84,7 @@ fun <TLoading, TSuccess, TFailure> LazyColumnScreen(
             )
         },
         item = item,
+        arrangementSpace = arrangementSpace,
         viewModel = viewModel
     )
 }

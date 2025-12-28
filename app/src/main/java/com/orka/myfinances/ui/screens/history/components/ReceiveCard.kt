@@ -5,9 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.receive.Receive
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
 @Composable
 fun ReceiveCard(
     modifier: Modifier = Modifier,

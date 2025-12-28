@@ -75,4 +75,9 @@
     <string name="orders">Orders</string>
     <string name="down">Down</string>
     <string name="order">Order</string>
+    <string name="debts">Debts</string>
+    <string name="add_debt">Add a debt</string>
+    <string name="fill_the_lines_below_to_add_a_new_debt">Fill the lines below to add a new a debt</string>
+    <string name="client">Client</string>
+    <string name="end_date">End date</string>
 </resources>

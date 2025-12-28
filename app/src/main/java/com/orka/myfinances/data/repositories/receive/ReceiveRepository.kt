@@ -8,14 +8,12 @@ import com.orka.myfinances.fixtures.resources.models.receive.receives
 import com.orka.myfinances.fixtures.resources.models.user1
 import com.orka.myfinances.lib.fixtures.data.repositories.MockRepository
 import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
 class ReceiveRepository : MockRepository<Receive, AddReceiveRequest>(items = receives) {
     override fun map(request: AddReceiveRequest): Receive {
         return request.toReceive()
     }
 
-    @OptIn(ExperimentalTime::class)
     private fun AddReceiveRequest.toReceive(): Receive {
         return Receive(
             id = id1,

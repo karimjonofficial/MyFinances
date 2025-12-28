@@ -69,6 +69,11 @@ fun ProfileContent(
             index = 4,
             name = stringResource(R.string.orders),
             action = { navigationManager.navigateToOrders() }
+        ),
+        ProfileOption(
+            index = 5,
+            name = stringResource(R.string.debts),
+            action = { navigationManager.navigateToDebts() }
         )
     )
 

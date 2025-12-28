@@ -9,9 +9,7 @@ import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.id2
 import com.orka.myfinances.fixtures.resources.models.user1
 import com.orka.myfinances.fixtures.resources.price
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
 val order1 = Order(
     id = id1,
     user = user1,
@@ -23,7 +21,6 @@ val order1 = Order(
     completed = false,
     description = description
 )
-@OptIn(ExperimentalTime::class)
 val order2 = Order(
     id = id2,
     user = user1,

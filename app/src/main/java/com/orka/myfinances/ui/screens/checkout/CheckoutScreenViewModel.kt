@@ -4,7 +4,7 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.basket.Basket
 import com.orka.myfinances.data.models.basket.BasketItem
-import com.orka.myfinances.data.repositories.Item
+import com.orka.myfinances.lib.data.repositories.Item
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.order.AddOrderRequest
 import com.orka.myfinances.data.repositories.sale.AddSaleRequest

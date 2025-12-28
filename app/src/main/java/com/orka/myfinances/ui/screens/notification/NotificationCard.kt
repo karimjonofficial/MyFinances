@@ -20,10 +20,8 @@ import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-@OptIn(ExperimentalTime::class)
 @Composable
 fun NotificationCard(
     modifier: Modifier,
@@ -96,7 +94,6 @@ fun NotificationCard(
     )
 }
 
-@OptIn(ExperimentalTime::class)
 private fun formatDateTime(dateTime: Instant): String {
     val now = Clock.System.now()
     val duration = now - dateTime

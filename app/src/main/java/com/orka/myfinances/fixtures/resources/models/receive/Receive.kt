@@ -7,9 +7,7 @@ import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.id2
 import com.orka.myfinances.fixtures.resources.models.user1
 import com.orka.myfinances.fixtures.resources.price
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
 val receive1 = Receive(
     id = id1,
     user = user1,
@@ -18,8 +16,6 @@ val receive1 = Receive(
     dateTime = dateTime,
     description = description
 )
-
-@OptIn(ExperimentalTime::class)
 val receive2 = Receive(
     id = id2,
     user = user1,

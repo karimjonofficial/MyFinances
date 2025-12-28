@@ -9,7 +9,6 @@ import com.orka.myfinances.fixtures.resources.models.folder.folder2
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.product1
 import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
 class ProductApiServiceImpl : ProductApiService {
     override suspend fun add(request: AddProductRequest): Product {
@@ -28,7 +27,6 @@ class ProductApiServiceImpl : ProductApiService {
         return product1
     }
 
-    @OptIn(ExperimentalTime::class)
     fun AddProductRequest.toProduct(id: Id): Product {
         return Product(
             id = id,

@@ -4,12 +4,15 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Session
-import com.orka.myfinances.data.repositories.receive.ReceiveRepository
-import com.orka.myfinances.data.repositories.client.ClientRepository
-import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.repositories.basket.BasketRepository
+import com.orka.myfinances.data.repositories.client.ClientRepository
+import com.orka.myfinances.data.repositories.debt.DebtRepository
 import com.orka.myfinances.data.repositories.notification.NotificationRepository
+import com.orka.myfinances.data.repositories.order.OrderRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
+import com.orka.myfinances.data.repositories.receive.ReceiveRepository
+import com.orka.myfinances.data.repositories.sale.SaleRepository
+import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.factories.ApiProvider
 import com.orka.myfinances.factories.viewmodel.ViewModelProvider
@@ -25,21 +28,20 @@ import com.orka.myfinances.lib.extensions.models.toModel
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.session.SessionManager
 import com.orka.myfinances.ui.managers.session.UiState
-import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
-import com.orka.myfinances.data.repositories.sale.SaleRepository
-import com.orka.myfinances.data.repositories.order.OrderRepository
-import com.orka.myfinances.ui.screens.order.OrdersScreenViewModel
 import com.orka.myfinances.ui.screens.checkout.CheckoutScreenViewModel
-import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
-import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
-import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import com.orka.myfinances.ui.screens.clients.ClientsScreenViewModel
+import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenViewModel
 import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentViewModel
+import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
 import com.orka.myfinances.ui.screens.notification.NotificationScreenViewModel
+import com.orka.myfinances.ui.screens.order.OrdersScreenViewModel
+import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.screens.stock.AddStockItemScreenViewModel
 import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
+import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -120,6 +122,7 @@ class UiManager(
         val receiveRepository = ReceiveRepository()
         val orderRepository = OrderRepository()
         val clientRepository = ClientRepository()
+        val debtRepository = DebtRepository()
 
         val foldersContentViewModel = FoldersContentViewModel(
             repository = folderRepository,
@@ -203,6 +206,12 @@ class UiManager(
             logger = logger,
             coroutineScope = newScope()
         )
+        val debtViewModel = DebtScreenViewModel(
+            debtRepository = debtRepository,
+            clientRepository = clientRepository,
+            logger = logger,
+            coroutineScope = newScope()
+        )
 
         return ViewModelProviderImpl(
             addTemplateScreenViewModel = addTemplateScreenViewModel,
@@ -218,7 +227,8 @@ class UiManager(
             checkoutViewModel = checkoutScreenViewModel,
             addStockItemViewModel = addStockItemScreenViewModel,
             ordersViewModel = ordersScreenViewModel,
-            notificationsViewModel = notificationScreenViewModel
+            notificationsViewModel = notificationScreenViewModel,
+            debtsViewModel = debtViewModel
         )
     }
 }

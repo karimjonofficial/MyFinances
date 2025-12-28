@@ -12,7 +12,7 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 fun <TLoading, TSuccess, TFailure> LazyColumnContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(horizontal = 4.dp),
-    arrangementSpace: Dp = 4.dp,
+    arrangementSpace: Dp = 0.dp,
     state: State<TLoading, List<TSuccess>, TFailure>,
     viewModel: ListViewModel<TLoading, TSuccess, TFailure>,
     item: @Composable (modifier: Modifier, item: TSuccess) -> Unit

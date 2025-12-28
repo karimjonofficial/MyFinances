@@ -1,6 +1,5 @@
 package com.orka.myfinances.fixtures.resources
 
-import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 const val description = "Lorem ipsum dolor"
@@ -10,6 +9,5 @@ const val price = 1000
 const val salePrice = 1100
 const val amount = 100
 
-@OptIn(ExperimentalTime::class)
 val dateTime = Instant.parse("2024-01-01T12:00:00Z")
 val types = listOf("text", "number", "range")

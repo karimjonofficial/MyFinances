@@ -18,4 +18,5 @@ interface ViewModelProvider {
     fun addStockItemViewModel(): Any
     fun notificationsViewModel(): Any
     fun ordersViewModel(): Any
+    fun debtsViewModel(): Any
 }

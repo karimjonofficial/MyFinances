@@ -1,6 +1,7 @@
 package com.orka.myfinances.ui.managers.navigation
 
 import com.orka.myfinances.data.models.Client
+import com.orka.myfinances.data.models.Debt
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Warehouse
@@ -24,5 +25,7 @@ interface NavigationManager {
     fun navigateToAddStockItem(warehouse: Warehouse)
     fun navigateToOrders()
     fun navigateToOrder(order: Order)
+    fun navigateToDebts()
+    fun navigateToDebt(debt: Debt)
     fun back()
 }

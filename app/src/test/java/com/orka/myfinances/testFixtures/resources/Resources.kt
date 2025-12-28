@@ -1,7 +1,6 @@
 package com.orka.myfinances.testFixtures.resources
 
 import com.orka.myfinances.data.repositories.product.models.AddProductRequest
-import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 const val name = "Name"
@@ -22,7 +21,6 @@ const val price = 100
 const val salePrice = 110
 const val amount = 1
 
-@OptIn(ExperimentalTime::class)
 val dateTime = Instant.parse("2024-01-01T12:00:00Z")
 
 val addProductRequest = AddProductRequest(
