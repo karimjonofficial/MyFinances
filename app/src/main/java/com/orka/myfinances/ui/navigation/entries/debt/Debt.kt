@@ -1,21 +1,23 @@
-package com.orka.myfinances.ui.navigation.entries
+package com.orka.myfinances.ui.navigation.entries.debt
 
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
-import com.orka.myfinances.ui.screens.debt.DebtScreen
-import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenViewModel
+import com.orka.myfinances.ui.screens.debt.DebtDetailScreen
 
-fun debtsEntry(
-    modifier: Modifier,
-    destination: Destination.Debts,
+fun debtEntry(
+    modifier: Modifier = Modifier.Companion,
+    destination: Destination.Debt,
     navigationManager: NavigationManager
 ): NavEntry<Destination> = entry(destination) {
-    DebtScreen(
+
+    DebtDetailScreen(
         modifier = modifier,
-        viewModel = destination.viewModel as DebtScreenViewModel,
-        navigationManager = navigationManager
+        debt = destination.debt,
+        onBackClick = { navigationManager.back() },
+        onEditClick = {},
+        onMarkAsPaidClick = {}
     )
 }

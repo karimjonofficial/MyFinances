@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.debt
+package com.orka.myfinances.ui.screens.debt.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

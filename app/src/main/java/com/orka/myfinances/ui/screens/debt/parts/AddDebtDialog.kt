@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.debt
+package com.orka.myfinances.ui.screens.debt.parts
 
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog

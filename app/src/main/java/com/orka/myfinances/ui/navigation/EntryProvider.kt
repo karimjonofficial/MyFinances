@@ -4,13 +4,13 @@ import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.data.models.User
 import com.orka.myfinances.impl.ui.managers.NavigationManagerImpl
-import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.navigation.entries.catalogEntry
 import com.orka.myfinances.ui.navigation.entries.checkoutEntry
 import com.orka.myfinances.ui.navigation.entries.clientEntry
 import com.orka.myfinances.ui.navigation.entries.clientsEntry
-import com.orka.myfinances.ui.navigation.entries.debtsEntry
+import com.orka.myfinances.ui.navigation.entries.debt.debtEntry
+import com.orka.myfinances.ui.navigation.entries.debt.debtsEntry
 import com.orka.myfinances.ui.navigation.entries.historyEntry
 import com.orka.myfinances.ui.navigation.entries.homeEntry
 import com.orka.myfinances.ui.navigation.entries.notificationsEntry
@@ -47,5 +47,5 @@ fun entryProvider(
     is Destination.Orders -> ordersEntry(modifier, destination, navigationManager)
     is Destination.Order -> orderEntry(destination)
     is Destination.Debts -> debtsEntry(modifier, destination, navigationManager)
-    is Destination.Debt -> entry(destination){}
+    is Destination.Debt -> debtEntry(modifier, destination, navigationManager)
 }
