@@ -1,33 +1,42 @@
 package com.orka.myfinances.ui.screens.templates.add
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.repositories.template.AddTemplateRequest
 import com.orka.myfinances.data.repositories.template.TemplateFieldModel
-import com.orka.myfinances.fixtures.managers.DummyNavigationManager
 import com.orka.myfinances.fixtures.data.repositories.TemplateRepositoryImpl
+import com.orka.myfinances.fixtures.managers.DummyNavigationManager
 import com.orka.myfinances.lib.ui.Scaffold
+import com.orka.myfinances.lib.ui.components.Dialog
+import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import com.orka.myfinances.ui.screens.templates.add.components.TemplateFieldCard
@@ -44,9 +53,51 @@ fun AddTemplateScreen(
     navigationManager: NavigationManager
 ) {
     val name = rememberSaveable { mutableStateOf("") }
-    val names = rememberSaveable { mutableStateListOf("") }
-    val fieldTypes = rememberSaveable { mutableStateListOf<Int?>(null) }
-    val count = rememberSaveable { mutableIntStateOf(1) }
+    val fields = rememberSaveable { mutableStateListOf<TemplateFieldModel>() }
+    val showDialog = rememberSaveable { mutableStateOf(false) }
+
+    if (showDialog.value) {
+        val newFieldName = rememberSaveable { mutableStateOf("") }
+        val newFieldTypeIndex = rememberSaveable { mutableStateOf<Int?>(null) }
+
+        Dialog(
+            dismissRequest = { showDialog.value = false },
+            title = stringResource(R.string.add_field),
+            supportingText = stringResource(R.string.fill_the_lines_below_to_add_a_new_field),
+            onSuccess = {
+                if (newFieldName.value.isNotBlank() && newFieldTypeIndex.value != null) {
+                    fields.add(
+                        TemplateFieldModel(
+                            name = newFieldName.value,
+                            typeId = newFieldTypeIndex.value!!
+                        )
+                    )
+                    showDialog.value = false
+                }
+            },
+            content = {
+                val exposed = rememberSaveable { mutableStateOf(false) }
+
+                OutlinedTextField(
+                    value = newFieldName.value,
+                    onValueChange = { newFieldName.value = it },
+                    label = { Text(text = stringResource(R.string.name)) }
+                )
+
+                VerticalSpacer(8)
+                OutlinedExposedDropDownTextField(
+                    menuExpanded = exposed.value,
+                    onExpandChange = { exposed.value = it },
+                    onDismissRequested = { exposed.value = false },
+                    text = if (newFieldTypeIndex.value == null) "" else types[newFieldTypeIndex.value!!],
+                    label = stringResource(R.string.type),
+                    items = types,
+                    itemText = { it },
+                    onItemSelected = { index, _ -> newFieldTypeIndex.value = index }
+                )
+            }
+        )
+    }
 
     Scaffold(
         modifier = modifier,
@@ -63,13 +114,7 @@ fun AddTemplateScreen(
                 ) {
                     Button(
                         onClick = {
-                            if (name.value.isNotBlank() && names.all { it.isNotBlank() } && fieldTypes.all { it != null }) {
-                                val fields = names.mapIndexed { i, name ->
-                                    TemplateFieldModel(
-                                        name,
-                                        fieldTypes[i]!!
-                                    )
-                                }
+                            if (name.value.isNotBlank() && fields.isNotEmpty()) {
                                 val template = AddTemplateRequest(name.value, fields)
                                 viewModel.addTemplate(template)
                                 navigationManager.back()
@@ -83,26 +128,14 @@ fun AddTemplateScreen(
         }
     ) { paddingValues ->
 
-        Column(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)) {
             Column(
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
                     .weight(1f)
             ) {
-
-                val countValue = count.intValue
-
-                if (countValue > names.size) {
-                    repeat(countValue - names.size) {
-                        names.add("")
-                        fieldTypes.add(null)
-                    }
-                } else if (countValue < names.size) {
-                    repeat(names.size - countValue) {
-                        names.removeAt(names.lastIndex)
-                        fieldTypes.removeAt(fieldTypes.lastIndex)
-                    }
-                }
 
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
@@ -115,34 +148,39 @@ fun AddTemplateScreen(
                 Text(text = stringResource(R.string.properties_of_template))
                 VerticalSpacer(8)
 
-                repeat(countValue) { index ->
-                    val typeIndex = fieldTypes[index]
-                    val name = names[index]
-
-                    TemplateFieldCard(
-                        modifier = Modifier.padding(horizontal = 4.dp),
-                        index = index + 1,
-                        name = name,
-                        type = if (typeIndex == null) "" else types[typeIndex],
-                        onNameChange = { names[index] = it },
-                        onTypeIndexChange = { fieldTypes[index] = it },
-                        types = types,
-                        onRemove = {
-                            names.removeAt(index)
-                            fieldTypes.removeAt(index)
-                            count.intValue = names.size
-                        }
-                    )
-
-                    VerticalSpacer(4)
-                }
-
-                VerticalSpacer(8)
-                TextButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { count.intValue++ }
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(3),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text(text = stringResource(R.string.add))
+
+                    items(items = fields) { field ->
+
+                        TemplateFieldCard(
+                            modifier = Modifier.size(120.dp),
+                            field = field,
+                            type = types[field.typeId],
+                            onRemove = { fields.remove(field) }
+                        )
+                    }
+
+                    item {
+                        Box(
+                            modifier = Modifier.size(120.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+
+                            IconButton(
+                                modifier = Modifier.size(64.dp),
+                                onClick = { showDialog.value = true }
+                            ) {
+                                Icon(
+                                    painter = painterResource(R.drawable.add),
+                                    contentDescription = stringResource(R.string.add)
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -155,7 +193,8 @@ fun AddTemplateScreen(
 private fun TemplateScreenPreview() {
     val types = listOf("text", "number", "range")
     val repository = TemplateRepositoryImpl()
-    val addTemplateScreenViewModel = AddTemplateScreenViewModel(repository, CoroutineScope(Dispatchers.Main))
+    val addTemplateScreenViewModel =
+        AddTemplateScreenViewModel(repository, CoroutineScope(Dispatchers.Main))
     val navigationManager = DummyNavigationManager()
 
     MyFinancesTheme {

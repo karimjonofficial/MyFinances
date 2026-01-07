@@ -1,77 +1,78 @@
 package com.orka.myfinances.ui.screens.templates.add.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
-import com.orka.myfinances.lib.ui.components.HorizontalSpacer
+import com.orka.myfinances.data.repositories.template.TemplateFieldModel
 
 @Composable
 fun TemplateFieldCard(
     modifier: Modifier = Modifier,
-    index: Int,
-    name: String,
+    field: TemplateFieldModel,
     type: String,
-    types: List<String>,
-    onNameChange: (String) -> Unit,
-    onTypeIndexChange: (Int) -> Unit,
     onRemove: () -> Unit
 ) {
-    val exposed = rememberSaveable { mutableStateOf(false) }
-
-    Row(
+    Box(
         modifier = modifier
-            .background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = MaterialTheme.shapes.small
-            )
-            .padding(start = 12.dp, top = 4.dp, bottom = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .clip(shape = RoundedCornerShape(16.dp))
+            .background(color = MaterialTheme.colorScheme.surfaceVariant)
     ) {
-        Text(text = "$index.")
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ) {
+            IconButton(onClick = onRemove) {
+                Icon(
+                    painter = painterResource(R.drawable.close),
+                    contentDescription = stringResource(R.string.remove)
+                )
+            }
+        }
 
-        HorizontalSpacer(4)
-        OutlinedTextField(
-            modifier = Modifier.weight(1f),
-            value = name,
-            onValueChange = { onNameChange(it) },
-            label = { Text(text = stringResource(R.string.name)) }
-        )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-        HorizontalSpacer(4)
-        OutlinedExposedDropDownTextField(
-            modifier = Modifier.width(120.dp),
-            menuExpanded = exposed.value,
-            onExpandChange = { exposed.value = it },
-            onDismissRequested = { exposed.value = false },
-            text = type,
-            label = stringResource(R.string.type),
-            items = types,
-            itemText = { it },
-            onItemSelected = { index, _ -> onTypeIndexChange(index) }
-        )
-
-        HorizontalSpacer(4)
-        IconButton(onClick = { onRemove() }) {
-            Icon(
-                painter = painterResource(R.drawable.remove),
-                contentDescription = stringResource(R.string.remove)
+            Text(
+                text = field.name,
+                fontWeight = FontWeight.Bold
             )
+
+            Box(
+                modifier = Modifier
+                    .padding(2.dp)
+                    .clip(RoundedCornerShape(50))
+                    .background(MaterialTheme.colorScheme.secondary)
+                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = type,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSecondary
+                )
+            }
         }
     }
 }

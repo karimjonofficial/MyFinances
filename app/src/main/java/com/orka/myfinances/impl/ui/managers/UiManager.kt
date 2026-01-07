@@ -140,6 +140,7 @@ class UiManager(
         )
         val templatesScreenViewModel = TemplatesScreenViewModel(
             repository = templateRepository,
+            events = templateRepository.events,
             logger = logger,
             coroutineScope = newScope()
         )

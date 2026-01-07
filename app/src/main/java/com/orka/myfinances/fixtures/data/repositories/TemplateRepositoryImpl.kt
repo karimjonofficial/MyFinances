@@ -8,16 +8,22 @@ import com.orka.myfinances.data.repositories.template.TemplateRepository
 import com.orka.myfinances.fixtures.resources.models.template.templates
 import com.orka.myfinances.fixtures.resources.types
 import com.orka.myfinances.lib.extensions.models.toId
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 class TemplateRepositoryImpl : TemplateRepository {
     private val state = templates.toMutableList()
 
-    override suspend fun add(request: AddTemplateRequest): Template? {
+    private val flow = MutableSharedFlow<TemplateRepositoryEvent>()
+    val events = flow as Flow<TemplateRepositoryEvent>
+
+    override suspend fun add(request: AddTemplateRequest): Template {
         state.add(request.toTemplate())
+        flow.emit(TemplateRepositoryEvent)
         return request.toTemplate()
     }
 
-    override suspend fun get(): List<Template>? {
+    override suspend fun get(): List<Template> {
         return state.toList()
     }
 
@@ -28,7 +34,6 @@ class TemplateRepositoryImpl : TemplateRepository {
             fields = fields.map { it.toTemplateField() }
         )
     }
-
     private fun TemplateFieldModel.toTemplateField(): TemplateField {
         return TemplateField(
             id = 1.toId(),
@@ -37,3 +42,5 @@ class TemplateRepositoryImpl : TemplateRepository {
         )
     }
 }
+
+data object TemplateRepositoryEvent
