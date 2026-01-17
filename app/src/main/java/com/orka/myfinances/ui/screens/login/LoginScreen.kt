@@ -59,7 +59,6 @@ fun LoginScreen(
 
 
             VerticalSpacer(32)
-
             Image(
                 modifier = Modifier.size(128.dp),
                 painter = painterResource(R.drawable.logo),
@@ -67,14 +66,12 @@ fun LoginScreen(
             )
 
             VerticalSpacer(16)
-
             Text(
                 text = stringResource(R.string.enter_to_account),
                 style = MaterialTheme.typography.headlineMedium
             )
 
             VerticalSpacer(16)
-
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !isLoadingState,
@@ -96,7 +93,6 @@ fun LoginScreen(
             )
 
             VerticalSpacer(8)
-
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !isLoadingState,
@@ -109,7 +105,7 @@ fun LoginScreen(
                         contentDescription = null
                     )
                 },
-                visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
+                visualTransformation = if(passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(
                         onClick = { passwordVisible.value = !passwordVisible.value }
@@ -129,7 +125,6 @@ fun LoginScreen(
             )
 
             VerticalSpacer(8)
-
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(
                     enabled = !isLoadingState,
@@ -141,7 +136,6 @@ fun LoginScreen(
             }
 
             VerticalSpacer(8)
-
             Button(
                 modifier = Modifier
                     .height(48.dp)
@@ -156,7 +150,8 @@ fun LoginScreen(
                 },
                 enabled = (usernameText.isNotBlank() && passwordText.isNotBlank()) && !isLoadingState
             ) {
-                if (isLoadingState) CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                if (isLoadingState)
+                    CircularProgressIndicator(modifier = Modifier.size(24.dp))
                 else Text(stringResource(R.string.enter))
             }
 

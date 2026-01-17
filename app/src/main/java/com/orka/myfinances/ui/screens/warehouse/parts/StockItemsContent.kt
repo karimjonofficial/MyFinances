@@ -18,24 +18,18 @@ fun StockItemsContent(
     onStockItemClick: (StockItem) -> Unit,
 ) {
     when (state) {
-        is WarehouseState.Loading -> {
-            LoadingScreen(modifier)
-        }
+        is WarehouseState.Loading -> LoadingScreen(modifier)
 
-        is WarehouseState.Failure -> {
-            FailureScreen(
-                modifier = modifier,
-                retry = { viewModel.initialize() }
-            )
-        }
+        is WarehouseState.Failure -> FailureScreen(
+            modifier = modifier,
+            retry = { viewModel.initialize() }
+        )
 
-        is WarehouseState.Success -> {
-            StockItemsGrid(
-                modifier = modifier,
-                contentPadding = contentPadding,
-                stockItems = state.stockItems,
-                onItemClick = onStockItemClick
-            )
-        }
+        is WarehouseState.Success -> StockItemsGrid(
+            modifier = modifier,
+            contentPadding = contentPadding,
+            stockItems = state.stockItems,
+            onItemClick = onStockItemClick
+        )
     }
 }

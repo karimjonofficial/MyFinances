@@ -2,7 +2,7 @@ package com.orka.myfinances.impl.factories.viewmodels
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.StockItem
-import com.orka.myfinances.data.models.folder.Warehouse
+import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.factories.viewmodel.WarehouseScreenViewModelProvider
@@ -16,9 +16,9 @@ class WarehouseScreenViewModelProviderImpl(
     private val logger: Logger,
     private val coroutineScope: CoroutineScope
 ) : WarehouseScreenViewModelProvider {
-    override fun warehouseViewModel(warehouse: Warehouse): WarehouseScreenViewModel {
+    override fun warehouseViewModel(category: Category): WarehouseScreenViewModel {
         return WarehouseScreenViewModel(
-            warehouse = warehouse,
+            category = category,
             productRepository = productRepository,
             stockRepository = stockRepository,
             add = addToBasket,

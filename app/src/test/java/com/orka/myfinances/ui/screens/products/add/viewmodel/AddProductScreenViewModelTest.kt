@@ -1,17 +1,16 @@
 package com.orka.myfinances.ui.screens.products.add.viewmodel
 
 import com.orka.myfinances.core.MainDispatcherContext
-import com.orka.myfinances.data.api.ProductApiService
 import com.orka.myfinances.data.api.StockApiService
-import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
+import com.orka.myfinances.data.repositories.product.ProductTitleRepository
+import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.testFixtures.DummyLogger
-import com.orka.myfinances.testFixtures.data.api.product.DummyProductApiService
-import com.orka.myfinances.testFixtures.data.api.product.SpyProductApiService
 import com.orka.myfinances.testFixtures.data.api.warehouse.DummyStockApiService
 import com.orka.myfinances.testFixtures.data.api.warehouse.EmptyStockApiServiceStub
 import com.orka.myfinances.testFixtures.data.api.warehouse.StockApiServiceStub
-import com.orka.myfinances.testFixtures.resources.addProductRequest
+import com.orka.myfinances.testFixtures.resources.successfulAddProductRequest
+import com.orka.myfinances.testFixtures.resources.models.product.productTitle1
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
@@ -19,13 +18,11 @@ import org.junit.jupiter.api.Test
 
 class AddProductScreenViewModelTest : MainDispatcherContext() {
     private val logger = DummyLogger()
+    private val repository = ProductRepository(repository = ProductTitleRepository())
 
-    private fun viewModel(
-        productApiService: ProductApiService,
-        stockApiService: StockApiService
-    ): AddProductScreenViewModel {
+    private fun viewModel(stockApiService: StockApiService): AddProductScreenViewModel {
         return AddProductScreenViewModel(
-            productRepository = ProductRepository(productApiService),
+            productRepository = repository,
             stockRepository = StockRepository(stockApiService),
             logger = logger,
             coroutineScope = testScope
@@ -34,10 +31,6 @@ class AddProductScreenViewModelTest : MainDispatcherContext() {
 
     @Nested
     inner class DummyProductApiContext {
-        private fun viewModel(stockApiService: StockApiService): AddProductScreenViewModel {
-            val productApiService = DummyProductApiService()
-            return viewModel(productApiService, stockApiService)
-        }
 
         @Test
         fun `When initialized, state is Loading`() {
@@ -63,14 +56,23 @@ class AddProductScreenViewModelTest : MainDispatcherContext() {
     }
 
     @Test
-    fun `When add product, passes request`() {
-        val productApiService = SpyProductApiService()
+    fun `When add product, passes request`() = runTest {
         val stockApiService = DummyStockApiService()
-        val viewModel = viewModel(productApiService, stockApiService)
+        val viewModel = viewModel(stockApiService)
+        val response1 = repository.get()
 
-        viewModel.addProduct(addProductRequest)
+        viewModel.addProduct(
+            titleId = productTitle1.id,
+            properties = successfulAddProductRequest.properties,
+            name = successfulAddProductRequest.name,
+            price = successfulAddProductRequest.price,
+            salePrice = successfulAddProductRequest.salePrice,
+            description = successfulAddProductRequest.description,
+            category = productTitle1.category
+        )
         advanceUntilIdle()
 
-        assertTrue(productApiService.addCalled)
+        val response2 = repository.get()
+        assertEquals(if (response1 == null) 1 else response1.size + 1, response2?.size ?: 0)
     }
 }

@@ -1,7 +1,7 @@
 package com.orka.myfinances.fixtures.data.api
 
 import com.orka.myfinances.data.models.StockItem
-import com.orka.myfinances.data.models.folder.Warehouse
+import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.api.StockApiService
 import com.orka.myfinances.fixtures.resources.models.folder.warehouses
 import com.orka.myfinances.fixtures.resources.models.stockItem1
@@ -11,7 +11,7 @@ class StockApiServiceImpl : StockApiService {
         return listOf(stockItem1)
     }
 
-    override suspend fun get(): List<Warehouse> {
+    override suspend fun get(): List<Category> {
         return warehouses
     }
 }

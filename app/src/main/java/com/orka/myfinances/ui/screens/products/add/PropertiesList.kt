@@ -9,12 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.orka.myfinances.data.models.product.Range
 import com.orka.myfinances.data.models.template.TemplateField
+import com.orka.myfinances.data.models.types.Range
 import com.orka.myfinances.data.repositories.product.models.PropertyModel
 import com.orka.myfinances.lib.ui.components.RangeField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
@@ -23,7 +22,7 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 fun PropertiesList(
     modifier: Modifier = Modifier,
     fields: List<TemplateField>,
-    properties: SnapshotStateList<PropertyModel<*>?>
+    onSuccess: (Int, PropertyModel<*>) -> Unit
 ) {
     Column(
         modifier = modifier,
@@ -42,7 +41,7 @@ fun PropertiesList(
                         onValueChange = {
                             value.value = it
                             if (it.isNotEmpty()) {
-                                properties[index] = PropertyModel(field, it)
+                                onSuccess(index, PropertyModel(field, it))
                             }
                         },
                         label = { Text(text = field.name) }
@@ -58,7 +57,7 @@ fun PropertiesList(
                             val n = it.toIntOrNull()
                             if (n != null && n > 0) {
                                 value.intValue = n
-                                properties[index] = PropertyModel(field, n)
+                                onSuccess(index, PropertyModel(field, n))
                             }
                         },
                         label = { Text(text = field.name) }
@@ -78,10 +77,7 @@ fun PropertiesList(
                         onMinValueChange = {
                             val maxValue = max.intValue
                             if (it > 0) {
-                                properties[index] = PropertyModel(
-                                    field = field,
-                                    value = Range(it, maxValue)
-                                )
+                                onSuccess(index, PropertyModel(field, Range(it, maxValue)))
                                 min.intValue = it
                             }
                         },
@@ -89,10 +85,7 @@ fun PropertiesList(
                             val minValue = min.intValue
 
                             if (minValue > 0) {
-                                properties[index] = PropertyModel(
-                                    field = field,
-                                    value = Range(minValue, it)
-                                )
+                                onSuccess(index, PropertyModel(field, Range(minValue, it)))
                                 max.intValue = it
                             }
                         }

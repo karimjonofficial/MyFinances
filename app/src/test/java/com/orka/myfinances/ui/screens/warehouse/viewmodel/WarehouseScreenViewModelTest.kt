@@ -2,23 +2,20 @@ package com.orka.myfinances.ui.screens.warehouse.viewmodel
 
 import app.cash.turbine.test
 import com.orka.myfinances.core.MainDispatcherContext
-import com.orka.myfinances.data.api.ProductApiService
 import com.orka.myfinances.data.api.StockApiService
 import com.orka.myfinances.data.models.StockItem
-import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
+import com.orka.myfinances.data.repositories.product.ProductTitleRepository
+import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.testFixtures.DummyLogger
-import com.orka.myfinances.testFixtures.data.api.product.DummyProductApiService
-import com.orka.myfinances.testFixtures.data.api.product.EmptyProductApiServiceStub
-import com.orka.myfinances.testFixtures.data.api.product.ProductApiServiceStub
-import com.orka.myfinances.testFixtures.data.api.product.SpyProductApiService
 import com.orka.myfinances.testFixtures.data.api.warehouse.DummyStockApiService
 import com.orka.myfinances.testFixtures.data.api.warehouse.EmptyStockApiServiceStub
 import com.orka.myfinances.testFixtures.data.api.warehouse.StockApiServiceStub
-import com.orka.myfinances.testFixtures.resources.addProductRequest
-import com.orka.myfinances.testFixtures.resources.models.folder.warehouse1
+import com.orka.myfinances.testFixtures.resources.successfulAddProductRequest
+import com.orka.myfinances.testFixtures.resources.models.folder.category1
 import com.orka.myfinances.testFixtures.resources.models.product.products
 import com.orka.myfinances.testFixtures.resources.models.stock.stockItem
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -33,7 +30,7 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
         add: (StockItem) -> Unit
     ): ViewModel {
         return ViewModel(
-            warehouse = warehouse1,
+            category = category1,
             productRepository = productRepository,
             stockRepository = stockRepository,
             add = add,
@@ -45,11 +42,10 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
     @Nested
     inner class NoRepositoryContext {
         private fun viewModel(
-            productApiService: ProductApiService,
             stockApiService: StockApiService,
             add: (StockItem) -> Unit
         ): ViewModel {
-            val productRepository = ProductRepository(productApiService)
+            val productRepository = ProductRepository(ProductTitleRepository())
             val stockRepository = StockRepository(stockApiService)
             return viewModel(
                 productRepository = productRepository,
@@ -60,12 +56,8 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
 
         @Nested
         inner class DummyAddContext {
-            private fun viewModel(
-                productApiService: ProductApiService,
-                stockApiService: StockApiService
-            ): ViewModel {
+            private fun viewModel(stockApiService: StockApiService): ViewModel {
                 return viewModel(
-                    productApiService = productApiService,
                     stockApiService = stockApiService,
                     add = {}
                 )
@@ -74,8 +66,7 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
             @Nested
             inner class DummyProductApiServiceContext {
                 private fun viewModel(stockApiService: StockApiService): ViewModel {
-                    val productApiService = DummyProductApiService()
-                    return viewModel(productApiService, stockApiService)
+                    return viewModel(stockApiService)
                 }
 
                 @Test
@@ -107,15 +98,14 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
 
                 @Nested
                 inner class DummyWarehouseApiServiceContext {
-                    private fun viewModel(productApiService: ProductApiService): ViewModel {
+                    private fun viewModel(): ViewModel {
                         val stockApiService = DummyStockApiService()
-                        return viewModel(productApiService, stockApiService)
+                        return viewModel(stockApiService)
                     }
 
                     @Test
                     fun `When api fails, product state is failure`() = runAndCancelChildren {
-                        val productApiService = EmptyProductApiServiceStub()
-                        val viewModel = viewModel(productApiService)
+                        val viewModel = viewModel()
 
                         runAndAdvance { viewModel.initialize() }
 
@@ -127,8 +117,7 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
 
                     @Test
                     fun `When api success, product state is success`() = runAndCancelChildren {
-                        val productApiService = ProductApiServiceStub()
-                        val viewModel = viewModel(productApiService)
+                        val viewModel = viewModel()
 
                         runAndAdvance { viewModel.initialize() }
 
@@ -145,12 +134,10 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
 
             @Test
             fun `Invokes add to basket`() = runAndCancelChildren {
-                val productApiService = DummyProductApiService()
                 val stockApiService = DummyStockApiService()
                 var invoked = false
 
                 val viewModel = viewModel(
-                    productApiService = productApiService,
                     stockApiService = stockApiService,
                     add = { invoked = true }
                 )
@@ -163,18 +150,20 @@ class WarehouseScreenViewModelTest : MainDispatcherContext() {
 
         @Test
         fun `Api triggers initialize`() = runAndCancelChildren {
-            val productApiService = SpyProductApiService()
             val stockApiService = DummyStockApiService()
-            val productRepository = ProductRepository(productApiService)
+            val productRepository = ProductRepository(ProductTitleRepository())
             val stockRepository = StockRepository(stockApiService)
-            viewModel(
+            val viewModel = viewModel(
                 productRepository = productRepository,
                 stockRepository = stockRepository,
                 add = {}
             )
 
-            runAndAdvance { productRepository.add(addProductRequest) }
+            runAndAdvance { productRepository.add(successfulAddProductRequest) }
 
-            assertTrue(productApiService.getCalled)
+            viewModel.productsState.test {
+                assertNotNull(awaitItem())
+                awaitComplete()
+            }
         }
     }

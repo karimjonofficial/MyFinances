@@ -25,11 +25,11 @@ import com.orka.myfinances.ui.navigation.entries.template.templatesEntry
 import com.orka.myfinances.ui.navigation.entries.warehouseEntry
 
 fun entryProvider(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     user: User,
     destination: Destination,
     navigationManager: NavigationManagerImpl
-): NavEntry<Destination> = when (destination) {
+): NavEntry<Destination> = when(destination) {
     is Destination.Home -> homeEntry(modifier, destination, user, navigationManager)
     is Destination.Catalog -> catalogEntry(modifier, destination, navigationManager)
     is Destination.Warehouse -> warehouseEntry(modifier, destination, navigationManager)

@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.folder.Warehouse
+import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
@@ -26,7 +26,7 @@ import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewMod
 @Composable
 fun WarehouseScreen(
     modifier: Modifier = Modifier,
-    warehouse: Warehouse,
+    category: Category,
     viewModel: WarehouseScreenViewModel,
     navigationManager: NavigationManager
 ) {
@@ -37,7 +37,7 @@ fun WarehouseScreen(
         modifier = modifier,
         topBar = {
             WarehouseScreenTopBar(
-                warehouse = warehouse,
+                category = category,
                 onAddProductClick = { navigationManager.navigateToAddProduct(it) },
                 onAddStockItemClick = { navigationManager.navigateToAddStockItem(it) }
             )

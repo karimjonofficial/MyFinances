@@ -1,7 +1,7 @@
 package com.orka.myfinances.impl.factories.viewmodels
 
 import com.orka.myfinances.data.models.folder.Catalog
-import com.orka.myfinances.data.models.folder.Warehouse
+import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.factories.viewmodel.CatalogScreenViewModelProvider
 import com.orka.myfinances.factories.viewmodel.ViewModelProvider
 import com.orka.myfinances.factories.viewmodel.WarehouseScreenViewModelProvider
@@ -57,8 +57,8 @@ class ViewModelProviderImpl(
         return addProductScreenViewModel
     }
 
-    override fun warehouseViewModel(warehouse: Warehouse): WarehouseScreenViewModel {
-        val viewmodel = warehouseScreenViewModelProvider.warehouseViewModel(warehouse) as WarehouseScreenViewModel
+    override fun warehouseViewModel(category: Category): WarehouseScreenViewModel {
+        val viewmodel = warehouseScreenViewModelProvider.warehouseViewModel(category) as WarehouseScreenViewModel
         viewmodel.initialize()
         return viewmodel
     }

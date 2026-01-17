@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Folder
-import com.orka.myfinances.data.models.folder.Warehouse
-import com.orka.myfinances.fixtures.resources.models.folder.warehouse1
+import com.orka.myfinances.data.models.folder.Category
+import com.orka.myfinances.fixtures.resources.models.folder.category1
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
@@ -148,7 +148,7 @@ private fun BaseFolderButton(
                 painter = painterResource(
                     id = when (folder) {
                         is Catalog -> R.drawable.folder_filled
-                        is Warehouse -> R.drawable.lists_filled
+                        is Category -> R.drawable.lists_filled
                     }
                 ),
                 tint = MaterialTheme.colorScheme.onSurface,
@@ -172,7 +172,7 @@ private fun CatalogPreview() {
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            FolderButton(folder = warehouse1) {}
+            FolderButton(folder = category1) {}
         }
     }
 }
@@ -191,7 +191,7 @@ private fun ProductFolderPreview() {
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            FolderButton(folder = warehouse1) {}
+            FolderButton(folder = category1) {}
         }
     }
 }

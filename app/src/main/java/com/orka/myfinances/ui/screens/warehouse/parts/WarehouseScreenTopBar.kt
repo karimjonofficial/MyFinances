@@ -10,29 +10,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.folder.Warehouse
+import com.orka.myfinances.data.models.folder.Category
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WarehouseScreenTopBar(
     modifier: Modifier = Modifier,
-    warehouse: Warehouse,
-    onAddProductClick: (Warehouse) -> Unit,
-    onAddStockItemClick: (Warehouse) -> Unit
+    category: Category,
+    onAddProductClick: (Category) -> Unit,
+    onAddStockItemClick: (Category) -> Unit
 ) {
 
     TopAppBar(
         modifier = modifier,
-        title = { Text(text = warehouse.name) },
+        title = { Text(text = category.name) },
         actions = {
-            IconButton(onClick = { onAddProductClick(warehouse) }) {
+            IconButton(onClick = { onAddProductClick(category) }) {
                 Icon(
                     painter = painterResource(R.drawable.add),
                     contentDescription = stringResource(R.string.add)
                 )
             }
 
-            IconButton(onClick = { onAddStockItemClick(warehouse) }) {
+            IconButton(onClick = { onAddStockItemClick(category) }) {
                 Icon(
                     painter = painterResource(R.drawable.download),
                     contentDescription = stringResource(R.string.download)

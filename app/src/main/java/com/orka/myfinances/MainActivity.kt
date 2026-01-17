@@ -22,7 +22,6 @@ class MainActivity : ComponentActivity() {
             manager.initialize()
 
             MyFinancesTheme {
-
                 MyFinancesScreen(
                     modifier = Modifier.fillMaxSize(),
                     state = uiState.value

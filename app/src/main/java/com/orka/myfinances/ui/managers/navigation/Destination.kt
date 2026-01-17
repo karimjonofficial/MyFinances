@@ -4,12 +4,12 @@ import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.Debt
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.models.folder.Catalog
-import com.orka.myfinances.data.models.folder.Warehouse
+import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.order.Order
 import com.orka.myfinances.data.models.product.Product
 
 typealias CatalogModel = Catalog
-typealias WarehouseModel = Warehouse
+typealias WarehouseModel = Category
 typealias ProductModel = Product
 typealias ClientModel = Client
 typealias OrderModel = Order

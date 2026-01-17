@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.data.models.folder.Catalog
-import com.orka.myfinances.data.models.folder.Warehouse
+import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
@@ -19,8 +19,12 @@ fun CatalogScreen(
     navigationManager: NavigationManager
 ) {
     when (state) {
-        is CatalogScreenState.Loading -> LoadingScreen(modifier = modifier)
-        is CatalogScreenState.Failure -> FailureScreen(modifier = modifier) { viewModel.initialize() }
+        is CatalogScreenState.Loading -> LoadingScreen(modifier)
+
+        is CatalogScreenState.Failure -> FailureScreen(
+            modifier = modifier,
+            retry = { viewModel.initialize() }
+        )
 
         is CatalogScreenState.Success -> FoldersList(
             modifier = modifier,
@@ -29,7 +33,7 @@ fun CatalogScreen(
             onFolderSelected = {
                 when (it) {
                     is Catalog -> navigationManager.navigateToCatalog(it)
-                    is Warehouse -> navigationManager.navigateToWarehouse(it)
+                    is Category -> navigationManager.navigateToWarehouse(it)
                 }
             }
         )

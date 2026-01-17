@@ -20,7 +20,12 @@ fun NavigationGraph(
         backStack = backStack,
         onBack = { navigationManager.back() },
         entryProvider = { destination ->
-            entryProvider(Modifier.fillMaxSize(), user, destination, navigationManager)
+            entryProvider(
+                modifier = Modifier.fillMaxSize(),
+                user = user,
+                destination = destination,
+                navigationManager = navigationManager
+            )
         }
     )
 }

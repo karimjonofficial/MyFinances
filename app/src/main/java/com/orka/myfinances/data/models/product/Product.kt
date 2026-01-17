@@ -1,7 +1,6 @@
 package com.orka.myfinances.data.models.product
 
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.data.models.folder.Warehouse
 import kotlin.time.Instant
 
 data class Product(
@@ -10,7 +9,5 @@ data class Product(
     val price: Int,
     val salePrice: Int,
     val dateTime: Instant,
-    val warehouse: Warehouse,
-    val properties: List<Property>,
-    val description: String? = null
+    val description: String?
 )

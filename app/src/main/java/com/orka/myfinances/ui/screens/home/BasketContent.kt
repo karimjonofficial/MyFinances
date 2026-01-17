@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
+import com.orka.myfinances.data.repositories.product.ProductTitleRepository
 import com.orka.myfinances.fixtures.managers.DummyNavigationManager
-import com.orka.myfinances.fixtures.data.api.ProductApiServiceImpl
 import com.orka.myfinances.lib.LoggerImpl
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
@@ -121,8 +121,7 @@ fun BasketContent(
 @Composable
 private fun BasketContentPreview() {
     val logger = LoggerImpl()
-    val apiService = ProductApiServiceImpl()
-    val productRepository = ProductRepository(apiService)
+    val productRepository = ProductRepository(ProductTitleRepository())
     val basketRepository = BasketRepository(productRepository)
     val viewModel = BasketContentViewModel(
         repository = basketRepository,

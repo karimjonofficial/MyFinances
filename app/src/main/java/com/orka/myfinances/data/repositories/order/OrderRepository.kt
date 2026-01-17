@@ -6,9 +6,9 @@ import com.orka.myfinances.fixtures.resources.dateTime
 import com.orka.myfinances.fixtures.resources.models.client1
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.order.orders
-import com.orka.myfinances.fixtures.resources.models.product1
+import com.orka.myfinances.fixtures.resources.models.product.product1
 import com.orka.myfinances.fixtures.resources.models.user1
-import com.orka.myfinances.lib.data.repositories.Item
+import com.orka.myfinances.lib.data.repositories.models.Item
 import com.orka.myfinances.lib.fixtures.data.repositories.MockRepository
 
 class OrderRepository : MockRepository<Order, AddOrderRequest>(orders) {

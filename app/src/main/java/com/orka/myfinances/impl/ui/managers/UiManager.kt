@@ -10,13 +10,13 @@ import com.orka.myfinances.data.repositories.debt.DebtRepository
 import com.orka.myfinances.data.repositories.notification.NotificationRepository
 import com.orka.myfinances.data.repositories.order.OrderRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
+import com.orka.myfinances.data.repositories.product.ProductTitleRepository
 import com.orka.myfinances.data.repositories.receive.ReceiveRepository
 import com.orka.myfinances.data.repositories.sale.SaleRepository
 import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.factories.ApiProvider
 import com.orka.myfinances.factories.viewmodel.ViewModelProvider
-import com.orka.myfinances.fixtures.data.api.ProductApiServiceImpl
 import com.orka.myfinances.fixtures.data.api.StockApiServiceImpl
 import com.orka.myfinances.fixtures.data.repositories.FolderRepositoryImpl
 import com.orka.myfinances.fixtures.data.repositories.TemplateRepositoryImpl
@@ -112,11 +112,11 @@ class UiManager(
     }
     private fun viewModelProvider(): ViewModelProvider {
         val folderRepository = FolderRepositoryImpl()
-        val productApiService = ProductApiServiceImpl()
         val warehouseApiService = StockApiServiceImpl()
         val templateRepository = TemplateRepositoryImpl()
         val stockRepository = StockRepository(warehouseApiService)
-        val productRepository = ProductRepository(productApiService)
+        val titleRepository = ProductTitleRepository()
+        val productRepository = ProductRepository(titleRepository)
         val basketRepository = BasketRepository(productRepository)
         val saleRepository = SaleRepository()
         val receiveRepository = ReceiveRepository()

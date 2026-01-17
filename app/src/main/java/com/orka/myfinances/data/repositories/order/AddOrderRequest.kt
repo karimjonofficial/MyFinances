@@ -1,6 +1,6 @@
 package com.orka.myfinances.data.repositories.order
 
-import com.orka.myfinances.lib.data.repositories.Item
+import com.orka.myfinances.lib.data.repositories.models.Item
 
 class AddOrderRequest(
     val client: Int,

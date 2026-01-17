@@ -1,4 +1,4 @@
-package com.orka.myfinances.data.models.product
+package com.orka.myfinances.data.models.types
 
 data class Range(
     val min: Int,

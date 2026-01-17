@@ -42,5 +42,3 @@ class TemplateRepositoryImpl : TemplateRepository {
         )
     }
 }
-
-data object TemplateRepositoryEvent

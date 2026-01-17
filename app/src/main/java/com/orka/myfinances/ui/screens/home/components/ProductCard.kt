@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.product.Product
-import com.orka.myfinances.fixtures.resources.models.product1
+import com.orka.myfinances.fixtures.resources.models.product.product1
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable

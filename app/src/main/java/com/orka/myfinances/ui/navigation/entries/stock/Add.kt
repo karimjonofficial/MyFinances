@@ -2,7 +2,7 @@ package com.orka.myfinances.ui.navigation.entries.stock
 
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
-import com.orka.myfinances.fixtures.resources.models.products
+import com.orka.myfinances.fixtures.resources.models.product.products
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
@@ -17,7 +17,7 @@ fun addStockItemEntry(
 
     AddStockItemScreen(
         modifier = modifier,
-        warehouse = destination.warehouse,
+        category = destination.warehouse,
         products = products,
         viewModel = destination.viewModel as AddStockItemScreenViewModel,
         navigationManager = navigationManager

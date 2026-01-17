@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
-import com.orka.myfinances.data.models.folder.Warehouse
+import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.data.models.product.Property
@@ -42,8 +42,9 @@ import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.models.template.TemplateField
 import com.orka.myfinances.fixtures.resources.dateTime
 import com.orka.myfinances.fixtures.resources.models.id1
-import com.orka.myfinances.fixtures.resources.models.id2
-import com.orka.myfinances.fixtures.resources.models.id3
+import com.orka.myfinances.fixtures.resources.price
+import com.orka.myfinances.fixtures.resources.salePrice
+import com.orka.myfinances.lib.extensions.ui.description
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 
 @Composable
@@ -95,8 +96,8 @@ fun BasketItemCard(
                     )
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        if (product.properties.isNotEmpty()) {
-                            product.properties.dropLast(1).forEach { property ->
+                        if (product.title.properties.isNotEmpty()) {
+                            product.title.properties.dropLast(1).forEach { property ->
                                 Text(
                                     text = "${property.type.name}: ${property.value}",
                                     style = MaterialTheme.typography.bodySmall
@@ -108,7 +109,7 @@ fun BasketItemCard(
                             }
 
                             Text(
-                                text = "${product.properties.last().type.name}: ${product.properties.last().value}",
+                                text = "${product.title.properties.last().type.name}: ${product.title.properties.last().value}",
                                 style = MaterialTheme.typography.bodySmall
                             )
                             HorizontalSpacer(4)
@@ -122,7 +123,7 @@ fun BasketItemCard(
 
                     if (product.description?.isNotBlank() ?: false) {
                         Text(
-                            text = product.description,
+                            text = product.title.description.description(),
                             style = MaterialTheme.typography.bodySmall,
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis,
@@ -143,7 +144,7 @@ fun BasketItemCard(
                     } else {**/
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            text = "$${product.salePrice}",
+                            text = "$${product.title.defaultSalePrice}",
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontWeight = FontWeight.Bold
                             )
@@ -255,20 +256,23 @@ fun BasketItemCardPreview() {
                     title = ProductTitle(
                         id = id1,
                         name = "Organic Cotton T-Shirt",
+                        defaultPrice = 2500,
+                        defaultSalePrice = 2500,
+                        dateTime = dateTime,
+                        category = Category(
+                            id = Id(21),
+                            name = "Clothes Warehouse",
+                            template = clothesTemplate
+                        ),
+                        properties = listOf(
+                            Property(Id(301), sizeField, "L"),
+                            Property(Id(302), colorField, "Navy")
+                        ),
                         description = "Made with 100% GOTS certified organic cotton for a soft feel and comfortable fit."
                     ),
-                    price = 2500,
-                    salePrice = 2500,
+                    price = price,
+                    salePrice = salePrice,
                     dateTime = dateTime,
-                    warehouse = Warehouse(
-                        id = Id(21),
-                        name = "Clothes Warehouse",
-                        template = clothesTemplate
-                    ),
-                    properties = listOf(
-                        Property(Id(301), sizeField, "L"),
-                        Property(Id(302), colorField, "Navy")
-                    ),
                     description = "Made with 100% GOTS certified organic cotton for a soft feel and comfortable fit."
                 ),
                 amount = 2
@@ -277,21 +281,24 @@ fun BasketItemCardPreview() {
                 product = Product(
                     id = Id(2),
                     title = ProductTitle(
-                        id = id2,
+                        id = id1,
                         name = "Wireless Noise-Cancelling Headphones",
+                        defaultPrice = 19999,
+                        defaultSalePrice = 14999,
+                        dateTime = dateTime,
+                        category = Category(
+                            id = Id(22),
+                            name = "Electronics Warehouse",
+                            template = electronicsTemplate
+                        ),
+                        properties = listOf(
+                            Property(Id(303), colorField, "Black")
+                        ),
                         description = "Immerse yourself in sound with active noise cancellation and up to 30 hours of battery."
                     ),
-                    price = 19999,
-                    salePrice = 14999,
+                    price = price,
+                    salePrice = salePrice,
                     dateTime = dateTime,
-                    warehouse = Warehouse(
-                        id = Id(22),
-                        name = "Electronics Warehouse",
-                        template = electronicsTemplate
-                    ),
-                    properties = listOf(
-                        Property(Id(303), colorField, "Black")
-                    ),
                     description = "Immerse yourself in sound with active noise cancellation and up to 30 hours of battery."
                 ),
                 amount = 1
@@ -300,22 +307,25 @@ fun BasketItemCardPreview() {
                 product = Product(
                     id = Id(3),
                     title = ProductTitle(
-                        id = id3,
+                        id = id1,
+                        dateTime = dateTime,
                         name = "Classic Canvas Sneakers",
+                        category = Category(
+                            id = Id(23),
+                            name = "Shoes Warehouse",
+                            template = shoesTemplate
+                        ),
+                        properties = listOf(
+                            Property(Id(304), sizeField, "9"),
+                            Property(Id(305), colorField, "Red")
+                        ),
+                        defaultPrice = 0,
+                        defaultSalePrice = 0,
                         description = "A timeless sneaker design for any casual occasion."
                     ),
-                    price = 0,
-                    salePrice = 0,
+                    price = price,
+                    salePrice = salePrice,
                     dateTime = dateTime,
-                    warehouse = Warehouse(
-                        id = Id(23),
-                        name = "Shoes Warehouse",
-                        template = shoesTemplate
-                    ),
-                    properties = listOf(
-                        Property(Id(304), sizeField, "9"),
-                        Property(Id(305), colorField, "Red")
-                    ),
                     description = "A timeless sneaker design for any casual occasion."
                 ),
                 amount = 1

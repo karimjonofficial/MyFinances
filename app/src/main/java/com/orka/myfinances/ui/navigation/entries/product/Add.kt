@@ -18,7 +18,7 @@ fun addProductEntry(
 
     AddProductScreen(
         modifier = modifier,
-        warehouse = destination.warehouse,
+        category = destination.warehouse,
         state = uiState.value,
         viewModel = destination.viewModel,
         navigationManager = navigationManager

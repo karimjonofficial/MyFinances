@@ -7,8 +7,8 @@ import com.orka.myfinances.core.assertTopIs
 import com.orka.myfinances.core.test
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
+import com.orka.myfinances.data.repositories.product.ProductTitleRepository
 import com.orka.myfinances.testFixtures.DummyLogger
-import com.orka.myfinances.testFixtures.data.api.product.DummyProductApiService
 import com.orka.myfinances.testFixtures.data.repositories.folder.DummyFolderRepository
 import com.orka.myfinances.testFixtures.factories.SpyViewModelProvider
 import com.orka.myfinances.testFixtures.resources.models.product.product1
@@ -20,8 +20,7 @@ import org.junit.jupiter.api.Test
 class NavigationManagerImplTest : MainDispatcherContext() {
     private val logger = DummyLogger()
     private val folderRepository = DummyFolderRepository()
-    private val productApi = DummyProductApiService()
-    private val productRepository = ProductRepository(productApi)
+    private val productRepository = ProductRepository(ProductTitleRepository())
     private val basketRepository = BasketRepository(productRepository)
     private val basketViewModel = BasketContentViewModel(basketRepository, logger, testScope)
     private val foldersContentViewModel = FoldersContentViewModel(folderRepository, logger)

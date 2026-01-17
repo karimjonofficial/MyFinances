@@ -6,7 +6,7 @@ import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.Debt
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.models.folder.Catalog
-import com.orka.myfinances.data.models.folder.Warehouse
+import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.order.Order
 import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.factories.viewmodel.ViewModelProvider
@@ -39,9 +39,9 @@ class NavigationManagerImpl(
         navigate(Destination.Catalog(catalog, viewModel))
     }
 
-    override fun navigateToWarehouse(warehouse: Warehouse) {
-        val viewModel = provider.warehouseViewModel(warehouse)
-        navigate(Destination.Warehouse(warehouse, viewModel))
+    override fun navigateToWarehouse(category: Category) {
+        val viewModel = provider.warehouseViewModel(category)
+        navigate(Destination.Warehouse(category, viewModel))
     }
 
     override fun navigateToNotifications() {
@@ -53,9 +53,9 @@ class NavigationManagerImpl(
         navigate(Destination.AddTemplate(viewModel, types))
     }
 
-    override fun navigateToAddProduct(warehouse: Warehouse) {
+    override fun navigateToAddProduct(category: Category) {
         val viewModel = provider.addProductViewModel()
-        navigate(Destination.AddProduct(warehouse, viewModel))
+        navigate(Destination.AddProduct(category, viewModel))
     }
 
     override fun navigateToSettings() {
@@ -97,9 +97,9 @@ class NavigationManagerImpl(
         navigate(Destination.History(saleViewModel, receiveViewModel))
     }
 
-    override fun navigateToAddStockItem(warehouse: Warehouse) {
+    override fun navigateToAddStockItem(category: Category) {
         val viewModel = provider.addStockItemViewModel()
-        navigate(Destination.AddStockItem(warehouse, viewModel))
+        navigate(Destination.AddStockItem(category, viewModel))
     }
 
     override fun navigateToOrders() {

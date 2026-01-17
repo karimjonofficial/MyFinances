@@ -35,8 +35,6 @@ import com.orka.myfinances.data.repositories.template.TemplateFieldModel
 import com.orka.myfinances.fixtures.data.repositories.TemplateRepositoryImpl
 import com.orka.myfinances.fixtures.managers.DummyNavigationManager
 import com.orka.myfinances.lib.ui.Scaffold
-import com.orka.myfinances.lib.ui.components.Dialog
-import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
 import com.orka.myfinances.ui.screens.templates.add.components.TemplateFieldCard
@@ -54,50 +52,6 @@ fun AddTemplateScreen(
 ) {
     val name = rememberSaveable { mutableStateOf("") }
     val fields = rememberSaveable { mutableStateListOf<TemplateFieldModel>() }
-    val showDialog = rememberSaveable { mutableStateOf(false) }
-
-    if (showDialog.value) {
-        val newFieldName = rememberSaveable { mutableStateOf("") }
-        val newFieldTypeIndex = rememberSaveable { mutableStateOf<Int?>(null) }
-
-        Dialog(
-            dismissRequest = { showDialog.value = false },
-            title = stringResource(R.string.add_field),
-            supportingText = stringResource(R.string.fill_the_lines_below_to_add_a_new_field),
-            onSuccess = {
-                if (newFieldName.value.isNotBlank() && newFieldTypeIndex.value != null) {
-                    fields.add(
-                        TemplateFieldModel(
-                            name = newFieldName.value,
-                            typeId = newFieldTypeIndex.value!!
-                        )
-                    )
-                    showDialog.value = false
-                }
-            },
-            content = {
-                val exposed = rememberSaveable { mutableStateOf(false) }
-
-                OutlinedTextField(
-                    value = newFieldName.value,
-                    onValueChange = { newFieldName.value = it },
-                    label = { Text(text = stringResource(R.string.name)) }
-                )
-
-                VerticalSpacer(8)
-                OutlinedExposedDropDownTextField(
-                    menuExpanded = exposed.value,
-                    onExpandChange = { exposed.value = it },
-                    onDismissRequested = { exposed.value = false },
-                    text = if (newFieldTypeIndex.value == null) "" else types[newFieldTypeIndex.value!!],
-                    label = stringResource(R.string.type),
-                    items = types,
-                    itemText = { it },
-                    onItemSelected = { index, _ -> newFieldTypeIndex.value = index }
-                )
-            }
-        )
-    }
 
     Scaffold(
         modifier = modifier,
@@ -127,6 +81,17 @@ fun AddTemplateScreen(
             }
         }
     ) { paddingValues ->
+        val showDialog = rememberSaveable { mutableStateOf(false) }
+
+        if (showDialog.value) {
+            AddTemplateFieldDialog(
+                types = types,
+                dismissRequest = { showDialog.value = false },
+                onSuccess = { name, typeId ->
+                    fields.add(TemplateFieldModel(name, typeId))
+                }
+            )
+        }
 
         Column(modifier = Modifier
             .fillMaxSize()

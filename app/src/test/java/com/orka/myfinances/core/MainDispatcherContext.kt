@@ -3,6 +3,7 @@ package com.orka.myfinances.core
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.TestScope
@@ -45,6 +46,12 @@ abstract class MainDispatcherContext {
 
     fun runAndCancelChildren(action: suspend () -> Unit) = testScope.runTest {
         action()
+        testScope.coroutineContext.cancelChildren()
+    }
+
+    fun launch(body: suspend () -> Unit) = testScope.launch { body() }
+
+    fun cancelChildren() {
         testScope.coroutineContext.cancelChildren()
     }
 }

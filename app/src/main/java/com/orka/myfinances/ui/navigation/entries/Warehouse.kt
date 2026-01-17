@@ -18,7 +18,7 @@ fun warehouseEntry(
     WarehouseScreen(
         modifier = modifier,
         viewModel = viewModel,
-        warehouse = destination.warehouse,
+        category = destination.warehouse,
         navigationManager = navigationManager
     )
 }

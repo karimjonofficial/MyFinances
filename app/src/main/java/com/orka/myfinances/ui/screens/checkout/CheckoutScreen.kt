@@ -13,10 +13,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.repositories.basket.BasketRepository
-import com.orka.myfinances.data.repositories.sale.SaleRepository
 import com.orka.myfinances.data.repositories.client.ClientRepository
-import com.orka.myfinances.fixtures.managers.DummyNavigationManager
+import com.orka.myfinances.data.repositories.order.OrderRepository
+import com.orka.myfinances.data.repositories.product.ProductRepository
+import com.orka.myfinances.data.repositories.product.ProductTitleRepository
+import com.orka.myfinances.data.repositories.sale.SaleRepository
 import com.orka.myfinances.fixtures.core.DummyLogger
+import com.orka.myfinances.fixtures.managers.DummyNavigationManager
 import com.orka.myfinances.fixtures.resources.models.basket.basketItems
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
@@ -24,9 +27,6 @@ import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.managers.navigation.NavigationManager
-import com.orka.myfinances.data.repositories.order.OrderRepository
-import com.orka.myfinances.data.repositories.product.ProductRepository
-import com.orka.myfinances.fixtures.data.api.ProductApiServiceImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
@@ -87,7 +87,7 @@ private fun CheckoutScreenPreview() {
             saleRepository = SaleRepository(),
             orderRepository = OrderRepository(),
             clientRepository = ClientRepository(),
-            basketRepository = BasketRepository(ProductRepository(ProductApiServiceImpl())),
+            basketRepository = BasketRepository(ProductRepository(ProductTitleRepository())),
             coroutineScope = CoroutineScope(Dispatchers.Main),
             logger = DummyLogger()
         )

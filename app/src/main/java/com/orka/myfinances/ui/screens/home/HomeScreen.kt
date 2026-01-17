@@ -105,7 +105,7 @@ fun HomeScreen(
     ) { paddingValues ->
         val m = Modifier.scaffoldPadding(paddingValues)
 
-        when (navState.intValue) {
+        when(navState.intValue) {
             0 -> {
                 val state = foldersViewModel.uiState.collectAsState()
 

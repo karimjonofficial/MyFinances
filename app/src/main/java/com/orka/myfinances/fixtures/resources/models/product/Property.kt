@@ -1,8 +1,9 @@
-package com.orka.myfinances.fixtures.resources.models
+package com.orka.myfinances.fixtures.resources.models.product
 
 import com.orka.myfinances.data.models.product.Property
 import com.orka.myfinances.data.models.template.TemplateField
-
+import com.orka.myfinances.fixtures.resources.models.id1
+import com.orka.myfinances.fixtures.resources.models.id2
 
 val sizeField = TemplateField(id1, "Size", "String")
 val colorField = TemplateField(id1, "Color", "String")

@@ -1,7 +1,7 @@
 package com.orka.myfinances.factories.viewmodel
 
-import com.orka.myfinances.data.models.folder.Warehouse
+import com.orka.myfinances.data.models.folder.Category
 
 interface WarehouseScreenViewModelProvider {
-    fun warehouseViewModel(warehouse: Warehouse): Any
+    fun warehouseViewModel(category: Category): Any
 }

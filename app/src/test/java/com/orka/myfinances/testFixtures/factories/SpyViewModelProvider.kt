@@ -1,7 +1,7 @@
 package com.orka.myfinances.testFixtures.factories
 
 import com.orka.myfinances.data.models.folder.Catalog
-import com.orka.myfinances.data.models.folder.Warehouse
+import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.factories.viewmodel.ViewModelProvider
 import com.orka.myfinances.testFixtures.resources.viewModel
 
@@ -24,7 +24,7 @@ class SpyViewModelProvider : ViewModelProvider {
         return "add product"
     }
 
-    override fun warehouseViewModel(warehouse: Warehouse): Any {
+    override fun warehouseViewModel(category: Category): Any {
         warehouseRequired = true
         return viewModel
     }
@@ -57,7 +57,15 @@ class SpyViewModelProvider : ViewModelProvider {
         return "add stock"
     }
 
+    override fun notificationsViewModel(): Any {
+        return "notifications"
+    }
+
     override fun ordersViewModel(): Any {
         return "orders"
+    }
+
+    override fun debtsViewModel(): Any {
+        return "debts"
     }
 }

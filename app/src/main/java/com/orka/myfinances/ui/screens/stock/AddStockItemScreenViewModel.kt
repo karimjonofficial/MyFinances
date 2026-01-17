@@ -17,7 +17,7 @@ class AddStockItemScreenViewModel(
             repository.add(
                 request = AddReceiveRequest(
                     items = listOf(ReceiveItemModel(product.id.value, amount)),
-                    price = product.price * amount
+                    price = product.title.defaultPrice * amount
                 )
             )
         }

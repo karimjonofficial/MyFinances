@@ -3,8 +3,8 @@ package com.orka.myfinances.fixtures.resources.models.sale
 import com.orka.myfinances.fixtures.resources.amount
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.id2
-import com.orka.myfinances.fixtures.resources.models.product1
-import com.orka.myfinances.fixtures.resources.models.product2
+import com.orka.myfinances.fixtures.resources.models.product.product1
+import com.orka.myfinances.fixtures.resources.models.product.product2
 import com.orka.myfinances.data.models.sale.SaleItem
 
 val saleItem1 = SaleItem(id1, product1, amount)

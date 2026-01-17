@@ -26,13 +26,10 @@ fun MyFinancesScreen(
             )
         }
 
-        is UiState.SignedIn -> {
-
-            MainScreen(
-                modifier = modifier,
-                navigationManager = state.navigationManager,
-                session = state.session
-            )
-        }
+        is UiState.SignedIn -> MainScreen(
+            modifier = modifier,
+            navigationManager = state.navigationManager,
+            session = state.session
+        )
     }
 }

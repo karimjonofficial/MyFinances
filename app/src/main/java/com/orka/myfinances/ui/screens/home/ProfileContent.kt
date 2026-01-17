@@ -81,7 +81,6 @@ fun ProfileContent(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Icon(
             modifier = Modifier
                 .size(160.dp)
@@ -97,10 +96,12 @@ fun ProfileContent(
         Text(text = user.phone ?: stringResource(R.string.no_phone_number))
 
         VerticalSpacer(16)
-        HorizontalDivider(modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp))
-        
+        HorizontalDivider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        )
+
         VerticalSpacer(16)
         LazyVerticalGrid(
             modifier = Modifier.padding(horizontal = 8.dp),

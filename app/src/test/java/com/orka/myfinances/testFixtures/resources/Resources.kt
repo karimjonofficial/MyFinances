@@ -1,6 +1,8 @@
 package com.orka.myfinances.testFixtures.resources
 
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.models.AddProductRequest
+import com.orka.myfinances.fixtures.resources.models.product.productTitle1
 import kotlin.time.Instant
 
 const val name = "Name"
@@ -23,9 +25,18 @@ const val amount = 1
 
 val dateTime = Instant.parse("2024-01-01T12:00:00Z")
 
-val addProductRequest = AddProductRequest(
+val successfulAddProductRequest = AddProductRequest(
+    titleId = productTitle1.id,
     name = name,
-    warehouseId = 1,
+    price = price,
+    salePrice = salePrice,
+    properties = emptyList(),
+    description = description
+)
+
+val failingAddProductRequest = AddProductRequest(
+    titleId = Id(10),
+    name = name,
     price = price,
     salePrice = salePrice,
     properties = emptyList(),
