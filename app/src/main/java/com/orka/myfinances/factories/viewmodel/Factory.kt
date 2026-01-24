@@ -47,14 +47,13 @@ class Factory(
     private val notificationRepository: NotificationRepository,
     private val logger: Logger
 ) {
-
     fun foldersViewModel(): FoldersContentViewModel {
         return FoldersContentViewModel(
             getRepository = folderRepository,
             addRepository = folderRepository,
             templateRepository = templateRepository,
             logger = logger
-        )
+        ).apply { initialize() }
     }
 
     fun templatesViewModel(): TemplatesScreenViewModel {
@@ -87,7 +86,7 @@ class Factory(
             basketRepository = basketRepository,
             events = productRepository.events,
             logger = logger
-        )
+        ).apply { initialize() }
     }
 
     fun catalogViewModel(catalog: Catalog): CatalogScreenViewModel {
@@ -95,14 +94,14 @@ class Factory(
             catalog = catalog,
             repository = folderRepository,
             logger = logger
-        )
+        ).apply { initialize() }
     }
 
     fun basketViewModel(): BasketContentViewModel {
         return BasketContentViewModel(
             repository = basketRepository,
             logger = logger
-        )
+        ).apply { initialize() }
     }
 
     fun clientsViewModel(): ClientsScreenViewModel {

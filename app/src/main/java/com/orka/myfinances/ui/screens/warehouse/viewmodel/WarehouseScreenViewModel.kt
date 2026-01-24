@@ -9,6 +9,7 @@ import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.ProductRepositoryEvent
 import com.orka.myfinances.lib.data.repositories.GetByParameterRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -44,7 +45,9 @@ class WarehouseScreenViewModel(
         else setState2(WarehouseState.Failure)
     }
 
-    fun addToBasket(stockItem: StockItem) = launch {
-        basketRepository.add(stockItem.product.id, 1)
+    fun addToBasket(stockItem: StockItem) {
+        launch(Dispatchers.Default) {
+            basketRepository.add(stockItem.product.id, 1)
+        }
     }
 }
