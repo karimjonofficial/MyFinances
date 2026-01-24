@@ -32,11 +32,11 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.repositories.template.AddTemplateRequest
 import com.orka.myfinances.data.repositories.template.TemplateFieldModel
-import com.orka.myfinances.fixtures.data.repositories.TemplateRepositoryImpl
-import com.orka.myfinances.fixtures.managers.DummyNavigationManager
+import com.orka.myfinances.data.repositories.template.TemplateRepository
+import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.managers.navigation.Navigator
 import com.orka.myfinances.ui.screens.templates.add.components.TemplateFieldCard
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 import kotlinx.coroutines.CoroutineScope
@@ -48,7 +48,7 @@ fun AddTemplateScreen(
     modifier: Modifier = Modifier,
     types: List<String>,
     viewModel: AddTemplateScreenViewModel,
-    navigationManager: NavigationManager
+    navigator: Navigator
 ) {
     val name = rememberSaveable { mutableStateOf("") }
     val fields = rememberSaveable { mutableStateListOf<TemplateFieldModel>() }
@@ -71,7 +71,7 @@ fun AddTemplateScreen(
                             if (name.value.isNotBlank() && fields.isNotEmpty()) {
                                 val template = AddTemplateRequest(name.value, fields)
                                 viewModel.addTemplate(template)
-                                navigationManager.back()
+                                navigator.back()
                             }
                         }
                     ) {
@@ -157,10 +157,10 @@ fun AddTemplateScreen(
 @Composable
 private fun TemplateScreenPreview() {
     val types = listOf("text", "number", "range")
-    val repository = TemplateRepositoryImpl()
+    val repository = TemplateRepository()
     val addTemplateScreenViewModel =
         AddTemplateScreenViewModel(repository, CoroutineScope(Dispatchers.Main))
-    val navigationManager = DummyNavigationManager()
+    val navigationManager = DummyNavigator()
 
     MyFinancesTheme {
         Scaffold(
@@ -176,7 +176,7 @@ private fun TemplateScreenPreview() {
                     .padding(innerPadding),
                 types = types,
                 viewModel = addTemplateScreenViewModel,
-                navigationManager = navigationManager
+                navigator = navigationManager
             )
         }
     }

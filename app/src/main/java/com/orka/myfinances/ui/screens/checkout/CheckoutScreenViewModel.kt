@@ -4,21 +4,22 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.basket.Basket
 import com.orka.myfinances.data.models.basket.BasketItem
-import com.orka.myfinances.lib.data.repositories.models.Item
+import com.orka.myfinances.data.models.order.Order
+import com.orka.myfinances.data.models.sale.Sale
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.order.AddOrderRequest
 import com.orka.myfinances.data.repositories.sale.AddSaleRequest
-import com.orka.myfinances.data.repositories.sale.SaleRepository
-import com.orka.myfinances.data.repositories.client.ClientRepository
+import com.orka.myfinances.lib.data.repositories.AddRepository
+import com.orka.myfinances.lib.data.repositories.GetRepository
+import com.orka.myfinances.lib.data.models.Item
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
-import com.orka.myfinances.data.repositories.order.OrderRepository
 import kotlinx.coroutines.CoroutineScope
 
 class CheckoutScreenViewModel(
-    private val saleRepository: SaleRepository,
-    private val orderRepository: OrderRepository,
+    private val saleRepository: AddRepository<Sale, AddSaleRequest>,
+    private val orderRepository: AddRepository<Order, AddOrderRequest>,
     private val basketRepository: BasketRepository,
-    clientRepository: ClientRepository,
+    clientRepository: GetRepository<Client>,
     logger: Logger,
     coroutineScope: CoroutineScope
 ) : ListViewModel<Unit, Client, Unit>(
@@ -28,7 +29,6 @@ class CheckoutScreenViewModel(
     logger = logger,
     coroutineScope = coroutineScope
 ) {
-
     fun sell(basket: Basket, client: Client) {
         launch {
             val response = saleRepository.add(basket.toSaleRequest(client))

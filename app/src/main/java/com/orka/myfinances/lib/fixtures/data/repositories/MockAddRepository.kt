@@ -1,14 +1,21 @@
 package com.orka.myfinances.lib.fixtures.data.repositories
 
 import com.orka.myfinances.lib.data.repositories.AddRepository
+import kotlinx.coroutines.delay
 
-abstract class MockAddRepository<T, R> : AddRepository<T, R> {
+interface MockAddRepository<T, R> : AddRepository<T, R>, Repository {
+    val items: MutableList<T>
+
     override suspend fun add(request: R): T? {
-        return if(acceptable(request)) {
-            request.map()
-        } else null
+        delay(duration)
+
+        if(acceptable(request)) {
+            val item = request.map()
+            items.add(item)
+            return item
+        } else return null
     }
 
-    protected abstract fun R.map(): T
-    protected open fun acceptable(request: R): Boolean = true
+    suspend fun R.map(): T
+    suspend fun acceptable(request: R): Boolean = true
 }

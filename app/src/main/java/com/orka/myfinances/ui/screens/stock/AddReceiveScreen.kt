@@ -22,16 +22,16 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.managers.navigation.Navigator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddStockItemScreen(
+fun AddReceiveScreen(
     modifier: Modifier = Modifier,
     category: Category,
     products: List<Product>,
-    viewModel: AddStockItemScreenViewModel,
-    navigationManager: NavigationManager
+    viewModel: AddReceiveScreenViewModel,
+    navigator: Navigator
 ) {
     val amount = rememberSaveable { mutableIntStateOf(0) }
     val productId = rememberSaveable { mutableStateOf<Int?>(null) }
@@ -52,7 +52,7 @@ fun AddStockItemScreen(
 
                         if (id != null && a > 0) {
                             viewModel.add(products.first { it.id.value == id }, a)
-                            navigationManager.back()
+                            navigator.back()
                         }
                     }
                 ) {

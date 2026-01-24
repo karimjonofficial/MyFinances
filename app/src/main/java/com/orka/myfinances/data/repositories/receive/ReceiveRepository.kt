@@ -6,15 +6,14 @@ import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.product.product1
 import com.orka.myfinances.fixtures.resources.models.receive.receives
 import com.orka.myfinances.fixtures.resources.models.user1
-import com.orka.myfinances.lib.fixtures.data.repositories.MockRepository
+import com.orka.myfinances.lib.fixtures.data.repositories.MockAddRepository
+import com.orka.myfinances.lib.fixtures.data.repositories.MockGetRepository
 import kotlin.time.Clock
 
-class ReceiveRepository : MockRepository<Receive, AddReceiveRequest>(items = receives) {
-    override fun map(request: AddReceiveRequest): Receive {
-        return request.toReceive()
-    }
+class ReceiveRepository : MockGetRepository<Receive>, MockAddRepository<Receive, AddReceiveRequest> {
+    override val items = receives.toMutableList()
 
-    private fun AddReceiveRequest.toReceive(): Receive {
+    override suspend fun AddReceiveRequest.map(): Receive {
         return Receive(
             id = id1,
             user = user1,

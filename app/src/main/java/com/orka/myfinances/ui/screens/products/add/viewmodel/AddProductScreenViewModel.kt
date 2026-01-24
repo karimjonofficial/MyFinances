@@ -4,16 +4,17 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.folder.Category
-import com.orka.myfinances.data.repositories.product.ProductRepository
+import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.data.repositories.product.models.AddProductRequest
 import com.orka.myfinances.data.repositories.product.models.PropertyModel
-import com.orka.myfinances.data.repositories.stock.StockRepository
+import com.orka.myfinances.lib.data.repositories.AddRepository
+import com.orka.myfinances.lib.data.repositories.GetRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.asStateFlow
 
 class AddProductScreenViewModel(
-    private val productRepository: ProductRepository,
-    private val stockRepository: StockRepository,
+    private val productRepository: AddRepository<Product, AddProductRequest>,
+    private val categoryRepository: GetRepository<Category>,
     logger: Logger,
     coroutineScope: CoroutineScope
 ) : ViewModel<AddProductScreenState>(
@@ -24,7 +25,7 @@ class AddProductScreenViewModel(
     val uiState = state.asStateFlow()
 
     fun initialize() = launch {
-        val categories = stockRepository.get()
+        val categories = categoryRepository.get()
         if(categories != null) updateState { AddProductScreenState.Success(categories) }
         else updateState { AddProductScreenState.Failure }
     }

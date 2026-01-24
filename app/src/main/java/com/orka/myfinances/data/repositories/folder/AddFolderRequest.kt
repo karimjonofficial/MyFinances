@@ -1,6 +1,9 @@
 package com.orka.myfinances.data.repositories.folder
 
+import com.orka.myfinances.data.models.Id
+
 data class AddFolderRequest(
     val name: String,
-    val type: FolderType
+    val type: String,
+    val templateId: Id? = null
 )

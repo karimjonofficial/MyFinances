@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation3.ui.NavDisplay
 import com.orka.myfinances.data.models.User
-import com.orka.myfinances.impl.ui.managers.NavigationManagerImpl
+import com.orka.myfinances.impl.ui.managers.NavigationManager
 import com.orka.myfinances.ui.managers.navigation.Destination
 
 @Composable
@@ -13,7 +13,7 @@ fun NavigationGraph(
     modifier: Modifier = Modifier,
     user: User,
     backStack: List<Destination>,
-    navigationManager: NavigationManagerImpl
+    navigationManager: NavigationManager
 ) {
     NavDisplay(
         modifier = modifier,

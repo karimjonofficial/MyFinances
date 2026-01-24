@@ -7,12 +7,12 @@ import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.order.Order
 import com.orka.myfinances.data.models.product.Product
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.managers.navigation.Navigator
 
-class DummyNavigationManager : NavigationManager {
+class DummyNavigator : Navigator {
     override fun navigateToHome() {}
     override fun navigateToCatalog(catalog: Catalog) {}
-    override fun navigateToWarehouse(category: Category) {}
+    override fun navigateToCategory(category: Category) {}
     override fun navigateToNotifications() {}
     override fun navigateToAddTemplate() {}
     override fun navigateToAddProduct(category: Category) {}
@@ -28,5 +28,6 @@ class DummyNavigationManager : NavigationManager {
     override fun navigateToOrder(order: Order) {}
     override fun navigateToDebts() {}
     override fun navigateToDebt(debt: Debt) {}
+    override fun navigateToSearch() {}
     override fun back() {}
 }

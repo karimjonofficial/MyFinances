@@ -35,7 +35,7 @@ import com.orka.myfinances.lib.ui.components.ExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.LazyColumn
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.managers.navigation.Navigator
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -47,7 +47,7 @@ fun CheckoutContent(
     items: List<BasketItem>,
     clients: List<Client>,
     viewModel: CheckoutScreenViewModel,
-    navigationManager: NavigationManager
+    navigator: Navigator
 ) {
     val price = rememberSaveable { mutableIntStateOf(items.getPrice()) }
     val description = rememberSaveable { mutableStateOf("") }
@@ -92,7 +92,7 @@ fun CheckoutContent(
                                             basket = Basket(price.intValue, description.value, items),
                                             client = it
                                         )
-                                        navigationManager.back()
+                                        navigator.back()
                                     }
                                 }
                             ) {
@@ -123,7 +123,7 @@ fun CheckoutContent(
                                         basket = Basket(price.intValue, description.value, items),
                                         client = it
                                     )
-                                    navigationManager.back()
+                                    navigator.back()
                                 }
                                 splitButtonMenuExpanded.value = false
                             }

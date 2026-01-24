@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 class DoubleFormatTest {
-
     @Test
     fun `Assert all`() {
         assertEquals("1", 1.0.format())

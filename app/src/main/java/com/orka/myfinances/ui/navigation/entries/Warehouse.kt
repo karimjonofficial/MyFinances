@@ -3,7 +3,7 @@ package com.orka.myfinances.ui.navigation.entries
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.ui.managers.navigation.Destination
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.managers.navigation.Navigator
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.screens.warehouse.WarehouseScreen
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
@@ -11,7 +11,7 @@ import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewMod
 fun warehouseEntry(
     modifier: Modifier,
     destination: Destination.Warehouse,
-    navigationManager: NavigationManager
+    navigator: Navigator
 ): NavEntry<Destination> = entry(destination) {
     val viewModel = destination.viewModel as WarehouseScreenViewModel
 
@@ -19,6 +19,6 @@ fun warehouseEntry(
         modifier = modifier,
         viewModel = viewModel,
         category = destination.warehouse,
-        navigationManager = navigationManager
+        navigator = navigator
     )
 }

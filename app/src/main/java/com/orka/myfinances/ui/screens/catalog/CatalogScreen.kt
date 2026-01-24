@@ -8,7 +8,7 @@ import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.managers.navigation.Navigator
 import com.orka.myfinances.ui.screens.home.parts.FoldersList
 
 @Composable
@@ -16,7 +16,7 @@ fun CatalogScreen(
     modifier: Modifier = Modifier,
     state: CatalogScreenState,
     viewModel: CatalogScreenViewModel,
-    navigationManager: NavigationManager
+    navigator: Navigator
 ) {
     when (state) {
         is CatalogScreenState.Loading -> LoadingScreen(modifier)
@@ -32,8 +32,8 @@ fun CatalogScreen(
             items = state.folders,
             onFolderSelected = {
                 when (it) {
-                    is Catalog -> navigationManager.navigateToCatalog(it)
-                    is Category -> navigationManager.navigateToWarehouse(it)
+                    is Catalog -> navigator.navigateToCatalog(it)
+                    is Category -> navigator.navigateToCategory(it)
                 }
             }
         )

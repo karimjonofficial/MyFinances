@@ -2,7 +2,7 @@ package com.orka.myfinances.ui.screens.warehouse
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
@@ -17,7 +17,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.managers.navigation.Navigator
 import com.orka.myfinances.ui.screens.warehouse.parts.ProductsContent
 import com.orka.myfinances.ui.screens.warehouse.parts.StockItemsContent
 import com.orka.myfinances.ui.screens.warehouse.parts.WarehouseScreenTopBar
@@ -28,7 +28,7 @@ fun WarehouseScreen(
     modifier: Modifier = Modifier,
     category: Category,
     viewModel: WarehouseScreenViewModel,
-    navigationManager: NavigationManager
+    navigator: Navigator
 ) {
     val productsState = viewModel.productsState.collectAsState()
     val warehouseState = viewModel.warehouseState.collectAsState()
@@ -38,8 +38,8 @@ fun WarehouseScreen(
         topBar = {
             WarehouseScreenTopBar(
                 category = category,
-                onAddProductClick = { navigationManager.navigateToAddProduct(it) },
-                onAddStockItemClick = { navigationManager.navigateToAddStockItem(it) }
+                onAddProductClick = { navigator.navigateToAddProduct(it) },
+                onAddStockItemClick = { navigator.navigateToAddStockItem(it) }
             )
         }
     ) { paddingValues ->
@@ -62,10 +62,11 @@ fun WarehouseScreen(
                     text = { Text(text = stringResource(R.string.products)) }
                 )
             }
+            val m = Modifier.weight(1f).fillMaxWidth()
 
             if (selectedTabValue == 0) {
                 StockItemsContent(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = m,
                     state = warehouseState.value,
                     viewModel = viewModel,
                     contentPadding = PaddingValues(8.dp),
@@ -73,11 +74,11 @@ fun WarehouseScreen(
                 )
             } else {
                 ProductsContent(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = m,
                     contentPadding = PaddingValues(0.dp),
                     state = productsState.value,
                     viewModel = viewModel,
-                    navigationManager = navigationManager
+                    navigator = navigator
                 )
             }
         }

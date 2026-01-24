@@ -7,14 +7,14 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.managers.navigation.Destination
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.managers.navigation.Navigator
 import com.orka.myfinances.ui.screens.catalog.CatalogScreen
 import com.orka.myfinances.ui.screens.catalog.CatalogScreenViewModel
 
 fun catalogEntry(
     modifier: Modifier,
     destination: Destination.Catalog,
-    navigationManager: NavigationManager
+    navigator: Navigator
 ): NavEntry<Destination> = entry(destination) {
 
     Scaffold(
@@ -28,7 +28,7 @@ fun catalogEntry(
             modifier = Modifier.scaffoldPadding(paddingValues),
             state = uiState.value,
             viewModel = viewModel,
-            navigationManager = navigationManager
+            navigator = navigator
         )
     }
 }

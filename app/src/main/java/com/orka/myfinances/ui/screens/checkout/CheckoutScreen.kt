@@ -19,14 +19,14 @@ import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.data.repositories.product.ProductTitleRepository
 import com.orka.myfinances.data.repositories.sale.SaleRepository
 import com.orka.myfinances.fixtures.core.DummyLogger
-import com.orka.myfinances.fixtures.managers.DummyNavigationManager
+import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.basket.basketItems
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.managers.navigation.Navigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
@@ -38,7 +38,7 @@ import kotlinx.coroutines.Dispatchers
 fun CheckoutScreen(
     modifier: Modifier,
     viewModel: CheckoutScreenViewModel,
-    navigationManager: NavigationManager,
+    navigator: Navigator,
     items: List<BasketItem>
 ) {
     val uiState = viewModel.uiState.collectAsState()
@@ -67,7 +67,7 @@ fun CheckoutScreen(
                 items = items,
                 clients = state.value,
                 viewModel = viewModel,
-                navigationManager = navigationManager
+                navigator = navigator
             )
         }
     }
@@ -82,7 +82,7 @@ private fun CheckoutScreenPreview() {
     CheckoutScreen(
         modifier = Modifier.fillMaxSize(),
         items = basketItems,
-        navigationManager = DummyNavigationManager(),
+        navigator = DummyNavigator(),
         viewModel = CheckoutScreenViewModel(
             saleRepository = SaleRepository(),
             orderRepository = OrderRepository(),

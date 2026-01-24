@@ -6,7 +6,8 @@ import com.orka.myfinances.fixtures.resources.models.notifications
 import com.orka.myfinances.lib.fixtures.data.repositories.MockGetRepository
 import kotlinx.coroutines.delay
 
-class NotificationRepository : MockGetRepository<Notification>(notifications) {
+class NotificationRepository : MockGetRepository<Notification> {
+    override val items = notifications.toMutableList()
 
     suspend fun read(id: Id) {
         delay(duration)

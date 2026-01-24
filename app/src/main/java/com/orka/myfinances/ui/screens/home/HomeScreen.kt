@@ -18,7 +18,7 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.managers.navigation.Navigator
 import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
 import com.orka.myfinances.ui.screens.home.parts.BasketScreenTopBar
 import com.orka.myfinances.ui.screens.home.parts.HomeScreenTopBar
@@ -32,7 +32,7 @@ fun HomeScreen(
     user: User,
     foldersViewModel: FoldersContentViewModel,
     basketViewModel: BasketContentViewModel,
-    navigationManager: NavigationManager,
+    navigator: Navigator,
     selectFolder: (Folder) -> Unit
 ) {
     val navItems = listOf(
@@ -72,11 +72,10 @@ fun HomeScreen(
         modifier = modifier,
         topBar = {
             when (navState.intValue) {
-
                 0 -> HomeScreenTopBar(
                     onAddClick = { showDialog() },
-                    onNotificationsClick = { navigationManager.navigateToNotifications() },
-                    onSearchClick = { /**TODO navigationManager.navigateToSearch() **/ }
+                    onNotificationsClick = { navigator.navigateToNotifications() },
+                    onSearchClick = { navigator.navigateToSearch() }
                 )
 
                 1 -> BasketScreenTopBar(viewModel = basketViewModel)
@@ -116,15 +115,17 @@ fun HomeScreen(
                 )
 
                 if (dialogVisible.value) {
+                    val dialogState = foldersViewModel.dialogState.collectAsState()
+
                     AddFolderDialog(
-                        templates = emptyList(),//TODO
+                        state = dialogState.value,
                         dismissRequest = { hideDialog() },
                         onAddTemplateClick = {
-                            navigationManager.navigateToAddTemplate()
+                            navigator.navigateToAddTemplate()
                             hideDialog()
                         },
-                        onSuccess = { name, type ->
-                            foldersViewModel.addFolder(name, type)
+                        onSuccess = { name, type, templateId ->
+                            foldersViewModel.addFolder(name, type, templateId)
                             hideDialog()
                         },
                         onCancel = { hideDialog() }
@@ -139,7 +140,7 @@ fun HomeScreen(
                     modifier = m,
                     state = state.value,
                     viewModel = basketViewModel,
-                    navigationManager = navigationManager
+                    navigator = navigator
                 )
             }
 
@@ -147,7 +148,7 @@ fun HomeScreen(
                 ProfileContent(
                     modifier = m,
                     user = user,
-                    navigationManager = navigationManager
+                    navigator = navigator
                 )
             }
         }

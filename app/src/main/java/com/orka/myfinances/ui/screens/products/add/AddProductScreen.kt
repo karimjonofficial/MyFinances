@@ -24,13 +24,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Category
+import com.orka.myfinances.data.repositories.folder.CategoryRepository
+import com.orka.myfinances.data.repositories.folder.FolderRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.data.repositories.product.ProductTitleRepository
 import com.orka.myfinances.data.repositories.product.models.PropertyModel
-import com.orka.myfinances.data.repositories.stock.StockRepository
+import com.orka.myfinances.data.repositories.template.TemplateRepository
 import com.orka.myfinances.fixtures.core.DummyLogger
-import com.orka.myfinances.fixtures.data.api.StockApiServiceImpl
-import com.orka.myfinances.fixtures.managers.DummyNavigationManager
+import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.folder.category1
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
@@ -38,7 +39,7 @@ import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.managers.navigation.Navigator
 import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenState
 import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
@@ -51,7 +52,7 @@ fun AddProductScreen(
     category: Category,
     state: AddProductScreenState,
     viewModel: AddProductScreenViewModel,
-    navigationManager: NavigationManager
+    navigator: Navigator
 ) {
     Scaffold(
         modifier = modifier,
@@ -151,7 +152,7 @@ fun AddProductScreen(
                                         description = description.value,
                                         category = selectedCategory,
                                     )
-                                    navigationManager.back()
+                                    navigator.back()
                                 }
                             ) {
                                 Text(text = stringResource(R.string.save))
@@ -169,7 +170,7 @@ fun AddProductScreen(
 private fun AddProductScreenPreview() {
     val viewModel = AddProductScreenViewModel(
         productRepository = ProductRepository(ProductTitleRepository()),
-        stockRepository = StockRepository(StockApiServiceImpl()),
+        categoryRepository = CategoryRepository(FolderRepository(TemplateRepository())),
         logger = DummyLogger(),
         coroutineScope = CoroutineScope(Dispatchers.Main)
     )
@@ -182,7 +183,7 @@ private fun AddProductScreenPreview() {
             category = category1,
             state = state.value,
             viewModel = viewModel,
-            navigationManager = DummyNavigationManager()
+            navigator = DummyNavigator()
         )
     }
 }

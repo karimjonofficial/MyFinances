@@ -34,4 +34,5 @@ sealed interface Destination {
     data class Order(val order: OrderModel) : Destination
     data class Debts(val viewModel: Any) : Destination
     data class Debt(val debt: DebtModel) : Destination
+    data object Search : Destination
 }

@@ -8,10 +8,11 @@ import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.order.Order
 import com.orka.myfinances.data.models.product.Product
 
-interface NavigationManager {
+interface Navigator {
+    fun back()
     fun navigateToHome()
     fun navigateToCatalog(catalog: Catalog)
-    fun navigateToWarehouse(category: Category)
+    fun navigateToCategory(category: Category)
     fun navigateToNotifications()
     fun navigateToAddTemplate()
     fun navigateToAddProduct(category: Category)
@@ -27,5 +28,5 @@ interface NavigationManager {
     fun navigateToOrder(order: Order)
     fun navigateToDebts()
     fun navigateToDebt(debt: Debt)
-    fun back()
+    fun navigateToSearch()
 }

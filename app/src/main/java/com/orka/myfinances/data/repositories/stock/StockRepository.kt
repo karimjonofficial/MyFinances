@@ -1,17 +1,22 @@
 package com.orka.myfinances.data.repositories.stock
 
-import com.orka.myfinances.data.api.StockApiService
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.data.models.folder.Category
+import com.orka.myfinances.fixtures.resources.models.stockItems
+import com.orka.myfinances.lib.fixtures.data.repositories.MockGetByIdRepository
+import com.orka.myfinances.lib.fixtures.data.repositories.MockGetByParameterRepository
+import com.orka.myfinances.lib.fixtures.data.repositories.MockGetRepository
 
-class StockRepository(private val apiService: StockApiService) {
-    suspend fun get(id: Id): List<StockItem>? {
-        val response = apiService.get(id.value)
-        return response
+class StockRepository : MockGetRepository<StockItem>, MockGetByIdRepository<StockItem>,
+    MockGetByParameterRepository<StockItem, Category> {
+    override val items = stockItems.toMutableList()
+
+    override suspend fun List<StockItem>.filter(parameter: Category): List<StockItem>? {
+        return filter { it.product.title.category == parameter }.ifEmpty { null }
     }
 
-    suspend fun get(): List<Category>? {
-        return apiService.get()
+    override suspend fun List<StockItem>.find(id: Id): StockItem? {
+        return find { it.id == id }
     }
 }

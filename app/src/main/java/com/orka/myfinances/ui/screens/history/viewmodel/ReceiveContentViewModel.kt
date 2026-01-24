@@ -2,12 +2,12 @@ package com.orka.myfinances.ui.screens.history.viewmodel
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.receive.Receive
-import com.orka.myfinances.data.repositories.receive.ReceiveRepository
+import com.orka.myfinances.lib.data.repositories.GetRepository
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
 import kotlinx.coroutines.CoroutineScope
 
 class ReceiveContentViewModel(
-    repository: ReceiveRepository,
+    repository: GetRepository<Receive>,
     loading: String,
     failure: String,
     logger: Logger,

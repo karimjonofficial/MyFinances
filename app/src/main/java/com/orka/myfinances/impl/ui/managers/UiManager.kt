@@ -13,13 +13,13 @@ import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.data.repositories.product.ProductTitleRepository
 import com.orka.myfinances.data.repositories.receive.ReceiveRepository
 import com.orka.myfinances.data.repositories.sale.SaleRepository
-import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.factories.ApiProvider
 import com.orka.myfinances.factories.viewmodel.ViewModelProvider
-import com.orka.myfinances.fixtures.data.api.StockApiServiceImpl
-import com.orka.myfinances.fixtures.data.repositories.FolderRepositoryImpl
-import com.orka.myfinances.fixtures.data.repositories.TemplateRepositoryImpl
+import com.orka.myfinances.data.repositories.stock.StockRepository
+import com.orka.myfinances.data.repositories.folder.CategoryRepository
+import com.orka.myfinances.data.repositories.folder.FolderRepository
+import com.orka.myfinances.data.repositories.template.TemplateRepository
 import com.orka.myfinances.impl.factories.viewmodels.CatalogScreenViewModelProviderImpl
 import com.orka.myfinances.impl.factories.viewmodels.ViewModelProviderImpl
 import com.orka.myfinances.impl.factories.viewmodels.WarehouseScreenViewModelProviderImpl
@@ -39,7 +39,7 @@ import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
 import com.orka.myfinances.ui.screens.notification.NotificationScreenViewModel
 import com.orka.myfinances.ui.screens.order.OrdersScreenViewModel
 import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
-import com.orka.myfinances.ui.screens.stock.AddStockItemScreenViewModel
+import com.orka.myfinances.ui.screens.stock.AddReceiveScreenViewModel
 import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
 import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -94,7 +94,7 @@ class UiManager(
         val basketViewModel = provider.basketViewModel()
         val initialBackStack = listOf(Destination.Home(foldersViewModel, basketViewModel))
         val navigationManager =
-            NavigationManagerImpl(initialBackStack, provider, logger, newScope())
+            NavigationManager(initialBackStack, provider, logger, newScope())
         setState(UiState.SignedIn(session, navigationManager))
     }
     private suspend fun getSession(credential: Credential): Session? {
@@ -111,10 +111,10 @@ class UiManager(
         } else null
     }
     private fun viewModelProvider(): ViewModelProvider {
-        val folderRepository = FolderRepositoryImpl()
-        val warehouseApiService = StockApiServiceImpl()
-        val templateRepository = TemplateRepositoryImpl()
-        val stockRepository = StockRepository(warehouseApiService)
+        val templateRepository = TemplateRepository()
+        val folderRepository = FolderRepository(templateRepository)
+        val categoryRepository = CategoryRepository(folderRepository)
+        val stockRepository = StockRepository()
         val titleRepository = ProductTitleRepository()
         val productRepository = ProductRepository(titleRepository)
         val basketRepository = BasketRepository(productRepository)
@@ -125,7 +125,9 @@ class UiManager(
         val debtRepository = DebtRepository()
 
         val foldersContentViewModel = FoldersContentViewModel(
-            repository = folderRepository,
+            getRepository = folderRepository,
+            addRepository = folderRepository,
+            templateRepository = templateRepository,
             logger = logger,
             coroutineScope = newScope()
         )
@@ -146,7 +148,7 @@ class UiManager(
         )
         val addProductScreenViewModel = AddProductScreenViewModel(
             productRepository = productRepository,
-            stockRepository = stockRepository,
+            categoryRepository = categoryRepository,
             logger = logger,
             coroutineScope = newScope()
         )
@@ -154,6 +156,7 @@ class UiManager(
             productRepository = productRepository,
             stockRepository = stockRepository,
             addToBasket = { basketContentViewModel.increase(it.product.id) },
+            events = productRepository.events(),
             logger = logger,
             coroutineScope = newScope()
         )
@@ -165,7 +168,8 @@ class UiManager(
         val clientsScreenViewModel = ClientsScreenViewModel(
             loading = "Loading",
             failure = "Failure",
-            repository = clientRepository,
+            getRepository = clientRepository,
+            addRepository = clientRepository,
             logger = logger,
             coroutineScope = newScope()
         )
@@ -191,7 +195,7 @@ class UiManager(
             logger = logger,
             coroutineScope = newScope()
         )
-        val addStockItemScreenViewModel = AddStockItemScreenViewModel(
+        val addReceiveScreenViewModel = AddReceiveScreenViewModel(
             repository = receiveRepository,
             coroutineScope = newScope()
         )
@@ -209,6 +213,7 @@ class UiManager(
         )
         val debtViewModel = DebtScreenViewModel(
             debtRepository = debtRepository,
+            addRepository = debtRepository,
             clientRepository = clientRepository,
             logger = logger,
             coroutineScope = newScope()
@@ -226,7 +231,7 @@ class UiManager(
             saleViewModel = saleViewModel,
             receiveViewModel = receiveViewModel,
             checkoutViewModel = checkoutScreenViewModel,
-            addStockItemViewModel = addStockItemScreenViewModel,
+            addStockItemViewModel = addReceiveScreenViewModel,
             ordersViewModel = ordersScreenViewModel,
             notificationsViewModel = notificationScreenViewModel,
             debtsViewModel = debtViewModel

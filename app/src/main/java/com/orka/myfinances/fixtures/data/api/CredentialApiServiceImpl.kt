@@ -5,7 +5,7 @@ import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.fixtures.resources.models.credential
 
 class CredentialApiServiceImpl : CredentialApiService {
-    override suspend fun get(username: String, password: String): Credential? {
+    override suspend fun get(username: String, password: String): Credential {
         return credential
     }
 }

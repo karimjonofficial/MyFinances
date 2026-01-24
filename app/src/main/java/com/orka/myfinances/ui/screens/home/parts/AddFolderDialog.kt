@@ -16,26 +16,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.template.Template
-import com.orka.myfinances.data.repositories.folder.FolderType
-import com.orka.myfinances.lib.extensions.models.FolderTypeSaver
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.ui.components.Dialog
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.RadioButton
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.ui.screens.home.viewmodel.TemplateState
 
 @Composable
 fun AddFolderDialog(
-    templates: List<Template>,
+    state: TemplateState,
     dismissRequest: () -> Unit,
     onAddTemplateClick: () -> Unit,
-    onSuccess: (String, FolderType) -> Unit,
+    onSuccess: (String, String, Id?) -> Unit,
     onCancel: () -> Unit
 ) {
     val name = rememberSaveable { mutableStateOf("") }
     val templatesVisible = rememberSaveable { mutableStateOf(false) }
     val folderType = rememberSaveable { mutableIntStateOf(0) }
-    val folder = rememberSaveable(stateSaver = FolderTypeSaver) { mutableStateOf(FolderType.Catalog) }
+    val templateId = rememberSaveable { mutableStateOf<Id?>(null) }
+    val templates = if(state is TemplateState.Success) state.templates else null
 
     val templatesVisibleValue = templatesVisible.value
 
@@ -48,8 +48,8 @@ fun AddFolderDialog(
         onCancel = onCancel,
         onSuccess = {
             val nameValue = name.value
-            val folderTypeValue = folder.value
-            if (nameValue.isNotBlank()) onSuccess(nameValue, folderTypeValue)
+            val folderTypeValue = if(folderType.intValue == 0) "catalog" else "category"
+            if (nameValue.isNotBlank()) onSuccess(nameValue, folderTypeValue, templateId.value)
         }
     ) {
         OutlinedTextField(
@@ -72,7 +72,6 @@ fun AddFolderDialog(
                 selected = folderType.intValue == 0,
                 onClick = {
                     folderType.intValue = 0
-                    folder.value = FolderType.Catalog
                     templatesVisible.value = false
                 }
             )
@@ -89,9 +88,8 @@ fun AddFolderDialog(
             )
 
             if(templatesVisibleValue) {
-                val template = rememberSaveable { mutableStateOf<Template?>(null) }
                 val dropDownMenuExpanded = rememberSaveable { mutableStateOf(false) }
-                val templateValue = template.value
+                val templateValue = templates?.find { it.id == templateId.value }
 
                 VerticalSpacer(8)
                 Row(
@@ -108,8 +106,7 @@ fun AddFolderDialog(
                         items = templates,
                         itemText = { it.name },
                         onItemSelected = {
-                            template.value = it
-                            folder.value = FolderType.ProductFolder(it.id.value)
+                            templateId.value = it.id
                         }
                     )
 

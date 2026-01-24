@@ -3,7 +3,7 @@ package com.orka.myfinances.ui.navigation
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.data.models.User
-import com.orka.myfinances.impl.ui.managers.NavigationManagerImpl
+import com.orka.myfinances.impl.ui.managers.NavigationManager
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.navigation.entries.catalogEntry
 import com.orka.myfinances.ui.navigation.entries.checkoutEntry
@@ -18,8 +18,9 @@ import com.orka.myfinances.ui.navigation.entries.order.orderEntry
 import com.orka.myfinances.ui.navigation.entries.ordersEntry
 import com.orka.myfinances.ui.navigation.entries.product.addProductEntry
 import com.orka.myfinances.ui.navigation.entries.product.productEntry
+import com.orka.myfinances.ui.navigation.entries.receive.addStockItemEntry
+import com.orka.myfinances.ui.navigation.entries.searchEntry
 import com.orka.myfinances.ui.navigation.entries.settingsEntry
-import com.orka.myfinances.ui.navigation.entries.stock.addStockItemEntry
 import com.orka.myfinances.ui.navigation.entries.template.addTemplateEntry
 import com.orka.myfinances.ui.navigation.entries.template.templatesEntry
 import com.orka.myfinances.ui.navigation.entries.warehouseEntry
@@ -28,7 +29,7 @@ fun entryProvider(
     modifier: Modifier = Modifier,
     user: User,
     destination: Destination,
-    navigationManager: NavigationManagerImpl
+    navigationManager: NavigationManager
 ): NavEntry<Destination> = when(destination) {
     is Destination.Home -> homeEntry(modifier, destination, user, navigationManager)
     is Destination.Catalog -> catalogEntry(modifier, destination, navigationManager)
@@ -48,4 +49,5 @@ fun entryProvider(
     is Destination.Order -> orderEntry(destination)
     is Destination.Debts -> debtsEntry(modifier, destination, navigationManager)
     is Destination.Debt -> debtEntry(modifier, destination, navigationManager)
+    is Destination.Search -> searchEntry(modifier, destination)
 }

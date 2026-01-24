@@ -4,7 +4,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.ui.managers.navigation.Destination
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.managers.navigation.Navigator
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.screens.products.add.AddProductScreen
 import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
@@ -12,7 +12,7 @@ import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenVie
 fun addProductEntry(
     modifier: Modifier = Modifier.Companion,
     destination: Destination.AddProduct,
-    navigationManager: NavigationManager
+    navigator: Navigator
 ): NavEntry<Destination> = entry(destination) {
     val uiState = (destination.viewModel as AddProductScreenViewModel).uiState.collectAsState()
 
@@ -21,6 +21,6 @@ fun addProductEntry(
         category = destination.warehouse,
         state = uiState.value,
         viewModel = destination.viewModel,
-        navigationManager = navigationManager
+        navigator = navigator
     )
 }

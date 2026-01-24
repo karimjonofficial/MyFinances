@@ -29,12 +29,12 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.data.repositories.product.ProductTitleRepository
-import com.orka.myfinances.fixtures.managers.DummyNavigationManager
+import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.lib.LoggerImpl
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.managers.navigation.Navigator
 import com.orka.myfinances.ui.screens.home.components.BasketItemCard
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketState
@@ -46,7 +46,7 @@ fun BasketContent(
     modifier: Modifier = Modifier,
     state: BasketState,
     viewModel: BasketContentViewModel,
-    navigationManager: NavigationManager
+    navigator: Navigator
 ) {
     when (state) {
         is BasketState.Loading -> LoadingScreen(modifier)
@@ -89,7 +89,7 @@ fun BasketContent(
                                 style = MaterialTheme.typography.headlineMedium
                             )
 
-                            Button(onClick = { navigationManager.navigateToCheckout(state.items) }) {
+                            Button(onClick = { navigator.navigateToCheckout(state.items) }) {
                                 Text(text = stringResource(R.string.checkout))
                             }
                         }
@@ -153,7 +153,7 @@ private fun BasketContentPreview() {
             modifier = Modifier.padding(paddingValues),
             state = uiState.value,
             viewModel = viewModel,
-            navigationManager = DummyNavigationManager()
+            navigator = DummyNavigator()
         )
     }
 }

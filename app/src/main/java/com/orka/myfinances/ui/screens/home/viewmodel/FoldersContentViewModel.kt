@@ -1,42 +1,53 @@
 package com.orka.myfinances.ui.screens.home.viewmodel
 
+import com.orka.myfinances.core.DualStateViewModel
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.core.ViewModel
+import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.data.models.folder.Folder
+import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.repositories.folder.AddFolderRequest
-import com.orka.myfinances.data.repositories.folder.FolderRepository
-import com.orka.myfinances.data.repositories.folder.FolderType
+import com.orka.myfinances.lib.data.repositories.AddRepository
+import com.orka.myfinances.lib.data.repositories.GetRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asStateFlow
 
 class FoldersContentViewModel(
-    private val repository: FolderRepository,
+    private val getRepository: GetRepository<Folder>,
+    private val addRepository: AddRepository<Folder, AddFolderRequest>,
+    private val templateRepository: GetRepository<Template>,
     logger: Logger,
     coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
-) : ViewModel<FoldersState>(
-    initialState = FoldersState.Initial,
+) : DualStateViewModel<FoldersState, TemplateState>(
+    initialState1 = FoldersState.Initial,
+    initialState2 = TemplateState.Initial,
     logger = logger,
     coroutineScope = coroutineScope
 ) {
-    val uiState = state.asStateFlow()
+    val uiState = state1.asStateFlow()
+    val dialogState = state2.asStateFlow()
 
     fun initialize() = launch {
-        setState(FoldersState.Loading)
-        val folders = repository.get()
+        setState1(FoldersState.Loading)
+        val folders = getRepository.get()
         if(folders != null)
-            setState(FoldersState.Success(folders))
-        else setState(FoldersState.Error)
+            setState1(FoldersState.Success(folders))
+        else setState1(FoldersState.Error)
+        val templates = templateRepository.get()
+        if(templates != null)
+            setState2(TemplateState.Success(templates))
+        else setState2(TemplateState.Error)
     }
 
-    fun addFolder(name: String, type: FolderType) = launch {
-        val previousState = state.value
-        setState(FoldersState.Loading)
-        val request = AddFolderRequest(name, type)
-        val folder = repository.add(request)
+    fun addFolder(name: String, type: String, templateId: Id?) = launch {
+        val previousState = state1.value
+        setState1(FoldersState.Loading)
+        val request = AddFolderRequest(name, type, templateId)
+        val folder = addRepository.add(request)
         if(folder != null) {
-            val folders = repository.get()
-            setState(FoldersState.Success(folders!!))
+            val folders = getRepository.get()
+            setState1(FoldersState.Success(folders!!))
         }
-        else setState(previousState)
+        else setState1(previousState)
     }
 }

@@ -28,52 +28,52 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.User
-import com.orka.myfinances.fixtures.managers.DummyNavigationManager
+import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.user1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.managers.navigation.Navigator
 import com.orka.myfinances.ui.screens.home.parts.ProfileTopBar
 
 @Composable
 fun ProfileContent(
     modifier: Modifier,
     user: User,
-    navigationManager: NavigationManager
+    navigator: Navigator
 ) {
     val options = listOf(
         ProfileOption(
             index = 0,
             name = stringResource(R.string.settings),
-            action = { navigationManager.navigateToSettings() }
+            action = { navigator.navigateToSettings() }
         ),
         ProfileOption(
             index = 1,
             name = stringResource(R.string.history),
-            action = { navigationManager.navigateToHistory() }
+            action = { navigator.navigateToHistory() }
         ),
         ProfileOption(
             index = 2,
             name = stringResource(R.string.templates),
-            action = { navigationManager.navigateToTemplates() }
+            action = { navigator.navigateToTemplates() }
         ),
         ProfileOption(
             index = 3,
             name = stringResource(R.string.clients),
-            action = { navigationManager.navigateToClients() }
+            action = { navigator.navigateToClients() }
         ),
         ProfileOption(
             index = 4,
             name = stringResource(R.string.orders),
-            action = { navigationManager.navigateToOrders() }
+            action = { navigator.navigateToOrders() }
         ),
         ProfileOption(
             index = 5,
             name = stringResource(R.string.debts),
-            action = { navigationManager.navigateToDebts() }
+            action = { navigator.navigateToDebts() }
         )
     )
 
@@ -180,7 +180,7 @@ private fun ProfileContentPreview() {
         ProfileContent(
             modifier = Modifier.scaffoldPadding(paddingValues),
             user = user1,
-            navigationManager = DummyNavigationManager()
+            navigator = DummyNavigator()
         )
     }
 }

@@ -1,14 +1,16 @@
 package com.orka.myfinances.ui.screens.clients
 
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
 import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.repositories.client.AddClientRequest
+import com.orka.myfinances.lib.data.repositories.AddRepository
+import com.orka.myfinances.lib.data.repositories.GetRepository
 import kotlinx.coroutines.CoroutineScope
 
 class ClientsScreenViewModel(
-    val repository: ClientRepository,
+    getRepository: GetRepository<Client>,
+    private val addRepository: AddRepository<Client, AddClientRequest>,
     loading: String,
     failure: String,
     logger: Logger,
@@ -16,7 +18,7 @@ class ClientsScreenViewModel(
 ) : ListViewModel<String, Client, String>(
     loading = loading,
     failure = failure,
-    repository = repository,
+    repository = getRepository,
     logger = logger,
     coroutineScope = coroutineScope
 ) {
@@ -27,7 +29,7 @@ class ClientsScreenViewModel(
             phone = phone,
             address = address
         )
-        if(repository.add(request) != null)
+        if(addRepository.add(request) != null)
             initialize()
     }
 }

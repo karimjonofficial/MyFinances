@@ -5,10 +5,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.R
-import com.orka.myfinances.fixtures.managers.DummyNavigationManager
+import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.lib.LoggerImpl
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.managers.navigation.Navigator
 import com.orka.myfinances.data.repositories.order.OrderRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 fun OrdersScreen(
     modifier: Modifier,
     viewModel: OrdersScreenViewModel,
-    navigationManager: NavigationManager
+    navigator: Navigator
 ) {
     LazyColumnScreen(
         modifier = modifier,
@@ -27,7 +27,7 @@ fun OrdersScreen(
             OrderCard(
                 modifier = modifier,
                 order = order,
-                onClick = { navigationManager.navigateToOrder(it) }
+                onClick = { navigator.navigateToOrder(it) }
             )
         },
         viewModel = viewModel
@@ -49,6 +49,6 @@ private fun OrderScreenPreview() {
     OrdersScreen(
         modifier = Modifier,
         viewModel = viewModel,
-        navigationManager = DummyNavigationManager()
+        navigator = DummyNavigator()
     )
 }

@@ -4,13 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.orka.myfinances.data.models.Session
-import com.orka.myfinances.impl.ui.managers.NavigationManagerImpl
+import com.orka.myfinances.impl.ui.managers.NavigationManager
 import com.orka.myfinances.ui.navigation.NavigationGraph
 
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    navigationManager: NavigationManagerImpl,
+    navigationManager: NavigationManager,
     session: Session
 ) {
     val backStack = navigationManager.backStack.collectAsState()

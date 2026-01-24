@@ -12,13 +12,13 @@ import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.factories.viewmodel.ViewModelProvider
 import com.orka.myfinances.fixtures.resources.types
 import com.orka.myfinances.ui.managers.navigation.Destination
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.managers.navigation.Navigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class NavigationManagerImpl(
+class NavigationManager(
     initialBackStack: List<Destination>,
     private val provider: ViewModelProvider,
     logger: Logger,
@@ -27,7 +27,7 @@ class NavigationManagerImpl(
     initialState = initialBackStack,
     logger = logger,
     coroutineScope = coroutineScope
-), NavigationManager {
+), Navigator {
     val backStack = state.asStateFlow()
 
     override fun navigateToHome() {
@@ -39,7 +39,7 @@ class NavigationManagerImpl(
         navigate(Destination.Catalog(catalog, viewModel))
     }
 
-    override fun navigateToWarehouse(category: Category) {
+    override fun navigateToCategory(category: Category) {
         val viewModel = provider.warehouseViewModel(category)
         navigate(Destination.Warehouse(category, viewModel))
     }
@@ -117,6 +117,10 @@ class NavigationManagerImpl(
 
     override fun navigateToDebt(debt: Debt) {
         navigate(Destination.Debt(debt))
+    }
+
+    override fun navigateToSearch() {
+        navigate(Destination.Search)
     }
 
     private fun navigate(destination: Destination) {

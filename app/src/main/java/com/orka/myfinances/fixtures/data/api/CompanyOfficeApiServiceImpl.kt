@@ -7,7 +7,7 @@ import com.orka.myfinances.fixtures.resources.models.office1
 import com.orka.myfinances.lib.extensions.models.toModel
 
 class CompanyOfficeApiServiceImpl : CompanyOfficeApiService {
-    override suspend fun get(credential: Credential): CompanyOfficeModel? {
+    override suspend fun get(credential: Credential): CompanyOfficeModel {
         return office1.toModel()
     }
 }

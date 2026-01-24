@@ -14,11 +14,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.R
 import com.orka.myfinances.data.repositories.client.ClientRepository
-import com.orka.myfinances.fixtures.managers.DummyNavigationManager
+import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.lib.LoggerImpl
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
 import com.orka.myfinances.ui.managers.navigation.Destination
-import com.orka.myfinances.ui.managers.navigation.NavigationManager
+import com.orka.myfinances.ui.managers.navigation.Navigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
@@ -27,7 +27,7 @@ import kotlinx.coroutines.Dispatchers
 fun ClientsScreen(
     modifier: Modifier,
     destination: Destination.Clients,
-    navigationManager: NavigationManager
+    navigator: Navigator
 ) {
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
     val viewModel = destination.viewModel as ClientsScreenViewModel
@@ -61,7 +61,7 @@ fun ClientsScreen(
             ClientCard(
                 modifier = modifier,
                 client = client,
-                onClick = { navigationManager.navigateToClient(it) }
+                onClick = { navigator.navigateToClient(it) }
             )
         }
     )
@@ -72,7 +72,8 @@ fun ClientsScreen(
 private fun ClientsScreenPreview() {
     val repository = ClientRepository()
     val viewModel = ClientsScreenViewModel(
-        repository = repository,
+        getRepository = repository,
+        addRepository = repository,
         loading = "loading",
         failure = "failure",
         logger = LoggerImpl(),
@@ -82,6 +83,6 @@ private fun ClientsScreenPreview() {
     ClientsScreen(
         modifier = Modifier,
         destination = Destination.Clients(viewModel),
-        navigationManager = DummyNavigationManager()
+        navigator = DummyNavigator()
     )
 }

@@ -15,12 +15,12 @@ val category1 = Category(
     name = "Smartphones",
     template = template1
 )
-val folder2 = Category(
+val category2 = Category(
     id = id2,
     name = "Laptops",
     template = template2
 )
-val folder3 = Category(
+val category3 = Category(
     id = id4,
     name = "Standalone Gadgets",
     template = template3
@@ -30,5 +30,5 @@ val catalog1 = Catalog(
     name = "Electronics"
 )
 
-val folders = listOf(category1, folder2, catalog1)
-val warehouses = listOf(category1, folder2, folder3)
+val folders = listOf(category1, category2, catalog1)
+val categories = listOf(category1, category2, category3)

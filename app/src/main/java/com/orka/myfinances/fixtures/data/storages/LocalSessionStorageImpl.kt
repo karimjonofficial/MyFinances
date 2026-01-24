@@ -12,7 +12,7 @@ import com.orka.myfinances.lib.extensions.models.toModel
 class LocalSessionStorageImpl : LocalSessionStorage {
     override suspend fun get(): SessionModel {
         return makeSession(
-            credential,
+            credential = credential,
             userModel = user1.toModel(),
             companyOfficeModel = office1.toModel(),
             companyModel = company1.toModel()

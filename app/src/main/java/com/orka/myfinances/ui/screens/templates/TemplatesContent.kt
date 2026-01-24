@@ -2,9 +2,12 @@ package com.orka.myfinances.ui.screens.templates
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.orka.myfinances.fixtures.resources.models.template.templates
+import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
+import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 
@@ -20,10 +23,23 @@ fun TemplatesContent(
         is TemplatesScreenState.Success -> {
             LazyColumn(modifier = modifier) {
                 items(items = state.templates) { template ->
-                    //TODO make a better component
-                    Text(text = template.name)
+                    TemplateCard(
+                        template = template,
+                        onClick = {}
+                    )
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun TemplatesContentPreview() {
+    ScaffoldPreview(title = "Templates") { paddingValues ->
+        TemplatesContent(
+            state = TemplatesScreenState.Success(templates),
+            modifier = Modifier.scaffoldPadding(paddingValues)
+        )
     }
 }

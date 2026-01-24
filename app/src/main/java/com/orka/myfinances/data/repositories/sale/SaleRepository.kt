@@ -8,15 +8,14 @@ import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.product.product1
 import com.orka.myfinances.fixtures.resources.models.sale.sales
 import com.orka.myfinances.fixtures.resources.models.user1
-import com.orka.myfinances.lib.data.repositories.models.Item
-import com.orka.myfinances.lib.fixtures.data.repositories.MockRepository
+import com.orka.myfinances.lib.data.models.Item
+import com.orka.myfinances.lib.fixtures.data.repositories.MockAddRepository
+import com.orka.myfinances.lib.fixtures.data.repositories.MockGetRepository
 
-class SaleRepository : MockRepository<Sale, AddSaleRequest>(items = sales) {
-    override fun map(request: AddSaleRequest): Sale {
-        return request.toSale()
-    }
+class SaleRepository : MockGetRepository<Sale>, MockAddRepository<Sale, AddSaleRequest> {
+    override val items = sales.toMutableList()
 
-    private fun AddSaleRequest.toSale(): Sale {
+    override suspend fun AddSaleRequest.map(): Sale {
         return Sale(
             id = id1,
             client = client1,
@@ -27,6 +26,7 @@ class SaleRepository : MockRepository<Sale, AddSaleRequest>(items = sales) {
             description = description
         )
     }
+
     private fun Item.toSaleItem(): SaleItem {
         return SaleItem(
             id = id1,

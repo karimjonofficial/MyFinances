@@ -5,8 +5,10 @@ import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.fixtures.resources.models.product.productTitles
 import com.orka.myfinances.lib.fixtures.data.repositories.MockGetByIdRepository
 
-class ProductTitleRepository(items: List<ProductTitle> = productTitles) : MockGetByIdRepository<ProductTitle>(items) {
-    override fun find(id: Id, item: ProductTitle): Boolean {
-        return item.id == id
+class ProductTitleRepository : MockGetByIdRepository<ProductTitle> {
+    override val items = productTitles.toMutableList()
+
+    override suspend fun List<ProductTitle>.find(id: Id): ProductTitle? {
+        return this.find { it.id == id }
     }
 }

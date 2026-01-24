@@ -3,11 +3,12 @@ package com.orka.myfinances.ui.screens.order
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.order.Order
 import com.orka.myfinances.data.repositories.order.OrderRepository
+import com.orka.myfinances.lib.data.repositories.GetRepository
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
 import kotlinx.coroutines.CoroutineScope
 
 class OrdersScreenViewModel(
-    repository: OrderRepository,
+    repository: GetRepository<Order>,
     loading: String,
     failure: String,
     logger: Logger,

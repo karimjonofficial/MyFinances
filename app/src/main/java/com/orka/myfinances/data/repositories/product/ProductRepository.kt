@@ -1,48 +1,53 @@
 package com.orka.myfinances.data.repositories.product
 
 import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.data.repositories.product.models.AddProductRequest
 import com.orka.myfinances.fixtures.resources.dateTime
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.product.products
-import com.orka.myfinances.lib.data.repositories.GetByIdRepository
+import com.orka.myfinances.lib.fixtures.data.repositories.MockAddRepository
+import com.orka.myfinances.lib.fixtures.data.repositories.MockGetByIdRepository
+import com.orka.myfinances.lib.fixtures.data.repositories.MockGetByParameterRepository
 import com.orka.myfinances.lib.fixtures.data.repositories.MockGetRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
-class ProductRepository(
-    private val repository: ProductTitleRepository
-) : MockGetRepository<Product>(items = products), GetByIdRepository<Product> {
-    private val events = MutableSharedFlow<ProductRepositoryEvent>(replay = 1)
+class ProductRepository(private val repository: ProductTitleRepository) :
+    MockGetRepository<Product>, MockGetByIdRepository<Product>,
+    MockGetByParameterRepository<Product, Category>,
+    MockAddRepository<Product, AddProductRequest> {
+    override val items = products.toMutableList()
+
+    private val events = MutableSharedFlow<ProductRepositoryEvent>()
     fun events(): Flow<ProductRepositoryEvent> = events
 
-    suspend fun add(request: AddProductRequest): Product? {
-        val title = repository.getById(request.titleId)
-        return if (title == null) null else {
-            val p = Product(
-                id = id1,
-                title = title,
-                price = request.price,
-                salePrice = request.salePrice,
-                dateTime = dateTime,
-                description = request.description
-            )
-            items.add(p)
-            events.emit(ProductRepositoryEvent.Add(title.category.id))
-            p
-        }
+    override suspend fun AddProductRequest.map(): Product {
+        val title = repository.getById(titleId)!!
+        events.emit(ProductRepositoryEvent.Add(title.category.id))
+
+        return Product(
+            id = id1,
+            title = title,
+            price = price,
+            salePrice = salePrice,
+            dateTime = dateTime,
+            description = description
+        )
     }
 
-    suspend fun getByCategory(id: Id): List<Product>? {
-        delay(duration)
-        val list = items.filter { it.title.category.id == id }
+    override suspend fun acceptable(request: AddProductRequest): Boolean {
+        val title = repository.getById(request.titleId)
+        return title != null
+    }
+
+    override suspend fun List<Product>.filter(parameter: Category): List<Product>? {
+        val list = items.filter { it.title.category == parameter }
         return list.ifEmpty { null }
     }
 
-    override suspend fun getById(id: Id): Product? {
-        delay(duration)
+    override suspend fun List<Product>.find(id: Id): Product? {
         return items.find { it.id == id }
     }
 }
