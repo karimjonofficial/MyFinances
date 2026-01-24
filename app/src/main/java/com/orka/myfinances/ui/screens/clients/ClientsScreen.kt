@@ -12,25 +12,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.lib.LoggerImpl
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
-import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.navigation.Navigator
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClientsScreen(
     modifier: Modifier,
-    destination: Destination.Clients,
+    viewModel: ClientsScreenViewModel,
     navigator: Navigator
 ) {
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
-    val viewModel = destination.viewModel as ClientsScreenViewModel
 
     LazyColumnScreen(
         modifier = modifier,
@@ -71,18 +68,19 @@ fun ClientsScreen(
 @Composable
 private fun ClientsScreenPreview() {
     val repository = ClientRepository()
-    val viewModel = ClientsScreenViewModel(
-        getRepository = repository,
-        addRepository = repository,
-        loading = "loading",
-        failure = "failure",
-        logger = LoggerImpl(),
-        coroutineScope = CoroutineScope(Dispatchers.Default)
-    )
+    val viewModel = viewModel {
+        ClientsScreenViewModel(
+            getRepository = repository,
+            addRepository = repository,
+            loading = R.string.loading,
+            failure = R.string.failure,
+            logger = LoggerImpl()
+        )
+    }
 
     ClientsScreen(
         modifier = Modifier,
-        destination = Destination.Clients(viewModel),
+        viewModel = viewModel,
         navigator = DummyNavigator()
     )
 }

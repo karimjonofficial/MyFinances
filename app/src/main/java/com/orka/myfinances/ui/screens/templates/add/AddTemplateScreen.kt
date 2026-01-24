@@ -29,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.repositories.template.AddTemplateRequest
 import com.orka.myfinances.data.repositories.template.TemplateFieldModel
@@ -39,8 +40,6 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.managers.navigation.Navigator
 import com.orka.myfinances.ui.screens.templates.add.components.TemplateFieldCard
 import com.orka.myfinances.ui.theme.MyFinancesTheme
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -158,8 +157,7 @@ fun AddTemplateScreen(
 private fun TemplateScreenPreview() {
     val types = listOf("text", "number", "range")
     val repository = TemplateRepository()
-    val addTemplateScreenViewModel =
-        AddTemplateScreenViewModel(repository, CoroutineScope(Dispatchers.Main))
+    val addTemplateScreenViewModel = viewModel { AddTemplateScreenViewModel(repository) }
     val navigationManager = DummyNavigator()
 
     MyFinancesTheme {

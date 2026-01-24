@@ -7,53 +7,34 @@ import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.data.repositories.debt.DebtRepository
+import com.orka.myfinances.data.repositories.folder.CategoryRepository
+import com.orka.myfinances.data.repositories.folder.FolderRepository
 import com.orka.myfinances.data.repositories.notification.NotificationRepository
 import com.orka.myfinances.data.repositories.order.OrderRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.data.repositories.product.ProductTitleRepository
 import com.orka.myfinances.data.repositories.receive.ReceiveRepository
 import com.orka.myfinances.data.repositories.sale.SaleRepository
+import com.orka.myfinances.data.repositories.stock.StockRepository
+import com.orka.myfinances.data.repositories.template.TemplateRepository
 import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.factories.ApiProvider
-import com.orka.myfinances.factories.viewmodel.ViewModelProvider
-import com.orka.myfinances.data.repositories.stock.StockRepository
-import com.orka.myfinances.data.repositories.folder.CategoryRepository
-import com.orka.myfinances.data.repositories.folder.FolderRepository
-import com.orka.myfinances.data.repositories.template.TemplateRepository
-import com.orka.myfinances.impl.factories.viewmodels.CatalogScreenViewModelProviderImpl
-import com.orka.myfinances.impl.factories.viewmodels.ViewModelProviderImpl
-import com.orka.myfinances.impl.factories.viewmodels.WarehouseScreenViewModelProviderImpl
+import com.orka.myfinances.factories.viewmodel.Factory
 import com.orka.myfinances.lib.extensions.models.makeSession
 import com.orka.myfinances.lib.extensions.models.toModel
 import com.orka.myfinances.ui.managers.navigation.Destination
 import com.orka.myfinances.ui.managers.session.SessionManager
 import com.orka.myfinances.ui.managers.session.UiState
-import com.orka.myfinances.ui.screens.checkout.CheckoutScreenViewModel
-import com.orka.myfinances.ui.screens.clients.ClientsScreenViewModel
-import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenViewModel
-import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentViewModel
-import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
-import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
-import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
-import com.orka.myfinances.ui.screens.notification.NotificationScreenViewModel
-import com.orka.myfinances.ui.screens.order.OrdersScreenViewModel
-import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
-import com.orka.myfinances.ui.screens.stock.AddReceiveScreenViewModel
-import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
-import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.asStateFlow
 
 class UiManager(
     logger: Logger,
     private val storage: LocalSessionStorage,
-    private val provider: ApiProvider,
-    coroutineScope: CoroutineScope
+    private val provider: ApiProvider
 ) : ViewModel<UiState>(
     initialState = UiState.Initial,
-    logger = logger,
-    coroutineScope = coroutineScope
+    logger = logger
 ), SessionManager {
     val uiState = state.asStateFlow()
 
@@ -65,7 +46,7 @@ class UiManager(
             openSession(session)
         } else {
             val apiService = provider.getCredentialApiService()
-            val viewModel = LoginScreenViewModel(logger, apiService, this, newScope())
+            val viewModel = LoginScreenViewModel(logger, apiService, this)
             setState(UiState.Guest(viewModel))
         }
     }
@@ -89,13 +70,10 @@ class UiManager(
     }
 
     private fun openSession(session: Session) {
-        val provider = viewModelProvider()
-        val foldersViewModel = provider.foldersViewModel()
-        val basketViewModel = provider.basketViewModel()
-        val initialBackStack = listOf(Destination.Home(foldersViewModel, basketViewModel))
-        val navigationManager =
-            NavigationManager(initialBackStack, provider, logger, newScope())
-        setState(UiState.SignedIn(session, navigationManager))
+        val factory = factory()
+        val initialBackStack = listOf(Destination.Home)
+        val navigationManager = NavigationManager(initialBackStack, logger)
+        setState(UiState.SignedIn(session, navigationManager, factory))
     }
     private suspend fun getSession(credential: Credential): Session? {
         val userApiService = provider.getUserApiService()
@@ -110,7 +88,7 @@ class UiManager(
             makeSession(credential, userModel, companyOfficeModel, companyModel)
         } else null
     }
-    private fun viewModelProvider(): ViewModelProvider {
+    private fun factory(): Factory {
         val templateRepository = TemplateRepository()
         val folderRepository = FolderRepository(templateRepository)
         val categoryRepository = CategoryRepository(folderRepository)
@@ -123,118 +101,22 @@ class UiManager(
         val orderRepository = OrderRepository()
         val clientRepository = ClientRepository()
         val debtRepository = DebtRepository()
+        val notificationRepository = NotificationRepository()
 
-        val foldersContentViewModel = FoldersContentViewModel(
-            getRepository = folderRepository,
-            addRepository = folderRepository,
+        return Factory(
+            folderRepository = folderRepository,
             templateRepository = templateRepository,
-            logger = logger,
-            coroutineScope = newScope()
-        )
-        val basketContentViewModel = BasketContentViewModel(
-            repository = basketRepository,
-            logger = logger,
-            coroutineScope = newScope()
-        )
-        val addTemplateScreenViewModel = AddTemplateScreenViewModel(
-            repository = templateRepository,
-            coroutineScope = newScope()
-        )
-        val templatesScreenViewModel = TemplatesScreenViewModel(
-            repository = templateRepository,
-            events = templateRepository.events,
-            logger = logger,
-            coroutineScope = newScope()
-        )
-        val addProductScreenViewModel = AddProductScreenViewModel(
             productRepository = productRepository,
             categoryRepository = categoryRepository,
-            logger = logger,
-            coroutineScope = newScope()
-        )
-        val warehouseScreenViewModelProvider = WarehouseScreenViewModelProviderImpl(
-            productRepository = productRepository,
             stockRepository = stockRepository,
-            addToBasket = { basketContentViewModel.increase(it.product.id) },
-            events = productRepository.events(),
-            logger = logger,
-            coroutineScope = newScope()
-        )
-        val catalogScreenViewModelProvider = CatalogScreenViewModelProviderImpl(
-            repository = folderRepository,
-            logger = logger,
-            coroutineScope = newScope()
-        )
-        val clientsScreenViewModel = ClientsScreenViewModel(
-            loading = "Loading",
-            failure = "Failure",
-            getRepository = clientRepository,
-            addRepository = clientRepository,
-            logger = logger,
-            coroutineScope = newScope()
-        )
-        val saleViewModel = SaleContentViewModel(
-            loading = "Loading",
-            failure = "Failure",
-            repository = saleRepository,
-            logger = logger,
-            coroutineScope = newScope()
-        )
-        val receiveViewModel = ReceiveContentViewModel(
-            loading = "Loading",
-            failure = "Failure",
-            repository = receiveRepository,
-            logger = logger,
-            coroutineScope = newScope()
-        )
-        val checkoutScreenViewModel = CheckoutScreenViewModel(
-            saleRepository = saleRepository,
-            orderRepository = orderRepository,
             basketRepository = basketRepository,
             clientRepository = clientRepository,
-            logger = logger,
-            coroutineScope = newScope()
-        )
-        val addReceiveScreenViewModel = AddReceiveScreenViewModel(
-            repository = receiveRepository,
-            coroutineScope = newScope()
-        )
-        val ordersScreenViewModel = OrdersScreenViewModel(
-            repository = orderRepository,
-            loading = "Loading",
-            failure = "Failure",
-            logger = logger,
-            coroutineScope = newScope()
-        )
-        val notificationScreenViewModel = NotificationScreenViewModel(
-            repository = NotificationRepository(),
-            logger = logger,
-            coroutineScope = newScope()
-        )
-        val debtViewModel = DebtScreenViewModel(
+            saleRepository = saleRepository,
+            orderRepository = orderRepository,
+            receiveRepository = receiveRepository,
             debtRepository = debtRepository,
-            addRepository = debtRepository,
-            clientRepository = clientRepository,
-            logger = logger,
-            coroutineScope = newScope()
-        )
-
-        return ViewModelProviderImpl(
-            addTemplateScreenViewModel = addTemplateScreenViewModel,
-            templatesScreenViewModel = templatesScreenViewModel,
-            foldersContentViewModel = foldersContentViewModel,
-            addProductScreenViewModel = addProductScreenViewModel,
-            warehouseScreenViewModelProvider = warehouseScreenViewModelProvider,
-            catalogScreenViewModelProvider = catalogScreenViewModelProvider,
-            basketContentViewModel = basketContentViewModel,
-            clientsScreenViewModel = clientsScreenViewModel,
-            saleViewModel = saleViewModel,
-            receiveViewModel = receiveViewModel,
-            checkoutViewModel = checkoutScreenViewModel,
-            addStockItemViewModel = addReceiveScreenViewModel,
-            ordersViewModel = ordersScreenViewModel,
-            notificationsViewModel = notificationScreenViewModel,
-            debtsViewModel = debtViewModel
+            notificationRepository = notificationRepository,
+            logger = logger
         )
     }
 }

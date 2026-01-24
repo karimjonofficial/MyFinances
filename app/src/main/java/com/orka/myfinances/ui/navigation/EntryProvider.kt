@@ -3,8 +3,9 @@ package com.orka.myfinances.ui.navigation
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.data.models.User
-import com.orka.myfinances.impl.ui.managers.NavigationManager
+import com.orka.myfinances.factories.viewmodel.Factory
 import com.orka.myfinances.ui.managers.navigation.Destination
+import com.orka.myfinances.ui.managers.navigation.Navigator
 import com.orka.myfinances.ui.navigation.entries.catalogEntry
 import com.orka.myfinances.ui.navigation.entries.checkoutEntry
 import com.orka.myfinances.ui.navigation.entries.clientEntry
@@ -29,25 +30,26 @@ fun entryProvider(
     modifier: Modifier = Modifier,
     user: User,
     destination: Destination,
-    navigationManager: NavigationManager
+    navigator: Navigator,
+    factory: Factory
 ): NavEntry<Destination> = when(destination) {
-    is Destination.Home -> homeEntry(modifier, destination, user, navigationManager)
-    is Destination.Catalog -> catalogEntry(modifier, destination, navigationManager)
-    is Destination.Warehouse -> warehouseEntry(modifier, destination, navigationManager)
-    is Destination.Notifications -> notificationsEntry(modifier, destination)
-    is Destination.AddTemplate -> addTemplateEntry(modifier, destination, navigationManager)
+    is Destination.Home -> homeEntry(modifier, destination, user, navigator, factory)
+    is Destination.Catalog -> catalogEntry(modifier, destination, navigator, factory)
+    is Destination.Warehouse -> warehouseEntry(modifier, destination, navigator, factory)
+    is Destination.Notifications -> notificationsEntry(modifier, destination, factory)
+    is Destination.AddTemplate -> addTemplateEntry(modifier, destination, navigator, factory)
     is Destination.Settings -> settingsEntry(modifier, destination)
-    is Destination.Templates -> templatesEntry(modifier, destination, navigationManager)
-    is Destination.AddProduct -> addProductEntry(modifier, destination, navigationManager)
+    is Destination.Templates -> templatesEntry(modifier, destination, navigator, factory)
+    is Destination.AddProduct -> addProductEntry(modifier, destination, navigator, factory)
     is Destination.Product -> productEntry(modifier, destination)
-    is Destination.Clients -> clientsEntry(modifier, destination, navigationManager)
+    is Destination.Clients -> clientsEntry(modifier, destination, navigator, factory)
     is Destination.Client -> clientEntry(modifier, destination)
-    is Destination.History -> historyEntry(modifier, destination)
-    is Destination.Checkout -> checkoutEntry(modifier, destination, navigationManager)
-    is Destination.AddStockItem -> addStockItemEntry(modifier, destination, navigationManager)
-    is Destination.Orders -> ordersEntry(modifier, destination, navigationManager)
-    is Destination.Order -> orderEntry(destination)
-    is Destination.Debts -> debtsEntry(modifier, destination, navigationManager)
-    is Destination.Debt -> debtEntry(modifier, destination, navigationManager)
+    is Destination.History -> historyEntry(modifier, destination, factory)
+    is Destination.Checkout -> checkoutEntry(modifier, destination, navigator, factory)
+    is Destination.AddStockItem -> addStockItemEntry(modifier, destination, navigator, factory)
+    is Destination.Orders -> ordersEntry(modifier, destination, navigator, factory)
+    is Destination.Order -> orderEntry(modifier, destination)
+    is Destination.Debts -> debtsEntry(modifier, destination, navigator, factory)
+    is Destination.Debt -> debtEntry(modifier, destination, navigator)
     is Destination.Search -> searchEntry(modifier, destination)
 }

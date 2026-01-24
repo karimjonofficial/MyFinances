@@ -4,18 +4,15 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.Notification
 import com.orka.myfinances.data.repositories.notification.NotificationRepository
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
-import kotlinx.coroutines.CoroutineScope
 
 class NotificationScreenViewModel(
     private val repository: NotificationRepository,
-    logger: Logger,
-    coroutineScope: CoroutineScope
+    logger: Logger
 ) : ListViewModel<Unit, Notification, Unit>(
     loading = Unit,
     failure = Unit,
     repository = repository,
-    logger = logger,
-    coroutineScope = coroutineScope
+    logger = logger
 ) {
     fun read(notification: Notification) = launch {
         if(!notification.read) {

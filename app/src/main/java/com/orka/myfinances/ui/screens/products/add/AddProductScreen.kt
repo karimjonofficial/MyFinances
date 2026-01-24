@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.repositories.folder.CategoryRepository
@@ -43,8 +44,6 @@ import com.orka.myfinances.ui.managers.navigation.Navigator
 import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenState
 import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 @Composable
 fun AddProductScreen(
@@ -168,12 +167,13 @@ fun AddProductScreen(
 @Preview
 @Composable
 private fun AddProductScreenPreview() {
-    val viewModel = AddProductScreenViewModel(
-        productRepository = ProductRepository(ProductTitleRepository()),
-        categoryRepository = CategoryRepository(FolderRepository(TemplateRepository())),
-        logger = DummyLogger(),
-        coroutineScope = CoroutineScope(Dispatchers.Main)
-    )
+    val viewModel = viewModel {
+        AddProductScreenViewModel(
+            productRepository = ProductRepository(ProductTitleRepository()),
+            categoryRepository = CategoryRepository(FolderRepository(TemplateRepository())),
+            logger = DummyLogger()
+        )
+    }
     viewModel.initialize()
     val state = viewModel.uiState.collectAsState()
 

@@ -4,18 +4,15 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.sale.Sale
 import com.orka.myfinances.lib.data.repositories.GetRepository
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
-import kotlinx.coroutines.CoroutineScope
 
 class SaleContentViewModel(
-    loading: String,
-    failure: String,
+    loading: Int,
+    failure: Int,
     repository: GetRepository<Sale>,
-    logger: Logger,
-    coroutineScope: CoroutineScope
-) : ListViewModel<String, Sale, String>(
+    logger: Logger
+) : ListViewModel<Int, Sale, Int>(
     loading = loading,
     failure = failure,
     repository = repository,
-    logger = logger,
-    coroutineScope = coroutineScope
+    logger = logger
 )

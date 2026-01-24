@@ -7,7 +7,6 @@ import com.orka.myfinances.data.repositories.debt.AddDebtRequest
 import com.orka.myfinances.lib.data.repositories.AddRepository
 import com.orka.myfinances.lib.data.repositories.GetRepository
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -15,14 +14,12 @@ class DebtScreenViewModel(
     debtRepository: GetRepository<Debt>,
     private val addRepository: AddRepository<Debt, AddDebtRequest>,
     private val clientRepository: GetRepository<Client>,
-    logger: Logger,
-    coroutineScope: CoroutineScope
+    logger: Logger
 ) : ListViewModel<Unit, Debt, Unit>(
     loading = Unit,
     failure = Unit,
     repository = debtRepository,
-    logger = logger,
-    coroutineScope = coroutineScope
+    logger = logger
 ) {
     private val _dialogState = MutableStateFlow<DialogState>(DialogState.Loading)
     val dialogState = _dialogState.asStateFlow()

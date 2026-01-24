@@ -2,11 +2,12 @@ package com.orka.myfinances.data.repositories.basket
 
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
-import com.orka.myfinances.data.repositories.product.ProductRepository
+import com.orka.myfinances.data.models.product.Product
+import com.orka.myfinances.lib.data.repositories.GetByIdRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
-class BasketRepository(private val productRepository: ProductRepository) {
+class BasketRepository(private val productRepository: GetByIdRepository<Product>) {
     private val items = mutableListOf<BasketItem>()
 
     private val _events = MutableSharedFlow<BasketEvent>()

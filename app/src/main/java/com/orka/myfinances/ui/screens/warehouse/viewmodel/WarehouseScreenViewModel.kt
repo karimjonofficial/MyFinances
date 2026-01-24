@@ -1,13 +1,14 @@
 package com.orka.myfinances.ui.screens.warehouse.viewmodel
 
+import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.core.DualStateViewModel
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.product.Product
+import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.ProductRepositoryEvent
 import com.orka.myfinances.lib.data.repositories.GetByParameterRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -17,21 +18,19 @@ class WarehouseScreenViewModel(
     private val category: Category,
     private val productRepository: GetByParameterRepository<Product, Category>,
     private val stockRepository: GetByParameterRepository<StockItem, Category>,
-    private val add: (StockItem) -> Unit,
+    private val basketRepository: BasketRepository,
     events: Flow<ProductRepositoryEvent>,
-    logger: Logger,
-    coroutineScope: CoroutineScope
+    logger: Logger
 ) : DualStateViewModel<ProductsState, WarehouseState>(
     initialState1 = ProductsState.Loading,
     initialState2 = WarehouseState.Loading,
-    logger = logger,
-    coroutineScope = coroutineScope
+    logger = logger
 ) {
     val productsState = state1.asStateFlow()
     val warehouseState = state2.asStateFlow()
 
     init {
-        events.onEach { initialize() }.launchIn(coroutineScope)
+        events.onEach { initialize() }.launchIn(viewModelScope)
     }
 
     fun initialize() = launch {
@@ -45,7 +44,7 @@ class WarehouseScreenViewModel(
         else setState2(WarehouseState.Failure)
     }
 
-    fun addToBasket(stockItem: StockItem) {
-        this.add(stockItem)
+    fun addToBasket(stockItem: StockItem) = launch {
+        basketRepository.add(stockItem.product.id, 1)
     }
 }

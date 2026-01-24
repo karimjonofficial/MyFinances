@@ -9,25 +9,22 @@ import com.orka.myfinances.data.models.sale.Sale
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.order.AddOrderRequest
 import com.orka.myfinances.data.repositories.sale.AddSaleRequest
+import com.orka.myfinances.lib.data.models.Item
 import com.orka.myfinances.lib.data.repositories.AddRepository
 import com.orka.myfinances.lib.data.repositories.GetRepository
-import com.orka.myfinances.lib.data.models.Item
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
-import kotlinx.coroutines.CoroutineScope
 
 class CheckoutScreenViewModel(
     private val saleRepository: AddRepository<Sale, AddSaleRequest>,
     private val orderRepository: AddRepository<Order, AddOrderRequest>,
     private val basketRepository: BasketRepository,
     clientRepository: GetRepository<Client>,
-    logger: Logger,
-    coroutineScope: CoroutineScope
+    logger: Logger
 ) : ListViewModel<Unit, Client, Unit>(
     loading = Unit,
     failure = Unit,
     repository = clientRepository,
-    logger = logger,
-    coroutineScope = coroutineScope
+    logger = logger
 ) {
     fun sell(basket: Basket, client: Client) {
         launch {

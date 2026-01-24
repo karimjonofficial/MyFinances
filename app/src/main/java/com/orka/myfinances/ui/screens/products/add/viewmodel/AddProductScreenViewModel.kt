@@ -9,18 +9,15 @@ import com.orka.myfinances.data.repositories.product.models.AddProductRequest
 import com.orka.myfinances.data.repositories.product.models.PropertyModel
 import com.orka.myfinances.lib.data.repositories.AddRepository
 import com.orka.myfinances.lib.data.repositories.GetRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.asStateFlow
 
 class AddProductScreenViewModel(
     private val productRepository: AddRepository<Product, AddProductRequest>,
     private val categoryRepository: GetRepository<Category>,
-    logger: Logger,
-    coroutineScope: CoroutineScope
+    logger: Logger
 ) : ViewModel<AddProductScreenState>(
     initialState = AddProductScreenState.Loading,
-    logger = logger,
-    coroutineScope = coroutineScope
+    logger = logger
 ) {
     val uiState = state.asStateFlow()
 

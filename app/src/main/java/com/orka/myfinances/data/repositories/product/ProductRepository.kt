@@ -20,12 +20,12 @@ class ProductRepository(private val repository: ProductTitleRepository) :
     MockAddRepository<Product, AddProductRequest> {
     override val items = products.toMutableList()
 
-    private val events = MutableSharedFlow<ProductRepositoryEvent>()
-    fun events(): Flow<ProductRepositoryEvent> = events
+    private val flow = MutableSharedFlow<ProductRepositoryEvent>()
+    val events: Flow<ProductRepositoryEvent> = flow as Flow<ProductRepositoryEvent>
 
     override suspend fun AddProductRequest.map(): Product {
         val title = repository.getById(titleId)!!
-        events.emit(ProductRepositoryEvent.Add(title.category.id))
+        flow.emit(ProductRepositoryEvent.Add(title.category.id))
 
         return Product(
             id = id1,

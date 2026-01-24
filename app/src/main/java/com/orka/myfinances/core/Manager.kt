@@ -1,23 +1,24 @@
 package com.orka.myfinances.core
 
-import kotlinx.coroutines.CoroutineScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
-abstract class Manager(protected val viewModelScope: CoroutineScope) {
-
+abstract class Manager : ViewModel() {
     protected fun launch(
-        coroutineContext: CoroutineContext = viewModelScope.coroutineContext,
+        context: CoroutineContext = EmptyCoroutineContext,
+        start: CoroutineStart = CoroutineStart.DEFAULT,
         callback: suspend () -> Unit
     ): Job {
-        return viewModelScope.launch(coroutineContext) {
+        return viewModelScope.launch(
+            context = context,
+            start = start
+        ) {
             callback.invoke()
         }
-    }
-
-    protected fun newScope(): CoroutineScope {
-        return CoroutineScope(viewModelScope.coroutineContext + SupervisorJob())
     }
 }

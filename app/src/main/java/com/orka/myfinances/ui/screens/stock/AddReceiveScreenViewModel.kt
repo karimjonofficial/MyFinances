@@ -6,12 +6,10 @@ import com.orka.myfinances.data.models.receive.Receive
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.data.repositories.receive.ReceiveItemModel
 import com.orka.myfinances.lib.data.repositories.AddRepository
-import kotlinx.coroutines.CoroutineScope
 
 class AddReceiveScreenViewModel(
-    private val repository: AddRepository<Receive, AddReceiveRequest>,
-    coroutineScope: CoroutineScope
-) : Manager(coroutineScope) {
+    private val repository: AddRepository<Receive, AddReceiveRequest>
+) : Manager() {
 
     fun add(product: Product, amount: Int) {
         launch {

@@ -29,7 +29,8 @@ fun MyFinancesScreen(
         is UiState.SignedIn -> MainScreen(
             modifier = modifier,
             navigationManager = state.navigationManager,
-            session = state.session
+            session = state.session,
+            factory = state.factory
         )
     }
 }

@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
@@ -38,8 +39,6 @@ import com.orka.myfinances.ui.managers.navigation.Navigator
 import com.orka.myfinances.ui.screens.home.components.BasketItemCard
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 @Composable
 fun BasketContent(
@@ -100,9 +99,9 @@ fun BasketContent(
                         ) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 Icon(
-                                    modifier = Modifier.size(160.dp),
+                                    modifier = Modifier.size(96.dp),
                                     painter = painterResource(R.drawable.shopping_cart_off),
-                                    tint = MaterialTheme.colorScheme.surfaceTint,
+                                    tint = MaterialTheme.colorScheme.surfaceDim,
                                     contentDescription = null
                                 )
 
@@ -123,11 +122,12 @@ private fun BasketContentPreview() {
     val logger = LoggerImpl()
     val productRepository = ProductRepository(ProductTitleRepository())
     val basketRepository = BasketRepository(productRepository)
-    val viewModel = BasketContentViewModel(
-        repository = basketRepository,
-        logger = logger,
-        coroutineScope = CoroutineScope(Dispatchers.Default)
-    )
+    val viewModel = viewModel {
+        BasketContentViewModel(
+            repository = basketRepository,
+            logger = logger
+        )
+    }
     viewModel.initialize()
     val uiState = viewModel.uiState.collectAsState()
 

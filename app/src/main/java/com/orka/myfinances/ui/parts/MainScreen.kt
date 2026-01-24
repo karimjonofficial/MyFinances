@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.orka.myfinances.data.models.Session
+import com.orka.myfinances.factories.viewmodel.Factory
 import com.orka.myfinances.impl.ui.managers.NavigationManager
 import com.orka.myfinances.ui.navigation.NavigationGraph
 
@@ -11,6 +12,7 @@ import com.orka.myfinances.ui.navigation.NavigationGraph
 fun MainScreen(
     modifier: Modifier = Modifier,
     navigationManager: NavigationManager,
+    factory: Factory,
     session: Session
 ) {
     val backStack = navigationManager.backStack.collectAsState()
@@ -19,6 +21,7 @@ fun MainScreen(
         modifier = modifier,
         backStack = backStack.value,
         navigationManager = navigationManager,
-        user = session.user
+        user = session.user,
+        factory = factory
     )
 }

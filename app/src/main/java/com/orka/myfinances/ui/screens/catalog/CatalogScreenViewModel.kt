@@ -5,17 +5,14 @@ import com.orka.myfinances.core.ViewModel
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Folder
 import com.orka.myfinances.lib.data.repositories.GetByParameterRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.asStateFlow
 
 class CatalogScreenViewModel(
     private val catalog: Catalog,
     private val repository: GetByParameterRepository<Folder, Catalog>,
-    logger: Logger,
-    coroutineScope: CoroutineScope
+    logger: Logger
 ) : ViewModel<CatalogScreenState>(
     initialState = CatalogScreenState.Loading,
-    coroutineScope = coroutineScope,
     logger = logger
 ) {
     val uiState = state.asStateFlow()

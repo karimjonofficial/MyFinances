@@ -10,6 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.repositories.basket.BasketRepository
@@ -27,8 +28,6 @@ import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.managers.navigation.Navigator
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -52,6 +51,7 @@ fun CheckoutScreen(
                 LoadingScreen(modifier = Modifier.scaffoldPadding(paddingValues))
             }
         }
+
         is State.Failure -> {
             Scaffold(
                 modifier = modifier,
@@ -83,13 +83,14 @@ private fun CheckoutScreenPreview() {
         modifier = Modifier.fillMaxSize(),
         items = basketItems,
         navigator = DummyNavigator(),
-        viewModel = CheckoutScreenViewModel(
-            saleRepository = SaleRepository(),
-            orderRepository = OrderRepository(),
-            clientRepository = ClientRepository(),
-            basketRepository = BasketRepository(ProductRepository(ProductTitleRepository())),
-            coroutineScope = CoroutineScope(Dispatchers.Main),
-            logger = DummyLogger()
-        )
+        viewModel = viewModel {
+            CheckoutScreenViewModel(
+                saleRepository = SaleRepository(),
+                orderRepository = OrderRepository(),
+                clientRepository = ClientRepository(),
+                basketRepository = BasketRepository(ProductRepository(ProductTitleRepository())),
+                logger = DummyLogger()
+            )
+        }
     )
 }

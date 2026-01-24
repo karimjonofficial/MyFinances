@@ -4,14 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
+import com.orka.myfinances.data.repositories.order.OrderRepository
 import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.lib.LoggerImpl
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
 import com.orka.myfinances.ui.managers.navigation.Navigator
-import com.orka.myfinances.data.repositories.order.OrderRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 @Composable
 fun OrdersScreen(
@@ -37,13 +36,14 @@ fun OrdersScreen(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 private fun OrderScreenPreview() {
-    val viewModel = OrdersScreenViewModel(
-        repository = OrderRepository(),
-        loading = "Loading",
-        failure = "Failure",
-        logger = LoggerImpl(),
-        coroutineScope = CoroutineScope(Dispatchers.Main)
-    )
+    val viewModel = viewModel {
+        OrdersScreenViewModel(
+            repository = OrderRepository(),
+            loading = R.string.loading,
+            failure = R.string.failure,
+            logger = LoggerImpl()
+        )
+    }
     viewModel.initialize()
 
     OrdersScreen(
