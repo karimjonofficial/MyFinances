@@ -1,8 +1,8 @@
-package com.orka.myfinances.ui.managers.session
+package com.orka.myfinances.ui.screens.main
 
-import com.orka.myfinances.impl.ui.managers.NavigationManager
 import com.orka.myfinances.data.models.Session
-import com.orka.myfinances.factories.viewmodel.Factory
+import com.orka.myfinances.factories.Factory
+import com.orka.myfinances.ui.navigation.NavigationManager
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
 
 sealed interface UiState {

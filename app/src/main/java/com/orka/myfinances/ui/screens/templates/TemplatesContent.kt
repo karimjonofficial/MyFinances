@@ -5,16 +5,19 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.template.templates
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
+import com.orka.myfinances.ui.managers.Navigator
 
 @Composable
 fun TemplatesContent(
     state: TemplatesScreenState,
-    modifier: Modifier
+    modifier: Modifier,
+    navigator: Navigator
 ) {
     when (state) {
         is TemplatesScreenState.Loading -> LoadingScreen(modifier)
@@ -25,7 +28,7 @@ fun TemplatesContent(
                 items(items = state.templates) { template ->
                     TemplateCard(
                         template = template,
-                        onClick = {}
+                        onClick = { navigator.navigateToTemplate(it) }
                     )
                 }
             }
@@ -39,7 +42,8 @@ private fun TemplatesContentPreview() {
     ScaffoldPreview(title = "Templates") { paddingValues ->
         TemplatesContent(
             state = TemplatesScreenState.Success(templates),
-            modifier = Modifier.scaffoldPadding(paddingValues)
+            modifier = Modifier.scaffoldPadding(paddingValues),
+            navigator = DummyNavigator()
         )
     }
 }

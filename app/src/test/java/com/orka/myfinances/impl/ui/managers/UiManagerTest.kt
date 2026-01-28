@@ -17,7 +17,8 @@ import com.orka.myfinances.testFixtures.data.storages.SessionStorageStub
 import com.orka.myfinances.testFixtures.data.storages.SpySessionStorage
 import com.orka.myfinances.testFixtures.factories.api.ConfigurableApiProvider
 import com.orka.myfinances.testFixtures.factories.api.DummyApiProvider
-import com.orka.myfinances.ui.managers.session.UiState
+import com.orka.myfinances.ui.screens.main.UiManager
+import com.orka.myfinances.ui.screens.main.UiState
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -30,7 +31,7 @@ class UiManagerTest : MainDispatcherContext() {
     private val logger = DummyLogger()
 
     private fun uiManager(storage: Storage, provider: Provider): UiManager {
-        return UiManager(logger, storage, provider, testScope)
+        return UiManager(logger, storage, provider)
     }
 
     @Nested
@@ -66,8 +67,7 @@ class UiManagerTest : MainDispatcherContext() {
             return UiManager(
                 logger = logger,
                 storage = storage,
-                provider = provider,
-                coroutineScope = testScope
+                provider = provider
             )
         }
 

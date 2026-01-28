@@ -1,14 +1,13 @@
-package com.orka.myfinances.ui.screens
+package com.orka.myfinances.ui.screens.main
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import com.orka.myfinances.ui.managers.session.UiState
 import com.orka.myfinances.ui.parts.MainScreen
 import com.orka.myfinances.ui.screens.login.LoginScreen
 
 @Composable
-fun MyFinancesScreen(
+fun MainScreen(
     modifier: Modifier = Modifier,
     state: UiState
 ) {

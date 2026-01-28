@@ -5,9 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation3.ui.NavDisplay
 import com.orka.myfinances.data.models.User
-import com.orka.myfinances.factories.viewmodel.Factory
-import com.orka.myfinances.impl.ui.managers.NavigationManager
-import com.orka.myfinances.ui.managers.navigation.Destination
+import com.orka.myfinances.factories.Factory
+import com.orka.myfinances.ui.navigation.NavigationManager
 
 @Composable
 fun NavigationGraph(

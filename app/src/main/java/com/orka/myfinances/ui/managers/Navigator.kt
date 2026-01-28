@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.managers.navigation
+package com.orka.myfinances.ui.managers
 
 import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.Debt
@@ -7,6 +7,9 @@ import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.order.Order
 import com.orka.myfinances.data.models.product.Product
+import com.orka.myfinances.data.models.receive.Receive
+import com.orka.myfinances.data.models.sale.Sale
+import com.orka.myfinances.data.models.template.Template
 
 interface Navigator {
     fun back()
@@ -29,4 +32,7 @@ interface Navigator {
     fun navigateToDebts()
     fun navigateToDebt(debt: Debt)
     fun navigateToSearch()
+    fun navigateToTemplate(template: Template)
+    fun navigateToSale(sale: Sale)
+    fun navigateToReceive(receive: Receive)
 }

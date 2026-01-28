@@ -31,20 +31,20 @@ import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.data.repositories.product.ProductTitleRepository
 import com.orka.myfinances.fixtures.managers.DummyNavigator
-import com.orka.myfinances.lib.LoggerImpl
+import com.orka.myfinances.application.LoggerImpl
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.ui.managers.navigation.Navigator
+import com.orka.myfinances.ui.managers.Navigator
 import com.orka.myfinances.ui.screens.home.components.BasketItemCard
-import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentSingleStateViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketState
 
 @Composable
 fun BasketContent(
     modifier: Modifier = Modifier,
     state: BasketState,
-    viewModel: BasketContentViewModel,
+    viewModel: BasketContentSingleStateViewModel,
     navigator: Navigator
 ) {
     when (state) {
@@ -123,7 +123,7 @@ private fun BasketContentPreview() {
     val productRepository = ProductRepository(ProductTitleRepository())
     val basketRepository = BasketRepository(productRepository)
     val viewModel = viewModel {
-        BasketContentViewModel(
+        BasketContentSingleStateViewModel(
             repository = basketRepository,
             logger = logger
         )

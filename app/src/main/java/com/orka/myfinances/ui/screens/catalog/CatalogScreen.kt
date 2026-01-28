@@ -8,7 +8,7 @@ import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.ui.managers.navigation.Navigator
+import com.orka.myfinances.ui.managers.Navigator
 import com.orka.myfinances.ui.screens.home.parts.FoldersList
 
 @Composable

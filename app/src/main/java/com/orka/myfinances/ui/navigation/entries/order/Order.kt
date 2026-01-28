@@ -6,7 +6,7 @@ import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.lib.ui.screens.BlankScreen
-import com.orka.myfinances.ui.managers.navigation.Destination
+import com.orka.myfinances.ui.navigation.Destination
 
 fun orderEntry(
     modifier: Modifier = Modifier,

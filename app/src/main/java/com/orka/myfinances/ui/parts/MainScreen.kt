@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.orka.myfinances.data.models.Session
-import com.orka.myfinances.factories.viewmodel.Factory
-import com.orka.myfinances.impl.ui.managers.NavigationManager
+import com.orka.myfinances.factories.Factory
+import com.orka.myfinances.ui.navigation.NavigationManager
 import com.orka.myfinances.ui.navigation.NavigationGraph
 
 @Composable

@@ -9,4 +9,5 @@ data class User(
     val patronymic: String? = null,
     val phone: String? = null,
     val address: String? = null,
+    val profession: String? = null
 )

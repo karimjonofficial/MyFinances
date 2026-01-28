@@ -1,7 +1,7 @@
 package com.orka.myfinances.ui.screens.products.add.viewmodel
 
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.core.ViewModel
+import com.orka.myfinances.core.SingleStateViewModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.product.Product
@@ -15,16 +15,18 @@ class AddProductScreenViewModel(
     private val productRepository: AddRepository<Product, AddProductRequest>,
     private val categoryRepository: GetRepository<Category>,
     logger: Logger
-) : ViewModel<AddProductScreenState>(
+) : SingleStateViewModel<AddProductScreenState>(
     initialState = AddProductScreenState.Loading,
     logger = logger
 ) {
     val uiState = state.asStateFlow()
 
-    fun initialize() = launch {
-        val categories = categoryRepository.get()
-        if(categories != null) updateState { AddProductScreenState.Success(categories) }
-        else updateState { AddProductScreenState.Failure }
+    override fun initialize() {
+        launch {
+            val categories = categoryRepository.get()
+            if(categories != null) updateState { AddProductScreenState.Success(categories) }
+            else updateState { AddProductScreenState.Failure }
+        }
     }
 
     fun addProduct(

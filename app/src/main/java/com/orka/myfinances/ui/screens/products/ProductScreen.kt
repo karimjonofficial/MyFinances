@@ -82,7 +82,7 @@ fun ProductScreen(
 
         LazyColumn(
             modifier = Modifier.scaffoldPadding(paddingValues),
-            contentPadding = PaddingValues(bottom = 96.dp)
+            contentPadding = PaddingValues(bottom = 16.dp)
         ) {
             item { HeroImage() }
             item { TitleSection(product = product) }

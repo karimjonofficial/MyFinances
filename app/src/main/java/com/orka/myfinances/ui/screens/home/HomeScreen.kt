@@ -18,12 +18,12 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
-import com.orka.myfinances.ui.managers.navigation.Navigator
+import com.orka.myfinances.ui.managers.Navigator
 import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
 import com.orka.myfinances.ui.screens.home.parts.BasketScreenTopBar
 import com.orka.myfinances.ui.screens.home.parts.HomeScreenTopBar
 import com.orka.myfinances.ui.screens.home.parts.ProfileTopBar
-import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentSingleStateViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
 
 @Composable
@@ -31,7 +31,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     user: User,
     foldersViewModel: FoldersContentViewModel,
-    basketViewModel: BasketContentViewModel,
+    basketViewModel: BasketContentSingleStateViewModel,
     navigator: Navigator,
     selectFolder: (Folder) -> Unit
 ) {

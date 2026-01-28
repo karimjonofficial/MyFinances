@@ -17,7 +17,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
-import com.orka.myfinances.ui.managers.navigation.Navigator
+import com.orka.myfinances.ui.managers.Navigator
 import com.orka.myfinances.ui.screens.warehouse.parts.ProductsContent
 import com.orka.myfinances.ui.screens.warehouse.parts.StockItemsContent
 import com.orka.myfinances.ui.screens.warehouse.parts.WarehouseScreenTopBar

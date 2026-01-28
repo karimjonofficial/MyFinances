@@ -1,7 +1,7 @@
-package com.orka.myfinances.impl.ui.managers
+package com.orka.myfinances.ui.navigation
 
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.core.ViewModel
+import com.orka.myfinances.core.SingleStateViewModel
 import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.Debt
 import com.orka.myfinances.data.models.basket.BasketItem
@@ -9,20 +9,34 @@ import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.order.Order
 import com.orka.myfinances.data.models.product.Product
+import com.orka.myfinances.data.models.receive.Receive
+import com.orka.myfinances.data.models.sale.Sale
+import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.fixtures.resources.types
-import com.orka.myfinances.ui.managers.navigation.Destination
-import com.orka.myfinances.ui.managers.navigation.Navigator
+import com.orka.myfinances.ui.managers.Navigator
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class NavigationManager(
     initialBackStack: List<Destination>,
     logger: Logger
-) : ViewModel<List<Destination>>(
+) : SingleStateViewModel<List<Destination>>(
     initialState = initialBackStack,
     logger = logger
 ), Navigator {
     val backStack = state.asStateFlow()
+
+    private fun navigate(destination: Destination) {
+        updateState { backStack.value + destination }
+    }
+
+    override fun initialize() {}
+
+    override fun back() {
+        val backstack = state.value
+        if (backstack.size > 1)
+            state.update { backstack.dropLast(1) }
+    }
 
     override fun navigateToHome() {
         navigate(backStack.value[0])
@@ -58,12 +72,6 @@ class NavigationManager(
 
     override fun navigateToProduct(product: Product) {
         navigate(Destination.Product(product))
-    }
-
-    override fun back() {
-        val backstack = state.value
-        if (backstack.size > 1)
-            state.update { backstack.dropLast(1) }
     }
 
     override fun navigateToClients() {
@@ -106,7 +114,15 @@ class NavigationManager(
         navigate(Destination.Search)
     }
 
-    private fun navigate(destination: Destination) {
-        updateState { backStack.value + destination }
+    override fun navigateToTemplate(template: Template) {
+        navigate(Destination.Template(template))
+    }
+
+    override fun navigateToSale(sale: Sale) {
+        navigate(Destination.Sale(sale))
+    }
+
+    override fun navigateToReceive(receive: Receive) {
+        navigate(Destination.Receive(receive))
     }
 }

@@ -7,7 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import com.orka.myfinances.ui.screens.MyFinancesScreen
+import com.orka.myfinances.application.MyFinancesApplication
+import com.orka.myfinances.ui.screens.main.MainScreen
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,12 +18,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            val manager = (application as MyFinancesApplication).manager
+            val manager = (application as MyFinancesApplication).manager()
             val uiState = manager.uiState.collectAsState()
-            manager.initialize()
 
             MyFinancesTheme {
-                MyFinancesScreen(
+                MainScreen(
                     modifier = Modifier.fillMaxSize(),
                     state = uiState.value
                 )

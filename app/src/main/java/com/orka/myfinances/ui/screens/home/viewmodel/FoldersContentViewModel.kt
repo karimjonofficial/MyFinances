@@ -23,16 +23,18 @@ class FoldersContentViewModel(
     val uiState = state1.asStateFlow()
     val dialogState = state2.asStateFlow()
 
-    fun initialize() = launch {
-        setState1(FoldersState.Loading)
-        val folders = getRepository.get()
-        if(folders != null)
-            setState1(FoldersState.Success(folders))
-        else setState1(FoldersState.Error)
-        val templates = templateRepository.get()
-        if(templates != null)
-            setState2(TemplateState.Success(templates))
-        else setState2(TemplateState.Error)
+    override fun initialize() {
+        launch {
+            setState1(FoldersState.Loading)
+            val folders = getRepository.get()
+            if(folders != null)
+                setState1(FoldersState.Success(folders))
+            else setState1(FoldersState.Error)
+            val templates = templateRepository.get()
+            if(templates != null)
+                setState2(TemplateState.Success(templates))
+            else setState2(TemplateState.Error)
+        }
     }
 
     fun addFolder(name: String, type: String, templateId: Id?) = launch {

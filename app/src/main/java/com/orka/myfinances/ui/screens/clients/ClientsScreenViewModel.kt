@@ -19,6 +19,7 @@ class ClientsScreenViewModel(
     repository = getRepository,
     logger = logger
 ) {
+
     fun add(name: String, lastName: String?, phone: String?, address: String?) = launch {
         val request = AddClientRequest(
             name = name,

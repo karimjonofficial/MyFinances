@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
-import com.orka.myfinances.ui.managers.navigation.Navigator
+import com.orka.myfinances.ui.managers.Navigator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +42,8 @@ fun TemplatesScreen(
 
         TemplatesContent(
             modifier = Modifier.scaffoldPadding(paddingValues),
-            state = uiState.value
+            state = uiState.value,
+            navigator = navigator
         )
     }
 }

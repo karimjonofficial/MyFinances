@@ -13,7 +13,7 @@ class ProductRepositoryTest : MainDispatcherContext() {
 
     @Test
     fun `When a product is added, the products flow is updated`() = runTest {
-        repository.events().test {
+        repository.events.test {
             repository.add(successfulAddProductRequest)
             assertEquals(ProductRepositoryEvent.Add(product1.id), awaitItem())
         }
@@ -24,7 +24,7 @@ class ProductRepositoryTest : MainDispatcherContext() {
         repository.add(failingAddProductRequest)
         advanceUntilIdle()
 
-        repository.events().test {
+        repository.events.test {
             expectNoEvents()
         }
     }

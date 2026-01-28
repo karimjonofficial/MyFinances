@@ -40,7 +40,7 @@ import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.ui.managers.navigation.Navigator
+import com.orka.myfinances.ui.managers.Navigator
 import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenState
 import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme

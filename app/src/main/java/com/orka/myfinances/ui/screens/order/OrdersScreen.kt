@@ -8,9 +8,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.repositories.order.OrderRepository
 import com.orka.myfinances.fixtures.managers.DummyNavigator
-import com.orka.myfinances.lib.LoggerImpl
+import com.orka.myfinances.application.LoggerImpl
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
-import com.orka.myfinances.ui.managers.navigation.Navigator
+import com.orka.myfinances.ui.managers.Navigator
 
 @Composable
 fun OrdersScreen(

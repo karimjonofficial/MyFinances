@@ -1,7 +1,7 @@
 package com.orka.myfinances.core
 
-import com.orka.myfinances.impl.ui.managers.NavigationManager
-import com.orka.myfinances.ui.managers.navigation.Destination
+import com.orka.myfinances.ui.navigation.NavigationManager
+import com.orka.myfinances.ui.navigation.Destination
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 

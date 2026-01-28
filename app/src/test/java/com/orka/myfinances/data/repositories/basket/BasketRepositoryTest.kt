@@ -42,7 +42,7 @@ class BasketRepositoryTest : MainDispatcherContext() {
         }
 
         @Test
-        fun `Nothing happens when item does not exist`() {
+        fun `Nothing happens when item does not exist`() = runTest {
             advanceUntilIdle()
             val old = repository.get()
             repository.remove(product2.id, amount)

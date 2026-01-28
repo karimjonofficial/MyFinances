@@ -6,11 +6,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.R
-import com.orka.myfinances.factories.viewmodel.Factory
+import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.lib.ui.models.ScreenTab
 import com.orka.myfinances.lib.ui.screens.MultipleTabScreen
-import com.orka.myfinances.ui.managers.navigation.Destination
+import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.ui.managers.Navigator
 import com.orka.myfinances.ui.screens.history.ReceiveContent
 import com.orka.myfinances.ui.screens.history.SaleContent
 
@@ -18,6 +19,7 @@ import com.orka.myfinances.ui.screens.history.SaleContent
 fun historyEntry(
     modifier: Modifier,
     destination: Destination.History,
+    navigator: Navigator,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val tabs = listOf(
@@ -27,7 +29,8 @@ fun historyEntry(
             content = { modifier ->
                 SaleContent(
                     modifier = modifier,
-                    viewModel = viewModel { factory.saleViewModel() }
+                    viewModel = viewModel { factory.saleViewModel() },
+                    navigator = navigator
                 )
             }
         ),
@@ -37,7 +40,8 @@ fun historyEntry(
             content = { modifier ->
                 ReceiveContent(
                     modifier = modifier,
-                    viewModel = viewModel { factory.receiveViewModel() }
+                    viewModel = viewModel { factory.receiveViewModel() },
+                    navigator = navigator
                 )
             }
         )

@@ -14,7 +14,7 @@ val receive1 = Receive(
     items = receiveItems,
     price = price,
     dateTime = dateTime,
-    description = description
+    description = "Shipment arrived via Northside Logistics. All items inspected for surface damage. Drill units batch #A-42 were slightly delayed but verified functional. Warehouse 4 storage zone B assigned for these units."
 )
 val receive2 = Receive(
     id = id2,

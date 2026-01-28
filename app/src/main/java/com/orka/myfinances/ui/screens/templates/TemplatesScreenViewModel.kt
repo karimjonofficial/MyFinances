@@ -1,7 +1,7 @@
 package com.orka.myfinances.ui.screens.templates
 
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.core.ViewModel
+import com.orka.myfinances.core.SingleStateViewModel
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.repositories.template.TemplateRepositoryEvent
 import com.orka.myfinances.lib.data.repositories.GetRepository
@@ -12,7 +12,7 @@ class TemplatesScreenViewModel(
     private val repository: GetRepository<Template>,
     private val events: Flow<TemplateRepositoryEvent>,
     logger: Logger
-) : ViewModel<TemplatesScreenState>(
+) : SingleStateViewModel<TemplatesScreenState>(
     initialState = TemplatesScreenState.Loading,
     logger = logger
 ) {
@@ -26,9 +26,11 @@ class TemplatesScreenViewModel(
         }
     }
 
-    fun initialize() = launch {
-        val templates = repository.get()
-        if (templates == null) updateState { TemplatesScreenState.Error }
-        else updateState { TemplatesScreenState.Success(templates) }
+    override fun initialize() {
+        launch {
+            val templates = repository.get()
+            if (templates == null) updateState { TemplatesScreenState.Error }
+            else updateState { TemplatesScreenState.Success(templates) }
+        }
     }
 }

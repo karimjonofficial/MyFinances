@@ -1,7 +1,7 @@
-package com.orka.myfinances.impl.ui.managers
+package com.orka.myfinances.ui.screens.main
 
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.core.ViewModel
+import com.orka.myfinances.core.SingleStateViewModel
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.repositories.basket.BasketRepository
@@ -19,35 +19,39 @@ import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.repositories.template.TemplateRepository
 import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.factories.ApiProvider
-import com.orka.myfinances.factories.viewmodel.Factory
+import com.orka.myfinances.factories.Factory
+import com.orka.myfinances.ui.navigation.NavigationManager
 import com.orka.myfinances.lib.extensions.models.makeSession
 import com.orka.myfinances.lib.extensions.models.toModel
-import com.orka.myfinances.ui.managers.navigation.Destination
-import com.orka.myfinances.ui.managers.session.SessionManager
-import com.orka.myfinances.ui.managers.session.UiState
+import com.orka.myfinances.ui.managers.SessionManager
+import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asStateFlow
 
 class UiManager(
     logger: Logger,
     private val storage: LocalSessionStorage,
     private val provider: ApiProvider
-) : ViewModel<UiState>(
+) : SingleStateViewModel<UiState>(
     initialState = UiState.Initial,
     logger = logger
 ), SessionManager {
     val uiState = state.asStateFlow()
 
-    fun initialize() = launch {
-        val sessionModel = storage.get()
+    override fun initialize() {
+        launch {
+            delay(100)
+            val sessionModel = storage.get()
 
-        if (sessionModel != null) {
-            val session = sessionModel.toSession()
-            openSession(session)
-        } else {
-            val apiService = provider.getCredentialApiService()
-            val viewModel = LoginScreenViewModel(logger, apiService, this)
-            setState(UiState.Guest(viewModel))
+            if (sessionModel != null) {
+                val session = sessionModel.toSession()
+                openSession(session)
+            } else {
+                val apiService = provider.getCredentialApiService()
+                val viewModel = LoginScreenViewModel(logger, apiService, this)
+                setState(UiState.Guest(viewModel))
+            }
         }
     }
 

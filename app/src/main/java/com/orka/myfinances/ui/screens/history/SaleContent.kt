@@ -6,13 +6,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.ui.screens.LazyColumnContent
+import com.orka.myfinances.ui.managers.Navigator
 import com.orka.myfinances.ui.screens.history.components.SaleCard
 import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
 
 @Composable
 fun SaleContent(
     modifier: Modifier = Modifier,
-    viewModel: SaleContentViewModel
+    viewModel: SaleContentViewModel,
+    navigator: Navigator
 ) {
     val state = viewModel.uiState.collectAsState()
 
@@ -22,6 +24,12 @@ fun SaleContent(
         arrangementSpace = 0.dp,
         state = state.value,
         viewModel = viewModel,
-        item = { modifier, sale -> SaleCard(modifier, sale) {} }
+        item = { modifier, sale ->
+            SaleCard(
+                modifier = modifier,
+                sale = sale,
+                onClick = { navigator.navigateToSale(it) }
+            )
+        }
     )
 }

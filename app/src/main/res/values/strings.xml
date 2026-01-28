@@ -108,4 +108,18 @@
     <string name="search">Search</string>
     <string name="screen">Screen</string>
     <string name="title">Title</string>
+    <string name="add_te">Add template</string>
+    <string name="add_template">Add template…</string>
+    <string name="fields">Fields</string>
+    <string name="total_price">Total price</string>
+    <string name="date_time"><![CDATA[Date & Time]]></string>
+    <string name="print_stock_labels">PRINT STOCK LABELS</string>
+    <string name="share_report">SHARE REPORT</string>
+    <string name="receive_detail">Receive Detail</string>
+    <string name="items_purchased">Items Purchased</string>
+    <string name="sale_details">Sale Details</string>
+    <string name="download_receipt">Download Receipt</string>
+    <string name="share_info">Share Info</string>
+    <string name="total_sale_value">Total Sale Value</string>
+    <string name="transaction_notes">Transaction Notes</string>
 </resources>

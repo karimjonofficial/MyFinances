@@ -1,10 +1,10 @@
 package com.orka.myfinances.ui.screens.login
 
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.core.ViewModel
+import com.orka.myfinances.core.SingleStateViewModel
 import com.orka.myfinances.data.api.CredentialApiService
 import com.orka.myfinances.data.models.Credential
-import com.orka.myfinances.ui.managers.session.SessionManager
+import com.orka.myfinances.ui.managers.SessionManager
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.yield
 
@@ -12,11 +12,13 @@ class LoginScreenViewModel(
     logger: Logger,
     private val apiService: CredentialApiService,
     private val manager: SessionManager
-) : ViewModel<LoginScreenState>(
+) : SingleStateViewModel<LoginScreenState>(
     initialState = LoginScreenState.Initial,
     logger = logger
 ) {
     val uiState = state.asStateFlow()
+
+    override fun initialize() {}
 
     fun authorize(username: String, password: String) = launch {
         launchAuthorization(username, password) {

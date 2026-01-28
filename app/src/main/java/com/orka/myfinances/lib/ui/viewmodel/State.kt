@@ -1,8 +1,10 @@
 package com.orka.myfinances.lib.ui.viewmodel
 
-sealed interface State<TLoading, TSuccess, TFailure> {
-    data class Initial<TLoading, TSuccess, TFailure>(val message: Unit = Unit) : State<TLoading, TSuccess, TFailure>
-    data class Loading<TLoading, TSuccess, TFailure>(val message: TLoading) : State<TLoading, TSuccess, TFailure>
-    data class Success<TLoading, TSuccess, TFailure>(val value: TSuccess) : State<TLoading, TSuccess, TFailure>
-    data class Failure<TLoading, TSuccess, TFailure>(val error: TFailure) : State<TLoading, TSuccess, TFailure>
+typealias N = Nothing
+
+sealed interface State<out L, out S, out F> {
+    data object Initial : State<N, N, N>
+    data class Loading<T>(val message: T) : State<T, N, N>
+    data class Success<T>(val value: T) : State<N, T, N>
+    data class Failure<T>(val error: T) : State<N, N, T>
 }

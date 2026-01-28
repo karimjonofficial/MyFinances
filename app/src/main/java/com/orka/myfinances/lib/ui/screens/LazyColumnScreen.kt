@@ -61,9 +61,7 @@ fun <TLoading, TSuccess, TFailure> LazyColumnScreen(
             item = item
         )
 
-        if (dialogState.value) {
-            dialog()
-        }
+        if (dialogState.value) dialog()
     }
 }
 
@@ -80,7 +78,7 @@ fun <TLoading, TSuccess, TFailure> LazyColumnScreen(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                title = { Text(title) }
+                title = { Text(text = title) }
             )
         },
         item = item,

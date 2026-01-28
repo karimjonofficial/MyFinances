@@ -1,8 +1,7 @@
 package com.orka.myfinances.ui.screens.home.viewmodel
 
-import android.util.Log
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.core.ViewModel
+import com.orka.myfinances.core.SingleStateViewModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.repositories.basket.BasketEvent
@@ -10,10 +9,10 @@ import com.orka.myfinances.data.repositories.basket.BasketRepository
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 
-class BasketContentViewModel(
+class BasketContentSingleStateViewModel(
     private val repository: BasketRepository,
     logger: Logger
-) : ViewModel<BasketState>(
+) : SingleStateViewModel<BasketState>(
     initialState = BasketState.Loading,
     logger = logger
 ) {
@@ -29,8 +28,7 @@ class BasketContentViewModel(
         }
     }
 
-    fun initialize() {
-        Log.d("BasketContentViewModel", "initialize:")
+    override fun initialize() {
         val items = repository.get()
         val price = items.sumOf { it.product.salePrice * it.amount }
         setState(BasketState.Success(items, price))

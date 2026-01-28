@@ -1,7 +1,7 @@
 package com.orka.myfinances.testFixtures.managers
 
 import com.orka.myfinances.data.models.Credential
-import com.orka.myfinances.ui.managers.session.SessionManager
+import com.orka.myfinances.ui.managers.SessionManager
 
 class DummySessionManager : SessionManager {
     override fun open(credential: Credential) {

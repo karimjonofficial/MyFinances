@@ -12,7 +12,7 @@ import com.orka.myfinances.testFixtures.managers.SpySessionManager
 import com.orka.myfinances.testFixtures.resources.password
 import com.orka.myfinances.testFixtures.resources.username
 import com.orka.myfinances.testLib.assertLoadingTransition
-import com.orka.myfinances.ui.managers.session.SessionManager
+import com.orka.myfinances.ui.managers.SessionManager
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -27,8 +27,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
         return ViewModel(
             apiService = apiService,
             manager = manager,
-            logger = logger,
-            coroutineScope = testScope
+            logger = logger
         )
     }
 

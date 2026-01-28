@@ -1,43 +1,50 @@
 package com.orka.myfinances.ui.screens.home.parts
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.fixtures.resources.models.template.templates
 import com.orka.myfinances.lib.ui.components.Dialog
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.RadioButton
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.ui.screens.home.viewmodel.TemplateState
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AddFolderDialog(
     state: TemplateState,
     dismissRequest: () -> Unit,
     onAddTemplateClick: () -> Unit,
     onSuccess: (String, String, Id?) -> Unit,
+    showTemplates: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     onCancel: () -> Unit
 ) {
     val name = rememberSaveable { mutableStateOf("") }
-    val templatesVisible = rememberSaveable { mutableStateOf(false) }
     val folderType = rememberSaveable { mutableIntStateOf(0) }
     val templateId = rememberSaveable { mutableStateOf<Id?>(null) }
-    val templates = if(state is TemplateState.Success) state.templates else null
+    val templates = if (state is TemplateState.Success) state.templates else null
 
-    val templatesVisibleValue = templatesVisible.value
+    val templatesVisibleValue = showTemplates.value
 
     Dialog(
         dismissRequest = dismissRequest,
@@ -48,7 +55,7 @@ fun AddFolderDialog(
         onCancel = onCancel,
         onSuccess = {
             val nameValue = name.value
-            val folderTypeValue = if(folderType.intValue == 0) "catalog" else "category"
+            val folderTypeValue = if (folderType.intValue == 0) "catalog" else "category"
             if (nameValue.isNotBlank()) onSuccess(nameValue, folderTypeValue, templateId.value)
         }
     ) {
@@ -72,7 +79,7 @@ fun AddFolderDialog(
                 selected = folderType.intValue == 0,
                 onClick = {
                     folderType.intValue = 0
-                    templatesVisible.value = false
+                    showTemplates.value = false
                 }
             )
 
@@ -83,38 +90,56 @@ fun AddFolderDialog(
                 selected = folderType.intValue == 1,
                 onClick = {
                     folderType.intValue = 1
-                    templatesVisible.value = true
+                    showTemplates.value = true
                 }
             )
 
-            if(templatesVisibleValue) {
+            if (templatesVisibleValue) {
                 val dropDownMenuExpanded = rememberSaveable { mutableStateOf(false) }
                 val templateValue = templates?.find { it.id == templateId.value }
 
                 VerticalSpacer(8)
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    OutlinedExposedDropDownTextField(
-                        modifier = Modifier.weight(1f),
-                        text = templateValue?.name ?: stringResource(R.string.select),
-                        label = stringResource(R.string.templates),
-                        menuExpanded = dropDownMenuExpanded.value,
-                        onExpandChange = { dropDownMenuExpanded.value = it },
-                        onDismissRequested = { dropDownMenuExpanded.value = false },
-                        items = templates,
-                        itemText = { it.name },
-                        onItemSelected = {
-                            templateId.value = it.id
-                        }
-                    )
-
-                    TextButton(onClick = onAddTemplateClick) {
-                        Text(text = stringResource(R.string.add))
+                OutlinedExposedDropDownTextField(
+                    text = templateValue?.name ?: stringResource(R.string.select),
+                    label = stringResource(R.string.templates),
+                    menuExpanded = dropDownMenuExpanded.value,
+                    onExpandChange = { dropDownMenuExpanded.value = it },
+                    onDismissRequested = { dropDownMenuExpanded.value = false },
+                    items = templates,
+                    itemText = { it.name },
+                    onItemSelected = {
+                        templateId.value = it.id
                     }
+                )
+
+                VerticalSpacer(8)
+                Row {
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    Text(
+                        modifier = Modifier.clickable { onAddTemplateClick() },
+                        text = stringResource(R.string.add_template),
+                        color = ButtonDefaults.textButtonColors().contentColor,
+                        style = MaterialTheme.typography.labelLarge
+                    )
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun AddFolderDialogPreview() {
+    ScaffoldPreview(title = "Home") {
+
+        AddFolderDialog(
+            state = TemplateState.Success(templates),
+            dismissRequest = {},
+            onAddTemplateClick = {},
+            onSuccess = { _, _, _ -> },
+            onCancel = {},
+            showTemplates = rememberSaveable { mutableStateOf(true) }
+        )
     }
 }

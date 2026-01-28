@@ -1,4 +1,4 @@
-package com.orka.myfinances.factories.viewmodel
+package com.orka.myfinances.factories
 
 import com.orka.myfinances.R
 import com.orka.myfinances.core.Logger
@@ -22,7 +22,7 @@ import com.orka.myfinances.ui.screens.clients.ClientsScreenViewModel
 import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenViewModel
 import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentViewModel
 import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
-import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentSingleStateViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
 import com.orka.myfinances.ui.screens.notification.NotificationScreenViewModel
 import com.orka.myfinances.ui.screens.order.OrdersScreenViewModel
@@ -53,7 +53,7 @@ class Factory(
             addRepository = folderRepository,
             templateRepository = templateRepository,
             logger = logger
-        ).apply { initialize() }
+        )
     }
 
     fun templatesViewModel(): TemplatesScreenViewModel {
@@ -86,7 +86,7 @@ class Factory(
             basketRepository = basketRepository,
             events = productRepository.events,
             logger = logger
-        ).apply { initialize() }
+        )
     }
 
     fun catalogViewModel(catalog: Catalog): CatalogScreenViewModel {
@@ -94,14 +94,14 @@ class Factory(
             catalog = catalog,
             repository = folderRepository,
             logger = logger
-        ).apply { initialize() }
+        )
     }
 
-    fun basketViewModel(): BasketContentViewModel {
-        return BasketContentViewModel(
+    fun basketViewModel(): BasketContentSingleStateViewModel {
+        return BasketContentSingleStateViewModel(
             repository = basketRepository,
             logger = logger
-        ).apply { initialize() }
+        )
     }
 
     fun clientsViewModel(): ClientsScreenViewModel {

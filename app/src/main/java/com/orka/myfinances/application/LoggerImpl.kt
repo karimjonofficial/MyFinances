@@ -1,4 +1,4 @@
-package com.orka.myfinances.lib
+package com.orka.myfinances.application
 
 import android.util.Log
 import com.orka.myfinances.core.Logger

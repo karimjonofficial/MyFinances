@@ -34,15 +34,17 @@ class WarehouseScreenViewModel(
         events.onEach { initialize() }.launchIn(viewModelScope)
     }
 
-    fun initialize() = launch {
-        val products = productRepository.get(category)
-        val stockItems = stockRepository.get(category)
-        if (products != null)
-            setState1(ProductsState.Success(products))
-        else setState1(ProductsState.Failure)
-        if (stockItems != null)
-            setState2(WarehouseState.Success(category, stockItems))
-        else setState2(WarehouseState.Failure)
+    override fun initialize() {
+        launch {
+            val products = productRepository.get(category)
+            val stockItems = stockRepository.get(category)
+            if (products != null)
+                setState1(ProductsState.Success(products))
+            else setState1(ProductsState.Failure)
+            if (stockItems != null)
+                setState2(WarehouseState.Success(category, stockItems))
+            else setState2(WarehouseState.Failure)
+        }
     }
 
     fun addToBasket(stockItem: StockItem) {
