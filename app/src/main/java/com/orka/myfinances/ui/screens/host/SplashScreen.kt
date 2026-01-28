@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.main
+package com.orka.myfinances.ui.screens.host
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

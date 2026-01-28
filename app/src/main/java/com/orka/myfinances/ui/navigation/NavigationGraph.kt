@@ -6,26 +6,26 @@ import androidx.compose.ui.Modifier
 import androidx.navigation3.ui.NavDisplay
 import com.orka.myfinances.data.models.User
 import com.orka.myfinances.factories.Factory
-import com.orka.myfinances.ui.navigation.NavigationManager
+import com.orka.myfinances.ui.managers.Navigator
 
 @Composable
 fun NavigationGraph(
     modifier: Modifier = Modifier,
     user: User,
     backStack: List<Destination>,
-    navigationManager: NavigationManager,
+    navigator: Navigator,
     factory: Factory
 ) {
     NavDisplay(
         modifier = modifier,
         backStack = backStack,
-        onBack = { navigationManager.back() },
+        onBack = { navigator.back() },
         entryProvider = { destination ->
             entryProvider(
                 modifier = Modifier.fillMaxSize(),
                 user = user,
                 destination = destination,
-                navigator = navigationManager,
+                navigator = navigator,
                 factory = factory
             )
         }

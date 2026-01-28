@@ -53,7 +53,7 @@ import kotlin.time.Clock
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DebtDetailScreen(
+fun DebtScreen(
     modifier: Modifier = Modifier,
     debt: Debt,
     onBackClick: () -> Unit,
@@ -324,9 +324,9 @@ fun TimelineAndStaffCard(
     showBackground = true
 )
 @Composable
-private fun DebtDetailScreenPreview() {
+private fun DebtScreenPreview() {
     MaterialTheme {
-        DebtDetailScreen(
+        DebtScreen(
             debt = debt1,
             onBackClick = {},
             onEditClick = {},

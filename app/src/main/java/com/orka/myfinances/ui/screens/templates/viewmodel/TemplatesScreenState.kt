@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.templates
+package com.orka.myfinances.ui.screens.templates.viewmodel
 
 import com.orka.myfinances.data.models.template.Template
 

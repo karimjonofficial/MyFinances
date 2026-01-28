@@ -16,5 +16,10 @@ fun ordersEntry(
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val viewModel = viewModel { factory.ordersViewModel() }
-    OrdersScreen(modifier, viewModel, navigator)
+
+    OrdersScreen(
+        modifier = modifier,
+        viewModel = viewModel,
+        navigator = navigator
+    )
 }

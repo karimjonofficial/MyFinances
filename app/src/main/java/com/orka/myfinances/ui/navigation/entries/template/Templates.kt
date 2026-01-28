@@ -15,7 +15,6 @@ fun templatesEntry(
     navigator: Navigator,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
-
     TemplatesScreen(
         modifier = modifier,
         viewModel = viewModel { factory.templatesViewModel() },

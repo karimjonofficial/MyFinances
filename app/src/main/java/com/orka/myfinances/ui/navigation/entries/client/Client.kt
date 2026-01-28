@@ -6,7 +6,9 @@ import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.screens.client.ClientScreen
 
-fun clientEntry(modifier: Modifier, destination: Destination.Client): NavEntry<Destination> =
-    entry(destination) {
-        ClientScreen(modifier, destination.client)
-    }
+fun clientEntry(
+    modifier: Modifier,
+    destination: Destination.Client
+): NavEntry<Destination> = entry(destination) {
+    ClientScreen(modifier, destination.client)
+}

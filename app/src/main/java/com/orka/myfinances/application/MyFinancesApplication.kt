@@ -2,7 +2,7 @@ package com.orka.myfinances.application
 
 import android.app.Application
 import com.orka.myfinances.fixtures.data.storages.LocalSessionStorageImpl
-import com.orka.myfinances.ui.screens.main.UiManager
+import com.orka.myfinances.ui.screens.host.UiManager
 
 class MyFinancesApplication : Application() {
     fun manager(): UiManager {

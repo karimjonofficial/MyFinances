@@ -12,6 +12,8 @@ import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.ui.managers.Navigator
+import com.orka.myfinances.ui.screens.templates.components.TemplateCard
+import com.orka.myfinances.ui.screens.templates.viewmodel.TemplatesScreenState
 
 @Composable
 fun TemplatesContent(

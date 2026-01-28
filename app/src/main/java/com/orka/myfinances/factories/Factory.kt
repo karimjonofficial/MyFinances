@@ -28,7 +28,7 @@ import com.orka.myfinances.ui.screens.notification.NotificationScreenViewModel
 import com.orka.myfinances.ui.screens.order.OrdersScreenViewModel
 import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
 import com.orka.myfinances.ui.screens.stock.AddReceiveScreenViewModel
-import com.orka.myfinances.ui.screens.templates.TemplatesScreenViewModel
+import com.orka.myfinances.ui.screens.templates.viewmodel.TemplatesScreenViewModel
 import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
 

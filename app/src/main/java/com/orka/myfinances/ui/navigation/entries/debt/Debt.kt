@@ -5,7 +5,7 @@ import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.managers.Navigator
-import com.orka.myfinances.ui.screens.debt.DebtDetailScreen
+import com.orka.myfinances.ui.screens.debt.DebtScreen
 
 fun debtEntry(
     modifier: Modifier = Modifier.Companion,
@@ -13,7 +13,7 @@ fun debtEntry(
     navigator: Navigator
 ): NavEntry<Destination> = entry(destination) {
 
-    DebtDetailScreen(
+    DebtScreen(
         modifier = modifier,
         debt = destination.debt,
         onBackClick = { navigator.back() },

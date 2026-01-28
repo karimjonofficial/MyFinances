@@ -17,8 +17,8 @@ import com.orka.myfinances.testFixtures.data.storages.SessionStorageStub
 import com.orka.myfinances.testFixtures.data.storages.SpySessionStorage
 import com.orka.myfinances.testFixtures.factories.api.ConfigurableApiProvider
 import com.orka.myfinances.testFixtures.factories.api.DummyApiProvider
-import com.orka.myfinances.ui.screens.main.UiManager
-import com.orka.myfinances.ui.screens.main.UiState
+import com.orka.myfinances.ui.screens.host.UiManager
+import com.orka.myfinances.ui.screens.host.UiState
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested

@@ -12,7 +12,6 @@ fun settingsEntry(
     modifier: Modifier,
     destination: Destination.Settings
 ): NavEntry<Destination> = entry(destination) {
-
     BlankScreen(
         modifier = modifier,
         title = stringResource(R.string.settings),

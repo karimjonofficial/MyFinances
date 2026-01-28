@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.main
+package com.orka.myfinances.ui.screens.host
 
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
