@@ -2,13 +2,13 @@ package com.orka.myfinances.lib.ui.viewmodel
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.SingleStateViewModel
-import com.orka.myfinances.lib.data.repositories.GetRepository
+import com.orka.myfinances.lib.data.repositories.Get
 import kotlinx.coroutines.flow.asStateFlow
 
 abstract class ListViewModel<TLoading, TSuccess, TFailure>(
     private val loading: TLoading,
     private val failure: TFailure,
-    private val repository: GetRepository<TSuccess>,
+    private val repository: Get<TSuccess>,
     logger: Logger
 ) : SingleStateViewModel<State<TLoading, List<TSuccess>, TFailure>>(
     initialState = State.Initial,

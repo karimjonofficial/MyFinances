@@ -7,13 +7,13 @@ import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.data.repositories.product.models.AddProductRequest
 import com.orka.myfinances.data.repositories.product.models.PropertyModel
-import com.orka.myfinances.lib.data.repositories.AddRepository
-import com.orka.myfinances.lib.data.repositories.GetRepository
+import com.orka.myfinances.lib.data.repositories.Add
+import com.orka.myfinances.lib.data.repositories.Get
 import kotlinx.coroutines.flow.asStateFlow
 
 class AddProductScreenViewModel(
-    private val productRepository: AddRepository<Product, AddProductRequest>,
-    private val categoryRepository: GetRepository<Category>,
+    private val productRepository: Add<Product, AddProductRequest>,
+    private val categoryRepository: Get<Category>,
     logger: Logger
 ) : SingleStateViewModel<AddProductScreenState>(
     initialState = AddProductScreenState.Loading,

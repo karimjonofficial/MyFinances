@@ -4,12 +4,12 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.SingleStateViewModel
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Folder
-import com.orka.myfinances.lib.data.repositories.GetByParameterRepository
+import com.orka.myfinances.lib.data.repositories.GetByParameter
 import kotlinx.coroutines.flow.asStateFlow
 
 class CatalogScreenViewModel(
     private val catalog: Catalog,
-    private val repository: GetByParameterRepository<Folder, Catalog>,
+    private val repository: GetByParameter<Folder, Catalog>,
     logger: Logger
 ) : SingleStateViewModel<CatalogScreenState>(
     initialState = CatalogScreenState.Loading,

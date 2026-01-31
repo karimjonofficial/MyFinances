@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.home
 
+import android.util.Log
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -11,27 +12,28 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.User
+import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.models.folder.Folder
+import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
 import com.orka.myfinances.ui.managers.Navigator
+import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
 import com.orka.myfinances.ui.screens.home.parts.BasketScreenTopBar
 import com.orka.myfinances.ui.screens.home.parts.HomeScreenTopBar
 import com.orka.myfinances.ui.screens.home.parts.ProfileTopBar
-import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentSingleStateViewModel
-import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    user: User,
-    foldersViewModel: FoldersContentViewModel,
-    basketViewModel: BasketContentSingleStateViewModel,
+    session: Session,
+    sessionManager: SessionManager,
+    factory: Factory,
     navigator: Navigator,
     selectFolder: (Folder) -> Unit
 ) {
@@ -64,9 +66,18 @@ fun HomeScreen(
     val navState = rememberSaveable { mutableIntStateOf(0) }
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
 
-    fun NavItem.getIconRes() = if(navState.intValue == index) iconRes.selected else iconRes.unSelected
-    fun showDialog() { dialogVisible.value = true }
-    fun hideDialog() { dialogVisible.value = false }
+    fun NavItem.getIconRes() =
+        if (navState.intValue == index) iconRes.selected else iconRes.unSelected
+
+    fun showDialog() {
+        dialogVisible.value = true
+    }
+
+    fun hideDialog() {
+        dialogVisible.value = false
+    }
+
+    Log.d("HomeScreen", "Recomposition")
 
     Scaffold(
         modifier = modifier,
@@ -78,8 +89,14 @@ fun HomeScreen(
                     onSearchClick = { navigator.navigateToSearch() }
                 )
 
-                1 -> BasketScreenTopBar(viewModel = basketViewModel)
-                2 -> ProfileTopBar(user = user)
+                1 -> {
+                    val viewModel = viewModel(key = session.office.id.toString()) {
+                        Log.d("ViewModel", "Required: ProfileViewModel for $session")
+                        factory.basketViewModel()
+                    }
+                    BasketScreenTopBar(viewModel = viewModel)
+                }
+                2 -> ProfileTopBar(user = session.user)
             }
         },
         bottomBar = {
@@ -104,9 +121,13 @@ fun HomeScreen(
     ) { paddingValues ->
         val m = Modifier.scaffoldPadding(paddingValues)
 
-        when(navState.intValue) {
+        when (navState.intValue) {
             0 -> {
-                val state = foldersViewModel.uiState.collectAsState()
+                val viewModel = viewModel(key = session.office.id.toString()) {
+                    Log.d("ViewModel", "Required: FolderViewModel for $session")
+                    factory.foldersViewModel()
+                }
+                val state = viewModel.uiState.collectAsState()
 
                 FoldersContent(
                     modifier = m,
@@ -115,7 +136,7 @@ fun HomeScreen(
                 )
 
                 if (dialogVisible.value) {
-                    val dialogState = foldersViewModel.dialogState.collectAsState()
+                    val dialogState = viewModel.dialogState.collectAsState()
 
                     AddFolderDialog(
                         state = dialogState.value,
@@ -125,7 +146,7 @@ fun HomeScreen(
                             hideDialog()
                         },
                         onSuccess = { name, type, templateId ->
-                            foldersViewModel.addFolder(name, type, templateId)
+                            viewModel.addFolder(name, type, templateId)
                             hideDialog()
                         },
                         onCancel = { hideDialog() }
@@ -134,21 +155,33 @@ fun HomeScreen(
             }
 
             1 -> {
-                val state = basketViewModel.uiState.collectAsState()
+                val viewModel = viewModel(key = session.office.id.toString()) {
+                    Log.d("ViewModel", "Required: BasketViewModel for $session")
+                    factory.basketViewModel()
+                }
+                val state = viewModel.uiState.collectAsState()
 
                 BasketContent(
                     modifier = m,
                     state = state.value,
-                    viewModel = basketViewModel,
+                    viewModel = viewModel,
                     navigator = navigator
                 )
             }
 
             2 -> {
+                val viewModel = viewModel(key = session.office.id.toString()) {
+                    Log.d("ViewModel", "Required: ProfileViewModel for $session")
+                    factory.profileViewModel()
+                }
+                val state = viewModel.uiState.collectAsState()
+
                 ProfileContent(
                     modifier = m,
-                    user = user,
-                    navigator = navigator
+                    session = session,
+                    state = state.value,
+                    navigator = navigator,
+                    sessionManager = sessionManager
                 )
             }
         }

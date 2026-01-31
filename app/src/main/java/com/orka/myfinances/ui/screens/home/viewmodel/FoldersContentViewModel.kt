@@ -6,14 +6,14 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.folder.Folder
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.repositories.folder.AddFolderRequest
-import com.orka.myfinances.lib.data.repositories.AddRepository
-import com.orka.myfinances.lib.data.repositories.GetRepository
+import com.orka.myfinances.lib.data.repositories.Add
+import com.orka.myfinances.lib.data.repositories.Get
 import kotlinx.coroutines.flow.asStateFlow
 
 class FoldersContentViewModel(
-    private val getRepository: GetRepository<Folder>,
-    private val addRepository: AddRepository<Folder, AddFolderRequest>,
-    private val templateRepository: GetRepository<Template>,
+    private val get: Get<Folder>,
+    private val add: Add<Folder, AddFolderRequest>,
+    private val templateRepository: Get<Template>,
     logger: Logger
 ) : DualStateViewModel<FoldersState, TemplateState>(
     initialState1 = FoldersState.Initial,
@@ -26,7 +26,7 @@ class FoldersContentViewModel(
     override fun initialize() {
         launch {
             setState1(FoldersState.Loading)
-            val folders = getRepository.get()
+            val folders = get.get()
             if(folders != null)
                 setState1(FoldersState.Success(folders))
             else setState1(FoldersState.Error)
@@ -41,9 +41,9 @@ class FoldersContentViewModel(
         val previousState = state1.value
         setState1(FoldersState.Loading)
         val request = AddFolderRequest(name, type, templateId)
-        val folder = addRepository.add(request)
+        val folder = add.add(request)
         if(folder != null) {
-            val folders = getRepository.get()
+            val folders = get.get()
             setState1(FoldersState.Success(folders!!))
         }
         else setState1(previousState)

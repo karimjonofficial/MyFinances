@@ -11,6 +11,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SplitButtonDefaults
 import androidx.compose.material3.SplitButtonLayout
 import androidx.compose.material3.Text
@@ -31,8 +32,8 @@ import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.lib.extensions.models.getPrice
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
-import com.orka.myfinances.lib.ui.components.ExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.LazyColumn
 import com.orka.myfinances.ui.managers.Navigator
@@ -62,7 +63,7 @@ fun CheckoutContent(
             TopAppBar(title = { Text(text = stringResource(R.string.checkout)) })
         },
         bottomBar = {
-            BottomAppBar(contentPadding = PaddingValues(horizontal = 8.dp)) {
+            BottomAppBar(contentPadding = PaddingValues(horizontal = 16.dp)) {
 
                 Column(modifier = Modifier.weight(1f)) {
 
@@ -152,7 +153,7 @@ fun CheckoutContent(
                 }
             )
 
-            ExposedDropDownTextField(
+            OutlinedExposedDropDownTextField(
                 modifier = Modifier.fillMaxWidth(),
                 text = selectedClient?.firstName ?: stringResource(R.string.clients),
                 label = stringResource(R.string.clients),
@@ -165,13 +166,15 @@ fun CheckoutContent(
             )
 
             VerticalSpacer(4)
-            TextField(
+            OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = description.value,
                 minLines = 3,
                 onValueChange = { description.value = it },
                 label = { Text(text = stringResource(R.string.description)) }
             )
+
+            VerticalSpacer(8)
         }
     }
 }

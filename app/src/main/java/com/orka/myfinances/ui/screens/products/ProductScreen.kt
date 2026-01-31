@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AssistChip
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -303,22 +304,12 @@ private fun BottomActionBar(
     modifier: Modifier = Modifier,
     onAddToCart: () -> Unit
 ) {
-    Surface(
-        modifier = modifier,
-        shadowElevation = 8.dp
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+    BottomAppBar(modifier = modifier) {
+        Button(
+            onClick = onAddToCart,
+            modifier = Modifier.weight(2f)
         ) {
-            Button(
-                onClick = onAddToCart,
-                modifier = Modifier.weight(2f)
-            ) {
-                Text(stringResource(R.string.add_to_cart))
-            }
+            Text(stringResource(R.string.add_to_cart))
         }
     }
 }

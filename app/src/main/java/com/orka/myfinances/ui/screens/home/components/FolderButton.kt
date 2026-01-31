@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -115,7 +116,7 @@ private fun BaseFolderButton(
     Box(
         modifier = modifier
             .clip(
-                RoundedCornerShape(
+                shape = RoundedCornerShape(
                     topStart = topStart,
                     topEnd = topEnd,
                     bottomEnd = bottomEnd,
@@ -138,6 +139,8 @@ private fun BaseFolderButton(
             ) {
                 Text(
                     text = folder.name,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
@@ -186,7 +189,6 @@ private fun ProductFolderPreview() {
     MyFinancesTheme {
         Box(
             modifier = Modifier
-                .fillMaxSize()
                 .background(Color.White)
                 .padding(16.dp),
             contentAlignment = Alignment.Center

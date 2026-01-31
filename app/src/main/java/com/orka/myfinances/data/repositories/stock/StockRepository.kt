@@ -12,8 +12,8 @@ class StockRepository : MockGetRepository<StockItem>, MockGetByIdRepository<Stoc
     MockGetByParameterRepository<StockItem, Category> {
     override val items = stockItems.toMutableList()
 
-    override suspend fun List<StockItem>.filter(parameter: Category): List<StockItem>? {
-        return filter { it.product.title.category == parameter }.ifEmpty { null }
+    override suspend fun List<StockItem>.filter(parameter: Category): List<StockItem> {
+        return filter { it.product.title.category == parameter }
     }
 
     override suspend fun List<StockItem>.find(id: Id): StockItem? {

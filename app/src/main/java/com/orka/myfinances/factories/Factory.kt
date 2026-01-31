@@ -2,6 +2,7 @@ package com.orka.myfinances.factories
 
 import com.orka.myfinances.R
 import com.orka.myfinances.core.Logger
+import com.orka.myfinances.data.api.OfficeApi
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.repositories.basket.BasketRepository
@@ -16,14 +17,16 @@ import com.orka.myfinances.data.repositories.receive.ReceiveRepository
 import com.orka.myfinances.data.repositories.sale.SaleRepository
 import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.repositories.template.TemplateRepository
+import com.orka.myfinances.lib.ui.models.Text
 import com.orka.myfinances.ui.screens.catalog.CatalogScreenViewModel
 import com.orka.myfinances.ui.screens.checkout.CheckoutScreenViewModel
 import com.orka.myfinances.ui.screens.clients.ClientsScreenViewModel
 import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenViewModel
 import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentViewModel
 import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
-import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentSingleStateViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.ProfileContentViewModel
 import com.orka.myfinances.ui.screens.notification.NotificationScreenViewModel
 import com.orka.myfinances.ui.screens.order.OrdersScreenViewModel
 import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
@@ -33,6 +36,7 @@ import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
 
 class Factory(
+    private val officeApi: OfficeApi,
     private val folderRepository: FolderRepository,
     private val templateRepository: TemplateRepository,
     private val productRepository: ProductRepository,
@@ -49,8 +53,8 @@ class Factory(
 ) {
     fun foldersViewModel(): FoldersContentViewModel {
         return FoldersContentViewModel(
-            getRepository = folderRepository,
-            addRepository = folderRepository,
+            get = folderRepository,
+            add = folderRepository,
             templateRepository = templateRepository,
             logger = logger
         )
@@ -97,8 +101,8 @@ class Factory(
         )
     }
 
-    fun basketViewModel(): BasketContentSingleStateViewModel {
-        return BasketContentSingleStateViewModel(
+    fun basketViewModel(): BasketContentViewModel {
+        return BasketContentViewModel(
             repository = basketRepository,
             logger = logger
         )
@@ -106,8 +110,8 @@ class Factory(
 
     fun clientsViewModel(): ClientsScreenViewModel {
         return ClientsScreenViewModel(
-            getRepository = clientRepository,
-            addRepository = clientRepository,
+            get = clientRepository,
+            add = clientRepository,
             loading = R.string.loading,
             failure = R.string.failure,
             logger = logger
@@ -167,8 +171,17 @@ class Factory(
     fun debtsViewModel(): DebtScreenViewModel {
         return DebtScreenViewModel(
             debtRepository = debtRepository,
-            addRepository = debtRepository,
+            add = debtRepository,
             clientRepository = clientRepository,
+            logger = logger
+        )
+    }
+
+    fun profileViewModel(): ProfileContentViewModel {
+        return ProfileContentViewModel(
+            loading = Text.Res(R.string.loading),
+            failure = Text.Res(R.string.failure),
+            repository = officeApi,
             logger = logger
         )
     }

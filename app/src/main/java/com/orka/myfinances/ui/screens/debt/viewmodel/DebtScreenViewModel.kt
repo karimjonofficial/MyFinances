@@ -4,16 +4,16 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.Debt
 import com.orka.myfinances.data.repositories.debt.AddDebtRequest
-import com.orka.myfinances.lib.data.repositories.AddRepository
-import com.orka.myfinances.lib.data.repositories.GetRepository
+import com.orka.myfinances.lib.data.repositories.Add
+import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class DebtScreenViewModel(
-    debtRepository: GetRepository<Debt>,
-    private val addRepository: AddRepository<Debt, AddDebtRequest>,
-    private val clientRepository: GetRepository<Client>,
+    debtRepository: Get<Debt>,
+    private val add: Add<Debt, AddDebtRequest>,
+    private val clientRepository: Get<Client>,
     logger: Logger
 ) : ListViewModel<Unit, Debt, Unit>(
     loading = Unit,
@@ -25,7 +25,7 @@ class DebtScreenViewModel(
     val dialogState = _dialogState.asStateFlow()
 
     fun add(request: AddDebtRequest) = launch {
-        addRepository.add(request)?.let { initialize() }
+        add.add(request)?.let { initialize() }
     }
 
     fun initializeClients() = launch {

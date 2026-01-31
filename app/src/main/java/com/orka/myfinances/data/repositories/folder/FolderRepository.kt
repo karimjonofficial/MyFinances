@@ -6,17 +6,18 @@ import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.folder.Folder
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.fixtures.resources.models.folder.folders
-import com.orka.myfinances.lib.data.repositories.GetByIdRepository
-import com.orka.myfinances.lib.data.repositories.GetByParameterRepository
+import com.orka.myfinances.lib.data.repositories.GetById
+import com.orka.myfinances.lib.data.repositories.GetByParameter
 import com.orka.myfinances.lib.fixtures.data.repositories.MockAddRepository
 import com.orka.myfinances.lib.fixtures.data.repositories.MockGetRepository
 
-class FolderRepository(private val templateRepository: GetByIdRepository<Template>) :
+class FolderRepository(private val templateRepository: GetById<Template>) :
     MockGetRepository<Folder>, MockAddRepository<Folder, AddFolderRequest>,
-    GetByParameterRepository<Folder, Catalog> {
+    GetByParameter<Folder, Catalog> {
     override val items = folders.toMutableList()
 
     override suspend fun get(parameter: Catalog): List<Folder> {
+        //TODO filter folders by catalog
         return folders
     }
 

@@ -10,7 +10,7 @@ import com.orka.myfinances.lib.extensions.models.toId
 data class SessionModel(
     val user: UserModel,
     val credential: Credential,
-    val companyOffice: CompanyOfficeModel,
+    val companyOffice: OfficeModel,
     val company: CompanyModel
 ) {
     fun toSession(): Session {
@@ -34,7 +34,6 @@ data class SessionModel(
             id = this.companyOffice.id.toId(),
             name = this.companyOffice.name,
             company = company,
-            templates = this.companyOffice.templates,
             address = this.companyOffice.address,
             phone = this.companyOffice.phone
         )

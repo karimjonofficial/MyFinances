@@ -8,7 +8,7 @@ import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.ProductRepositoryEvent
-import com.orka.myfinances.lib.data.repositories.GetByParameterRepository
+import com.orka.myfinances.lib.data.repositories.GetByParameter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,8 +17,8 @@ import kotlinx.coroutines.flow.onEach
 
 class WarehouseScreenViewModel(
     private val category: Category,
-    private val productRepository: GetByParameterRepository<Product, Category>,
-    private val stockRepository: GetByParameterRepository<StockItem, Category>,
+    private val productRepository: GetByParameter<Product, Category>,
+    private val stockRepository: GetByParameter<StockItem, Category>,
     private val basketRepository: BasketRepository,
     events: Flow<ProductRepositoryEvent>,
     logger: Logger

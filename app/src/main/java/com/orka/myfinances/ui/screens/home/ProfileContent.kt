@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,8 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,23 +30,35 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.User
+import com.orka.myfinances.data.models.Office
+import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.fixtures.managers.DummyNavigator
+import com.orka.myfinances.fixtures.managers.DummySessionManager
+import com.orka.myfinances.fixtures.resources.models.office1
+import com.orka.myfinances.fixtures.resources.models.session
 import com.orka.myfinances.fixtures.resources.models.user1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
+import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.Scaffold
+import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
+import com.orka.myfinances.lib.ui.models.Text
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.managers.Navigator
+import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.screens.home.parts.ProfileTopBar
 
 @Composable
 fun ProfileContent(
     modifier: Modifier,
-    user: User,
-    navigator: Navigator
+    state: State<Text, List<Office>, Text>,
+    session: Session,
+    navigator: Navigator,
+    sessionManager: SessionManager
 ) {
+    Log.d("ProfileContent", "Recomposition")
     val options = listOf(
         ProfileOption(
             index = 0,
@@ -76,6 +91,7 @@ fun ProfileContent(
             action = { navigator.navigateToDebts() }
         )
     )
+    val exposed = rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = modifier,
@@ -92,8 +108,30 @@ fun ProfileContent(
         )
 
         VerticalSpacer(8)
-        Text(text = "ID: ${user.id.value}")
-        Text(text = user.phone ?: stringResource(R.string.no_phone_number))
+        Text(text = "ID: ${session.user.id.value}")
+        Text(text = session.user.phone ?: stringResource(R.string.no_phone_number))
+
+        OutlinedExposedDropDownTextField(
+            text = when (state) {
+                is State.Initial -> stringResource(R.string.loading)
+                is State.Success -> session.office.name
+                is State.Failure -> state.error.str()
+                is State.Loading -> state.message.str()
+            },
+            label = "",
+            menuExpanded = exposed.value,
+            onExpandChange = { exposed.value = it },
+            onDismissRequested = { exposed.value = false },
+            items = when (state) {
+                is State.Success -> state.value
+                else -> emptyList()
+            },
+            itemText = { it.name },
+            onItemSelected = { office ->
+                sessionManager.setOffice(session.credential, office)
+                exposed.value = false
+            }
+        )
 
         VerticalSpacer(16)
         HorizontalDivider(
@@ -110,10 +148,7 @@ fun ProfileContent(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(items = options) {
-                Button(
-                    modifier = Modifier.weight(1f),
-                    onClick = it.action
-                ) {
+                Button(onClick = it.action) {
                     Text(text = it.name)
                 }
             }
@@ -179,8 +214,10 @@ private fun ProfileContentPreview() {
 
         ProfileContent(
             modifier = Modifier.scaffoldPadding(paddingValues),
-            user = user1,
-            navigator = DummyNavigator()
+            session = session,
+            navigator = DummyNavigator(),
+            state = State.Success(listOf(office1)),
+            sessionManager = DummySessionManager()
         )
     }
 }

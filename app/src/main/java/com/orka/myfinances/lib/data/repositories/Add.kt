@@ -1,5 +1,5 @@
 package com.orka.myfinances.lib.data.repositories
 
-interface AddRepository<T, R> {
+fun interface Add<T, R> {
     suspend fun add(request: R): T?
 }

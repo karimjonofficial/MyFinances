@@ -7,6 +7,7 @@ import com.orka.myfinances.fixtures.resources.models.client1
 import com.orka.myfinances.fixtures.resources.models.client2
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.id2
+import com.orka.myfinances.fixtures.resources.models.office1
 import com.orka.myfinances.fixtures.resources.models.user1
 import com.orka.myfinances.fixtures.resources.price
 
@@ -17,6 +18,7 @@ val sale1 = Sale(
     items = saleItems,
     price = price,
     dateTime = dateTime,
+    office = office1,
     description = "Client requested gift wrapping for the briefcase. Discount code 'LOYALTY10' applied at checkout. Delivery scheduled for priority courier on Monday morning."
 )
 val sale2 = Sale(
@@ -26,6 +28,7 @@ val sale2 = Sale(
     items = saleItems,
     price = price,
     dateTime = dateTime,
+    office = office1,
     description = description
 )
 

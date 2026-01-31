@@ -4,6 +4,7 @@ import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.fixtures.resources.dateTime
 import com.orka.myfinances.fixtures.resources.description
 import com.orka.myfinances.fixtures.resources.models.folder.category1
+import com.orka.myfinances.fixtures.resources.models.folder.category2
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.id2
 import com.orka.myfinances.fixtures.resources.price
@@ -27,7 +28,7 @@ val productTitle2 = ProductTitle(
     defaultPrice = price,
     defaultSalePrice = salePrice,
     dateTime = dateTime,
-    category = category1,
+    category = category2,
     properties = properties,
     description = description
 )

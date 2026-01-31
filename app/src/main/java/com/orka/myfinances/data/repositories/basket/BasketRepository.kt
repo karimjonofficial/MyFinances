@@ -3,13 +3,13 @@ package com.orka.myfinances.data.repositories.basket
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.models.product.Product
-import com.orka.myfinances.lib.data.repositories.GetByIdRepository
+import com.orka.myfinances.lib.data.repositories.GetById
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-class BasketRepository(private val productRepository: GetByIdRepository<Product>) {
+class BasketRepository(private val productRepository: GetById<Product>) {
     private val mutex = Mutex()
     private val items = mutableListOf<BasketItem>()
 

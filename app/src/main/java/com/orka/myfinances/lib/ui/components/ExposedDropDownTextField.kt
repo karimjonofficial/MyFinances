@@ -80,7 +80,7 @@ fun <T> OutlinedExposedDropDownTextField(
         OutlinedTextField(
             value = text,
             onValueChange = {},
-            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+            modifier = modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
             readOnly = true,
             label = { Text(text = label) },
             singleLine = true,

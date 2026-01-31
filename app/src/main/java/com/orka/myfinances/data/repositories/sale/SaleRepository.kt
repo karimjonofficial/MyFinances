@@ -5,6 +5,7 @@ import com.orka.myfinances.data.models.sale.SaleItem
 import com.orka.myfinances.fixtures.resources.dateTime
 import com.orka.myfinances.fixtures.resources.models.client1
 import com.orka.myfinances.fixtures.resources.models.id1
+import com.orka.myfinances.fixtures.resources.models.office1
 import com.orka.myfinances.fixtures.resources.models.product.product1
 import com.orka.myfinances.fixtures.resources.models.sale.sales
 import com.orka.myfinances.fixtures.resources.models.user1
@@ -23,6 +24,7 @@ class SaleRepository : MockGetRepository<Sale>, MockAddRepository<Sale, AddSaleR
             price = price,
             dateTime = dateTime,
             items = items.map { it.toSaleItem() },
+            office = office1,
             description = description
         )
     }

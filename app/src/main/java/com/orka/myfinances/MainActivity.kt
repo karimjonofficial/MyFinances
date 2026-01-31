@@ -24,7 +24,8 @@ class MainActivity : ComponentActivity() {
             MyFinancesTheme {
                 HostScreen(
                     modifier = Modifier.fillMaxSize(),
-                    state = uiState.value
+                    state = uiState.value,
+                    sessionManager = manager
                 )
             }
         }

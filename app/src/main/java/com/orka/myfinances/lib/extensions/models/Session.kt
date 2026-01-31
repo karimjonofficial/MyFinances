@@ -6,7 +6,7 @@ import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.models.User
 import com.orka.myfinances.data.zipped.CompanyModel
-import com.orka.myfinances.data.zipped.CompanyOfficeModel
+import com.orka.myfinances.data.zipped.OfficeModel
 import com.orka.myfinances.data.zipped.SessionModel
 import com.orka.myfinances.data.zipped.UserModel
 
@@ -22,7 +22,7 @@ fun Session.toModel(): SessionModel {
 fun makeSession(
     credential: Credential,
     userModel: UserModel,
-    companyOfficeModel: CompanyOfficeModel,
+    officeModel: OfficeModel,
     companyModel: CompanyModel
 ): Session {
     val company = Company(
@@ -32,11 +32,10 @@ fun makeSession(
         phone = companyModel.phone
     )
     val office = Office(
-        id = companyOfficeModel.id.toId(),
-        name = companyOfficeModel.name,
-        templates = companyOfficeModel.templates,
-        address = companyOfficeModel.address,
-        phone = companyOfficeModel.phone,
+        id = officeModel.id.toId(),
+        name = officeModel.name,
+        address = officeModel.address,
+        phone = officeModel.phone,
         company = company
     )
     val user = User(

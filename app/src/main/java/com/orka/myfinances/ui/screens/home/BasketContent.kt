@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,33 +38,35 @@ import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.ui.managers.Navigator
 import com.orka.myfinances.ui.screens.home.components.BasketItemCard
-import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentSingleStateViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketState
 
 @Composable
 fun BasketContent(
     modifier: Modifier = Modifier,
     state: BasketState,
-    viewModel: BasketContentSingleStateViewModel,
+    viewModel: BasketContentViewModel,
     navigator: Navigator
 ) {
+    Log.d("BasketContent", "Recomposition")
     when (state) {
         is BasketState.Loading -> LoadingScreen(modifier)
 
         is BasketState.Success -> {
             Column(modifier = modifier) {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 8.dp)
-                ) {
+                Column(modifier = Modifier.weight(1f)) {
                     if (state.items.isNotEmpty()) {
-                        Text(text = stringResource(R.string.items))
 
-                        VerticalSpacer(4)
                         LazyColumn(
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(horizontal = 8.dp)
                         ) {
+                            item {
+                                Text(text = stringResource(R.string.items))
+                                VerticalSpacer(4)
+                            }
+
                             items(items = state.items) {
                                 BasketItemCard(
                                     item = it,
@@ -77,8 +80,8 @@ fun BasketContent(
 
                         Row(
                             modifier = Modifier
-                                .background(MaterialTheme.colorScheme.surfaceContainer)
                                 .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.surfaceContainer)
                                 .padding(8.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
@@ -123,7 +126,7 @@ private fun BasketContentPreview() {
     val productRepository = ProductRepository(ProductTitleRepository())
     val basketRepository = BasketRepository(productRepository)
     val viewModel = viewModel {
-        BasketContentSingleStateViewModel(
+        BasketContentViewModel(
             repository = basketRepository,
             logger = logger
         )

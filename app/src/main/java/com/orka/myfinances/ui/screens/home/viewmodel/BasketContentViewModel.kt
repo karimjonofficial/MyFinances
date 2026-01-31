@@ -9,7 +9,7 @@ import com.orka.myfinances.data.repositories.basket.BasketRepository
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 
-class BasketContentSingleStateViewModel(
+class BasketContentViewModel(
     private val repository: BasketRepository,
     logger: Logger
 ) : SingleStateViewModel<BasketState>(

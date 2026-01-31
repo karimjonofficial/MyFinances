@@ -1,5 +1,5 @@
 package com.orka.myfinances.lib.data.repositories
 
-interface GetByParameterRepository<T, P> {
+fun interface GetByParameter<T, P> {
     suspend fun get(parameter: P): List<T>?
 }

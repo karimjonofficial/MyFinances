@@ -9,7 +9,6 @@ val office = Office(
     id = id1,
     name = name,
     company = company,
-    templates = emptyList(),
     address = address,
     phone = phone
 )

@@ -4,12 +4,12 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.SingleStateViewModel
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.repositories.template.TemplateRepositoryEvent
-import com.orka.myfinances.lib.data.repositories.GetRepository
+import com.orka.myfinances.lib.data.repositories.Get
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
 
 class TemplatesScreenViewModel(
-    private val repository: GetRepository<Template>,
+    private val repository: Get<Template>,
     private val events: Flow<TemplateRepositoryEvent>,
     logger: Logger
 ) : SingleStateViewModel<TemplatesScreenState>(

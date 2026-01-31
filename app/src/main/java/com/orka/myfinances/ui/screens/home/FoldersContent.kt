@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.home
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.carousel.rememberCarouselState
@@ -20,6 +21,7 @@ fun FoldersContent(
     state: FoldersState,
     onNavigateToFolder: (Folder) -> Unit
 ) {
+    Log.d("FolderContent", "Recomposition")
     when (state) {
         is FoldersState.Initial -> LoadingScreen(modifier)
         is FoldersState.Error -> FailureScreen(modifier)

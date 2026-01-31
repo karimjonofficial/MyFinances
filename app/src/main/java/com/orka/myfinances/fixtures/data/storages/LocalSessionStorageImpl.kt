@@ -14,7 +14,7 @@ class LocalSessionStorageImpl : LocalSessionStorage {
         return makeSession(
             credential = credential,
             userModel = user1.toModel(),
-            companyOfficeModel = office1.toModel(),
+            officeModel = office1.toModel(),
             companyModel = company1.toModel()
         ).toModel()
     }

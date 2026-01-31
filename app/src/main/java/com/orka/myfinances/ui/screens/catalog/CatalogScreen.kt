@@ -14,7 +14,7 @@ fun CatalogScreen(
     state: CatalogScreenState,
     viewModel: CatalogScreenViewModel,
     navigator: Navigator
-) {
+) {//TODO add add button
     Scaffold(
         modifier = modifier,
         title = catalog.name

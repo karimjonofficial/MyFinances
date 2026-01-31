@@ -21,7 +21,7 @@ class ProductRepository(private val repository: ProductTitleRepository) :
     override val items = products.toMutableList()
 
     private val flow = MutableSharedFlow<ProductRepositoryEvent>()
-    val events: Flow<ProductRepositoryEvent> = flow as Flow<ProductRepositoryEvent>
+    val events: Flow<ProductRepositoryEvent> = flow
 
     override suspend fun AddProductRequest.map(): Product {
         val title = repository.getById(titleId)!!
@@ -42,9 +42,9 @@ class ProductRepository(private val repository: ProductTitleRepository) :
         return title != null
     }
 
-    override suspend fun List<Product>.filter(parameter: Category): List<Product>? {
+    override suspend fun List<Product>.filter(parameter: Category): List<Product> {
         val list = items.filter { it.title.category == parameter }
-        return list.ifEmpty { null }
+        return list
     }
 
     override suspend fun List<Product>.find(id: Id): Product? {

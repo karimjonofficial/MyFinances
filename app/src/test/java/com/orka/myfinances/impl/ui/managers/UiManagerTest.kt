@@ -7,8 +7,8 @@ import com.orka.myfinances.fixtures.resources.models.credential
 import com.orka.myfinances.testFixtures.DummyLogger
 import com.orka.myfinances.testFixtures.data.api.company.CompanyApiServiceStub
 import com.orka.myfinances.testFixtures.data.api.company.EmptyCompanyApiServiceStub
-import com.orka.myfinances.testFixtures.data.api.companyOffice.CompanyOfficeApiServiceStub
-import com.orka.myfinances.testFixtures.data.api.companyOffice.EmptyCompanyOfficeApiServiceStub
+import com.orka.myfinances.testFixtures.data.api.companyOffice.OfficeApiStub
+import com.orka.myfinances.testFixtures.data.api.companyOffice.EmptyOfficeApiStub
 import com.orka.myfinances.testFixtures.data.api.user.EmptyUserApiServiceStub
 import com.orka.myfinances.testFixtures.data.api.user.UserApiServiceStub
 import com.orka.myfinances.testFixtures.data.storages.DummySessionStorage
@@ -82,7 +82,7 @@ class UiManagerTest : MainDispatcherContext() {
                 fun setup() {
                     provider.setUserApiService(EmptyUserApiServiceStub())
                     provider.setCompanyApiService(CompanyApiServiceStub())
-                    provider.setCompanyOfficeApiService(CompanyOfficeApiServiceStub())
+                    provider.setCompanyOfficeApiService(OfficeApiStub())
                 }
 
                 @Test
@@ -108,7 +108,7 @@ class UiManagerTest : MainDispatcherContext() {
                 fun setup() {
                     provider.setUserApiService(UserApiServiceStub())
                     provider.setCompanyApiService(EmptyCompanyApiServiceStub())
-                    provider.setCompanyOfficeApiService(CompanyOfficeApiServiceStub())
+                    provider.setCompanyOfficeApiService(OfficeApiStub())
                 }
 
                 @Test
@@ -134,7 +134,7 @@ class UiManagerTest : MainDispatcherContext() {
                 fun setup() {
                     provider.setUserApiService(UserApiServiceStub())
                     provider.setCompanyApiService(CompanyApiServiceStub())
-                    provider.setCompanyOfficeApiService(EmptyCompanyOfficeApiServiceStub())
+                    provider.setCompanyOfficeApiService(EmptyOfficeApiStub())
                 }
 
                 @Test
@@ -160,7 +160,7 @@ class UiManagerTest : MainDispatcherContext() {
                 fun setup() {
                     provider.setUserApiService(UserApiServiceStub())
                     provider.setCompanyApiService(CompanyApiServiceStub())
-                    provider.setCompanyOfficeApiService(CompanyOfficeApiServiceStub())
+                    provider.setCompanyOfficeApiService(OfficeApiStub())
                 }
 
                 @Test
@@ -184,7 +184,7 @@ class UiManagerTest : MainDispatcherContext() {
             val storage = SpySessionStorage()
             provider.setUserApiService(UserApiServiceStub())
             provider.setCompanyApiService(CompanyApiServiceStub())
-            provider.setCompanyOfficeApiService(CompanyOfficeApiServiceStub())
+            provider.setCompanyOfficeApiService(OfficeApiStub())
             val manager = uiManager(storage)
 
             manager.store(credential)

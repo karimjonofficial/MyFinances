@@ -20,7 +20,7 @@ fun Scaffold(
     content: @Composable (PaddingValues) -> Unit
 ) {
     MScaffold(
-        modifier = modifier.clip(RoundedCornerShape(48.dp)),
+        modifier = modifier,
         topBar = topBar,
         bottomBar = bottomBar,
         floatingActionButton = floatingActionButton,

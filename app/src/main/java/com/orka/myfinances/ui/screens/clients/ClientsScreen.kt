@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.repositories.client.ClientRepository
@@ -54,6 +55,7 @@ fun ClientsScreen(
                 }
             )
         },
+        arrangementSpace = 2.dp,
         item = { modifier, client ->
             ClientCard(
                 modifier = modifier,
@@ -70,8 +72,8 @@ private fun ClientsScreenPreview() {
     val repository = ClientRepository()
     val viewModel = viewModel {
         ClientsScreenViewModel(
-            getRepository = repository,
-            addRepository = repository,
+            get = repository,
+            add = repository,
             loading = R.string.loading,
             failure = R.string.failure,
             logger = LoggerImpl()

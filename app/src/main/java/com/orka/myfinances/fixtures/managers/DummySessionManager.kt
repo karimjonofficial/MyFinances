@@ -1,6 +1,7 @@
-package com.orka.myfinances.testFixtures.managers
+package com.orka.myfinances.fixtures.managers
 
 import com.orka.myfinances.data.models.Credential
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.ui.managers.SessionManager
 

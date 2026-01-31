@@ -11,14 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
-import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentSingleStateViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.BasketState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BasketScreenTopBar(
     modifier: Modifier = Modifier,
-    viewModel: BasketContentSingleStateViewModel
+    viewModel: BasketContentViewModel
 ) {
     TopAppBar(
         modifier = modifier,

@@ -1,6 +1,7 @@
 package com.orka.myfinances.testFixtures.managers
 
 import com.orka.myfinances.data.models.Credential
+import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.ui.managers.SessionManager
 
 class SpySessionManager : SessionManager {
@@ -14,4 +15,6 @@ class SpySessionManager : SessionManager {
     override fun store(credential: Credential) {
         storeCalled = true
     }
+
+    override fun setOffice(credential: Credential, office: Office) {}
 }

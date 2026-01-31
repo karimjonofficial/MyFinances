@@ -3,6 +3,7 @@ package com.orka.myfinances.ui.screens.home.parts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -51,47 +52,58 @@ fun FoldersList(
         if (size > 0) {
             item {
                 FirstFolderButton(
+                    modifier = Modifier.fillMaxSize(),
                     folder = items[0],
                     onClick = onFolderSelected
                 )
             }
 
-            if (size > 1) item {
-                SecondFolderButton(
-                    folder = items[1],
-                    onClick = onFolderSelected
-                )
-            }
-
-            if (size > 4) items(
-                items = items.subList(2, size - 3)
-            ) { item ->
-                FolderButton(
-                    folder = item,
-                    onClick = onFolderSelected
-                )
-            }
-
-            if (size > 2) item {
-
-                if (size == 3) {
-                    NotLastFolderButton(
-                        folder = items[size - 1],
-                        onClick = onFolderSelected
-                    )
-                } else {
-                    NotLastFolderButton(
-                        folder = items[size - 2],
+            if (size > 1) {
+                item {
+                    SecondFolderButton(
+                        modifier = Modifier.fillMaxSize(),
+                        folder = items[1],
                         onClick = onFolderSelected
                     )
                 }
             }
 
-            if (size > 3) item {
-                LastFolderButton(
-                    folder = items[size - 1],
-                    onClick = onFolderSelected
-                )
+            if (size > 4) {
+                items(items = items.subList(2, size - (2 - size % 2))) { item ->
+                    FolderButton(
+                        modifier = Modifier.fillMaxSize(),
+                        folder = item,
+                        onClick = onFolderSelected
+                    )
+                }
+            }
+
+            if (size > 2) {
+                if (size % 2 == 0) {
+                    item {
+                        NotLastFolderButton(
+                            modifier = Modifier.fillMaxSize(),
+                            folder = items[size - 2],
+                            onClick = onFolderSelected
+                        )
+                    }
+
+                    item {
+                        LastFolderButton(
+                            modifier = Modifier.fillMaxSize(),
+                            folder = items[size - 1],
+                            onClick = onFolderSelected
+                        )
+                    }
+                } else {
+                    item {
+                        NotLastFolderButton(
+                            modifier = Modifier.fillMaxSize(),
+                            folder = items[size - 1],
+                            onClick = onFolderSelected
+                        )
+                    }
+                }
             }
         } else {
             item {
