@@ -2,7 +2,6 @@ package com.orka.myfinances.lib.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,38 +12,28 @@ import com.orka.myfinances.R
 @Composable
 fun RangeField(
     modifier: Modifier = Modifier,
-    min: Int,
-    max: Int,
-    onMinValueChange: (Int) -> Unit,
-    onMaxValueChange: (Int) -> Unit
+    min: Int?,
+    max: Int?,
+    onMinValueChange: (Int?) -> Unit,
+    onMaxValueChange: (Int?) -> Unit
 ) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        OutlinedTextField(
+        OutlinedIntegerTextField(
             modifier = Modifier.weight(1f),
-            value = min.toString(),
-            onValueChange = {
-                val minValue = it.toIntOrNull()
-                if (minValue != null) {
-                    onMinValueChange(minValue)
-                }
-            },
+            value = min,
+            onValueChange = { onMinValueChange(it) },
             label = { Text(text = stringResource(R.string.min)) }
         )
 
         HorizontalSpacer(8)
-        OutlinedTextField(
+        OutlinedIntegerTextField(
             modifier = Modifier.weight(1f),
-            value = max.toString(),
-            onValueChange = {
-                val maxValue = it.toIntOrNull()
-                if (maxValue != null) {
-                    onMaxValueChange(maxValue)
-                }
-            },
+            value = max,
+            onValueChange = { onMaxValueChange(it) },
             label = { Text(text = stringResource(R.string.max)) }
         )
     }

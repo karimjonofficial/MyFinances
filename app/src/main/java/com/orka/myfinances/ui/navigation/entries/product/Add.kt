@@ -11,17 +11,17 @@ import com.orka.myfinances.ui.managers.Navigator
 import com.orka.myfinances.ui.screens.products.add.AddProductScreen
 
 fun addProductEntry(
-    modifier: Modifier = Modifier.Companion,
+    modifier: Modifier = Modifier,
     destination: Destination.AddProduct,
     navigator: Navigator,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
-    val viewModel = viewModel { factory.addProductViewModel() }
+    val viewModel = viewModel(key = "${destination.category.id}") { factory.addProductViewModel() }
     val uiState = viewModel.uiState.collectAsState()
 
     AddProductScreen(
         modifier = modifier,
-        category = destination.warehouse,
+        category = destination.category,
         state = uiState.value,
         viewModel = viewModel,
         navigator = navigator

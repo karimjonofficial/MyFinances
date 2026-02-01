@@ -1,6 +1,5 @@
 package com.orka.myfinances.ui.screens.home
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,11 +27,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
+import com.orka.myfinances.application.LoggerImpl
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.data.repositories.product.ProductTitleRepository
 import com.orka.myfinances.fixtures.managers.DummyNavigator
-import com.orka.myfinances.application.LoggerImpl
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
@@ -48,7 +47,6 @@ fun BasketContent(
     viewModel: BasketContentViewModel,
     navigator: Navigator
 ) {
-    Log.d("BasketContent", "Recomposition")
     when (state) {
         is BasketState.Loading -> LoadingScreen(modifier)
 
@@ -104,7 +102,7 @@ fun BasketContent(
                                 Icon(
                                     modifier = Modifier.size(96.dp),
                                     painter = painterResource(R.drawable.shopping_cart_off),
-                                    tint = MaterialTheme.colorScheme.surfaceDim,
+                                    tint = MaterialTheme.colorScheme.error,
                                     contentDescription = null
                                 )
 

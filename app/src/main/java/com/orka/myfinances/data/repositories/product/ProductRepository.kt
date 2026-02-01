@@ -1,5 +1,6 @@
 package com.orka.myfinances.data.repositories.product
 
+import android.util.Log
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.product.Product
@@ -24,6 +25,7 @@ class ProductRepository(private val repository: ProductTitleRepository) :
     val events: Flow<ProductRepositoryEvent> = flow
 
     override suspend fun AddProductRequest.map(): Product {
+        Log.d("ProductRepository", "Add")
         val title = repository.getById(titleId)!!
         flow.emit(ProductRepositoryEvent.Add(title.category.id))
 

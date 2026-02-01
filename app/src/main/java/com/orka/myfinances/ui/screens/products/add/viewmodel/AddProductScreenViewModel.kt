@@ -33,27 +33,30 @@ class AddProductScreenViewModel(
         titleId: Id,
         properties: List<PropertyModel<*>?>,
         name: String,
-        price: Int,
-        salePrice: Int,
+        price: Int?,
+        salePrice: Int?,
         description: String?,
         category: Category
-    ) = launch {
-        val p = properties.filterNotNull()
+    ) {
+        launch {
+            val p = properties.filterNotNull()
 
-        if (
-            p.size == category.template.fields.size && name.isNotEmpty() &&
-            price > 0 && salePrice > 0 && salePrice > price &&
-            category.id.value > 0
-        ) {
-            val request = AddProductRequest(
-                titleId = titleId,
-                name = name,
-                price = price,
-                salePrice = salePrice,
-                properties = p,
-                description = description
-            )
-            productRepository.add(request)
+            if (
+                price != null && salePrice != null &&
+                p.size == category.template.fields.size && name.isNotEmpty() &&
+                price > 0 && salePrice > 0 && salePrice > price &&
+                category.id.value > 0
+            ) {
+                val request = AddProductRequest(
+                    titleId = titleId,
+                    name = name,
+                    price = price,
+                    salePrice = salePrice,
+                    properties = p,
+                    description = description
+                )
+                productRepository.add(request)
+            }
         }
     }
 }

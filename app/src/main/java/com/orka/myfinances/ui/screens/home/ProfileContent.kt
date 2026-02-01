@@ -58,7 +58,6 @@ fun ProfileContent(
     navigator: Navigator,
     sessionManager: SessionManager
 ) {
-    Log.d("ProfileContent", "Recomposition")
     val options = listOf(
         ProfileOption(
             index = 0,

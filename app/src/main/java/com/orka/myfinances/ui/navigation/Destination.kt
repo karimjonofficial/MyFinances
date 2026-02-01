@@ -32,7 +32,7 @@ sealed interface Destination {
     data object Clients : Destination
     data class Client(val client: ClientModel) : Destination
     data class AddTemplate(val types: List<String>) : Destination
-    data class AddProduct(val warehouse: CategoryModel) : Destination
+    data class AddProduct(val category: CategoryModel) : Destination
     data object History : Destination
     data class Checkout(val items: List<BasketItem>) : Destination
     data class AddStockItem(val warehouse: CategoryModel) : Destination

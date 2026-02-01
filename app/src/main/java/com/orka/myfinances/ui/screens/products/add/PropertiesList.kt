@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -15,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.data.models.template.TemplateField
 import com.orka.myfinances.data.models.types.Range
 import com.orka.myfinances.data.repositories.product.models.PropertyModel
+import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
 import com.orka.myfinances.lib.ui.components.RangeField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 
@@ -49,15 +49,14 @@ fun PropertiesList(
                 }
 
                 "number" -> {
-                    val value = rememberSaveable { mutableIntStateOf(0) }
+                    val value = rememberSaveable { mutableStateOf<Int?>(0) }
 
-                    OutlinedTextField(
-                        value = value.intValue.toString(),
+                    OutlinedIntegerTextField(
+                        value = value.value,
                         onValueChange = {
-                            val n = it.toIntOrNull()
-                            if (n != null && n > 0) {
-                                value.intValue = n
-                                onSuccess(index, PropertyModel(field, n))
+                            value.value = it
+                            if (it != null && it > 0) {
+                                onSuccess(index, PropertyModel(field, it))
                             }
                         },
                         label = { Text(text = field.name) }
@@ -65,29 +64,27 @@ fun PropertiesList(
                 }
 
                 "range" -> {
-                    val min = rememberSaveable { mutableIntStateOf(0) }
-                    val max = rememberSaveable { mutableIntStateOf(1) }
+                    val min = rememberSaveable { mutableStateOf<Int?>(0) }
+                    val max = rememberSaveable { mutableStateOf<Int?>(1) }
 
                     Text(modifier = Modifier.align(Alignment.Start), text = field.name)
 
                     RangeField(
                         modifier = Modifier.width(280.dp),
-                        min = min.intValue,
-                        max = max.intValue,
+                        min = min.value,
+                        max = max.value,
                         onMinValueChange = {
-                            val maxValue = max.intValue
-                            if (it > 0) {
+                            min.value = it
+                            val maxValue = max.value
+                            if (it != null && it > 0 && maxValue != null)
                                 onSuccess(index, PropertyModel(field, Range(it, maxValue)))
-                                min.intValue = it
-                            }
                         },
                         onMaxValueChange = {
-                            val minValue = min.intValue
+                            val minValue = min.value
+                            max.value = it
 
-                            if (minValue > 0) {
+                            if (minValue != null && minValue > 0 && it != null)
                                 onSuccess(index, PropertyModel(field, Range(minValue, it)))
-                                max.intValue = it
-                            }
                         }
                     )
                 }

@@ -15,10 +15,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SplitButtonDefaults
 import androidx.compose.material3.SplitButtonLayout
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -33,6 +31,7 @@ import com.orka.myfinances.lib.extensions.models.getPrice
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.IntegerTextField
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.LazyColumn
@@ -50,7 +49,7 @@ fun CheckoutContent(
     viewModel: CheckoutScreenViewModel,
     navigator: Navigator
 ) {
-    val price = rememberSaveable { mutableIntStateOf(items.getPrice()) }
+    val price = rememberSaveable { mutableStateOf<Int?>(items.getPrice()) }
     val description = rememberSaveable { mutableStateOf("") }
     val selectedClientId = rememberSaveable(clients) { mutableStateOf(clients.firstOrNull()?.id?.value) }
     val selectedClient = clients.find { it.id.value == selectedClientId.value }
@@ -67,18 +66,15 @@ fun CheckoutContent(
 
                 Column(modifier = Modifier.weight(1f)) {
 
-                    TextField(
+                    IntegerTextField(
                         leadingIcon = {
                             Icon(
                                 painter = painterResource(R.drawable.attach_money),
                                 contentDescription = stringResource(R.string.price)
                             )
                         },
-                        value = price.intValue.toString(),
-                        onValueChange = {
-                            val p = it.toIntOrNull()
-                            if (p != null) price.intValue = p
-                        }
+                        value = price.value,
+                        onValueChange = { price.value = it }
                     )
                 }
 
@@ -88,12 +84,14 @@ fun CheckoutContent(
                         leadingButton = {
                             SplitButtonDefaults.LeadingButton(
                                 onClick = {
-                                    selectedClient?.let {
-                                        viewModel.sell(
-                                            basket = Basket(price.intValue, description.value, items),
-                                            client = it
-                                        )
-                                        navigator.back()
+                                    selectedClient?.let { client ->
+                                        price.value?.let { price ->
+                                            viewModel.sell(
+                                                basket = Basket(price, description.value, items),
+                                                client = client
+                                            )
+                                            navigator.back()
+                                        }
                                     }
                                 }
                             ) {
@@ -119,14 +117,16 @@ fun CheckoutContent(
                         DropdownMenuItem(
                             text = { Text(text = stringResource(R.string.order)) },
                             onClick = {
-                                selectedClient?.let {
-                                    viewModel.order(
-                                        basket = Basket(price.intValue, description.value, items),
-                                        client = it
-                                    )
-                                    navigator.back()
+                                selectedClient?.let { client ->
+                                    price.value?.let { price ->
+                                        viewModel.order(
+                                            basket = Basket(price, description.value, items),
+                                            client = client
+                                        )
+                                        navigator.back()
+                                    }
+                                    splitButtonMenuExpanded.value = false
                                 }
-                                splitButtonMenuExpanded.value = false
                             }
                         )
                     }

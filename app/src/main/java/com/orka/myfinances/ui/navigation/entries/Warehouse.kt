@@ -16,7 +16,7 @@ fun warehouseEntry(
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val viewModel = viewModel(
-        key = destination.category.id.value.toString(),
+        key = "${destination.category.id.value}",
         initializer = { factory.warehouseViewModel(destination.category) }
     )
 

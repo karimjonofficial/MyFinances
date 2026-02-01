@@ -15,6 +15,7 @@ class FolderRepository(private val templateRepository: GetById<Template>) :
     MockGetRepository<Folder>, MockAddRepository<Folder, AddFolderRequest>,
     GetByParameter<Folder, Catalog> {
     override val items = folders.toMutableList()
+    private var id: Int = folders.maxOfOrNull { it.id.value } ?: 0
 
     override suspend fun get(parameter: Catalog): List<Folder> {
         //TODO filter folders by catalog
@@ -24,7 +25,7 @@ class FolderRepository(private val templateRepository: GetById<Template>) :
     override suspend fun AddFolderRequest.map(): Folder {
         return when (type) {
             "catalog" -> Catalog(
-                id = Id(1),
+                id = Id(id++),
                 name = this.name
             )
 
@@ -32,7 +33,7 @@ class FolderRepository(private val templateRepository: GetById<Template>) :
                 val t = templateRepository.getById(templateId!!)
                 if (t != null) {
                     Category(
-                        id = Id(1),
+                        id = Id(id++),
                         name = this.name,
                         template = t
                     )

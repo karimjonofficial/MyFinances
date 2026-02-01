@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.warehouse
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,7 +39,10 @@ fun WarehouseScreen(
         topBar = {
             WarehouseScreenTopBar(
                 category = category,
-                onAddProductClick = { navigator.navigateToAddProduct(it) },
+                onAddProductClick = {
+                    Log.d("WarehouseScreen", "onAddProductClick: $it")
+                    navigator.navigateToAddProduct(it)
+                },
                 onAddStockItemClick = { navigator.navigateToAddStockItem(it) }
             )
         }
@@ -62,7 +66,9 @@ fun WarehouseScreen(
                     text = { Text(text = stringResource(R.string.products)) }
                 )
             }
-            val m = Modifier.weight(1f).fillMaxWidth()
+            val m = Modifier
+                .weight(1f)
+                .fillMaxWidth()
 
             if (selectedTabValue == 0) {
                 StockItemsContent(

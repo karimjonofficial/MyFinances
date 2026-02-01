@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.warehouse.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.core.DualStateViewModel
 import com.orka.myfinances.core.Logger
@@ -31,7 +32,14 @@ class WarehouseScreenViewModel(
     val warehouseState = state2.asStateFlow()
 
     init {
-        events.onEach { initialize() }.launchIn(viewModelScope)
+        events.onEach {
+            Log.d("WarehouseScreenViewModel", "OnEach")
+            Log.d("WarehouseScreenViewModel", "$it")
+            if(it is ProductRepositoryEvent.Add && it.categoryId == category.id) {
+                Log.d("WarehouseScreenViewModel", "initialize")
+                initialize()
+            }
+        }.launchIn(viewModelScope)
     }
 
     override fun initialize() {

@@ -12,7 +12,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.models.folder.Folder
@@ -21,6 +20,7 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
+import com.orka.myfinances.lib.ui.viewmodel.viewModel
 import com.orka.myfinances.ui.managers.Navigator
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
@@ -90,8 +90,7 @@ fun HomeScreen(
                 )
 
                 1 -> {
-                    val viewModel = viewModel(key = session.office.id.toString()) {
-                        Log.d("ViewModel", "Required: ProfileViewModel for $session")
+                    val viewModel = viewModel(session.office) {
                         factory.basketViewModel()
                     }
                     BasketScreenTopBar(viewModel = viewModel)
@@ -123,8 +122,7 @@ fun HomeScreen(
 
         when (navState.intValue) {
             0 -> {
-                val viewModel = viewModel(key = session.office.id.toString()) {
-                    Log.d("ViewModel", "Required: FolderViewModel for $session")
+                val viewModel = viewModel(session.office) {
                     factory.foldersViewModel()
                 }
                 val state = viewModel.uiState.collectAsState()
@@ -155,8 +153,7 @@ fun HomeScreen(
             }
 
             1 -> {
-                val viewModel = viewModel(key = session.office.id.toString()) {
-                    Log.d("ViewModel", "Required: BasketViewModel for $session")
+                val viewModel = viewModel(session.office) {
                     factory.basketViewModel()
                 }
                 val state = viewModel.uiState.collectAsState()
@@ -170,8 +167,7 @@ fun HomeScreen(
             }
 
             2 -> {
-                val viewModel = viewModel(key = session.office.id.toString()) {
-                    Log.d("ViewModel", "Required: ProfileViewModel for $session")
+                val viewModel = viewModel(session.office) {
                     factory.profileViewModel()
                 }
                 val state = viewModel.uiState.collectAsState()

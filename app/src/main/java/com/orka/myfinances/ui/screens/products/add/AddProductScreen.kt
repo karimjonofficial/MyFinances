@@ -5,15 +5,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.retain.retain
@@ -22,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Category
@@ -37,7 +39,9 @@ import com.orka.myfinances.fixtures.resources.models.folder.category1
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
+import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
+import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.ui.managers.Navigator
@@ -67,12 +71,13 @@ fun AddProductScreen(
                 val scrollState = rememberScrollState()
                 val menuVisible = rememberSaveable { mutableStateOf(false) }
                 val name = rememberSaveable { mutableStateOf("") }
-                val price = rememberSaveable { mutableIntStateOf(0) }
-                val salePrice = rememberSaveable { mutableIntStateOf(0) }
+                val price = rememberSaveable { mutableStateOf<Int?>(0) }
+                val salePrice = rememberSaveable { mutableStateOf<Int?>(0) }
                 val description = rememberSaveable { mutableStateOf("") }
                 val selectedCategoryId = retain { mutableStateOf(category.id) }
                 val selectedCategory = categories.find { it.id == selectedCategoryId.value }!!
                 val fields = selectedCategory.template.fields
+
                 val properties = rememberSaveable { mutableStateListOf<PropertyModel<*>?>() }.apply {
                     repeat(fields.size) { add(null) }
                 }
@@ -82,16 +87,19 @@ fun AddProductScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
-                            .verticalScroll(scrollState),
+                            .verticalScroll(scrollState)
+                            .padding(horizontal = 8.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         OutlinedTextField(
+                            modifier = Modifier.fillMaxWidth(),
                             value = name.value,
                             onValueChange = { name.value = it },
                             label = { Text(text = stringResource(R.string.name)) }
                         )
 
                         OutlinedExposedDropDownTextField(
+                            modifier = Modifier.fillMaxWidth(),
                             text = selectedCategory.name,
                             label = stringResource(R.string.category),
                             menuExpanded = menuVisible.value,
@@ -104,7 +112,18 @@ fun AddProductScreen(
 
                         if (fields.isNotEmpty()) {
                             VerticalSpacer(8)
-                            Text(text = stringResource(R.string.properties))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                HorizontalDivider(modifier = Modifier.weight(1f))
+                                HorizontalSpacer(4)
+                                Text(text = stringResource(R.string.properties))
+                                HorizontalSpacer(4)
+                                HorizontalDivider(modifier = Modifier.weight(1f))
+                            }
+                            VerticalSpacer(8)
 
                             VerticalSpacer(4)
                             PropertiesList(
@@ -115,19 +134,25 @@ fun AddProductScreen(
                             VerticalSpacer(8)
                         }
 
-                        OutlinedTextField(
-                            value = price.intValue.toString(),
-                            onValueChange = { price.intValue = it.toInt() },
+                        HorizontalDivider()
+                        VerticalSpacer(8)
+
+                        OutlinedIntegerTextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = price.value,
+                            onValueChange = { price.value = it },
                             label = { Text(text = stringResource(R.string.price)) }
                         )
 
-                        OutlinedTextField(
-                            value = salePrice.intValue.toString(),
-                            onValueChange = { salePrice.intValue = it.toInt() },
+                        OutlinedIntegerTextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = salePrice.value,
+                            onValueChange = { salePrice.value = it },
                             label = { Text(text = stringResource(R.string.sale_price)) }
                         )
 
                         OutlinedTextField(
+                            modifier = Modifier.fillMaxWidth(),
                             value = description.value,
                             minLines = 3,
                             onValueChange = { description.value = it },
@@ -146,8 +171,8 @@ fun AddProductScreen(
                                         titleId = id1,
                                         properties = properties,
                                         name = name.value,
-                                        price = price.intValue,
-                                        salePrice = salePrice.intValue,
+                                        price = price.value,
+                                        salePrice = salePrice.value,
                                         description = description.value,
                                         category = selectedCategory,
                                     )
