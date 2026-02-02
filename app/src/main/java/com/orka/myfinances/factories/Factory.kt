@@ -123,9 +123,10 @@ class Factory(
 
     fun saleViewModel(): SaleContentViewModel {
         return SaleContentViewModel(
-            loading = R.string.loading,
-            failure = R.string.failure,
+            loading = Text.Res(R.string.loading),
+            failure = Text.Res(R.string.failure),
             repository = saleRepository,
+            events = saleRepository.events,
             logger = logger
         )
     }
@@ -133,6 +134,7 @@ class Factory(
     fun receiveViewModel(): ReceiveContentViewModel {
         return ReceiveContentViewModel(
             repository = receiveRepository,
+            events = receiveRepository.events,
             loading = R.string.loading,
             failure = R.string.failure,
             logger = logger

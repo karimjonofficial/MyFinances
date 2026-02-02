@@ -12,7 +12,7 @@ import com.orka.myfinances.ui.managers.Navigator
 
 @Composable
 fun HistoryScreen(
-    modifier: Modifier = Modifier.Companion,
+    modifier: Modifier = Modifier,
     factory: Factory,
     navigator: Navigator
 ) {

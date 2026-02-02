@@ -16,7 +16,7 @@ fun addReceiveEntry(
     navigator: Navigator,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
-    val viewModel = viewModel {
+    val viewModel = viewModel(key = "${destination.category.id}") {
         factory.addReceiveViewModel(destination.category)
     }
     val state = viewModel.uiState.collectAsState()

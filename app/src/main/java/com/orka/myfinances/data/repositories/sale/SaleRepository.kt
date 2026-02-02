@@ -12,8 +12,13 @@ import com.orka.myfinances.fixtures.resources.models.user1
 import com.orka.myfinances.lib.data.models.Item
 import com.orka.myfinances.lib.fixtures.data.repositories.MockAddRepository
 import com.orka.myfinances.lib.fixtures.data.repositories.MockGetRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 class SaleRepository : MockGetRepository<Sale>, MockAddRepository<Sale, AddSaleRequest> {
+    private val flow = MutableSharedFlow<SaleEvent>()
+    val events: Flow<SaleEvent> = flow
+
     override val items = sales.toMutableList()
 
     override suspend fun AddSaleRequest.map(): Sale {
@@ -27,6 +32,10 @@ class SaleRepository : MockGetRepository<Sale>, MockAddRepository<Sale, AddSaleR
             office = office1,
             description = description
         )
+    }
+
+    override suspend fun afterAdd(item: Sale) {
+        flow.emit(SaleEvent)
     }
 
     private fun Item.toSaleItem(): SaleItem {

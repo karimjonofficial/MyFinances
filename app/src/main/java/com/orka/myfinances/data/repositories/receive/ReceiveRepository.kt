@@ -16,12 +16,17 @@ import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.fixtures.data.repositories.MockAddRepository
 import com.orka.myfinances.lib.fixtures.data.repositories.MockGetRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 class ReceiveRepository(
     private val productTitleRepository: GetById<ProductTitle>,
     private val productRepository: Add<Product, AddProductRequest>,
     private val stockRepository: Add<StockItem, AddStockItemRequest>,
 ) : MockGetRepository<Receive>, MockAddRepository<Receive, AddReceiveRequest> {
+    private val flow = MutableSharedFlow<ReceiveEvent>()
+    val events: Flow<ReceiveEvent> = flow
+
     override val items = receives.toMutableList()
 
     override suspend fun AddReceiveRequest.map(): Receive {
@@ -53,5 +58,9 @@ class ReceiveRepository(
             dateTime = now(),
             description = comment
         )
+    }
+
+    override suspend fun afterAdd(item: Receive) {
+        flow.emit(ReceiveEvent)
     }
 }
