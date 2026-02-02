@@ -19,7 +19,7 @@ import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.ui.managers.Navigator
-import com.orka.myfinances.ui.screens.warehouse.parts.ProductsContent
+import com.orka.myfinances.ui.screens.warehouse.parts.ProductTitlesContent
 import com.orka.myfinances.ui.screens.warehouse.parts.StockItemsContent
 import com.orka.myfinances.ui.screens.warehouse.parts.WarehouseScreenTopBar
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
@@ -31,7 +31,7 @@ fun WarehouseScreen(
     viewModel: WarehouseScreenViewModel,
     navigator: Navigator
 ) {
-    val productsState = viewModel.productsState.collectAsState()
+    val productsState = viewModel.productTitlesState.collectAsState()
     val warehouseState = viewModel.warehouseState.collectAsState()
 
     Scaffold(
@@ -79,7 +79,7 @@ fun WarehouseScreen(
                     onStockItemClick = viewModel::addToBasket
                 )
             } else {
-                ProductsContent(
+                ProductTitlesContent(
                     modifier = m,
                     contentPadding = PaddingValues(0.dp),
                     state = productsState.value,

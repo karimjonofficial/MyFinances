@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,6 +42,24 @@ fun IntegerTextField(
         value = value,
         onValueChange = onValueChange,
         label = label,
+        leadingIcon = leadingIcon,
+        outlined = false
+    )
+}
+
+@Composable
+fun IntegerTextField(
+    modifier: Modifier = Modifier,
+    value: Int?,
+    onValueChange: (Int?) -> Unit,
+    label: String,
+    leadingIcon: @Composable (() -> Unit)? = null
+) {
+    IntegerTextFieldImpl(
+        modifier = modifier,
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(text = label) },
         leadingIcon = leadingIcon,
         outlined = false
     )
@@ -188,7 +207,7 @@ private fun IntegerTextFieldPreview() {
                 value = intValue.value,
                 onValueChange = { intValue.value = it },
                 modifier = Modifier.fillMaxWidth(),
-                label = { androidx.compose.material3.Text("Integer") }
+                label = { Text("Integer") }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -197,7 +216,7 @@ private fun IntegerTextFieldPreview() {
                 value = intValue.value,
                 onValueChange = { intValue.value = it },
                 modifier = Modifier.fillMaxWidth(),
-                label = { androidx.compose.material3.Text("Outlined Integer") }
+                label = { Text("Outlined Integer") }
             )
         }
     }

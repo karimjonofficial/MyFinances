@@ -1,17 +1,27 @@
 package com.orka.myfinances.data.repositories.receive
 
+import com.orka.myfinances.data.models.StockItem
+import com.orka.myfinances.data.models.product.Product
+import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.data.models.receive.Receive
 import com.orka.myfinances.data.models.receive.ReceiveItem
+import com.orka.myfinances.data.repositories.product.AddProductRequest
+import com.orka.myfinances.data.repositories.stock.AddStockItemRequest
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.office1
-import com.orka.myfinances.fixtures.resources.models.product.product1
 import com.orka.myfinances.fixtures.resources.models.receive.receives
 import com.orka.myfinances.fixtures.resources.models.user1
+import com.orka.myfinances.lib.data.now
+import com.orka.myfinances.lib.data.repositories.Add
+import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.fixtures.data.repositories.MockAddRepository
 import com.orka.myfinances.lib.fixtures.data.repositories.MockGetRepository
-import kotlin.time.Clock
 
-class ReceiveRepository : MockGetRepository<Receive>, MockAddRepository<Receive, AddReceiveRequest> {
+class ReceiveRepository(
+    private val productTitleRepository: GetById<ProductTitle>,
+    private val productRepository: Add<Product, AddProductRequest>,
+    private val stockRepository: Add<StockItem, AddStockItemRequest>,
+) : MockGetRepository<Receive>, MockAddRepository<Receive, AddReceiveRequest> {
     override val items = receives.toMutableList()
 
     override suspend fun AddReceiveRequest.map(): Receive {
@@ -19,10 +29,29 @@ class ReceiveRepository : MockGetRepository<Receive>, MockAddRepository<Receive,
             id = id1,
             user = user1,
             office = office1,
-            items = items.map { ReceiveItem(id1, product1, it.amount) },
+            items = items.map {
+                val title = productTitleRepository.getById(it.productTitleId)!!
+                stockRepository.add(AddStockItemRequest(
+                        productTitleId = it.productTitleId,
+                        amount = it.amount,
+                        price = it.price,
+                        salePrice = it.salePrice,
+                        comment = it.description//TODO may be removed
+                    ))
+                if(title.defaultPrice != it.price || title.defaultSalePrice != it.salePrice) {
+                    //TODO edit title's properties
+                }
+                val product = productRepository.add(AddProductRequest(
+                        titleId = it.productTitleId,
+                        price = it.price,
+                        salePrice = it.salePrice,
+                        description = it.description
+                    ))!!
+                ReceiveItem(id1, product, it.amount)
+            },
             price = price,
-            dateTime = Clock.System.now(),
-            description = description
+            dateTime = now(),
+            description = comment
         )
     }
 }

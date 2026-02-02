@@ -13,11 +13,12 @@ import com.orka.myfinances.data.repositories.folder.FolderRepository
 import com.orka.myfinances.data.repositories.notification.NotificationRepository
 import com.orka.myfinances.data.repositories.order.OrderRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
-import com.orka.myfinances.data.repositories.product.ProductTitleRepository
+import com.orka.myfinances.data.repositories.product.title.ProductTitleRepository
 import com.orka.myfinances.data.repositories.receive.ReceiveRepository
 import com.orka.myfinances.data.repositories.sale.SaleRepository
 import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.repositories.template.TemplateRepository
+import com.orka.myfinances.data.repositories.template.field.TemplateFieldRepository
 import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.data.zipped.OfficeModel
 import com.orka.myfinances.factories.ApiProvider
@@ -91,7 +92,7 @@ class UiManager(
     }
 
     private fun openSession(session: Session) {
-        val factory = factory()
+        val factory = factory(session.office)
         val initialBackStack = listOf(Destination.Home)
         val navigationManager = NavigationManager(initialBackStack, logger)
         setState(UiState.SignedIn(session, navigationManager, factory))
@@ -121,25 +122,26 @@ class UiManager(
         else null
     }
 
-    private fun factory(): Factory {
+    private fun factory(office: Office): Factory {
         val templateRepository = TemplateRepository()
         val folderRepository = FolderRepository(templateRepository)
         val categoryRepository = CategoryRepository(folderRepository)
-        val stockRepository = StockRepository()
-        val titleRepository = ProductTitleRepository()
-        val productRepository = ProductRepository(titleRepository)
+        val templateFieldRepository = TemplateFieldRepository()
+        val productTitleRepository = ProductTitleRepository(categoryRepository, templateFieldRepository)
+        val productRepository = ProductRepository(productTitleRepository)
+        val stockRepository = StockRepository(productRepository, office)
         val basketRepository = BasketRepository(productRepository)
         val saleRepository = SaleRepository()
-        val receiveRepository = ReceiveRepository()
+        val receiveRepository = ReceiveRepository(productTitleRepository, productRepository, stockRepository)
         val orderRepository = OrderRepository()
         val clientRepository = ClientRepository()
         val debtRepository = DebtRepository()
         val notificationRepository = NotificationRepository()
 
         return Factory(
+            productTitleRepository = productTitleRepository,
             folderRepository = folderRepository,
             templateRepository = templateRepository,
-            productRepository = productRepository,
             categoryRepository = categoryRepository,
             stockRepository = stockRepository,
             basketRepository = basketRepository,

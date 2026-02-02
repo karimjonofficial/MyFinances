@@ -18,8 +18,8 @@ import com.orka.myfinances.ui.navigation.entries.notificationsEntry
 import com.orka.myfinances.ui.navigation.entries.order.orderEntry
 import com.orka.myfinances.ui.navigation.entries.order.ordersEntry
 import com.orka.myfinances.ui.navigation.entries.product.addProductEntry
-import com.orka.myfinances.ui.navigation.entries.product.productEntry
-import com.orka.myfinances.ui.navigation.entries.receive.addStockItemEntry
+import com.orka.myfinances.ui.navigation.entries.product.productTitleEntry
+import com.orka.myfinances.ui.navigation.entries.receive.addReceiveEntry
 import com.orka.myfinances.ui.navigation.entries.receive.receiveEntry
 import com.orka.myfinances.ui.navigation.entries.saleEntry
 import com.orka.myfinances.ui.navigation.entries.searchEntry
@@ -46,12 +46,12 @@ fun entryProvider(
         is Destination.Settings -> settingsEntry(modifier, destination)
         is Destination.Templates -> templatesEntry(modifier, destination, navigator, factory)
         is Destination.AddProduct -> addProductEntry(modifier, destination, navigator, factory)
-        is Destination.Product -> productEntry(modifier, destination)
+        is Destination.ProductTitle -> productTitleEntry(modifier, destination, factory)
         is Destination.Clients -> clientsEntry(modifier, destination, navigator, factory)
         is Destination.Client -> clientEntry(modifier, destination)
         is Destination.History -> historyEntry(modifier, destination, navigator, factory)
         is Destination.Checkout -> checkoutEntry(modifier, destination, navigator, factory)
-        is Destination.AddStockItem -> addStockItemEntry(modifier, destination, navigator, factory)
+        is Destination.AddStockItem -> addReceiveEntry(modifier, destination, navigator, factory)
         is Destination.Orders -> ordersEntry(modifier, destination, navigator, factory)
         is Destination.Order -> orderEntry(modifier, destination)
         is Destination.Debts -> debtsEntry(modifier, destination, navigator, factory)

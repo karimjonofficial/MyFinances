@@ -31,3 +31,4 @@ val category3 = Category(
 )
 
 val folders = listOf(category1, category2, category3, catalog1)
+val categories = listOf(category1, category2, category3)

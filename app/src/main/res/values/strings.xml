@@ -26,7 +26,6 @@
     <string name="no_folders_found">Papkalar topilmadi</string>
     <string name="products">Maxsulotlar</string>
     <string name="folders">Folders</string>
-    <string name="stock_items">Ombor</string>
     <string name="notifications">Notifications</string>
     <string name="save">Save</string>
     <string name="remove">Remove</string>
@@ -122,4 +121,7 @@
     <string name="share_info">Share Info</string>
     <string name="total_sale_value">Total Sale Value</string>
     <string name="transaction_notes">Transaction Notes</string>
+    <string name="amount">Amount</string>
+    <string name="fill_the_lines_below_to_receive">Fill the lines below to receive</string>
+    <string name="comment">Comment</string>
 </resources>

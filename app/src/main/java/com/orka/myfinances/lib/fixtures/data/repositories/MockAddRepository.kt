@@ -12,10 +12,12 @@ interface MockAddRepository<T, R> : Add<T, R>, Repository {
         if(acceptable(request)) {
             val item = request.map()
             items.add(item)
+            afterAdd(item)
             return item
         } else return null
     }
 
     suspend fun R.map(): T
+    suspend fun afterAdd(item: T) {}
     suspend fun acceptable(request: R): Boolean = true
 }

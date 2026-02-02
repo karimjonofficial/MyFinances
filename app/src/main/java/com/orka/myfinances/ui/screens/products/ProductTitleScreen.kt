@@ -27,6 +27,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,23 +40,28 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.product.Product
-import com.orka.myfinances.fixtures.resources.models.product.product1
+import com.orka.myfinances.data.models.product.ProductTitle
+import com.orka.myfinances.fixtures.resources.models.product.productTitle1
 import com.orka.myfinances.lib.extensions.ui.description
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
+import com.orka.myfinances.lib.ui.components.CommentTextField
+import com.orka.myfinances.lib.ui.components.Dialog
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.IntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductScreen(
+fun ProductTitleScreen(
     modifier: Modifier = Modifier,
-    product: Product,
-    onEdit: () -> Unit,
-    onAddToCart: () -> Unit
+    productTitle: ProductTitle,
+    viewModel: ProductTitleScreenViewModel
 ) {
+    val dialogVisible = rememberSaveable { mutableStateOf(false) }
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -67,7 +74,7 @@ fun ProductScreen(
                     )
                 },
                 actions = {
-                    IconButton(onClick = { onEdit() }) {
+                    IconButton(onClick = {}) {
                         Icon(
                             painter = painterResource(R.drawable.edit_outlined),
                             contentDescription = "More"
@@ -77,21 +84,88 @@ fun ProductScreen(
             )
         },
         bottomBar = {
-            BottomActionBar(onAddToCart = onAddToCart)
+            BottomAppBar(contentPadding = PaddingValues(horizontal = 16.dp)) {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { dialogVisible.value = true }
+                ) {
+                    Text(stringResource(R.string.receive))
+                }
+            }
         }
     ) { paddingValues ->
-
         LazyColumn(
             modifier = Modifier.scaffoldPadding(paddingValues),
             contentPadding = PaddingValues(bottom = 16.dp)
         ) {
             item { HeroImage() }
-            item { TitleSection(product = product) }
-            item { PricingSection(product = product) }
+            item { TitleSection(productTitle = productTitle) }
+            item { PricingSection(productTitle = productTitle) }
             item { HorizontalDivider() }
-            item { InventorySection(product = product) }
-            item { DescriptionSection(product = product) }
-            item { SpecificationsSection(product = product) }
+            item { InventorySection(productTitle = productTitle) }
+            item { DescriptionSection(productTitle = productTitle) }
+            item { SpecificationsSection(productTitle = productTitle) }
+        }
+
+        if(dialogVisible.value) {
+            val price = rememberSaveable { mutableStateOf<Int?>(null) }
+            val salePrice = rememberSaveable { mutableStateOf<Int?>(null) }
+            val amount = rememberSaveable { mutableStateOf<Int?>(null) }
+            val totalPrice = rememberSaveable { mutableStateOf<Int?>(null) }
+            val comment = rememberSaveable { mutableStateOf<String?>(null) }
+
+            Dialog(
+                dismissRequest = { dialogVisible.value = false },
+                title = stringResource(R.string.receive),
+                supportingText = stringResource(R.string.fill_the_lines_below_to_receive),
+                onSuccess = {
+                    val p = price.value
+                    val sp = salePrice.value
+                    val a = amount.value
+                    val t = totalPrice.value
+                    val c = comment.value
+
+                    if(p != null && sp != null && a != null && t != null) {
+                        viewModel.receive(
+                            price = p,
+                            salePrice = sp,
+                            amount = a,
+                            totalPrice = t,
+                            comment = c
+                        )
+                        dialogVisible.value = false
+                    }
+                }
+            ) {
+                IntegerTextField(
+                    value = price.value,
+                    onValueChange = { price.value = it },
+                    label = stringResource(R.string.price)
+                )
+
+                IntegerTextField(
+                    value = salePrice.value,
+                    onValueChange = { salePrice.value = it },
+                    label = stringResource(R.string.sale_price)
+                )
+
+                IntegerTextField(
+                    value = amount.value,
+                    onValueChange = { amount.value = it },
+                    label = stringResource(R.string.amount)
+                )
+
+                IntegerTextField(
+                    value = totalPrice.value,
+                    onValueChange = { totalPrice.value = it },
+                    label = stringResource(R.string.total_price)
+                )
+
+                CommentTextField(
+                    value = comment.value,
+                    onValueChange = { comment.value = it }
+                )
+            }
         }
     }
 }
@@ -113,12 +187,12 @@ private fun HeroImage(modifier: Modifier = Modifier) {
 @Composable
 private fun TitleSection(
     modifier: Modifier = Modifier,
-    product: Product
+    productTitle: ProductTitle
 ) {
     Column(modifier = modifier.padding(horizontal = 16.dp)) {
 
         Text(
-            text = product.title.name,
+            text = productTitle.name,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
         )
@@ -135,7 +209,7 @@ private fun TitleSection(
 
             HorizontalSpacer(6)
             Text(
-                text = product.dateTime.toString(),
+                text = productTitle.dateTime.toString(),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -146,7 +220,7 @@ private fun TitleSection(
 @Composable
 private fun PricingSection(
     modifier: Modifier = Modifier,
-    product: Product
+    productTitle: ProductTitle
 ) {
     Row(
         modifier = modifier.padding(16.dp),
@@ -154,7 +228,7 @@ private fun PricingSection(
     ) {
 
         Text(
-            text = "$${product.salePrice}",
+            text = "$${productTitle.defaultSalePrice}",
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Black,
             color = MaterialTheme.colorScheme.primary
@@ -180,7 +254,7 @@ private fun PricingSection(
 @Composable
 private fun InventorySection(
     modifier: Modifier = Modifier,
-    product: Product
+    productTitle: ProductTitle
 ) {
     Column(modifier = modifier.padding(16.dp)) {
 
@@ -217,7 +291,7 @@ private fun InventorySection(
                     Column {
 
                         Text(
-                            text = product.title.category.name,
+                            text = productTitle.category.name,
                             style = MaterialTheme.typography.labelSmall
                         )
 
@@ -237,7 +311,7 @@ private fun InventorySection(
 
                     VerticalSpacer(4)
                     Text(
-                        text = product.title.category.template.name,
+                        text = productTitle.category.template.name,
                         style = MaterialTheme.typography.labelMedium,
                         modifier = Modifier
                             .background(
@@ -255,7 +329,7 @@ private fun InventorySection(
 @Composable
 private fun DescriptionSection(
     modifier: Modifier = Modifier,
-    product: Product
+    productTitle: ProductTitle
 ) {
     Column(modifier = modifier.padding(16.dp)) {
 
@@ -267,7 +341,7 @@ private fun DescriptionSection(
 
         VerticalSpacer(8)
         Text(
-            text = product.description.description(),
+            text = productTitle.description.description(),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -277,7 +351,7 @@ private fun DescriptionSection(
 @Composable
 private fun SpecificationsSection(
     modifier: Modifier = Modifier,
-    product: Product
+    productTitle: ProductTitle
 ) {
     Column(modifier = modifier.padding(16.dp)) {
 
@@ -289,9 +363,9 @@ private fun SpecificationsSection(
 
         VerticalSpacer(8)
         Card {
-            product.title.properties.forEachIndexed { index, property ->
+            productTitle.properties.forEachIndexed { index, property ->
                 PropertyCard(property = property)
-                if (index != product.title.properties.lastIndex) {
+                if (index != productTitle.properties.lastIndex) {
                     HorizontalDivider()
                 }
             }
@@ -299,27 +373,17 @@ private fun SpecificationsSection(
     }
 }
 
-@Composable
-private fun BottomActionBar(
-    modifier: Modifier = Modifier,
-    onAddToCart: () -> Unit
-) {
-    BottomAppBar(modifier = modifier) {
-        Button(
-            onClick = onAddToCart,
-            modifier = Modifier.weight(2f)
-        ) {
-            Text(stringResource(R.string.add_to_cart))
-        }
-    }
-}
-
 @Preview
 @Composable
-private fun ProductScreenPreview() {
-    ProductScreen(
-        product = product1,
-        onEdit = {},
-        onAddToCart = {}
+private fun ProductTitleScreenPreview() {
+    val viewModel = viewModel {
+        ProductTitleScreenViewModel(
+            productTitle = productTitle1,
+            repository = { null }
+        )
+    }
+    ProductTitleScreen(
+        productTitle = productTitle1,
+        viewModel = viewModel
     )
 }

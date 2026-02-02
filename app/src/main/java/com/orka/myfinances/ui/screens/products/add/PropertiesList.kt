@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.data.models.template.TemplateField
 import com.orka.myfinances.data.models.types.Range
-import com.orka.myfinances.data.repositories.product.models.PropertyModel
+import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
 import com.orka.myfinances.lib.ui.components.RangeField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
@@ -41,7 +41,7 @@ fun PropertiesList(
                         onValueChange = {
                             value.value = it
                             if (it.isNotEmpty()) {
-                                onSuccess(index, PropertyModel(field, it))
+                                onSuccess(index, PropertyModel(field.id, it))
                             }
                         },
                         label = { Text(text = field.name) }
@@ -56,7 +56,7 @@ fun PropertiesList(
                         onValueChange = {
                             value.value = it
                             if (it != null && it > 0) {
-                                onSuccess(index, PropertyModel(field, it))
+                                onSuccess(index, PropertyModel(field.id, it))
                             }
                         },
                         label = { Text(text = field.name) }
@@ -77,14 +77,14 @@ fun PropertiesList(
                             min.value = it
                             val maxValue = max.value
                             if (it != null && it > 0 && maxValue != null)
-                                onSuccess(index, PropertyModel(field, Range(it, maxValue)))
+                                onSuccess(index, PropertyModel(field.id, Range(it, maxValue)))
                         },
                         onMaxValueChange = {
                             val minValue = min.value
                             max.value = it
 
                             if (minValue != null && minValue > 0 && it != null)
-                                onSuccess(index, PropertyModel(field, Range(minValue, it)))
+                                onSuccess(index, PropertyModel(field.id, Range(minValue, it)))
                         }
                     )
                 }

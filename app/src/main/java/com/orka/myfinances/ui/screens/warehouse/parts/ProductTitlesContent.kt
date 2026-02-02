@@ -10,7 +10,7 @@ import com.orka.myfinances.ui.screens.warehouse.viewmodel.ProductsState
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
 
 @Composable
-fun ProductsContent(
+fun ProductTitlesContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     viewModel: WarehouseScreenViewModel,
@@ -30,11 +30,11 @@ fun ProductsContent(
         }
 
         is ProductsState.Success -> {
-            ProductsList(
+            ProductTitlesList(
                 modifier = modifier,
                 contentPadding = contentPadding,
-                products = state.products,
-                onProductClick = { navigator.navigateToProduct(it) }
+                productTitles = state.productTitles,
+                onProductClick = { navigator.navigateToProductTitle(it) }
             )
         }
     }

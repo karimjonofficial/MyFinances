@@ -6,7 +6,7 @@ import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.order.Order
-import com.orka.myfinances.data.models.product.Product
+import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.data.models.receive.Receive
 import com.orka.myfinances.data.models.sale.Sale
 import com.orka.myfinances.data.models.template.Template
@@ -21,7 +21,7 @@ class DummyNavigator : Navigator {
     override fun navigateToAddProduct(category: Category) {}
     override fun navigateToSettings() {}
     override fun navigateToTemplates() {}
-    override fun navigateToProduct(product: Product) {}
+    override fun navigateToProductTitle(productTitle: ProductTitle) {}
     override fun navigateToClients() {}
     override fun navigateToClient(client: Client) {}
     override fun navigateToHistory() {}

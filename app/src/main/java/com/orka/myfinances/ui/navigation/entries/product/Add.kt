@@ -8,7 +8,7 @@ import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.managers.Navigator
-import com.orka.myfinances.ui.screens.products.add.AddProductScreen
+import com.orka.myfinances.ui.screens.products.add.AddProductTitleScreen
 
 fun addProductEntry(
     modifier: Modifier = Modifier,
@@ -19,7 +19,7 @@ fun addProductEntry(
     val viewModel = viewModel(key = "${destination.category.id}") { factory.addProductViewModel() }
     val uiState = viewModel.uiState.collectAsState()
 
-    AddProductScreen(
+    AddProductTitleScreen(
         modifier = modifier,
         category = destination.category,
         state = uiState.value,

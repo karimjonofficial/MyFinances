@@ -29,14 +29,13 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.repositories.folder.CategoryRepository
 import com.orka.myfinances.data.repositories.folder.FolderRepository
-import com.orka.myfinances.data.repositories.product.ProductRepository
-import com.orka.myfinances.data.repositories.product.ProductTitleRepository
-import com.orka.myfinances.data.repositories.product.models.PropertyModel
+import com.orka.myfinances.data.repositories.product.title.ProductTitleRepository
+import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 import com.orka.myfinances.data.repositories.template.TemplateRepository
+import com.orka.myfinances.data.repositories.template.field.TemplateFieldRepository
 import com.orka.myfinances.fixtures.core.DummyLogger
 import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.folder.category1
-import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
@@ -45,16 +44,16 @@ import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.ui.managers.Navigator
-import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenState
-import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
+import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductTitleScreenState
+import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductTitleScreenViewModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
-fun AddProductScreen(
+fun AddProductTitleScreen(
     modifier: Modifier = Modifier,
     category: Category,
-    state: AddProductScreenState,
-    viewModel: AddProductScreenViewModel,
+    state: AddProductTitleScreenState,
+    viewModel: AddProductTitleScreenViewModel,
     navigator: Navigator
 ) {
     Scaffold(
@@ -64,9 +63,9 @@ fun AddProductScreen(
         val m = Modifier.scaffoldPadding(paddingValues)
 
         when (state) {
-            is AddProductScreenState.Loading -> LoadingScreen(m)
+            is AddProductTitleScreenState.Loading -> LoadingScreen(m)
 
-            is AddProductScreenState.Success -> {
+            is AddProductTitleScreenState.Success -> {
                 val categories = state.categories
                 val scrollState = rememberScrollState()
                 val menuVisible = rememberSaveable { mutableStateOf(false) }
@@ -78,9 +77,10 @@ fun AddProductScreen(
                 val selectedCategory = categories.find { it.id == selectedCategoryId.value }!!
                 val fields = selectedCategory.template.fields
 
-                val properties = rememberSaveable { mutableStateListOf<PropertyModel<*>?>() }.apply {
-                    repeat(fields.size) { add(null) }
-                }
+                val properties =
+                    rememberSaveable { mutableStateListOf<PropertyModel<*>?>() }.apply {
+                        repeat(fields.size) { add(null) }
+                    }
 
                 Column(modifier = m) {
                     Column(
@@ -167,8 +167,7 @@ fun AddProductScreen(
                         ) {
                             Button(
                                 onClick = {
-                                    viewModel.addProduct(
-                                        titleId = id1,
+                                    viewModel.addProductTitle(
                                         properties = properties,
                                         name = name.value,
                                         price = price.value,
@@ -191,10 +190,13 @@ fun AddProductScreen(
 
 @Preview
 @Composable
-private fun AddProductScreenPreview() {
+private fun AddProductTitleScreenPreview() {
     val viewModel = viewModel {
-        AddProductScreenViewModel(
-            productRepository = ProductRepository(ProductTitleRepository()),
+        AddProductTitleScreenViewModel(
+            productTitleRepository = ProductTitleRepository(
+                categoryRepository = CategoryRepository(FolderRepository(TemplateRepository())),
+                fieldRepository = TemplateFieldRepository()
+            ),
             categoryRepository = CategoryRepository(FolderRepository(TemplateRepository())),
             logger = DummyLogger()
         )
@@ -203,7 +205,7 @@ private fun AddProductScreenPreview() {
     val state = viewModel.uiState.collectAsState()
 
     MyFinancesTheme {
-        AddProductScreen(
+        AddProductTitleScreen(
             modifier = Modifier.fillMaxSize(),
             category = category1,
             state = state.value,

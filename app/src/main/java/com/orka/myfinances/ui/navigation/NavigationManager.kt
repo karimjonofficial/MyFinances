@@ -8,7 +8,7 @@ import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.order.Order
-import com.orka.myfinances.data.models.product.Product
+import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.data.models.receive.Receive
 import com.orka.myfinances.data.models.sale.Sale
 import com.orka.myfinances.data.models.template.Template
@@ -70,8 +70,8 @@ class NavigationManager(
         navigate(Destination.Templates)
     }
 
-    override fun navigateToProduct(product: Product) {
-        navigate(Destination.Product(product))
+    override fun navigateToProductTitle(productTitle: ProductTitle) {
+        navigate(Destination.ProductTitle(productTitle))
     }
 
     override fun navigateToClients() {

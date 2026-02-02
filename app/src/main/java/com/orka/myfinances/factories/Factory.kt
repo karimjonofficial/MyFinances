@@ -5,6 +5,7 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.api.OfficeApi
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Category
+import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.data.repositories.debt.DebtRepository
@@ -12,7 +13,7 @@ import com.orka.myfinances.data.repositories.folder.CategoryRepository
 import com.orka.myfinances.data.repositories.folder.FolderRepository
 import com.orka.myfinances.data.repositories.notification.NotificationRepository
 import com.orka.myfinances.data.repositories.order.OrderRepository
-import com.orka.myfinances.data.repositories.product.ProductRepository
+import com.orka.myfinances.data.repositories.product.title.ProductTitleRepository
 import com.orka.myfinances.data.repositories.receive.ReceiveRepository
 import com.orka.myfinances.data.repositories.sale.SaleRepository
 import com.orka.myfinances.data.repositories.stock.StockRepository
@@ -29,17 +30,18 @@ import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.ProfileContentViewModel
 import com.orka.myfinances.ui.screens.notification.NotificationScreenViewModel
 import com.orka.myfinances.ui.screens.order.OrdersScreenViewModel
-import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductScreenViewModel
-import com.orka.myfinances.ui.screens.stock.AddReceiveScreenViewModel
-import com.orka.myfinances.ui.screens.templates.viewmodel.TemplatesScreenViewModel
+import com.orka.myfinances.ui.screens.products.ProductTitleScreenViewModel
+import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductTitleScreenViewModel
+import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenViewModel
 import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
+import com.orka.myfinances.ui.screens.templates.viewmodel.TemplatesScreenViewModel
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
 
 class Factory(
     private val officeApi: OfficeApi,
+    private val productTitleRepository: ProductTitleRepository,
     private val folderRepository: FolderRepository,
     private val templateRepository: TemplateRepository,
-    private val productRepository: ProductRepository,
     private val categoryRepository: CategoryRepository,
     private val stockRepository: StockRepository,
     private val basketRepository: BasketRepository,
@@ -74,9 +76,9 @@ class Factory(
         )
     }
 
-    fun addProductViewModel(): AddProductScreenViewModel {
-        return AddProductScreenViewModel(
-            productRepository = productRepository,
+    fun addProductViewModel(): AddProductTitleScreenViewModel {
+        return AddProductTitleScreenViewModel(
+            productTitleRepository = productTitleRepository,
             categoryRepository = categoryRepository,
             logger = logger
         )
@@ -85,10 +87,11 @@ class Factory(
     fun warehouseViewModel(category: Category): WarehouseScreenViewModel {
         return WarehouseScreenViewModel(
             category = category,
-            productRepository = productRepository,
+            productTitleRepository = productTitleRepository,
             stockRepository = stockRepository,
             basketRepository = basketRepository,
-            events = productRepository.events,
+            productTitleEvents = productTitleRepository.events,
+            stockEvents = stockRepository.events,
             logger = logger
         )
     }
@@ -146,9 +149,14 @@ class Factory(
         )
     }
 
-    fun addReceiveViewModel(): AddReceiveScreenViewModel {
+    fun addReceiveViewModel(category: Category): AddReceiveScreenViewModel {
         return AddReceiveScreenViewModel(
-            repository = receiveRepository
+            titleRepository = productTitleRepository,
+            receiveRepository = receiveRepository,
+            category = category,
+            loading = Text.Res(R.string.loading),
+            failure = Text.Res(R.string.failure),
+            logger = logger
         )
     }
 
@@ -183,6 +191,13 @@ class Factory(
             failure = Text.Res(R.string.failure),
             repository = officeApi,
             logger = logger
+        )
+    }
+
+    fun productTitleViewModel(productTitle: ProductTitle): ProductTitleScreenViewModel {
+        return ProductTitleScreenViewModel(
+            productTitle = productTitle,
+            repository = receiveRepository
         )
     }
 }

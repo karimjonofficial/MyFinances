@@ -1,6 +1,5 @@
 package com.orka.myfinances.ui.navigation.entries
 
-import android.util.Log
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.data.models.Session
@@ -21,7 +20,6 @@ fun homeEntry(
     navigator: Navigator,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
-    Log.d("HomeEntry", "Recomposition")
     HomeScreen(
         modifier = modifier,
         factory = factory,

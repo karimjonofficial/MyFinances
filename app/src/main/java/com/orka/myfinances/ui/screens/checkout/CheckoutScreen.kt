@@ -15,10 +15,14 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.client.ClientRepository
+import com.orka.myfinances.data.repositories.folder.CategoryRepository
+import com.orka.myfinances.data.repositories.folder.FolderRepository
 import com.orka.myfinances.data.repositories.order.OrderRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
-import com.orka.myfinances.data.repositories.product.ProductTitleRepository
+import com.orka.myfinances.data.repositories.product.title.ProductTitleRepository
 import com.orka.myfinances.data.repositories.sale.SaleRepository
+import com.orka.myfinances.data.repositories.template.TemplateRepository
+import com.orka.myfinances.data.repositories.template.field.TemplateFieldRepository
 import com.orka.myfinances.fixtures.core.DummyLogger
 import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.basket.basketItems
@@ -88,7 +92,14 @@ private fun CheckoutScreenPreview() {
                 saleRepository = SaleRepository(),
                 orderRepository = OrderRepository(),
                 clientRepository = ClientRepository(),
-                basketRepository = BasketRepository(ProductRepository(ProductTitleRepository())),
+                basketRepository = BasketRepository(
+                    productRepository = ProductRepository(
+                        titleRepository = ProductTitleRepository(
+                            categoryRepository = CategoryRepository(FolderRepository(TemplateRepository())),
+                            fieldRepository = TemplateFieldRepository()
+                        )
+                    )
+                ),
                 logger = DummyLogger()
             )
         }

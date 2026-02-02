@@ -29,8 +29,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.application.LoggerImpl
 import com.orka.myfinances.data.repositories.basket.BasketRepository
+import com.orka.myfinances.data.repositories.folder.CategoryRepository
+import com.orka.myfinances.data.repositories.folder.FolderRepository
 import com.orka.myfinances.data.repositories.product.ProductRepository
-import com.orka.myfinances.data.repositories.product.ProductTitleRepository
+import com.orka.myfinances.data.repositories.product.title.ProductTitleRepository
+import com.orka.myfinances.data.repositories.template.TemplateRepository
+import com.orka.myfinances.data.repositories.template.field.TemplateFieldRepository
 import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
@@ -121,7 +125,12 @@ fun BasketContent(
 @Composable
 private fun BasketContentPreview() {
     val logger = LoggerImpl()
-    val productRepository = ProductRepository(ProductTitleRepository())
+    val productRepository = ProductRepository(
+        titleRepository = ProductTitleRepository(
+            categoryRepository = CategoryRepository(FolderRepository(TemplateRepository())),
+            fieldRepository = TemplateFieldRepository()
+        )
+    )
     val basketRepository = BasketRepository(productRepository)
     val viewModel = viewModel {
         BasketContentViewModel(

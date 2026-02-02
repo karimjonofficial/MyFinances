@@ -2,7 +2,6 @@ package com.orka.myfinances.data.repositories.basket
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.repositories.product.ProductRepository
-import com.orka.myfinances.data.repositories.product.ProductTitleRepository
 import com.orka.myfinances.testFixtures.resources.amount
 import com.orka.myfinances.testFixtures.resources.models.id1
 import com.orka.myfinances.testFixtures.resources.models.product.product2
@@ -15,7 +14,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class BasketRepositoryTest : MainDispatcherContext() {
-    private val productRepository = ProductRepository(ProductTitleRepository())
+    private val productRepository = ProductRepository({ null })
     private val repository = BasketRepository(productRepository)
 
     @Test
