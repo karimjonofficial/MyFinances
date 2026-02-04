@@ -25,7 +25,6 @@ import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.IntegerTextField
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.lib.ui.models.Text
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.managers.Navigator
 
@@ -33,7 +32,7 @@ import com.orka.myfinances.ui.managers.Navigator
 fun AddReceiveScreen(
     modifier: Modifier = Modifier,
     category: Category,
-    state: State<Text, List<ProductTitle>, Text>,
+    state: State,
     viewModel: AddReceiveScreenViewModel,
     navigator: Navigator
 ) {
@@ -93,7 +92,7 @@ fun AddReceiveScreen(
                 menuExpanded = expanded.value,
                 onExpandChange = { expanded.value = it },
                 onDismissRequested = { expanded.value = false },
-                items = if(state is State.Success) state.value else emptyList(),
+                items = if(state is State.Success<*>) state.value as List<ProductTitle> else emptyList(),
                 itemText = { it.name },
                 onItemSelected = {
                     price.value = it.defaultPrice

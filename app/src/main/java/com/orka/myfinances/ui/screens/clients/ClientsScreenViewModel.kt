@@ -5,15 +5,16 @@ import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.repositories.client.AddClientRequest
 import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.Get
+import com.orka.myfinances.lib.ui.models.Text
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
 
 class ClientsScreenViewModel(
     get: Get<Client>,
     private val add: Add<Client, AddClientRequest>,
-    loading: Int,
-    failure: Int,
+    loading: Text,
+    failure: Text,
     logger: Logger
-) : ListViewModel<Int, Client, Int>(
+) : ListViewModel<Client>(
     loading = loading,
     failure = failure,
     repository = get,

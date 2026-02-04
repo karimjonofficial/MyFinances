@@ -11,5 +11,7 @@ interface MockGetByParameterRepository<T, P> : GetByParameter<T, P>, Repository 
         return items.filter(parameter)
     }
 
-    suspend fun List<T>.filter(parameter: P): List<T>?
+    suspend fun List<T>.filter(parameter: P): List<T>? {
+        return this.toList()
+    }
 }

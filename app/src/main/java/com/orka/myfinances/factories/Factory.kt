@@ -100,6 +100,9 @@ class Factory(
         return CatalogScreenViewModel(
             catalog = catalog,
             repository = folderRepository,
+            addRepository = folderRepository,
+            templateRepository = templateRepository,
+            events = folderRepository.events,
             logger = logger
         )
     }
@@ -115,8 +118,8 @@ class Factory(
         return ClientsScreenViewModel(
             get = clientRepository,
             add = clientRepository,
-            loading = R.string.loading,
-            failure = R.string.failure,
+            loading = Text.Res(R.string.loading),
+            failure = Text.Res(R.string.failure),
             logger = logger
         )
     }
@@ -135,8 +138,8 @@ class Factory(
         return ReceiveContentViewModel(
             repository = receiveRepository,
             events = receiveRepository.events,
-            loading = R.string.loading,
-            failure = R.string.failure,
+            loading = Text.Res(R.string.loading),
+            failure = Text.Res(R.string.failure),
             logger = logger
         )
     }
@@ -147,7 +150,9 @@ class Factory(
             orderRepository = orderRepository,
             basketRepository = basketRepository,
             clientRepository = clientRepository,
-            logger = logger
+            logger = logger,
+            loading = Text.Res(R.string.loading),
+            failure = Text.Res(R.string.failure),
         )
     }
 
@@ -165,15 +170,17 @@ class Factory(
     fun notificationsViewModel(): NotificationScreenViewModel {
         return NotificationScreenViewModel(
             repository = notificationRepository,
-            logger = logger
+            logger = logger,
+            loading = Text.Res(R.string.loading),
+            failure = Text.Res(R.string.failure),
         )
     }
 
     fun ordersViewModel(): OrdersScreenViewModel {
         return OrdersScreenViewModel(
             repository = orderRepository,
-            loading = R.string.loading,
-            failure = R.string.failure,
+            loading = Text.Res(R.string.loading),
+            failure = Text.Res(R.string.failure),
             logger = logger
         )
     }
@@ -183,7 +190,9 @@ class Factory(
             debtRepository = debtRepository,
             add = debtRepository,
             clientRepository = clientRepository,
-            logger = logger
+            logger = logger,
+            loading = Text.Res(R.string.loading),
+            failure = Text.Res(R.string.failure),
         )
     }
 

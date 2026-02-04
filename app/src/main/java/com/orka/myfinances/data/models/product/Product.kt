@@ -8,6 +8,5 @@ data class Product(
     val title: ProductTitle,
     val price: Int,
     val salePrice: Int,
-    val dateTime: Instant,
-    val description: String? = null//TODO may be removed
+    val dateTime: Instant
 )

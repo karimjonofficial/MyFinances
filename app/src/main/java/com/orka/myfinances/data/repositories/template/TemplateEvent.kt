@@ -1,3 +1,3 @@
 package com.orka.myfinances.data.repositories.template
 
-data object TemplateRepositoryEvent
+data object TemplateEvent

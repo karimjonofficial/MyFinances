@@ -14,12 +14,12 @@ import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
 import androidx.compose.runtime.State as RState
 
 @Composable
-fun <TLoading, TSuccess, TFailure> LazyColumnScreen(
+fun <T> LazyColumnScreen(
     modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit = {},
     arrangementSpace: Dp = 0.dp,
-    item: @Composable (Modifier, TSuccess) -> Unit,
-    viewModel: ListViewModel<TLoading, TSuccess, TFailure>
+    item: @Composable (Modifier, T) -> Unit,
+    viewModel: ListViewModel<T>
 ) {
     Scaffold(
         modifier = modifier,
@@ -38,14 +38,14 @@ fun <TLoading, TSuccess, TFailure> LazyColumnScreen(
 }
 
 @Composable
-fun <TLoading, TSuccess, TFailure> LazyColumnScreen(
+fun <T> LazyColumnScreen(
     modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit = {},
     arrangementSpace: Dp = 0.dp,
     dialogState: RState<Boolean>,
     dialog: @Composable () -> Unit,
-    item: @Composable (Modifier, TSuccess) -> Unit,
-    viewModel: ListViewModel<TLoading, TSuccess, TFailure>
+    item: @Composable (Modifier, T) -> Unit,
+    viewModel: ListViewModel<T>
 ) {
     Scaffold(
         modifier = modifier,
@@ -67,12 +67,12 @@ fun <TLoading, TSuccess, TFailure> LazyColumnScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <TLoading, TSuccess, TFailure> LazyColumnScreen(
+fun <T> LazyColumnScreen(
     modifier: Modifier = Modifier,
     title: String,
     arrangementSpace: Dp = 0.dp,
-    item: @Composable (Modifier, TSuccess) -> Unit,
-    viewModel: ListViewModel<TLoading, TSuccess, TFailure>
+    item: @Composable (Modifier, T) -> Unit,
+    viewModel: ListViewModel<T>
 ) {
     LazyColumnScreen(
         modifier = modifier,

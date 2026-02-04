@@ -40,8 +40,7 @@ class ReceiveRepository(
                         productTitleId = it.productTitleId,
                         amount = it.amount,
                         price = it.price,
-                        salePrice = it.salePrice,
-                        comment = it.description//TODO may be removed
+                        salePrice = it.salePrice
                     ))
                 if(title.defaultPrice != it.price || title.defaultSalePrice != it.salePrice) {
                     //TODO edit title's properties

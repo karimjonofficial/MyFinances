@@ -7,8 +7,8 @@ import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.data.repositories.basket.BasketRepository
-import com.orka.myfinances.data.repositories.product.title.ProductTitleRepositoryEvent
-import com.orka.myfinances.data.repositories.stock.StockRepositoryEvent
+import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
+import com.orka.myfinances.data.repositories.stock.StockEvent
 import com.orka.myfinances.lib.data.repositories.GetByParameter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -21,8 +21,8 @@ class WarehouseScreenViewModel(
     private val productTitleRepository: GetByParameter<ProductTitle, Category>,
     private val stockRepository: GetByParameter<StockItem, Category>,
     private val basketRepository: BasketRepository,
-    productTitleEvents: Flow<ProductTitleRepositoryEvent>,
-    stockEvents: Flow<StockRepositoryEvent>,
+    productTitleEvents: Flow<ProductTitleEvent>,
+    stockEvents: Flow<StockEvent>,
     logger: Logger
 ) : DualStateViewModel<ProductsState, WarehouseState>(
     initialState1 = ProductsState.Loading,
@@ -34,9 +34,7 @@ class WarehouseScreenViewModel(
 
     init {
         productTitleEvents.onEach {
-            if (it is ProductTitleRepositoryEvent.Add && it.categoryId == category.id) {
-                initialize()
-            }
+            if (it.categoryId == category.id) initialize()
         }.launchIn(viewModelScope)
 
         stockEvents.onEach {

@@ -121,18 +121,15 @@ fun BasketItemCard(
                         }
                     }
 
-                    if (product.description?.isNotBlank() ?: false) {
-                        Text(
-                            text = product.title.description.description(),
-                            style = MaterialTheme.typography.bodySmall,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.padding(top = 4.dp)
-                        )
-                    }
+                    Text(
+                        text = product.title.description.description(),
+                        style = MaterialTheme.typography.bodySmall,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
 
                     Spacer(modifier = Modifier.height(8.dp))
-
                     /**if (item.isOutOfStock) {
                     Text(
                     text = "Out of Stock",
@@ -272,8 +269,7 @@ fun BasketItemCardPreview() {
                     ),
                     price = price,
                     salePrice = salePrice,
-                    dateTime = dateTime,
-                    description = "Made with 100% GOTS certified organic cotton for a soft feel and comfortable fit."
+                    dateTime = dateTime
                 ),
                 amount = 2
             )
@@ -298,8 +294,7 @@ fun BasketItemCardPreview() {
                     ),
                     price = price,
                     salePrice = salePrice,
-                    dateTime = dateTime,
-                    description = "Immerse yourself in sound with active noise cancellation and up to 30 hours of battery."
+                    dateTime = dateTime
                 ),
                 amount = 1
             )
@@ -325,8 +320,7 @@ fun BasketItemCardPreview() {
                     ),
                     price = price,
                     salePrice = salePrice,
-                    dateTime = dateTime,
-                    description = "A timeless sneaker design for any casual occasion."
+                    dateTime = dateTime
                 ),
                 amount = 1
             )

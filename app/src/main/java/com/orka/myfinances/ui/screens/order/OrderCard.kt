@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
@@ -46,7 +48,11 @@ fun OrderCard(
     } else {
         Card(
             modifier = modifier,
-            onClick = { onClick(order) }
+            onClick = { onClick(order) },
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            )
         ) {
             OrderCardContent(order = order)
         }
@@ -104,7 +110,9 @@ private fun OrderCardContent(
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(4.dp))
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .background(
+                        color = if(!order.completed) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.onPrimary
+                    )
                     .padding(4.dp),
                 contentAlignment = Alignment.Center
             ) {
@@ -112,11 +120,15 @@ private fun OrderCardContent(
 
                     Icon(
                         painter = painterResource(R.drawable.shopping_bag_outlined),
+                        tint = if(!order.completed) LocalContentColor.current else MaterialTheme.colorScheme.primary,
                         contentDescription = null
                     )
 
                     HorizontalSpacer(4)
-                    Text(text = "${order.items.size} items")
+                    Text(
+                        text = "${order.items.size} items",
+                        color = if(!order.completed) LocalContentColor.current else MaterialTheme.colorScheme.primary,
+                    )
                 }
             }
         }

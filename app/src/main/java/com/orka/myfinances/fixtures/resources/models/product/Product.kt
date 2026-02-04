@@ -13,16 +13,14 @@ val product1 = Product(
     title = productTitle1,
     price = price,
     salePrice = salePrice,
-    dateTime = dateTime,
-    description = description
+    dateTime = dateTime
 )
 val product2 = Product(
     id = id2,
     title = productTitle2,
     price = price,
     salePrice = salePrice,
-    dateTime = dateTime,
-    description = description
+    dateTime = dateTime
 )
 
 val products = listOf(product1, product2)

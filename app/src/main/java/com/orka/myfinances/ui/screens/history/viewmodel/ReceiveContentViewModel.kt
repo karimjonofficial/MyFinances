@@ -5,6 +5,7 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.receive.Receive
 import com.orka.myfinances.data.repositories.receive.ReceiveEvent
 import com.orka.myfinances.lib.data.repositories.Get
+import com.orka.myfinances.lib.ui.models.Text
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
@@ -13,10 +14,10 @@ import kotlinx.coroutines.flow.onEach
 class ReceiveContentViewModel(
     events: Flow<ReceiveEvent>,
     repository: Get<Receive>,
-    loading: Int,
-    failure: Int,
+    loading: Text,
+    failure: Text,
     logger: Logger
-) : ListViewModel<Int, Receive, Int>(
+) : ListViewModel<Receive>(
     repository = repository,
     loading = loading,
     failure = failure,

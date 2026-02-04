@@ -23,8 +23,8 @@ class StockRepository(
 ) : MockGetRepository<StockItem>, MockGetByIdRepository<StockItem>,
     MockGetByParameterRepository<StockItem, Category>,
     MockAddRepository<StockItem, AddStockItemRequest> {
-    private val flow = MutableSharedFlow<StockRepositoryEvent>()
-    val events: Flow<StockRepositoryEvent> = flow
+    private val flow = MutableSharedFlow<StockEvent>()
+    val events: Flow<StockEvent> = flow
 
     override val items = stockItems.toMutableList()
 
@@ -41,13 +41,12 @@ class StockRepository(
             product = product,
             amount = amount,
             office = office,
-            dateTime = now(),
-            comment = comment
+            dateTime = now()
         )
     }
 
     override suspend fun afterAdd(item: StockItem) {
-        flow.emit(StockRepositoryEvent(item.product.title.category))
+        flow.emit(StockEvent(item.product.title.category))
     }
 
     override suspend fun List<StockItem>.filter(parameter: Category): List<StockItem> {

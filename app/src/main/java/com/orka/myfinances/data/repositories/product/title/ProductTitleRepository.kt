@@ -24,8 +24,8 @@ class ProductTitleRepository(
     MockGetByParameterRepository<ProductTitle, Category>,
     MockAddRepository<ProductTitle, AddProductTitleRequest>,
     MockGetRepository<ProductTitle> {
-    private val flow = MutableSharedFlow<ProductTitleRepositoryEvent>()
-    val events: Flow<ProductTitleRepositoryEvent> = flow
+    private val flow = MutableSharedFlow<ProductTitleEvent>()
+    val events: Flow<ProductTitleEvent> = flow
 
     override val items = productTitles.toMutableList()
 
@@ -53,7 +53,7 @@ class ProductTitleRepository(
     }
 
     override suspend fun afterAdd(item: ProductTitle) {
-        flow.emit(ProductTitleRepositoryEvent.Add(item.category.id))
+        flow.emit(ProductTitleEvent(item.category.id))
     }
 
     override suspend fun List<ProductTitle>.filter(

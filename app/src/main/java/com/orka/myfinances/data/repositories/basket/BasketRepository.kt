@@ -57,7 +57,7 @@ class BasketRepository(private val productRepository: GetById<Product>) {
     }
 
     private suspend fun emit() {
-        _events.emit(BasketEvent.Clear)
+        _events.emit(BasketEvent)
     }
 
     private fun getIndex(id: Id): Int? {

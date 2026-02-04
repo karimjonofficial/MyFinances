@@ -22,11 +22,11 @@ class TemplateRepository : MockGetRepository<Template>,
         return find { it.id == id }
     }
 
-    val flow = MutableSharedFlow<TemplateRepositoryEvent>()
-    val events = flow as Flow<TemplateRepositoryEvent>
+    val flow = MutableSharedFlow<TemplateEvent>()
+    val events = flow as Flow<TemplateEvent>
 
     override suspend fun AddTemplateRequest.map(): Template {
-        flow.emit(TemplateRepositoryEvent)
+        flow.emit(TemplateEvent)
         return Template(
             id = id1,
             name = name,

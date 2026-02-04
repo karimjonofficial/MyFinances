@@ -18,7 +18,7 @@ class AddReceiveScreenViewModel(
     loading: Text,
     failure: Text,
     logger: Logger
-) : ListByParameterViewModel<Text, ProductTitle, Text, Category>(
+) : ListByParameterViewModel<ProductTitle, Category>(
     parameter = category,
     loading = loading,
     failure = failure,

@@ -1,6 +1,5 @@
 package com.orka.myfinances.ui.screens.home
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -44,7 +43,6 @@ import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
-import com.orka.myfinances.lib.ui.models.Text
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.managers.Navigator
 import com.orka.myfinances.ui.managers.SessionManager
@@ -53,7 +51,7 @@ import com.orka.myfinances.ui.screens.home.parts.ProfileTopBar
 @Composable
 fun ProfileContent(
     modifier: Modifier,
-    state: State<Text, List<Office>, Text>,
+    state: State,
     session: Session,
     navigator: Navigator,
     sessionManager: SessionManager
@@ -112,8 +110,8 @@ fun ProfileContent(
 
         OutlinedExposedDropDownTextField(
             text = when (state) {
-                is State.Initial -> stringResource(R.string.loading)
-                is State.Success -> session.office.name
+                State.Initial -> stringResource(R.string.loading)
+                is State.Success<*> -> session.office.name
                 is State.Failure -> state.error.str()
                 is State.Loading -> state.message.str()
             },
@@ -122,7 +120,7 @@ fun ProfileContent(
             onExpandChange = { exposed.value = it },
             onDismissRequested = { exposed.value = false },
             items = when (state) {
-                is State.Success -> state.value
+                is State.Success<*> -> state.value as List<Office>
                 else -> emptyList()
             },
             itemText = { it.name },

@@ -8,6 +8,5 @@ data class StockItem(
     val product: Product,
     val amount: Int,
     val office: Office,
-    val dateTime: Instant,
-    val comment: String? = null
+    val dateTime: Instant
 )

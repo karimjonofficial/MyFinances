@@ -1,6 +1,5 @@
 package com.orka.myfinances.ui.screens.home
 
-import android.util.Log
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -68,16 +67,12 @@ fun HomeScreen(
 
     fun NavItem.getIconRes() =
         if (navState.intValue == index) iconRes.selected else iconRes.unSelected
-
     fun showDialog() {
         dialogVisible.value = true
     }
-
     fun hideDialog() {
         dialogVisible.value = false
     }
-
-    Log.d("HomeScreen", "Recomposition")
 
     Scaffold(
         modifier = modifier,

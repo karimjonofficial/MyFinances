@@ -1,13 +1,14 @@
 package com.orka.myfinances.ui.screens.home.viewmodel
 
+import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.SingleStateViewModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
-import com.orka.myfinances.data.repositories.basket.BasketEvent
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class BasketContentViewModel(
     private val repository: BasketRepository,
@@ -19,13 +20,9 @@ class BasketContentViewModel(
     val uiState = state.asStateFlow()
 
     init {
-        launch {
-            repository.events.collectLatest { event ->
-                when (event) {
-                    is BasketEvent.Clear -> initialize()
-                }
-            }
-        }
+        repository.events.onEach {
+            initialize()
+        }.launchIn(viewModelScope)
     }
 
     override fun initialize() {

@@ -2,6 +2,7 @@ package com.orka.myfinances.ui.screens.sale
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -78,7 +79,7 @@ fun SaleScreen(
             )
         },
         bottomBar = {
-            BottomAppBar {
+            BottomAppBar(contentPadding = PaddingValues(horizontal = 16.dp)) {
                 Button(
                     onClick = {},
                     modifier = Modifier.weight(1f).wrapContentHeight(),
@@ -256,6 +257,7 @@ fun SaleScreen(
                             modifier = Modifier.padding(16.dp)
                         )
                     }
+                    VerticalSpacer(8)
                 }
             }
         }

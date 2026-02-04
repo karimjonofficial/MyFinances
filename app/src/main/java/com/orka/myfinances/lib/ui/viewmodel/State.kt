@@ -1,10 +1,10 @@
 package com.orka.myfinances.lib.ui.viewmodel
 
-typealias N = Nothing
+import com.orka.myfinances.lib.ui.models.Text
 
-sealed interface State<out L, out S, out F> {
-    data object Initial : State<N, N, N>
-    data class Loading<T>(val message: T) : State<T, N, N>
-    data class Success<T>(val value: T) : State<N, T, N>
-    data class Failure<T>(val error: T) : State<N, N, T>
+sealed interface State {
+    data object Initial : State
+    data class Loading(val message: Text) : State
+    data class Success<out T>(val value: T) : State
+    data class Failure(val error: Text) : State
 }

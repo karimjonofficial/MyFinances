@@ -27,7 +27,6 @@ class ProductRepository(private val titleRepository: GetById<ProductTitle>) :
             price = price,
             salePrice = salePrice,
             dateTime = dateTime,
-            description = description,
         )
     }
 

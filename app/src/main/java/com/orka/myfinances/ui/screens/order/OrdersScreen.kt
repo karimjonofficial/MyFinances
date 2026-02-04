@@ -10,6 +10,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.repositories.order.OrderRepository
 import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.application.LoggerImpl
+import com.orka.myfinances.lib.ui.models.Text
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
 import com.orka.myfinances.ui.managers.Navigator
 
@@ -41,8 +42,8 @@ private fun OrderScreenPreview() {
     val viewModel = viewModel {
         OrdersScreenViewModel(
             repository = OrderRepository(),
-            loading = R.string.loading,
-            failure = R.string.failure,
+            loading = Text.Res(R.string.loading),
+            failure = Text.Res(R.string.failure),
             logger = LoggerImpl()
         )
     }

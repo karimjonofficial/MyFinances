@@ -11,7 +11,7 @@ class ProfileContentViewModel(
     failure: Text,
     repository: Get<Office>,
     logger: Logger
-) : ListViewModel<Text, Office, Text>(
+) : ListViewModel<Office>(
     loading = loading,
     failure = failure,
     repository = repository,

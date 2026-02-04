@@ -17,7 +17,7 @@ class SaleContentViewModel(
     failure: Text,
     repository: Get<Sale>,
     logger: Logger
-) : ListViewModel<Text, Sale, Text>(
+) : ListViewModel<Sale>(
     loading = loading,
     failure = failure,
     repository = repository,
