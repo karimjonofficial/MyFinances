@@ -8,7 +8,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.models.ScreenTab
 import com.orka.myfinances.lib.ui.screens.MultipleTabScreen
-import com.orka.myfinances.ui.managers.Navigator
+import com.orka.myfinances.ui.navigation.Navigator
 
 @Composable
 fun HistoryScreen(

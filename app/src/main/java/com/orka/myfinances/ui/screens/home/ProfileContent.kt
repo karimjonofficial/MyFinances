@@ -44,7 +44,7 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.ui.managers.Navigator
+import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.screens.home.parts.ProfileTopBar
 

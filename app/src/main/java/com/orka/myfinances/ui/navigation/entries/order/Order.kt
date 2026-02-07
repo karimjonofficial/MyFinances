@@ -10,5 +10,8 @@ fun orderEntry(
     modifier: Modifier = Modifier,
     destination: Destination.Order
 ): NavEntry<Destination> = entry(destination) {
-    OrderScreen(modifier)
+    OrderScreen(
+        modifier = modifier,
+        order = destination.order
+    )
 }

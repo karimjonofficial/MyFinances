@@ -1,6 +1,5 @@
 package com.orka.myfinances.ui.screens.warehouse
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +17,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
-import com.orka.myfinances.ui.managers.Navigator
+import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.warehouse.parts.ProductTitlesContent
 import com.orka.myfinances.ui.screens.warehouse.parts.StockItemsContent
 import com.orka.myfinances.ui.screens.warehouse.parts.WarehouseScreenTopBar
@@ -39,10 +38,7 @@ fun WarehouseScreen(
         topBar = {
             WarehouseScreenTopBar(
                 category = category,
-                onAddProductClick = {
-                    Log.d("WarehouseScreen", "onAddProductClick: $it")
-                    navigator.navigateToAddProduct(it)
-                },
+                onAddProductClick = { navigator.navigateToAddProduct(it) },
                 onAddStockItemClick = { navigator.navigateToAddStockItem(it) }
             )
         }

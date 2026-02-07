@@ -23,12 +23,10 @@ fun ProductTitleCard(
     productTitle: ProductTitle,
     onClick: (ProductTitle) -> Unit
 ) {
-    val d = productTitle.description.description()
-
     ListItem(
         modifier = modifier.clickable { onClick(productTitle) },
         headlineContent = { Text(text = productTitle.name) },
-        supportingContent = { Text(text = d) },
+        supportingContent = { Text(text = productTitle.description.description()) },
         leadingContent = {
             Icon(
                 painter = painterResource(R.drawable.star_outlined),

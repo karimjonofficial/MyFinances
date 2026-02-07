@@ -26,7 +26,7 @@ import com.orka.myfinances.lib.ui.components.IntegerTextField
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.ui.managers.Navigator
+import com.orka.myfinances.ui.navigation.Navigator
 
 @Composable
 fun AddReceiveScreen(

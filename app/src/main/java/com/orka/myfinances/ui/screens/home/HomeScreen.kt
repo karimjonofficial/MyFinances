@@ -20,7 +20,7 @@ import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
 import com.orka.myfinances.lib.ui.viewmodel.viewModel
-import com.orka.myfinances.ui.managers.Navigator
+import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
 import com.orka.myfinances.ui.screens.home.parts.BasketScreenTopBar

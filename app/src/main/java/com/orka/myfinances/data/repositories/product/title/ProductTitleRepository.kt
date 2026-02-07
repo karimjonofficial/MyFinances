@@ -6,9 +6,9 @@ import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.data.models.product.Property
 import com.orka.myfinances.data.models.template.TemplateField
 import com.orka.myfinances.data.repositories.product.title.models.AddProductTitleRequest
-import com.orka.myfinances.fixtures.resources.dateTime
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.product.productTitles
+import com.orka.myfinances.lib.data.now
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.fixtures.data.repositories.MockAddRepository
 import com.orka.myfinances.lib.fixtures.data.repositories.MockGetByIdRepository
@@ -31,37 +31,30 @@ class ProductTitleRepository(
 
     override suspend fun AddProductTitleRequest.map(): ProductTitle {
         val category = categoryRepository.getById(categoryId)!!
-        val title = ProductTitle(
+        return ProductTitle(
             id = id1,
             name = name,
             defaultPrice = price,
             defaultSalePrice = salePrice,
-            dateTime = dateTime,
+            dateTime = now(),
             category = category,
             properties = properties.map {
-                val field = fieldRepository.getById(it.fieldId)!!
-
                 Property(
                     id = id1,
-                    type = field,
+                    type = fieldRepository.getById(it.fieldId)!!,
                     value = it.value
                 )
             },
             description = description
         )
-        return title
     }
 
     override suspend fun afterAdd(item: ProductTitle) {
         flow.emit(ProductTitleEvent(item.category.id))
     }
 
-    override suspend fun List<ProductTitle>.filter(
-        parameter: Category
-    ): List<ProductTitle> {
-        return this.filter {
-            it.category == parameter
-        }
+    override suspend fun List<ProductTitle>.filter(parameter: Category): List<ProductTitle> {
+        return this.filter { it.category == parameter }
     }
 
     override suspend fun List<ProductTitle>.find(id: Id): ProductTitle? {

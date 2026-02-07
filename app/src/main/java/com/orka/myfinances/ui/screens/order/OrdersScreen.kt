@@ -12,7 +12,7 @@ import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.application.LoggerImpl
 import com.orka.myfinances.lib.ui.models.Text
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
-import com.orka.myfinances.ui.managers.Navigator
+import com.orka.myfinances.ui.navigation.Navigator
 
 @Composable
 fun OrdersScreen(

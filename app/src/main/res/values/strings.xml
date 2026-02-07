@@ -124,4 +124,9 @@
     <string name="amount">Amount</string>
     <string name="fill_the_lines_below_to_receive">Fill the lines below to receive</string>
     <string name="comment">Comment</string>
+    <string name="no_phone_provided">No phone number provided</string>
+    <string name="complete">Complete</string>
+    <string name="registered_at">Registered at:</string>
+    <string name="completed_at">Completed at:</string>
+    <string name="completion_date">Completion date:</string>
 </resources>

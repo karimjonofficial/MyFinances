@@ -14,7 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
-import com.orka.myfinances.ui.managers.Navigator
+import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.debt.components.DebtCard
 import com.orka.myfinances.ui.screens.debt.parts.AddDebtDialog
 import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenViewModel

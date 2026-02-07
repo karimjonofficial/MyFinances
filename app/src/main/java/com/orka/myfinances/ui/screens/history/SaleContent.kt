@@ -6,7 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.ui.screens.LazyColumnContent
-import com.orka.myfinances.ui.managers.Navigator
+import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.history.components.SaleCard
 import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
 

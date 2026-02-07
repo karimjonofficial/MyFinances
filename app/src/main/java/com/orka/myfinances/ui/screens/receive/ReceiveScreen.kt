@@ -48,7 +48,7 @@ import com.orka.myfinances.lib.extensions.ui.description
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.ui.managers.Navigator
+import com.orka.myfinances.ui.navigation.Navigator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

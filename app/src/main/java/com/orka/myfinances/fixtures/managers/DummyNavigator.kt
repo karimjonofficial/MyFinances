@@ -10,7 +10,7 @@ import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.data.models.receive.Receive
 import com.orka.myfinances.data.models.sale.Sale
 import com.orka.myfinances.data.models.template.Template
-import com.orka.myfinances.ui.managers.Navigator
+import com.orka.myfinances.ui.navigation.Navigator
 
 class DummyNavigator : Navigator {
     override fun navigateToHome() {}

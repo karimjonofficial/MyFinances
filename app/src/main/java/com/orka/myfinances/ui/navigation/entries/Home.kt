@@ -7,7 +7,7 @@ import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
-import com.orka.myfinances.ui.managers.Navigator
+import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.screens.home.HomeScreen

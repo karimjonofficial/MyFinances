@@ -4,7 +4,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
-import com.orka.myfinances.ui.managers.Navigator
+import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.navigation.entries.catalogEntry
 import com.orka.myfinances.ui.navigation.entries.checkoutEntry

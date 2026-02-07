@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.managers
+package com.orka.myfinances.ui.navigation
 
 import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.Debt

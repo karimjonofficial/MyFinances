@@ -2,7 +2,6 @@ package com.orka.myfinances.fixtures.resources.models.product
 
 import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.fixtures.resources.dateTime
-import com.orka.myfinances.fixtures.resources.description
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.id2
 import com.orka.myfinances.fixtures.resources.price

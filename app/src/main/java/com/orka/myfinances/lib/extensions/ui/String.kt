@@ -6,5 +6,15 @@ import com.orka.myfinances.R
 
 @Composable
 fun String?.description(defaultId: Int = R.string.no_description_provided): String {
-    return this ?: stringResource(defaultId)
+    return if(this.isNullOrBlank()) stringResource(defaultId) else this
+}
+
+@Composable
+fun String?.address(defaultId: Int = R.string.no_address): String {
+    return if(this.isNullOrBlank()) stringResource(defaultId) else this
+}
+
+@Composable
+fun String?.phone(defaultId: Int = R.string.no_phone_provided): String {
+    return if(this.isNullOrBlank()) stringResource(defaultId) else this
 }

@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.navigation
+package com.orka.myfinances.ui.screens.host
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.core.SingleStateViewModel
@@ -13,7 +13,8 @@ import com.orka.myfinances.data.models.receive.Receive
 import com.orka.myfinances.data.models.sale.Sale
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.fixtures.resources.types
-import com.orka.myfinances.ui.managers.Navigator
+import com.orka.myfinances.ui.navigation.Navigator
+import com.orka.myfinances.ui.navigation.Destination
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 

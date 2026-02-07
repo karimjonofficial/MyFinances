@@ -27,7 +27,7 @@ import com.orka.myfinances.lib.extensions.models.makeSession
 import com.orka.myfinances.lib.extensions.models.toModel
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.navigation.Destination
-import com.orka.myfinances.ui.navigation.NavigationManager
+import com.orka.myfinances.ui.screens.host.NavigationManager
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asStateFlow

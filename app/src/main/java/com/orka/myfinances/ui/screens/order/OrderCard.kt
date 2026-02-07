@@ -39,13 +39,6 @@ fun OrderCard(
 ) {
 
     if(!order.completed) {
-        OutlinedCard(
-            modifier = modifier,
-            onClick = { onClick(order) }
-        ) {
-            OrderCardContent(order = order)
-        }
-    } else {
         Card(
             modifier = modifier,
             onClick = { onClick(order) },
@@ -54,6 +47,13 @@ fun OrderCard(
                 contentColor = MaterialTheme.colorScheme.onPrimary
             )
         ) {
+            OrderCardContent(order = order)
+        }
+    } else {
+            OutlinedCard(
+                modifier = modifier,
+                onClick = { onClick(order) }
+            ) {
             OrderCardContent(order = order)
         }
     }
@@ -111,7 +111,7 @@ private fun OrderCardContent(
                 modifier = Modifier
                     .clip(RoundedCornerShape(4.dp))
                     .background(
-                        color = if(!order.completed) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.onPrimary
+                        color = if(!order.completed) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant
                     )
                     .padding(4.dp),
                 contentAlignment = Alignment.Center
@@ -120,14 +120,14 @@ private fun OrderCardContent(
 
                     Icon(
                         painter = painterResource(R.drawable.shopping_bag_outlined),
-                        tint = if(!order.completed) LocalContentColor.current else MaterialTheme.colorScheme.primary,
+                        tint = if(!order.completed) MaterialTheme.colorScheme.primary else LocalContentColor.current,
                         contentDescription = null
                     )
 
                     HorizontalSpacer(4)
                     Text(
                         text = "${order.items.size} items",
-                        color = if(!order.completed) LocalContentColor.current else MaterialTheme.colorScheme.primary,
+                        color = if(!order.completed) MaterialTheme.colorScheme.primary else LocalContentColor.current
                     )
                 }
             }

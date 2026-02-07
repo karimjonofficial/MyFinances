@@ -18,7 +18,7 @@ fun <T> ListItem(
     headlineText: String,
     supportingText: String,
     price: String,
-    dateTime: String,
+    dateTime: String? = null,
     onClick: (T) -> Unit
 ) {
     ListItem(
@@ -34,7 +34,7 @@ fun <T> ListItem(
         trailingContent = {
             Column(horizontalAlignment = Alignment.End) {
                 Text(text = price)
-                Text(text = dateTime)
+                if(dateTime != null) Text(text = dateTime)
             }
         }
     )

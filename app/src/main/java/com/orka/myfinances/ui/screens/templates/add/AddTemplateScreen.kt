@@ -37,7 +37,7 @@ import com.orka.myfinances.data.repositories.template.TemplateRepository
 import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.ui.managers.Navigator
+import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.templates.add.components.TemplateFieldCard
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
