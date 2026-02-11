@@ -6,8 +6,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.extensions.ui.str
-import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.list.State
+import com.orka.myfinances.lib.viewmodel.list.ListViewModel
 
 @Composable
 fun <T> LazyColumnContent(

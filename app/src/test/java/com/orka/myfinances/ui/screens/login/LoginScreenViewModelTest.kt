@@ -1,12 +1,12 @@
 package com.orka.myfinances.ui.screens.login
 
 import com.orka.myfinances.core.MainDispatcherContext
-import com.orka.myfinances.data.api.CredentialApiService
+import com.orka.myfinances.data.api.CredentialApi
 import com.orka.myfinances.testFixtures.DummyLogger
-import com.orka.myfinances.testFixtures.data.api.credential.CredentialApiServiceStub
-import com.orka.myfinances.testFixtures.data.api.credential.DummyCredentialApiService
-import com.orka.myfinances.testFixtures.data.api.credential.EmptyCredentialApiServiceStub
-import com.orka.myfinances.testFixtures.data.api.credential.SpyCredentialApiService
+import com.orka.myfinances.testFixtures.data.api.credential.CredentialApiStub
+import com.orka.myfinances.testFixtures.data.api.credential.DummyCredentialApi
+import com.orka.myfinances.testFixtures.data.api.credential.EmptyCredentialApiStub
+import com.orka.myfinances.testFixtures.data.api.credential.SpyCredentialApi
 import com.orka.myfinances.testFixtures.managers.DummySessionManager
 import com.orka.myfinances.testFixtures.managers.SpySessionManager
 import com.orka.myfinances.testFixtures.resources.password
@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 typealias ViewModel = LoginScreenViewModel
-typealias ApiService = CredentialApiService
+typealias ApiService = CredentialApi
 
 class LoginScreenViewModelTest : MainDispatcherContext() {
     private val logger = DummyLogger()
@@ -40,7 +40,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
 
         @Test
         fun `When authorize called gets credentials`() {
-            val apiService = SpyCredentialApiService()
+            val apiService = SpyCredentialApi()
             val viewModel = viewModel(apiService)
 
             viewModel.authorize(username, password)
@@ -51,34 +51,34 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
 
         @Nested
         inner class NoApiServiceContext {
-            private val apiService = EmptyCredentialApiServiceStub()
+            private val apiService = EmptyCredentialApiStub()
             private val viewModel = viewModel(apiService)
 
             @Test
             fun `When credential not found state is Error`() {
                 viewModel.authorize(username, password)
                 advanceUntilIdle()
-                assertTrue(viewModel.uiState.value is LoginScreenState.Error)
+                assertTrue(viewModel.state.value is LoginScreenState.Error)
             }
 
             @Test
             fun `When authorizeAndRemember credential not found state is Error`() {
                 viewModel.authorizeAndRemember(username, password)
                 advanceUntilIdle()
-                assertTrue(viewModel.uiState.value is LoginScreenState.Error)
+                assertTrue(viewModel.state.value is LoginScreenState.Error)
             }
         }
 
         @Nested
         inner class DummyCredentialDataSourceContext {
-            private val apiService = DummyCredentialApiService()
+            private val apiService = DummyCredentialApi()
             private val viewModel = viewModel(apiService)
             private suspend fun assertLoadingTransition(action: () -> Unit) =
-                viewModel.uiState.assertLoadingTransition<LoginScreenState, LoginScreenState.Loading>(action)
+                viewModel.state.assertLoadingTransition<LoginScreenState, LoginScreenState.Loading>(action)
 
             @Test
             fun `State is initial`() {
-                val state = viewModel.uiState.value
+                val state = viewModel.state.value
                 assertTrue(state is LoginScreenState.Initial)
             }
 
@@ -96,7 +96,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
 
     @Nested
     inner class StubDataSourceContext {
-        private val apiService = CredentialApiServiceStub()
+        private val apiService = CredentialApiStub()
         private val manager = SpySessionManager()
         private val viewModel = viewModel(apiService, manager)
 
@@ -115,7 +115,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
 
             @Test
             fun `When authorize successful state is initial`() = runTest {
-                val state = viewModel.uiState.value
+                val state = viewModel.state.value
                 assertTrue(state is LoginScreenState.Initial)
             }
         }
@@ -135,7 +135,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
 
             @Test
             fun `When authorizeAndRemember successful state is initial`() {
-                val state = viewModel.uiState.value
+                val state = viewModel.state.value
                 assertTrue(state is LoginScreenState.Initial)
             }
         }

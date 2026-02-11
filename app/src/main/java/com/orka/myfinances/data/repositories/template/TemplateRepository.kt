@@ -3,17 +3,16 @@ package com.orka.myfinances.data.repositories.template
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.models.template.TemplateField
-import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.template.templates
 import com.orka.myfinances.fixtures.resources.types
-import com.orka.myfinances.lib.extensions.models.toId
+import com.orka.myfinances.lib.data.repositories.Generator
 import com.orka.myfinances.lib.fixtures.data.repositories.MockAddRepository
 import com.orka.myfinances.lib.fixtures.data.repositories.MockGetByIdRepository
 import com.orka.myfinances.lib.fixtures.data.repositories.MockGetRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
-class TemplateRepository : MockGetRepository<Template>,
+class TemplateRepository(private val generator: Generator<Id>) : MockGetRepository<Template>,
     MockAddRepository<Template, AddTemplateRequest>,
     MockGetByIdRepository<Template> {
     override val items = templates.toMutableList()
@@ -28,7 +27,7 @@ class TemplateRepository : MockGetRepository<Template>,
     override suspend fun AddTemplateRequest.map(): Template {
         flow.emit(TemplateEvent)
         return Template(
-            id = id1,
+            id = generator.generate(),
             name = name,
             fields = fields.map { it.toTemplateField() }
         )
@@ -36,7 +35,7 @@ class TemplateRepository : MockGetRepository<Template>,
 
     private fun TemplateFieldModel.toTemplateField(): TemplateField {
         return TemplateField(
-            id = 1.toId(),
+            id = generator.generate(),
             name = name,
             type = types[typeId]
         )

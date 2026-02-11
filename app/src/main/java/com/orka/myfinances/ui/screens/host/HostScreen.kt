@@ -20,7 +20,7 @@ fun HostScreen(
 
         is UiState.Guest -> {
             val viewModel = state.viewModel
-            val uiState = viewModel.uiState.collectAsState()
+            val uiState = viewModel.state.collectAsState()
 
             LoginScreen(
                 modifier = modifier,

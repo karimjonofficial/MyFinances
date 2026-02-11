@@ -151,7 +151,7 @@ fun HomeScreen(
                 val viewModel = viewModel(session.office) {
                     factory.basketViewModel()
                 }
-                val state = viewModel.uiState.collectAsState()
+                val state = viewModel.state.collectAsState()
 
                 BasketContent(
                     modifier = m,
@@ -165,7 +165,7 @@ fun HomeScreen(
                 val viewModel = viewModel(session.office) {
                     factory.profileViewModel()
                 }
-                val state = viewModel.uiState.collectAsState()
+                val state = viewModel.state.collectAsState()
 
                 ProfileContent(
                     modifier = m,

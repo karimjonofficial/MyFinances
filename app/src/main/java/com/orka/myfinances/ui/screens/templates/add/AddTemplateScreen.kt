@@ -35,6 +35,7 @@ import com.orka.myfinances.data.repositories.template.AddTemplateRequest
 import com.orka.myfinances.data.repositories.template.TemplateFieldModel
 import com.orka.myfinances.data.repositories.template.TemplateRepository
 import com.orka.myfinances.fixtures.managers.DummyNavigator
+import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.navigation.Navigator
@@ -156,7 +157,7 @@ fun AddTemplateScreen(
 @Composable
 private fun TemplateScreenPreview() {
     val types = listOf("text", "number", "range")
-    val repository = TemplateRepository()
+    val repository = TemplateRepository(generator = { id1 })
     val addTemplateScreenViewModel = viewModel { AddTemplateScreenViewModel(repository) }
     val navigationManager = DummyNavigator()
 

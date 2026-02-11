@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -42,103 +41,85 @@ import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.models.template.TemplateField
 import com.orka.myfinances.fixtures.resources.dateTime
 import com.orka.myfinances.fixtures.resources.models.id1
+import com.orka.myfinances.fixtures.resources.models.template.templateField1
 import com.orka.myfinances.fixtures.resources.price
 import com.orka.myfinances.fixtures.resources.salePrice
 import com.orka.myfinances.lib.extensions.ui.description
-import com.orka.myfinances.lib.ui.components.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.VerticalSpacer
 
 @Composable
 fun BasketItemCard(
     item: BasketItem,
     imageRes: Int,
-    increase: (BasketItem) -> Unit,
-    decrease: (BasketItem) -> Unit,
-    remove: (BasketItem) -> Unit
+    increase: () -> Unit,
+    decrease: () -> Unit,
+    remove: () -> Unit
 ) {
     val product = item.product
 
     OutlinedCard(
-        shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
-            Row(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-            ) {
-                Image(
-                    painter = painterResource(id = imageRes),
-                    contentDescription = product.title.name,
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(RoundedCornerShape(12.dp)),
-                    contentScale = ContentScale.Crop
-                )
-
-                Spacer(modifier = Modifier.width(16.dp))
-
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .align(Alignment.CenterVertically)
-                ) {
-                    Text(
-                        text = product.title.name,
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontWeight = FontWeight.Bold
+        Box {
+            Box(modifier = Modifier.padding(16.dp)) {
+                Column {
+                    Row(
+                        modifier = Modifier
+                            .padding(end = 32.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Image(
+                            painter = painterResource(id = imageRes),
+                            contentDescription = product.title.name,
+                            modifier = Modifier
+                                .size(80.dp)
+                                .clip(RoundedCornerShape(12.dp)),
+                            contentScale = ContentScale.Crop
                         )
-                    )
 
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        if (product.title.properties.isNotEmpty()) {
-                            product.title.properties.dropLast(1).forEach { property ->
-                                Text(
-                                    text = "${property.type.name}: ${property.value}",
-                                    style = MaterialTheme.typography.bodySmall
+                        Spacer(modifier = Modifier.width(16.dp))
+
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .align(Alignment.CenterVertically)
+                        ) {
+                            Text(
+                                text = product.title.name,
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    fontWeight = FontWeight.Bold
                                 )
-
-                                HorizontalSpacer(4)
-                                Text(text = "|")
-                                HorizontalSpacer(4)
-                            }
-
-                            Text(
-                                text = "${product.title.properties.last().type.name}: ${product.title.properties.last().value}",
-                                style = MaterialTheme.typography.bodySmall
                             )
-                            HorizontalSpacer(4)
-                        } else {
+
+                            val propertiesText = product.title.properties
+                                .joinToString(" | ") { "${it.type.name}: ${it.value}" }
+
                             Text(
-                                text = stringResource(R.string.no_description_provided),
-                                style = MaterialTheme.typography.bodySmall
+                                text = propertiesText.ifEmpty {
+                                    stringResource(R.string.no_description_provided)
+                                },
+                                style = MaterialTheme.typography.bodySmall,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+
+                            Text(
+                                text = product.title.description.description(),
+                                style = MaterialTheme.typography.bodySmall,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.padding(top = 4.dp)
                             )
                         }
                     }
 
-                    Text(
-                        text = product.title.description.description(),
-                        style = MaterialTheme.typography.bodySmall,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-                    /**if (item.isOutOfStock) {
-                    Text(
-                    text = "Out of Stock",
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                    fontWeight = FontWeight.Bold
-                    )
-                    )
-                    } else {**/
+                    VerticalSpacer(8)
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             text = "$${product.title.defaultSalePrice}",
@@ -146,66 +127,49 @@ fun BasketItemCard(
                                 fontWeight = FontWeight.Bold
                             )
                         )
-                        /**if (hasDiscount) {
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                        text = "$${product.price / 100.0}",
-                        style = MaterialTheme.typography.bodySmall.copy(
-                        textDecoration = TextDecoration.LineThrough,
-                        color = MaterialTheme.colorScheme.outline
-                        )
-                        )
-                        }**/
-                    }
-                    //}
 
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    //if(!item.isOutOfStock) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        IconButton(
-                            onClick = { decrease(item) },
-                            //enabled = !item.isOutOfStock,
-                            colors = IconButtonDefaults.iconButtonColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceVariant
-                            )
+                        Row(
+                            modifier = Modifier.weight(1f),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.End
                         ) {
-                            Icon(
-                                painter = painterResource(R.drawable.remove),
-                                contentDescription = stringResource(R.string.decrease)
-                            )
-                        }
+                            IconButton(
+                                onClick = decrease,
+                                colors = IconButtonDefaults.iconButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                                )
+                            ) {
+                                Icon(
+                                    painter = painterResource(R.drawable.remove),
+                                    contentDescription = stringResource(R.string.decrease)
+                                )
+                            }
 
-                        Text(
-                            text = item.amount.toString(),
-                            style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.padding(horizontal = 8.dp)
-                        )
+                            Text(
+                                text = "${item.amount}",
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.padding(horizontal = 8.dp)
+                            )
 
-                        IconButton(
-                            onClick = { increase(item) },
-                            //enabled = !item.isOutOfStock,
-                            colors = IconButtonDefaults.iconButtonColors(
-                                containerColor = MaterialTheme.colorScheme.primary,
-                                contentColor = MaterialTheme.colorScheme.onPrimary
-                            )
-                        ) {
-                            Icon(
-                                painter = painterResource(R.drawable.add),
-                                contentDescription = stringResource(R.string.increase)
-                            )
+                            IconButton(
+                                onClick = increase,
+                                colors = IconButtonDefaults.iconButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.primary,
+                                    contentColor = MaterialTheme.colorScheme.onPrimary
+                                )
+                            ) {
+                                Icon(
+                                    painter = painterResource(R.drawable.add),
+                                    contentDescription = stringResource(R.string.increase)
+                                )
+                            }
                         }
                     }
-                    //}
                 }
             }
 
             IconButton(
-                onClick = { remove(item) },
+                onClick = remove,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
             ) {
@@ -263,7 +227,17 @@ fun BasketItemCardPreview() {
                         ),
                         properties = listOf(
                             Property(Id(301), sizeField, "L"),
-                            Property(Id(302), colorField, "Navy")
+                            Property(Id(302), colorField, "Navy"),
+                            Property(id1, templateField1, "Y"),
+                            Property(id1, templateField1, "Y"),
+                            Property(id1, templateField1, "Y"),
+                            Property(id1, templateField1, "Y"),
+                            Property(id1, templateField1, "Y"),
+                            Property(id1, templateField1, "Y"),
+                            Property(id1, templateField1, "Y"),
+                            Property(id1, templateField1, "Y"),
+                            Property(id1, templateField1, "Y"),
+                            Property(id1, templateField1, "Y"),
                         ),
                         description = "Made with 100% GOTS certified organic cotton for a soft feel and comfortable fit."
                     ),

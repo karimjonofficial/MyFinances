@@ -12,7 +12,7 @@ import com.orka.myfinances.data.repositories.sale.AddSaleRequest
 import com.orka.myfinances.lib.data.models.Item
 import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.Get
-import com.orka.myfinances.lib.ui.models.Text
+import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
 
 class CheckoutScreenViewModel(
@@ -21,8 +21,8 @@ class CheckoutScreenViewModel(
     private val basketRepository: BasketRepository,
     clientRepository: Get<Client>,
     logger: Logger,
-    loading: Text,
-    failure: Text
+    loading: UiText,
+    failure: UiText
 ) : ListViewModel<Client>(
     loading = loading,
     failure = failure,

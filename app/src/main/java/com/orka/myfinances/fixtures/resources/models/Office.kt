@@ -4,17 +4,17 @@ import com.orka.myfinances.data.models.Office
 
 val office1 = Office(
     id = id1,
-    name = "CompanyOffice 1",
+    name = "Office 1",
     company = company1,
-    address = "Address of the CompanyOffice 1",
-    phone = "Phone of the CompanyOffice 1"
+    address = "Address of the Office 1",
+    phone = "Phone of the Office 1"
 )
 val office2 = Office(
     id = id2,
-    name = "CompanyOffice 2",
+    name = "Office 2",
     company = company1,
-    address = "Address of the CompanyOffice 2",
-    phone = "Phone of the CompanyOffice 2"
+    address = "Address of the Office 2",
+    phone = "Phone of the Office 2"
 )
 
 val offices = listOf(office1, office2)

@@ -16,7 +16,7 @@ fun ReceiveContent(
     viewModel: ReceiveContentViewModel,
     navigator: Navigator
 ) {
-    val state = viewModel.uiState.collectAsState()
+    val state = viewModel.state.collectAsState()
 
     LazyColumnContent(
         modifier = modifier,

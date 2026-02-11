@@ -24,7 +24,7 @@ fun BasketScreenTopBar(
         modifier = modifier,
         title = { Text(text = stringResource(R.string.basket)) },
         actions = {
-            val state = viewModel.uiState.collectAsState().value
+            val state = viewModel.state.collectAsState().value
             if (state is BasketState.Success && state.items.isNotEmpty())
                 IconButton(onClick = { viewModel.clear() }) {
                     Icon(

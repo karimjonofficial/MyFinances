@@ -11,24 +11,15 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.repositories.basket.BasketRepository
-import com.orka.myfinances.data.repositories.client.ClientRepository
-import com.orka.myfinances.data.repositories.folder.CategoryRepository
-import com.orka.myfinances.data.repositories.folder.FolderRepository
-import com.orka.myfinances.data.repositories.order.OrderRepository
-import com.orka.myfinances.data.repositories.product.ProductRepository
-import com.orka.myfinances.data.repositories.product.title.ProductTitleRepository
-import com.orka.myfinances.data.repositories.sale.SaleRepository
-import com.orka.myfinances.data.repositories.template.TemplateRepository
-import com.orka.myfinances.data.repositories.template.field.TemplateFieldRepository
 import com.orka.myfinances.fixtures.core.DummyLogger
 import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.basket.basketItems
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
-import com.orka.myfinances.lib.ui.models.Text
+import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.list.State
 import com.orka.myfinances.ui.navigation.Navigator
 
 @Composable
@@ -38,7 +29,7 @@ fun CheckoutScreen(
     navigator: Navigator,
     items: List<BasketItem>
 ) {
-    val uiState = viewModel.uiState.collectAsState()
+    val uiState = viewModel.state.collectAsState()
 
     when (val state = uiState.value) {
         is State.Initial, is State.Loading -> {
@@ -83,20 +74,13 @@ private fun CheckoutScreenPreview() {
         navigator = DummyNavigator(),
         viewModel = viewModel {
             CheckoutScreenViewModel(
-                saleRepository = SaleRepository(),
-                orderRepository = OrderRepository(),
-                basketRepository = BasketRepository(
-                    productRepository = ProductRepository(
-                        titleRepository = ProductTitleRepository(
-                            categoryRepository = CategoryRepository(FolderRepository(TemplateRepository())),
-                            fieldRepository = TemplateFieldRepository()
-                        )
-                    )
-                ),
-                clientRepository = ClientRepository(),
+                saleRepository = { null },
+                orderRepository = { null },
+                basketRepository = BasketRepository(productRepository = { null }),
+                clientRepository = { null },
                 logger = DummyLogger(),
-                loading = Text.Res(R.string.loading),
-                failure = Text.Res(R.string.failure),
+                loading = UiText.Res(R.string.loading),
+                failure = UiText.Res(R.string.failure),
             )
         }
     )

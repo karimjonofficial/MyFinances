@@ -1,46 +1,50 @@
 package com.orka.myfinances.ui.screens.checkout
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SplitButtonDefaults
-import androidx.compose.material3.SplitButtonLayout
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.basket.Basket
 import com.orka.myfinances.data.models.basket.BasketItem
+import com.orka.myfinances.data.repositories.basket.BasketRepository
+import com.orka.myfinances.fixtures.core.DummyLogger
+import com.orka.myfinances.fixtures.managers.DummyNavigator
+import com.orka.myfinances.fixtures.resources.models.clients
+import com.orka.myfinances.fixtures.resources.models.product.product1
+import com.orka.myfinances.fixtures.resources.models.product.product2
 import com.orka.myfinances.lib.extensions.models.getPrice
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
+import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
-import com.orka.myfinances.lib.ui.components.IntegerTextField
+import com.orka.myfinances.lib.ui.components.OutlinedCommentTextField
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
+import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.lib.ui.screens.LazyColumn
+import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.ui.navigation.Navigator
+import com.orka.myfinances.ui.theme.MyFinancesTheme
 
-@OptIn(
-    ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3ExpressiveApi::class
-)
 @Composable
 fun CheckoutContent(
     modifier: Modifier,
@@ -50,7 +54,7 @@ fun CheckoutContent(
     navigator: Navigator
 ) {
     val price = rememberSaveable { mutableStateOf<Int?>(items.getPrice()) }
-    val description = rememberSaveable { mutableStateOf("") }
+    val description = rememberSaveable { mutableStateOf<String?>(null) }
     val selectedClientId = rememberSaveable(clients) { mutableStateOf(clients.firstOrNull()?.id?.value) }
     val selectedClient = clients.find { it.id.value == selectedClientId.value }
     val menuExpanded = rememberSaveable { mutableStateOf(false) }
@@ -58,78 +62,42 @@ fun CheckoutContent(
 
     Scaffold(
         modifier = modifier,
-        topBar = {
-            TopAppBar(title = { Text(text = stringResource(R.string.checkout)) })
-        },
+        title = stringResource(R.string.checkout),
         bottomBar = {
             BottomAppBar(contentPadding = PaddingValues(horizontal = 16.dp)) {
-
-                Column(modifier = Modifier.weight(1f)) {
-
-                    IntegerTextField(
-                        leadingIcon = {
-                            Icon(
-                                painter = painterResource(R.drawable.attach_money),
-                                contentDescription = stringResource(R.string.price)
-                            )
-                        },
-                        value = price.value,
-                        onValueChange = { price.value = it }
-                    )
+                Spacer(modifier = Modifier.weight(1f))
+                OutlinedButton(
+                    onClick = {
+                        selectedClient?.let { client ->
+                            price.value?.let { price ->
+                                viewModel.order(
+                                    basket = Basket(price, description.value, items),
+                                    client = client
+                                )
+                                navigator.back()
+                            }
+                            splitButtonMenuExpanded.value = false
+                        }
+                    }
+                ) {
+                    Text(text = stringResource(R.string.order))
                 }
 
                 HorizontalSpacer(8)
-                Box {
-                    SplitButtonLayout(
-                        leadingButton = {
-                            SplitButtonDefaults.LeadingButton(
-                                onClick = {
-                                    selectedClient?.let { client ->
-                                        price.value?.let { price ->
-                                            viewModel.sell(
-                                                basket = Basket(price, description.value, items),
-                                                client = client
-                                            )
-                                            navigator.back()
-                                        }
-                                    }
-                                }
-                            ) {
-                                Text(text = stringResource(R.string.sell))
-                            }
-                        },
-                        trailingButton = {
-                            SplitButtonDefaults.TrailingButton(
-                                onClick = { splitButtonMenuExpanded.value = true }
-                            ) {
-                                Icon(
-                                    painter = painterResource(R.drawable.arrow_drop_down),
-                                    contentDescription = stringResource(R.string.down)
+                Button(
+                    onClick = {
+                        selectedClient?.let { client ->
+                            price.value?.let { price ->
+                                viewModel.sell(
+                                    basket = Basket(price, description.value, items),
+                                    client = client
                                 )
+                                navigator.back()
                             }
                         }
-                    )
-
-                    DropdownMenu(
-                        expanded = splitButtonMenuExpanded.value,
-                        onDismissRequest = { splitButtonMenuExpanded.value = false }
-                    ) {
-                        DropdownMenuItem(
-                            text = { Text(text = stringResource(R.string.order)) },
-                            onClick = {
-                                selectedClient?.let { client ->
-                                    price.value?.let { price ->
-                                        viewModel.order(
-                                            basket = Basket(price, description.value, items),
-                                            client = client
-                                        )
-                                        navigator.back()
-                                    }
-                                    splitButtonMenuExpanded.value = false
-                                }
-                            }
-                        )
                     }
+                ) {
+                    Text(text = stringResource(R.string.sell))
                 }
             }
         }
@@ -140,41 +108,84 @@ fun CheckoutContent(
                 .scaffoldPadding(paddingValues)
                 .padding(horizontal = 8.dp)
         ) {
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                arrangementSpace = 8.dp,
-                contentPadding = PaddingValues(horizontal = 8.dp),
+            DividedList(
+                modifier = Modifier.fillMaxWidth(),
+                title = stringResource(R.string.items_purchased),
                 items = items,
-                item = { itemModifier, item ->
-                    CheckoutItemCard(
-                        modifier = itemModifier,
-                        item = item
-                    )
+                itemTitle = { it.product.title.name },
+                itemSupportingText = {
+                    val price = it.amount * it.product.title.defaultSalePrice
+                    "$${it.product.title.defaultSalePrice} x ${it.amount}  = $$price"
                 }
             )
 
-            OutlinedExposedDropDownTextField(
-                modifier = Modifier.fillMaxWidth(),
-                text = selectedClient?.firstName ?: stringResource(R.string.clients),
-                label = stringResource(R.string.clients),
-                menuExpanded = menuExpanded.value,
-                onExpandChange = { menuExpanded.value = it },
-                onDismissRequested = { menuExpanded.value = false },
-                items = clients,
-                itemText = { it.firstName },
-                onItemSelected = { selectedClientId.value = it.id.value }
-            )
+            VerticalSpacer(16)
+            Row {
+                OutlinedExposedDropDownTextField(
+                    modifier = Modifier.weight(1f),
+                    text = selectedClient?.firstName ?: stringResource(R.string.clients),
+                    label = stringResource(R.string.clients),
+                    menuExpanded = menuExpanded.value,
+                    onExpandChange = { menuExpanded.value = it },
+                    onDismissRequested = { menuExpanded.value = false },
+                    items = clients,
+                    itemText = { it.firstName },
+                    onItemSelected = { selectedClientId.value = it.id.value }
+                )
 
-            VerticalSpacer(4)
-            OutlinedTextField(
+                HorizontalSpacer(8)
+                OutlinedIntegerTextField(
+                    modifier = Modifier.width(160.dp),
+                    label = stringResource(R.string.total_price),
+                    leadingIcon = {
+                        Icon(
+                            painter = painterResource(R.drawable.attach_money),
+                            contentDescription = stringResource(R.string.price)
+                        )
+                    },
+                    value = price.value,
+                    onValueChange = { price.value = it }
+                )
+            }
+
+            VerticalSpacer(8)
+            OutlinedCommentTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = description.value,
-                minLines = 3,
-                onValueChange = { description.value = it },
-                label = { Text(text = stringResource(R.string.description)) }
+                onValueChange = { description.value = it }
             )
 
             VerticalSpacer(8)
         }
+    }
+}
+
+@Preview
+@Composable
+private fun CheckoutContentPreview() {
+    val items = listOf(
+        BasketItem(product1, 1000),
+        BasketItem(product2, 10000)
+    )
+    val viewModel = viewModel {
+        CheckoutScreenViewModel(
+            saleRepository = { null },
+            orderRepository = { null },
+            basketRepository = BasketRepository(productRepository = { null }),
+            clientRepository = { null },
+            logger = DummyLogger(),
+            loading = UiText.Res(R.string.loading),
+            failure = UiText.Res(R.string.failure)
+        )
+    }
+
+    MyFinancesTheme {
+        CheckoutContent(
+            modifier = Modifier.fillMaxSize(),
+            items = items,
+            clients = clients,
+            viewModel = viewModel,
+            navigator = DummyNavigator(),
+        )
     }
 }

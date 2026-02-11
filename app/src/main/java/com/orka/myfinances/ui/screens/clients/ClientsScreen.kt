@@ -15,11 +15,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
+import com.orka.myfinances.application.LoggerImpl
 import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.fixtures.managers.DummyNavigator
-import com.orka.myfinances.application.LoggerImpl
-import com.orka.myfinances.lib.ui.models.Text
+import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
+import com.orka.myfinances.ui.components.ClientCard
 import com.orka.myfinances.ui.navigation.Navigator
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,8 +61,8 @@ fun ClientsScreen(
         item = { modifier, client ->
             ClientCard(
                 modifier = modifier,
-                client = client,
-                onClick = { navigator.navigateToClient(it) }
+                model = client.model,
+                onClick = { navigator.navigateToClient(client.client) }
             )
         }
     )
@@ -75,8 +76,8 @@ private fun ClientsScreenPreview() {
         ClientsScreenViewModel(
             get = repository,
             add = repository,
-            loading = Text.Res(R.string.loading),
-            failure = Text.Res(R.string.failure),
+            loading = UiText.Res(R.string.loading),
+            failure = UiText.Res(R.string.failure),
             logger = LoggerImpl()
         )
     }

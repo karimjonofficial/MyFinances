@@ -27,18 +27,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Category
-import com.orka.myfinances.data.repositories.folder.CategoryRepository
-import com.orka.myfinances.data.repositories.folder.FolderRepository
-import com.orka.myfinances.data.repositories.product.title.ProductTitleRepository
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
-import com.orka.myfinances.data.repositories.template.TemplateRepository
-import com.orka.myfinances.data.repositories.template.field.TemplateFieldRepository
 import com.orka.myfinances.fixtures.core.DummyLogger
 import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.folder.category1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.OutlinedCommentTextField
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
@@ -151,12 +147,11 @@ fun AddProductTitleScreen(
                             label = { Text(text = stringResource(R.string.sale_price)) }
                         )
 
-                        OutlinedTextField(
+                        OutlinedCommentTextField(
                             modifier = Modifier.fillMaxWidth(),
                             value = description.value,
-                            minLines = 3,
                             onValueChange = { description.value = it },
-                            label = { Text(text = stringResource(R.string.description)) }
+                            label = stringResource(R.string.description)
                         )
                     }
 
@@ -193,16 +188,13 @@ fun AddProductTitleScreen(
 private fun AddProductTitleScreenPreview() {
     val viewModel = viewModel {
         AddProductTitleScreenViewModel(
-            productTitleRepository = ProductTitleRepository(
-                categoryRepository = CategoryRepository(FolderRepository(TemplateRepository())),
-                fieldRepository = TemplateFieldRepository()
-            ),
-            categoryRepository = CategoryRepository(FolderRepository(TemplateRepository())),
+            productTitleRepository = { null },
+            categoryRepository = { null },
             logger = DummyLogger()
         )
     }
     viewModel.initialize()
-    val state = viewModel.uiState.collectAsState()
+    val state = viewModel.state.collectAsState()
 
     MyFinancesTheme {
         AddProductTitleScreen(

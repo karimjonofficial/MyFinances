@@ -70,13 +70,33 @@ fun OutlinedIntegerTextField(
     value: Int?,
     onValueChange: (Int?) -> Unit,
     modifier: Modifier = Modifier,
-    label: @Composable (() -> Unit)? = null
+    label: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null
 ) {
     IntegerTextFieldImpl(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
         label = label,
+        leadingIcon = leadingIcon,
+        outlined = true
+    )
+}
+
+@Composable
+fun OutlinedIntegerTextField(
+    value: Int?,
+    onValueChange: (Int?) -> Unit,
+    modifier: Modifier = Modifier,
+    label: String,
+    leadingIcon: @Composable (() -> Unit)? = null
+) {
+    IntegerTextFieldImpl(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier,
+        label = { Text(text = label) },
+        leadingIcon = leadingIcon,
         outlined = true
     )
 }

@@ -79,7 +79,9 @@ fun NotificationStatusCard(
 
             Switch(
                 checked = isChecked.value,
-                onCheckedChange = { isChecked.value = it }
+                onCheckedChange = {
+                    isChecked.value = it//TODO
+                }
             )
         }
     }

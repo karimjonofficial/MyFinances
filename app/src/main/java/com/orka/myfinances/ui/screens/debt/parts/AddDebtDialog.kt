@@ -17,6 +17,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.repositories.debt.AddDebtRequest
 import com.orka.myfinances.lib.ui.components.Dialog
+import com.orka.myfinances.lib.ui.components.OutlinedCommentTextField
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.screens.debt.viewmodel.DialogState
@@ -97,10 +98,9 @@ fun AddDebtDialog(
 
         VerticalSpacer(8)
 
-        OutlinedTextField(
+        OutlinedCommentTextField(
             value = description.value,
-            onValueChange = { description.value = it },
-            label = { Text(stringResource(R.string.description)) }
+            onValueChange = { description.value = it }
         )
     }
 

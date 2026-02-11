@@ -2,6 +2,7 @@ package com.orka.myfinances.ui.screens.warehouse.parts
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
@@ -21,11 +22,12 @@ fun StockItemsGrid(
         modifier = modifier,
         columns = GridCells.Fixed(2),
         contentPadding = contentPadding,
-        verticalArrangement = Arrangement.spacedBy(2.dp),
-        horizontalArrangement = Arrangement.spacedBy(2.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(stockItems.size) { index ->
             StockItemCard(
+                modifier = Modifier.fillMaxWidth(),
                 item = stockItems[index],
                 click = onItemClick
             )

@@ -5,12 +5,12 @@ import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.factories.ApiProvider
 import com.orka.myfinances.fixtures.resources.models.credential
 import com.orka.myfinances.testFixtures.DummyLogger
-import com.orka.myfinances.testFixtures.data.api.company.CompanyApiServiceStub
-import com.orka.myfinances.testFixtures.data.api.company.EmptyCompanyApiServiceStub
-import com.orka.myfinances.testFixtures.data.api.companyOffice.OfficeApiStub
-import com.orka.myfinances.testFixtures.data.api.companyOffice.EmptyOfficeApiStub
-import com.orka.myfinances.testFixtures.data.api.user.EmptyUserApiServiceStub
-import com.orka.myfinances.testFixtures.data.api.user.UserApiServiceStub
+import com.orka.myfinances.testFixtures.data.api.company.CompanyApiStub
+import com.orka.myfinances.testFixtures.data.api.company.EmptyCompanyApiStub
+import com.orka.myfinances.testFixtures.data.api.office.OfficeApiStub
+import com.orka.myfinances.testFixtures.data.api.office.EmptyOfficeApiStub
+import com.orka.myfinances.testFixtures.data.api.user.EmptyUserApiStub
+import com.orka.myfinances.testFixtures.data.api.user.UserApiStub
 import com.orka.myfinances.testFixtures.data.storages.DummySessionStorage
 import com.orka.myfinances.testFixtures.data.storages.EmptySessionStorage
 import com.orka.myfinances.testFixtures.data.storages.SessionStorageStub
@@ -47,7 +47,7 @@ class UiManagerTest : MainDispatcherContext() {
             val manager = uiManager(storage)
             manager.initialize()
             advanceUntilIdle()
-            assertTrue(manager.uiState.value is UiState.Guest)
+            assertTrue(manager.state.value is UiState.Guest)
         }
 
         @Test
@@ -56,7 +56,7 @@ class UiManagerTest : MainDispatcherContext() {
             val manager = uiManager(storage)
             manager.initialize()
             advanceUntilIdle()
-            assertTrue(manager.uiState.value is UiState.SignedIn)
+            assertTrue(manager.state.value is UiState.SignedIn)
         }
     }
 
@@ -80,25 +80,25 @@ class UiManagerTest : MainDispatcherContext() {
             inner class EmptyUserApiServiceStubContext {
                 @BeforeEach
                 fun setup() {
-                    provider.setUserApiService(EmptyUserApiServiceStub())
-                    provider.setCompanyApiService(CompanyApiServiceStub())
+                    provider.setUserApiService(EmptyUserApiStub())
+                    provider.setCompanyApiService(CompanyApiStub())
                     provider.setCompanyOfficeApiService(OfficeApiStub())
                 }
 
                 @Test
                 fun `When open called and user api service fails, state does not change`() {
-                    val state = manager.uiState.value
+                    val state = manager.state.value
                     manager.open(credential)
                     advanceUntilIdle()
-                    assertTrue(manager.uiState.value === state)
+                    assertTrue(manager.state.value === state)
                 }
 
                 @Test
                 fun `When store called and user api service fails, state does not change`() {
-                    val state = manager.uiState.value
+                    val state = manager.state.value
                     manager.store(credential)
                     advanceUntilIdle()
-                    assertTrue(manager.uiState.value === state)
+                    assertTrue(manager.state.value === state)
                 }
             }
 
@@ -106,25 +106,25 @@ class UiManagerTest : MainDispatcherContext() {
             inner class EmptyCompanyApiServiceStubContext {
                 @BeforeEach
                 fun setup() {
-                    provider.setUserApiService(UserApiServiceStub())
-                    provider.setCompanyApiService(EmptyCompanyApiServiceStub())
+                    provider.setUserApiService(UserApiStub())
+                    provider.setCompanyApiService(EmptyCompanyApiStub())
                     provider.setCompanyOfficeApiService(OfficeApiStub())
                 }
 
                 @Test
                 fun `When open called and company api service fails, state does not change`() {
-                    val state = manager.uiState.value
+                    val state = manager.state.value
                     manager.open(credential)
                     advanceUntilIdle()
-                    assertTrue(manager.uiState.value === state)
+                    assertTrue(manager.state.value === state)
                 }
 
                 @Test
                 fun `When store called and company api service fails, state does not change`() {
-                    val state = manager.uiState.value
+                    val state = manager.state.value
                     manager.store(credential)
                     advanceUntilIdle()
-                    assertTrue(manager.uiState.value === state)
+                    assertTrue(manager.state.value === state)
                 }
             }
 
@@ -132,25 +132,25 @@ class UiManagerTest : MainDispatcherContext() {
             inner class EmptyCompanyOfficeApiServiceStubContext {
                 @BeforeEach
                 fun setup() {
-                    provider.setUserApiService(UserApiServiceStub())
-                    provider.setCompanyApiService(CompanyApiServiceStub())
+                    provider.setUserApiService(UserApiStub())
+                    provider.setCompanyApiService(CompanyApiStub())
                     provider.setCompanyOfficeApiService(EmptyOfficeApiStub())
                 }
 
                 @Test
                 fun `When open called and companyOffice api service fails, state does not change`() {
-                    val state = manager.uiState.value
+                    val state = manager.state.value
                     manager.open(credential)
                     advanceUntilIdle()
-                    assertTrue(manager.uiState.value === state)
+                    assertTrue(manager.state.value === state)
                 }
 
                 @Test
                 fun `When store called and companyOffice api service fails, state does not change`() {
-                    val state = manager.uiState.value
+                    val state = manager.state.value
                     manager.store(credential)
                     advanceUntilIdle()
-                    assertTrue(manager.uiState.value === state)
+                    assertTrue(manager.state.value === state)
                 }
             }
 
@@ -158,8 +158,8 @@ class UiManagerTest : MainDispatcherContext() {
             inner class SuccessContext {
                 @BeforeEach
                 fun setup() {
-                    provider.setUserApiService(UserApiServiceStub())
-                    provider.setCompanyApiService(CompanyApiServiceStub())
+                    provider.setUserApiService(UserApiStub())
+                    provider.setCompanyApiService(CompanyApiStub())
                     provider.setCompanyOfficeApiService(OfficeApiStub())
                 }
 
@@ -167,14 +167,14 @@ class UiManagerTest : MainDispatcherContext() {
                 fun `When open called and all api services success, state changes into SignedIn`() {
                     manager.open(credential)
                     advanceUntilIdle()
-                    assertTrue(manager.uiState.value is UiState.SignedIn)
+                    assertTrue(manager.state.value is UiState.SignedIn)
                 }
 
                 @Test
                 fun `When store called and all api services success, state changes into SignedIn`() {
                     manager.store(credential)
                     advanceUntilIdle()
-                    assertTrue(manager.uiState.value is UiState.SignedIn)
+                    assertTrue(manager.state.value is UiState.SignedIn)
                 }
             }
         }
@@ -182,8 +182,8 @@ class UiManagerTest : MainDispatcherContext() {
         @Test
         fun `When store called and all api services success, stores into storage`() {
             val storage = SpySessionStorage()
-            provider.setUserApiService(UserApiServiceStub())
-            provider.setCompanyApiService(CompanyApiServiceStub())
+            provider.setUserApiService(UserApiStub())
+            provider.setCompanyApiService(CompanyApiStub())
             provider.setCompanyOfficeApiService(OfficeApiStub())
             val manager = uiManager(storage)
 

@@ -3,14 +3,14 @@ package com.orka.myfinances.ui.screens.notification
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.Notification
 import com.orka.myfinances.data.repositories.notification.NotificationRepository
-import com.orka.myfinances.lib.ui.models.Text
+import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
 
 class NotificationScreenViewModel(
     private val repository: NotificationRepository,
     logger: Logger,
-    loading: Text,
-    failure: Text
+    loading: UiText,
+    failure: UiText
 ) : ListViewModel<Notification>(
     loading = loading,
     failure = failure,

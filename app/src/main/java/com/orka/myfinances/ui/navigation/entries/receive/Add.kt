@@ -19,7 +19,7 @@ fun addReceiveEntry(
     val viewModel = viewModel(key = "${destination.category.id}") {
         factory.addReceiveViewModel(destination.category)
     }
-    val state = viewModel.uiState.collectAsState()
+    val state = viewModel.state.collectAsState()
 
     AddReceiveScreen(
         modifier = modifier,

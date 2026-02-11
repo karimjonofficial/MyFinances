@@ -2,12 +2,12 @@ package com.orka.myfinances.lib.extensions.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.orka.myfinances.lib.ui.models.Text
+import com.orka.myfinances.lib.ui.models.UiText
 
 @Composable
-fun Text.str(): String {
+fun UiText.str(): String {
     return when(this) {
-        is Text.Str -> this.value
-        is Text.Res -> stringResource(this.id)
+        is UiText.Str -> this.value
+        is UiText.Res -> stringResource(this.id)
     }
 }

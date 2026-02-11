@@ -27,15 +27,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
-import com.orka.myfinances.application.LoggerImpl
 import com.orka.myfinances.data.repositories.basket.BasketRepository
-import com.orka.myfinances.data.repositories.folder.CategoryRepository
-import com.orka.myfinances.data.repositories.folder.FolderRepository
-import com.orka.myfinances.data.repositories.product.ProductRepository
-import com.orka.myfinances.data.repositories.product.title.ProductTitleRepository
-import com.orka.myfinances.data.repositories.template.TemplateRepository
-import com.orka.myfinances.data.repositories.template.field.TemplateFieldRepository
+import com.orka.myfinances.fixtures.core.DummyLogger
 import com.orka.myfinances.fixtures.managers.DummyNavigator
+import com.orka.myfinances.fixtures.resources.models.product.product1
+import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
@@ -73,9 +69,9 @@ fun BasketContent(
                                 BasketItemCard(
                                     item = it,
                                     imageRes = R.drawable.furniture,
-                                    increase = { item -> viewModel.increase(item.product.id) },
-                                    decrease = { item -> viewModel.decrease(item.product.id) },
-                                    remove = { item -> viewModel.remove(item) }
+                                    increase = { viewModel.increase(it.product.id) },
+                                    decrease = { viewModel.decrease(it.product.id) },
+                                    remove = { viewModel.remove(it) }
                                 )
                             }
                         }
@@ -124,22 +120,14 @@ fun BasketContent(
 @Preview
 @Composable
 private fun BasketContentPreview() {
-    val logger = LoggerImpl()
-    val productRepository = ProductRepository(
-        titleRepository = ProductTitleRepository(
-            categoryRepository = CategoryRepository(FolderRepository(TemplateRepository())),
-            fieldRepository = TemplateFieldRepository()
-        )
-    )
-    val basketRepository = BasketRepository(productRepository)
     val viewModel = viewModel {
         BasketContentViewModel(
-            repository = basketRepository,
-            logger = logger
+            repository = BasketRepository(productRepository = { product1 }),
+            logger = DummyLogger()
         )
     }
     viewModel.initialize()
-    val uiState = viewModel.uiState.collectAsState()
+    val uiState = viewModel.state.collectAsState()
 
     ScaffoldPreview(
         title = "Basket",
@@ -160,7 +148,7 @@ private fun BasketContentPreview() {
     ) { paddingValues ->
 
         BasketContent(
-            modifier = Modifier.padding(paddingValues),
+            modifier = Modifier.scaffoldPadding(paddingValues),
             state = uiState.value,
             viewModel = viewModel,
             navigator = DummyNavigator()

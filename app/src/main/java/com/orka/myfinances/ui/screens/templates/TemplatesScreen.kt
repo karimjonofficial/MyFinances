@@ -39,7 +39,7 @@ fun TemplatesScreen(
             )
         }
     ) { paddingValues ->
-        val uiState = viewModel.uiState.collectAsState()
+        val uiState = viewModel.state.collectAsState()
 
         TemplatesContent(
             modifier = Modifier.scaffoldPadding(paddingValues),

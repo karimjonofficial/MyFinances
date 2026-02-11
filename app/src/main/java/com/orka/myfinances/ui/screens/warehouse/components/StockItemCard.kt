@@ -6,8 +6,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -34,7 +35,6 @@ fun StockItemCard(
 ) {
     Column(
         modifier = modifier
-            .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(24.dp))
             .clickable { click(item) }
     ) {
@@ -46,7 +46,7 @@ fun StockItemCard(
         ) {
 
             Image(
-                modifier = Modifier.size(200.dp),
+                modifier = Modifier.height(240.dp).fillMaxWidth(),
                 painter = painterResource(R.drawable.furniture1),
                 contentScale = ContentScale.Crop,
                 contentDescription = item.product.title.name,
@@ -97,7 +97,6 @@ private fun ProductCardPreview() {
             contentAlignment = Alignment.Center
         ) {
             StockItemCard(
-                modifier = Modifier.size(height = 200.dp, width = 180.dp),
                 item = stockItem1,
                 click = {}
             )

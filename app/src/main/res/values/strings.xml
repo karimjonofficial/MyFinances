@@ -112,8 +112,8 @@
     <string name="fields">Fields</string>
     <string name="total_price">Total price</string>
     <string name="date_time"><![CDATA[Date & Time]]></string>
-    <string name="print_stock_labels">PRINT STOCK LABELS</string>
-    <string name="share_report">SHARE REPORT</string>
+    <string name="print_stock_labels">Print stock labels</string>
+    <string name="share_report">Share report</string>
     <string name="receive_detail">Receive Detail</string>
     <string name="items_purchased">Items Purchased</string>
     <string name="sale_details">Sale Details</string>
@@ -129,4 +129,9 @@
     <string name="registered_at">Registered at:</string>
     <string name="completed_at">Completed at:</string>
     <string name="completion_date">Completion date:</string>
+    <string name="no_profession_provided">No profession provided</string>
+    <string name="seller">Seller</string>
+    <string name="order_details">Order details</string>
+    <string name="customer_details">Customer Details</string>
+    <string name="more">More</string>
 </resources>

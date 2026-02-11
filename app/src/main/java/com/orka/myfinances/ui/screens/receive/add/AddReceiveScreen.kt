@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.retain.retain
@@ -22,10 +21,11 @@ import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
+import com.orka.myfinances.lib.ui.components.CommentTextField
 import com.orka.myfinances.lib.ui.components.IntegerTextField
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.list.State
 import com.orka.myfinances.ui.navigation.Navigator
 
 @Composable
@@ -37,10 +37,16 @@ fun AddReceiveScreen(
     navigator: Navigator
 ) {
     val title = retain { mutableStateOf<ProductTitle?>(null) }
-    val amount = rememberSaveable { mutableStateOf<Int?>(0) }
-    val price = rememberSaveable { mutableStateOf<Int?>(0) }
-    val salePrice = rememberSaveable { mutableStateOf<Int?>(0) }
+    val amount = rememberSaveable { mutableStateOf<Int?>(null) }
+    val price = rememberSaveable { mutableStateOf<Int?>(null) }
+    val salePrice = rememberSaveable { mutableStateOf<Int?>(null) }
+    val totalPrice = rememberSaveable { mutableStateOf<Int?>(null) }
     val description = rememberSaveable { mutableStateOf<String?>(null) }
+    fun refreshTotalPrice(amount: Int?, price: Int?) {
+        if(amount != null && price != null) {
+            totalPrice.value = amount * price
+        }
+    }
 
     Scaffold(
         modifier = modifier,
@@ -55,17 +61,20 @@ fun AddReceiveScreen(
                         val a = amount.value
                         val p = price.value
                         val sp = salePrice.value
+                        val tp = totalPrice.value
 
                         if (
                             t != null && a != null && a > 0 &&
                             p != null && p > 0 &&
-                            sp != null && sp > 0
+                            sp != null && sp > 0 &&
+                            tp != null
                         ) {
                             viewModel.add(
                                 title = t,
                                 price = p,
                                 salePrice = sp,
                                 amount = a,
+                                totalPrice = tp,
                                 description = description.value
                             )
                             navigator.back()
@@ -106,7 +115,10 @@ fun AddReceiveScreen(
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text(text = stringResource(R.string.amount)) },
                 value = amount.value,
-                onValueChange = { amount.value = it }
+                onValueChange = {
+                    amount.value = it
+                    refreshTotalPrice(it, price.value)
+                }
             )
 
             VerticalSpacer(8)
@@ -114,7 +126,10 @@ fun AddReceiveScreen(
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text(text = stringResource(R.string.price)) },
                 value = price.value,
-                onValueChange = { amount.value = it }
+                onValueChange = {
+                    price.value = it
+                    refreshTotalPrice(amount.value, it)
+                }
             )
 
             VerticalSpacer(8)
@@ -122,16 +137,22 @@ fun AddReceiveScreen(
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text(text = stringResource(R.string.sale_price)) },
                 value = salePrice.value,
-                onValueChange = { amount.value = it }
+                onValueChange = { salePrice.value = it }
             )
 
             VerticalSpacer(8)
-            TextField(
+            IntegerTextField(
                 modifier = Modifier.fillMaxWidth(),
-                label = { Text(text = stringResource(R.string.description)) },
+                label = { Text(text = stringResource(R.string.total_price)) },
+                value = totalPrice.value,
+                onValueChange = { totalPrice.value = it }
+            )
+
+            VerticalSpacer(8)
+            CommentTextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = description.value ?: "",
-                onValueChange = { description.value = it },
-                minLines = 3
+                onValueChange = { description.value = it }
             )
         }
     }

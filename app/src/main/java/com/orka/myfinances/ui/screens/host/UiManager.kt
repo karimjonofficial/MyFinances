@@ -5,6 +5,7 @@ import com.orka.myfinances.core.SingleStateViewModel
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.data.models.Session
+import com.orka.myfinances.data.repositories.IdGenerator
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.data.repositories.debt.DebtRepository
@@ -27,7 +28,6 @@ import com.orka.myfinances.lib.extensions.models.makeSession
 import com.orka.myfinances.lib.extensions.models.toModel
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.navigation.Destination
-import com.orka.myfinances.ui.screens.host.NavigationManager
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asStateFlow
@@ -123,17 +123,24 @@ class UiManager(
     }
 
     private fun factory(office: Office): Factory {
-        val templateRepository = TemplateRepository()
+        val idGenerator = IdGenerator()
+        val templateRepository = TemplateRepository(idGenerator)
         val folderRepository = FolderRepository(templateRepository)
         val categoryRepository = CategoryRepository(folderRepository)
         val templateFieldRepository = TemplateFieldRepository()
-        val productTitleRepository = ProductTitleRepository(categoryRepository, templateFieldRepository)
-        val productRepository = ProductRepository(productTitleRepository)
-        val stockRepository = StockRepository(productRepository, office)
+        val productTitleRepository = ProductTitleRepository(categoryRepository, templateFieldRepository, idGenerator)
+        val productRepository = ProductRepository(productTitleRepository, idGenerator)
+        val stockRepository = StockRepository(office, productRepository, idGenerator)
         val basketRepository = BasketRepository(productRepository)
-        val saleRepository = SaleRepository()
-        val receiveRepository = ReceiveRepository(productTitleRepository, productRepository, stockRepository)
-        val orderRepository = OrderRepository()
+        val saleRepository = SaleRepository(idGenerator)
+        val receiveRepository = ReceiveRepository(
+            productTitleRepository = productTitleRepository,
+            productRepository = productRepository,
+            stockRepository = stockRepository,
+            setProductTitlePrice = productTitleRepository,
+            generator = idGenerator
+        )
+        val orderRepository = OrderRepository(idGenerator)
         val clientRepository = ClientRepository()
         val debtRepository = DebtRepository()
         val notificationRepository = NotificationRepository()

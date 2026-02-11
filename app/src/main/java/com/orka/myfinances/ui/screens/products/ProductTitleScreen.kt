@@ -1,8 +1,6 @@
 package com.orka.myfinances.ui.screens.products
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -12,18 +10,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AssistChip
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -44,14 +37,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.fixtures.resources.models.product.productTitle1
-import com.orka.myfinances.lib.extensions.ui.description
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
-import com.orka.myfinances.lib.ui.components.CommentTextField
-import com.orka.myfinances.lib.ui.components.Dialog
+import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
-import com.orka.myfinances.lib.ui.components.IntegerTextField
+import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.ui.screens.debt.components.DescriptionCard
+import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,98 +67,61 @@ fun ProductTitleScreen(
                     )
                 },
                 actions = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {}) {//TODO
                         Icon(
                             painter = painterResource(R.drawable.edit_outlined),
-                            contentDescription = "More"
+                            contentDescription = stringResource(R.string.more)
                         )
                     }
                 }
             )
         },
         bottomBar = {
-            BottomAppBar(contentPadding = PaddingValues(horizontal = 16.dp)) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { dialogVisible.value = true }
-                ) {
-                    Text(stringResource(R.string.receive))
-                }
-            }
+            SingleActionBottomBar(
+                buttonText = stringResource(R.string.receive),
+                action = { dialogVisible.value = true }
+            )
         }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier.scaffoldPadding(paddingValues),
-            contentPadding = PaddingValues(bottom = 16.dp)
+            contentPadding = PaddingValues(bottom = 16.dp, start = 16.dp, end = 16.dp)
         ) {
             item { HeroImage() }
             item { TitleSection(productTitle = productTitle) }
             item { PricingSection(productTitle = productTitle) }
             item { HorizontalDivider() }
-            item { InventorySection(productTitle = productTitle) }
-            item { DescriptionSection(productTitle = productTitle) }
-            item { SpecificationsSection(productTitle = productTitle) }
-        }
-
-        if(dialogVisible.value) {
-            val price = rememberSaveable { mutableStateOf<Int?>(null) }
-            val salePrice = rememberSaveable { mutableStateOf<Int?>(null) }
-            val amount = rememberSaveable { mutableStateOf<Int?>(null) }
-            val totalPrice = rememberSaveable { mutableStateOf<Int?>(null) }
-            val comment = rememberSaveable { mutableStateOf<String?>(null) }
-
-            Dialog(
-                dismissRequest = { dialogVisible.value = false },
-                title = stringResource(R.string.receive),
-                supportingText = stringResource(R.string.fill_the_lines_below_to_receive),
-                onSuccess = {
-                    val p = price.value
-                    val sp = salePrice.value
-                    val a = amount.value
-                    val t = totalPrice.value
-                    val c = comment.value
-
-                    if(p != null && sp != null && a != null && t != null) {
-                        viewModel.receive(
-                            price = p,
-                            salePrice = sp,
-                            amount = a,
-                            totalPrice = t,
-                            comment = c
-                        )
-                        dialogVisible.value = false
-                    }
-                }
-            ) {
-                IntegerTextField(
-                    value = price.value,
-                    onValueChange = { price.value = it },
-                    label = stringResource(R.string.price)
-                )
-
-                IntegerTextField(
-                    value = salePrice.value,
-                    onValueChange = { salePrice.value = it },
-                    label = stringResource(R.string.sale_price)
-                )
-
-                IntegerTextField(
-                    value = amount.value,
-                    onValueChange = { amount.value = it },
-                    label = stringResource(R.string.amount)
-                )
-
-                IntegerTextField(
-                    value = totalPrice.value,
-                    onValueChange = { totalPrice.value = it },
-                    label = stringResource(R.string.total_price)
-                )
-
-                CommentTextField(
-                    value = comment.value,
-                    onValueChange = { comment.value = it }
+            item {
+                VerticalSpacer(16)
+                DividedList(
+                    title = stringResource(R.string.specifications),
+                    items = productTitle.properties,
+                    itemTitle = { it.type.name },
+                    itemSupportingText = { "${it.value}" }
                 )
             }
+            if(!productTitle.description.isNullOrBlank()) {
+                item {
+                    VerticalSpacer(8)
+                    DescriptionCard(description = productTitle.description)
+                }
+            }
+        }
+
+        if (dialogVisible.value) {
+            ReceiveDialog(
+                dismissRequest = { dialogVisible.value = false },
+                onSuccess = { p, sp, a, t, c ->
+                    viewModel.receive(
+                        price = p,
+                        salePrice = sp,
+                        amount = a,
+                        totalPrice = t,
+                        comment = c
+                    )
+                    dialogVisible.value = false
+                }
+            )
         }
     }
 }
@@ -251,128 +207,6 @@ private fun PricingSection(
     }
 }
 
-@Composable
-private fun InventorySection(
-    modifier: Modifier = Modifier,
-    productTitle: ProductTitle
-) {
-    Column(modifier = modifier.padding(16.dp)) {
-
-        Text(
-            text = "Inventory",
-            style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.Bold
-        )
-
-        VerticalSpacer(8)
-        Card {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
-                Row(verticalAlignment = Alignment.CenterVertically) {
-
-                    Surface(
-                        shape = CircleShape,
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.inventory2),
-                            contentDescription = null,
-                            modifier = Modifier.padding(12.dp),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-
-                    HorizontalSpacer(12)
-                    Column {
-
-                        Text(
-                            text = productTitle.category.name,
-                            style = MaterialTheme.typography.labelSmall
-                        )
-
-                        Text(
-                            text = stringResource(R.string.in_stock),
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-
-                Column(horizontalAlignment = Alignment.End) {
-
-                    Text(
-                        text = stringResource(R.string.template),
-                        style = MaterialTheme.typography.labelSmall
-                    )
-
-                    VerticalSpacer(4)
-                    Text(
-                        text = productTitle.category.template.name,
-                        style = MaterialTheme.typography.labelMedium,
-                        modifier = Modifier
-                            .background(
-                                color = MaterialTheme.colorScheme.surfaceVariant,
-                                shape = RoundedCornerShape(8.dp)
-                            )
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun DescriptionSection(
-    modifier: Modifier = Modifier,
-    productTitle: ProductTitle
-) {
-    Column(modifier = modifier.padding(16.dp)) {
-
-        Text(
-            text = stringResource(R.string.description),
-            style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.Bold
-        )
-
-        VerticalSpacer(8)
-        Text(
-            text = productTitle.description.description(),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
-
-@Composable
-private fun SpecificationsSection(
-    modifier: Modifier = Modifier,
-    productTitle: ProductTitle
-) {
-    Column(modifier = modifier.padding(16.dp)) {
-
-        Text(
-            text = stringResource(R.string.specifications),
-            style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.Bold
-        )
-
-        VerticalSpacer(8)
-        Card {
-            productTitle.properties.forEachIndexed { index, property ->
-                PropertyCard(property = property)
-                if (index != productTitle.properties.lastIndex) {
-                    HorizontalDivider()
-                }
-            }
-        }
-    }
-}
-
 @Preview
 @Composable
 private fun ProductTitleScreenPreview() {
@@ -382,8 +216,11 @@ private fun ProductTitleScreenPreview() {
             repository = { null }
         )
     }
-    ProductTitleScreen(
-        productTitle = productTitle1,
-        viewModel = viewModel
-    )
+    
+    MyFinancesTheme {
+        ProductTitleScreen(
+            productTitle = productTitle1,
+            viewModel = viewModel
+        )
+    }
 }

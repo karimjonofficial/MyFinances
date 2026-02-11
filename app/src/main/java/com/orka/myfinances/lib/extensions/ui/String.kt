@@ -18,3 +18,8 @@ fun String?.address(defaultId: Int = R.string.no_address): String {
 fun String?.phone(defaultId: Int = R.string.no_phone_provided): String {
     return if(this.isNullOrBlank()) stringResource(defaultId) else this
 }
+
+@Composable
+fun String?.profession(defaultId: Int = R.string.no_profession_provided): String {
+    return if(this.isNullOrBlank()) stringResource(defaultId) else this
+}

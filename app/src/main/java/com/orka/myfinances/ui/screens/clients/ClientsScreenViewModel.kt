@@ -5,19 +5,20 @@ import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.repositories.client.AddClientRequest
 import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.Get
-import com.orka.myfinances.lib.ui.models.Text
-import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
+import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.ui.viewmodel.MapperListViewModel
 
 class ClientsScreenViewModel(
     get: Get<Client>,
     private val add: Add<Client, AddClientRequest>,
-    loading: Text,
-    failure: Text,
+    loading: UiText,
+    failure: UiText,
     logger: Logger
-) : ListViewModel<Client>(
+) : MapperListViewModel<Client, ClientModel>(
     loading = loading,
     failure = failure,
     repository = get,
+    map = { ClientModel(it, it.map()) },
     logger = logger
 ) {
 
@@ -28,7 +29,6 @@ class ClientsScreenViewModel(
             phone = phone,
             address = address
         )
-        if(add.add(request) != null)
-            initialize()
+        if(add.add(request) != null) initialize()
     }
 }

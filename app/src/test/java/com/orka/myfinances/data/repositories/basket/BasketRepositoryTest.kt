@@ -14,7 +14,10 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class BasketRepositoryTest : MainDispatcherContext() {
-    private val productRepository = ProductRepository({ null })
+    private val productRepository = ProductRepository(
+        titleRepository = { null },
+        generator = { id1 }
+    )
     private val repository = BasketRepository(productRepository)
 
     @Test

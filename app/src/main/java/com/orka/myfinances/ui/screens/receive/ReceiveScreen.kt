@@ -1,18 +1,13 @@
 package com.orka.myfinances.ui.screens.receive
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -24,31 +19,25 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.receive.Receive
 import com.orka.myfinances.fixtures.managers.DummyNavigator
-import com.orka.myfinances.fixtures.resources.industrialDrill
 import com.orka.myfinances.fixtures.resources.models.receive.receive1
-import com.orka.myfinances.fixtures.resources.safetyHelmet
-import com.orka.myfinances.fixtures.resources.straps
-import com.orka.myfinances.lib.extensions.ui.description
 import com.orka.myfinances.lib.ui.Scaffold
+import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.ui.components.UserCard
 import com.orka.myfinances.ui.navigation.Navigator
+import com.orka.myfinances.ui.screens.debt.components.DescriptionCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,27 +46,6 @@ fun ReceiveScreen(
     navigator: Navigator,
     receive: Receive
 ) {
-    val items = listOf(
-        ReceivedItem(
-            name = "Industrial Drill V2",
-            amount = "Amount: 10 units",
-            price = "$2,500",
-            imageUrl = industrialDrill
-        ),
-        ReceivedItem(
-            name = "Pro Safety Helmets",
-            amount = "Amount: 50 units",
-            price = "$1,250",
-            imageUrl = safetyHelmet
-        ),
-        ReceivedItem(
-            name = "Heavy Duty Straps",
-            amount = "Amount: 100 units",
-            price = "$1,100",
-            imageUrl = straps
-        )
-    )
-
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -154,113 +122,25 @@ fun ReceiveScreen(
             }
 
             item {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                ) {
-                    Surface(
-                        shape = CircleShape,
-                        color = MaterialTheme.colorScheme.surfaceContainer,
-                        modifier = Modifier.size(48.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.person),
-                            contentDescription = null,
-                            modifier = Modifier.padding(12.dp)
-                        )
-                    }
-
-                    HorizontalSpacer(16)
-
-                    Column {
-                        Text(
-                            text = "${receive.user.firstName} ${receive.user.lastName}",
-                            style = MaterialTheme.typography.titleSmall
-                        )
-
-                        Text(
-                            text = receive.user.profession ?: "No profession detected",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-            }
-
-            item {
-                Text(
-                    text = "${stringResource(R.string.items)}(${receive.items.size})",
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(horizontal = 8.dp)
+                UserCard(
+                    user = receive.user,
+                    onClick = {}
                 )
             }
 
-            items(items = items) { item ->
-                Card(
-                    shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-                    )
-                ) {
-                    Row(
-                        modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        AsyncImage(
-                            model = item.imageUrl,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(56.dp)
-                                .clip(RoundedCornerShape(8.dp))
-                                .border(
-                                    width = 1.dp,
-                                    color = MaterialTheme.colorScheme.outlineVariant,
-                                    shape = RoundedCornerShape(8.dp)
-                                ),
-                            contentScale = ContentScale.Crop
-                        )
-
-                        HorizontalSpacer(16)
-                        Column(Modifier.weight(1f)) {
-
-                            Text(
-                                text = item.name,
-                                style = MaterialTheme.typography.bodyLarge
-                            )
-
-                            Text(
-                                text = item.amount,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-
-                        Text(
-                            text = item.price,
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-                }
+            item {
+                VerticalSpacer(8)
+                DividedList(
+                    title = stringResource(R.string.items),
+                    items = receive.items,
+                    itemTitle = { item -> item.product.title.name },
+                    itemSupportingText = { item -> "${item.amount}" }
+                )
             }
 
-            item {
-                Column {
-                    Text(
-                        text = stringResource(R.string.description),
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-
-                    VerticalSpacer(8)
-                    OutlinedCard {
-                        Text(
-                            text = receive.description.description(),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(16.dp)
-                        )
-                    }
+            if(!receive.description.isNullOrBlank()) {
+                item {
+                    DescriptionCard(description = receive.description)
                 }
             }
 
@@ -270,11 +150,7 @@ fun ReceiveScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Button(
-                        onClick = {},
-                        modifier = Modifier.height(56.dp),
-                        shape = RoundedCornerShape(50)
-                    ) {
+                    Button(onClick = {}) {
                         Icon(
                             painter = painterResource(R.drawable.print),
                             contentDescription = null
@@ -283,11 +159,7 @@ fun ReceiveScreen(
                         Text(stringResource(R.string.print_stock_labels))
                     }
 
-                    OutlinedButton(
-                        onClick = {},
-                        modifier = Modifier.height(56.dp),
-                        shape = RoundedCornerShape(50)
-                    ) {
+                    OutlinedButton(onClick = {}) {
                         Icon(
                             painter = painterResource(R.drawable.share),
                             contentDescription = null

@@ -1,5 +1,6 @@
 package com.orka.myfinances.lib.ui.components
 
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -15,6 +16,22 @@ fun CommentTextField(
     label: String = stringResource(R.string.comment)
 ) {
     TextField(
+        modifier = modifier,
+        value = value ?: "",
+        onValueChange = onValueChange,
+        label = { Text(text = label) },
+        minLines = 3
+    )
+}
+
+@Composable
+fun OutlinedCommentTextField(
+    modifier: Modifier = Modifier,
+    value: String?,
+    onValueChange: (String) -> Unit,
+    label: String = stringResource(R.string.comment)
+) {
+    OutlinedTextField(
         modifier = modifier,
         value = value ?: "",
         onValueChange = onValueChange,

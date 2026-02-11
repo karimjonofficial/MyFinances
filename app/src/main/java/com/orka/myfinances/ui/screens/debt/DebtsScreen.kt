@@ -6,6 +6,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -45,7 +46,6 @@ fun DebtsScreen(
         },
         viewModel = viewModel,
         item = { modifier, item ->
-
             DebtCard(
                 modifier = modifier,
                 debt = item,
@@ -54,6 +54,9 @@ fun DebtsScreen(
         },
         dialogState = visible,
         dialog = {
+            LaunchedEffect(Unit) {
+                viewModel.initializeClients()
+            }
             val dialogState = viewModel.dialogState.collectAsState()
 
             AddDebtDialog(

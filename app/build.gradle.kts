@@ -43,6 +43,9 @@ android {
 kotlin {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_11)
+        freeCompilerArgs.addAll(
+            "-Xexplicit-backing-fields"
+        )
     }
 }
 
@@ -70,6 +73,12 @@ dependencies {
     implementation(libs.androidx.adaptive.navigation)
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+
+    // Ktor
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
 
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)

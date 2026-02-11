@@ -4,7 +4,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
-import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.navigation.entries.catalogEntry
 import com.orka.myfinances.ui.navigation.entries.checkoutEntry
@@ -53,7 +52,7 @@ fun entryProvider(
         is Destination.Checkout -> checkoutEntry(modifier, destination, navigator, factory)
         is Destination.AddStockItem -> addReceiveEntry(modifier, destination, navigator, factory)
         is Destination.Orders -> ordersEntry(modifier, destination, navigator, factory)
-        is Destination.Order -> orderEntry(modifier, destination)
+        is Destination.Order -> orderEntry(modifier, destination, navigator)
         is Destination.Debts -> debtsEntry(modifier, destination, navigator, factory)
         is Destination.Debt -> debtEntry(modifier, destination, navigator)
         is Destination.Search -> searchEntry(modifier, destination)

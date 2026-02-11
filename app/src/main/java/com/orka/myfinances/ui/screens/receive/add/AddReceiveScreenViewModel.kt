@@ -8,15 +8,15 @@ import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.data.repositories.receive.ReceiveItemModel
 import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.GetByParameter
-import com.orka.myfinances.lib.ui.models.Text
+import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.ListByParameterViewModel
 
 class AddReceiveScreenViewModel(
     private val receiveRepository: Add<Receive, AddReceiveRequest>,
     category: Category,
     titleRepository: GetByParameter<ProductTitle, Category>,
-    loading: Text,
-    failure: Text,
+    loading: UiText,
+    failure: UiText,
     logger: Logger
 ) : ListByParameterViewModel<ProductTitle, Category>(
     parameter = category,
@@ -31,6 +31,7 @@ class AddReceiveScreenViewModel(
         amount: Int,
         price: Int,
         salePrice: Int,
+        totalPrice: Int,
         description: String?
     ) {
         launch {
@@ -44,7 +45,7 @@ class AddReceiveScreenViewModel(
                             description = description
                         )
                     ),
-                    price = title.defaultPrice * amount
+                    price = totalPrice
                 ))
         }
     }

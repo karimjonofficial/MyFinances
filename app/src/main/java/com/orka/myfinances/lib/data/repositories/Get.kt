@@ -1,5 +1,5 @@
 package com.orka.myfinances.lib.data.repositories
 
-interface Get<T> {
+fun interface Get<T> {
     suspend fun get(): List<T>?
 }

@@ -71,7 +71,7 @@ fun WarehouseScreen(
                     modifier = m,
                     state = warehouseState.value,
                     viewModel = viewModel,
-                    contentPadding = PaddingValues(8.dp),
+                    contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
                     onStockItemClick = viewModel::addToBasket
                 )
             } else {

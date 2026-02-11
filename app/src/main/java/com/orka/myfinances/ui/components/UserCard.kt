@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -18,13 +20,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.User
+import com.orka.myfinances.fixtures.resources.models.client1
 import com.orka.myfinances.lib.extensions.ui.phone
+import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
+import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.ui.screens.clients.map
 
 @Composable
 fun UserCard(
@@ -75,5 +83,31 @@ fun UserCard(
             painter = painterResource(R.drawable.arrow_right),
             contentDescription = user.firstName
         )
+    }
+}
+
+@Preview(
+    showSystemUi = true,
+    showBackground = true
+)
+@Composable
+private fun ClientCardPreview() {
+    Scaffold(title = stringResource(R.string.clients)) { paddingValues ->
+        Box(modifier = Modifier.scaffoldPadding(paddingValues)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 4.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                repeat(10) {
+                    ClientCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        model = client1.map(),
+                        onClick = {}
+                    )
+                }
+            }
+        }
     }
 }

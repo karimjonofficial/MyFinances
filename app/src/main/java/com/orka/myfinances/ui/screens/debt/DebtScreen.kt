@@ -1,7 +1,6 @@
 package com.orka.myfinances.ui.screens.debt
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,7 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,13 +38,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Debt
+import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.debt1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
-import com.orka.myfinances.ui.screens.debt.components.Avatar
+import com.orka.myfinances.ui.components.UserCard
+import com.orka.myfinances.ui.navigation.Navigator
+import com.orka.myfinances.ui.components.ClientCard
 import com.orka.myfinances.ui.screens.debt.components.DateCard
 import com.orka.myfinances.ui.screens.debt.components.DescriptionCard
 import com.orka.myfinances.ui.screens.debt.components.EmphasizedDateCard
-import com.orka.myfinances.ui.screens.debt.parts.ClientInfoCard
 import com.orka.myfinances.ui.screens.debt.parts.NotificationStatusCard
 import kotlin.time.Clock
 
@@ -56,9 +56,7 @@ import kotlin.time.Clock
 fun DebtScreen(
     modifier: Modifier = Modifier,
     debt: Debt,
-    onBackClick: () -> Unit,
-    onEditClick: () -> Unit,
-    onMarkAsPaidClick: () -> Unit
+    navigator: Navigator
 ) {
 
     Scaffold(
@@ -72,7 +70,7 @@ fun DebtScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = onBackClick) {
+                    IconButton(onClick = navigator::back) {
                         Icon(
                             painter = painterResource(R.drawable.arrow_back),
                             contentDescription = stringResource(R.string.back)
@@ -80,7 +78,7 @@ fun DebtScreen(
                     }
                 },
                 actions = {
-                    TextButton(onClick = onEditClick) {
+                    TextButton(onClick = {}) {//TODO
                         Text(
                             text = stringResource(R.string.edit),
                             style = MaterialTheme.typography.bodyLarge,
@@ -91,12 +89,12 @@ fun DebtScreen(
             )
         },
         bottomBar = {
-            BottomAppBar {
+            BottomAppBar(containerColor = MaterialTheme.colorScheme.surface) {
                 Button(
-                    onClick = onMarkAsPaidClick,
+                    onClick = {},//TODO
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(16.dp)
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.check_circle),
@@ -129,8 +127,21 @@ fun DebtScreen(
                 )
             }
 
-            item { ClientInfoCard(client = debt.client) }
             item { TimelineAndStaffCard(debt = debt) }
+
+            item {
+                ClientCard(
+                    client = debt.client,
+                    navigator = navigator
+                )
+            }
+
+            item {
+                UserCard(
+                    user = debt.user,
+                    onClick = {}
+                )
+            }
 
             item {
                 debt.description?.let {
@@ -196,35 +207,6 @@ fun HeroSection(
 }
 
 @Composable
-fun ClientAction(
-    modifier: Modifier = Modifier,
-    text: String,
-    painter: Painter,
-    onClick: () -> Unit
-) {
-
-    TextButton(
-        onClick = { onClick() },
-        modifier = modifier,
-        shape = RoundedCornerShape(0.dp)
-    ) {
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(vertical = 8.dp)
-        ) {
-
-            Icon(
-                painter = painter,
-                contentDescription = text
-            )
-
-            Text(text, style = MaterialTheme.typography.labelSmall)
-        }
-    }
-}
-
-@Composable
 fun TimelineAndStaffCard(
     modifier: Modifier = Modifier,
     debt: Debt
@@ -234,9 +216,7 @@ fun TimelineAndStaffCard(
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
     ) {
-
         Column(modifier = Modifier.padding(16.dp)) {
-
             Text(
                 text = stringResource(R.string.timeline_and_staff),
                 style = MaterialTheme.typography.titleSmall,
@@ -246,7 +226,6 @@ fun TimelineAndStaffCard(
             )
 
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-
                 DateCard(
                     modifier = Modifier.weight(1f),
                     label = "Start Date",
@@ -273,43 +252,6 @@ fun TimelineAndStaffCard(
                     )
                 }
             }
-
-            Spacer(Modifier.height(16.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp))
-                    .clickable {}
-                    .background(MaterialTheme.colorScheme.surface)
-                    .padding(12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                Avatar(contentDescription = stringResource(R.string.assigned_to_avatar))
-
-                Spacer(modifier = Modifier.size(12.dp))
-                Column(modifier = Modifier.weight(1f)) {
-
-                    Text(
-                        text = stringResource(R.string.assigned_to),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-
-                    Text(
-                        text = debt.user.firstName,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Icon(
-                    painter = painterResource(R.drawable.arrow_right),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
         }
     }
 }
@@ -324,9 +266,7 @@ private fun DebtScreenPreview() {
     MaterialTheme {
         DebtScreen(
             debt = debt1,
-            onBackClick = {},
-            onEditClick = {},
-            onMarkAsPaidClick = {}
+            navigator = DummyNavigator()
         )
     }
 }

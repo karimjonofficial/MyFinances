@@ -5,7 +5,7 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.sale.Sale
 import com.orka.myfinances.data.repositories.sale.SaleEvent
 import com.orka.myfinances.lib.data.repositories.Get
-import com.orka.myfinances.lib.ui.models.Text
+import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
@@ -13,8 +13,8 @@ import kotlinx.coroutines.flow.onEach
 
 class SaleContentViewModel(
     events: Flow<SaleEvent>,
-    loading: Text,
-    failure: Text,
+    loading: UiText,
+    failure: UiText,
     repository: Get<Sale>,
     logger: Logger
 ) : ListViewModel<Sale>(

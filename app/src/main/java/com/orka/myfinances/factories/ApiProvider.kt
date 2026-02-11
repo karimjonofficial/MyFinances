@@ -1,13 +1,13 @@
 package com.orka.myfinances.factories
 
-import com.orka.myfinances.data.api.CompanyApiService
+import com.orka.myfinances.data.api.CompanyApi
 import com.orka.myfinances.data.api.OfficeApi
-import com.orka.myfinances.data.api.CredentialApiService
-import com.orka.myfinances.data.api.UserApiService
+import com.orka.myfinances.data.api.CredentialApi
+import com.orka.myfinances.data.api.UserApi
 
 interface ApiProvider {
-    fun getUserApiService(): UserApiService
-    fun getCompanyApiService(): CompanyApiService
+    fun getUserApiService(): UserApi
+    fun getCompanyApiService(): CompanyApi
     fun officeApi(): OfficeApi
-    fun getCredentialApiService(): CredentialApiService
+    fun getCredentialApiService(): CredentialApi
 }

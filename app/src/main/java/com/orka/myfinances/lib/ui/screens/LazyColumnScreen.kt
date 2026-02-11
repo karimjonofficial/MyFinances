@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
-import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
+import com.orka.myfinances.lib.viewmodel.list.ListViewModel
 import androidx.compose.runtime.State as RState
 
 @Composable
@@ -86,4 +86,3 @@ fun <T> LazyColumnScreen(
         viewModel = viewModel
     )
 }
-

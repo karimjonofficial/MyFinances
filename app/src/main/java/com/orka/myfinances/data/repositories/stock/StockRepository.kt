@@ -6,10 +6,10 @@ import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.data.repositories.product.AddProductRequest
-import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.stockItems
 import com.orka.myfinances.lib.data.now
 import com.orka.myfinances.lib.data.repositories.Add
+import com.orka.myfinances.lib.data.repositories.Generator
 import com.orka.myfinances.lib.fixtures.data.repositories.MockAddRepository
 import com.orka.myfinances.lib.fixtures.data.repositories.MockGetByIdRepository
 import com.orka.myfinances.lib.fixtures.data.repositories.MockGetByParameterRepository
@@ -18,8 +18,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class StockRepository(
+    private val office: Office,
     private val productRepository: Add<Product, AddProductRequest>,
-    private val office: Office
+    private val generator: Generator<Id>,
 ) : MockGetRepository<StockItem>, MockGetByIdRepository<StockItem>,
     MockGetByParameterRepository<StockItem, Category>,
     MockAddRepository<StockItem, AddStockItemRequest> {
@@ -37,7 +38,7 @@ class StockRepository(
             )
         ) ?: throw Exception("Product not found")
         return StockItem(
-            id = id1,
+            id = generator.generate(),
             product = product,
             amount = amount,
             office = office,

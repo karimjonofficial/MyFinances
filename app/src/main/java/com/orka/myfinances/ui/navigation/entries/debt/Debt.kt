@@ -16,8 +16,6 @@ fun debtEntry(
     DebtScreen(
         modifier = modifier,
         debt = destination.debt,
-        onBackClick = { navigator.back() },
-        onEditClick = {},
-        onMarkAsPaidClick = {}
+        navigator = navigator
     )
 }

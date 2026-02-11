@@ -18,7 +18,7 @@ import com.orka.myfinances.data.repositories.receive.ReceiveRepository
 import com.orka.myfinances.data.repositories.sale.SaleRepository
 import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.repositories.template.TemplateRepository
-import com.orka.myfinances.lib.ui.models.Text
+import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.ui.screens.catalog.CatalogScreenViewModel
 import com.orka.myfinances.ui.screens.checkout.CheckoutScreenViewModel
 import com.orka.myfinances.ui.screens.clients.ClientsScreenViewModel
@@ -118,16 +118,16 @@ class Factory(
         return ClientsScreenViewModel(
             get = clientRepository,
             add = clientRepository,
-            loading = Text.Res(R.string.loading),
-            failure = Text.Res(R.string.failure),
+            loading = UiText.Res(R.string.loading),
+            failure = UiText.Res(R.string.failure),
             logger = logger
         )
     }
 
     fun saleViewModel(): SaleContentViewModel {
         return SaleContentViewModel(
-            loading = Text.Res(R.string.loading),
-            failure = Text.Res(R.string.failure),
+            loading = UiText.Res(R.string.loading),
+            failure = UiText.Res(R.string.failure),
             repository = saleRepository,
             events = saleRepository.events,
             logger = logger
@@ -138,8 +138,8 @@ class Factory(
         return ReceiveContentViewModel(
             repository = receiveRepository,
             events = receiveRepository.events,
-            loading = Text.Res(R.string.loading),
-            failure = Text.Res(R.string.failure),
+            loading = UiText.Res(R.string.loading),
+            failure = UiText.Res(R.string.failure),
             logger = logger
         )
     }
@@ -151,8 +151,8 @@ class Factory(
             basketRepository = basketRepository,
             clientRepository = clientRepository,
             logger = logger,
-            loading = Text.Res(R.string.loading),
-            failure = Text.Res(R.string.failure),
+            loading = UiText.Res(R.string.loading),
+            failure = UiText.Res(R.string.failure),
         )
     }
 
@@ -161,8 +161,8 @@ class Factory(
             titleRepository = productTitleRepository,
             receiveRepository = receiveRepository,
             category = category,
-            loading = Text.Res(R.string.loading),
-            failure = Text.Res(R.string.failure),
+            loading = UiText.Res(R.string.loading),
+            failure = UiText.Res(R.string.failure),
             logger = logger
         )
     }
@@ -171,16 +171,16 @@ class Factory(
         return NotificationScreenViewModel(
             repository = notificationRepository,
             logger = logger,
-            loading = Text.Res(R.string.loading),
-            failure = Text.Res(R.string.failure),
+            loading = UiText.Res(R.string.loading),
+            failure = UiText.Res(R.string.failure),
         )
     }
 
     fun ordersViewModel(): OrdersScreenViewModel {
         return OrdersScreenViewModel(
             repository = orderRepository,
-            loading = Text.Res(R.string.loading),
-            failure = Text.Res(R.string.failure),
+            loading = UiText.Res(R.string.loading),
+            failure = UiText.Res(R.string.failure),
             logger = logger
         )
     }
@@ -191,15 +191,15 @@ class Factory(
             add = debtRepository,
             clientRepository = clientRepository,
             logger = logger,
-            loading = Text.Res(R.string.loading),
-            failure = Text.Res(R.string.failure),
+            loading = UiText.Res(R.string.loading),
+            failure = UiText.Res(R.string.failure),
         )
     }
 
     fun profileViewModel(): ProfileContentViewModel {
         return ProfileContentViewModel(
-            loading = Text.Res(R.string.loading),
-            failure = Text.Res(R.string.failure),
+            loading = UiText.Res(R.string.loading),
+            failure = UiText.Res(R.string.failure),
             repository = officeApi,
             logger = logger
         )
