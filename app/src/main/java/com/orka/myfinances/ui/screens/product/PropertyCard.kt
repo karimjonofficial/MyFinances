@@ -16,7 +16,7 @@ import com.orka.myfinances.data.models.product.Property
 fun PropertyCard(
     modifier: Modifier = Modifier,
     property: Property
-) {
+) {//TODO why is this left
     Row(
         modifier = modifier
             .fillMaxWidth()

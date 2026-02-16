@@ -12,7 +12,7 @@ import com.orka.myfinances.lib.ui.components.IntegerTextField
 
 @Composable
 fun ReceiveDialog(
-    modifier: Modifier = Modifier.Companion,
+    modifier: Modifier = Modifier,
     dismissRequest: () -> Unit,
     onSuccess: (Int, Int, Int, Int, String?) -> Unit,
 ) {

@@ -1,6 +1,5 @@
 package com.orka.myfinances.lib.ui.viewmodel
 
-import com.orka.myfinances.lib.ui.viewmodel.Manager
 import com.orka.myfinances.lib.viewmodel.StateFul
 import kotlinx.coroutines.delay
 
