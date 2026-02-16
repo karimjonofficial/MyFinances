@@ -35,17 +35,15 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.home.components.BasketItemCard
-import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
-import com.orka.myfinances.ui.screens.home.viewmodel.BasketState
+import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketContentViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketState
 
 @Composable
 fun BasketContent(
     modifier: Modifier = Modifier,
     state: BasketState,
-    viewModel: BasketContentViewModel,
-    navigator: Navigator
+    viewModel: BasketContentViewModel
 ) {
     when (state) {
         is BasketState.Loading -> LoadingScreen(modifier)
@@ -89,7 +87,7 @@ fun BasketContent(
                                 style = MaterialTheme.typography.headlineMedium
                             )
 
-                            Button(onClick = { navigator.navigateToCheckout(state.items) }) {
+                            Button(onClick = { viewModel.checkout() }) {
                                 Text(text = stringResource(R.string.checkout))
                             }
                         }
@@ -123,11 +121,12 @@ private fun BasketContentPreview() {
     val viewModel = viewModel {
         BasketContentViewModel(
             repository = BasketRepository(productRepository = { product1 }),
+            navigator = DummyNavigator(),
             logger = DummyLogger()
         )
     }
     viewModel.initialize()
-    val uiState = viewModel.state.collectAsState()
+    val uiState = viewModel.uiState.collectAsState()
 
     ScaffoldPreview(
         title = "Basket",
@@ -150,8 +149,7 @@ private fun BasketContentPreview() {
         BasketContent(
             modifier = Modifier.scaffoldPadding(paddingValues),
             state = uiState.value,
-            viewModel = viewModel,
-            navigator = DummyNavigator()
+            viewModel = viewModel
         )
     }
 }

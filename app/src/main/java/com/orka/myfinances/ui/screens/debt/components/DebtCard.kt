@@ -7,29 +7,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.Debt
 import com.orka.myfinances.fixtures.resources.models.debt1
 import com.orka.myfinances.fixtures.resources.models.debt2
 import com.orka.myfinances.lib.extensions.ui.description
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
+import com.orka.myfinances.ui.screens.debt.viewmodel.toModel
 import com.orka.myfinances.ui.screens.history.components.ListItem
 
 @Composable
 fun DebtCard(
     modifier: Modifier = Modifier,
-    debt: Debt,
-    onClick: (Debt) -> Unit
+    debt: DebtCardModel,
+    onClick: () -> Unit
 ) {
     ListItem(
         modifier = modifier,
-        model = debt,
         painter = painterResource(R.drawable.money),
-        headlineText = debt.client.firstName,
+        headlineText = debt.name,
         supportingText = debt.description.description(),
-        price = "$${debt.price}",
-        dateTime = debt.endDateTime.toString(),
-        onClick = { onClick(debt) }
+        price = debt.price,
+        dateTime = debt.dateTime,
+        onClick = { onClick() }
     )
 }
 
@@ -37,12 +36,20 @@ fun DebtCard(
 @Composable
 private fun DebtCardPreview() {
     ScaffoldPreview(title = "Debt") { paddingValues ->
-        Column(
-            modifier = Modifier.scaffoldPadding(paddingValues)
-        ) {
+        Column(modifier = Modifier.scaffoldPadding(paddingValues)) {
             repeat(5) {
-                DebtCard(modifier = Modifier.fillMaxWidth(), debt = debt1, onClick = {})
-                DebtCard(modifier = Modifier.fillMaxWidth(), debt = debt2, onClick = {})
+
+                DebtCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    debt = debt1.toModel(),
+                    onClick = {}
+                )
+
+                DebtCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    debt = debt2.toModel(),
+                    onClick = {}
+                )
             }
         }
     }

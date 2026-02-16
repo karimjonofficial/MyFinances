@@ -1,12 +1,9 @@
 package com.orka.myfinances.lib.ui.viewmodel
 
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.core.SingleStateViewModel
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.list.ListViewModel
 import com.orka.myfinances.lib.viewmodel.list.State
-import kotlinx.coroutines.flow.asStateFlow
 
 abstract class MapperListViewModel<T, U>(
     private val loading: UiText,
@@ -14,12 +11,10 @@ abstract class MapperListViewModel<T, U>(
     private val repository: Get<T>,
     private val map: (T) -> U,
     logger: Logger
-) : ListViewModel<U>, SingleStateViewModel<State>(
+) : SingleStateViewModel<State>(
     initialState = State.Initial,
     logger = logger
 ) {
-    override val uiState = state.asStateFlow()
-
     override fun initialize() {
         launch {
             if(state.value !is State.Loading)

@@ -7,28 +7,41 @@ import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.MapperListViewModel
+import com.orka.myfinances.lib.viewmodel.list.ListViewModel
+import com.orka.myfinances.ui.navigation.Navigator
+import kotlinx.coroutines.flow.asStateFlow
 
 class ClientsScreenViewModel(
     get: Get<Client>,
     private val add: Add<Client, AddClientRequest>,
     loading: UiText,
     failure: UiText,
+    private val navigator: Navigator,
     logger: Logger
 ) : MapperListViewModel<Client, ClientModel>(
     loading = loading,
     failure = failure,
     repository = get,
-    map = { ClientModel(it, it.map()) },
+    map = { ClientModel(it, it.toModel()) },
     logger = logger
-) {
+), ListViewModel<ClientModel> {
+    override val uiState = state.asStateFlow()
 
-    fun add(name: String, lastName: String?, phone: String?, address: String?) = launch {
-        val request = AddClientRequest(
-            name = name,
-            lastName = lastName,
-            phone = phone,
-            address = address
-        )
-        if(add.add(request) != null) initialize()
+    fun add(name: String, lastName: String?, phone: String?, address: String?) {
+        launch {
+            val request = AddClientRequest(
+                name = name,
+                lastName = lastName,
+                phone = phone,
+                address = address
+            )
+            if(add.add(request) != null) initialize()
+        }
+    }
+
+    fun select(client: Client) {
+        launch {
+            navigator.navigateToClient(client)
+        }
     }
 }

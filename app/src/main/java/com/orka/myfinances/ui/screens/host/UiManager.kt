@@ -1,7 +1,6 @@
 package com.orka.myfinances.ui.screens.host
 
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.core.SingleStateViewModel
 import com.orka.myfinances.data.models.Credential
 import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.data.models.Session
@@ -26,8 +25,10 @@ import com.orka.myfinances.factories.ApiProvider
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.extensions.models.makeSession
 import com.orka.myfinances.lib.extensions.models.toModel
+import com.orka.myfinances.lib.ui.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asStateFlow
@@ -92,9 +93,9 @@ class UiManager(
     }
 
     private fun openSession(session: Session) {
-        val factory = factory(session.office)
         val initialBackStack = listOf(Destination.Home)
         val navigationManager = NavigationManager(initialBackStack, logger)
+        val factory = factory(session.office, navigationManager)
         setState(UiState.SignedIn(session, navigationManager, factory))
     }
 
@@ -122,13 +123,17 @@ class UiManager(
         else null
     }
 
-    private fun factory(office: Office): Factory {
+    private fun factory(office: Office, navigator: Navigator): Factory {
         val idGenerator = IdGenerator()
         val templateRepository = TemplateRepository(idGenerator)
-        val folderRepository = FolderRepository(templateRepository)
+        val folderRepository = FolderRepository(templateRepository, idGenerator)
         val categoryRepository = CategoryRepository(folderRepository)
         val templateFieldRepository = TemplateFieldRepository()
-        val productTitleRepository = ProductTitleRepository(categoryRepository, templateFieldRepository, idGenerator)
+        val productTitleRepository = ProductTitleRepository(
+            categoryRepository = categoryRepository,
+            fieldRepository = templateFieldRepository,
+            generator = idGenerator
+        )
         val productRepository = ProductRepository(productTitleRepository, idGenerator)
         val stockRepository = StockRepository(office, productRepository, idGenerator)
         val basketRepository = BasketRepository(productRepository)
@@ -159,7 +164,8 @@ class UiManager(
             debtRepository = debtRepository,
             notificationRepository = notificationRepository,
             officeApi = provider.officeApi(),
-            logger = logger
+            logger = logger,
+            navigator = navigator
         )
     }
 }

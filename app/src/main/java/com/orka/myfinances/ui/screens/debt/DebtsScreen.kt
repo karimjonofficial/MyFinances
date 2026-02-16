@@ -15,7 +15,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
-import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.debt.components.DebtCard
 import com.orka.myfinances.ui.screens.debt.parts.AddDebtDialog
 import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenViewModel
@@ -24,8 +23,7 @@ import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenViewModel
 @Composable
 fun DebtsScreen(
     modifier: Modifier,
-    viewModel: DebtScreenViewModel,
-    navigator: Navigator
+    viewModel: DebtScreenViewModel
 ) {
     val visible = rememberSaveable { mutableStateOf(false) }
 
@@ -48,8 +46,8 @@ fun DebtsScreen(
         item = { modifier, item ->
             DebtCard(
                 modifier = modifier,
-                debt = item,
-                onClick = { navigator.navigateToDebt(it) }
+                debt = item.model,
+                onClick = { viewModel.select(item.debt) }
             )
         },
         dialogState = visible,

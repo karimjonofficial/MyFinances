@@ -22,12 +22,13 @@ import com.orka.myfinances.ui.screens.home.components.FirstFolderButton
 import com.orka.myfinances.ui.screens.home.components.LastFolderButton
 import com.orka.myfinances.ui.screens.home.components.NotLastFolderButton
 import com.orka.myfinances.ui.screens.home.components.SecondFolderButton
+import com.orka.myfinances.ui.screens.home.models.FolderUiModel
 
 @Composable
 fun FoldersList(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(horizontal = 8.dp),
-    items: List<Folder>,
+    items: List<FolderUiModel>,
     onFolderSelected: (Folder) -> Unit
 ) {
     LazyVerticalGrid(
@@ -53,8 +54,8 @@ fun FoldersList(
             item {
                 FirstFolderButton(
                     modifier = Modifier.fillMaxSize(),
-                    folder = items[0],
-                    onClick = onFolderSelected
+                    folder = items[0].model,
+                    onClick = { onFolderSelected(items[0].folder) }
                 )
             }
 
@@ -62,8 +63,8 @@ fun FoldersList(
                 item {
                     SecondFolderButton(
                         modifier = Modifier.fillMaxSize(),
-                        folder = items[1],
-                        onClick = onFolderSelected
+                        folder = items[1].model,
+                        onClick = { onFolderSelected(items[1].folder) }
                     )
                 }
             }
@@ -72,8 +73,8 @@ fun FoldersList(
                 items(items = items.subList(2, size - (2 - size % 2))) { item ->
                     FolderButton(
                         modifier = Modifier.fillMaxSize(),
-                        folder = item,
-                        onClick = onFolderSelected
+                        folder = item.model,
+                        onClick = { onFolderSelected(item.folder) }
                     )
                 }
             }
@@ -83,24 +84,24 @@ fun FoldersList(
                     item {
                         NotLastFolderButton(
                             modifier = Modifier.fillMaxSize(),
-                            folder = items[size - 2],
-                            onClick = onFolderSelected
+                            folder = items[size - 2].model,
+                            onClick = { onFolderSelected(items[size - 2].folder) }
                         )
                     }
 
                     item {
                         LastFolderButton(
                             modifier = Modifier.fillMaxSize(),
-                            folder = items[size - 1],
-                            onClick = onFolderSelected
+                            folder = items[size - 1].model,
+                            onClick = { onFolderSelected(items[size - 1].folder) }
                         )
                     }
                 } else {
                     item {
                         NotLastFolderButton(
                             modifier = Modifier.fillMaxSize(),
-                            folder = items[size - 1],
-                            onClick = onFolderSelected
+                            folder = items[size - 1].model,
+                            onClick = { onFolderSelected(items[size - 1].folder) }
                         )
                     }
                 }

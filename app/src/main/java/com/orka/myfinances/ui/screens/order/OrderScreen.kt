@@ -35,6 +35,7 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.components.UserCard
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.components.ClientCard
+import com.orka.myfinances.ui.screens.clients.toModel
 import com.orka.myfinances.ui.screens.debt.components.DescriptionCard
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
@@ -124,8 +125,8 @@ fun OrderScreen(
 
             VerticalSpacer(8)
             ClientCard(
-                client = order.client,
-                navigator = navigator
+                model = order.client.toModel(),
+                onClick = { navigator.navigateToClient(order.client) }
             )
 
             VerticalSpacer(8)

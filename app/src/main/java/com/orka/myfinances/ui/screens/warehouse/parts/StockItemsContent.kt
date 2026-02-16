@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.fixtures.core.DummyLogger
+import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.folder.category1
 import com.orka.myfinances.fixtures.resources.models.product.productTitles
 import com.orka.myfinances.fixtures.resources.models.stockItems
@@ -57,11 +58,12 @@ private fun StockItemContentPreview() {
         val viewModel = viewModel {
             WarehouseScreenViewModel(
                 category = category1,
-                productTitleRepository = { productTitles },
-                stockRepository = { stockItems },
+                getProductTitles = { productTitles },
+                getStockItems = { stockItems },
                 basketRepository = BasketRepository(productRepository = { null }),
                 productTitleEvents = flow {},
                 stockEvents = flow {},
+                navigator = DummyNavigator(),
                 logger = DummyLogger(),
             )
         }

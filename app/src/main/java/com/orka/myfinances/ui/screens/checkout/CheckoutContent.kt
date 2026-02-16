@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Client
-import com.orka.myfinances.data.models.basket.Basket
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.fixtures.core.DummyLogger
@@ -42,60 +41,49 @@ import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
 fun CheckoutContent(
     modifier: Modifier,
-    items: List<BasketItem>,
+    items: List<BasketItem>,//TODO add state for this screen
     clients: List<Client>,
-    viewModel: CheckoutScreenViewModel,
-    navigator: Navigator
+    viewModel: CheckoutScreenViewModel
 ) {
     val price = rememberSaveable { mutableStateOf<Int?>(items.getPrice()) }
     val description = rememberSaveable { mutableStateOf<String?>(null) }
-    val selectedClientId = rememberSaveable(clients) { mutableStateOf(clients.firstOrNull()?.id?.value) }
+    val selectedClientId =
+        rememberSaveable(clients) { mutableStateOf(clients.firstOrNull()?.id?.value) }
     val selectedClient = clients.find { it.id.value == selectedClientId.value }
     val menuExpanded = rememberSaveable { mutableStateOf(false) }
-    val splitButtonMenuExpanded = rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         modifier = modifier,
         title = stringResource(R.string.checkout),
         bottomBar = {
             BottomAppBar(contentPadding = PaddingValues(horizontal = 16.dp)) {
+                val priceValue = price.value
+
                 Spacer(modifier = Modifier.weight(1f))
                 OutlinedButton(
-                    onClick = {
-                        selectedClient?.let { client ->
-                            price.value?.let { price ->
-                                viewModel.order(
-                                    basket = Basket(price, description.value, items),
-                                    client = client
-                                )
-                                navigator.back()
-                            }
-                            splitButtonMenuExpanded.value = false
-                        }
-                    }
+                    enabled = selectedClient != null && priceValue != null,
+                    onClick = { viewModel.order(
+                            price = priceValue,
+                            description = description.value,
+                            client = selectedClient
+                        ) }
                 ) {
                     Text(text = stringResource(R.string.order))
                 }
 
                 HorizontalSpacer(8)
                 Button(
-                    onClick = {
-                        selectedClient?.let { client ->
-                            price.value?.let { price ->
-                                viewModel.sell(
-                                    basket = Basket(price, description.value, items),
-                                    client = client
-                                )
-                                navigator.back()
-                            }
-                        }
-                    }
+                    enabled = selectedClient != null && priceValue != null,
+                    onClick = { viewModel.sell(
+                            price = priceValue,
+                            description = description.value,
+                            client = selectedClient
+                        ) }
                 ) {
                     Text(text = stringResource(R.string.sell))
                 }
@@ -169,11 +157,12 @@ private fun CheckoutContentPreview() {
     )
     val viewModel = viewModel {
         CheckoutScreenViewModel(
-            saleRepository = { null },
-            orderRepository = { null },
+            addSale = { null },
+            addOrder = { null },
             basketRepository = BasketRepository(productRepository = { null }),
-            clientRepository = { null },
+            get = { null },
             logger = DummyLogger(),
+            navigator = DummyNavigator(),
             loading = UiText.Res(R.string.loading),
             failure = UiText.Res(R.string.failure)
         )
@@ -185,7 +174,6 @@ private fun CheckoutContentPreview() {
             items = items,
             clients = clients,
             viewModel = viewModel,
-            navigator = DummyNavigator(),
         )
     }
 }

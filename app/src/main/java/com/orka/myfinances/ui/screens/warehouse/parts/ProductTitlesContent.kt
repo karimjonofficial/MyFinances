@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.ProductsState
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
 
@@ -14,8 +13,7 @@ fun ProductTitlesContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     viewModel: WarehouseScreenViewModel,
-    state: ProductsState,
-    navigator: Navigator
+    state: ProductsState
 ) {
     when (state) {
         ProductsState.Loading -> {
@@ -33,8 +31,8 @@ fun ProductTitlesContent(
             ProductTitlesList(
                 modifier = modifier,
                 contentPadding = contentPadding,
-                productTitles = state.productTitles,
-                onProductClick = { navigator.navigateToProductTitle(it) }
+                productTitles = state.titles,
+                onProductClick = { viewModel.selectProduct(it) }
             )
         }
     }

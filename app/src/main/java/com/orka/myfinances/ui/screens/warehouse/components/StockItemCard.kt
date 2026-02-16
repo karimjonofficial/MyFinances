@@ -23,20 +23,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.fixtures.resources.models.stockItem1
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.ui.screens.warehouse.viewmodel.toModel
 
 @Composable
 fun StockItemCard(
     modifier: Modifier = Modifier,
-    item: StockItem,
-    click: (StockItem) -> Unit
+    item: StockItemCardModel,
+    click: () -> Unit
 ) {
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(24.dp))
-            .clickable { click(item) }
+            .clickable { click() }
     ) {
         Box(
             modifier = Modifier
@@ -44,12 +44,11 @@ fun StockItemCard(
                 .background(MaterialTheme.colorScheme.surfaceVariant),
             contentAlignment = Alignment.Center
         ) {
-
             Image(
                 modifier = Modifier.height(240.dp).fillMaxWidth(),
                 painter = painterResource(R.drawable.furniture1),
                 contentScale = ContentScale.Crop,
-                contentDescription = item.product.title.name,
+                contentDescription = item.title,
             )
 
             Box(
@@ -60,7 +59,7 @@ fun StockItemCard(
                     .padding(horizontal = 12.dp, vertical = 6.dp)
             ) {
                 Text(
-                    text = "${item.amount} left",
+                    text = item.amount,
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.surfaceVariant
                 )
@@ -71,7 +70,7 @@ fun StockItemCard(
 
         Column(modifier = Modifier.padding(horizontal = 8.dp)) {
             Text(
-                text = item.product.title.name,
+                text = item.title,
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.Bold
             )
@@ -79,7 +78,7 @@ fun StockItemCard(
             VerticalSpacer(4)
 
             Text(
-                text = "${item.product.salePrice}",
+                text = item.price,
                 style = MaterialTheme.typography.titleMedium
             )
         }
@@ -97,7 +96,7 @@ private fun ProductCardPreview() {
             contentAlignment = Alignment.Center
         ) {
             StockItemCard(
-                item = stockItem1,
+                item = stockItem1.toModel(),
                 click = {}
             )
         }

@@ -14,32 +14,48 @@ import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
+import com.orka.myfinances.ui.navigation.Navigator
 
 class CheckoutScreenViewModel(
-    private val saleRepository: Add<Sale, AddSaleRequest>,
-    private val orderRepository: Add<Order, AddOrderRequest>,
     private val basketRepository: BasketRepository,
-    clientRepository: Get<Client>,
+    private val addSale: Add<Sale, AddSaleRequest>,
+    private val addOrder: Add<Order, AddOrderRequest>,
+    get: Get<Client>,
+    private val navigator: Navigator,
     logger: Logger,
     loading: UiText,
     failure: UiText
 ) : ListViewModel<Client>(
     loading = loading,
     failure = failure,
-    repository = clientRepository,
+    repository = get,
     logger = logger
 ) {
-    fun sell(basket: Basket, client: Client) {
+    fun sell(client: Client?, price: Int?, description: String?) {
         launch {
-            val response = saleRepository.add(basket.toSaleRequest(client))
-            if(response != null) clearBasket()
+            if(client != null && price != null) {
+                val items = basketRepository.get()
+                val basket = Basket(price, description, items)
+                val response = addSale.add(basket.toSaleRequest(client))
+                if (response != null) {
+                    clearBasket()
+                    navigator.back()
+                }
+            }
         }
     }
 
-    fun order(basket: Basket, client: Client) {
+    fun order(client: Client?, price: Int?, description: String?) {
         launch {
-            val response = orderRepository.add(basket.toOrderRequest(client))
-            if(response != null) clearBasket()
+            if(client != null && price != null) {
+                val items = basketRepository.get()
+                val basket = Basket(price, description, items)
+                val response = addOrder.add(basket.toOrderRequest(client))
+                if (response != null) {
+                    clearBasket()
+                    navigator.back()
+                }
+            }
         }
     }
 

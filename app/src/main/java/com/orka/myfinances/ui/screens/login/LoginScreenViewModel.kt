@@ -1,9 +1,9 @@
 package com.orka.myfinances.ui.screens.login
 
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.core.SingleStateViewModel
 import com.orka.myfinances.data.api.CredentialApi
 import com.orka.myfinances.data.models.Credential
+import com.orka.myfinances.lib.ui.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.managers.SessionManager
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.yield

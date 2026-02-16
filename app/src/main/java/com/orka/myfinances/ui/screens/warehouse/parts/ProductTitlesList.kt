@@ -9,12 +9,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.ui.screens.home.components.ProductTitleCard
+import com.orka.myfinances.ui.screens.warehouse.viewmodel.ProductTitleUiModel
 
 @Composable
 fun ProductTitlesList(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
-    productTitles: List<ProductTitle>,
+    productTitles: List<ProductTitleUiModel>,
     onProductClick: (ProductTitle) -> Unit
 ) {
     LazyColumn(
@@ -24,8 +25,8 @@ fun ProductTitlesList(
     ) {
         items(items = productTitles) { productTitle ->
             ProductTitleCard(
-                productTitle = productTitle,
-                onClick = { onProductClick(it) }
+                productTitle = productTitle.model,
+                onClick = { onProductClick(productTitle.title) }
             )
         }
     }

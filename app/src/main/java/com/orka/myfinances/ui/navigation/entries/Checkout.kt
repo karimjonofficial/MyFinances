@@ -12,7 +12,6 @@ import com.orka.myfinances.ui.screens.checkout.CheckoutScreen
 fun checkoutEntry(
     modifier: Modifier = Modifier,
     destination: Destination.Checkout,
-    navigator: Navigator,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val viewModel = viewModel { factory.checkoutViewModel() }
@@ -20,7 +19,6 @@ fun checkoutEntry(
     CheckoutScreen(
         modifier = modifier,
         items = destination.items,
-        viewModel = viewModel,
-        navigator = navigator
+        viewModel = viewModel
     )
 }

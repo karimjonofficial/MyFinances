@@ -19,19 +19,20 @@ import com.orka.myfinances.data.repositories.sale.SaleRepository
 import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.repositories.template.TemplateRepository
 import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.catalog.CatalogScreenViewModel
 import com.orka.myfinances.ui.screens.checkout.CheckoutScreenViewModel
 import com.orka.myfinances.ui.screens.clients.ClientsScreenViewModel
 import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenViewModel
 import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentViewModel
 import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
-import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
-import com.orka.myfinances.ui.screens.home.viewmodel.FoldersContentViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketContentViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.folder.FoldersContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.ProfileContentViewModel
 import com.orka.myfinances.ui.screens.notification.NotificationScreenViewModel
 import com.orka.myfinances.ui.screens.order.OrdersScreenViewModel
-import com.orka.myfinances.ui.screens.products.ProductTitleScreenViewModel
-import com.orka.myfinances.ui.screens.products.add.viewmodel.AddProductTitleScreenViewModel
+import com.orka.myfinances.ui.screens.product.ProductTitleScreenViewModel
+import com.orka.myfinances.ui.screens.product.add.viewmodel.AddProductTitleScreenViewModel
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenViewModel
 import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.templates.viewmodel.TemplatesScreenViewModel
@@ -51,35 +52,40 @@ class Factory(
     private val receiveRepository: ReceiveRepository,
     private val debtRepository: DebtRepository,
     private val notificationRepository: NotificationRepository,
-    private val logger: Logger
+    private val logger: Logger,
+    private val navigator: Navigator
 ) {
+    private val loading = UiText.Res(R.string.loading)
+    private val failure = UiText.Res(R.string.failure)
+
     fun foldersViewModel(): FoldersContentViewModel {
         return FoldersContentViewModel(
             get = folderRepository,
             add = folderRepository,
             templateRepository = templateRepository,
+            navigator = navigator,
             logger = logger
         )
     }
 
     fun templatesViewModel(): TemplatesScreenViewModel {
         return TemplatesScreenViewModel(
-            repository = templateRepository,
+            get = templateRepository,
             events = templateRepository.events,
+            navigator = navigator,
             logger = logger
         )
     }
 
     fun addTemplateViewModel(): AddTemplateScreenViewModel {
-        return AddTemplateScreenViewModel(
-            repository = templateRepository
-        )
+        return AddTemplateScreenViewModel(add = templateRepository)
     }
 
     fun addProductViewModel(): AddProductTitleScreenViewModel {
         return AddProductTitleScreenViewModel(
             productTitleRepository = productTitleRepository,
             categoryRepository = categoryRepository,
+            navigator = navigator,
             logger = logger
         )
     }
@@ -87,11 +93,12 @@ class Factory(
     fun warehouseViewModel(category: Category): WarehouseScreenViewModel {
         return WarehouseScreenViewModel(
             category = category,
-            productTitleRepository = productTitleRepository,
-            stockRepository = stockRepository,
+            getProductTitles = productTitleRepository,
+            getStockItems = stockRepository,
             basketRepository = basketRepository,
             productTitleEvents = productTitleRepository.events,
             stockEvents = stockRepository.events,
+            navigator = navigator,
             logger = logger
         )
     }
@@ -99,10 +106,11 @@ class Factory(
     fun catalogViewModel(catalog: Catalog): CatalogScreenViewModel {
         return CatalogScreenViewModel(
             catalog = catalog,
-            repository = folderRepository,
-            addRepository = folderRepository,
-            templateRepository = templateRepository,
+            getByParameter = folderRepository,
+            add = folderRepository,
+            get = templateRepository,
             events = folderRepository.events,
+            navigator = navigator,
             logger = logger
         )
     }
@@ -110,6 +118,7 @@ class Factory(
     fun basketViewModel(): BasketContentViewModel {
         return BasketContentViewModel(
             repository = basketRepository,
+            navigator = navigator,
             logger = logger
         )
     }
@@ -118,18 +127,20 @@ class Factory(
         return ClientsScreenViewModel(
             get = clientRepository,
             add = clientRepository,
-            loading = UiText.Res(R.string.loading),
-            failure = UiText.Res(R.string.failure),
+            loading = loading,
+            failure = failure,
+            navigator = navigator,
             logger = logger
         )
     }
 
     fun saleViewModel(): SaleContentViewModel {
         return SaleContentViewModel(
-            loading = UiText.Res(R.string.loading),
-            failure = UiText.Res(R.string.failure),
+            loading = loading,
+            failure = failure,
             repository = saleRepository,
             events = saleRepository.events,
+            navigator = navigator,
             logger = logger
         )
     }
@@ -138,31 +149,34 @@ class Factory(
         return ReceiveContentViewModel(
             repository = receiveRepository,
             events = receiveRepository.events,
-            loading = UiText.Res(R.string.loading),
-            failure = UiText.Res(R.string.failure),
+            loading = loading,
+            failure = failure,
+            navigator = navigator,
             logger = logger
         )
     }
 
     fun checkoutViewModel(): CheckoutScreenViewModel {
         return CheckoutScreenViewModel(
-            saleRepository = saleRepository,
-            orderRepository = orderRepository,
+            addSale = saleRepository,
+            addOrder = orderRepository,
             basketRepository = basketRepository,
-            clientRepository = clientRepository,
+            get = clientRepository,
             logger = logger,
-            loading = UiText.Res(R.string.loading),
-            failure = UiText.Res(R.string.failure),
+            navigator = navigator,
+            loading = loading,
+            failure = failure,
         )
     }
 
     fun addReceiveViewModel(category: Category): AddReceiveScreenViewModel {
         return AddReceiveScreenViewModel(
-            titleRepository = productTitleRepository,
-            receiveRepository = receiveRepository,
+            get = productTitleRepository,
+            add = receiveRepository,
             category = category,
-            loading = UiText.Res(R.string.loading),
-            failure = UiText.Res(R.string.failure),
+            loading = loading,
+            failure = failure,
+            navigator = navigator,
             logger = logger
         )
     }
@@ -171,16 +185,17 @@ class Factory(
         return NotificationScreenViewModel(
             repository = notificationRepository,
             logger = logger,
-            loading = UiText.Res(R.string.loading),
-            failure = UiText.Res(R.string.failure),
+            loading = loading,
+            failure = failure,
         )
     }
 
     fun ordersViewModel(): OrdersScreenViewModel {
         return OrdersScreenViewModel(
             repository = orderRepository,
-            loading = UiText.Res(R.string.loading),
-            failure = UiText.Res(R.string.failure),
+            loading = loading,
+            failure = failure,
+            navigator = navigator,
             logger = logger
         )
     }
@@ -190,17 +205,19 @@ class Factory(
             debtRepository = debtRepository,
             add = debtRepository,
             clientRepository = clientRepository,
+            navigator = navigator,
             logger = logger,
-            loading = UiText.Res(R.string.loading),
-            failure = UiText.Res(R.string.failure),
+            loading = loading,
+            failure = failure,
         )
     }
 
     fun profileViewModel(): ProfileContentViewModel {
         return ProfileContentViewModel(
-            loading = UiText.Res(R.string.loading),
-            failure = UiText.Res(R.string.failure),
-            repository = officeApi,
+            loading = loading,
+            failure = failure,
+            get = officeApi,
+            navigator = navigator,
             logger = logger
         )
     }

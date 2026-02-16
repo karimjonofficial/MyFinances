@@ -13,15 +13,13 @@ import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
-import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.templates.viewmodel.TemplatesScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TemplatesScreen(
     modifier: Modifier = Modifier,
-    viewModel: TemplatesScreenViewModel,
-    navigator: Navigator
+    viewModel: TemplatesScreenViewModel
 ) {
     Scaffold(
         modifier = modifier,
@@ -29,7 +27,7 @@ fun TemplatesScreen(
             TopAppBar(
                 title = { Text(text = stringResource(R.string.templates)) },
                 actions = {
-                    IconButton(onClick = { navigator.navigateToAddTemplate() }) {
+                    IconButton(onClick = viewModel::addTemplate) {
                         Icon(
                             painter = painterResource(R.drawable.add),
                             contentDescription = stringResource(R.string.add)
@@ -39,12 +37,12 @@ fun TemplatesScreen(
             )
         }
     ) { paddingValues ->
-        val uiState = viewModel.state.collectAsState()
+        val uiState = viewModel.uiState.collectAsState()
 
         TemplatesContent(
             modifier = Modifier.scaffoldPadding(paddingValues),
             state = uiState.value,
-            navigator = navigator
+            viewModel = viewModel
         )
     }
 }

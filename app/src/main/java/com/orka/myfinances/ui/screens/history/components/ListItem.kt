@@ -11,18 +11,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 
 @Composable
-fun <T> ListItem(
+fun ListItem(
     modifier: Modifier = Modifier,
-    model: T,
     painter: Painter,
     headlineText: String,
     supportingText: String,
     price: String,
     dateTime: String? = null,
-    onClick: (T) -> Unit
+    onClick: () -> Unit
 ) {
     ListItem(
-        modifier = modifier.clickable { onClick(model) },
+        modifier = modifier.clickable { onClick() },
         leadingContent = {
             Icon(
                 painter = painter,

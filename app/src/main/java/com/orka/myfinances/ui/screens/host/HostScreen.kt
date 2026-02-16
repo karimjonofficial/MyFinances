@@ -1,6 +1,5 @@
 package com.orka.myfinances.ui.screens.host
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -14,13 +13,12 @@ fun HostScreen(
     state: UiState,
     sessionManager: SessionManager
 ) {
-    Log.d("HostScreen", "Recomposition. State: $state")
     when (state) {
         UiState.Initial -> SplashScreen(modifier)
 
         is UiState.Guest -> {
             val viewModel = state.viewModel
-            val uiState = viewModel.state.collectAsState()
+            val uiState = viewModel.uiState.collectAsState()
 
             LoginScreen(
                 modifier = modifier,

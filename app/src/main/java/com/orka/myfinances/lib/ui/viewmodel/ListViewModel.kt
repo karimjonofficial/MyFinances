@@ -1,7 +1,6 @@
 package com.orka.myfinances.lib.ui.viewmodel
 
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.core.SingleStateViewModel
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.list.ListViewModel

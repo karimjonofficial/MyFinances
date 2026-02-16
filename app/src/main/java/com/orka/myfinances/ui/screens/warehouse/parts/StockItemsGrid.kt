@@ -10,12 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.ui.screens.warehouse.components.StockItemCard
+import com.orka.myfinances.ui.screens.warehouse.viewmodel.StockItemUiModel
 
 @Composable
 fun StockItemsGrid(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
-    stockItems: List<StockItem>,
+    stockItems: List<StockItemUiModel>,
     onItemClick: (StockItem) -> Unit
 ) {
     LazyVerticalGrid(
@@ -28,8 +29,8 @@ fun StockItemsGrid(
         items(stockItems.size) { index ->
             StockItemCard(
                 modifier = Modifier.fillMaxWidth(),
-                item = stockItems[index],
-                click = onItemClick
+                item = stockItems[index].model,
+                click = { onItemClick(stockItems[index].item) }
             )
         }
     }

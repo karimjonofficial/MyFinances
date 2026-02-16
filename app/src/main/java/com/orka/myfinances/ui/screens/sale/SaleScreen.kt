@@ -38,6 +38,7 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.components.UserCard
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.components.ClientCard
+import com.orka.myfinances.ui.screens.clients.toModel
 import com.orka.myfinances.ui.screens.debt.components.DescriptionCard
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -156,8 +157,8 @@ fun SaleScreen(
 
             item {
                 ClientCard(
-                    client = sale.client,
-                    navigator = navigator
+                    model = sale.client.toModel(),
+                    onClick = { navigator.navigateToClient(sale.client) }
                 )
             }
 

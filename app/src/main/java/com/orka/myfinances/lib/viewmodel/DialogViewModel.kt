@@ -2,8 +2,6 @@ package com.orka.myfinances.lib.viewmodel
 
 import kotlinx.coroutines.flow.StateFlow
 
-interface DialogViewModel<T> {
+interface DialogViewModel<T> : StateFul {
     val dialogState: StateFlow<T>
-    fun setDialogState(value: T)
-    fun updateDialogState(callback: (T) -> T)
 }

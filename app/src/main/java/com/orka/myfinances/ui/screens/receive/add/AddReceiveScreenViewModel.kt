@@ -10,32 +10,40 @@ import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.GetByParameter
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.ListByParameterViewModel
+import com.orka.myfinances.ui.navigation.Navigator
 
 class AddReceiveScreenViewModel(
-    private val receiveRepository: Add<Receive, AddReceiveRequest>,
     category: Category,
-    titleRepository: GetByParameter<ProductTitle, Category>,
+    private val add: Add<Receive, AddReceiveRequest>,
+    get: GetByParameter<ProductTitle, Category>,
     loading: UiText,
     failure: UiText,
+    private val navigator: Navigator,
     logger: Logger
 ) : ListByParameterViewModel<ProductTitle, Category>(
     parameter = category,
     loading = loading,
     failure = failure,
-    repository = titleRepository,
+    repository = get,
     logger = logger
 ) {
 
     fun add(
-        title: ProductTitle,
-        amount: Int,
-        price: Int,
-        salePrice: Int,
-        totalPrice: Int,
+        title: ProductTitle?,
+        amount: Int?,
+        price: Int?,
+        salePrice: Int?,
+        totalPrice: Int?,
         description: String?
     ) {
         launch {
-            receiveRepository.add(AddReceiveRequest(
+            if (
+                title != null && amount != null && amount > 0 &&
+                price != null && price > 0 &&
+                salePrice != null && salePrice > 0 &&
+                totalPrice != null
+            ) {
+                val request = AddReceiveRequest(
                     items = listOf(
                         ReceiveItemModel(
                             productTitleId = title.id,
@@ -46,7 +54,10 @@ class AddReceiveScreenViewModel(
                         )
                     ),
                     price = totalPrice
-                ))
+                )
+                add.add(request)
+                navigator.back()
+            }
         }
     }
 }

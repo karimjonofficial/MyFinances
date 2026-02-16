@@ -1,27 +1,25 @@
 package com.orka.myfinances.ui.screens.home
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.orka.myfinances.data.models.folder.Folder
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.ui.screens.home.parts.FoldersContentCarousel
 import com.orka.myfinances.ui.screens.home.parts.FoldersList
-import com.orka.myfinances.ui.screens.home.viewmodel.FoldersState
+import com.orka.myfinances.ui.screens.home.viewmodel.folder.FoldersContentViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.folder.FoldersState
 
 @Composable
 fun FoldersContent(
     modifier: Modifier = Modifier,
     state: FoldersState,
-    onNavigateToFolder: (Folder) -> Unit
+    viewModel: FoldersContentViewModel
 ) {
-    Log.d("FolderContent", "Recomposition")
     when (state) {
         is FoldersState.Initial -> LoadingScreen(modifier)
         is FoldersState.Error -> FailureScreen(modifier)
@@ -37,7 +35,7 @@ fun FoldersContent(
                 FoldersList(
                     items = state.folders,
                     contentPadding = PaddingValues(horizontal = 16.dp),
-                    onFolderSelected = onNavigateToFolder
+                    onFolderSelected = { viewModel.select(it) }
                 )
             }
         }

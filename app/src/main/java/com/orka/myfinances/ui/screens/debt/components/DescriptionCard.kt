@@ -27,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
+import com.orka.myfinances.lib.extensions.ui.description
 
 @Composable
 fun DescriptionCard(
@@ -46,7 +47,14 @@ fun DescriptionCard(
         elevation = CardDefaults.cardElevation(0.dp)
     ) {
 
-        Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 8.dp)) {
+        Column(
+            modifier = Modifier.padding(
+                start = 16.dp,
+                end = 16.dp,
+                bottom = 16.dp,
+                top = 8.dp
+            )
+        ) {
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -95,7 +103,7 @@ fun DescriptionCard(
             }
 
             Text(
-                text = description,
+                text = description.description(),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

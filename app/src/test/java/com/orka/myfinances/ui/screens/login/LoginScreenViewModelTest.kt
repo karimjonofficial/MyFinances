@@ -58,14 +58,14 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
             fun `When credential not found state is Error`() {
                 viewModel.authorize(username, password)
                 advanceUntilIdle()
-                assertTrue(viewModel.state.value is LoginScreenState.Error)
+                assertTrue(viewModel.uiState.value is LoginScreenState.Error)
             }
 
             @Test
             fun `When authorizeAndRemember credential not found state is Error`() {
                 viewModel.authorizeAndRemember(username, password)
                 advanceUntilIdle()
-                assertTrue(viewModel.state.value is LoginScreenState.Error)
+                assertTrue(viewModel.uiState.value is LoginScreenState.Error)
             }
         }
 
@@ -74,11 +74,11 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
             private val apiService = DummyCredentialApi()
             private val viewModel = viewModel(apiService)
             private suspend fun assertLoadingTransition(action: () -> Unit) =
-                viewModel.state.assertLoadingTransition<LoginScreenState, LoginScreenState.Loading>(action)
+                viewModel.uiState.assertLoadingTransition<LoginScreenState, LoginScreenState.Loading>(action)
 
             @Test
             fun `State is initial`() {
-                val state = viewModel.state.value
+                val state = viewModel.uiState.value
                 assertTrue(state is LoginScreenState.Initial)
             }
 
@@ -115,7 +115,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
 
             @Test
             fun `When authorize successful state is initial`() = runTest {
-                val state = viewModel.state.value
+                val state = viewModel.uiState.value
                 assertTrue(state is LoginScreenState.Initial)
             }
         }
@@ -135,7 +135,7 @@ class LoginScreenViewModelTest : MainDispatcherContext() {
 
             @Test
             fun `When authorizeAndRemember successful state is initial`() {
-                val state = viewModel.state.value
+                val state = viewModel.uiState.value
                 assertTrue(state is LoginScreenState.Initial)
             }
         }

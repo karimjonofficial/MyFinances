@@ -44,6 +44,7 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.ui.components.UserCard
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.components.ClientCard
+import com.orka.myfinances.ui.screens.clients.toModel
 import com.orka.myfinances.ui.screens.debt.components.DateCard
 import com.orka.myfinances.ui.screens.debt.components.DescriptionCard
 import com.orka.myfinances.ui.screens.debt.components.EmphasizedDateCard
@@ -55,10 +56,9 @@ import kotlin.time.Clock
 @Composable
 fun DebtScreen(
     modifier: Modifier = Modifier,
-    debt: Debt,
-    navigator: Navigator
+    navigator: Navigator,
+    debt: Debt
 ) {
-
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -131,8 +131,8 @@ fun DebtScreen(
 
             item {
                 ClientCard(
-                    client = debt.client,
-                    navigator = navigator
+                    model = debt.client.toModel(),
+                    onClick = { navigator.navigateToClient(debt.client) }
                 )
             }
 
@@ -143,8 +143,8 @@ fun DebtScreen(
                 )
             }
 
-            item {
-                debt.description?.let {
+            if (!debt.description.isNullOrBlank()) {
+                item {
                     DescriptionCard(description = debt.description)
                 }
             }

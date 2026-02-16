@@ -13,12 +13,10 @@ import com.orka.myfinances.ui.screens.history.HistoryScreen
 fun historyEntry(
     modifier: Modifier,
     destination: Destination.History,
-    navigator: Navigator,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     HistoryScreen(
         modifier = modifier,
-        factory = factory,
-        navigator = navigator
+        factory = factory
     )
 }

@@ -18,7 +18,7 @@ fun WarehouseScreenTopBar(
     modifier: Modifier = Modifier,
     category: Category,
     onAddProductClick: (Category) -> Unit,
-    onAddStockItemClick: (Category) -> Unit
+    onAddReceive: (Category) -> Unit
 ) {
 
     TopAppBar(
@@ -32,7 +32,7 @@ fun WarehouseScreenTopBar(
                 )
             }
 
-            IconButton(onClick = { onAddStockItemClick(category) }) {
+            IconButton(onClick = { onAddReceive(category) }) {
                 Icon(
                     painter = painterResource(R.drawable.download),
                     contentDescription = stringResource(R.string.download)

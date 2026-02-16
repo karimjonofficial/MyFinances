@@ -47,7 +47,7 @@ class UiManagerTest : MainDispatcherContext() {
             val manager = uiManager(storage)
             manager.initialize()
             advanceUntilIdle()
-            assertTrue(manager.state.value is UiState.Guest)
+            assertTrue(manager.uiState.value is UiState.Guest)
         }
 
         @Test
@@ -56,7 +56,7 @@ class UiManagerTest : MainDispatcherContext() {
             val manager = uiManager(storage)
             manager.initialize()
             advanceUntilIdle()
-            assertTrue(manager.state.value is UiState.SignedIn)
+            assertTrue(manager.uiState.value is UiState.SignedIn)
         }
     }
 
@@ -87,18 +87,18 @@ class UiManagerTest : MainDispatcherContext() {
 
                 @Test
                 fun `When open called and user api service fails, state does not change`() {
-                    val state = manager.state.value
+                    val state = manager.uiState.value
                     manager.open(credential)
                     advanceUntilIdle()
-                    assertTrue(manager.state.value === state)
+                    assertTrue(manager.uiState.value === state)
                 }
 
                 @Test
                 fun `When store called and user api service fails, state does not change`() {
-                    val state = manager.state.value
+                    val state = manager.uiState.value
                     manager.store(credential)
                     advanceUntilIdle()
-                    assertTrue(manager.state.value === state)
+                    assertTrue(manager.uiState.value === state)
                 }
             }
 
@@ -113,18 +113,18 @@ class UiManagerTest : MainDispatcherContext() {
 
                 @Test
                 fun `When open called and company api service fails, state does not change`() {
-                    val state = manager.state.value
+                    val state = manager.uiState.value
                     manager.open(credential)
                     advanceUntilIdle()
-                    assertTrue(manager.state.value === state)
+                    assertTrue(manager.uiState.value === state)
                 }
 
                 @Test
                 fun `When store called and company api service fails, state does not change`() {
-                    val state = manager.state.value
+                    val state = manager.uiState.value
                     manager.store(credential)
                     advanceUntilIdle()
-                    assertTrue(manager.state.value === state)
+                    assertTrue(manager.uiState.value === state)
                 }
             }
 
@@ -139,18 +139,18 @@ class UiManagerTest : MainDispatcherContext() {
 
                 @Test
                 fun `When open called and companyOffice api service fails, state does not change`() {
-                    val state = manager.state.value
+                    val state = manager.uiState.value
                     manager.open(credential)
                     advanceUntilIdle()
-                    assertTrue(manager.state.value === state)
+                    assertTrue(manager.uiState.value === state)
                 }
 
                 @Test
                 fun `When store called and companyOffice api service fails, state does not change`() {
-                    val state = manager.state.value
+                    val state = manager.uiState.value
                     manager.store(credential)
                     advanceUntilIdle()
-                    assertTrue(manager.state.value === state)
+                    assertTrue(manager.uiState.value === state)
                 }
             }
 
@@ -167,14 +167,14 @@ class UiManagerTest : MainDispatcherContext() {
                 fun `When open called and all api services success, state changes into SignedIn`() {
                     manager.open(credential)
                     advanceUntilIdle()
-                    assertTrue(manager.state.value is UiState.SignedIn)
+                    assertTrue(manager.uiState.value is UiState.SignedIn)
                 }
 
                 @Test
                 fun `When store called and all api services success, state changes into SignedIn`() {
                     manager.store(credential)
                     advanceUntilIdle()
-                    assertTrue(manager.state.value is UiState.SignedIn)
+                    assertTrue(manager.uiState.value is UiState.SignedIn)
                 }
             }
         }

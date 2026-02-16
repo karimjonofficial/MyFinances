@@ -11,34 +11,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.template.Template
 
 @Composable
 fun TemplateCard(
     modifier: Modifier = Modifier,
-    template: Template,
-    onClick: (Template) -> Unit
+    template: TemplateCardModel,
+    onClick: () -> Unit
 ) {
     ListItem(
-        modifier = modifier.clickable { onClick(template) },
-        headlineContent = {
-            Text(text = template.name)
-        },
+        modifier = modifier.clickable { onClick() },
+        headlineContent = { Text(text = template.title) },
         supportingContent = {
             Row(verticalAlignment = Alignment.CenterVertically) {
-
                 Icon(
                     painter = painterResource(R.drawable.docs),
                     contentDescription = stringResource(R.string.template)
                 )
 
-                Text(text = "${template.fields.size} fields")
+                Text(text = template.size)
             }
         },
         trailingContent = {
             Icon(
                 painter = painterResource(R.drawable.arrow_right),
-                contentDescription = template.name
+                contentDescription = template.title
             )
         }
     )

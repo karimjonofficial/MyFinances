@@ -27,7 +27,7 @@ import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.RadioButton
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
-import com.orka.myfinances.ui.screens.home.viewmodel.TemplateState
+import com.orka.myfinances.ui.screens.home.viewmodel.folder.TemplateState
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable

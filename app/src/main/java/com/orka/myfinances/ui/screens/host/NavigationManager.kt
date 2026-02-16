@@ -1,7 +1,6 @@
 package com.orka.myfinances.ui.screens.host
 
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.core.SingleStateViewModel
 import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.Debt
 import com.orka.myfinances.data.models.basket.BasketItem
@@ -13,10 +12,10 @@ import com.orka.myfinances.data.models.receive.Receive
 import com.orka.myfinances.data.models.sale.Sale
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.fixtures.resources.types
-import com.orka.myfinances.ui.navigation.Navigator
+import com.orka.myfinances.lib.ui.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.ui.navigation.Navigator
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 
 class NavigationManager(
     initialBackStack: List<Destination>,
@@ -28,19 +27,22 @@ class NavigationManager(
     val backStack = state.asStateFlow()
 
     private fun navigate(destination: Destination) {
-        updateState { backStack.value + destination }
+        updateState { state.value + destination }
     }
 
     override fun initialize() {}
 
     override fun back() {
-        val backstack = state.value
-        if (backstack.size > 1)
-            state.update { backstack.dropLast(1) }
+        updateState {
+            if (it.size > 1)
+                it.dropLast(1)
+            else
+                it
+        }
     }
 
     override fun navigateToHome() {
-        navigate(backStack.value[0])
+        navigate(state.value[0])
     }
 
     override fun navigateToCatalog(catalog: Catalog) {

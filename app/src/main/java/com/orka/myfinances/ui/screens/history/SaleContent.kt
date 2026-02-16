@@ -13,10 +13,9 @@ import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
 @Composable
 fun SaleContent(
     modifier: Modifier = Modifier,
-    viewModel: SaleContentViewModel,
-    navigator: Navigator
+    viewModel: SaleContentViewModel
 ) {
-    val state = viewModel.state.collectAsState()
+    val state = viewModel.uiState.collectAsState()
 
     LazyColumnContent(
         modifier = modifier,
@@ -27,9 +26,16 @@ fun SaleContent(
         item = { modifier, sale ->
             SaleCard(
                 modifier = modifier,
-                sale = sale,
-                onClick = { navigator.navigateToSale(it) }
+                sale = sale.model,
+                onClick = { viewModel.select(sale.sale) }
             )
         }
     )
 }
+
+data class SaleCardModel(
+    val title: String,
+    val price: String,
+    val size: String,
+    val dateTime: String
+)

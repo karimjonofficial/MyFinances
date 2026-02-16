@@ -21,14 +21,12 @@ import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
 import com.orka.myfinances.ui.components.ClientCard
-import com.orka.myfinances.ui.navigation.Navigator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClientsScreen(
     modifier: Modifier,
-    viewModel: ClientsScreenViewModel,
-    navigator: Navigator
+    viewModel: ClientsScreenViewModel
 ) {
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
 
@@ -62,7 +60,7 @@ fun ClientsScreen(
             ClientCard(
                 modifier = modifier,
                 model = client.model,
-                onClick = { navigator.navigateToClient(client.client) }
+                onClick = { viewModel.select(client.client) }
             )
         }
     )
@@ -78,6 +76,7 @@ private fun ClientsScreenPreview() {
             add = repository,
             loading = UiText.Res(R.string.loading),
             failure = UiText.Res(R.string.failure),
+            navigator = DummyNavigator(),
             logger = LoggerImpl()
         )
     }
@@ -85,6 +84,5 @@ private fun ClientsScreenPreview() {
     ClientsScreen(
         modifier = Modifier,
         viewModel = viewModel,
-        navigator = DummyNavigator()
     )
 }

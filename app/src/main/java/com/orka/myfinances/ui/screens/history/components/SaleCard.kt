@@ -9,25 +9,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.sale.Sale
 import com.orka.myfinances.fixtures.resources.models.sale.sale1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
+import com.orka.myfinances.ui.screens.history.SaleCardModel
+import com.orka.myfinances.ui.screens.history.viewmodel.toModel
 
 @Composable
 fun SaleCard(
     modifier: Modifier = Modifier,
-    sale: Sale,
-    onClick: (Sale) -> Unit
+    sale: SaleCardModel,
+    onClick: () -> Unit
 ) {
     ListItem(
         modifier = modifier,
-        model = sale,
         painter = painterResource(R.drawable.shopping_bag_outlined),
-        headlineText = sale.items[0].product.title.name,
-        supportingText = "${sale.items.size} items",
-        price = sale.price.toString(),
-        dateTime = sale.dateTime.toString(),
+        headlineText = sale.title,
+        supportingText = sale.size,
+        price = sale.price,
+        dateTime = sale.dateTime,
         onClick = onClick
     )
 }
@@ -44,7 +44,7 @@ private fun SaleCardPreview() {
             modifier = Modifier.scaffoldPadding(paddingValues)
         ) {
             repeat(10) {
-                SaleCard(modifier = Modifier.fillMaxWidth(), sale = sale1) { }
+                SaleCard(modifier = Modifier.fillMaxWidth(), sale = sale1.toModel()) { }
             }
         }
     }

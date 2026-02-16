@@ -6,20 +6,17 @@ import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.navigation.Destination
-import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.order.OrdersScreen
 
 fun ordersEntry(
     modifier: Modifier,
     destination: Destination.Orders,
-    navigator: Navigator,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val viewModel = viewModel { factory.ordersViewModel() }
 
     OrdersScreen(
         modifier = modifier,
-        viewModel = viewModel,
-        navigator = navigator
+        viewModel = viewModel
     )
 }

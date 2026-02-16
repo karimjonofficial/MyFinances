@@ -32,7 +32,7 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.ui.screens.clients.map
+import com.orka.myfinances.ui.screens.clients.toModel
 
 @Composable
 fun UserCard(
@@ -103,7 +103,7 @@ private fun ClientCardPreview() {
                 repeat(10) {
                     ClientCard(
                         modifier = Modifier.fillMaxWidth(),
-                        model = client1.map(),
+                        model = client1.toModel(),
                         onClick = {}
                     )
                 }

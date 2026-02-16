@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
-import com.orka.myfinances.ui.screens.home.viewmodel.BasketContentViewModel
-import com.orka.myfinances.ui.screens.home.viewmodel.BasketState
+import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketContentViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,7 +24,7 @@ fun BasketScreenTopBar(
         modifier = modifier,
         title = { Text(text = stringResource(R.string.basket)) },
         actions = {
-            val state = viewModel.state.collectAsState().value
+            val state = viewModel.uiState.collectAsState().value
             if (state is BasketState.Success && state.items.isNotEmpty())
                 IconButton(onClick = { viewModel.clear() }) {
                     Icon(

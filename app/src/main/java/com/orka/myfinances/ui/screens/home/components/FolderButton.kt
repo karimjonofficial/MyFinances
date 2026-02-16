@@ -23,12 +23,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.orka.myfinances.R
-import com.orka.myfinances.data.models.folder.Catalog
-import com.orka.myfinances.data.models.folder.Folder
-import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.fixtures.resources.models.folder.category1
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
+import com.orka.myfinances.ui.screens.home.models.FolderButtonModel
+import com.orka.myfinances.ui.screens.home.viewmodel.folder.toModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 private const val roundedCornerRadius = 16
@@ -37,8 +35,8 @@ private const val normalCornerRadius = 4
 @Composable
 fun FolderButton(
     modifier: Modifier = Modifier,
-    folder: Folder,
-    onClick: (Folder) -> Unit
+    folder: FolderButtonModel,
+    onClick: () -> Unit
 ) {
     BaseFolderButton(
         modifier = modifier,
@@ -50,8 +48,8 @@ fun FolderButton(
 @Composable
 fun FirstFolderButton(
     modifier: Modifier = Modifier,
-    folder: Folder,
-    onClick: (Folder) -> Unit
+    folder: FolderButtonModel,
+    onClick: () -> Unit
 ) {
     BaseFolderButton(
         modifier = modifier,
@@ -64,8 +62,8 @@ fun FirstFolderButton(
 @Composable
 fun SecondFolderButton(
     modifier: Modifier = Modifier,
-    folder: Folder,
-    onClick: (Folder) -> Unit
+    folder: FolderButtonModel,
+    onClick: () -> Unit
 ) {
     BaseFolderButton(
         modifier = modifier,
@@ -78,8 +76,8 @@ fun SecondFolderButton(
 @Composable
 fun NotLastFolderButton(
     modifier: Modifier = Modifier,
-    folder: Folder,
-    onClick: (Folder) -> Unit
+    folder: FolderButtonModel,
+    onClick: () -> Unit
 ) {
     BaseFolderButton(
         modifier = modifier,
@@ -92,8 +90,8 @@ fun NotLastFolderButton(
 @Composable
 fun LastFolderButton(
     modifier: Modifier = Modifier,
-    folder: Folder,
-    onClick: (Folder) -> Unit
+    folder: FolderButtonModel,
+    onClick: () -> Unit
 ) {
     BaseFolderButton(
         modifier = modifier,
@@ -110,8 +108,8 @@ private fun BaseFolderButton(
     topEnd: Dp = normalCornerRadius.dp,
     bottomStart: Dp = normalCornerRadius.dp,
     bottomEnd: Dp = normalCornerRadius.dp,
-    folder: Folder,
-    onClick: (Folder) -> Unit
+    folder: FolderButtonModel,
+    onClick: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -124,7 +122,7 @@ private fun BaseFolderButton(
                 )
             )
             .background(MaterialTheme.colorScheme.surfaceContainer)
-            .clickable { onClick(folder) }
+            .clickable { onClick() }
             .padding(8.dp)
     ) {
         Row(
@@ -148,12 +146,7 @@ private fun BaseFolderButton(
             HorizontalSpacer(8)
             Icon(
                 modifier = Modifier.size(36.dp).padding(4.dp),
-                painter = painterResource(
-                    id = when (folder) {
-                        is Catalog -> R.drawable.folder_filled
-                        is Category -> R.drawable.lists_filled
-                    }
-                ),
+                painter = painterResource(folder.iconRes),
                 tint = MaterialTheme.colorScheme.onSurface,
                 contentDescription = null
             )
@@ -175,7 +168,7 @@ private fun CatalogPreview() {
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            FolderButton(folder = category1) {}
+            FolderButton(folder = category1.toModel()) {}
         }
     }
 }
@@ -193,7 +186,7 @@ private fun ProductFolderPreview() {
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            FolderButton(folder = category1) {}
+            FolderButton(folder = category1.toModel()) {}
         }
     }
 }

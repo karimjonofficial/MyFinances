@@ -28,9 +28,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.data.models.Session
+import com.orka.myfinances.fixtures.core.DummyLogger
 import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.managers.DummySessionManager
 import com.orka.myfinances.fixtures.resources.models.office1
@@ -43,49 +45,52 @@ import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
+import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.list.State
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.managers.SessionManager
+import com.orka.myfinances.ui.screens.home.models.ProfileOption
 import com.orka.myfinances.ui.screens.home.parts.ProfileTopBar
+import com.orka.myfinances.ui.screens.home.viewmodel.ProfileContentViewModel
 
 @Composable
 fun ProfileContent(
     modifier: Modifier,
     state: State,
+    viewModel: ProfileContentViewModel,
     session: Session,
-    navigator: Navigator,
     sessionManager: SessionManager
 ) {
     val options = listOf(
         ProfileOption(
             index = 0,
             name = stringResource(R.string.settings),
-            action = { navigator.navigateToSettings() }
+            action = viewModel::settings
         ),
         ProfileOption(
             index = 1,
             name = stringResource(R.string.history),
-            action = { navigator.navigateToHistory() }
+            action = viewModel::history
         ),
         ProfileOption(
             index = 2,
             name = stringResource(R.string.templates),
-            action = { navigator.navigateToTemplates() }
+            action = viewModel::templates
         ),
         ProfileOption(
             index = 3,
             name = stringResource(R.string.clients),
-            action = { navigator.navigateToClients() }
+            action = viewModel::clients
         ),
         ProfileOption(
             index = 4,
             name = stringResource(R.string.orders),
-            action = { navigator.navigateToOrders() }
+            action = viewModel::orders
         ),
         ProfileOption(
             index = 5,
             name = stringResource(R.string.debts),
-            action = { navigator.navigateToDebts() }
+            action = viewModel::debts
         )
     )
     val exposed = rememberSaveable { mutableStateOf(false) }
@@ -185,12 +190,19 @@ private fun ProfileContentPreview() {
             )
         )
     )
+    val viewModel = viewModel {
+        ProfileContentViewModel(
+            get = { null },
+            loading = UiText.Res(R.string.loading),
+            failure = UiText.Res(R.string.failure),
+            navigator = DummyNavigator(),
+            logger = DummyLogger()
+        )
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = {
-            ProfileTopBar(user = user1)
-        },
+        topBar = { ProfileTopBar(user = user1) },
         bottomBar = {
             NavigationBar {
                 navItems.forEach {
@@ -212,8 +224,8 @@ private fun ProfileContentPreview() {
         ProfileContent(
             modifier = Modifier.scaffoldPadding(paddingValues),
             session = session,
-            navigator = DummyNavigator(),
             state = State.Success(listOf(office1)),
+            viewModel = viewModel,
             sessionManager = DummySessionManager()
         )
     }

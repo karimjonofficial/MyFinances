@@ -20,16 +20,14 @@ import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.viewmodel.list.State
-import com.orka.myfinances.ui.navigation.Navigator
 
 @Composable
 fun CheckoutScreen(
     modifier: Modifier,
     viewModel: CheckoutScreenViewModel,
-    navigator: Navigator,
     items: List<BasketItem>
 ) {
-    val uiState = viewModel.state.collectAsState()
+    val uiState = viewModel.uiState.collectAsState()
 
     when (val state = uiState.value) {
         is State.Initial, is State.Loading -> {
@@ -55,8 +53,7 @@ fun CheckoutScreen(
                 modifier = modifier,
                 items = items,
                 clients = state.value as List<Client>,
-                viewModel = viewModel,
-                navigator = navigator
+                viewModel = viewModel
             )
         }
     }
@@ -71,14 +68,14 @@ private fun CheckoutScreenPreview() {
     CheckoutScreen(
         modifier = Modifier.fillMaxSize(),
         items = basketItems,
-        navigator = DummyNavigator(),
         viewModel = viewModel {
             CheckoutScreenViewModel(
-                saleRepository = { null },
-                orderRepository = { null },
+                addSale = { null },
+                addOrder = { null },
                 basketRepository = BasketRepository(productRepository = { null }),
-                clientRepository = { null },
+                get = { null },
                 logger = DummyLogger(),
+                navigator = DummyNavigator(),
                 loading = UiText.Res(R.string.loading),
                 failure = UiText.Res(R.string.failure),
             )

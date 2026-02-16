@@ -10,7 +10,6 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.fixtures.resources.models.template.template1
-import com.orka.myfinances.lib.extensions.ui.description
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.DividedList
@@ -40,7 +39,10 @@ fun TemplateScreen(
             )
 
             VerticalSpacer(8)
-            DescriptionCard(description = template.description.description())
+            if(!template.description.isNullOrBlank()) {
+                DescriptionCard(description = template.description)
+                VerticalSpacer(8)
+            }
         }
     }
 }

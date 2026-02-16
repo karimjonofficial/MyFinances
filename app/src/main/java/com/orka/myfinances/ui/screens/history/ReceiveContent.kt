@@ -13,10 +13,9 @@ import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentViewModel
 @Composable
 fun ReceiveContent(
     modifier: Modifier = Modifier,
-    viewModel: ReceiveContentViewModel,
-    navigator: Navigator
+    viewModel: ReceiveContentViewModel
 ) {
-    val state = viewModel.state.collectAsState()
+    val state = viewModel.uiState.collectAsState()
 
     LazyColumnContent(
         modifier = modifier,
@@ -27,8 +26,8 @@ fun ReceiveContent(
         item = { modifier, receive ->
             ReceiveCard(
                 modifier = modifier,
-                receive = receive,
-                onClick = { navigator.navigateToReceive(it) }
+                receive = receive.model,
+                onClick = { viewModel.select(receive.receive) }
             )
         }
     )

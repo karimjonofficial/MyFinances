@@ -8,13 +8,11 @@ import com.orka.myfinances.R
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.models.ScreenTab
 import com.orka.myfinances.lib.ui.screens.MultipleTabScreen
-import com.orka.myfinances.ui.navigation.Navigator
 
 @Composable
 fun HistoryScreen(
     modifier: Modifier = Modifier,
     factory: Factory,
-    navigator: Navigator
 ) {
     val tabs = listOf(
         ScreenTab(
@@ -23,8 +21,7 @@ fun HistoryScreen(
             content = { modifier ->
                 SaleContent(
                     modifier = modifier,
-                    viewModel = viewModel { factory.saleViewModel() },
-                    navigator = navigator
+                    viewModel = viewModel { factory.saleViewModel() }
                 )
             }
         ),
@@ -34,8 +31,7 @@ fun HistoryScreen(
             content = { modifier ->
                 ReceiveContent(
                     modifier = modifier,
-                    viewModel = viewModel { factory.receiveViewModel() },
-                    navigator = navigator
+                    viewModel = viewModel { factory.receiveViewModel() }
                 )
             }
         )

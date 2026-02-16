@@ -5,9 +5,9 @@ import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.ui.components.ClientCardModel
 
-fun Client.map(): ClientCardModel {
+fun Client.toModel(): ClientCardModel {
     return ClientCardModel(
-        shortName = "$firstName ${lastName?.firstOrNull() ?: ""}",
+        shortName = "${firstName[0]}${lastName?.firstOrNull() ?: ""}",
         fullName = "$firstName $lastName",
         phone = if (phone.isNullOrBlank()) UiText.Res(R.string.no_phone_number) else UiText.Str(
             phone

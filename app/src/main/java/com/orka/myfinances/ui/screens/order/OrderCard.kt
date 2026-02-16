@@ -23,7 +23,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.order.Order
 import com.orka.myfinances.fixtures.resources.models.order.order1
 import com.orka.myfinances.fixtures.resources.models.order.order2
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
@@ -34,14 +33,14 @@ import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 @Composable
 fun OrderCard(
     modifier: Modifier = Modifier,
-    order: Order,
-    onClick: (Order) -> Unit
+    order: OrderCardModel,
+    onClick: () -> Unit
 ) {
 
     if(!order.completed) {
         Card(
             modifier = modifier,
-            onClick = { onClick(order) },
+            onClick = { onClick() },
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
@@ -52,7 +51,7 @@ fun OrderCard(
     } else {
             OutlinedCard(
                 modifier = modifier,
-                onClick = { onClick(order) }
+                onClick = { onClick() }
             ) {
             OrderCardContent(order = order)
         }
@@ -62,7 +61,7 @@ fun OrderCard(
 @Composable
 private fun OrderCardContent(
     modifier: Modifier = Modifier,
-    order: Order
+    order: OrderCardModel
 ) {
     Row(
         modifier = modifier,
@@ -81,12 +80,12 @@ private fun OrderCardContent(
             ) {
 
                 Text(
-                    text = "${order.client.firstName} ${order.client.lastName}",
+                    text = order.title,
                     style = MaterialTheme.typography.titleLarge
                 )
 
                 Text(
-                    text = "$${order.price}",
+                    text = order.price,
                     style = MaterialTheme.typography.titleMedium
                 )
             }
@@ -101,7 +100,7 @@ private fun OrderCardContent(
 
                 HorizontalSpacer(4)
                 Text(
-                    text = "${order.endDateTime}",
+                    text = order.dateTime,
                     style = MaterialTheme.typography.labelMedium
                 )
             }
@@ -126,7 +125,7 @@ private fun OrderCardContent(
 
                     HorizontalSpacer(4)
                     Text(
-                        text = "${order.items.size} items",
+                        text = order.size,
                         color = if(!order.completed) MaterialTheme.colorScheme.primary else LocalContentColor.current
                     )
                 }
@@ -151,13 +150,13 @@ private fun OrderCardPreview() {
             repeat(5) {
                 OrderCard(
                     modifier = Modifier.fillMaxWidth(),
-                    order = order1,
+                    order = order1.toModel(),
                     onClick = {}
                 )
 
                 OrderCard(
                     modifier = Modifier.fillMaxWidth(),
-                    order = order2,
+                    order = order2.toModel(),
                     onClick = {}
                 )
             }

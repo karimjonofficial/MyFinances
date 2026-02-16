@@ -20,7 +20,7 @@ fun catalogEntry(
         key = "${destination.catalog.id.value}",
         initializer = { factory.catalogViewModel(destination.catalog) }
     )
-    val uiState = viewModel.state.collectAsState()
+    val uiState = viewModel.uiState.collectAsState()
 
     CatalogScreen(
         modifier = modifier,

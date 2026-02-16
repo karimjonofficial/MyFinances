@@ -12,31 +12,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.fixtures.resources.models.product.productTitle1
-import com.orka.myfinances.lib.extensions.ui.description
+import com.orka.myfinances.lib.extensions.ui.str
+import com.orka.myfinances.ui.screens.warehouse.viewmodel.toModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
 fun ProductTitleCard(
     modifier: Modifier = Modifier,
-    productTitle: ProductTitle,
-    onClick: (ProductTitle) -> Unit
+    productTitle: ProductTitleCardModel,
+    onClick: () -> Unit
 ) {
     ListItem(
-        modifier = modifier.clickable { onClick(productTitle) },
-        headlineContent = { Text(text = productTitle.name) },
-        supportingContent = { Text(text = productTitle.description.description()) },
+        modifier = modifier.clickable { onClick() },
+        headlineContent = { Text(text = productTitle.title) },
+        supportingContent = { Text(text = productTitle.description.str()) },
         leadingContent = {
             Icon(
                 painter = painterResource(R.drawable.star_outlined),
-                contentDescription = productTitle.name
+                contentDescription = productTitle.title
             )
         },
         trailingContent = {
             Icon(
                 painter = painterResource(R.drawable.arrow_right),
-                contentDescription = productTitle.name
+                contentDescription = productTitle.title
             )
         }
     )
@@ -51,7 +51,7 @@ private fun ProductTitleCardPreview() {
             contentAlignment = Alignment.Center
         ) {
             ProductTitleCard(
-                productTitle = productTitle1,
+                productTitle = productTitle1.toModel(),
                 onClick = {}
             )
         }

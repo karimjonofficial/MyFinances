@@ -42,8 +42,7 @@ fun CatalogScreen(
         CatalogContent(
             modifier = Modifier.scaffoldPadding(paddingValues),
             state = state,
-            viewModel = viewModel,
-            navigator = navigator
+            viewModel = viewModel
         )
 
         if (dialogVisible.value) {

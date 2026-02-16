@@ -13,15 +13,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Session
-import com.orka.myfinances.data.models.folder.Folder
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
 import com.orka.myfinances.lib.ui.viewmodel.viewModel
-import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.managers.SessionManager
+import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
 import com.orka.myfinances.ui.screens.home.parts.BasketScreenTopBar
 import com.orka.myfinances.ui.screens.home.parts.HomeScreenTopBar
@@ -33,8 +32,7 @@ fun HomeScreen(
     session: Session,
     sessionManager: SessionManager,
     factory: Factory,
-    navigator: Navigator,
-    selectFolder: (Folder) -> Unit
+    navigator: Navigator
 ) {
     val navItems = listOf(
         NavItem(
@@ -65,8 +63,7 @@ fun HomeScreen(
     val navState = rememberSaveable { mutableIntStateOf(0) }
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
 
-    fun NavItem.getIconRes() =
-        if (navState.intValue == index) iconRes.selected else iconRes.unSelected
+    fun NavItem.getIconRes() = if(navState.intValue == index) iconRes.selected else iconRes.unSelected
     fun showDialog() {
         dialogVisible.value = true
     }
@@ -125,7 +122,7 @@ fun HomeScreen(
                 FoldersContent(
                     modifier = m,
                     state = state.value,
-                    onNavigateToFolder = selectFolder
+                    viewModel = viewModel
                 )
 
                 if (dialogVisible.value) {
@@ -151,13 +148,12 @@ fun HomeScreen(
                 val viewModel = viewModel(session.office) {
                     factory.basketViewModel()
                 }
-                val state = viewModel.state.collectAsState()
+                val state = viewModel.uiState.collectAsState()
 
                 BasketContent(
                     modifier = m,
                     state = state.value,
-                    viewModel = viewModel,
-                    navigator = navigator
+                    viewModel = viewModel
                 )
             }
 
@@ -165,13 +161,13 @@ fun HomeScreen(
                 val viewModel = viewModel(session.office) {
                     factory.profileViewModel()
                 }
-                val state = viewModel.state.collectAsState()
+                val state = viewModel.uiState.collectAsState()
 
                 ProfileContent(
                     modifier = m,
                     session = session,
                     state = state.value,
-                    navigator = navigator,
+                    viewModel = viewModel,
                     sessionManager = sessionManager
                 )
             }

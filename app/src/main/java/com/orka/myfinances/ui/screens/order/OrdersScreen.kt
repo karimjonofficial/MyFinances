@@ -7,19 +7,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
+import com.orka.myfinances.application.LoggerImpl
 import com.orka.myfinances.data.repositories.order.OrderRepository
 import com.orka.myfinances.fixtures.managers.DummyNavigator
-import com.orka.myfinances.application.LoggerImpl
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
-import com.orka.myfinances.ui.navigation.Navigator
 
 @Composable
 fun OrdersScreen(
     modifier: Modifier,
-    viewModel: OrdersScreenViewModel,
-    navigator: Navigator
+    viewModel: OrdersScreenViewModel
 ) {
     LazyColumnScreen(
         modifier = modifier,
@@ -28,8 +26,8 @@ fun OrdersScreen(
 
             OrderCard(
                 modifier = modifier,
-                order = order,
-                onClick = { navigator.navigateToOrder(it) }
+                order = order.model,
+                onClick = { viewModel.select(order.order) }
             )
         },
         arrangementSpace = 4.dp,
@@ -45,6 +43,7 @@ private fun OrderScreenPreview() {
             repository = OrderRepository(generator = { id1 }),
             loading = UiText.Res(R.string.loading),
             failure = UiText.Res(R.string.failure),
+            navigator = DummyNavigator(),
             logger = LoggerImpl()
         )
     }
@@ -52,7 +51,6 @@ private fun OrderScreenPreview() {
 
     OrdersScreen(
         modifier = Modifier,
-        viewModel = viewModel,
-        navigator = DummyNavigator()
+        viewModel = viewModel
     )
 }

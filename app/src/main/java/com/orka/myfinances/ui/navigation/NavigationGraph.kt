@@ -7,7 +7,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation3.ui.NavDisplay
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
-import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.managers.SessionManager
 
 @Composable
