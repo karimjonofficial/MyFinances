@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.navigation.entries.order
 
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
@@ -14,9 +15,11 @@ fun ordersEntry(
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val viewModel = viewModel { factory.ordersViewModel() }
+    val state = viewModel.uiState.collectAsState()
 
     OrdersScreen(
         modifier = modifier,
+        state = state.value,
         viewModel = viewModel
     )
 }

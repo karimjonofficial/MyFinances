@@ -3,25 +3,37 @@ package com.orka.myfinances.ui.screens.order
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.order.Order
 import com.orka.myfinances.lib.data.repositories.Get
+import com.orka.myfinances.lib.format.FormatDate
+import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.lib.format.FormatTime
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.MapperListViewModel
-import com.orka.myfinances.lib.viewmodel.list.ListViewModel
+import com.orka.myfinances.lib.ui.viewmodel.MapViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import kotlinx.coroutines.flow.asStateFlow
 
+typealias IMapViewModel<T> = com.orka.myfinances.lib.viewmodel.list.MapViewModel<T>
+
 class OrdersScreenViewModel(
-    repository: Get<Order>,
+    get: Get<Order>,
+    private val priceFormatter: FormatPrice,
+    private val dateFormatter: FormatDate,
+    private val timeFormatter: FormatTime,
+    private val navigator: Navigator,
     loading: UiText,
     failure: UiText,
-    private val navigator: Navigator,
     logger: Logger
-) : MapperListViewModel<Order, OrderUiModel>(
+) : MapViewModel<Order, OrderUiModel>(
     loading = loading,
     failure = failure,
-    repository = repository,
-    map = { it.toUiModel() },
+    get = get,
+    map = { orders ->
+        orders.groupBy { dateFormatter.formatDate(it.dateTime) }
+            .mapValues { entry ->
+                entry.value.map { it.toUiModel(priceFormatter, dateFormatter, timeFormatter) }
+            }
+    },
     logger = logger
-), ListViewModel<OrderUiModel> {
+), IMapViewModel<OrderUiModel> {
     override val uiState = state.asStateFlow()
 
     fun select(order: Order) {

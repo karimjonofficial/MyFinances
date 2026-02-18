@@ -41,13 +41,13 @@ private fun DebtCardPreview() {
 
                 DebtCard(
                     modifier = Modifier.fillMaxWidth(),
-                    debt = debt1.toModel(),
+                    debt = debt1.toModel({""}, {""}, {""}),
                     onClick = {}
                 )
 
                 DebtCard(
                     modifier = Modifier.fillMaxWidth(),
-                    debt = debt2.toModel(),
+                    debt = debt2.toModel({""}, {""}, {""}),
                     onClick = {}
                 )
             }

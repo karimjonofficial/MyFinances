@@ -96,7 +96,7 @@ private fun ProductCardPreview() {
             contentAlignment = Alignment.Center
         ) {
             StockItemCard(
-                item = stockItem1.toModel(),
+                item = stockItem1.toModel({""}, {""}),
                 click = {}
             )
         }

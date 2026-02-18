@@ -1,6 +1,7 @@
 package com.orka.myfinances.ui.navigation.entries.product
 
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
@@ -18,10 +19,11 @@ fun productTitleEntry(
     val viewModel = viewModel {
         factory.productTitleViewModel(destination.productTitle)
     }
+    val state = viewModel.uiState.collectAsState()
 
     ProductTitleScreen(
         modifier = modifier,
-        productTitle = destination.productTitle,
+        state = state.value,
         viewModel = viewModel
     )
 }

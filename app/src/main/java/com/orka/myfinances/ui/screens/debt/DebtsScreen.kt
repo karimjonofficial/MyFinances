@@ -1,8 +1,11 @@
 package com.orka.myfinances.ui.screens.debt
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -13,8 +16,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
+import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
+import com.orka.myfinances.lib.viewmodel.list.State
 import com.orka.myfinances.ui.screens.debt.components.DebtCard
 import com.orka.myfinances.ui.screens.debt.parts.AddDebtDialog
 import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenViewModel
@@ -23,11 +29,12 @@ import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenViewModel
 @Composable
 fun DebtsScreen(
     modifier: Modifier,
+    state: State,
     viewModel: DebtScreenViewModel
 ) {
     val visible = rememberSaveable { mutableStateOf(false) }
 
-    LazyColumnScreen(
+    LazyColumnWithStickyHeaderScreen(
         modifier = modifier,
         topBar = {
             TopAppBar(
@@ -43,9 +50,20 @@ fun DebtsScreen(
             )
         },
         viewModel = viewModel,
+        state = state,
+        header = { modifier, date ->
+            Text(
+                text = date,
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = modifier
+                    .background(MaterialTheme.colorScheme.surface)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            )
+        },
         item = { modifier, item ->
             DebtCard(
-                modifier = modifier,
+                modifier = modifier.padding(horizontal = 8.dp),
                 debt = item.model,
                 onClick = { viewModel.select(item.debt) }
             )

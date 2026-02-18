@@ -150,13 +150,21 @@ private fun OrderCardPreview() {
             repeat(5) {
                 OrderCard(
                     modifier = Modifier.fillMaxWidth(),
-                    order = order1.toModel(),
+                    order = order1.toModel(
+                        priceFormatter = { "" },
+                        dateFormatter = { "" },
+                        timeFormatter = { "" }
+                    ),
                     onClick = {}
                 )
 
                 OrderCard(
                     modifier = Modifier.fillMaxWidth(),
-                    order = order2.toModel(),
+                    order = order2.toModel(
+                        priceFormatter = { "" },
+                        dateFormatter = { "" },
+                        timeFormatter = { "" }
+                    ),
                     onClick = {}
                 )
             }

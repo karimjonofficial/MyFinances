@@ -31,7 +31,6 @@ import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.clients
 import com.orka.myfinances.fixtures.resources.models.product.product1
 import com.orka.myfinances.fixtures.resources.models.product.product2
-import com.orka.myfinances.lib.extensions.models.getPrice
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.DividedList
@@ -40,17 +39,17 @@ import com.orka.myfinances.lib.ui.components.OutlinedCommentTextField
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
 fun CheckoutContent(
     modifier: Modifier,
-    items: List<BasketItem>,//TODO add state for this screen
+    items: List<BasketItemCardModel>,//TODO add state for this screen
     clients: List<Client>,
+    price: Int,
     viewModel: CheckoutScreenViewModel
 ) {
-    val price = rememberSaveable { mutableStateOf<Int?>(items.getPrice()) }
+    val price = rememberSaveable { mutableStateOf<Int?>(price) }
     val description = rememberSaveable { mutableStateOf<String?>(null) }
     val selectedClientId =
         rememberSaveable(clients) { mutableStateOf(clients.firstOrNull()?.id?.value) }
@@ -100,11 +99,8 @@ fun CheckoutContent(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.items_purchased),
                 items = items,
-                itemTitle = { it.product.title.name },
-                itemSupportingText = {
-                    val price = it.amount * it.product.title.defaultSalePrice
-                    "$${it.product.title.defaultSalePrice} x ${it.amount}  = $$price"
-                }
+                itemTitle = { it.title },
+                itemSupportingText = { it.price }
             )
 
             VerticalSpacer(16)
@@ -159,21 +155,22 @@ private fun CheckoutContentPreview() {
         CheckoutScreenViewModel(
             addSale = { null },
             addOrder = { null },
-            basketRepository = BasketRepository(productRepository = { null }),
+            basketRepository = BasketRepository(getById = { null }),
             get = { null },
             logger = DummyLogger(),
             navigator = DummyNavigator(),
-            loading = UiText.Res(R.string.loading),
-            failure = UiText.Res(R.string.failure)
+            formatDecimal = {""},
+            formatPrice = {""}
         )
     }
 
     MyFinancesTheme {
         CheckoutContent(
             modifier = Modifier.fillMaxSize(),
-            items = items,
+            items = items.map { it.toModel({""}, {""}) },
             clients = clients,
             viewModel = viewModel,
+            price = 1000
         )
     }
 }

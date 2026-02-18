@@ -14,3 +14,10 @@ fun Client.toModel(): ClientCardModel {
         )
     )
 }
+
+fun Client.toUiModel(): ClientModel {
+    return ClientModel(
+        client = this,
+        model = toModel()
+    )
+}

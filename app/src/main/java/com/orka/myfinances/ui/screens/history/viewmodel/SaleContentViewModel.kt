@@ -5,9 +5,12 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.sale.Sale
 import com.orka.myfinances.data.repositories.sale.SaleEvent
 import com.orka.myfinances.lib.data.repositories.Get
+import com.orka.myfinances.lib.format.FormatDate
+import com.orka.myfinances.lib.format.FormatNames
+import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.lib.format.FormatTime
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.MapperListViewModel
-import com.orka.myfinances.lib.viewmodel.list.ListViewModel
+import com.orka.myfinances.lib.ui.viewmodel.MapViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,18 +22,35 @@ class SaleContentViewModel(
     loading: UiText,
     failure: UiText,
     repository: Get<Sale>,
+    formatNames: FormatNames,
+    priceFormatter: FormatPrice,
+    dateFormatter: FormatDate,
+    timeFormatter: FormatTime,
     private val navigator: Navigator,
     logger: Logger
-) : MapperListViewModel<Sale, SaleUiModel>(
+) : MapViewModel<Sale, SaleUiModel>(
     loading = loading,
     failure = failure,
-    repository = repository,
-    map = { it.toUiModel() },
+    get = repository,
+    map = { sales ->
+        sales.groupBy { sale -> sale.dateTime }
+            .mapKeys { entry -> dateFormatter.formatDate(entry.key) }
+            .mapValues { entry ->
+                entry.value.map { sale ->
+                    sale.toUiModel(
+                        formatNames,
+                        priceFormatter,
+                        dateFormatter,
+                        timeFormatter
+                    )
+                }
+            }
+    },
     logger = logger
-), ListViewModel<SaleUiModel> {
+), IMapViewModel<SaleUiModel> {
     override val uiState = state.asStateFlow()
 
-    init  {
+    init {
         events.onEach {
             initialize()
         }.launchIn(viewModelScope)

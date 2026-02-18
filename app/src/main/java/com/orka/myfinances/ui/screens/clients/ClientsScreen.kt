@@ -18,14 +18,18 @@ import com.orka.myfinances.R
 import com.orka.myfinances.application.LoggerImpl
 import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.fixtures.managers.DummyNavigator
+import com.orka.myfinances.fixtures.resources.models.clients
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
+import com.orka.myfinances.lib.viewmodel.list.State
 import com.orka.myfinances.ui.components.ClientCard
+import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClientsScreen(
     modifier: Modifier,
+    state: State,
     viewModel: ClientsScreenViewModel
 ) {
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
@@ -46,6 +50,7 @@ fun ClientsScreen(
                 }
             )
         },
+        state = state,
         dialogState = dialogVisible,
         dialog = {
             AddClientDialog(
@@ -81,8 +86,11 @@ private fun ClientsScreenPreview() {
         )
     }
 
-    ClientsScreen(
-        modifier = Modifier,
-        viewModel = viewModel,
-    )
+    MyFinancesTheme {
+        ClientsScreen(
+            modifier = Modifier,
+            viewModel = viewModel,
+            state = State.Success(clients.map { it.toUiModel() })
+        )
+    }
 }

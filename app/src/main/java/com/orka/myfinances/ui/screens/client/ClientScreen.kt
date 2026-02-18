@@ -34,6 +34,7 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -134,12 +135,16 @@ fun ClientScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showSystemUi = true, showBackground = true)
+@Preview(
+    showSystemUi = true,
+    showBackground = true
+)
 @Composable
 private fun ClientScreenPreview() {
-    ClientScreen(
-        modifier = Modifier.fillMaxSize(),
-        client = client1
-    )
+    MyFinancesTheme {
+        ClientScreen(
+            modifier = Modifier.fillMaxSize(),
+            client = client1
+        )
+    }
 }

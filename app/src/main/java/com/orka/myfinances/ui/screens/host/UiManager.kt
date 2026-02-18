@@ -149,6 +149,7 @@ class UiManager(
         val clientRepository = ClientRepository()
         val debtRepository = DebtRepository()
         val notificationRepository = NotificationRepository()
+        val formatter = Formatter()
 
         return Factory(
             productTitleRepository = productTitleRepository,
@@ -165,7 +166,8 @@ class UiManager(
             notificationRepository = notificationRepository,
             officeApi = provider.officeApi(),
             logger = logger,
-            navigator = navigator
+            navigator = navigator,
+            formatter = formatter
         )
     }
 }

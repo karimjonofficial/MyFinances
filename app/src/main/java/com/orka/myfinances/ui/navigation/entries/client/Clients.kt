@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.navigation.entries.client
 
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
@@ -13,9 +14,12 @@ fun clientsEntry(
     destination: Destination.Clients,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
+    val viewModel = viewModel { factory.clientsViewModel() }
+    val state = viewModel.uiState.collectAsState()
 
     ClientsScreen(
         modifier = modifier,
-        viewModel = viewModel { factory.clientsViewModel() }
+        viewModel = viewModel,
+        state = state.value
     )
 }

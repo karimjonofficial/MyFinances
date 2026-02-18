@@ -6,28 +6,40 @@ import com.orka.myfinances.data.models.Debt
 import com.orka.myfinances.data.repositories.debt.AddDebtRequest
 import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.Get
+import com.orka.myfinances.lib.format.FormatDate
+import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.lib.format.FormatTime
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.MapperListViewModel
-import com.orka.myfinances.lib.viewmodel.list.ListViewModel
+import com.orka.myfinances.lib.ui.viewmodel.MapViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
+typealias IMapViewModel<T> = com.orka.myfinances.lib.viewmodel.list.MapViewModel<T>
+
 class DebtScreenViewModel(
-    debtRepository: Get<Debt>,
+    get: Get<Debt>,
     private val add: Add<Debt, AddDebtRequest>,
     private val clientRepository: Get<Client>,
-    logger: Logger,
-    private val navigator: Navigator,
+    priceFormatter: FormatPrice,
+    private val dateFormatter: FormatDate,
+    timeFormatter: FormatTime,
     loading: UiText,
-    failure: UiText
-) : MapperListViewModel<Debt, DebtUiModel>(
+    failure: UiText,
+    logger: Logger,
+    private val navigator: Navigator
+) : MapViewModel<Debt, DebtUiModel>(
     loading = loading,
     failure = failure,
-    repository = debtRepository,
-    map = { it.toUiModel() },
+    get = get,
+    map = { debts ->
+        debts.groupBy { dateFormatter.formatDate(it.dateTime) }
+            .mapValues { entry ->
+                entry.value.map { it.toUiModel(priceFormatter, dateFormatter, timeFormatter) }
+            }
+    },
     logger = logger
-), ListViewModel<DebtUiModel> {
+), IMapViewModel<DebtUiModel> {
     override val uiState = state.asStateFlow()
 
     private val _dialogState = MutableStateFlow<DialogState>(DialogState.Loading)

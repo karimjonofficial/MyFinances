@@ -9,6 +9,8 @@ import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
 import com.orka.myfinances.data.repositories.stock.StockEvent
 import com.orka.myfinances.lib.data.repositories.GetByParameter
+import com.orka.myfinances.lib.format.FormatDecimal
+import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.viewmodel.DualStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +23,8 @@ class WarehouseScreenViewModel(
     private val getProductTitles: GetByParameter<ProductTitle, Category>,
     private val getStockItems: GetByParameter<StockItem, Category>,
     private val basketRepository: BasketRepository,
+    private val priceFormatter: FormatPrice,
+    private val decimalFormatter: FormatDecimal,
     productTitleEvents: Flow<ProductTitleEvent>,
     stockEvents: Flow<StockEvent>,
     private val navigator: Navigator,
@@ -51,7 +55,7 @@ class WarehouseScreenViewModel(
                 setState1(ProductsState.Success(productTitles.map { it.toUiModel() }))
             else setState1(ProductsState.Failure)
             if (stockItems != null)
-                setState2(WarehouseState.Success(category, stockItems.map { it.toUiModel() }))
+                setState2(WarehouseState.Success(category, stockItems.map { it.toUiModel(priceFormatter, decimalFormatter) }))
             else setState2(WarehouseState.Failure)
         }
     }
@@ -80,4 +84,3 @@ class WarehouseScreenViewModel(
         }
     }
 }
-

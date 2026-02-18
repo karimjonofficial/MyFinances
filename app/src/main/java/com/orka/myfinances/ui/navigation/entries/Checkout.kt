@@ -1,5 +1,7 @@
 package com.orka.myfinances.ui.navigation.entries
 
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
@@ -14,10 +16,14 @@ fun checkoutEntry(
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val viewModel = viewModel { factory.checkoutViewModel() }
+    val state = viewModel.uiState.collectAsState()
+    LaunchedEffect(Unit) {
+        viewModel.initialize()
+    }
 
     CheckoutScreen(
         modifier = modifier,
-        items = destination.items,
+        state = state.value,
         viewModel = viewModel
     )
 }

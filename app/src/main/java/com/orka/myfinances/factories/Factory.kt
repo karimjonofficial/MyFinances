@@ -26,12 +26,13 @@ import com.orka.myfinances.ui.screens.clients.ClientsScreenViewModel
 import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenViewModel
 import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentViewModel
 import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.ProfileContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.folder.FoldersContentViewModel
-import com.orka.myfinances.ui.screens.home.viewmodel.ProfileContentViewModel
+import com.orka.myfinances.ui.screens.host.Formatter
 import com.orka.myfinances.ui.screens.notification.NotificationScreenViewModel
 import com.orka.myfinances.ui.screens.order.OrdersScreenViewModel
-import com.orka.myfinances.ui.screens.product.ProductTitleScreenViewModel
+import com.orka.myfinances.ui.screens.product.viewmodel.ProductTitleScreenViewModel
 import com.orka.myfinances.ui.screens.product.add.viewmodel.AddProductTitleScreenViewModel
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenViewModel
 import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
@@ -53,7 +54,8 @@ class Factory(
     private val debtRepository: DebtRepository,
     private val notificationRepository: NotificationRepository,
     private val logger: Logger,
-    private val navigator: Navigator
+    private val navigator: Navigator,
+    private val formatter: Formatter,
 ) {
     private val loading = UiText.Res(R.string.loading)
     private val failure = UiText.Res(R.string.failure)
@@ -99,6 +101,8 @@ class Factory(
             productTitleEvents = productTitleRepository.events,
             stockEvents = stockRepository.events,
             navigator = navigator,
+            priceFormatter = formatter,
+            decimalFormatter = formatter,
             logger = logger
         )
     }
@@ -119,6 +123,8 @@ class Factory(
         return BasketContentViewModel(
             repository = basketRepository,
             navigator = navigator,
+            priceFormatter = formatter,
+            decimalFormatter = formatter,
             logger = logger
         )
     }
@@ -141,7 +147,11 @@ class Factory(
             repository = saleRepository,
             events = saleRepository.events,
             navigator = navigator,
-            logger = logger
+            formatNames = formatter,
+            priceFormatter = formatter,
+            dateFormatter = formatter,
+            timeFormatter = formatter,
+            logger = logger,
         )
     }
 
@@ -152,6 +162,10 @@ class Factory(
             loading = loading,
             failure = failure,
             navigator = navigator,
+            formatNames = formatter,
+            priceFormatter = formatter,
+            dateFormatter = formatter,
+            timeFormatter = formatter,
             logger = logger
         )
     }
@@ -164,8 +178,8 @@ class Factory(
             get = clientRepository,
             logger = logger,
             navigator = navigator,
-            loading = loading,
-            failure = failure,
+            formatPrice = formatter,
+            formatDecimal = formatter
         )
     }
 
@@ -192,22 +206,28 @@ class Factory(
 
     fun ordersViewModel(): OrdersScreenViewModel {
         return OrdersScreenViewModel(
-            repository = orderRepository,
+            get = orderRepository,
             loading = loading,
             failure = failure,
             navigator = navigator,
+            priceFormatter = formatter,
+            dateFormatter = formatter,
+            timeFormatter = formatter,
             logger = logger
         )
     }
 
     fun debtsViewModel(): DebtScreenViewModel {
         return DebtScreenViewModel(
-            debtRepository = debtRepository,
+            get = debtRepository,
             add = debtRepository,
             clientRepository = clientRepository,
             navigator = navigator,
             logger = logger,
             loading = loading,
+            priceFormatter = formatter,
+            dateFormatter = formatter,
+            timeFormatter = formatter,
             failure = failure,
         )
     }
@@ -225,7 +245,12 @@ class Factory(
     fun productTitleViewModel(productTitle: ProductTitle): ProductTitleScreenViewModel {
         return ProductTitleScreenViewModel(
             productTitle = productTitle,
-            repository = receiveRepository
+            repository = receiveRepository,
+            formatDecimal = formatter,
+            formatDate = formatter,
+            formatPrice = formatter,
+            loading = loading,
+            logger = logger
         )
     }
 }

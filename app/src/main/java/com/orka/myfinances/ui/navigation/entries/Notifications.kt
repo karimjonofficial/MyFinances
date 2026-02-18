@@ -1,6 +1,7 @@
 package com.orka.myfinances.ui.navigation.entries
 
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
@@ -15,9 +16,12 @@ fun notificationsEntry(
     destination: Destination.Notifications,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
+    val viewModel = viewModel { factory.notificationsViewModel() }
+    val state = viewModel.uiState.collectAsState()
 
     NotificationScreen(
         modifier = modifier,
-        viewModel = viewModel { factory.notificationsViewModel() }
+        state = state.value,
+        viewModel = viewModel
     )
 }

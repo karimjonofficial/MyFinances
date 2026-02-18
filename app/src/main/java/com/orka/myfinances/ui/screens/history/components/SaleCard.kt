@@ -44,7 +44,16 @@ private fun SaleCardPreview() {
             modifier = Modifier.scaffoldPadding(paddingValues)
         ) {
             repeat(10) {
-                SaleCard(modifier = Modifier.fillMaxWidth(), sale = sale1.toModel()) { }
+                SaleCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    sale = sale1.toModel(
+                        format = { "" },
+                        priceFormatter = { "" },
+                        dateFormatter = { "" },
+                        timeFormatter = { "" }
+                    ),
+                    onClick = {}
+                )
             }
         }
     }

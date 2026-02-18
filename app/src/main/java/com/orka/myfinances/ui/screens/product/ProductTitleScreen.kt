@@ -20,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -35,7 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.product.ProductTitle
+import com.orka.myfinances.fixtures.core.DummyLogger
 import com.orka.myfinances.fixtures.resources.models.product.productTitle1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
@@ -43,14 +44,19 @@ import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.ui.screens.FailureScreen
+import com.orka.myfinances.lib.ui.screens.LoadingScreen
+import com.orka.myfinances.lib.viewmodel.list.State
 import com.orka.myfinances.ui.screens.debt.components.DescriptionCard
+import com.orka.myfinances.ui.screens.product.viewmodel.ProductTitleScreenViewModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductTitleScreen(
     modifier: Modifier = Modifier,
-    productTitle: ProductTitle,
+    state: State,
     viewModel: ProductTitleScreenViewModel
 ) {
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
@@ -83,45 +89,55 @@ fun ProductTitleScreen(
             )
         }
     ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier.scaffoldPadding(paddingValues),
-            contentPadding = PaddingValues(bottom = 16.dp, start = 16.dp, end = 16.dp)
-        ) {
-            item { HeroImage() }
-            item { TitleSection(productTitle = productTitle) }
-            item { PricingSection(productTitle = productTitle) }
-            item { HorizontalDivider() }
-            item {
-                VerticalSpacer(16)
-                DividedList(
-                    title = stringResource(R.string.specifications),
-                    items = productTitle.properties,
-                    itemTitle = { it.type.name },
-                    itemSupportingText = { "${it.value}" }
-                )
-            }
-            if(!productTitle.description.isNullOrBlank()) {
-                item {
-                    VerticalSpacer(8)
-                    DescriptionCard(description = productTitle.description)
-                }
-            }
-        }
+        val m = Modifier.scaffoldPadding(paddingValues)
 
-        if (dialogVisible.value) {
-            ReceiveDialog(
-                dismissRequest = { dialogVisible.value = false },
-                onSuccess = { p, sp, a, t, c ->
-                    viewModel.receive(
-                        price = p,
-                        salePrice = sp,
-                        amount = a,
-                        totalPrice = t,
-                        comment = c
-                    )
-                    dialogVisible.value = false
+        when(state) {
+            is State.Initial, is State.Loading -> LoadingScreen(modifier = m)
+            is State.Failure -> FailureScreen(modifier = m)
+
+            is State.Success<*> -> {
+                val productTitle = state.value as ProductTitleModel
+                LazyColumn(
+                    modifier = m,
+                    contentPadding = PaddingValues(bottom = 16.dp, start = 16.dp, end = 16.dp)
+                ) {
+                    item { HeroImage() }
+                    item { TitleSection(productTitle = productTitle) }
+                    item { PricingSection(productTitle = productTitle) }
+                    item { HorizontalDivider() }
+                    item {
+                        VerticalSpacer(16)
+                        DividedList(
+                            title = stringResource(R.string.specifications),
+                            items = productTitle.properties,
+                            itemTitle = { it.name },
+                            itemSupportingText = { it.value }
+                        )
+                    }
+                    if (!productTitle.description.isNullOrBlank()) {
+                        item {
+                            VerticalSpacer(8)
+                            DescriptionCard(description = productTitle.description)
+                        }
+                    }
                 }
-            )
+
+                if (dialogVisible.value) {
+                    ReceiveDialog(
+                        dismissRequest = { dialogVisible.value = false },
+                        onSuccess = { p, sp, a, t, c ->
+                            viewModel.receive(
+                                price = p,
+                                salePrice = sp,
+                                amount = a,
+                                totalPrice = t,
+                                comment = c
+                            )
+                            dialogVisible.value = false
+                        }
+                    )
+                }
+            }
         }
     }
 }
@@ -143,12 +159,12 @@ private fun HeroImage(modifier: Modifier = Modifier) {
 @Composable
 private fun TitleSection(
     modifier: Modifier = Modifier,
-    productTitle: ProductTitle
+    productTitle: ProductTitleModel
 ) {
     Column(modifier = modifier.padding(horizontal = 16.dp)) {
 
         Text(
-            text = productTitle.name,
+            text = productTitle.title,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
         )
@@ -165,7 +181,7 @@ private fun TitleSection(
 
             HorizontalSpacer(6)
             Text(
-                text = productTitle.dateTime.toString(),
+                text = productTitle.dateTime,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -176,7 +192,7 @@ private fun TitleSection(
 @Composable
 private fun PricingSection(
     modifier: Modifier = Modifier,
-    productTitle: ProductTitle
+    productTitle: ProductTitleModel
 ) {
     Row(
         modifier = modifier.padding(16.dp),
@@ -184,7 +200,7 @@ private fun PricingSection(
     ) {
 
         Text(
-            text = "$${productTitle.defaultSalePrice}",
+            text = productTitle.price,
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Black,
             color = MaterialTheme.colorScheme.primary
@@ -213,13 +229,17 @@ private fun ProductTitleScreenPreview() {
     val viewModel = viewModel {
         ProductTitleScreenViewModel(
             productTitle = productTitle1,
-            repository = { null }
+            repository = { null },
+            logger = DummyLogger(),
+            loading = UiText.Res(R.string.loading),
+            formatPrice = {""}, formatDecimal = {""}, formatDate = {""}
         )
     }
+    val state = viewModel.uiState.collectAsState()
     
     MyFinancesTheme {
         ProductTitleScreen(
-            productTitle = productTitle1,
+            state = state.value,
             viewModel = viewModel
         )
     }

@@ -22,7 +22,7 @@ class ClientsScreenViewModel(
     loading = loading,
     failure = failure,
     repository = get,
-    map = { ClientModel(it, it.toModel()) },
+    map = { it.toUiModel() },
     logger = logger
 ), ListViewModel<ClientModel> {
     override val uiState = state.asStateFlow()

@@ -60,11 +60,13 @@ private fun StockItemContentPreview() {
                 category = category1,
                 getProductTitles = { productTitles },
                 getStockItems = { stockItems },
-                basketRepository = BasketRepository(productRepository = { null }),
+                basketRepository = BasketRepository(getById = { null }),
                 productTitleEvents = flow {},
                 stockEvents = flow {},
                 navigator = DummyNavigator(),
                 logger = DummyLogger(),
+                priceFormatter = {""},
+                decimalFormatter = {""},
             )
         }
         val state = viewModel.warehouseState.collectAsState()

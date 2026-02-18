@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-class BasketRepository(private val productRepository: GetById<Product>) {
+class BasketRepository(private val getById: GetById<Product>) {
     private val mutex = Mutex()
     private val items = mutableListOf<BasketItem>()
 
@@ -27,7 +27,7 @@ class BasketRepository(private val productRepository: GetById<Product>) {
                 val i = items[index]
                 items[index] = i.copy(amount = i.amount + amount)
             } else {
-                val product = productRepository.getById(id)
+                val product = getById.getById(id)
                 if (product != null) {
                     items.add(BasketItem(product, amount))
                 }

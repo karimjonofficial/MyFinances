@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.navigation.entries.debt
 
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
@@ -13,8 +14,12 @@ fun debtsEntry(
     destination: Destination.Debts,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
+    val viewModel = viewModel { factory.debtsViewModel() }
+    val state = viewModel.uiState.collectAsState()
+
     DebtsScreen(
         modifier = modifier,
-        viewModel = viewModel { factory.debtsViewModel() }
+        state = state.value,
+        viewModel = viewModel
     )
 }
