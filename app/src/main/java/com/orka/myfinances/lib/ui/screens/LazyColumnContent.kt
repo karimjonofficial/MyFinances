@@ -1,19 +1,14 @@
 package com.orka.myfinances.lib.ui.screens
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.extensions.ui.str
-import com.orka.myfinances.lib.viewmodel.list.State
-import com.orka.myfinances.lib.viewmodel.list.ListViewModel
-import com.orka.myfinances.lib.viewmodel.list.MapViewModel
+import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
+import com.orka.myfinances.lib.ui.viewmodel.MapViewModel
+import com.orka.myfinances.lib.ui.viewmodel.State
 
 @Composable
 fun <T> LazyColumnContent(
@@ -52,7 +47,6 @@ fun <T> LazyColumnContent(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun <T> LazyColumnContentWithStickyHeader(
     modifier: Modifier = Modifier,
@@ -60,7 +54,6 @@ fun <T> LazyColumnContentWithStickyHeader(
     arrangementSpace: Dp = 0.dp,
     state: State,
     viewModel: MapViewModel<T>,
-    header: @Composable (modifier: Modifier, key: String) -> Unit,
     item: @Composable (modifier: Modifier, item: T) -> Unit
 ) {
     when (state) {
@@ -74,20 +67,13 @@ fun <T> LazyColumnContentWithStickyHeader(
         is State.Success<*> -> {
             @Suppress("UNCHECKED_CAST")
             val groupedItems = state.value as Map<String, List<T>>
-            LazyColumn(
+            LazyColumnWithStickHeader(
                 modifier = modifier,
                 contentPadding = contentPadding,
-                verticalArrangement = Arrangement.spacedBy(arrangementSpace)
-            ) {
-                groupedItems.forEach { (key, items) ->
-                    stickyHeader {
-                        header(Modifier.fillMaxWidth(), key)
-                    }
-                    items(items = items) {
-                        item(Modifier.fillMaxWidth(), it)
-                    }
-                }
-            }
+                map = groupedItems,
+                arrangementSpace = arrangementSpace,
+                item = item
+            )
         }
 
         is State.Failure -> FailureScreen(

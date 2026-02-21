@@ -9,7 +9,7 @@ import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.repositories.folder.AddFolderRequest
 import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.Get
-import com.orka.myfinances.lib.ui.viewmodel.DualStateViewModel
+import com.orka.myfinances.lib.viewmodel.DualStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import kotlinx.coroutines.flow.asStateFlow
 

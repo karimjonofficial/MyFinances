@@ -37,7 +37,7 @@ fun entryProvider(
     factory: Factory
 ): NavEntry<Destination> {
     return when(destination) {
-        is Destination.Home -> homeEntry(modifier, destination, session, sessionManager, navigator, factory)
+        is Destination.Home -> homeEntry(modifier, destination, session, sessionManager, navigator, factory)//TODO Remove navigator
         is Destination.Catalog -> catalogEntry(modifier, destination, navigator, factory)
         is Destination.Warehouse -> warehouseEntry(modifier, destination, factory)
         is Destination.Notifications -> notificationsEntry(modifier, destination, factory)
@@ -52,12 +52,12 @@ fun entryProvider(
         is Destination.Checkout -> checkoutEntry(modifier, destination, factory)
         is Destination.AddStockItem -> addReceiveEntry(modifier, destination, factory)
         is Destination.Orders -> ordersEntry(modifier, destination, factory)
-        is Destination.Order -> orderEntry(modifier, destination, navigator)
+        is Destination.Order -> orderEntry(modifier, destination, factory, navigator)
         is Destination.Debts -> debtsEntry(modifier, destination, factory)
-        is Destination.Debt -> debtEntry(modifier, destination, navigator)
+        is Destination.Debt -> debtEntry(modifier, destination, factory, navigator)
         is Destination.Search -> searchEntry(modifier, destination)
         is Destination.Template -> templateEntry(modifier, destination)
-        is Destination.Sale -> saleEntry(modifier, navigator, destination)
-        is Destination.Receive -> receiveEntry(modifier, navigator, destination)
+        is Destination.Sale -> saleEntry(modifier, navigator, factory, destination)
+        is Destination.Receive -> receiveEntry(modifier, factory, navigator, destination)
     }
 }

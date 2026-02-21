@@ -19,6 +19,7 @@ import com.orka.myfinances.data.repositories.debt.AddDebtRequest
 import com.orka.myfinances.lib.ui.components.Dialog
 import com.orka.myfinances.lib.ui.components.OutlinedCommentTextField
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
+import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.screens.debt.viewmodel.DialogState
 import kotlin.time.Instant
@@ -30,7 +31,7 @@ fun AddDebtDialog(
     onSuccess: (AddDebtRequest) -> Unit,
     onCancel: () -> Unit
 ) {
-    val price = rememberSaveable { mutableStateOf("") }
+    val price = rememberSaveable { mutableStateOf<Int?>(null) }
     val description = rememberSaveable { mutableStateOf("") }
     val client = rememberSaveable { mutableStateOf<Client?>(null) }
     val clientDropDownMenuExpanded = rememberSaveable { mutableStateOf(false) }
@@ -45,7 +46,7 @@ fun AddDebtDialog(
         successTitle = stringResource(R.string.add),
         onCancel = onCancel,
         onSuccess = {
-            val priceValue = price.value.toIntOrNull()
+            val priceValue = price.value
             val clientValue = client.value
             val endDateTimeValue = endDateTime.value
             if (priceValue != null && clientValue != null && endDateTimeValue != null) {
@@ -59,15 +60,7 @@ fun AddDebtDialog(
                 )
             }
         }
-    ) { 
-        OutlinedTextField(
-            value = price.value,
-            onValueChange = { price.value = it },
-            label = { Text(stringResource(R.string.price)) }
-        )
-
-        VerticalSpacer(8)
-
+    ) {
         OutlinedExposedDropDownTextField(
             text = client.value?.firstName ?: stringResource(R.string.client),
             label = stringResource(R.string.client),
@@ -80,7 +73,13 @@ fun AddDebtDialog(
         )
 
         VerticalSpacer(8)
+        OutlinedIntegerTextField(
+            value = price.value,
+            onValueChange = { price.value = it },
+            label = stringResource(R.string.price)
+        )
 
+        VerticalSpacer(8)
         OutlinedTextField(
             value = endDateTime.value?.toString()?.substring(0, 10) ?: stringResource(R.string.end_date),
             onValueChange = {},
@@ -97,7 +96,6 @@ fun AddDebtDialog(
         )
 
         VerticalSpacer(8)
-
         OutlinedCommentTextField(
             value = description.value,
             onValueChange = { description.value = it }

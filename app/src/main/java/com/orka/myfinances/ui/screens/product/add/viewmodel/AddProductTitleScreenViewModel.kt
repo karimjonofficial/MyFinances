@@ -7,7 +7,7 @@ import com.orka.myfinances.data.repositories.product.title.models.AddProductTitl
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.Get
-import com.orka.myfinances.lib.ui.viewmodel.SingleStateViewModel
+import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import kotlinx.coroutines.flow.asStateFlow
 

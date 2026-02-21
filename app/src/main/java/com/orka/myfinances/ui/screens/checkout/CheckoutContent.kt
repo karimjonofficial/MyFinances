@@ -39,6 +39,9 @@ import com.orka.myfinances.lib.ui.components.OutlinedCommentTextField
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.ui.screens.checkout.viewmodel.BasketItemCardModel
+import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenViewModel
+import com.orka.myfinances.ui.screens.checkout.viewmodel.toModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
@@ -159,8 +162,8 @@ private fun CheckoutContentPreview() {
             get = { null },
             logger = DummyLogger(),
             navigator = DummyNavigator(),
-            formatDecimal = {""},
-            formatPrice = {""}
+            formatDecimal = { "" },
+            formatPrice = { "" }
         )
     }
 

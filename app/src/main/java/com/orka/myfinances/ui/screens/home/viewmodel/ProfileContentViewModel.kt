@@ -4,8 +4,9 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
+import com.orka.myfinances.lib.viewmodel.ListViewModel
 import com.orka.myfinances.ui.navigation.Navigator
+import kotlinx.coroutines.flow.asStateFlow
 
 class ProfileContentViewModel(
     loading: UiText,
@@ -19,6 +20,8 @@ class ProfileContentViewModel(
     repository = get,
     logger = logger
 ) {
+    val uiState = state.asStateFlow()
+
     fun history() {
         launch { navigator.navigateToHistory() }
     }

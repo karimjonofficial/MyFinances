@@ -9,7 +9,6 @@ val client1 = Client(
     address = "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
     phone = "The phone number of user 1"
 )
-
 val client2 = Client(
     id = id2,
     firstName = "John",

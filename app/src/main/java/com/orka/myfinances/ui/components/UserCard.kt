@@ -32,7 +32,8 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.ui.screens.clients.toModel
+import com.orka.myfinances.ui.screens.clients.viewmodel.toModel
+import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
 fun UserCard(
@@ -92,20 +93,22 @@ fun UserCard(
 )
 @Composable
 private fun ClientCardPreview() {
-    Scaffold(title = stringResource(R.string.clients)) { paddingValues ->
-        Box(modifier = Modifier.scaffoldPadding(paddingValues)) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 4.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                repeat(10) {
-                    ClientCard(
-                        modifier = Modifier.fillMaxWidth(),
-                        model = client1.toModel(),
-                        onClick = {}
-                    )
+    MyFinancesTheme {
+        Scaffold(title = stringResource(R.string.clients)) { paddingValues ->
+            Box(modifier = Modifier.scaffoldPadding(paddingValues)) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 4.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    repeat(10) {
+                        ClientCard(
+                            modifier = Modifier.fillMaxWidth(),
+                            model = client1.toModel(),
+                            onClick = {}
+                        )
+                    }
                 }
             }
         }

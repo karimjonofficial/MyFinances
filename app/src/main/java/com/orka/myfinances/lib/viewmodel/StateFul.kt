@@ -1,5 +1,15 @@
 package com.orka.myfinances.lib.viewmodel
 
-interface StateFul {
-    fun initialize()
+import com.orka.myfinances.lib.ui.viewmodel.StateFul
+import kotlinx.coroutines.delay
+
+typealias IStateFul = StateFul
+
+abstract class StateFul : Manager(), IStateFul {
+    init {
+        launch {
+            delay(1000)
+            initialize()
+        }
+    }
 }

@@ -33,7 +33,7 @@ import com.orka.myfinances.lib.ui.components.IntegerTextField
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.list.State
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
@@ -95,6 +95,7 @@ fun AddReceiveScreen(
                 .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            @Suppress("UNCHECKED_CAST")
             OutlinedExposedDropDownTextField(
                 modifier = Modifier.fillMaxWidth(),
                 text = title.value?.name ?: stringResource(R.string.products),

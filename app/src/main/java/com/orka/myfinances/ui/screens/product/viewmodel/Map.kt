@@ -5,8 +5,6 @@ import com.orka.myfinances.data.models.product.Property
 import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.ui.screens.product.ProductTitleModel
-import com.orka.myfinances.ui.screens.product.PropertyModel
 import kotlin.time.Instant
 
 fun ProductTitle.toModel(formatDecimal: FormatDecimal, formatDate: FormatDate, formatPrice: FormatPrice): ProductTitleModel {

@@ -12,7 +12,7 @@ data class Order(
     val items: List<OrderItem>,
     val price: Int,
     val dateTime: Instant,
-    val endDateTime: Instant,
+    val endDateTime: Instant? = null,
     val completed: Boolean,
     val description: String? = null
 )

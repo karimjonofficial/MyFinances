@@ -9,8 +9,9 @@ import com.orka.myfinances.data.repositories.receive.ReceiveItemModel
 import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.GetByParameter
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.ListByParameterViewModel
+import com.orka.myfinances.lib.viewmodel.ListByParameterViewModel
 import com.orka.myfinances.ui.navigation.Navigator
+import kotlinx.coroutines.flow.asStateFlow
 
 class AddReceiveScreenViewModel(
     category: Category,
@@ -27,6 +28,7 @@ class AddReceiveScreenViewModel(
     repository = get,
     logger = logger
 ) {
+    val uiState = state.asStateFlow()
 
     fun add(
         title: ProductTitle?,

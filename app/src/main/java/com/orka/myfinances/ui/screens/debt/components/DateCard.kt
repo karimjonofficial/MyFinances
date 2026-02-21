@@ -19,13 +19,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import kotlin.time.Instant
 
 @Composable
 fun EmphasizedDateCard(
     modifier: Modifier = Modifier,
     label: String,
-    date: Instant,
+    date: String,
     painter: Painter,
     contentDescription: String
 ) {
@@ -46,7 +45,7 @@ fun EmphasizedDateCard(
 fun DateCard(
     modifier: Modifier = Modifier,
     label: String,
-    date: Instant,
+    date: String,
     painter: Painter,
     contentDescription: String
 ) {
@@ -67,7 +66,7 @@ fun DateCard(
 private fun DateCard(
     modifier: Modifier = Modifier,
     label: String,
-    date: Instant,
+    date: String,
     painter: Painter,
     contentDescription: String,
     containerColor: Color,
@@ -102,7 +101,7 @@ private fun DateCard(
             }
 
             Text(
-                text = date.toString(),
+                text = date,
                 style = MaterialTheme.typography.bodyLarge,
                 color = textColor,
                 fontWeight = FontWeight.SemiBold

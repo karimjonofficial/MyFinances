@@ -9,6 +9,6 @@ class MyFinancesApplication : Application() {
         val logger = LoggerImpl()
         val storage = LocalSessionStorageImpl()
         val provider = ApiProviderImpl()
-        return UiManager(logger, storage, provider)
+        return UiManager(storage, provider, logger)
     }
 }

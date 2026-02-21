@@ -10,7 +10,7 @@ import com.orka.myfinances.lib.format.FormatNames
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.MapViewModel
+import com.orka.myfinances.lib.viewmodel.MapViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow

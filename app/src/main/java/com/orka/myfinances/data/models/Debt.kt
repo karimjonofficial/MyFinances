@@ -9,6 +9,6 @@ data class Debt(
     val price: Int,
     val notified: Boolean,
     val dateTime: Instant,
-    val endDateTime: Instant,
+    val endDateTime: Instant? = null,
     val description: String? = null
 )

@@ -25,28 +25,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.receive.Receive
-import com.orka.myfinances.fixtures.managers.DummyNavigator
-import com.orka.myfinances.fixtures.resources.models.receive.receive1
-import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.screens.StatefulScreen
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.components.UserCard
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.debt.components.DescriptionCard
+import com.orka.myfinances.ui.screens.receive.viewmodel.ReceiveUiModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReceiveScreen(
     modifier: Modifier = Modifier,
     navigator: Navigator,
-    receive: Receive
+    state: State
 ) {
-    Scaffold(
+    StatefulScreen<ReceiveUiModel>(
         modifier = modifier,
         topBar = {
             CenterAlignedTopAppBar(
@@ -68,13 +66,11 @@ fun ReceiveScreen(
                     }
                 }
             )
-        }
-    ) { paddingValues ->
-
+        },
+        state = state
+    ) { modifier, uiModel ->
         LazyColumn(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(16.dp),
+            modifier = modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
@@ -91,7 +87,7 @@ fun ReceiveScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
-                            text = "$${receive.price}",
+                            text = uiModel.price,
                             style = MaterialTheme.typography.headlineMedium
                         )
 
@@ -112,7 +108,7 @@ fun ReceiveScreen(
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 Text(
-                                    text = "${receive.dateTime}",
+                                    text = uiModel.dateTime,
                                     style = MaterialTheme.typography.bodyMedium
                                 )
                             }
@@ -123,7 +119,7 @@ fun ReceiveScreen(
 
             item {
                 UserCard(
-                    user = receive.user,
+                    user = uiModel.receive.user,
                     onClick = {}
                 )
             }
@@ -132,15 +128,15 @@ fun ReceiveScreen(
                 VerticalSpacer(8)
                 DividedList(
                     title = stringResource(R.string.items),
-                    items = receive.items,
-                    itemTitle = { item -> item.product.title.name },
-                    itemSupportingText = { item -> "${item.amount}" }
+                    items = uiModel.items,
+                    itemTitle = { item -> item.name },
+                    itemSupportingText = { item -> item.amount }
                 )
             }
 
-            if(!receive.description.isNullOrBlank()) {
+            if (!uiModel.receive.description.isNullOrBlank()) {
                 item {
-                    DescriptionCard(description = receive.description)
+                    DescriptionCard(description = uiModel.receive.description)
                 }
             }
 
@@ -174,13 +170,4 @@ fun ReceiveScreen(
             item { HorizontalSpacer(32) }
         }
     }
-}
-
-@Preview
-@Composable
-private fun ReceiveScreenPreview() {
-    ReceiveScreen(
-        navigator = DummyNavigator(),
-        receive = receive1
-    )
 }

@@ -46,7 +46,7 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.list.State
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.screens.home.models.ProfileOption
 import com.orka.myfinances.ui.screens.home.parts.ProfileTopBar
@@ -112,6 +112,7 @@ fun ProfileContent(
         Text(text = "ID: ${session.user.id.value}")
         Text(text = session.user.phone ?: stringResource(R.string.no_phone_number))
 
+        @Suppress("UNCHECKED_CAST")
         OutlinedExposedDropDownTextField(
             text = when (state) {
                 State.Initial -> stringResource(R.string.loading)

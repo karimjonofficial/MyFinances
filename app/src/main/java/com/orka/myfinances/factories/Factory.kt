@@ -3,9 +3,13 @@ package com.orka.myfinances.factories
 import com.orka.myfinances.R
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.api.OfficeApi
+import com.orka.myfinances.data.models.Debt
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Category
+import com.orka.myfinances.data.models.order.Order
 import com.orka.myfinances.data.models.product.ProductTitle
+import com.orka.myfinances.data.models.receive.Receive
+import com.orka.myfinances.data.models.sale.Sale
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.data.repositories.debt.DebtRepository
@@ -20,10 +24,11 @@ import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.repositories.template.TemplateRepository
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.catalog.CatalogScreenViewModel
-import com.orka.myfinances.ui.screens.checkout.CheckoutScreenViewModel
-import com.orka.myfinances.ui.screens.clients.ClientsScreenViewModel
+import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenViewModel
+import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenViewModel
+import com.orka.myfinances.ui.screens.clients.viewmodel.ClientsScreenViewModel
 import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenViewModel
+import com.orka.myfinances.ui.screens.debt.viewmodel.DebtsScreenViewModel
 import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentViewModel
 import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.ProfileContentViewModel
@@ -31,10 +36,13 @@ import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketContentViewMod
 import com.orka.myfinances.ui.screens.home.viewmodel.folder.FoldersContentViewModel
 import com.orka.myfinances.ui.screens.host.Formatter
 import com.orka.myfinances.ui.screens.notification.NotificationScreenViewModel
-import com.orka.myfinances.ui.screens.order.OrdersScreenViewModel
-import com.orka.myfinances.ui.screens.product.viewmodel.ProductTitleScreenViewModel
+import com.orka.myfinances.ui.screens.order.viewmodel.OrderScreenViewModel
+import com.orka.myfinances.ui.screens.order.viewmodel.OrdersScreenViewModel
 import com.orka.myfinances.ui.screens.product.add.viewmodel.AddProductTitleScreenViewModel
+import com.orka.myfinances.ui.screens.product.viewmodel.ProductTitleScreenViewModel
+import com.orka.myfinances.ui.screens.receive.viewmodel.ReceiveScreenViewModel
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenViewModel
+import com.orka.myfinances.ui.screens.sale.viewmodel.SaleScreenViewModel
 import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.templates.viewmodel.TemplatesScreenViewModel
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
@@ -123,8 +131,8 @@ class Factory(
         return BasketContentViewModel(
             repository = basketRepository,
             navigator = navigator,
-            priceFormatter = formatter,
-            decimalFormatter = formatter,
+            formatPrice = formatter,
+            formatDecimal = formatter,
             logger = logger
         )
     }
@@ -140,7 +148,7 @@ class Factory(
         )
     }
 
-    fun saleViewModel(): SaleContentViewModel {
+    fun salesViewModel(): SaleContentViewModel {
         return SaleContentViewModel(
             loading = loading,
             failure = failure,
@@ -155,7 +163,18 @@ class Factory(
         )
     }
 
-    fun receiveViewModel(): ReceiveContentViewModel {
+    fun saleViewModel(sale: Sale): SaleScreenViewModel {
+        return SaleScreenViewModel(
+            sale = sale,
+            formatPrice = formatter,
+            formatDateTime = formatter,
+            loading = loading,
+            formatDecimal = formatter,
+            logger = logger
+        )
+    }
+
+    fun receivesViewModel(): ReceiveContentViewModel {
         return ReceiveContentViewModel(
             repository = receiveRepository,
             events = receiveRepository.events,
@@ -217,18 +236,37 @@ class Factory(
         )
     }
 
-    fun debtsViewModel(): DebtScreenViewModel {
-        return DebtScreenViewModel(
-            get = debtRepository,
+    fun orderViewModel(order: Order): OrderScreenViewModel {
+        return OrderScreenViewModel(
+            order = order,
+            formatPrice = formatter,
+            formatDate = formatter,
+            formatDecimal = formatter,
+            logger = logger
+        )
+    }
+
+    fun debtsViewModel(): DebtsScreenViewModel {
+        return DebtsScreenViewModel(
+            getDebts = debtRepository,
             add = debtRepository,
-            clientRepository = clientRepository,
+            getClients = clientRepository,
             navigator = navigator,
             logger = logger,
             loading = loading,
-            priceFormatter = formatter,
-            dateFormatter = formatter,
-            timeFormatter = formatter,
+            formatPrice = formatter,
+            formatDate = formatter,
+            formatDateTime = formatter,
             failure = failure,
+        )
+    }
+
+    fun debtViewModel(debt: Debt): DebtScreenViewModel {
+        return DebtScreenViewModel(
+            debt = debt,
+            formatPrice = formatter,
+            formatDate = formatter,
+            logger = logger
         )
     }
 
@@ -249,6 +287,17 @@ class Factory(
             formatDecimal = formatter,
             formatDate = formatter,
             formatPrice = formatter,
+            loading = loading,
+            logger = logger
+        )
+    }
+
+    fun receiveViewModel(receive: Receive): ReceiveScreenViewModel {
+        return ReceiveScreenViewModel(
+            receive = receive,
+            formatPrice = formatter,
+            formatDateTime = formatter,
+            formatDecimal = formatter,
             loading = loading,
             logger = logger
         )

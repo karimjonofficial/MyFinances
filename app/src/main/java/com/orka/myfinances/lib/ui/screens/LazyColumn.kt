@@ -3,6 +3,7 @@ package com.orka.myfinances.lib.ui.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -28,3 +29,34 @@ fun <T> LazyColumn(
         }
     }
 }
+
+@Composable
+fun <T> LazyColumnWithStickHeader(
+    modifier: Modifier = Modifier,
+    map: Map<String, List<T>>,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    arrangementSpace: Dp = 0.dp,
+    item: @Composable ((Modifier, T) -> Unit)
+) {
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = contentPadding,
+        verticalArrangement = Arrangement.spacedBy(arrangementSpace)
+    ) {
+        map.forEach { (key, items) ->
+            stickyHeader {
+                StickyHeader(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    key = key
+                )
+            }
+
+            items(items = items) { item ->
+                item(Modifier.fillMaxWidth(), item)
+            }
+        }
+    }
+}
+

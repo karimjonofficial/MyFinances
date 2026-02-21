@@ -12,7 +12,7 @@ import com.orka.myfinances.data.models.receive.Receive
 import com.orka.myfinances.data.models.sale.Sale
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.fixtures.resources.types
-import com.orka.myfinances.lib.ui.viewmodel.SingleStateViewModel
+import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.navigation.Navigator
 import kotlinx.coroutines.flow.asStateFlow

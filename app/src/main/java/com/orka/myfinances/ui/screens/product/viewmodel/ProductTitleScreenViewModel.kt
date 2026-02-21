@@ -10,8 +10,8 @@ import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.SingleStateViewModel
-import com.orka.myfinances.lib.viewmodel.list.State
+import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
+import com.orka.myfinances.lib.ui.viewmodel.State
 import kotlinx.coroutines.flow.asStateFlow
 
 class ProductTitleScreenViewModel(

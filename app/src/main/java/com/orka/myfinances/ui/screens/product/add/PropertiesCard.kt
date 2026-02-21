@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.product.add
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,6 +45,7 @@ fun PropertiesCard(
                     text = stringResource(R.string.properties)
                 )
 
+                Log.d("Properties(fields: ${fields.size})", "Size: ${properties.size}")
                 if (properties.size != fields.size || properties.any { it == null }) {
                     HorizontalSpacer(8)
                     Icon(
@@ -59,10 +61,16 @@ fun PropertiesCard(
                 modifier = Modifier.fillMaxWidth(),
                 fields = fields,
                 onSuccess = { model ->//TODO put it inside view model
-                    val index =
-                        properties.indexOfFirst { it?.fieldId == model.fieldId }
-                    if (index == -1) properties.add(model)
-                    else properties[index] = model
+                    Log.d("Properties(fields: ${fields.size})", "Size: ${properties.size}")
+                    val index = properties.indexOfFirst { it?.fieldId == model.fieldId }
+                    if (index == -1) {
+                        Log.d("Properties", "Add a new model($model)")
+                        properties.add(model)
+                    }
+                    else {
+                        Log.d("Properties", "Replace model($model, index: $index)")
+                        properties[index] = model
+                    }
                 },
                 onFail = { id ->
                     val index = properties.indexOfFirst { it?.fieldId == id }

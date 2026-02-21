@@ -1,24 +1,21 @@
 package com.orka.myfinances.ui.screens.order
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.ui.screens.LazyColumnContentWithStickyHeader
-import com.orka.myfinances.lib.viewmodel.list.State
+import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
+import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.ui.screens.order.components.OrderCard
+import com.orka.myfinances.ui.screens.order.viewmodel.OrdersScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,7 +24,7 @@ fun OrdersScreen(
     state: State,
     viewModel: OrdersScreenViewModel
 ) {
-    Scaffold(
+    LazyColumnWithStickyHeaderScreen(
         modifier = modifier,
         topBar = {
             TopAppBar(
@@ -41,31 +38,16 @@ fun OrdersScreen(
                     }
                 }
             )
+        },
+        arrangementSpace = 8.dp,
+        state = state,
+        viewModel = viewModel,
+        item = { modifier, item ->
+            OrderCard(
+                modifier = modifier.padding(horizontal = 8.dp),
+                order = item.model,
+                onClick = { viewModel.select(item.order) }
+            )
         }
-    ) { paddingValues ->
-        LazyColumnContentWithStickyHeader(
-            modifier = Modifier.padding(paddingValues),
-            contentPadding = PaddingValues(0.dp),
-            arrangementSpace = 0.dp,
-            state = state,
-            viewModel = viewModel,
-            header = { modifier, date ->
-                Text(
-                    text = date,
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = FontWeight.Bold,
-                    modifier = modifier
-                        .background(MaterialTheme.colorScheme.surface)
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-            },
-            item = { modifier, item ->
-                OrderCard(
-                    modifier = modifier.padding(horizontal = 8.dp),
-                    order = item.model,
-                    onClick = { viewModel.select(item.order) }
-                )
-            }
-        )
-    }
+    )
 }

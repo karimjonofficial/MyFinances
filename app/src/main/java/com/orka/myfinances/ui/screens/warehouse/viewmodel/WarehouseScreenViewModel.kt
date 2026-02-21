@@ -11,7 +11,7 @@ import com.orka.myfinances.data.repositories.stock.StockEvent
 import com.orka.myfinances.lib.data.repositories.GetByParameter
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.lib.ui.viewmodel.DualStateViewModel
+import com.orka.myfinances.lib.viewmodel.DualStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow

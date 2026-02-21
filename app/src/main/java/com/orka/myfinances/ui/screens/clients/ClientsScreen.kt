@@ -21,8 +21,10 @@ import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.clients
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
-import com.orka.myfinances.lib.viewmodel.list.State
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.components.ClientCard
+import com.orka.myfinances.ui.screens.clients.viewmodel.ClientsScreenViewModel
+import com.orka.myfinances.ui.screens.clients.viewmodel.toUiModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)

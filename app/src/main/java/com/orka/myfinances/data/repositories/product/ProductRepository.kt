@@ -4,8 +4,8 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.data.models.product.ProductTitle
-import com.orka.myfinances.fixtures.resources.dateTime
 import com.orka.myfinances.fixtures.resources.models.product.products
+import com.orka.myfinances.lib.data.now
 import com.orka.myfinances.lib.data.repositories.Generator
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.fixtures.data.repositories.MockAddRepository
@@ -28,7 +28,7 @@ class ProductRepository(
             title = title,
             price = price,
             salePrice = salePrice,
-            dateTime = dateTime,
+            dateTime = now(),
         )
     }
 

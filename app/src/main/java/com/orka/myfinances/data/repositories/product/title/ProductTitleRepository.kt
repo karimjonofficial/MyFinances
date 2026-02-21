@@ -19,8 +19,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class ProductTitleRepository(
-    private val categoryRepository: GetById<Category>,
-    private val fieldRepository: GetById<TemplateField>,
+    private val getCategory: GetById<Category>,
+    private val getFieldById: GetById<TemplateField>,
     private val generator: Generator<Id>
 ) : MockGetByIdRepository<ProductTitle>,
     MockGetByParameterRepository<ProductTitle, Category>,
@@ -36,7 +36,7 @@ class ProductTitleRepository(
     }
 
     override suspend fun AddProductTitleRequest.map(): ProductTitle {
-        val category = categoryRepository.getById(categoryId)!!
+        val category = getCategory.getById(categoryId)!!
         return ProductTitle(
             id = generator.generate(),
             name = name,
@@ -47,7 +47,7 @@ class ProductTitleRepository(
             properties = properties.map {
                 Property(
                     id = generator.generate(),
-                    type = fieldRepository.getById(it.fieldId)!!,
+                    type = getFieldById.getById(it.fieldId)!!,
                     value = it.value
                 )
             },

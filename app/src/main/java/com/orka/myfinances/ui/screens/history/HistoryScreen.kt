@@ -21,7 +21,7 @@ fun HistoryScreen(
             content = { modifier ->
                 SaleContent(
                     modifier = modifier,
-                    viewModel = viewModel { factory.saleViewModel() }
+                    viewModel = viewModel { factory.salesViewModel() }
                 )
             }
         ),
@@ -31,7 +31,7 @@ fun HistoryScreen(
             content = { modifier ->
                 ReceiveContent(
                     modifier = modifier,
-                    viewModel = viewModel { factory.receiveViewModel() }
+                    viewModel = viewModel { factory.receivesViewModel() }
                 )
             }
         )

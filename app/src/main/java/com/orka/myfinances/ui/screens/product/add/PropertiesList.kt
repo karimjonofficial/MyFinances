@@ -40,7 +40,7 @@ fun PropertiesList(
                         value = value.value,
                         onValueChange = {
                             value.value = it
-                            if (it.isNotEmpty())
+                            if (it.isNotBlank())
                                 onSuccess(PropertyModel(field.id, it))
                             else onFail(field.id)
                         },

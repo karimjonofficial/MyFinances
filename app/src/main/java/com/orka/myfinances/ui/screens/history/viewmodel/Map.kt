@@ -6,20 +6,20 @@ import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatNames
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
-import com.orka.myfinances.ui.screens.history.SaleCardModel
+import com.orka.myfinances.ui.screens.history.components.SaleCardModel
 import com.orka.myfinances.ui.screens.history.components.ReceiveCardModel
 
 fun Sale.toModel(
-    format: FormatNames,
-    priceFormatter: FormatPrice,
-    dateFormatter: FormatDate,
-    timeFormatter: FormatTime
+    formatNames: FormatNames,
+    formatPrice: FormatPrice,
+    formatDate: FormatDate,
+    formatTime: FormatTime
 ): SaleCardModel {
     return SaleCardModel(
-        title = format.formatNames(items.map { it.product.title }),
-        price = priceFormatter.formatPrice(price.toDouble()),
+        title = formatNames.formatNames(items.map { it.product.title }),
+        price = formatPrice.formatPrice(price.toDouble()),
         size = "${items.size} items",
-        dateTime = "${dateFormatter.formatDate(dateTime)} ${timeFormatter.formatTime(dateTime)}"
+        dateTime = "${formatDate.formatDate(dateTime)} ${formatTime.formatTime(dateTime)}"
     )
 }
 

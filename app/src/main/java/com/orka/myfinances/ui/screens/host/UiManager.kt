@@ -25,7 +25,7 @@ import com.orka.myfinances.factories.ApiProvider
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.extensions.models.makeSession
 import com.orka.myfinances.lib.extensions.models.toModel
-import com.orka.myfinances.lib.ui.viewmodel.SingleStateViewModel
+import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.navigation.Navigator
@@ -34,9 +34,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asStateFlow
 
 class UiManager(
-    logger: Logger,
     private val storage: LocalSessionStorage,
-    private val provider: ApiProvider
+    private val provider: ApiProvider,
+    logger: Logger,
 ) : SingleStateViewModel<UiState>(
     initialState = UiState.Initial,
     logger = logger
@@ -130,14 +130,19 @@ class UiManager(
         val categoryRepository = CategoryRepository(folderRepository)
         val templateFieldRepository = TemplateFieldRepository()
         val productTitleRepository = ProductTitleRepository(
-            categoryRepository = categoryRepository,
-            fieldRepository = templateFieldRepository,
+            getCategory = categoryRepository,
+            getFieldById = templateFieldRepository,
             generator = idGenerator
         )
+        val clientRepository = ClientRepository()
         val productRepository = ProductRepository(productTitleRepository, idGenerator)
         val stockRepository = StockRepository(office, productRepository, idGenerator)
         val basketRepository = BasketRepository(productRepository)
-        val saleRepository = SaleRepository(idGenerator)
+        val saleRepository = SaleRepository(
+            generator = idGenerator,
+            getProductById = productRepository,
+            getClientById = clientRepository
+        )
         val receiveRepository = ReceiveRepository(
             productTitleRepository = productTitleRepository,
             productRepository = productRepository,
@@ -145,8 +150,11 @@ class UiManager(
             setProductTitlePrice = productTitleRepository,
             generator = idGenerator
         )
-        val orderRepository = OrderRepository(idGenerator)
-        val clientRepository = ClientRepository()
+        val orderRepository = OrderRepository(
+            generator = idGenerator,
+            getProductById = productRepository,
+            getClientById = clientRepository
+        )
         val debtRepository = DebtRepository()
         val notificationRepository = NotificationRepository()
         val formatter = Formatter()

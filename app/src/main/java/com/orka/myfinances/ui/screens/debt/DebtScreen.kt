@@ -24,7 +24,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -37,19 +36,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.Debt
+import com.orka.myfinances.fixtures.format.FormatDateImpl
+import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.debt1
-import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
+import com.orka.myfinances.lib.ui.screens.StatefulScreen
+import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.ui.components.ClientCard
 import com.orka.myfinances.ui.components.UserCard
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.components.ClientCard
-import com.orka.myfinances.ui.screens.clients.toModel
 import com.orka.myfinances.ui.screens.debt.components.DateCard
 import com.orka.myfinances.ui.screens.debt.components.DescriptionCard
 import com.orka.myfinances.ui.screens.debt.components.EmphasizedDateCard
 import com.orka.myfinances.ui.screens.debt.parts.NotificationStatusCard
-import kotlin.time.Clock
+import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenModel
+import com.orka.myfinances.ui.screens.debt.viewmodel.toScreenModel
+import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,9 +59,9 @@ import kotlin.time.Clock
 fun DebtScreen(
     modifier: Modifier = Modifier,
     navigator: Navigator,
-    debt: Debt
+    state: State
 ) {
-    Scaffold(
+    StatefulScreen<DebtScreenModel>(
         modifier = modifier,
         topBar = {
             CenterAlignedTopAppBar(
@@ -105,47 +107,47 @@ fun DebtScreen(
                 }
             }
         },
-        containerColor = MaterialTheme.colorScheme.background
-    ) { paddingValues ->
+        state = state
+    ) { modifier, model ->
 
         LazyColumn(
-            modifier = Modifier.scaffoldPadding(paddingValues),
+            modifier = modifier,
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
                 HeroSection(
                     modifier = Modifier.fillMaxSize(),
-                    debt = debt
+                    debt = model
                 )
             }
 
             item {
                 NotificationStatusCard(
-                    notified = debt.notified,
+                    notified = model.notified,
                     lastSent = stringResource(R.string.last_sent_today_9_41_am)
                 )
             }
 
-            item { TimelineAndStaffCard(debt = debt) }
+            item { TimelineAndStaffCard(debt = model) }
 
             item {
                 ClientCard(
-                    model = debt.client.toModel(),
-                    onClick = { navigator.navigateToClient(debt.client) }
+                    model = model.client,
+                    onClick = { navigator.navigateToClient(model.debt.client) }
                 )
             }
 
             item {
                 UserCard(
-                    user = debt.user,
+                    user = model.debt.user,
                     onClick = {}
                 )
             }
 
-            if (!debt.description.isNullOrBlank()) {
+            if (!model.description.isNullOrBlank()) {
                 item {
-                    DescriptionCard(description = debt.description)
+                    DescriptionCard(description = model.description)
                 }
             }
         }
@@ -155,14 +157,13 @@ fun DebtScreen(
 @Composable
 fun HeroSection(
     modifier: Modifier = Modifier,
-    debt: Debt
+    debt: DebtScreenModel
 ) {
-
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (debt.endDateTime > Clock.System.now()) {
+        if (debt.isOverdue)//debt.endDateTime != null && debt.endDateTime > Clock.System.now()) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -170,7 +171,6 @@ fun HeroSection(
                     .background(MaterialTheme.colorScheme.errorContainer)
                     .padding(horizontal = 12.dp, vertical = 6.dp)
             ) {
-
                 Box(
                     modifier = Modifier
                         .size(8.dp)
@@ -183,33 +183,32 @@ fun HeroSection(
                 Spacer(Modifier.size(8.dp))
 
                 Text(
-                    text = "Overdue",
+                    text = stringResource(R.string.overdue),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onErrorContainer,
                     fontWeight = FontWeight.Bold
                 )
             }
-            Spacer(Modifier.height(8.dp))
-        }
-
-        Text(
-            text = "$${debt.price}",
-            style = MaterialTheme.typography.displaySmall,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-
-        Text(
-            text = stringResource(R.string.total_amount_owed),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        Spacer(Modifier.height(8.dp))
     }
+
+    Text(
+        text = debt.price,
+        style = MaterialTheme.typography.displaySmall,
+        color = MaterialTheme.colorScheme.onSurface
+    )
+
+    Text(
+        text = stringResource(R.string.total_amount_owed),
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant
+    )
 }
 
 @Composable
 fun TimelineAndStaffCard(
     modifier: Modifier = Modifier,
-    debt: Debt
+    debt: DebtScreenModel
 ) {
     Card(
         modifier = modifier,
@@ -228,25 +227,35 @@ fun TimelineAndStaffCard(
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 DateCard(
                     modifier = Modifier.weight(1f),
-                    label = "Start Date",
-                    date = debt.dateTime,
+                    label = stringResource(R.string.start_date),
+                    date = debt.startDate,
                     painter = painterResource(R.drawable.calendar_today),
                     contentDescription = stringResource(R.string.created_at)
                 )
 
-                if (debt.endDateTime > Clock.System.now()) {
-                    EmphasizedDateCard(
-                        modifier = Modifier.weight(1f),
-                        label = "Due Date",
-                        date = debt.endDateTime,
-                        painter = painterResource(R.drawable.error),
-                        contentDescription = stringResource(R.string.error)
-                    )
+                if (debt.endDateTime != null) {
+                    if (debt.isOverdue) {
+                        EmphasizedDateCard(
+                            modifier = Modifier.weight(1f),
+                            label = stringResource(R.string.due_date),
+                            date = debt.endDateTime,
+                            painter = painterResource(R.drawable.error),
+                            contentDescription = stringResource(R.string.error)
+                        )
+                    } else {
+                        DateCard(
+                            modifier = Modifier.weight(1f),
+                            label = stringResource(R.string.due_date),
+                            date = debt.endDateTime,
+                            painter = painterResource(R.drawable.calendar_today),
+                            contentDescription = stringResource(R.string.created_at)
+                        )
+                    }
                 } else {
                     DateCard(
                         modifier = Modifier.weight(1f),
-                        label = "Due Date",
-                        date = debt.endDateTime,
+                        label = stringResource(R.string.due_date),
+                        date = stringResource(R.string.date_is_not_provided),
                         painter = painterResource(R.drawable.calendar_today),
                         contentDescription = stringResource(R.string.created_at)
                     )
@@ -263,9 +272,9 @@ fun TimelineAndStaffCard(
 )
 @Composable
 private fun DebtScreenPreview() {
-    MaterialTheme {
+    MyFinancesTheme {
         DebtScreen(
-            debt = debt1,
+            state = State.Success(debt1.toScreenModel(FormatPriceImpl(), FormatDateImpl())),
             navigator = DummyNavigator()
         )
     }

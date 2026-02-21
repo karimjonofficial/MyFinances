@@ -1,11 +1,9 @@
 package com.orka.myfinances.ui.screens.debt
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -16,21 +14,29 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
+import com.orka.myfinances.fixtures.core.DummyLogger
+import com.orka.myfinances.fixtures.format.FormatDateImpl
+import com.orka.myfinances.fixtures.format.FormatDateTimeImpl
+import com.orka.myfinances.fixtures.format.FormatPriceImpl
+import com.orka.myfinances.fixtures.managers.DummyNavigator
+import com.orka.myfinances.fixtures.resources.models.debts
+import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
-import com.orka.myfinances.lib.viewmodel.list.State
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.debt.components.DebtCard
 import com.orka.myfinances.ui.screens.debt.parts.AddDebtDialog
-import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenViewModel
+import com.orka.myfinances.ui.screens.debt.viewmodel.DebtsScreenViewModel
+import com.orka.myfinances.ui.screens.debt.viewmodel.toMap
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DebtsScreen(
     modifier: Modifier,
     state: State,
-    viewModel: DebtScreenViewModel
+    viewModel: DebtsScreenViewModel
 ) {
     val visible = rememberSaveable { mutableStateOf(false) }
 
@@ -51,19 +57,9 @@ fun DebtsScreen(
         },
         viewModel = viewModel,
         state = state,
-        header = { modifier, date ->
-            Text(
-                text = date,
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.Bold,
-                modifier = modifier
-                    .background(MaterialTheme.colorScheme.surface)
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-            )
-        },
         item = { modifier, item ->
             DebtCard(
-                modifier = modifier.padding(horizontal = 8.dp),
+                modifier = modifier,
                 debt = item.model,
                 onClick = { viewModel.select(item.debt) }
             )
@@ -85,5 +81,47 @@ fun DebtsScreen(
                 onCancel = { visible.value = false }
             )
         }
+    )
+}
+
+@Preview
+@Composable
+private fun DebtsScreenPreview() {
+    val viewModel = viewModel {
+        DebtsScreenViewModel(
+            getDebts = { null },
+            add = { null },
+            getClients = { null },
+            formatPrice = { "" },
+            formatDate = { "" },
+            formatDateTime = { "" },
+            loading = UiText.Str("Loading"),
+            failure = UiText.Str("Failure"),
+            logger = DummyLogger(),
+            navigator = DummyNavigator()
+        )
+    }
+    val data = debts.toMutableList()
+    data.addAll(debts)
+    data.addAll(debts)
+    data.addAll(debts)
+    data.addAll(debts)
+    data.addAll(debts)
+    data.addAll(debts)
+    data.addAll(debts)
+    data.addAll(debts)
+    data.addAll(debts)
+    val state = State.Success(
+        value = data.toMap(
+            formatPrice = FormatPriceImpl(),
+            formatDate = FormatDateImpl(),
+            formatDateTime = FormatDateTimeImpl()
+        )
+    )
+
+    DebtsScreen(
+        modifier = Modifier.fillMaxSize(),
+        state = state,
+        viewModel = viewModel
     )
 }

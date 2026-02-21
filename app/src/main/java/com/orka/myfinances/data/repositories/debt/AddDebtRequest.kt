@@ -7,5 +7,5 @@ data class AddDebtRequest(
     val client: Client,
     val price: Int,
     val description: String?,
-    val endDateTime: Instant
+    val endDateTime: Instant? = null
 )

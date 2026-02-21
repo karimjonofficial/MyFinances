@@ -12,7 +12,6 @@ val stockItem1 = StockItem(
     dateTime = dateTime,
     office = office1
 )
-
 val stockItem2 = StockItem(
     id = id2,
     product = product2,

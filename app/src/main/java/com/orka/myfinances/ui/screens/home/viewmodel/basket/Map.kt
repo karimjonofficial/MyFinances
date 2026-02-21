@@ -8,8 +8,8 @@ import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.ui.screens.home.components.BasketItemCardModel
 
 fun BasketItem.toModel(
-    priceFormatter: FormatPrice,
-    decimalFormatter: FormatDecimal
+    formatPrice: FormatPrice,
+    formatDecimal: FormatDecimal
 ): BasketItemCardModel {
     val product = product
     val propertiesText = product.title.properties
@@ -19,8 +19,15 @@ fun BasketItem.toModel(
         title = product.title.name,
         properties = propertiesText,
         description = if (product.title.description != null) UiText.Str(product.title.description) else UiText.Res(R.string.no_description_provided),
-        price = priceFormatter.formatPrice(product.salePrice.toDouble()),
-        amount = decimalFormatter.formatDecimal(amount.toDouble()),
+        price = formatPrice.formatPrice(product.salePrice.toDouble()),
+        amount = formatDecimal.formatDecimal(amount.toDouble()),
         imageRes = R.drawable.furniture1 // Default image or map from category if possible
+    )
+}
+
+fun BasketItem.toUiModel(formatPrice: FormatPrice, formatDecimal: FormatDecimal): BasketItemUiModel {
+    return BasketItemUiModel(
+        item = this,
+        model = this.toModel(formatPrice, formatDecimal)
     )
 }

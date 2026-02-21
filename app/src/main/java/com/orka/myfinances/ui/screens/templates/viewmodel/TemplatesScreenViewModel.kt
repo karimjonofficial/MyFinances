@@ -4,7 +4,7 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.repositories.template.TemplateEvent
 import com.orka.myfinances.lib.data.repositories.Get
-import com.orka.myfinances.lib.ui.viewmodel.SingleStateViewModel
+import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow

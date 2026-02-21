@@ -7,6 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.R
+import com.orka.myfinances.fixtures.format.FormatDateTimeImpl
+import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.debt1
 import com.orka.myfinances.fixtures.resources.models.debt2
 import com.orka.myfinances.lib.extensions.ui.description
@@ -38,16 +40,15 @@ private fun DebtCardPreview() {
     ScaffoldPreview(title = "Debt") { paddingValues ->
         Column(modifier = Modifier.scaffoldPadding(paddingValues)) {
             repeat(5) {
-
                 DebtCard(
                     modifier = Modifier.fillMaxWidth(),
-                    debt = debt1.toModel({""}, {""}, {""}),
+                    debt = debt1.toModel(FormatPriceImpl(), FormatDateTimeImpl()),
                     onClick = {}
                 )
 
                 DebtCard(
                     modifier = Modifier.fillMaxWidth(),
-                    debt = debt2.toModel({""}, {""}, {""}),
+                    debt = debt2.toModel(FormatPriceImpl(), FormatDateTimeImpl()),
                     onClick = {}
                 )
             }

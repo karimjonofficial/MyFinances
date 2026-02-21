@@ -4,14 +4,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AssistChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -20,7 +17,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -30,7 +26,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,9 +42,11 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.lib.viewmodel.list.State
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.debt.components.DescriptionCard
+import com.orka.myfinances.ui.screens.product.viewmodel.ProductTitleModel
 import com.orka.myfinances.ui.screens.product.viewmodel.ProductTitleScreenViewModel
+import com.orka.myfinances.ui.screens.product.viewmodel.toModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -102,9 +99,22 @@ fun ProductTitleScreen(
                     contentPadding = PaddingValues(bottom = 16.dp, start = 16.dp, end = 16.dp)
                 ) {
                     item { HeroImage() }
-                    item { TitleSection(productTitle = productTitle) }
-                    item { PricingSection(productTitle = productTitle) }
-                    item { HorizontalDivider() }
+
+                    item {
+                        VerticalSpacer(16)
+                        TitleSection(productTitle = productTitle)
+                    }
+
+                    item {
+                        VerticalSpacer(8)
+                        PricingSection(productTitle = productTitle)
+                    }
+
+                    item {
+                        VerticalSpacer(8)
+                        HorizontalDivider()
+                    }
+
                     item {
                         VerticalSpacer(16)
                         DividedList(
@@ -148,7 +158,6 @@ private fun HeroImage(modifier: Modifier = Modifier) {
         painter = painterResource(R.drawable.headphone),
         contentDescription = null,
         modifier = modifier
-            .padding(16.dp)
             .fillMaxWidth()
             .aspectRatio(16 / 9f)
             .clip(RoundedCornerShape(16.dp)),
@@ -161,15 +170,13 @@ private fun TitleSection(
     modifier: Modifier = Modifier,
     productTitle: ProductTitleModel
 ) {
-    Column(modifier = modifier.padding(horizontal = 16.dp)) {
-
+    Column(modifier = modifier) {
         Text(
             text = productTitle.title,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
         )
 
-        VerticalSpacer(8)
         Row(verticalAlignment = Alignment.CenterVertically) {
 
             Icon(
@@ -195,30 +202,14 @@ private fun PricingSection(
     productTitle: ProductTitleModel
 ) {
     Row(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier,
         verticalAlignment = Alignment.Bottom
     ) {
-
         Text(
             text = productTitle.price,
-            style = MaterialTheme.typography.headlineLarge,
+            style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Black,
             color = MaterialTheme.colorScheme.primary
-        )
-
-        HorizontalSpacer(12)
-        Text(
-            text = "$299.00",
-            style = MaterialTheme.typography.titleMedium.copy(
-                textDecoration = TextDecoration.LineThrough
-            ),
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-
-        Spacer(Modifier.weight(1f))
-        AssistChip(
-            onClick = {},
-            label = { Text(stringResource(R.string.on_sale)) }
         )
     }
 }
@@ -235,11 +226,14 @@ private fun ProductTitleScreenPreview() {
             formatPrice = {""}, formatDecimal = {""}, formatDate = {""}
         )
     }
-    val state = viewModel.uiState.collectAsState()
     
     MyFinancesTheme {
         ProductTitleScreen(
-            state = state.value,
+            state = State.Success(productTitle1.toModel(
+                formatDecimal = { "100.00" },
+                formatDate = { "12.01.2024" },
+                formatPrice = { "1000.00 UZS" }
+            )),
             viewModel = viewModel
         )
     }

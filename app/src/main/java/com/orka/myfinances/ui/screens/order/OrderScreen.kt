@@ -23,44 +23,49 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.order.Order
+import com.orka.myfinances.fixtures.format.FormatDateImpl
+import com.orka.myfinances.fixtures.format.FormatDecimalImpl
+import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.order.order1
 import com.orka.myfinances.fixtures.resources.models.order.order2
-import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.screens.StatefulScreen
+import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.ui.components.ClientCard
 import com.orka.myfinances.ui.components.UserCard
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.components.ClientCard
-import com.orka.myfinances.ui.screens.clients.toModel
 import com.orka.myfinances.ui.screens.debt.components.DescriptionCard
+import com.orka.myfinances.ui.screens.order.viewmodel.OrderScreenModel
+import com.orka.myfinances.ui.screens.order.viewmodel.toScreenModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
 fun OrderScreen(
     modifier: Modifier = Modifier,
-    order: Order,
+    state: State,
     navigator: Navigator
 ) {
-    Scaffold(
+    @Suppress("UNCHECKED_CAST")
+    StatefulScreen<OrderScreenModel>(
         modifier = modifier,
         title = stringResource(R.string.order),
-        bottomBar = {
-            if (!order.completed) {
+        state = state,
+        bottomBar = { state ->
+            if (!((state as? State.Success<OrderScreenModel>)?.value?.completed ?: false)) {
                 SingleActionBottomBar(
                     buttonText = stringResource(R.string.complete),
                     action = {}//TODO
                 )
             }
         }
-    ) { paddingValues ->
+    ) { modifier, order ->
 
         Column(
-            modifier = Modifier
-                .padding(paddingValues)
+            modifier = modifier
                 .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
@@ -75,7 +80,7 @@ fun OrderScreen(
                     Text(text = stringResource(R.string.total_price))
 
                     Text(
-                        text = "$${order.price}",
+                        text = order.price,
                         style = MaterialTheme.typography.headlineLarge,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.primary
@@ -92,7 +97,7 @@ fun OrderScreen(
                         LabeledDate(
                             modifier = Modifier.weight(1f),
                             label = stringResource(R.string.registered_at),
-                            date = order.dateTime.toString()
+                            date = order.startDate
                         )
 
                         HorizontalSpacer(16)
@@ -106,7 +111,7 @@ fun OrderScreen(
                             modifier = Modifier.weight(1f),
                             label = if (order.completed) stringResource(R.string.completed_at)
                             else stringResource(R.string.completion_date),
-                            date = order.endDateTime.toString()
+                            date = order.endDate
                         )
                     }
                 }
@@ -116,8 +121,8 @@ fun OrderScreen(
             DividedList(
                 title = stringResource(R.string.order_details),
                 items = order.items,
-                itemTitle = { item -> item.product.title.name },
-                itemSupportingText = { item -> "${item.amount}" }
+                itemTitle = { item -> item.name },
+                itemSupportingText = { item -> item.amount }
             )
 
             VerticalSpacer(16)
@@ -125,8 +130,8 @@ fun OrderScreen(
 
             VerticalSpacer(8)
             ClientCard(
-                model = order.client.toModel(),
-                onClick = { navigator.navigateToClient(order.client) }
+                model = order.client.model,
+                onClick = { navigator.navigateToClient(order.client.client) }
             )
 
             VerticalSpacer(8)
@@ -175,7 +180,7 @@ private fun OrderScreenPreview() {
     MyFinancesTheme {
         OrderScreen(
             modifier = Modifier.fillMaxSize(),
-            order = order1,
+            state = State.Success(order1.toScreenModel(FormatPriceImpl(), FormatDateImpl(), FormatDecimalImpl())),
             navigator = DummyNavigator()
         )
     }
@@ -187,7 +192,7 @@ private fun CompletedOrderScreenPreview() {
     MyFinancesTheme {
         OrderScreen(
             modifier = Modifier.fillMaxSize(),
-            order = order2,
+            state = State.Success(order2.toScreenModel(FormatPriceImpl(), FormatDateImpl(), FormatDecimalImpl())),
             navigator = DummyNavigator()
         )
     }

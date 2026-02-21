@@ -15,6 +15,9 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
+import com.orka.myfinances.ui.screens.checkout.viewmodel.BasketItemCardModel
+import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenState
+import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenViewModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
@@ -68,8 +71,8 @@ private fun CheckoutScreenPreview() {
             get = { null },
             logger = DummyLogger(),
             navigator = DummyNavigator(),
-            formatPrice = {""},
-            formatDecimal = {""}
+            formatPrice = { "" },
+            formatDecimal = { "" }
         )
     }
     val items = listOf(

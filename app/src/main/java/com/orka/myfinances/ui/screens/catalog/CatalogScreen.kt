@@ -15,6 +15,8 @@ import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.ui.navigation.Navigator
+import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenState
+import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenViewModel
 import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
 
 @Composable
