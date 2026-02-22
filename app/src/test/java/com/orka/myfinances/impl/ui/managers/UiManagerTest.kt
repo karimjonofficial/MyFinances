@@ -31,7 +31,7 @@ class UiManagerTest : MainDispatcherContext() {
     private val logger = DummyLogger()
 
     private fun uiManager(storage: Storage, provider: Provider): UiManager {
-        return UiManager(logger, storage, provider)
+        return UiManager( storage, provider, logger)
     }
 
     @Nested
