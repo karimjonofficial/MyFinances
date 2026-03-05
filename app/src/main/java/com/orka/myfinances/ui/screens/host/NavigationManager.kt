@@ -11,15 +11,15 @@ import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.data.models.receive.Receive
 import com.orka.myfinances.data.models.sale.Sale
 import com.orka.myfinances.data.models.template.Template
-import com.orka.myfinances.fixtures.resources.types
+import com.orka.myfinances.fixtures.resources.Types
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.navigation.Navigator
 import kotlinx.coroutines.flow.asStateFlow
 
 class NavigationManager(
-    initialBackStack: List<Destination>,
-    logger: Logger
+    logger: Logger,
+    initialBackStack: List<Destination> = listOf(Destination.Home),
 ) : SingleStateViewModel<List<Destination>>(
     initialState = initialBackStack,
     logger = logger
@@ -36,8 +36,7 @@ class NavigationManager(
         updateState {
             if (it.size > 1)
                 it.dropLast(1)
-            else
-                it
+            else it
         }
     }
 
@@ -58,7 +57,7 @@ class NavigationManager(
     }
 
     override fun navigateToAddTemplate() {
-        navigate(Destination.AddTemplate(types))
+        navigate(Destination.AddTemplate(Types.all))
     }
 
     override fun navigateToAddProduct(category: Category) {

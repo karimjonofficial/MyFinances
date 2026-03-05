@@ -10,17 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.User
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileTopBar(
-    modifier: Modifier = Modifier.Companion,
-    user: User
-) {
+fun ProfileTopBar(modifier: Modifier = Modifier) {
     TopAppBar(
         modifier = modifier,
-        title = { Text(text = "${user.firstName} ${user.lastName}") },
+        title = { Text(text = stringResource(R.string.profile)) },
         actions = {
             IconButton(onClick = {}) {
                 Icon(

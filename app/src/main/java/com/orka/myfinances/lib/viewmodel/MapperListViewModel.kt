@@ -8,7 +8,7 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 abstract class MapperListViewModel<T, U>(
     private val loading: UiText,
     private val failure: UiText,
-    private val repository: Get<T>,
+    private val get: Get<T>,
     private val map: (T) -> U,
     logger: Logger
 ) : SingleStateViewModel<State>(
@@ -24,7 +24,7 @@ abstract class MapperListViewModel<T, U>(
     }
 
     protected open suspend fun fetchState(): State.Success<List<U>>? {
-        val response = repository.get()
+        val response = get.get()
         return if(response != null) State.Success(filterData(response).map { map(it) }) else null
     }
 

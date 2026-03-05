@@ -4,5 +4,5 @@ import com.orka.myfinances.data.models.Id
 
 data class Catalog(
     override val id: Id,
-    override val name: String
+    override val name: String,
 ) : Folder

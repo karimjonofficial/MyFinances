@@ -2,7 +2,6 @@ package com.orka.myfinances.factories
 
 import com.orka.myfinances.R
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.data.api.OfficeApi
 import com.orka.myfinances.data.models.Debt
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Category
@@ -16,6 +15,7 @@ import com.orka.myfinances.data.repositories.debt.DebtRepository
 import com.orka.myfinances.data.repositories.folder.CategoryRepository
 import com.orka.myfinances.data.repositories.folder.FolderRepository
 import com.orka.myfinances.data.repositories.notification.NotificationRepository
+import com.orka.myfinances.data.repositories.office.OfficeRepository
 import com.orka.myfinances.data.repositories.order.OrderRepository
 import com.orka.myfinances.data.repositories.product.title.ProductTitleRepository
 import com.orka.myfinances.data.repositories.receive.ReceiveRepository
@@ -23,6 +23,7 @@ import com.orka.myfinances.data.repositories.sale.SaleRepository
 import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.repositories.template.TemplateRepository
 import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.printer.pos.BluetoothPrinterImpl
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenViewModel
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenViewModel
@@ -31,24 +32,26 @@ import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenViewModel
 import com.orka.myfinances.ui.screens.debt.viewmodel.DebtsScreenViewModel
 import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentViewModel
 import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
-import com.orka.myfinances.ui.screens.home.viewmodel.ProfileContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.folder.FoldersContentViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.profile.InfoRepository
+import com.orka.myfinances.ui.screens.home.viewmodel.profile.ProfileContentViewModel
 import com.orka.myfinances.ui.screens.host.Formatter
 import com.orka.myfinances.ui.screens.notification.NotificationScreenViewModel
 import com.orka.myfinances.ui.screens.order.viewmodel.OrderScreenViewModel
 import com.orka.myfinances.ui.screens.order.viewmodel.OrdersScreenViewModel
 import com.orka.myfinances.ui.screens.product.add.viewmodel.AddProductTitleScreenViewModel
 import com.orka.myfinances.ui.screens.product.viewmodel.ProductTitleScreenViewModel
-import com.orka.myfinances.ui.screens.receive.viewmodel.ReceiveScreenViewModel
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenViewModel
+import com.orka.myfinances.ui.screens.receive.viewmodel.ReceiveScreenViewModel
 import com.orka.myfinances.ui.screens.sale.viewmodel.SaleScreenViewModel
 import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.templates.viewmodel.TemplatesScreenViewModel
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
 
 class Factory(
-    private val officeApi: OfficeApi,
+    private val printer: BluetoothPrinterImpl,
+    private val officeRepository: OfficeRepository,
     private val productTitleRepository: ProductTitleRepository,
     private val folderRepository: FolderRepository,
     private val templateRepository: TemplateRepository,
@@ -64,6 +67,7 @@ class Factory(
     private val logger: Logger,
     private val navigator: Navigator,
     private val formatter: Formatter,
+    private val infoRepository: InfoRepository
 ) {
     private val loading = UiText.Res(R.string.loading)
     private val failure = UiText.Res(R.string.failure)
@@ -198,7 +202,9 @@ class Factory(
             logger = logger,
             navigator = navigator,
             formatPrice = formatter,
-            formatDecimal = formatter
+            formatDecimal = formatter,
+            printer = printer,
+            printerState = printer.state
         )
     }
 
@@ -272,9 +278,8 @@ class Factory(
 
     fun profileViewModel(): ProfileContentViewModel {
         return ProfileContentViewModel(
-            loading = loading,
-            failure = failure,
-            get = officeApi,
+            getOffices = officeRepository,
+            getUser = infoRepository,
             navigator = navigator,
             logger = logger
         )

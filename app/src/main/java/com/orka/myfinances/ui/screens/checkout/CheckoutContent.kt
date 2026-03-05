@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.checkout
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -10,12 +11,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,13 +50,15 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 @Composable
 fun CheckoutContent(
     modifier: Modifier,
-    items: List<BasketItemCardModel>,//TODO add state for this screen
+    items: List<BasketItemCardModel>,
     clients: List<Client>,
     price: Int,
+    printerConnected: Boolean,
     viewModel: CheckoutScreenViewModel
 ) {
     val price = rememberSaveable { mutableStateOf<Int?>(price) }
     val description = rememberSaveable { mutableStateOf<String?>(null) }
+    val printReceipt = rememberSaveable { mutableStateOf(printerConnected) }
     val selectedClientId =
         rememberSaveable(clients) { mutableStateOf(clients.firstOrNull()?.id?.value) }
     val selectedClient = clients.find { it.id.value == selectedClientId.value }
@@ -84,7 +89,8 @@ fun CheckoutContent(
                     onClick = { viewModel.sell(
                             price = priceValue,
                             description = description.value,
-                            client = selectedClient
+                            client = selectedClient,
+                            print = printReceipt.value
                         ) }
                 ) {
                     Text(text = stringResource(R.string.sell))
@@ -142,6 +148,24 @@ fun CheckoutContent(
                 onValueChange = { description.value = it }
             )
 
+            if(printerConnected) {
+                VerticalSpacer(8)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            printReceipt.value = !printReceipt.value
+                        },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(
+                        checked = printReceipt.value,
+                        onCheckedChange = { printReceipt.value = it }
+                    )
+                    Text(text = stringResource(R.string.print_receipt))
+                }
+            }
+
             VerticalSpacer(8)
         }
     }
@@ -163,7 +187,11 @@ private fun CheckoutContentPreview() {
             logger = DummyLogger(),
             navigator = DummyNavigator(),
             formatDecimal = { "" },
-            formatPrice = { "" }
+            formatPrice = { "" },
+            printer = object : com.orka.myfinances.printer.Printer {
+                override fun print(sale: com.orka.myfinances.data.models.sale.Sale) {}
+            },
+            printerState = kotlinx.coroutines.flow.MutableStateFlow(com.orka.myfinances.printer.PrinterState.Disconnected)
         )
     }
 
@@ -173,7 +201,8 @@ private fun CheckoutContentPreview() {
             items = items.map { it.toModel({""}, {""}) },
             clients = clients,
             viewModel = viewModel,
-            price = 1000
+            price = 1000,
+            printerConnected = true
         )
     }
 }

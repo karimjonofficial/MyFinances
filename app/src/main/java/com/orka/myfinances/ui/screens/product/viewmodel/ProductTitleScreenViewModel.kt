@@ -28,7 +28,13 @@ class ProductTitleScreenViewModel(
 ) {
     val uiState = state.asStateFlow()
 
-    fun receive(price: Int, salePrice: Int, amount: Int, totalPrice: Int, comment: String?) {
+    fun receive(
+        price: Int,
+        salePrice: Int,
+        amount: Int,
+        totalPrice: Int,
+        comment: String?
+    ) {
         launch {
             val request = AddReceiveRequest(
                 items = listOf(
@@ -47,7 +53,6 @@ class ProductTitleScreenViewModel(
     }
 
     override fun initialize() {
-        setState(State.Loading(loading))
         val title = productTitle.toModel(formatDecimal, formatDate, formatPrice)
         setState(State.Success(title))
     }

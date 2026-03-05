@@ -1,9 +1,9 @@
 package com.orka.myfinances.data.repositories.product.title.models
 
-import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.data.models.folder.Category
 
 data class AddProductTitleRequest(
-    val categoryId: Id,
+    val category: Category,
     val name: String,
     val price: Int,
     val salePrice: Int,

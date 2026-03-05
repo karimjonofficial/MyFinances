@@ -13,7 +13,7 @@ fun BasketItem.toModel(
 ): BasketItemCardModel {
     val product = product
     val propertiesText = product.title.properties
-        .joinToString(" | ") { "${it.type.name}: ${it.value}" }
+        .joinToString(" | ") { "${it.field.name}: ${it.value}" }
 
     return BasketItemCardModel(
         title = product.title.name,

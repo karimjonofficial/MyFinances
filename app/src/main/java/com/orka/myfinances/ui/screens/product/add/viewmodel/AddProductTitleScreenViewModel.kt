@@ -48,7 +48,7 @@ class AddProductTitleScreenViewModel(
                 category.id.value > 0
             ) {
                 val request = AddProductTitleRequest(
-                    categoryId = category.id,
+                    category = category,
                     name = name,
                     price = price,
                     salePrice = salePrice,

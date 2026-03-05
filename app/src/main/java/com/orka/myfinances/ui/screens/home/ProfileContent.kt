@@ -30,14 +30,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.fixtures.core.DummyLogger
 import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.managers.DummySessionManager
 import com.orka.myfinances.fixtures.resources.models.office1
 import com.orka.myfinances.fixtures.resources.models.session
-import com.orka.myfinances.fixtures.resources.models.user1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.Scaffold
@@ -45,13 +43,14 @@ import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
-import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.screens.home.models.ProfileOption
 import com.orka.myfinances.ui.screens.home.parts.ProfileTopBar
-import com.orka.myfinances.ui.screens.home.viewmodel.ProfileContentViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.profile.ProfileContentModel
+import com.orka.myfinances.ui.screens.home.viewmodel.profile.ProfileContentViewModel
 
+@Suppress("UNCHECKED_CAST")
 @Composable
 fun ProfileContent(
     modifier: Modifier,
@@ -109,13 +108,16 @@ fun ProfileContent(
         )
 
         VerticalSpacer(8)
-        Text(text = "ID: ${session.user.id.value}")
-        Text(text = session.user.phone ?: stringResource(R.string.no_phone_number))
+        Text(
+            text = "ID: ${if(state is State.Success<*>) (state.value as ProfileContentModel).user.id.value else stringResource(R.string.loading)}"
+        )
+        Text(
+            text = if(state is State.Success<*>) (state.value as ProfileContentModel).user.phone ?: stringResource(R.string.no_phone_number) else stringResource(R.string.no_phone_number)
+        )
 
-        @Suppress("UNCHECKED_CAST")
         OutlinedExposedDropDownTextField(
             text = when (state) {
-                State.Initial -> stringResource(R.string.loading)
+                is State.Initial -> stringResource(R.string.loading)
                 is State.Success<*> -> session.office.name
                 is State.Failure -> state.error.str()
                 is State.Loading -> state.message.str()
@@ -125,12 +127,12 @@ fun ProfileContent(
             onExpandChange = { exposed.value = it },
             onDismissRequested = { exposed.value = false },
             items = when (state) {
-                is State.Success<*> -> state.value as List<Office>
+                is State.Success<*> -> (state.value as ProfileContentModel).offices
                 else -> emptyList()
             },
             itemText = { it.name },
             onItemSelected = { office ->
-                sessionManager.setOffice(session.credential, office)
+                sessionManager.setOffice(session.credentials, office)
                 exposed.value = false
             }
         )
@@ -192,9 +194,8 @@ private fun ProfileContentPreview() {
     )
     val viewModel = viewModel {
         ProfileContentViewModel(
-            get = { null },
-            loading = UiText.Res(R.string.loading),
-            failure = UiText.Res(R.string.failure),
+            getOffices = { null },
+            getUser = { null },
             navigator = DummyNavigator(),
             logger = DummyLogger()
         )
@@ -202,7 +203,7 @@ private fun ProfileContentPreview() {
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { ProfileTopBar(user = user1) },
+        topBar = { ProfileTopBar() },
         bottomBar = {
             NavigationBar {
                 navItems.forEach {

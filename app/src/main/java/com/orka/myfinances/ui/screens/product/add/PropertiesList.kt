@@ -2,10 +2,13 @@ package com.orka.myfinances.ui.screens.product.add
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -15,6 +18,8 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.template.TemplateField
 import com.orka.myfinances.data.models.types.Range
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
+import com.orka.myfinances.fixtures.resources.Types
+import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
 import com.orka.myfinances.lib.ui.components.RangeField
 
@@ -32,7 +37,7 @@ fun PropertiesList(
     ) {
         fields.forEach { field ->
             when (field.type) {
-                "text" -> {
+                Types.TEXT -> {
                     val value = rememberSaveable { mutableStateOf("") }
 
                     OutlinedTextField(
@@ -48,7 +53,7 @@ fun PropertiesList(
                     )
                 }
 
-                "number" -> {
+                Types.NUMBER -> {
                     val value = rememberSaveable { mutableStateOf<Int?>(null) }
 
                     OutlinedIntegerTextField(
@@ -64,7 +69,34 @@ fun PropertiesList(
                     )
                 }
 
-                "range" -> {
+                Types.BOOLEAN -> {
+                    val value = rememberSaveable { mutableStateOf(false) }
+
+                    LaunchedEffect(Unit) {
+                        onSuccess(PropertyModel(field.id, false))
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = field.name
+                        )
+
+                        HorizontalSpacer(8)
+                        Switch(
+                            checked = value.value,
+                            onCheckedChange = {
+                                value.value = it
+                                onSuccess(PropertyModel(field.id, it))
+                            }
+                        )
+                    }
+                }
+
+                Types.RANGE -> {
                     val min = rememberSaveable { mutableStateOf<Int?>(null) }
                     val max = rememberSaveable { mutableStateOf<Int?>(null) }
 

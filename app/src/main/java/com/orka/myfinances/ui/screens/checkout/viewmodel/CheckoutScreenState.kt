@@ -9,6 +9,7 @@ interface CheckoutScreenState {
     data class Success(
         val clients: List<Client>,
         val items: List<BasketItemCardModel>,
-        val price: Int
+        val price: Int,
+        val printerConnected: Boolean = false
     ) : CheckoutScreenState
 }

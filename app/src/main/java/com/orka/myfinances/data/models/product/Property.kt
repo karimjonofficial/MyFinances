@@ -5,6 +5,6 @@ import com.orka.myfinances.data.models.template.TemplateField
 
 data class Property(
     val id: Id,
-    val type: TemplateField,
+    val field: TemplateField,
     val value: Any
 )

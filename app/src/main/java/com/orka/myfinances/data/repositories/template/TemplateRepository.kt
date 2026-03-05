@@ -4,21 +4,33 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.models.template.TemplateField
 import com.orka.myfinances.fixtures.resources.models.template.templates
-import com.orka.myfinances.fixtures.resources.types
 import com.orka.myfinances.lib.data.repositories.Generator
+import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.fixtures.data.repositories.MockAddRepository
-import com.orka.myfinances.lib.fixtures.data.repositories.MockGetByIdRepository
 import com.orka.myfinances.lib.fixtures.data.repositories.MockGetRepository
+import com.orka.myfinances.ui.screens.templates.add.TemplateFieldModel
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
-class TemplateRepository(private val generator: Generator<Id>) : MockGetRepository<Template>,
+class TemplateRepository(
+    private val generator: Generator<Id>,
+    private val client: HttpClient
+) : MockGetRepository<Template>,
     MockAddRepository<Template, AddTemplateRequest>,
-    MockGetByIdRepository<Template> {
+    GetById<Template> {
     override val items = templates.toMutableList()
 
-    override suspend fun List<Template>.find(id: Id): Template? {
-        return find { it.id == id }
+    override suspend fun getById(id: Id): Template? {
+        val response = client.get("templates/${id.value}/")
+
+        if(response.status == HttpStatusCode.OK) {
+            val template = response.body<TemplateApiModel>().map()
+            return template
+        } else return null
     }
 
     val flow = MutableSharedFlow<TemplateEvent>()
@@ -37,7 +49,7 @@ class TemplateRepository(private val generator: Generator<Id>) : MockGetReposito
         return TemplateField(
             id = generator.generate(),
             name = name,
-            type = types[typeId]
+            type = type
         )
     }
 }

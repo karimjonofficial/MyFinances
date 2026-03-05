@@ -3,6 +3,8 @@ package com.orka.myfinances.ui.screens.host
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import com.orka.myfinances.lib.extensions.ui.str
+import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.navigation.MainScreen
 import com.orka.myfinances.ui.screens.login.LoginScreen
@@ -14,7 +16,7 @@ fun HostScreen(
     sessionManager: SessionManager
 ) {
     when (state) {
-        UiState.Initial -> SplashScreen(modifier)
+        is UiState.Initial -> SplashScreen(modifier)
 
         is UiState.Guest -> {
             val viewModel = state.viewModel
@@ -22,8 +24,26 @@ fun HostScreen(
 
             LoginScreen(
                 modifier = modifier,
-                uiState = uiState.value,
+                state = uiState.value,
                 viewModel = viewModel
+            )
+        }
+
+        is UiState.NewUser -> {
+            val viewModel = state.viewModel
+            val uiState = viewModel.uiState.collectAsState()
+
+            SelectOfficeScreen(
+                modifier = modifier,
+                state = uiState.value,
+                viewModel = viewModel
+            )
+        }
+
+        is UiState.Failure -> {
+            FailureScreen(
+                modifier = modifier,
+                message = state.message.str()
             )
         }
 

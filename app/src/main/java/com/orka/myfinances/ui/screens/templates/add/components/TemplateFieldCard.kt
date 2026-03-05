@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.repositories.template.TemplateFieldModel
+import com.orka.myfinances.ui.screens.templates.add.TemplateFieldModel
 
 @Composable
 fun TemplateFieldCard(

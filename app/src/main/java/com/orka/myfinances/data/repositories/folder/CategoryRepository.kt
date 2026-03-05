@@ -14,6 +14,6 @@ class CategoryRepository(private val folderRepository: FolderRepository) : Get<C
     }
 
     override suspend fun get(): List<Category>? {
-        return folderRepository.get()?.filter { it is Category }?.map { it as Category }
+        return folderRepository.get()?.filterIsInstance<Category>()?.map { it }
     }
 }

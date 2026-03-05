@@ -1,46 +1,49 @@
 package com.orka.myfinances.ui.screens.host
 
+import com.orka.myfinances.R
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.data.models.Credential
+import com.orka.myfinances.data.models.Credentials
 import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.data.models.Session
-import com.orka.myfinances.data.repositories.IdGenerator
-import com.orka.myfinances.data.repositories.basket.BasketRepository
-import com.orka.myfinances.data.repositories.client.ClientRepository
-import com.orka.myfinances.data.repositories.debt.DebtRepository
-import com.orka.myfinances.data.repositories.folder.CategoryRepository
-import com.orka.myfinances.data.repositories.folder.FolderRepository
-import com.orka.myfinances.data.repositories.notification.NotificationRepository
-import com.orka.myfinances.data.repositories.order.OrderRepository
-import com.orka.myfinances.data.repositories.product.ProductRepository
-import com.orka.myfinances.data.repositories.product.title.ProductTitleRepository
-import com.orka.myfinances.data.repositories.receive.ReceiveRepository
-import com.orka.myfinances.data.repositories.sale.SaleRepository
-import com.orka.myfinances.data.repositories.stock.StockRepository
-import com.orka.myfinances.data.repositories.template.TemplateRepository
-import com.orka.myfinances.data.repositories.template.field.TemplateFieldRepository
+import com.orka.myfinances.data.repositories.office.OfficeApi
+import com.orka.myfinances.data.repositories.office.OfficeModel
+import com.orka.myfinances.data.repositories.office.OfficeRepository
+import com.orka.myfinances.data.repositories.office.map
 import com.orka.myfinances.data.storages.LocalSessionStorage
-import com.orka.myfinances.data.zipped.OfficeModel
-import com.orka.myfinances.factories.ApiProvider
-import com.orka.myfinances.factories.Factory
-import com.orka.myfinances.lib.extensions.models.makeSession
+import com.orka.myfinances.fixtures.data.api.CredentialApiImpl
+import com.orka.myfinances.fixtures.data.api.CredentialsModel
+import com.orka.myfinances.fixtures.data.api.map
 import com.orka.myfinances.lib.extensions.models.toModel
+import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
+import com.orka.myfinances.printer.pos.BluetoothPrinterImpl
 import com.orka.myfinances.ui.managers.SessionManager
-import com.orka.myfinances.ui.navigation.Destination
-import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.HttpStatusCode
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 
 class UiManager(
     private val storage: LocalSessionStorage,
-    private val provider: ApiProvider,
+    private val printer: (CoroutineScope) -> BluetoothPrinterImpl,
     logger: Logger,
 ) : SingleStateViewModel<UiState>(
     initialState = UiState.Initial,
     logger = logger
 ), SessionManager {
+    private var store: Boolean = false
+    private val client = httpClient(httpLogger())
+
     val uiState = state.asStateFlow()
 
     override fun initialize() {
@@ -49,133 +52,174 @@ class UiManager(
             val sessionModel = storage.get()
 
             if (sessionModel != null) {
-                val session = sessionModel.toSession()
-                openSession(session)
+                val credentials = sessionModel.credentials
+                val client = httpClient(
+                    logger = httpLogger(),
+                    credentials = credentials,
+                    onUnauthorized = this::refreshCredentials
+                //TODO this has a side effect that I don't expect
+                )
+                val response = getCompany(client)
+                when(response.status) {
+                    HttpStatusCode.OK -> {
+                        val company = response.body<CompanyModel>().map()
+                        val office = getOffice(client, sessionModel.officeId)?.map(company)
+                        if (office != null) {
+                            val session = Session(
+                                credentials = credentials,
+                                office = office
+                            )
+                            setStateSignedIn(credentials, session)
+                        } else setStateNewUser(credentials)
+                    }
+
+                    HttpStatusCode.Unauthorized -> {
+                        val c = getNewCredentials(credentials.refresh)
+                        if(c != null) {
+                            val client = httpClient(httpLogger(), c, this::refreshCredentials)
+                            val company = getCompany(client).body<CompanyModel>().map()
+                            val office = getOffice(client, sessionModel.officeId)?.map(company)!!
+                            val session = Session(
+                                credentials = c,
+                                office = office
+                            )
+                            setStateSignedIn(c, session)
+                        } else setStateGuest()
+                    }
+
+                    else -> onCompanyNotFound()
+                }
             } else setStateGuest()
         }
     }
 
-    override fun open(credential: Credential) {
+    override fun refreshCredentials(credentials: Credentials) {
         launch {
-            val session = getSession(credential)
-            if (session != null) openSession(session)
-        }
-    }
-
-    override fun store(credential: Credential) {
-        launch {
-            val session = getSession(credential)
-
-            if (session != null) {
-                storage.store(session.toModel())
-                openSession(session)
+            val stateValue = state.value
+            if(stateValue is UiState.SignedIn) {
+                val c = getNewCredentials(credentials.refresh)
+                if(c != null)
+                    setStateSignedIn(c, stateValue.session)
+                else setStateGuest()
             }
         }
     }
 
-    override fun setOffice(credential: Credential, office: Office) {
+    override fun open(credentials: Credentials) {
         launch {
-            val session = getSession(
-                credential = credential,
-                officeModel = office.toModel()
-            )
-
-            if (session != null)
-                openSession(session)
-            else setStateGuest()
+            setStateNewUser(credentials)
         }
     }
 
-    private fun setStateGuest() {
-        val apiService = provider.getCredentialApiService()
-        val viewModel = LoginScreenViewModel(logger, apiService, this)
-        state.value = UiState.Guest(viewModel)
+    override fun store(credentials: Credentials) {
+        launch {
+            store = true
+            setStateNewUser(credentials)
+        }
     }
 
-    private fun openSession(session: Session) {
-        val initialBackStack = listOf(Destination.Home)
-        val navigationManager = NavigationManager(initialBackStack, logger)
-        val factory = factory(session.office, navigationManager)
+    override fun setOffice(credentials: Credentials, office: Office) {
+        launch {
+            val session = Session(
+                office = office,
+                credentials = credentials
+            )
+            if(store) storage.store(session.toModel())
+            setStateSignedIn(credentials, session)
+        }
+    }
+
+    private fun setStateFailure(message: UiText) {
+        val state = UiState.Failure(message)
+        setState(state)
+    }
+
+    private fun setStateGuest() {
+        val apiService = CredentialApiImpl(client)
+        val viewModel = LoginScreenViewModel(logger, apiService, this)
+        setState(UiState.Guest(viewModel))
+    }
+
+    private suspend fun setStateNewUser(credentials: Credentials) {
+        val client = httpClient(
+            logger = httpLogger(),
+            credentials = credentials,
+            onUnauthorized = this::refreshCredentials
+        )
+        val response = getCompany(client)
+        if(response.status == HttpStatusCode.OK) {
+            val company = response.body<CompanyModel>().map()
+            val api = OfficeApi(client)
+            val viewModel = SelectOfficeScreenViewModel(
+                sessionManager = this,
+                credentials = credentials,
+                get = OfficeRepository(api, company),
+                loading = UiText.Res(R.string.loading),
+                failure = UiText.Res(R.string.failure),
+                logger = logger
+            )
+            setState(UiState.NewUser(credentials, viewModel))
+        } else onCompanyNotFound()
+    }
+
+    private fun setStateSignedIn(
+        credentials: Credentials,
+        session: Session
+    ) {
+        val httpClient = httpClient(
+            logger = httpLogger(),
+            credentials = credentials,
+            onUnauthorized = this::refreshCredentials
+        )
+        val navigationManager = NavigationManager(logger)
+        val factory = factory(
+            printer = printer(CoroutineScope(Dispatchers.Default)),
+            logger = logger,
+            office = session.office,
+            httpClient = httpClient,
+            navigator = navigationManager
+        )
         setState(UiState.SignedIn(session, navigationManager, factory))
     }
 
-    private suspend fun getSession(credential: Credential): Session? {
-        val officeApi = provider.officeApi()
-        val officeModel = officeApi.get(credential)
-
-        return if (officeModel != null) {
-            getSession(credential, officeModel)
-        } else null
+    private fun onCompanyNotFound() {
+        setStateFailure(UiText.Str("You don't belong to any company.\nConnect to the developers of this app"))
     }
 
-    private suspend fun getSession(
-        credential: Credential,
-        officeModel: OfficeModel
-    ): Session? {
-        val userApiService = provider.getUserApiService()
-        val companyApiService = provider.getCompanyApiService()
-
-        val userModel = userApiService.get(credential)
-        val companyModel = companyApiService.get(credential)
-
-        return if (userModel != null && companyModel != null)
-            makeSession(credential, userModel, officeModel, companyModel)
-        else null
+    private suspend fun getCompany(client: HttpClient): HttpResponse {
+        return client.get("users/me/company/")
     }
 
-    private fun factory(office: Office, navigator: Navigator): Factory {
-        val idGenerator = IdGenerator()
-        val templateRepository = TemplateRepository(idGenerator)
-        val folderRepository = FolderRepository(templateRepository, idGenerator)
-        val categoryRepository = CategoryRepository(folderRepository)
-        val templateFieldRepository = TemplateFieldRepository()
-        val productTitleRepository = ProductTitleRepository(
-            getCategory = categoryRepository,
-            getFieldById = templateFieldRepository,
-            generator = idGenerator
-        )
-        val clientRepository = ClientRepository()
-        val productRepository = ProductRepository(productTitleRepository, idGenerator)
-        val stockRepository = StockRepository(office, productRepository, idGenerator)
-        val basketRepository = BasketRepository(productRepository)
-        val saleRepository = SaleRepository(
-            generator = idGenerator,
-            getProductById = productRepository,
-            getClientById = clientRepository
-        )
-        val receiveRepository = ReceiveRepository(
-            productTitleRepository = productTitleRepository,
-            productRepository = productRepository,
-            stockRepository = stockRepository,
-            setProductTitlePrice = productTitleRepository,
-            generator = idGenerator
-        )
-        val orderRepository = OrderRepository(
-            generator = idGenerator,
-            getProductById = productRepository,
-            getClientById = clientRepository
-        )
-        val debtRepository = DebtRepository()
-        val notificationRepository = NotificationRepository()
-        val formatter = Formatter()
+    private suspend fun getOffice(
+        client: HttpClient,
+        officeId: Int
+    ): OfficeModel? {
+        return OfficeApi(client).getById(officeId)
+    }
 
-        return Factory(
-            productTitleRepository = productTitleRepository,
-            folderRepository = folderRepository,
-            templateRepository = templateRepository,
-            categoryRepository = categoryRepository,
-            stockRepository = stockRepository,
-            basketRepository = basketRepository,
-            clientRepository = clientRepository,
-            saleRepository = saleRepository,
-            orderRepository = orderRepository,
-            receiveRepository = receiveRepository,
-            debtRepository = debtRepository,
-            notificationRepository = notificationRepository,
-            officeApi = provider.officeApi(),
-            logger = logger,
-            navigator = navigator,
-            formatter = formatter
+    private fun httpLogger(): HttpLogger {
+        return HttpLogger(logger)
+    }
+
+    private suspend fun getNewCredentials(refresh: String): Credentials? {
+        val response = client.post(
+            urlString = "auth/token/refresh/",
+            block = {
+                setBody(
+                    buildJsonObject {
+                        put("refresh", refresh)
+                    }
+                )
+            }
         )
+
+        if(response.status == HttpStatusCode.OK) {
+            val model = response.body<CredentialsModel>()
+            storage.updateCredentials(model)
+            return model.map()
+        } else {
+            storage.clear()
+            return null
+        }
     }
 }

@@ -1,12 +1,14 @@
 package com.orka.myfinances.ui.screens.login
 
+import com.orka.myfinances.R
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.data.api.CredentialApi
-import com.orka.myfinances.data.models.Credential
+import com.orka.myfinances.data.api.credential.AuthRequest
+import com.orka.myfinances.data.api.credential.CredentialApi
+import com.orka.myfinances.data.models.Credentials
+import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.managers.SessionManager
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.yield
 
 class LoginScreenViewModel(
     logger: Logger,
@@ -35,16 +37,20 @@ class LoginScreenViewModel(
     private suspend fun launchAuthorization(
         username: String,
         password: String,
-        onSuccess: suspend (Credential) -> Unit
+        onSuccess: suspend (Credentials) -> Unit
     ) {
-        updateState { LoginScreenState.Loading }
-        yield()
-        val credential = apiService.get(username, password)
-        if (credential != null) {
-            onSuccess(credential)
-            updateState { LoginScreenState.Initial }
-        } else {
-            updateState { LoginScreenState.Error }
+        setState(LoginScreenState.Loading)
+        try {
+            val credential = apiService.get(AuthRequest(username, password))
+            if (credential != null) {
+                onSuccess(credential)
+                setState(LoginScreenState.Initial)
+            } else {
+                setState(LoginScreenState.Error(UiText.Res(R.string.user_not_found)))
+            }
+        } catch (e: Exception) {
+            logger.log("LoginScreenViewModel", e.message.toString())
+           setState(LoginScreenState.Error(UiText.Str(e.javaClass.name), true))
         }
     }
 }

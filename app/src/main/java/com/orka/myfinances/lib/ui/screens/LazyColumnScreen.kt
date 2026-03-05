@@ -17,6 +17,7 @@ typealias DialogState = androidx.compose.runtime.State<Boolean>
 fun <T> LazyColumnScreen(
     modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit = {},
+    bottomBar: @Composable (State) -> Unit = {},
     arrangementSpace: Dp = 0.dp,
     state: State,
     viewModel: ListViewModel<T>,
@@ -25,6 +26,7 @@ fun <T> LazyColumnScreen(
     StatefulScreen<List<T>>(
         modifier = modifier,
         topBar = topBar,
+        bottomBar = bottomBar,
         onRetry = { viewModel.initialize() },
         state = state
     ) { modifier, items ->

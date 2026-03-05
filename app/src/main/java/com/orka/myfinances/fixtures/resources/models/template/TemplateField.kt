@@ -1,6 +1,7 @@
 package com.orka.myfinances.fixtures.resources.models.template
 
 import com.orka.myfinances.data.models.template.TemplateField
+import com.orka.myfinances.fixtures.resources.Types
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.id2
 import com.orka.myfinances.fixtures.resources.models.id3
@@ -10,53 +11,52 @@ import com.orka.myfinances.fixtures.resources.models.id6
 import com.orka.myfinances.fixtures.resources.models.id7
 import com.orka.myfinances.fixtures.resources.models.id8
 import com.orka.myfinances.fixtures.resources.models.id9
-import com.orka.myfinances.fixtures.resources.types
 
 val templateField1 = TemplateField(
     id = id1,
     name = "TemplateField 1",
-    type = types[1]
+    type = Types.NUMBER
 )
 val templateField2 = TemplateField(
     id = id2,
     name = "TemplateField 2",
-    type = types[0]
+    type = Types.TEXT
 )
 val templateField3 = TemplateField(
     id = id3,
     name = "TemplateField 3",
-    type = types[2]
+    type = Types.RANGE
 )
 
 val templateField4 = TemplateField(
     id = id4,
     name = "f1",
-    type = types[0]
+    type = Types.TEXT
 )
 val templateField5 = TemplateField(
     id = id5,
     name = "f2",
-    type = types[0]
+    type = Types.TEXT
 )
 val templateField6 = TemplateField(
     id = id6,
     name = "f3",
-    type = types[0]
+    type = Types.BOOLEAN
 )
 val templateField7 = TemplateField(
     id = id7,
     name = "f4",
-    type = types[0]
+    type = Types.TEXT
 )
 val templateField8 = TemplateField(
     id = id8,
     name = "f5",
-    type = types[0]
+    type = Types.TEXT
 )
 val templateField9 = TemplateField(
     id = id9,
     name = "f6",
-    type = types[0]
+    type = Types.TEXT
 )
 
 val template1Fields = listOf(

@@ -87,7 +87,7 @@ fun HomeScreen(
                     }
                     BasketScreenTopBar(viewModel = viewModel)
                 }
-                2 -> ProfileTopBar(user = session.user)
+                2 -> ProfileTopBar()
             }
         },
         bottomBar = {

@@ -7,7 +7,11 @@ import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import kotlin.time.Instant
 
-fun ProductTitle.toModel(formatDecimal: FormatDecimal, formatDate: FormatDate, formatPrice: FormatPrice): ProductTitleModel {
+fun ProductTitle.toModel(
+    formatDecimal: FormatDecimal,
+    formatDate: FormatDate,
+    formatPrice: FormatPrice
+): ProductTitleModel {
     return ProductTitleModel(
         title = name,
         dateTime = formatDate.formatDate(dateTime),
@@ -17,10 +21,13 @@ fun ProductTitle.toModel(formatDecimal: FormatDecimal, formatDate: FormatDate, f
     )
 }
 
-fun Property.toModel(formatDecimal: FormatDecimal, formatDate: FormatDate): PropertyModel {
+fun Property.toModel(
+    formatDecimal: FormatDecimal,
+    formatDate: FormatDate
+): PropertyModel {
     return PropertyModel(
-        name = type.name,
-        value = when(type.type) {
+        name = field.name,
+        value = when(field.type) {
             "text" -> value as String
             "number" -> formatDecimal.formatDecimal((value as Int).toDouble())
             "date" -> formatDate.formatDate((value as Instant))

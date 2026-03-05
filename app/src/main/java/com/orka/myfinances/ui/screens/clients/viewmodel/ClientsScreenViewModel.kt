@@ -21,7 +21,7 @@ class ClientsScreenViewModel(
 ) : MapperListViewModel<Client, ClientModel>(
     loading = loading,
     failure = failure,
-    repository = get,
+    get = get,
     map = { it.toUiModel() },
     logger = logger
 ), ListViewModel<ClientModel> {

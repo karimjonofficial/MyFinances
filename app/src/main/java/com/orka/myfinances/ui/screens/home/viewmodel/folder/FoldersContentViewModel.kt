@@ -7,6 +7,7 @@ import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.folder.Folder
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.repositories.folder.AddFolderRequest
+import com.orka.myfinances.data.repositories.folder.GetTopFolders
 import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.viewmodel.DualStateViewModel
@@ -14,7 +15,7 @@ import com.orka.myfinances.ui.navigation.Navigator
 import kotlinx.coroutines.flow.asStateFlow
 
 class FoldersContentViewModel(
-    private val get: Get<Folder>,
+    private val get: GetTopFolders,
     private val add: Add<Folder, AddFolderRequest>,
     private val templateRepository: Get<Template>,
     private val navigator: Navigator,
@@ -30,27 +31,37 @@ class FoldersContentViewModel(
     override fun initialize() {
         launch {
             setState1(FoldersState.Loading)
-            val folders = get.get()
-            if(folders != null)
-                setState1(FoldersState.Success(folders.map { it.toUiModel() }))
-            else setState1(FoldersState.Error)
-            val templates = templateRepository.get()
-            if(templates != null)
-                setState2(TemplateState.Success(templates))
-            else setState2(TemplateState.Error)
+            try {
+                val folders = get.getTop()
+                if (folders != null)
+                    setState1(FoldersState.Success(folders.map { it.toUiModel() }))
+                else setState1(FoldersState.Error)
+            } catch (_: Exception) {
+                setState1(FoldersState.Error)
+            }
+            try {
+                val templates = templateRepository.get()
+                if (templates != null)
+                    setState2(TemplateState.Success(templates))
+                else setState2(TemplateState.Error)
+
+            } catch (_: Exception) {
+                setState2(TemplateState.Error)
+            }
         }
     }
 
-    fun addFolder(name: String, type: String, templateId: Id?) = launch {
-        val previousState = state1.value
-        setState1(FoldersState.Loading)
-        val request = AddFolderRequest(name, type, templateId)
-        val folder = add.add(request)
-        if(folder != null) {
-            val folders = get.get()
-            setState1(FoldersState.Success(folders!!.map { it.toUiModel() }))
+    fun addFolder(name: String, type: String, templateId: Id?) {
+        launch {
+            val previousState = state1.value
+            setState1(FoldersState.Loading)
+            val request = AddFolderRequest(name, type, templateId)
+            val folder = add.add(request)
+            if (folder != null) {
+                val folders = get.getTop()
+                setState1(FoldersState.Success(folders!!.map { it.toUiModel() }))
+            } else setState1(previousState)
         }
-        else setState1(previousState)
     }
 
     fun select(folder: Folder) {

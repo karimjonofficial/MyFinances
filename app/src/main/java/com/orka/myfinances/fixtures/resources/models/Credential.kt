@@ -1,8 +1,8 @@
 package com.orka.myfinances.fixtures.resources.models
 
-import com.orka.myfinances.data.models.Credential
+import com.orka.myfinances.data.models.Credentials
 
-val credential = Credential(
-    token = "token",
+val credentials = Credentials(
+    access = "token",
     refresh = "refresh"
 )

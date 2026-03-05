@@ -16,7 +16,10 @@ import com.orka.myfinances.lib.extensions.models.getPrice
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
+import com.orka.myfinances.printer.Printer
+import com.orka.myfinances.printer.PrinterState
 import com.orka.myfinances.ui.navigation.Navigator
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlin.time.Instant
 
@@ -26,6 +29,8 @@ class CheckoutScreenViewModel(
     private val addOrder: Add<Order, AddOrderRequest>,
     private val get: Get<Client>,
     private val navigator: Navigator,
+    private val printer: Printer,
+    private val printerState: StateFlow<PrinterState>,
     private val formatDecimal: FormatDecimal,
     private val formatPrice: FormatPrice,
     logger: Logger
@@ -40,18 +45,40 @@ class CheckoutScreenViewModel(
             val items = basketRepository.get()
             val clients = get.get()
             if (clients != null)
-                setState(CheckoutScreenState.Success(clients, items.map { it.toModel(formatPrice, formatDecimal) }, items.getPrice()))
+                setState(
+                    CheckoutScreenState.Success(
+                        clients = clients,
+                        items = items.map { it.toModel(formatPrice, formatDecimal) },
+                        price = items.getPrice(),
+                        printerConnected = printerState.value is PrinterState.Connected
+                    )
+                )
             else setState(CheckoutScreenState.Failure)
+        }
+
+        launch {
+            printerState.collect { newState ->
+                updateState { currentState ->
+                    if (currentState is CheckoutScreenState.Success) {
+                        currentState.copy(printerConnected = newState is PrinterState.Connected)
+                    } else {
+                        currentState
+                    }
+                }
+            }
         }
     }
 
-    fun sell(client: Client?, price: Int?, description: String?) {
+    fun sell(client: Client?, price: Int?, description: String?, print: Boolean) {
         launch {
-            if(client != null && price != null) {
+            if (client != null && price != null) {
                 val items = basketRepository.get()
                 val basket = Basket(price, description, items)
                 val response = addSale.add(basket.toSaleRequest(client))
                 if (response != null) {
+                    if (print && printerState.value is PrinterState.Connected) {
+                        printer.print(response)
+                    }
                     clearBasket()
                     navigator.back()
                 }
@@ -61,7 +88,7 @@ class CheckoutScreenViewModel(
 
     fun order(client: Client?, price: Int?, description: String?) {
         launch {
-            if(client != null && price != null) {
+            if (client != null && price != null) {
                 val items = basketRepository.get()
                 val basket = Basket(price, description, items)
                 val response = addOrder.add(basket.toOrderRequest(client))
@@ -89,6 +116,7 @@ class CheckoutScreenViewModel(
     private suspend fun clearBasket() {
         basketRepository.clear()
     }
+
     private fun Basket.toSaleRequest(client: Client): AddSaleRequest {
         return AddSaleRequest(
             clientId = client.id,
@@ -97,6 +125,7 @@ class CheckoutScreenViewModel(
             description = description
         )
     }
+
     private fun BasketItem.toItem(): Item {
         return Item(product.id, amount)
     }

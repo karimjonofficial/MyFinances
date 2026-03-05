@@ -32,10 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.repositories.template.AddTemplateRequest
-import com.orka.myfinances.data.repositories.template.TemplateFieldModel
-import com.orka.myfinances.data.repositories.template.TemplateRepository
 import com.orka.myfinances.fixtures.managers.DummyNavigator
-import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.navigation.Navigator
@@ -87,8 +84,8 @@ fun AddTemplateScreen(
             AddTemplateFieldDialog(
                 types = types,
                 dismissRequest = { showDialog.value = false },
-                onSuccess = { name, typeId ->
-                    fields.add(TemplateFieldModel(name, typeId))
+                onSuccess = { name, type ->
+                    fields.add(TemplateFieldModel(name, type))
                 }
             )
         }
@@ -124,7 +121,7 @@ fun AddTemplateScreen(
                         TemplateFieldCard(
                             modifier = Modifier.size(120.dp),
                             field = field,
-                            type = types[field.typeId],
+                            type = field.type,
                             onRemove = { fields.remove(field) }
                         )
                     }
@@ -157,8 +154,7 @@ fun AddTemplateScreen(
 @Composable
 private fun TemplateScreenPreview() {
     val types = listOf("text", "number", "range")
-    val repository = TemplateRepository(generator = { id1 })
-    val addTemplateScreenViewModel = viewModel { AddTemplateScreenViewModel(repository) }
+    val addTemplateScreenViewModel = viewModel { AddTemplateScreenViewModel(add = {null}) }
     val navigationManager = DummyNavigator()
 
     MyFinancesTheme {
@@ -180,3 +176,8 @@ private fun TemplateScreenPreview() {
         }
     }
 }
+
+data class TemplateFieldModel(
+    val name: String,
+    val type: String
+)

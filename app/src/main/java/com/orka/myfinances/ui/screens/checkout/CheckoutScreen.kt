@@ -51,6 +51,7 @@ fun CheckoutScreen(
                 items = state.items,
                 clients = state.clients,
                 price = state.price,
+                printerConnected = state.printerConnected,
                 viewModel = viewModel
             )
         }
@@ -72,7 +73,11 @@ private fun CheckoutScreenPreview() {
             logger = DummyLogger(),
             navigator = DummyNavigator(),
             formatPrice = { "" },
-            formatDecimal = { "" }
+            formatDecimal = { "" },
+            printer = object : com.orka.myfinances.printer.Printer {
+                override fun print(sale: com.orka.myfinances.data.models.sale.Sale) {}
+            },
+            printerState = kotlinx.coroutines.flow.MutableStateFlow(com.orka.myfinances.printer.PrinterState.Disconnected)
         )
     }
     val items = listOf(

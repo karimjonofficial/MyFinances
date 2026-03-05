@@ -11,3 +11,12 @@ const val amount = 100
 
 val dateTime = Instant.parse("2024-01-01T12:00:00Z")
 val types = listOf("text", "number", "range")
+
+object Types {
+    const val TEXT = "text"
+    const val NUMBER = "number"
+    const val BOOLEAN = "boolean"
+    const val RANGE = "range"
+
+    val all = listOf(TEXT, NUMBER, BOOLEAN, RANGE)
+}

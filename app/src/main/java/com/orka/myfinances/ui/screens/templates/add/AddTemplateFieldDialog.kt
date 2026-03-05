@@ -17,10 +17,10 @@ fun AddTemplateFieldDialog(
     modifier: Modifier = Modifier,
     types: List<String>,
     dismissRequest: () -> Unit,
-    onSuccess: (String, Int) -> Unit
+    onSuccess: (String, String) -> Unit
 ) {
     val newFieldName = rememberSaveable { mutableStateOf("") }
-    val newFieldTypeIndex = rememberSaveable { mutableStateOf<Int?>(null) }
+    val newFieldType = rememberSaveable { mutableStateOf<String?>(null) }
 
     Dialog(
         modifier = modifier,
@@ -29,7 +29,7 @@ fun AddTemplateFieldDialog(
         supportingText = stringResource(R.string.fill_the_lines_below_to_add_a_new_field),
         onSuccess = {
             val name = newFieldName.value
-            val index = newFieldTypeIndex.value
+            val index = newFieldType.value
 
             if (name.isNotBlank() && index != null) {
                 onSuccess(name, index)
@@ -50,11 +50,11 @@ fun AddTemplateFieldDialog(
                 menuExpanded = exposed.value,
                 onExpandChange = { exposed.value = it },
                 onDismissRequested = { exposed.value = false },
-                text = if (newFieldTypeIndex.value == null) "" else types[newFieldTypeIndex.value!!],
+                text = if (newFieldType.value == null) "" else newFieldType.value!!,
                 label = stringResource(R.string.type),
                 items = types,
                 itemText = { it },
-                onItemSelected = { index, _ -> newFieldTypeIndex.value = index }
+                onItemSelected = { _, value -> newFieldType.value = value }
             )
         }
     )

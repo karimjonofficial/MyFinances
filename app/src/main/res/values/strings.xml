@@ -138,4 +138,6 @@
     <string name="start_date">Start Date</string>
     <string name="due_date">Due Date</string>
     <string name="overdue">Overdue</string>
+    <string name="user_not_found">User not found</string>
+    <string name="print_receipt">Print Receipt</string>
 </resources>
