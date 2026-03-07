@@ -16,8 +16,8 @@ fun productTitleEntry(
     destination: Destination.ProductTitle,
     factory: Factory,
 ): NavEntry<Destination> = entry(destination) {
-    val viewModel = viewModel {
-        factory.productTitleViewModel(destination.productTitle)
+    val viewModel = viewModel(key = destination.id.value.toString()) {
+        factory.productTitleViewModel(destination.id)
     }
     val state = viewModel.uiState.collectAsState()
 

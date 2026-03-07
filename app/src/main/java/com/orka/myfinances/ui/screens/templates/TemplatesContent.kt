@@ -17,6 +17,8 @@ import com.orka.myfinances.ui.screens.templates.components.TemplateCard
 import com.orka.myfinances.ui.screens.templates.viewmodel.TemplatesScreenState
 import com.orka.myfinances.ui.screens.templates.viewmodel.TemplatesScreenViewModel
 import com.orka.myfinances.ui.screens.templates.viewmodel.toUiModel
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
 import kotlinx.coroutines.flow.flow
 
 @Composable
@@ -45,9 +47,10 @@ fun TemplatesContent(
 @Preview
 @Composable
 private fun TemplatesContentPreview() {
+    val client = HttpClient(OkHttp)
     val viewModel = viewModel {
         TemplatesScreenViewModel(
-            get = { null },
+            client = client,
             events = flow {},
             navigator = DummyNavigator(),
             logger = DummyLogger()

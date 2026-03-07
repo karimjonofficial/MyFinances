@@ -32,7 +32,7 @@ fun ProductTitlesContent(
                 modifier = modifier,
                 contentPadding = contentPadding,
                 productTitles = state.titles,
-                onProductClick = { viewModel.selectProduct(it) }
+                onProductClick = { viewModel.selectProduct(it.id) }
             )
         }
     }

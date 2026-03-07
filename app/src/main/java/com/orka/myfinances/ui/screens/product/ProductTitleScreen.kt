@@ -39,7 +39,6 @@ import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -48,6 +47,8 @@ import com.orka.myfinances.ui.screens.product.viewmodel.ProductTitleModel
 import com.orka.myfinances.ui.screens.product.viewmodel.ProductTitleScreenViewModel
 import com.orka.myfinances.ui.screens.product.viewmodel.toModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -217,12 +218,12 @@ private fun PricingSection(
 @Preview
 @Composable
 private fun ProductTitleScreenPreview() {
+    val client = HttpClient(OkHttp)
     val viewModel = viewModel {
         ProductTitleScreenViewModel(
-            productTitle = productTitle1,
-            repository = { null },
+            id = productTitle1.id,
+            client = client,
             logger = DummyLogger(),
-            loading = UiText.Res(R.string.loading),
             formatPrice = {""}, formatDecimal = {""}, formatDate = {""}
         )
     }

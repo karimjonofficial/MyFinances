@@ -14,7 +14,7 @@ import com.orka.myfinances.fixtures.resources.models.debt2
 import com.orka.myfinances.lib.extensions.ui.description
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
-import com.orka.myfinances.ui.screens.debt.viewmodel.toModel
+import com.orka.myfinances.ui.screens.debt.viewmodel.map
 import com.orka.myfinances.ui.screens.history.components.ListItem
 
 @Composable
@@ -42,13 +42,13 @@ private fun DebtCardPreview() {
             repeat(5) {
                 DebtCard(
                     modifier = Modifier.fillMaxWidth(),
-                    debt = debt1.toModel(FormatPriceImpl(), FormatDateTimeImpl()),
+                    debt = debt1.map(FormatPriceImpl(), FormatDateTimeImpl()),
                     onClick = {}
                 )
 
                 DebtCard(
                     modifier = Modifier.fillMaxWidth(),
-                    debt = debt2.toModel(FormatPriceImpl(), FormatDateTimeImpl()),
+                    debt = debt2.map(FormatPriceImpl(), FormatDateTimeImpl()),
                     onClick = {}
                 )
             }

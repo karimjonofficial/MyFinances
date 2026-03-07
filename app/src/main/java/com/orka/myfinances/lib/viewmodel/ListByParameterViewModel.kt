@@ -9,7 +9,7 @@ abstract class ListByParameterViewModel<T, P>(
     private val parameter: P,
     private val loading: UiText,
     private val failure: UiText,
-    private val repository: GetByParameter<T, P>,
+    private val getByParameter: GetByParameter<T, P>,
     logger: Logger
 ) : SingleStateViewModel<State>(
     initialState = State.Initial,
@@ -24,7 +24,7 @@ abstract class ListByParameterViewModel<T, P>(
     }
 
     protected open suspend fun fetchState(): State.Success<List<T>>? {
-        val response = repository.get(parameter)
+        val response = getByParameter.get(parameter)
         return if(response != null) State.Success(filterData(response)) else null
     }
 

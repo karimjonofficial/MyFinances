@@ -5,7 +5,7 @@ import androidx.room.Room
 import com.orka.myfinances.data.storages.room.AppDatabase
 import com.orka.myfinances.data.storages.room.LocalSessionStorageImpl
 import com.orka.myfinances.printer.pos.BluetoothPrinterImpl
-import com.orka.myfinances.ui.screens.host.UiManager
+import com.orka.myfinances.ui.screens.host.viewmodel.UiManager
 import kotlinx.coroutines.CoroutineScope
 
 class MyFinancesApplication : Application() {

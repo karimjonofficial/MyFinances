@@ -35,7 +35,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
+import com.orka.myfinances.fixtures.core.DummyLogger
 import com.orka.myfinances.fixtures.format.FormatDateImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.managers.DummyNavigator
@@ -44,22 +46,24 @@ import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.components.ClientCard
 import com.orka.myfinances.ui.components.UserCard
-import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.debt.components.DateCard
 import com.orka.myfinances.ui.screens.debt.components.DescriptionCard
 import com.orka.myfinances.ui.screens.debt.components.EmphasizedDateCard
 import com.orka.myfinances.ui.screens.debt.parts.NotificationStatusCard
 import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenModel
+import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenViewModel
 import com.orka.myfinances.ui.screens.debt.viewmodel.toScreenModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DebtScreen(
     modifier: Modifier = Modifier,
-    navigator: Navigator,
-    state: State
+    state: State,
+    viewModel: DebtScreenViewModel
 ) {
     StatefulScreen<DebtScreenModel>(
         modifier = modifier,
@@ -72,7 +76,7 @@ fun DebtScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = navigator::back) {
+                    IconButton(onClick = viewModel::back) {
                         Icon(
                             painter = painterResource(R.drawable.arrow_back),
                             contentDescription = stringResource(R.string.back)
@@ -134,13 +138,13 @@ fun DebtScreen(
             item {
                 ClientCard(
                     model = model.client,
-                    onClick = { navigator.navigateToClient(model.debt.client) }
+                    onClick = { viewModel.navigateToClient(model.clientId) }
                 )
             }
 
             item {
                 UserCard(
-                    user = model.debt.user,
+                    user = model.user,
                     onClick = {}
                 )
             }
@@ -163,7 +167,7 @@ fun HeroSection(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (debt.isOverdue)//debt.endDateTime != null && debt.endDateTime > Clock.System.now()) {
+        if (debt.isOverdue)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -272,10 +276,21 @@ fun TimelineAndStaffCard(
 )
 @Composable
 private fun DebtScreenPreview() {
+    val client = HttpClient(OkHttp)
+    val viewModel = viewModel {
+        DebtScreenViewModel(
+            id = debt1.id,
+            client = client,
+            formatPrice = FormatPriceImpl(),
+            formatDate = FormatDateImpl(),
+            navigator = DummyNavigator(),
+            logger = DummyLogger()
+        )
+    }
     MyFinancesTheme {
         DebtScreen(
             state = State.Success(debt1.toScreenModel(FormatPriceImpl(), FormatDateImpl())),
-            navigator = DummyNavigator()
+            viewModel = viewModel
         )
     }
 }

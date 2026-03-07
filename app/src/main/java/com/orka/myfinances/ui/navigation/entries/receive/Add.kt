@@ -14,15 +14,14 @@ fun addReceiveEntry(
     destination: Destination.AddStockItem,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
-    val viewModel = viewModel(key = "${destination.category.id}") {
-        factory.addReceiveViewModel(destination.category)
+    val viewModel = viewModel(key = "${destination.id}") {
+        factory.addReceiveViewModel(destination.id)
     }
     val state = viewModel.uiState.collectAsState()
 
     AddReceiveScreen(
         modifier = modifier,
         viewModel = viewModel,
-        state = state.value,
-        category = destination.category
+        state = state.value
     )
 }

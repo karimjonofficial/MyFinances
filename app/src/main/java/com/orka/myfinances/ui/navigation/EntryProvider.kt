@@ -33,31 +33,30 @@ fun entryProvider(
     session: Session,
     sessionManager: SessionManager,
     destination: Destination,
-    navigator: Navigator,
     factory: Factory
 ): NavEntry<Destination> {
     return when(destination) {
-        is Destination.Home -> homeEntry(modifier, destination, session, sessionManager, navigator, factory)//TODO Remove navigator
-        is Destination.Catalog -> catalogEntry(modifier, destination, navigator, factory)
+        is Destination.Home -> homeEntry(modifier, destination, session, sessionManager, factory)
+        is Destination.Catalog -> catalogEntry(modifier, destination, factory)
         is Destination.Warehouse -> warehouseEntry(modifier, destination, factory)
         is Destination.Notifications -> notificationsEntry(modifier, destination, factory)
-        is Destination.AddTemplate -> addTemplateEntry(modifier, destination, navigator, factory)
+        is Destination.AddTemplate -> addTemplateEntry(modifier, destination, factory)
         is Destination.Settings -> settingsEntry(modifier, destination)
         is Destination.Templates -> templatesEntry(modifier, destination, factory)
         is Destination.AddProduct -> addProductEntry(modifier, destination, factory)
         is Destination.ProductTitle -> productTitleEntry(modifier, destination, factory)
         is Destination.Clients -> clientsEntry(modifier, destination, factory)
-        is Destination.Client -> clientEntry(modifier, destination)
+        is Destination.Client -> clientEntry(modifier, destination, factory)
         is Destination.History -> historyEntry(modifier, destination, factory)
         is Destination.Checkout -> checkoutEntry(modifier, destination, factory)
         is Destination.AddStockItem -> addReceiveEntry(modifier, destination, factory)
         is Destination.Orders -> ordersEntry(modifier, destination, factory)
-        is Destination.Order -> orderEntry(modifier, destination, factory, navigator)
+        is Destination.Order -> orderEntry(modifier, destination, factory)
         is Destination.Debts -> debtsEntry(modifier, destination, factory)
-        is Destination.Debt -> debtEntry(modifier, destination, factory, navigator)
+        is Destination.Debt -> debtEntry(modifier, destination, factory)
         is Destination.Search -> searchEntry(modifier, destination)
-        is Destination.Template -> templateEntry(modifier, destination)
-        is Destination.Sale -> saleEntry(modifier, navigator, factory, destination)
-        is Destination.Receive -> receiveEntry(modifier, factory, navigator, destination)
+        is Destination.Template -> templateEntry(modifier, destination, factory)
+        is Destination.Sale -> saleEntry(modifier, destination, factory)
+        is Destination.Receive -> receiveEntry(modifier, factory, destination)
     }
 }

@@ -29,13 +29,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.repositories.template.AddTemplateRequest
-import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.templates.add.components.TemplateFieldCard
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
@@ -44,8 +41,7 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 fun AddTemplateScreen(
     modifier: Modifier = Modifier,
     types: List<String>,
-    viewModel: AddTemplateScreenViewModel,
-    navigator: Navigator
+    interactor: AddTemplateInteractor
 ) {
     val name = rememberSaveable { mutableStateOf("") }
     val fields = rememberSaveable { mutableStateListOf<TemplateFieldModel>() }
@@ -54,7 +50,15 @@ fun AddTemplateScreen(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(R.string.templates)) }
+                title = { Text(text = stringResource(R.string.templates)) },
+                navigationIcon = {
+                    IconButton(onClick = { interactor.back() }) {
+                        Icon(
+                            painter = painterResource(R.drawable.arrow_back),
+                            contentDescription = stringResource(R.string.back)
+                        )
+                    }
+                }
             )
         },
         bottomBar = {
@@ -67,8 +71,7 @@ fun AddTemplateScreen(
                         onClick = {
                             if (name.value.isNotBlank() && fields.isNotEmpty()) {
                                 val template = AddTemplateRequest(name.value, fields)
-                                viewModel.addTemplate(template)
-                                navigator.back()
+                                interactor.addTemplate(template)
                             }
                         }
                     ) {
@@ -115,7 +118,6 @@ fun AddTemplateScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-
                     items(items = fields) { field ->
 
                         TemplateFieldCard(
@@ -154,26 +156,17 @@ fun AddTemplateScreen(
 @Composable
 private fun TemplateScreenPreview() {
     val types = listOf("text", "number", "range")
-    val addTemplateScreenViewModel = viewModel { AddTemplateScreenViewModel(add = {null}) }
-    val navigationManager = DummyNavigator()
+    val dummyInteractor = object : AddTemplateInteractor {
+        override fun addTemplate(template: AddTemplateRequest) {}
+        override fun back() {}
+    }
 
     MyFinancesTheme {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(text = stringResource(R.string.templates)) }
-                )
-            }
-        ) { innerPadding ->
-            AddTemplateScreen(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-                types = types,
-                viewModel = addTemplateScreenViewModel,
-                navigator = navigationManager
-            )
-        }
+        AddTemplateScreen(
+            modifier = Modifier.fillMaxSize(),
+            types = types,
+            interactor = dummyInteractor
+        )
     }
 }
 

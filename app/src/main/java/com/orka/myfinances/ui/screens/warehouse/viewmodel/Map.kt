@@ -1,6 +1,7 @@
 package com.orka.myfinances.ui.screens.warehouse.viewmodel
 
 import com.orka.myfinances.R
+import com.orka.myfinances.data.api.stock.StockItemApiModel
 import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.lib.format.FormatDecimal
@@ -23,6 +24,27 @@ fun ProductTitle.toUiModel(): ProductTitleUiModel {
     )
 }
 
+fun StockItemApiModel.toModel(
+    priceFormatter: FormatPrice,
+    decimalFormatter: FormatDecimal
+): StockItemCardModel {
+    return StockItemCardModel(
+        title = product.productTitle.name,
+        price = priceFormatter.formatPrice(product.price.toDouble()),
+        amount = decimalFormatter.formatDecimal(amount.toDouble())
+    )
+}
+
+fun StockItemApiModel.toUiModel(
+    priceFormatter: FormatPrice,
+    decimalFormatter: FormatDecimal
+): StockItemUiModel {
+    return StockItemUiModel(
+        model = toModel(priceFormatter, decimalFormatter),
+        id = com.orka.myfinances.data.models.Id(id)
+    )
+}
+
 fun StockItem.toModel(
     priceFormatter: FormatPrice,
     decimalFormatter: FormatDecimal
@@ -40,6 +62,6 @@ fun StockItem.toUiModel(
 ): StockItemUiModel {
     return StockItemUiModel(
         model = toModel(priceFormatter, decimalFormatter),
-        item = this
+        id = this.id
     )
 }

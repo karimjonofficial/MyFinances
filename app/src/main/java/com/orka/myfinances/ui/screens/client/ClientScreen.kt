@@ -15,6 +15,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,30 +29,43 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.Client
+import com.orka.myfinances.data.api.client.ClientApiModel
 import com.orka.myfinances.fixtures.resources.models.client1
-import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
-import com.orka.myfinances.lib.ui.Scaffold
+import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.ui.screens.client.viewmodel.ClientInteractor
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClientScreen(
     modifier: Modifier = Modifier,
-    client: Client
+    state: State,
+    interactor: ClientInteractor
 ) {
-    Scaffold(
+    StatefulScreen<ClientApiModel>(
         modifier = modifier,
+        state = state,
         topBar = {
             TopAppBar(
-                title = { Text(text = "${client.firstName} ${client.lastName}") }
+                title = {
+                    val client = (state as? State.Success<*>)?.value as? ClientApiModel
+                    Text(text = if (client != null) "${client.firstName} ${client.lastName}" else "")
+                },
+                navigationIcon = {
+                    IconButton(onClick = interactor::back) {
+                        Icon(
+                            painter = painterResource(R.drawable.arrow_back),
+                            contentDescription = stringResource(R.string.back)
+                        )
+                    }
+                }
             )
         }
-    ) { paddingValues ->
-
-        Column(modifier = Modifier.scaffoldPadding(paddingValues)) {
+    ) { modifier, client ->
+        Column(modifier = modifier) {
 
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -141,10 +155,14 @@ fun ClientScreen(
 )
 @Composable
 private fun ClientScreenPreview() {
+    val dummyInteractor = object : ClientInteractor {
+        override fun back() {}
+    }
     MyFinancesTheme {
         ClientScreen(
             modifier = Modifier.fillMaxSize(),
-            client = client1
+            state = State.Success(client1),
+            interactor = dummyInteractor
         )
     }
 }

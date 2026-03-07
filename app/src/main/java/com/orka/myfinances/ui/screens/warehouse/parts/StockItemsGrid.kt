@@ -8,7 +8,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.orka.myfinances.data.models.StockItem
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.ui.screens.warehouse.components.StockItemCard
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.StockItemUiModel
 
@@ -17,7 +17,7 @@ fun StockItemsGrid(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     stockItems: List<StockItemUiModel>,
-    onItemClick: (StockItem) -> Unit
+    onItemClick: (Id) -> Unit
 ) {
     LazyVerticalGrid(
         modifier = modifier,
@@ -30,7 +30,7 @@ fun StockItemsGrid(
             StockItemCard(
                 modifier = Modifier.fillMaxWidth(),
                 item = stockItems[index].model,
-                click = { onItemClick(stockItems[index].item) }
+                click = { onItemClick(stockItems[index].id) }
             )
         }
     }

@@ -7,6 +7,5 @@ data class StockItem(
     val id: Id,
     val product: Product,
     val amount: Int,
-    val office: Office,
     val dateTime: Instant
 )

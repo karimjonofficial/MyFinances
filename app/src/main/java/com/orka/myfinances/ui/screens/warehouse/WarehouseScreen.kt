@@ -7,42 +7,48 @@ import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.folder.Category
-import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
-import com.orka.myfinances.lib.ui.Scaffold
+import com.orka.myfinances.lib.ui.components.TopAppBar
+import com.orka.myfinances.lib.ui.screens.StatefulScreen
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.warehouse.parts.ProductTitlesContent
 import com.orka.myfinances.ui.screens.warehouse.parts.StockItemsContent
 import com.orka.myfinances.ui.screens.warehouse.parts.WarehouseScreenTopBar
+import com.orka.myfinances.ui.screens.warehouse.viewmodel.ProductsState
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
+import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenState
+import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseState
 
 @Composable
 fun WarehouseScreen(
     modifier: Modifier = Modifier,
-    category: Category,
+    state: State,
     viewModel: WarehouseScreenViewModel
 ) {
-    val productsState = viewModel.productTitlesState.collectAsState()
-    val warehouseState = viewModel.warehouseState.collectAsState()
-
-    Scaffold(
+    StatefulScreen<WarehouseScreenState>(
         modifier = modifier,
+        state = state,
+        onRetry = { viewModel.initialize() },
         topBar = {
-            WarehouseScreenTopBar(
-                category = category,
-                onAddProductClick = { viewModel.addProduct(it) },
-                onAddReceive = { viewModel.receive(it) }
-            )
+            val category = (state as? State.Success<*>)?.let { (it.value as WarehouseScreenState).category }
+            if (category != null) {
+                WarehouseScreenTopBar(
+                    category = category,
+                    onAddProductClick = { viewModel.addProduct(it) },
+                    onAddReceive = { viewModel.receive(it) }
+                )
+            } else {
+                TopAppBar(title = "")
+            }
         }
-    ) { paddingValues ->
+    ) { modifier, screenState ->
 
-        Column(modifier = Modifier.scaffoldPadding(paddingValues)) {
+        Column(modifier = modifier) {
             val selectedTab = rememberSaveable { mutableIntStateOf(0) }
             val selectedTabValue = selectedTab.intValue
 
@@ -60,14 +66,12 @@ fun WarehouseScreen(
                     text = { Text(text = stringResource(R.string.products)) }
                 )
             }
-            val m = Modifier
-                .weight(1f)
-                .fillMaxWidth()
+            val m = Modifier.weight(1f).fillMaxWidth()
 
             if (selectedTabValue == 0) {
                 StockItemsContent(
                     modifier = m,
-                    state = warehouseState.value,
+                    state = WarehouseState.Success(screenState.category, screenState.stockItems),
                     viewModel = viewModel,
                     contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
                     onStockItemClick = viewModel::addToBasket
@@ -76,7 +80,7 @@ fun WarehouseScreen(
                 ProductTitlesContent(
                     modifier = m,
                     contentPadding = PaddingValues(0.dp),
-                    state = productsState.value,
+                    state = ProductsState.Success(screenState.productTitles),
                     viewModel = viewModel
                 )
             }

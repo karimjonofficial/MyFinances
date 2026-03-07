@@ -6,24 +6,22 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
-import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.screens.receive.ReceiveScreen
 
 fun receiveEntry(
     modifier: Modifier = Modifier,
     factory: Factory,
-    navigator: Navigator,
     destination: Destination.Receive
 ): NavEntry<Destination> = entry(destination) {
-    val viewModel = viewModel(key = destination.receive.id.toString()) {
-        factory.receiveViewModel(destination.receive)
+    val viewModel = viewModel(key = destination.id.value.toString()) {
+        factory.receiveViewModel(destination.id)
     }
     val state = viewModel.uiState.collectAsState()
 
     ReceiveScreen(
         modifier = modifier,
-        navigator = navigator,
+        viewModel = viewModel,
         state = state.value
     )
 }

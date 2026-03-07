@@ -33,15 +33,16 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.components.UserCard
-import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.debt.components.DescriptionCard
+import com.orka.myfinances.ui.screens.receive.viewmodel.ReceiveScreenViewModel
 import com.orka.myfinances.ui.screens.receive.viewmodel.ReceiveUiModel
+import com.orka.myfinances.ui.screens.sale.viewmodel.map
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReceiveScreen(
     modifier: Modifier = Modifier,
-    navigator: Navigator,
+    viewModel: ReceiveScreenViewModel,
     state: State
 ) {
     StatefulScreen<ReceiveUiModel>(
@@ -50,7 +51,7 @@ fun ReceiveScreen(
             CenterAlignedTopAppBar(
                 title = { Text(text = stringResource(R.string.receive_detail)) },
                 navigationIcon = {
-                    IconButton(onClick = { navigator.back() }) {
+                    IconButton(onClick = viewModel::back) {
                         Icon(
                             painter = painterResource(R.drawable.arrow_back),
                             contentDescription = null
@@ -119,7 +120,7 @@ fun ReceiveScreen(
 
             item {
                 UserCard(
-                    user = uiModel.receive.user,
+                    user = uiModel.user.map(),
                     onClick = {}
                 )
             }
@@ -134,9 +135,9 @@ fun ReceiveScreen(
                 )
             }
 
-            if (!uiModel.receive.description.isNullOrBlank()) {
+            if (!uiModel.description.isNullOrBlank()) {
                 item {
-                    DescriptionCard(description = uiModel.receive.description)
+                    DescriptionCard(description = uiModel.description)
                 }
             }
 

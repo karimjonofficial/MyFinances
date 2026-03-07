@@ -39,14 +39,17 @@ import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.ui.screens.home.components.BasketItemCard
 import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketContentViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketInteractor
 import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketState
 import com.orka.myfinances.ui.screens.home.viewmodel.basket.toUiModel
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
 
 @Composable
 fun BasketContent(
     modifier: Modifier = Modifier,
     state: BasketState,
-    viewModel: BasketContentViewModel
+    interactor: BasketInteractor
 ) {
     when (state) {
         is BasketState.Loading -> LoadingScreen(modifier)
@@ -73,9 +76,9 @@ fun BasketContent(
                             items(items = state.items) { uiModel ->
                                 BasketItemCard(
                                     item = uiModel.model,
-                                    increase = { viewModel.increase(uiModel.item) },
-                                    decrease = { viewModel.decrease(uiModel.item) },
-                                    remove = { viewModel.remove(uiModel.item) }
+                                    increase = { interactor.increase(uiModel.item) },
+                                    decrease = { interactor.decrease(uiModel.item) },
+                                    remove = { interactor.remove(uiModel.item) }
                                 )
                             }
                         }
@@ -127,7 +130,7 @@ fun BasketContent(
                             )
                         }
 
-                        Button(onClick = { viewModel.checkout() }) {
+                        Button(onClick = { interactor.checkout() }) {
                             Text(text = stringResource(R.string.checkout))
                         }
                     }
@@ -140,9 +143,10 @@ fun BasketContent(
 @Preview
 @Composable
 private fun BasketContentPreview() {
+    val client = HttpClient(OkHttp)
     val viewModel = viewModel {
         BasketContentViewModel(
-            repository = BasketRepository(getById = { null }),
+            repository = BasketRepository(client = client),
             navigator = DummyNavigator(),
             formatPrice = { "" },
             formatDecimal = { "" },
@@ -160,7 +164,7 @@ private fun BasketContentPreview() {
                 items = basketItems.map { it.toUiModel(FormatPriceImpl(), FormatDecimalImpl()) },
                 price = "100000.00 UZS"
             ),
-            viewModel = viewModel
+            interactor = viewModel
         )
     }
 }

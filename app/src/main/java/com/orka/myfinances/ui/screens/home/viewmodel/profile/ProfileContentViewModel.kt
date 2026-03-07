@@ -2,59 +2,79 @@ package com.orka.myfinances.ui.screens.home.viewmodel.profile
 
 import com.orka.myfinances.R
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.data.models.Office
-import com.orka.myfinances.data.models.User
-import com.orka.myfinances.lib.data.repositories.Get
+import com.orka.myfinances.data.models.Company
+import com.orka.myfinances.data.api.office.OfficeApiModel
+import com.orka.myfinances.data.api.office.map
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.asStateFlow
 
 class ProfileContentViewModel(
-    private val getOffices: Get<Office>,
-    private val getUser: GetSingle<User>,
+    private val client: HttpClient,
+    private val company: Company,
     private val navigator: Navigator,
     logger: Logger
 ) : SingleStateViewModel<State>(
     initialState = State.Initial,
     logger = logger
-) {
+), ProfileInteractor {
     val uiState = state.asStateFlow()
 
     override fun initialize() {
         launch {
-            val offices = getOffices.get()
-            val user = getUser.getSingle()
-            if(offices != null && user != null) {
-                setState(State.Success(ProfileContentModel(offices, user)))
-            } else {
+            try {
+                val officesResponse = client.get(
+                    urlString = "branches/",
+                    block = { parameter(key = "company", value = company.id.value) }
+                )
+                val offices = if (officesResponse.status == HttpStatusCode.OK)
+                    officesResponse.body<List<OfficeApiModel>>().map { it.map(company) }
+                else null
+
+                val userResponse = client.get(urlString = "users/me/")
+                val user = if (userResponse.status == HttpStatusCode.OK)
+                    userResponse.body<UserApiModel>().map()
+                else null
+
+                if (offices != null && user != null) {
+                    setState(State.Success(ProfileContentModel(offices, user)))
+                } else {
+                    setState(State.Failure(UiText.Res(R.string.failure)))
+                }
+            } catch (_: Exception) {
                 setState(State.Failure(UiText.Res(R.string.failure)))
             }
         }
     }
 
-    fun history() {
+    override fun history() {
         launch { navigator.navigateToHistory() }
     }
 
-    fun settings() {
+    override fun settings() {
         launch { navigator.navigateToSettings() }
     }
 
-    fun templates() {
+    override fun templates() {
         launch { navigator.navigateToTemplates() }
     }
 
-    fun clients() {
+    override fun clients() {
         launch { navigator.navigateToClients() }
     }
 
-    fun orders() {
+    override fun orders() {
         launch { navigator.navigateToOrders() }
     }
 
-    fun debts() {
+    override fun debts() {
         launch { navigator.navigateToDebts() }
     }
 }

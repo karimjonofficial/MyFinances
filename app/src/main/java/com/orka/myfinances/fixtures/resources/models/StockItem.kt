@@ -10,14 +10,12 @@ val stockItem1 = StockItem(
     product = product1,
     amount = 100,
     dateTime = dateTime,
-    office = office1
 )
 val stockItem2 = StockItem(
     id = id2,
     product = product2,
     amount = 100,
     dateTime = dateTime,
-    office = office1
 )
 
 val stockItems = listOf(stockItem1, stockItem2)

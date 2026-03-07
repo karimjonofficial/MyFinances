@@ -36,6 +36,7 @@ import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.managers.DummySessionManager
 import com.orka.myfinances.fixtures.resources.models.office1
 import com.orka.myfinances.fixtures.resources.models.session
+import com.orka.myfinances.fixtures.resources.models.user1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.Scaffold
@@ -49,13 +50,16 @@ import com.orka.myfinances.ui.screens.home.models.ProfileOption
 import com.orka.myfinances.ui.screens.home.parts.ProfileTopBar
 import com.orka.myfinances.ui.screens.home.viewmodel.profile.ProfileContentModel
 import com.orka.myfinances.ui.screens.home.viewmodel.profile.ProfileContentViewModel
+import com.orka.myfinances.ui.screens.home.viewmodel.profile.ProfileInteractor
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
 
 @Suppress("UNCHECKED_CAST")
 @Composable
 fun ProfileContent(
     modifier: Modifier,
     state: State,
-    viewModel: ProfileContentViewModel,
+    interactor: ProfileInteractor,
     session: Session,
     sessionManager: SessionManager
 ) {
@@ -63,32 +67,32 @@ fun ProfileContent(
         ProfileOption(
             index = 0,
             name = stringResource(R.string.settings),
-            action = viewModel::settings
+            action = interactor::settings
         ),
         ProfileOption(
             index = 1,
             name = stringResource(R.string.history),
-            action = viewModel::history
+            action = interactor::history
         ),
         ProfileOption(
             index = 2,
             name = stringResource(R.string.templates),
-            action = viewModel::templates
+            action = interactor::templates
         ),
         ProfileOption(
             index = 3,
             name = stringResource(R.string.clients),
-            action = viewModel::clients
+            action = interactor::clients
         ),
         ProfileOption(
             index = 4,
             name = stringResource(R.string.orders),
-            action = viewModel::orders
+            action = interactor::orders
         ),
         ProfileOption(
             index = 5,
             name = stringResource(R.string.debts),
-            action = viewModel::debts
+            action = interactor::debts
         )
     )
     val exposed = rememberSaveable { mutableStateOf(false) }
@@ -166,6 +170,7 @@ fun ProfileContent(
 )
 @Composable
 private fun ProfileContentPreview() {
+    val client = HttpClient(OkHttp)
     val navItems = listOf(
         NavItem(
             index = 0,
@@ -194,8 +199,8 @@ private fun ProfileContentPreview() {
     )
     val viewModel = viewModel {
         ProfileContentViewModel(
-            getOffices = { null },
-            getUser = { null },
+            client = client,
+            company = office1.company,
             navigator = DummyNavigator(),
             logger = DummyLogger()
         )
@@ -225,8 +230,8 @@ private fun ProfileContentPreview() {
         ProfileContent(
             modifier = Modifier.scaffoldPadding(paddingValues),
             session = session,
-            state = State.Success(listOf(office1)),
-            viewModel = viewModel,
+            state = State.Success(ProfileContentModel(listOf(office1), user1)),
+            interactor = viewModel,
             sessionManager = DummySessionManager()
         )
     }

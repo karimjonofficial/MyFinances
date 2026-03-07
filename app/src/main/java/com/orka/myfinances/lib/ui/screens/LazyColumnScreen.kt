@@ -16,7 +16,7 @@ typealias DialogState = androidx.compose.runtime.State<Boolean>
 @Composable
 fun <T> LazyColumnScreen(
     modifier: Modifier = Modifier,
-    topBar: @Composable () -> Unit = {},
+    topBar: @Composable (State) -> Unit = {},
     bottomBar: @Composable (State) -> Unit = {},
     arrangementSpace: Dp = 0.dp,
     state: State,
@@ -42,7 +42,7 @@ fun <T> LazyColumnScreen(
 @Composable
 fun <T> LazyColumnScreen(
     modifier: Modifier = Modifier,
-    topBar: @Composable () -> Unit = {},
+    topBar: @Composable (State) -> Unit = {},
     arrangementSpace: Dp = 0.dp,
     state: State,
     viewModel: ListViewModel<T>,
@@ -94,7 +94,7 @@ fun <T> LazyColumnScreen(
 @Composable
 fun <T> LazyColumnWithStickyHeaderScreen(
     modifier: Modifier = Modifier,
-    topBar: @Composable () -> Unit = {},
+    topBar: @Composable (State) -> Unit = {},
     arrangementSpace: Dp = 0.dp,
     state: State,
     viewModel: MapViewModel<T>,
@@ -118,7 +118,7 @@ fun <T> LazyColumnWithStickyHeaderScreen(
 @Composable
 fun <T> LazyColumnWithStickyHeaderScreen(
     modifier: Modifier = Modifier,
-    topBar: @Composable () -> Unit = {},
+    topBar: @Composable (State) -> Unit = {},
     arrangementSpace: Dp = 0.dp,
     state: State,
     viewModel: MapViewModel<T>,

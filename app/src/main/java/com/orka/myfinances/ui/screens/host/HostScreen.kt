@@ -7,6 +7,7 @@ import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.navigation.MainScreen
+import com.orka.myfinances.ui.screens.host.viewmodel.UiState
 import com.orka.myfinances.ui.screens.login.LoginScreen
 
 @Composable

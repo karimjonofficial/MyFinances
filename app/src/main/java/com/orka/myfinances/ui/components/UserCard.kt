@@ -25,7 +25,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.User
 import com.orka.myfinances.fixtures.resources.models.client1
 import com.orka.myfinances.lib.extensions.ui.phone
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
@@ -38,7 +37,7 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 @Composable
 fun UserCard(
     modifier: Modifier = Modifier,
-    user: User,
+    user: UserCardModel,
     onClick: () -> Unit
 ) {
     Row(
@@ -58,9 +57,7 @@ fun UserCard(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "${user.firstName[0].uppercase()}${
-                    user.lastName?.firstOrNull()?.uppercase() ?: ""
-                }",
+                text = user.shortName,
                 style = MaterialTheme.typography.titleMedium
             )
         }
@@ -71,7 +68,7 @@ fun UserCard(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "${user.firstName} ${user.lastName}",
+                text = user.fullName,
                 fontWeight = FontWeight.Bold
             )
 
@@ -82,7 +79,7 @@ fun UserCard(
         HorizontalSpacer(8)
         Icon(
             painter = painterResource(R.drawable.arrow_right),
-            contentDescription = user.firstName
+            contentDescription = user.fullName
         )
     }
 }

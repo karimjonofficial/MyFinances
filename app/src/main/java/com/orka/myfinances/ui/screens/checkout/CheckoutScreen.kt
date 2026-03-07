@@ -19,6 +19,8 @@ import com.orka.myfinances.ui.screens.checkout.viewmodel.BasketItemCardModel
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenState
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenViewModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
 
 @Composable
 fun CheckoutScreen(
@@ -64,12 +66,11 @@ fun CheckoutScreen(
 )
 @Composable
 private fun CheckoutScreenPreview() {
+    val client = HttpClient(OkHttp)
     val viewModel = viewModel {
         CheckoutScreenViewModel(
-            addSale = { null },
-            addOrder = { null },
-            basketRepository = BasketRepository(getById = { null }),
-            get = { null },
+            client = client,
+            basketRepository = BasketRepository(client = client),
             logger = DummyLogger(),
             navigator = DummyNavigator(),
             formatPrice = { "" },
@@ -88,7 +89,7 @@ private fun CheckoutScreenPreview() {
     MyFinancesTheme {
         CheckoutScreen(
             modifier = Modifier.fillMaxSize(),
-            state = CheckoutScreenState.Success(clients, items, 10000),
+            state = CheckoutScreenState.Success(clients, items, 10000, false),
             viewModel = viewModel
         )
     }

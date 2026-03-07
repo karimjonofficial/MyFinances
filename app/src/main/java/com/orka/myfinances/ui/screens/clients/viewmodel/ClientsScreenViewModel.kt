@@ -1,27 +1,39 @@
 package com.orka.myfinances.ui.screens.clients.viewmodel
 
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.data.models.Client
-import com.orka.myfinances.data.repositories.client.AddClientRequest
-import com.orka.myfinances.lib.data.repositories.Add
-import com.orka.myfinances.lib.data.repositories.Get
+import com.orka.myfinances.data.api.client.AddClientApiRequest
+import com.orka.myfinances.data.api.client.ClientApiModel
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.MapperListViewModel
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
+import com.orka.myfinances.lib.viewmodel.MapperListViewModel
 import com.orka.myfinances.ui.navigation.Navigator
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.asStateFlow
 
 class ClientsScreenViewModel(
-    get: Get<Client>,
-    private val add: Add<Client, AddClientRequest>,
+    private val client: HttpClient,
     loading: UiText,
     failure: UiText,
     private val navigator: Navigator,
     logger: Logger
-) : MapperListViewModel<Client, ClientModel>(
+) : MapperListViewModel<ClientApiModel, ClientModel>(
     loading = loading,
     failure = failure,
-    get = get,
+    get = {
+        try {
+            val response = client.get("clients/")
+            if (response.status == HttpStatusCode.OK) {
+                response.body<List<ClientApiModel>>()
+            } else null
+        } catch (_: Exception) {
+            null
+        }
+    },
     map = { it.toUiModel() },
     logger = logger
 ), ListViewModel<ClientModel> {
@@ -29,19 +41,27 @@ class ClientsScreenViewModel(
 
     fun add(name: String, lastName: String?, phone: String?, address: String?) {
         launch {
-            val request = AddClientRequest(
-                name = name,
-                lastName = lastName,
-                phone = phone,
-                address = address
-            )
-            if(add.add(request) != null) initialize()
+            try {
+                val request = AddClientApiRequest(
+                    firstName = name,
+                    lastName = lastName,
+                    phone = phone,
+                    address = address
+                )
+                val response = client.post(
+                    urlString = "clients/",
+                    block = { setBody(request) }
+                )
+                if (response.status == HttpStatusCode.Created) initialize()
+            } catch (_: Exception) {
+                // Handle error
+            }
         }
     }
 
-    fun select(client: Client) {
+    fun select(client: ClientModel) {
         launch {
-            navigator.navigateToClient(client)
+            navigator.navigateToClient(client.id)
         }
     }
 }

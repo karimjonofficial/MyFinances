@@ -26,7 +26,7 @@ fun ReceiveContent(
             ReceiveCard(
                 modifier = modifier,
                 receive = receive.model,
-                onClick = { viewModel.select(receive.receive) }
+                onClick = { viewModel.select(receive) }
             )
         }
     )

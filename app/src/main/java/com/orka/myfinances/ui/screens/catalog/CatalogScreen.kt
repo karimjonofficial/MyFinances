@@ -11,39 +11,46 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.folder.Catalog
-import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
-import com.orka.myfinances.lib.ui.Scaffold
-import com.orka.myfinances.ui.navigation.Navigator
+import com.orka.myfinances.lib.ui.components.TopAppBar
+import com.orka.myfinances.lib.ui.screens.StatefulScreen
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenState
+import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenStateSuccess
 import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenViewModel
 import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
 
 @Composable
 fun CatalogScreen(
     modifier: Modifier = Modifier,
-    catalog: Catalog,
-    state: CatalogScreenState,
-    viewModel: CatalogScreenViewModel,
-    navigator: Navigator
+    state: State,
+    viewModel: CatalogScreenViewModel
 ) {
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
 
-    Scaffold(
+    StatefulScreen<CatalogScreenStateSuccess>(
         modifier = modifier,
-        title = catalog.name,
-        actions = {
-            IconButton(onClick = { dialogVisible.value = true }) {
-                Icon(
-                    painter = painterResource(R.drawable.add),
-                    contentDescription = stringResource(R.string.add)
-                )
-            }
-        }
-    ) { paddingValues ->
+        state = state,
+        onRetry = { viewModel.initialize() },
+        topBar = { state ->
+            TopAppBar(
+                title = if (state is State.Success<*>)
+                    (state.value as CatalogScreenStateSuccess).catalog.name else stringResource(R.string.catalog),
+                actions = {
+                    IconButton(onClick = { dialogVisible.value = true}) {
+                        Icon(
+                            painter = painterResource(R.drawable.add),
+                            contentDescription = stringResource(R.string.add)
+                        )
+                    }
+                }
+            )
+        },
+    ) { modifier, model ->
         CatalogContent(
-            modifier = Modifier.scaffoldPadding(paddingValues),
-            state = state,
+            modifier = modifier,
+            state = CatalogScreenState.Success(
+                model.folders
+            ),
             viewModel = viewModel
         )
 
@@ -56,7 +63,10 @@ fun CatalogScreen(
             AddFolderDialog(
                 state = dialogState.value,
                 dismissRequest = { dialogVisible.value = false },
-                onAddTemplateClick = { navigator.navigateToAddTemplate() },
+                onAddTemplateClick = {
+                    viewModel.navigateToAddTemplate()
+                    dialogVisible.value = false
+                },
                 onSuccess = { name, folderType, templateId ->
                     viewModel.addFolder(name, folderType, templateId)
                     dialogVisible.value = false

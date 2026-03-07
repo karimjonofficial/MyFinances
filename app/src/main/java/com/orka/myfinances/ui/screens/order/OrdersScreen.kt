@@ -46,7 +46,7 @@ fun OrdersScreen(
             OrderCard(
                 modifier = modifier.padding(horizontal = 8.dp),
                 order = item.model,
-                onClick = { viewModel.select(item.order) }
+                onClick = { viewModel.select(item) }
             )
         }
     )

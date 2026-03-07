@@ -1,6 +1,6 @@
 package com.orka.myfinances.data.api.title
 
-import com.orka.myfinances.data.repositories.template.TemplateFieldApiModel
+import com.orka.myfinances.data.api.template.TemplateFieldApiModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -3,16 +3,17 @@ package com.orka.myfinances.ui.screens.history
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
-import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.models.ScreenTab
 import com.orka.myfinances.lib.ui.screens.MultipleTabScreen
+import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentViewModel
+import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
 
 @Composable
 fun HistoryScreen(
     modifier: Modifier = Modifier,
-    factory: Factory,
+    saleViewModel: SaleContentViewModel,
+    receiveViewModel: ReceiveContentViewModel,
 ) {
     val tabs = listOf(
         ScreenTab(
@@ -21,7 +22,7 @@ fun HistoryScreen(
             content = { modifier ->
                 SaleContent(
                     modifier = modifier,
-                    viewModel = viewModel { factory.salesViewModel() }
+                    viewModel = saleViewModel
                 )
             }
         ),
@@ -31,7 +32,7 @@ fun HistoryScreen(
             content = { modifier ->
                 ReceiveContent(
                     modifier = modifier,
-                    viewModel = viewModel { factory.receivesViewModel() }
+                    viewModel = receiveViewModel
                 )
             }
         )

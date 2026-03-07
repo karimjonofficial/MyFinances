@@ -1,9 +1,5 @@
 package com.orka.myfinances.ui.screens.host
 
-import androidx.compose.foundation.clickable
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.retain.retain
@@ -14,6 +10,8 @@ import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.ui.screens.host.components.OfficeCard
+import com.orka.myfinances.ui.screens.host.viewmodel.SelectOfficeScreenViewModel
 
 @Composable
 fun SelectOfficeScreen(
@@ -36,17 +34,14 @@ fun SelectOfficeScreen(
                 }
             )
         },
-        item = { itemModifier, model ->
-            ListItem(
-                modifier = itemModifier.clickable { office.value = model.office },
-                headlineContent = { Text(text = model.name) },
-                leadingContent = {
-                    Checkbox(
-                        checked = office.value == model.office,
-                        onCheckedChange = null
-                    )
-                }
+        item = { modifier, model ->
+            OfficeCard(
+                modifier = modifier,
+                model = model,
+                checked = office.value == model.office,
+                onChecked = { office.value = it.office }
             )
         }
     )
 }
+

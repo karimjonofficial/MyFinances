@@ -28,12 +28,17 @@ fun ListItem(
                 contentDescription = null
             )
         },
-        headlineContent = { Text(text = headlineText, softWrap = false) },
+        headlineContent = {
+            Text(
+                text = headlineText,
+                maxLines = 2
+            )
+        },
         supportingContent = { Text(text = supportingText) },
         trailingContent = {
             Column(horizontalAlignment = Alignment.End) {
                 Text(text = price)
-                if(dateTime != null) Text(text = dateTime)
+                if (dateTime != null) Text(text = dateTime)
             }
         }
     )

@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.application.LoggerImpl
-import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.clients
 import com.orka.myfinances.lib.ui.models.UiText
@@ -26,6 +25,8 @@ import com.orka.myfinances.ui.components.ClientCard
 import com.orka.myfinances.ui.screens.clients.viewmodel.ClientsScreenViewModel
 import com.orka.myfinances.ui.screens.clients.viewmodel.toUiModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,7 +68,7 @@ fun ClientsScreen(
             ClientCard(
                 modifier = modifier,
                 model = client.model,
-                onClick = { viewModel.select(client.client) }
+                onClick = { viewModel.select(client) }
             )
         }
     )
@@ -76,11 +77,10 @@ fun ClientsScreen(
 @Preview
 @Composable
 private fun ClientsScreenPreview() {
-    val repository = ClientRepository()
+    val client = HttpClient(OkHttp)
     val viewModel = viewModel {
         ClientsScreenViewModel(
-            get = repository,
-            add = repository,
+            client = client,
             loading = UiText.Res(R.string.loading),
             failure = UiText.Res(R.string.failure),
             navigator = DummyNavigator(),

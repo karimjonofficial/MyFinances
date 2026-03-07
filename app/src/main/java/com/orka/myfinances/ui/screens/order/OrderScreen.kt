@@ -23,10 +23,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.fixtures.format.FormatDateImpl
-import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
-import com.orka.myfinances.fixtures.managers.DummyNavigator
+import com.orka.myfinances.fixtures.format.FormatTimeImpl
 import com.orka.myfinances.fixtures.resources.models.order.order1
 import com.orka.myfinances.fixtures.resources.models.order.order2
 import com.orka.myfinances.lib.ui.components.DividedList
@@ -37,17 +37,18 @@ import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.components.ClientCard
 import com.orka.myfinances.ui.components.UserCard
-import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.debt.components.DescriptionCard
+import com.orka.myfinances.ui.screens.order.viewmodel.OrderInteractor
 import com.orka.myfinances.ui.screens.order.viewmodel.OrderScreenModel
-import com.orka.myfinances.ui.screens.order.viewmodel.toScreenModel
+import com.orka.myfinances.ui.screens.order.viewmodel.map
+import com.orka.myfinances.ui.screens.sale.viewmodel.map
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
 fun OrderScreen(
     modifier: Modifier = Modifier,
     state: State,
-    navigator: Navigator
+    interactor: OrderInteractor
 ) {
     @Suppress("UNCHECKED_CAST")
     StatefulScreen<OrderScreenModel>(
@@ -131,12 +132,12 @@ fun OrderScreen(
             VerticalSpacer(8)
             ClientCard(
                 model = order.client.model,
-                onClick = { navigator.navigateToClient(order.client.client) }
+                onClick = { interactor.navigateToClient(order.client.id) }
             )
 
             VerticalSpacer(8)
             UserCard(
-                user = order.user,
+                user = order.user.map(),
                 onClick = {}
             )
 
@@ -177,11 +178,20 @@ private fun LabeledDate(
 @Preview
 @Composable
 private fun OrderScreenPreview() {
+    val interactor = object : OrderInteractor {
+        override fun navigateToClient(clientId: Id) {
+
+        }
+    }
     MyFinancesTheme {
         OrderScreen(
             modifier = Modifier.fillMaxSize(),
-            state = State.Success(order1.toScreenModel(FormatPriceImpl(), FormatDateImpl(), FormatDecimalImpl())),
-            navigator = DummyNavigator()
+            state = State.Success(order1.map(
+                formatPrice = FormatPriceImpl(),
+                formatDate = FormatDateImpl(),
+                formatTime = FormatTimeImpl()
+            )),
+            interactor = interactor
         )
     }
 }
@@ -189,11 +199,20 @@ private fun OrderScreenPreview() {
 @Preview
 @Composable
 private fun CompletedOrderScreenPreview() {
+    val interactor = object : OrderInteractor {
+        override fun navigateToClient(clientId: Id) {
+
+        }
+    }
     MyFinancesTheme {
         OrderScreen(
             modifier = Modifier.fillMaxSize(),
-            state = State.Success(order2.toScreenModel(FormatPriceImpl(), FormatDateImpl(), FormatDecimalImpl())),
-            navigator = DummyNavigator()
+            state = State.Success(order2.map(
+                formatPrice = FormatPriceImpl(),
+                formatDate = FormatDateImpl(),
+                formatTime = FormatTimeImpl()
+            )),
+            interactor = interactor
         )
     }
 }

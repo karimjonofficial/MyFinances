@@ -29,7 +29,6 @@ fun NavigationGraph(
                     session = session,
                     sessionManager = sessionManager,
                     destination = destination,
-                    navigator = navigator,
                     factory = factory
                 )
             }

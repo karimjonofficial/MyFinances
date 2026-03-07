@@ -3,7 +3,7 @@ package com.orka.myfinances.ui.screens.home.viewmodel.profile
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.User
 
-fun UserModel.map(): User {
+fun UserApiModel.map(): User {
     return User(
         id = Id(id),
         firstName = firstName,
@@ -13,5 +13,18 @@ fun UserModel.map(): User {
         phone = phone,
         address = address,
         profession = profession
+    )
+}
+
+fun User.map(): UserApiModel {
+    return UserApiModel(
+        id = id.value,
+        firstName = firstName,
+        lastName = lastName,
+        patronymic = patronymic,
+        profession = profession,
+        userName = userName,
+        address = address,
+        phone = phone
     )
 }

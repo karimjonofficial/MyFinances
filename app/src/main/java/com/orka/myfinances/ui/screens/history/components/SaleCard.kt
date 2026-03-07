@@ -9,14 +9,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.R
-import com.orka.myfinances.fixtures.format.FormatDateImpl
-import com.orka.myfinances.fixtures.format.FormatNamesImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
-import com.orka.myfinances.fixtures.format.FormatTimeImpl
 import com.orka.myfinances.fixtures.resources.models.sale.sale1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
-import com.orka.myfinances.ui.screens.history.viewmodel.toModel
 
 @Composable
 fun SaleCard(
@@ -49,11 +45,11 @@ private fun SaleCardPreview() {
             repeat(10) {
                 SaleCard(
                     modifier = Modifier.fillMaxWidth(),
-                    sale = sale1.toModel(
-                        formatNames = FormatNamesImpl(),
-                        formatPrice = FormatPriceImpl(),
-                        formatDate = FormatDateImpl(),
-                        formatTime = FormatTimeImpl()
+                    sale = SaleCardModel(
+                        title = sale1.items.joinToString { it.product.title.name },
+                        price = FormatPriceImpl().formatPrice(sale1.price.toDouble()),
+                        size = "${sale1.items.size} items",
+                        dateTime = "12.02.26"
                     ),
                     onClick = {}
                 )

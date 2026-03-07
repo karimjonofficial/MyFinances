@@ -1,7 +1,8 @@
 package com.orka.myfinances.ui.screens.debt.viewmodel
 
-import com.orka.myfinances.data.models.Debt
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.ui.components.ClientCardModel
+import com.orka.myfinances.ui.components.UserCardModel
 
 data class DebtScreenModel(
     val price: String,
@@ -10,6 +11,8 @@ data class DebtScreenModel(
     val notified: Boolean,
     val client: ClientCardModel,
     val isOverdue: Boolean,
-    val debt: Debt,
+    val id: Id,
+    val user: UserCardModel,
+    val clientId: Id,
     val description: String? = null
 )

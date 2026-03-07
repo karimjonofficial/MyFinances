@@ -13,7 +13,7 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 @Composable
 fun <T> StatefulScreen(
     modifier: Modifier = Modifier,
-    topBar: @Composable () -> Unit = {},
+    topBar: @Composable (State) -> Unit = {},
     bottomBar: @Composable (State) -> Unit = {},
     state: State,
     onRetry: () -> Unit = {},
@@ -21,7 +21,7 @@ fun <T> StatefulScreen(
 ) {
     Scaffold(
         modifier = modifier,
-        topBar = topBar,
+        topBar = { topBar(state) },
         bottomBar = { bottomBar(state) },
     ) { paddingValues ->
         val m = Modifier.scaffoldPadding(paddingValues)

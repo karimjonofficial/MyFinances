@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.ui.managers.SessionManager
-import com.orka.myfinances.ui.screens.host.NavigationManager
+import com.orka.myfinances.ui.screens.host.viewmodel.NavigationManager
 
 @Composable
 fun MainScreen(

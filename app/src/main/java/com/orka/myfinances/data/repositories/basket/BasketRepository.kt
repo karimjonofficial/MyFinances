@@ -3,13 +3,16 @@ package com.orka.myfinances.data.repositories.basket
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.models.product.Product
-import com.orka.myfinances.lib.data.repositories.GetById
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-class BasketRepository(private val getById: GetById<Product>) {
+class BasketRepository(private val client: HttpClient) {
     private val mutex = Mutex()
     private val items = mutableListOf<BasketItem>()
 
@@ -27,9 +30,14 @@ class BasketRepository(private val getById: GetById<Product>) {
                 val i = items[index]
                 items[index] = i.copy(amount = i.amount + amount)
             } else {
-                val product = getById.getById(id)
-                if (product != null) {
-                    items.add(BasketItem(product, amount))
+                try {
+                    val response = client.get("products/${id.value}/")
+                    if (response.status == HttpStatusCode.OK) {
+                        val product = response.body<Product>()
+                        items.add(BasketItem(product, amount))
+                    }
+                } catch (_: Exception) {
+                    // Handle error
                 }
             }
             emit()

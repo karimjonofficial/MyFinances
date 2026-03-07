@@ -21,7 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.extensions.ui.str
+import com.orka.myfinances.lib.extensions.ui.phone
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 
@@ -67,7 +67,7 @@ fun ClientCard(
             )
 
             VerticalSpacer(4)
-            Text(text = model.phone.str())
+            Text(text = model.phone.phone())
         }
 
         HorizontalSpacer(8)

@@ -32,7 +32,7 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
-import com.orka.myfinances.ui.screens.order.viewmodel.toModel
+import com.orka.myfinances.ui.screens.order.viewmodel.map
 
 @Composable
 fun OrderCard(
@@ -154,7 +154,7 @@ private fun OrderCardPreview() {
             repeat(5) {
                 OrderCard(
                     modifier = Modifier.fillMaxWidth(),
-                    order = order1.toModel(
+                    order = order1.map(
                         formatPrice = FormatPriceImpl(),
                         formatDate = FormatDateImpl(),
                         formatTime = FormatTimeImpl()
@@ -164,7 +164,7 @@ private fun OrderCardPreview() {
 
                 OrderCard(
                     modifier = Modifier.fillMaxWidth(),
-                    order = order2.toModel(
+                    order = order2.map(
                         formatPrice = FormatPriceImpl(),
                         formatDate = FormatDateImpl(),
                         formatTime = FormatTimeImpl()

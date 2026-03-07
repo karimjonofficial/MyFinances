@@ -1,10 +1,10 @@
 package com.orka.myfinances.data.repositories.basket
 
 import com.orka.myfinances.core.MainDispatcherContext
-import com.orka.myfinances.data.repositories.product.ProductRepository
 import com.orka.myfinances.testFixtures.resources.amount
 import com.orka.myfinances.testFixtures.resources.models.id1
 import com.orka.myfinances.testFixtures.resources.models.product.product2
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.launch
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -14,11 +14,8 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class BasketRepositoryTest : MainDispatcherContext() {
-    private val productRepository = ProductRepository(
-        titleRepository = { null },
-        generator = { id1 }
-    )
-    private val repository = BasketRepository(productRepository)
+    private val httpClient = HttpClient()
+    private val repository = BasketRepository(httpClient)
 
     @Test
     fun `Returns an empty list`() {

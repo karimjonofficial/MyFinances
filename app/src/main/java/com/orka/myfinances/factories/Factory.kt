@@ -2,31 +2,21 @@ package com.orka.myfinances.factories
 
 import com.orka.myfinances.R
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.data.models.Debt
-import com.orka.myfinances.data.models.folder.Catalog
-import com.orka.myfinances.data.models.folder.Category
-import com.orka.myfinances.data.models.order.Order
-import com.orka.myfinances.data.models.product.ProductTitle
-import com.orka.myfinances.data.models.receive.Receive
-import com.orka.myfinances.data.models.sale.Sale
+import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.repositories.basket.BasketRepository
-import com.orka.myfinances.data.repositories.client.ClientRepository
-import com.orka.myfinances.data.repositories.debt.DebtRepository
-import com.orka.myfinances.data.repositories.folder.CategoryRepository
-import com.orka.myfinances.data.repositories.folder.FolderRepository
-import com.orka.myfinances.data.repositories.notification.NotificationRepository
-import com.orka.myfinances.data.repositories.office.OfficeRepository
-import com.orka.myfinances.data.repositories.order.OrderRepository
-import com.orka.myfinances.data.repositories.product.title.ProductTitleRepository
-import com.orka.myfinances.data.repositories.receive.ReceiveRepository
-import com.orka.myfinances.data.repositories.sale.SaleRepository
-import com.orka.myfinances.data.repositories.stock.StockRepository
-import com.orka.myfinances.data.repositories.template.TemplateRepository
+import com.orka.myfinances.data.repositories.folder.FolderEvent
+import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
+import com.orka.myfinances.data.repositories.receive.ReceiveEvent
+import com.orka.myfinances.data.repositories.sale.SaleEvent
+import com.orka.myfinances.data.repositories.stock.StockEvent
+import com.orka.myfinances.data.repositories.template.TemplateEvent
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.printer.pos.BluetoothPrinterImpl
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenViewModel
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenViewModel
+import com.orka.myfinances.ui.screens.client.viewmodel.ClientScreenViewModel
 import com.orka.myfinances.ui.screens.clients.viewmodel.ClientsScreenViewModel
 import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenViewModel
 import com.orka.myfinances.ui.screens.debt.viewmodel.DebtsScreenViewModel
@@ -34,9 +24,8 @@ import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentViewModel
 import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.folder.FoldersContentViewModel
-import com.orka.myfinances.ui.screens.home.viewmodel.profile.InfoRepository
 import com.orka.myfinances.ui.screens.home.viewmodel.profile.ProfileContentViewModel
-import com.orka.myfinances.ui.screens.host.Formatter
+import com.orka.myfinances.ui.screens.host.viewmodel.Formatter
 import com.orka.myfinances.ui.screens.notification.NotificationScreenViewModel
 import com.orka.myfinances.ui.screens.order.viewmodel.OrderScreenViewModel
 import com.orka.myfinances.ui.screens.order.viewmodel.OrdersScreenViewModel
@@ -45,87 +34,85 @@ import com.orka.myfinances.ui.screens.product.viewmodel.ProductTitleScreenViewMo
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenViewModel
 import com.orka.myfinances.ui.screens.receive.viewmodel.ReceiveScreenViewModel
 import com.orka.myfinances.ui.screens.sale.viewmodel.SaleScreenViewModel
+import com.orka.myfinances.ui.screens.templates.TemplateScreenViewModel
 import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
 import com.orka.myfinances.ui.screens.templates.viewmodel.TemplatesScreenViewModel
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
+import io.ktor.client.HttpClient
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 class Factory(
+    private val session: Session,
+    private val client: HttpClient,
     private val printer: BluetoothPrinterImpl,
-    private val officeRepository: OfficeRepository,
-    private val productTitleRepository: ProductTitleRepository,
-    private val folderRepository: FolderRepository,
-    private val templateRepository: TemplateRepository,
-    private val categoryRepository: CategoryRepository,
-    private val stockRepository: StockRepository,
     private val basketRepository: BasketRepository,
-    private val clientRepository: ClientRepository,
-    private val saleRepository: SaleRepository,
-    private val orderRepository: OrderRepository,
-    private val receiveRepository: ReceiveRepository,
-    private val debtRepository: DebtRepository,
-    private val notificationRepository: NotificationRepository,
     private val logger: Logger,
     private val navigator: Navigator,
-    private val formatter: Formatter,
-    private val infoRepository: InfoRepository
+    private val formatter: Formatter
 ) {
     private val loading = UiText.Res(R.string.loading)
     private val failure = UiText.Res(R.string.failure)
+    private val stockFlow = MutableSharedFlow<StockEvent>()
+    private val templateFlow = MutableSharedFlow<TemplateEvent>()
+    private val productTitleFlow = MutableSharedFlow<ProductTitleEvent>()
+    private val folderFlow = MutableSharedFlow<FolderEvent>()
+    private val saleFlow = MutableSharedFlow<SaleEvent>()
+    private val receiveFlow = MutableSharedFlow<ReceiveEvent>()
 
     fun foldersViewModel(): FoldersContentViewModel {
         return FoldersContentViewModel(
-            get = folderRepository,
-            add = folderRepository,
-            templateRepository = templateRepository,
+            client = client,
             navigator = navigator,
+            office = session.office,
             logger = logger
         )
     }
 
     fun templatesViewModel(): TemplatesScreenViewModel {
         return TemplatesScreenViewModel(
-            get = templateRepository,
-            events = templateRepository.events,
+            client = client,
             navigator = navigator,
-            logger = logger
+            logger = logger,
+            events = templateFlow
         )
     }
 
     fun addTemplateViewModel(): AddTemplateScreenViewModel {
-        return AddTemplateScreenViewModel(add = templateRepository)
+        return AddTemplateScreenViewModel(
+            client = client,
+            navigator = navigator
+        )
     }
 
     fun addProductViewModel(): AddProductTitleScreenViewModel {
         return AddProductTitleScreenViewModel(
-            productTitleRepository = productTitleRepository,
-            categoryRepository = categoryRepository,
+            office = session.office,
+            client = client,
             navigator = navigator,
             logger = logger
         )
     }
 
-    fun warehouseViewModel(category: Category): WarehouseScreenViewModel {
+    fun warehouseViewModel(id: Id): WarehouseScreenViewModel {
         return WarehouseScreenViewModel(
-            category = category,
-            getProductTitles = productTitleRepository,
-            getStockItems = stockRepository,
+            id = id,
+            client = client,
             basketRepository = basketRepository,
-            productTitleEvents = productTitleRepository.events,
-            stockEvents = stockRepository.events,
+            productTitleEvents = productTitleFlow,
             navigator = navigator,
-            priceFormatter = formatter,
-            decimalFormatter = formatter,
+            formatPrice = formatter,
+            formatDecimal = formatter,
+            stockEvents = stockFlow,
             logger = logger
         )
     }
 
-    fun catalogViewModel(catalog: Catalog): CatalogScreenViewModel {
+    fun catalogViewModel(id: Id): CatalogScreenViewModel {
         return CatalogScreenViewModel(
-            catalog = catalog,
-            getByParameter = folderRepository,
-            add = folderRepository,
-            get = templateRepository,
-            events = folderRepository.events,
+            office = session.office,
+            id = id,
+            client = client,
+            events = folderFlow,
             navigator = navigator,
             logger = logger
         )
@@ -143,10 +130,18 @@ class Factory(
 
     fun clientsViewModel(): ClientsScreenViewModel {
         return ClientsScreenViewModel(
-            get = clientRepository,
-            add = clientRepository,
+            client = client,
             loading = loading,
             failure = failure,
+            navigator = navigator,
+            logger = logger
+        )
+    }
+
+    fun clientViewModel(id: Id): ClientScreenViewModel {
+        return ClientScreenViewModel(
+            id = id,
+            client = client,
             navigator = navigator,
             logger = logger
         )
@@ -156,49 +151,48 @@ class Factory(
         return SaleContentViewModel(
             loading = loading,
             failure = failure,
-            repository = saleRepository,
-            events = saleRepository.events,
+            client = client,
+            events = saleFlow,
             navigator = navigator,
-            formatNames = formatter,
             priceFormatter = formatter,
             dateFormatter = formatter,
-            timeFormatter = formatter,
+            formatDateTime = formatter,
             logger = logger,
         )
     }
 
-    fun saleViewModel(sale: Sale): SaleScreenViewModel {
+    fun saleViewModel(id: Id): SaleScreenViewModel {
         return SaleScreenViewModel(
-            sale = sale,
+            id = id,
+            client = client,
             formatPrice = formatter,
             formatDateTime = formatter,
             loading = loading,
             formatDecimal = formatter,
+            navigator = navigator,
             logger = logger
         )
     }
 
     fun receivesViewModel(): ReceiveContentViewModel {
         return ReceiveContentViewModel(
-            repository = receiveRepository,
-            events = receiveRepository.events,
+            client = client,
+            events = receiveFlow,
             loading = loading,
             failure = failure,
             navigator = navigator,
-            formatNames = formatter,
-            priceFormatter = formatter,
-            dateFormatter = formatter,
-            timeFormatter = formatter,
+            formatPrice = formatter,
+            formatDate = formatter,
+            formatTime = formatter,
+            formatDecimal = formatter,
             logger = logger
         )
     }
 
     fun checkoutViewModel(): CheckoutScreenViewModel {
         return CheckoutScreenViewModel(
-            addSale = saleRepository,
-            addOrder = orderRepository,
+            client = client,
             basketRepository = basketRepository,
-            get = clientRepository,
             logger = logger,
             navigator = navigator,
             formatPrice = formatter,
@@ -208,13 +202,10 @@ class Factory(
         )
     }
 
-    fun addReceiveViewModel(category: Category): AddReceiveScreenViewModel {
+    fun addReceiveViewModel(id: Id): AddReceiveScreenViewModel {
         return AddReceiveScreenViewModel(
-            get = productTitleRepository,
-            add = receiveRepository,
-            category = category,
-            loading = loading,
-            failure = failure,
+            client = client,
+            id = id,
             navigator = navigator,
             logger = logger
         )
@@ -222,16 +213,16 @@ class Factory(
 
     fun notificationsViewModel(): NotificationScreenViewModel {
         return NotificationScreenViewModel(
-            repository = notificationRepository,
+            client = client,
             logger = logger,
             loading = loading,
-            failure = failure,
+            failure = failure
         )
     }
 
     fun ordersViewModel(): OrdersScreenViewModel {
         return OrdersScreenViewModel(
-            get = orderRepository,
+            client = client,
             loading = loading,
             failure = failure,
             navigator = navigator,
@@ -242,21 +233,21 @@ class Factory(
         )
     }
 
-    fun orderViewModel(order: Order): OrderScreenViewModel {
+    fun orderViewModel(id: Id): OrderScreenViewModel {
         return OrderScreenViewModel(
-            order = order,
+            id = id,
+            client = client,
             formatPrice = formatter,
             formatDate = formatter,
-            formatDecimal = formatter,
+            formatTime = formatter,
+            navigator = navigator,
             logger = logger
         )
     }
 
     fun debtsViewModel(): DebtsScreenViewModel {
         return DebtsScreenViewModel(
-            getDebts = debtRepository,
-            add = debtRepository,
-            getClients = clientRepository,
+            client = client,
             navigator = navigator,
             logger = logger,
             loading = loading,
@@ -267,43 +258,56 @@ class Factory(
         )
     }
 
-    fun debtViewModel(debt: Debt): DebtScreenViewModel {
+    fun debtViewModel(id: Id): DebtScreenViewModel {
         return DebtScreenViewModel(
-            debt = debt,
+            id = id,
+            client = client,
             formatPrice = formatter,
             formatDate = formatter,
+            navigator = navigator,
             logger = logger
         )
     }
 
     fun profileViewModel(): ProfileContentViewModel {
         return ProfileContentViewModel(
-            getOffices = officeRepository,
-            getUser = infoRepository,
+            company = session.office.company,
+            client = client,
             navigator = navigator,
             logger = logger
         )
     }
 
-    fun productTitleViewModel(productTitle: ProductTitle): ProductTitleScreenViewModel {
+    fun productTitleViewModel(id: Id): ProductTitleScreenViewModel {
         return ProductTitleScreenViewModel(
-            productTitle = productTitle,
-            repository = receiveRepository,
+            id = id,
+            client = client,
             formatDecimal = formatter,
             formatDate = formatter,
             formatPrice = formatter,
-            loading = loading,
             logger = logger
         )
     }
 
-    fun receiveViewModel(receive: Receive): ReceiveScreenViewModel {
+    fun receiveViewModel(id: Id): ReceiveScreenViewModel {
         return ReceiveScreenViewModel(
-            receive = receive,
+            id = id,
+            client = client,
             formatPrice = formatter,
             formatDateTime = formatter,
             formatDecimal = formatter,
             loading = loading,
+            navigator = navigator,
+            logger = logger
+        )
+    }
+
+    fun templateViewModel(id: Id): TemplateScreenViewModel {
+        return TemplateScreenViewModel(
+            id = id,
+            client = client,
+            failure = failure,
+            navigator = navigator,
             logger = logger
         )
     }

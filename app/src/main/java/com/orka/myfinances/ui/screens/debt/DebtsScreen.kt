@@ -18,7 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.core.DummyLogger
-import com.orka.myfinances.fixtures.format.FormatDateImpl
 import com.orka.myfinances.fixtures.format.FormatDateTimeImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.managers.DummyNavigator
@@ -29,7 +28,9 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.debt.components.DebtCard
 import com.orka.myfinances.ui.screens.debt.parts.AddDebtDialog
 import com.orka.myfinances.ui.screens.debt.viewmodel.DebtsScreenViewModel
-import com.orka.myfinances.ui.screens.debt.viewmodel.toMap
+import com.orka.myfinances.ui.screens.debt.viewmodel.map
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,7 +62,7 @@ fun DebtsScreen(
             DebtCard(
                 modifier = modifier,
                 debt = item.model,
-                onClick = { viewModel.select(item.debt) }
+                onClick = { viewModel.select(item) }
             )
         },
         dialogState = visible,
@@ -87,11 +88,10 @@ fun DebtsScreen(
 @Preview
 @Composable
 private fun DebtsScreenPreview() {
+    val client = HttpClient(OkHttp)
     val viewModel = viewModel {
         DebtsScreenViewModel(
-            getDebts = { null },
-            add = { null },
-            getClients = { null },
+            client = client,
             formatPrice = { "" },
             formatDate = { "" },
             formatDateTime = { "" },
@@ -112,11 +112,12 @@ private fun DebtsScreenPreview() {
     data.addAll(debts)
     data.addAll(debts)
     val state = State.Success(
-        value = data.toMap(
-            formatPrice = FormatPriceImpl(),
-            formatDate = FormatDateImpl(),
-            formatDateTime = FormatDateTimeImpl()
-        )
+        value = data.map {
+            it.map(
+                formatPrice = FormatPriceImpl(),
+                formatDateTime = FormatDateTimeImpl()
+            )
+        }
     )
 
     DebtsScreen(

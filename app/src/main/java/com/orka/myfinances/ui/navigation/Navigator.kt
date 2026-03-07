@@ -1,38 +1,30 @@
 package com.orka.myfinances.ui.navigation
 
-import com.orka.myfinances.data.models.Client
-import com.orka.myfinances.data.models.Debt
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
-import com.orka.myfinances.data.models.folder.Catalog
-import com.orka.myfinances.data.models.folder.Category
-import com.orka.myfinances.data.models.order.Order
-import com.orka.myfinances.data.models.product.ProductTitle
-import com.orka.myfinances.data.models.receive.Receive
-import com.orka.myfinances.data.models.sale.Sale
-import com.orka.myfinances.data.models.template.Template
 
 interface Navigator {
     fun back()
     fun navigateToHome()
-    fun navigateToCatalog(catalog: Catalog)
-    fun navigateToCategory(category: Category)
+    fun navigateToCatalog(id: Id)
+    fun navigateToCategory(id: Id)
     fun navigateToNotifications()
     fun navigateToAddTemplate()
-    fun navigateToAddProduct(category: Category)
+    fun navigateToAddProduct(id: Id)
     fun navigateToSettings()
     fun navigateToTemplates()
-    fun navigateToProductTitle(productTitle: ProductTitle)
+    fun navigateToProductTitle(id: Id)
     fun navigateToClients()
-    fun navigateToClient(client: Client)
+    fun navigateToClient(id: Id)
     fun navigateToHistory()
     fun navigateToCheckout(items: List<BasketItem>)
-    fun navigateToAddStockItem(category: Category)
+    fun navigateToAddStockItem(id: Id)
     fun navigateToOrders()
-    fun navigateToOrder(order: Order)
+    fun navigateToOrder(id: Id)
     fun navigateToDebts()
-    fun navigateToDebt(debt: Debt)
+    fun navigateToDebt(id: Id)
     fun navigateToSearch()
-    fun navigateToTemplate(template: Template)
-    fun navigateToSale(sale: Sale)
-    fun navigateToReceive(receive: Receive)
+    fun navigateToTemplate(id: Id)
+    fun navigateToSale(id: Id)
+    fun navigateToReceive(id: Id)
 }

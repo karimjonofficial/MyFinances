@@ -26,7 +26,7 @@ fun SaleContent(
             SaleCard(
                 modifier = modifier,
                 sale = sale.model,
-                onClick = { viewModel.select(sale.sale) }
+                onClick = { viewModel.select(sale) }
             )
         }
     )

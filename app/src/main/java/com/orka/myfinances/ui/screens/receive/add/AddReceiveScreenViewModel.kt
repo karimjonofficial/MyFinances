@@ -1,34 +1,65 @@
 package com.orka.myfinances.ui.screens.receive.add
 
+import com.orka.myfinances.R
 import com.orka.myfinances.core.Logger
+import com.orka.myfinances.data.api.folder.FolderModel
+import com.orka.myfinances.data.api.folder.map
+import com.orka.myfinances.data.api.title.ProductTitleApiModel
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.product.ProductTitle
-import com.orka.myfinances.data.models.receive.Receive
+import com.orka.myfinances.data.api.title.map
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.data.repositories.receive.ReceiveItemModel
-import com.orka.myfinances.lib.data.repositories.Add
-import com.orka.myfinances.lib.data.repositories.GetByParameter
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.ListByParameterViewModel
+import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.asStateFlow
 
 class AddReceiveScreenViewModel(
-    category: Category,
-    private val add: Add<Receive, AddReceiveRequest>,
-    get: GetByParameter<ProductTitle, Category>,
-    loading: UiText,
-    failure: UiText,
+    private val id: Id,
+    private val client: HttpClient,
     private val navigator: Navigator,
     logger: Logger
-) : ListByParameterViewModel<ProductTitle, Category>(
-    parameter = category,
-    loading = loading,
-    failure = failure,
-    repository = get,
+) : SingleStateViewModel<State>(
+    initialState = State.Initial,
     logger = logger
 ) {
     val uiState = state.asStateFlow()
+
+    override fun initialize() {
+        launch {
+            try {
+                val categoryResponse = client.get("categories/${id.value}/")
+                if (categoryResponse.status == HttpStatusCode.OK) {
+                    val category = categoryResponse.body<FolderModel>().map() as Category
+                    
+                    val titlesResponse = client.get(
+                        urlString = "product-titles/",
+                        block = { parameter("category", id.value) }
+                    )
+                    if (titlesResponse.status == HttpStatusCode.OK) {
+                        val titles = titlesResponse.body<List<ProductTitleApiModel>>().map { it.map(category) }
+                        setState(State.Success(AddReceiveScreenStateSuccess(category, titles)))
+                    } else {
+                        setState(State.Failure(UiText.Res(R.string.failure)))
+                    }
+                } else {
+                    setState(State.Failure(UiText.Res(R.string.failure)))
+                }
+            } catch (_: Exception) {
+                setState(State.Failure(UiText.Res(R.string.failure)))
+            }
+        }
+    }
 
     fun add(
         title: ProductTitle?,
@@ -57,8 +88,17 @@ class AddReceiveScreenViewModel(
                     ),
                     price = totalPrice
                 )
-                add.add(request)
-                navigator.back()
+                try {
+                    val response = client.post(
+                        urlString = "receives/",
+                        block = { setBody(request) }
+                    )
+                    if (response.status == HttpStatusCode.Created) {
+                        navigator.back()
+                    }
+                } catch (_: Exception) {
+                    // Handle error
+                }
             }
         }
     }

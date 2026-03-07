@@ -21,7 +21,7 @@ class BasketContentViewModel(
 ) : SingleStateViewModel<BasketState>(
     initialState = BasketState.Loading,
     logger = logger
-) {
+), BasketInteractor {
     val uiState = state.asStateFlow()
 
     init {
@@ -41,31 +41,31 @@ class BasketContentViewModel(
         )
     }
 
-    fun increase(item: BasketItem) {
+    override fun increase(item: BasketItem) {
         launch {
             repository.add(id = item.product.id, amount = 1)
         }
     }
 
-    fun decrease(item: BasketItem) {
+    override fun decrease(item: BasketItem) {
         launch {
             repository.remove(item.product.id, 1)
         }
     }
 
-    fun remove(item: BasketItem) {
+    override fun remove(item: BasketItem) {
         launch {
             repository.remove(item.product.id, item.amount)
         }
     }
 
-    fun clear() {
+    override fun clear() {
         launch {
             repository.clear()
         }
     }
 
-    fun checkout() {
+    override fun checkout() {
         launch {
             val currentState = state.value
             if (currentState is BasketState.Success) {
@@ -74,4 +74,3 @@ class BasketContentViewModel(
         }
     }
 }
-

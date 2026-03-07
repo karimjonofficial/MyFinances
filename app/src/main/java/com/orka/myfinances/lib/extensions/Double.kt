@@ -14,8 +14,3 @@ fun Double.format(): String {
         return int.format() + r
     }
 }
-
-fun String.parseFromFormatted(): Double? {
-    val s = replace(", ", "")
-    return s.toDoubleOrNull()
-}
