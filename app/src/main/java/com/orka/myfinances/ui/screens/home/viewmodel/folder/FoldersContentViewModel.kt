@@ -34,6 +34,11 @@ class FoldersContentViewModel(
     val uiState = state1.asStateFlow()
     val dialogState = state2.asStateFlow()
 
+    override fun refresh() {
+        if (state1.value is FoldersState.Loading) return
+        initialize()
+    }
+
     override fun initialize() {
         launch {
             setState1(FoldersState.Loading)
@@ -101,3 +106,5 @@ class FoldersContentViewModel(
         }
     }
 }
+
+
