@@ -26,7 +26,6 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,7 +33,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class CatalogScreenViewModel(
-    private val id: Id,
+    private val catalog: Catalog,
     private val client: HttpClient,
     private val office: Office,
     events: Flow<FolderEvent>,
@@ -50,29 +49,22 @@ class CatalogScreenViewModel(
 
     init {
         events.onEach {
-            if(it.catalogId == id) initialize()
+            if(it.catalogId == catalog.id) initialize()
         }.launchIn(viewModelScope)
     }
 
     override fun initialize() {
         launch {
             try {
-                val catalogResponse = client.get("categories/${id.value}/")
-                if (catalogResponse.status == HttpStatusCode.OK) {
-                    val catalog = catalogResponse.body<FolderModel>().map() as Catalog
-                    
-                    val folders = client.get(
-                        urlString = "categories/",
-                        block = {
-                            parameter("parent_id", id.value)
-                            parameter("branch", office.id.value)
-                        }
-                    ).body<List<FolderModel>>().map { it.map() }
+                val folders = client.get(
+                    urlString = "categories/",
+                    block = {
+                        parameter("parent_id", catalog.id.value)
+                        parameter("branch", office.id.value)
+                    }
+                ).body<List<FolderModel>>().map { it.map() }
 
-                    setState(State.Success(CatalogScreenStateSuccess(catalog, folders.map { it.toUiModel() })))
-                } else {
-                    setState(State.Failure(UiText.Res(R.string.failure)))
-                }
+                setState(State.Success(CatalogScreenStateSuccess(catalog, folders.map { it.toUiModel() })))
             } catch (_: Exception) {
                 setState(State.Failure(UiText.Res(R.string.failure)))
             }
@@ -105,7 +97,7 @@ class CatalogScreenViewModel(
                 name = name,
                 type = type,
                 templateId = templateId,
-                parentId = id
+                parentId = catalog.id
             )
             client.post(
                 urlString = "categories/",
@@ -117,8 +109,8 @@ class CatalogScreenViewModel(
     fun select(folder: Folder) {
         launch {
             when (folder) {
-                is Catalog -> navigator.navigateToCatalog(folder.id)
-                is Category -> navigator.navigateToCategory(folder.id)
+                is Catalog -> navigator.navigateToCatalog(folder)
+                is Category -> navigator.navigateToCategory(folder)
             }
         }
     }

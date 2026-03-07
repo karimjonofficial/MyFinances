@@ -3,6 +3,8 @@ package com.orka.myfinances.ui.screens.host.viewmodel
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
+import com.orka.myfinances.data.models.folder.Catalog
+import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.fixtures.resources.Types
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Destination
@@ -36,12 +38,12 @@ class NavigationManager(
         navigate(state.value[0])
     }
 
-    override fun navigateToCatalog(id: Id) {
-        navigate(Destination.Catalog(id))
+    override fun navigateToCatalog(catalog: Catalog) {
+        navigate(Destination.Catalog(catalog))
     }
 
-    override fun navigateToCategory(id: Id) {
-        navigate(Destination.Warehouse(id))
+    override fun navigateToCategory(category: Category) {
+        navigate(Destination.Warehouse(category))
     }
 
     override fun navigateToNotifications() {

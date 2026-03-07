@@ -2,12 +2,14 @@ package com.orka.myfinances.ui.navigation
 
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
+import com.orka.myfinances.data.models.folder.Catalog
+import com.orka.myfinances.data.models.folder.Category
 
 interface Navigator {
     fun back()
     fun navigateToHome()
-    fun navigateToCatalog(id: Id)
-    fun navigateToCategory(id: Id)
+    fun navigateToCatalog(catalog: Catalog)
+    fun navigateToCategory(category: Category)
     fun navigateToNotifications()
     fun navigateToAddTemplate()
     fun navigateToAddProduct(id: Id)

@@ -15,8 +15,8 @@ fun catalogEntry(
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val viewModel = viewModel(
-        key = "${destination.id.value}",
-        initializer = { factory.catalogViewModel(destination.id) }
+        key = "${destination.catalog.id.value}",
+        initializer = { factory.catalogViewModel(destination.catalog) }
     )
     val uiState = viewModel.uiState.collectAsState()
 

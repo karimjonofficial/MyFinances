@@ -77,8 +77,8 @@ class FoldersContentViewModel(
     override fun select(folder: Folder) {
         launch {
             when (folder) {
-                is Catalog -> navigator.navigateToCatalog(folder.id)
-                is Category -> navigator.navigateToCategory(folder.id)
+                is Catalog -> navigator.navigateToCatalog(folder)
+                is Category -> navigator.navigateToCategory(folder)
             }
         }
     }

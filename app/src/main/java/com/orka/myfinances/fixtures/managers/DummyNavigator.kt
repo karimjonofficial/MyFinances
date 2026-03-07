@@ -2,12 +2,14 @@ package com.orka.myfinances.fixtures.managers
 
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
+import com.orka.myfinances.data.models.folder.Catalog
+import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.ui.navigation.Navigator
 
 class DummyNavigator : Navigator {
     override fun navigateToHome() {}
-    override fun navigateToCatalog(id: Id) {}
-    override fun navigateToCategory(id: Id) {}
+    override fun navigateToCatalog(catalog: Catalog) {}
+    override fun navigateToCategory(category: Category) {}
     override fun navigateToNotifications() {}
     override fun navigateToAddTemplate() {}
     override fun navigateToAddProduct(id: Id) {}

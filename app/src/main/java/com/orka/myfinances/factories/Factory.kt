@@ -4,6 +4,8 @@ import com.orka.myfinances.R
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Session
+import com.orka.myfinances.data.models.folder.Catalog
+import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.folder.FolderEvent
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
@@ -93,9 +95,9 @@ class Factory(
         )
     }
 
-    fun warehouseViewModel(id: Id): WarehouseScreenViewModel {
+    fun warehouseViewModel(category: Category): WarehouseScreenViewModel {
         return WarehouseScreenViewModel(
-            id = id,
+            category = category,
             client = client,
             basketRepository = basketRepository,
             productTitleEvents = productTitleFlow,
@@ -107,10 +109,10 @@ class Factory(
         )
     }
 
-    fun catalogViewModel(id: Id): CatalogScreenViewModel {
+    fun catalogViewModel(catalog: Catalog): CatalogScreenViewModel {
         return CatalogScreenViewModel(
             office = session.office,
-            id = id,
+            catalog = catalog,
             client = client,
             events = folderFlow,
             navigator = navigator,

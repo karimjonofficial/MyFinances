@@ -3,8 +3,6 @@ package com.orka.myfinances.ui.screens.warehouse.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.R
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.data.api.folder.FolderModel
-import com.orka.myfinances.data.api.folder.map
 import com.orka.myfinances.data.api.stock.StockItemApiModel
 import com.orka.myfinances.data.api.title.ProductTitleApiModel
 import com.orka.myfinances.data.api.title.map
@@ -23,14 +21,13 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
-import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class WarehouseScreenViewModel(
-    private val id: Id,
+    private val category: Category,
     private val client: HttpClient,
     private val basketRepository: BasketRepository,
     private val formatPrice: FormatPrice,
@@ -47,46 +44,39 @@ class WarehouseScreenViewModel(
 
     init {
         productTitleEvents.onEach {
-            if (it.categoryId == id) initialize()
+            if (it.categoryId == category.id) initialize()
         }.launchIn(viewModelScope)
 
         stockEvents.onEach {
-            if (it.category.id == id) initialize()
+            if (it.category.id == category.id) initialize()
         }.launchIn(viewModelScope)
     }
 
     override fun initialize() {
         launch {
             try {
-                val categoryResponse = client.get("categories/${id.value}/")
-                if (categoryResponse.status == HttpStatusCode.OK) {
-                    val category = categoryResponse.body<FolderModel>().map() as Category
+                val titlesResponse = client.get(
+                    urlString = "product-titles/",
+                    block = { parameter("category", category.id.value) }
+                )
 
-                    val titlesResponse = client.get(
-                        urlString = "product-titles/",
-                        block = { parameter("category", id.value) }
-                    )
-                    
-                    val stockResponse = client.get(
-                        urlString = "stock-items",
-                        block = { parameter("category", id.value) }
-                    )
+                val stockResponse = client.get(
+                    urlString = "stock-items",
+                    block = { parameter("category", category.id.value) }
+                )
 
-                    if (titlesResponse.status == HttpStatusCode.OK && stockResponse.status == HttpStatusCode.OK) {
-                        val titlesModels = titlesResponse.body<List<ProductTitleApiModel>>()
-                        val titles = titlesModels.map { it.map(category) }
-                        
-                        val stockItemModels = stockResponse.body<List<StockItemApiModel>>()
-                        val stockItems = stockItemModels.map { it.toUiModel(formatPrice, formatDecimal) }
+                if (titlesResponse.status.value == 200 && stockResponse.status.value == 200) {
+                    val titlesModels = titlesResponse.body<List<ProductTitleApiModel>>()
+                    val titles = titlesModels.map { it.map(category) }
 
-                        setState(State.Success(WarehouseScreenState(
-                            category = category,
-                            productTitles = titles.map { it.toUiModel() },
-                            stockItems = stockItems
-                        )))
-                    } else {
-                        setState(State.Failure(UiText.Res(R.string.failure)))
-                    }
+                    val stockItemModels = stockResponse.body<List<StockItemApiModel>>()
+                    val stockItems = stockItemModels.map { it.toUiModel(formatPrice, formatDecimal) }
+
+                    setState(State.Success(WarehouseScreenState(
+                        category = category,
+                        productTitles = titles.map { it.toUiModel() },
+                        stockItems = stockItems
+                    )))
                 } else {
                     setState(State.Failure(UiText.Res(R.string.failure)))
                 }

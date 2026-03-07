@@ -57,7 +57,7 @@ private fun StockItemContentPreview() {
         val client = HttpClient()
         val viewModel = viewModel {
             WarehouseScreenViewModel(
-                id = category1.id,
+                category = category1,
                 client = client,
                 basketRepository = BasketRepository(client = client),
                 productTitleEvents = flow {},
