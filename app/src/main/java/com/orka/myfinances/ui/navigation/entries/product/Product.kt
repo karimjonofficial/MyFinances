@@ -8,7 +8,7 @@ import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.navigation.Destination
-import com.orka.myfinances.ui.screens.product.ProductTitleScreen
+import com.orka.myfinances.ui.screens.product.details.ProductTitleScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun productTitleEntry(
@@ -24,6 +24,6 @@ fun productTitleEntry(
     ProductTitleScreen(
         modifier = modifier,
         state = state.value,
-        viewModel = viewModel
+        interactor = viewModel
     )
 }

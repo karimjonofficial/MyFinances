@@ -4,6 +4,7 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.folder.Folder
 
 interface FoldersInteractor {
+    fun initialize()
     fun addFolder(name: String, type: String, templateId: Id?)
     fun select(folder: Folder)
     fun navigateToNotifications()

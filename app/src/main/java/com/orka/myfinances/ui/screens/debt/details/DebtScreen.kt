@@ -1,0 +1,292 @@
+package com.orka.myfinances.ui.screens.debt.details
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.orka.myfinances.R
+import com.orka.myfinances.application.viewmodels.debt.details.DebtScreenViewModel
+import com.orka.myfinances.data.api.debt.DebtApi
+import com.orka.myfinances.fixtures.core.DummyLogger
+import com.orka.myfinances.fixtures.format.FormatDateImpl
+import com.orka.myfinances.fixtures.format.FormatPriceImpl
+import com.orka.myfinances.fixtures.managers.DummyNavigator
+import com.orka.myfinances.fixtures.resources.models.debt1
+import com.orka.myfinances.lib.ui.components.DescriptionCard
+import com.orka.myfinances.lib.ui.screens.StatefulScreen
+import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.ui.components.ClientCard
+import com.orka.myfinances.ui.components.UserCard
+import com.orka.myfinances.ui.theme.MyFinancesTheme
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DebtScreen(
+    modifier: Modifier = Modifier,
+    state: State,
+    viewModel: DebtScreenViewModel
+) {
+    StatefulScreen<DebtScreenModel>(
+        modifier = modifier,
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(R.string.debt_details),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = viewModel::back) {
+                        Icon(
+                            painter = painterResource(R.drawable.arrow_back),
+                            contentDescription = stringResource(R.string.back)
+                        )
+                    }
+                },
+                actions = {
+                    TextButton(onClick = {}) {//TODO
+                        Text(
+                            text = stringResource(R.string.edit),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            )
+        },
+        bottomBar = {
+            BottomAppBar(containerColor = MaterialTheme.colorScheme.surface) {
+                Button(
+                    onClick = {},//TODO
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.check_circle),
+                        contentDescription = null
+                    )
+                    Spacer(Modifier.size(8.dp))
+                    Text(stringResource(R.string.mark_as_paid))
+                }
+            }
+        },
+        state = state,
+        onInitialize = viewModel::initialize
+    ) { modifier, model ->
+
+        LazyColumn(
+            modifier = modifier,
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            item {
+                HeroSection(
+                    modifier = Modifier.fillMaxSize(),
+                    debt = model
+                )
+            }
+
+            item {
+                NotificationStatusCard(
+                    notified = model.notified,
+                    lastSent = stringResource(R.string.last_sent_today_9_41_am)
+                )
+            }
+
+            item { TimelineAndStaffCard(debt = model) }
+
+            item {
+                ClientCard(
+                    model = model.client,
+                    onClick = { viewModel.navigateToClient(model.clientId) }
+                )
+            }
+
+            item {
+                UserCard(
+                    user = model.user,
+                    onClick = {}
+                )
+            }
+
+            if (!model.description.isNullOrBlank()) {
+                item {
+                    DescriptionCard(description = model.description)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun HeroSection(
+    modifier: Modifier = Modifier,
+    debt: DebtScreenModel
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        if (debt.isOverdue)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(50))
+                    .background(MaterialTheme.colorScheme.errorContainer)
+                    .padding(horizontal = 12.dp, vertical = 6.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(8.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.error,
+                            shape = CircleShape
+                        )
+                )
+
+                Spacer(Modifier.size(8.dp))
+
+                Text(
+                    text = stringResource(R.string.overdue),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onErrorContainer,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        Spacer(Modifier.height(8.dp))
+    }
+
+    Text(
+        text = debt.price,
+        style = MaterialTheme.typography.displaySmall,
+        color = MaterialTheme.colorScheme.onSurface
+    )
+
+    Text(
+        text = stringResource(R.string.total_amount_owed),
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant
+    )
+}
+
+@Composable
+fun TimelineAndStaffCard(
+    modifier: Modifier = Modifier,
+    debt: DebtScreenModel
+) {
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = stringResource(R.string.timeline_and_staff),
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                DateCard(
+                    modifier = Modifier.weight(1f),
+                    label = stringResource(R.string.start_date),
+                    date = debt.startDate,
+                    painter = painterResource(R.drawable.calendar_today),
+                    contentDescription = stringResource(R.string.created_at)
+                )
+
+                if (debt.endDateTime != null) {
+                    if (debt.isOverdue) {
+                        EmphasizedDateCard(
+                            modifier = Modifier.weight(1f),
+                            label = stringResource(R.string.due_date),
+                            date = debt.endDateTime,
+                            painter = painterResource(R.drawable.error),
+                            contentDescription = stringResource(R.string.error)
+                        )
+                    } else {
+                        DateCard(
+                            modifier = Modifier.weight(1f),
+                            label = stringResource(R.string.due_date),
+                            date = debt.endDateTime,
+                            painter = painterResource(R.drawable.calendar_today),
+                            contentDescription = stringResource(R.string.created_at)
+                        )
+                    }
+                } else {
+                    DateCard(
+                        modifier = Modifier.weight(1f),
+                        label = stringResource(R.string.due_date),
+                        date = stringResource(R.string.date_is_not_provided),
+                        painter = painterResource(R.drawable.calendar_today),
+                        contentDescription = stringResource(R.string.created_at)
+                    )
+                }
+            }
+        }
+    }
+}
+
+
+@Preview(
+    showSystemUi = true,
+    showBackground = true
+)
+@Composable
+private fun DebtScreenPreview() {
+    val client = HttpClient(OkHttp)
+    val viewModel = viewModel {
+        DebtScreenViewModel(
+            id = debt1.id,
+            debtApi = DebtApi(client),
+            formatPrice = FormatPriceImpl(),
+            formatDate = FormatDateImpl(),
+            navigator = DummyNavigator(),
+            logger = DummyLogger()
+        )
+    }
+    MyFinancesTheme {
+        DebtScreen(
+            state = State.Success(debt1.toScreenModel(FormatPriceImpl(), FormatDateImpl())),
+            viewModel = viewModel
+        )
+    }
+}

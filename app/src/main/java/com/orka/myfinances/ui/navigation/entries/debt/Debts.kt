@@ -7,7 +7,7 @@ import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.navigation.Destination
-import com.orka.myfinances.ui.screens.debt.DebtsScreen
+import com.orka.myfinances.ui.screens.debt.list.DebtsScreen
 
 fun debtsEntry(
     modifier: Modifier,
@@ -20,6 +20,6 @@ fun debtsEntry(
     DebtsScreen(
         modifier = modifier,
         state = state.value,
-        viewModel = viewModel
+        interactor = viewModel
     )
 }

@@ -11,7 +11,7 @@ import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.host.components.OfficeCard
-import com.orka.myfinances.ui.screens.host.viewmodel.SelectOfficeScreenViewModel
+import com.orka.myfinances.application.viewmodels.office.SelectOfficeScreenViewModel
 
 @Composable
 fun SelectOfficeScreen(
@@ -23,6 +23,7 @@ fun SelectOfficeScreen(
 
     LazyColumnScreen(
         modifier = modifier,
+        title = stringResource(R.string.select_your_office),
         state = state,
         viewModel = viewModel,
         bottomBar = {

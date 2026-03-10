@@ -23,35 +23,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
-import com.orka.myfinances.fixtures.core.DummyLogger
-import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.folder.categories
 import com.orka.myfinances.fixtures.resources.models.folder.category1
-import com.orka.myfinances.fixtures.resources.models.office1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.CommentTextField
 import com.orka.myfinances.lib.ui.components.ExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.IntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.ui.screens.product.add.viewmodel.AddProductTitleScreenState
-import com.orka.myfinances.ui.screens.product.add.viewmodel.AddProductTitleScreenViewModel
+import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenInteractor
+import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenState
 import com.orka.myfinances.ui.theme.MyFinancesTheme
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
 
 @Composable
 fun AddProductTitleScreen(
     modifier: Modifier = Modifier,
     categoryId: Id,
     state: AddProductTitleScreenState,
-    viewModel: AddProductTitleScreenViewModel
+    interactor: AddProductTitleScreenInteractor
 ) {
     val selectedCategory = retain { mutableStateOf<Category?>(null) }
     val properties = rememberSaveable { mutableStateListOf<PropertyModel<*>?>() }
@@ -79,7 +74,7 @@ fun AddProductTitleScreen(
                                 selectedCategory.value != null,
                         onClick = {
                             selectedCategory.value?.let { category ->
-                                viewModel.addProductTitle(
+                                interactor.addProductTitle(
                                     properties = properties,
                                     name = name.value,
                                     price = price.value,
@@ -96,10 +91,10 @@ fun AddProductTitleScreen(
             }
         }
     ) { paddingValues ->
-        val m = Modifier.scaffoldPadding(paddingValues)
+        val modifier = Modifier.scaffoldPadding(paddingValues)
 
         when (state) {
-            is AddProductTitleScreenState.Loading -> LoadingScreen(m)
+            is AddProductTitleScreenState.Loading -> LoadingScreen(modifier)
 
             is AddProductTitleScreenState.Success -> {
                 if (selectedCategory.value == null) {
@@ -112,7 +107,7 @@ fun AddProductTitleScreen(
                     val fields = currentCategory.template.fields
                     val innerModifier = Modifier.fillMaxWidth()
 
-                    Column(modifier = m) {
+                    Column(modifier = modifier) {
                         Column(
                             modifier = innerModifier
                                 .weight(1f)
@@ -178,9 +173,11 @@ fun AddProductTitleScreen(
                     }
                 }
             }
-            is AddProductTitleScreenState.Failure -> {
-                // Show failure screen or retry
-            }
+
+            is AddProductTitleScreenState.Failure -> FailureScreen(
+                modifier = modifier,
+                retry = interactor::initialize
+            )
         }
     }
 }
@@ -188,22 +185,12 @@ fun AddProductTitleScreen(
 @Preview
 @Composable
 private fun AddProductTitleScreenPreview() {
-    val client = HttpClient(OkHttp)
-    val viewModel = viewModel {
-        AddProductTitleScreenViewModel(
-            client = client,
-            office = office1,
-            navigator = DummyNavigator(),
-            logger = DummyLogger()
-        )
-    }
-
     MyFinancesTheme {
         AddProductTitleScreen(
             modifier = Modifier.fillMaxSize(),
             categoryId = category1.id,
             state = AddProductTitleScreenState.Success(categories),
-            viewModel = viewModel
+            interactor = AddProductTitleScreenInteractor.dummy
         )
     }
 }

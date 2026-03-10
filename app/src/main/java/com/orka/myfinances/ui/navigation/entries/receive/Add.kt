@@ -21,7 +21,7 @@ fun addReceiveEntry(
 
     AddReceiveScreen(
         modifier = modifier,
-        viewModel = viewModel,
+        interactor = viewModel,
         state = state.value
     )
 }

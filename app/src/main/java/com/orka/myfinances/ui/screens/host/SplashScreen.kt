@@ -11,6 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,7 +24,8 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 @Composable
 fun SplashScreen(
     modifier: Modifier = Modifier,
-    message: String = stringResource(R.string.loading)
+    message: String = stringResource(R.string.loading),
+    action: (() -> Unit)? = null
 ) {
     Surface(modifier = modifier) {
         Column(
@@ -33,6 +35,9 @@ fun SplashScreen(
         ) {
             LoadingIndicator(modifier = Modifier.size(96.dp))
             Text(text = message)
+            if (action != null) LaunchedEffect(Unit) {
+                action()
+            }
         }
     }
 }

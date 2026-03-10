@@ -17,7 +17,7 @@ fun AddFolderRequest.map(): AddFolderApiRequest {
     )
 }
 
-fun CategoryModel.map(template: Template): Category {
+fun CategoryApiModel.map(template: Template): Category {
     return Category(
         id = Id(id),
         name = name,
@@ -25,20 +25,20 @@ fun CategoryModel.map(template: Template): Category {
     )
 }
 
-fun CatalogModel.map(): Catalog {
+fun CatalogApiModel.map(): Catalog {
     return Catalog(
         id = Id(id),
         name = name
     )
 }
 
-fun List<FolderModel>.map(): List<Folder> {
+fun List<FolderApiModel>.map(): List<Folder> {
     return map { it.map() }
 }
 
-fun FolderModel.map(): Folder {
+fun FolderApiModel.map(): Folder {
     return when(this) {
-        is CatalogModel -> map()
-        is CategoryModel -> map(template1)//TODO
+        is CatalogApiModel -> map()
+        is CategoryApiModel -> map(template1)//TODO
     }
 }

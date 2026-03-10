@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.ui.screens.LazyColumnContentWithStickyHeader
 import com.orka.myfinances.ui.screens.history.components.SaleCard
-import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
+import com.orka.myfinances.application.viewmodels.history.SaleContentViewModel
 
 @Composable
 fun SaleContent(

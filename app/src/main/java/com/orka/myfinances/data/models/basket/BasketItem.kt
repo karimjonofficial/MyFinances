@@ -1,8 +1,8 @@
 package com.orka.myfinances.data.models.basket
 
-import com.orka.myfinances.data.models.product.Product
+import com.orka.myfinances.data.api.product.ProductApiModel
 
 data class BasketItem(
-    val product: Product,
+    val product: ProductApiModel,
     val amount: Int
 )

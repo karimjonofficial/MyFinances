@@ -8,7 +8,7 @@ import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.navigation.Destination
-import com.orka.myfinances.ui.screens.notification.NotificationScreen
+import com.orka.myfinances.ui.screens.notifications.NotificationsScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun notificationsEntry(
@@ -19,7 +19,7 @@ fun notificationsEntry(
     val viewModel = viewModel { factory.notificationsViewModel() }
     val state = viewModel.uiState.collectAsState()
 
-    NotificationScreen(
+    NotificationsScreen(
         modifier = modifier,
         state = state.value,
         viewModel = viewModel

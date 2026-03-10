@@ -13,5 +13,6 @@ data class ProductTitleApiModel(
     @SerialName("default_price") val defaultPrice: Long,
     @SerialName("default_sale_price") val defaultSalePrice: Long,
     @SerialName("created_at") val createdAt: Instant,
-    @SerialName("modified_at") val modifiedAt: Instant
+    @SerialName("modified_at") val modifiedAt: Instant,
+    val description: String? = null
 )

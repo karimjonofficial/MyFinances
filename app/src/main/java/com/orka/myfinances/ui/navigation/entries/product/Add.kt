@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.navigation.entries.product
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -15,12 +16,15 @@ fun addProductEntry(
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val viewModel = viewModel(key = "${destination.id}") { factory.addProductViewModel() }
+    LaunchedEffect(Unit) {
+        viewModel.initialize()
+    }
     val uiState = viewModel.uiState.collectAsState()
 
     AddProductTitleScreen(
         modifier = modifier,
         categoryId = destination.id,
         state = uiState.value,
-        viewModel = viewModel
+        interactor = viewModel
     )
 }

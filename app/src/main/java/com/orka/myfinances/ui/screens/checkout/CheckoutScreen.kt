@@ -5,27 +5,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
-import com.orka.myfinances.data.repositories.basket.BasketRepository
-import com.orka.myfinances.fixtures.core.DummyLogger
-import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.clients
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.ui.screens.checkout.viewmodel.BasketItemCardModel
+import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenState
-import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenViewModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
 
 @Composable
 fun CheckoutScreen(
     modifier: Modifier,
-    viewModel: CheckoutScreenViewModel,
+    interactor: CheckoutScreenInteractor,
     state: CheckoutScreenState
 ) {
     when (state) {
@@ -54,7 +48,7 @@ fun CheckoutScreen(
                 clients = state.clients,
                 price = state.price,
                 printerConnected = state.printerConnected,
-                viewModel = viewModel
+                interactor = interactor
             )
         }
     }
@@ -66,31 +60,22 @@ fun CheckoutScreen(
 )
 @Composable
 private fun CheckoutScreenPreview() {
-    val client = HttpClient(OkHttp)
-    val viewModel = viewModel {
-        CheckoutScreenViewModel(
-            client = client,
-            basketRepository = BasketRepository(client = client),
-            logger = DummyLogger(),
-            navigator = DummyNavigator(),
-            formatPrice = { "" },
-            formatDecimal = { "" },
-            printer = object : com.orka.myfinances.printer.Printer {
-                override fun print(sale: com.orka.myfinances.data.models.sale.Sale) {}
-            },
-            printerState = kotlinx.coroutines.flow.MutableStateFlow(com.orka.myfinances.printer.PrinterState.Disconnected)
-        )
-    }
     val items = listOf(
         BasketItemCardModel("Product1", "10,000.00 UZS x 10 = 100,000.00 UZS"),
         BasketItemCardModel("Product2", "10,000.00 UZS x 10 = 100,000.00 UZS")
+    )
+    val state = CheckoutScreenState.Success(
+        clients = clients,
+        items = items,
+        price = 10000,
+        printerConnected = false
     )
 
     MyFinancesTheme {
         CheckoutScreen(
             modifier = Modifier.fillMaxSize(),
-            state = CheckoutScreenState.Success(clients, items, 10000, false),
-            viewModel = viewModel
+            state = state,
+            interactor = CheckoutScreenInteractor.dummy
         )
     }
 }

@@ -5,9 +5,9 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
 import kotlin.collections.contains
 
-object FolderModelSerializer : JsonContentPolymorphicSerializer<FolderModel>(FolderModel::class) {
+object FolderModelSerializer : JsonContentPolymorphicSerializer<FolderApiModel>(FolderApiModel::class) {
     override fun selectDeserializer(element: JsonElement) = when {
-        "template" in element.jsonObject -> CategoryModel.serializer()
-        else -> CatalogModel.serializer()
+        "template" in element.jsonObject -> CategoryApiModel.serializer()
+        else -> CatalogApiModel.serializer()
     }
 }

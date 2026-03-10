@@ -22,6 +22,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.fixtures.format.FormatDateTimeImpl
+import com.orka.myfinances.fixtures.format.FormatDecimalImpl
+import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.sale.sale1
 import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
@@ -29,11 +32,10 @@ import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.components.ClientCard
 import com.orka.myfinances.ui.components.UserCard
-import com.orka.myfinances.ui.screens.debt.components.DescriptionCard
-import com.orka.myfinances.ui.screens.host.viewmodel.Formatter
-import com.orka.myfinances.ui.screens.sale.viewmodel.SaleInteractor
+import com.orka.myfinances.lib.ui.components.DescriptionCard
+import com.orka.myfinances.ui.screens.sale.viewmodel.SaleScreenInteractor
 import com.orka.myfinances.ui.screens.sale.viewmodel.SaleUiModel
-import com.orka.myfinances.ui.screens.sale.viewmodel.toUiModel
+import com.orka.myfinances.application.viewmodels.sale.toUiModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,7 +43,7 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 fun SaleScreen(
     modifier: Modifier = Modifier,
     state: State,
-    interactor: SaleInteractor
+    interactor: SaleScreenInteractor
 ) {
     StatefulScreen<SaleUiModel>(
         modifier = modifier,
@@ -66,7 +68,8 @@ fun SaleScreen(
                 }
             )
         },
-        state = state
+        state = state,
+        onInitialize = interactor::initialize
     ) { modifier, model ->
         LazyColumn(
             modifier = modifier.padding(horizontal = 16.dp),
@@ -142,8 +145,8 @@ fun SaleScreen(
 @Preview(showBackground = true)
 @Composable
 fun SaleScreenPreview() {
-    val formatter = Formatter()
-    val dummyInteractor = object : SaleInteractor {
+    val dummyInteractor = object : SaleScreenInteractor {
+        override fun initialize() {}
         override fun navigateToClient(clientId: Id) {}
         override fun back() {}
     }
@@ -151,9 +154,9 @@ fun SaleScreenPreview() {
         SaleScreen(
             state = State.Success(
                 value = sale1.toUiModel(
-                    formatPrice = formatter,
-                    formatDateTime = formatter,
-                    formatDecimal = formatter
+                    formatPrice = FormatPriceImpl(),
+                    formatDateTime = FormatDateTimeImpl(),
+                    formatDecimal = FormatDecimalImpl()
                 )
             ),
             interactor = dummyInteractor

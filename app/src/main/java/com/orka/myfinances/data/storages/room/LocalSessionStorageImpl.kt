@@ -3,7 +3,6 @@ package com.orka.myfinances.data.storages.room
 import com.orka.myfinances.data.models.Credentials
 import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.data.zipped.SessionModel
-import com.orka.myfinances.fixtures.data.api.CredentialsModel
 
 class LocalSessionStorageImpl(private val sessionDao: SessionDao) : LocalSessionStorage {
     override suspend fun get(): SessionModel? {
@@ -28,7 +27,7 @@ class LocalSessionStorageImpl(private val sessionDao: SessionDao) : LocalSession
         )
     }
 
-    override suspend fun updateCredentials(credentials: CredentialsModel) {
+    override suspend fun updateCredentials(credentials: Credentials) {
         sessionDao.updateCredentials(credentials.access, credentials.refresh)
     }
 

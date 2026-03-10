@@ -15,8 +15,8 @@ import com.orka.myfinances.lib.ui.components.TopAppBar
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenState
-import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenStateSuccess
-import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenViewModel
+import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenModel
+import com.orka.myfinances.application.viewmodels.catalog.CatalogScreenViewModel
 import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
 
 @Composable
@@ -27,14 +27,15 @@ fun CatalogScreen(
 ) {
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
 
-    StatefulScreen<CatalogScreenStateSuccess>(
+    StatefulScreen<CatalogScreenModel>(
         modifier = modifier,
         state = state,
+        onInitialize = viewModel::initialize,
         onRetry = { viewModel.initialize() },
         topBar = { state ->
             TopAppBar(
                 title = if (state is State.Success<*>)
-                    (state.value as CatalogScreenStateSuccess).catalog.name else stringResource(R.string.catalog),
+                    (state.value as CatalogScreenModel).catalog.name else stringResource(R.string.catalog),
                 actions = {
                     IconButton(onClick = { dialogVisible.value = true}) {
                         Icon(
@@ -76,3 +77,4 @@ fun CatalogScreen(
         }
     }
 }
+

@@ -40,7 +40,7 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
-import com.orka.myfinances.ui.screens.home.viewmodel.basket.toModel
+import com.orka.myfinances.application.viewmodels.home.basket.toModel
 
 @Composable
 fun BasketItemCard(

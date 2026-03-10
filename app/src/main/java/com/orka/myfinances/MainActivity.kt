@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
                 HostScreen(
                     modifier = Modifier.fillMaxSize(),
                     state = uiState.value,
-                    sessionManager = manager
+                    interactor = manager
                 )
             }
         }

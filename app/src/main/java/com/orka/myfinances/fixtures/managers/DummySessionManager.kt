@@ -5,6 +5,7 @@ import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.ui.managers.SessionManager
 
 class DummySessionManager : SessionManager {
+    override fun initialize() {}
     override fun open(credentials: Credentials) {}
     override fun store(credentials: Credentials) {}
     override fun setOffice(credentials: Credentials, office: Office) {}

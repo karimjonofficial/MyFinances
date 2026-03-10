@@ -1,7 +1,7 @@
 package com.orka.myfinances.printer
 
-import com.orka.myfinances.data.models.sale.Sale
+import com.orka.myfinances.data.api.sale.SaleApiModel
 
 interface Printer {
-    fun print(sale: Sale)
+    fun print(sale: SaleApiModel)
 }

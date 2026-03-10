@@ -24,6 +24,6 @@ fun checkoutEntry(
     CheckoutScreen(
         modifier = modifier,
         state = state.value,
-        viewModel = viewModel
+        interactor = viewModel
     )
 }

@@ -1,7 +1,43 @@
 package com.orka.myfinances.factories
 
 import com.orka.myfinances.R
+import com.orka.myfinances.application.factories.Formatter
+import com.orka.myfinances.application.viewmodels.catalog.CatalogScreenViewModel
+import com.orka.myfinances.application.viewmodels.checkout.CheckoutScreenViewModel
+import com.orka.myfinances.application.viewmodels.client.details.ClientScreenViewModel
+import com.orka.myfinances.application.viewmodels.client.list.ClientsScreenViewModel
+import com.orka.myfinances.application.viewmodels.debt.details.DebtScreenViewModel
+import com.orka.myfinances.application.viewmodels.debt.list.DebtsScreenViewModel
+import com.orka.myfinances.application.viewmodels.history.ReceiveContentViewModel
+import com.orka.myfinances.application.viewmodels.history.SaleContentViewModel
+import com.orka.myfinances.application.viewmodels.home.basket.BasketContentViewModel
+import com.orka.myfinances.application.viewmodels.home.folder.FoldersContentViewModel
+import com.orka.myfinances.application.viewmodels.home.profile.ProfileContentViewModel
+import com.orka.myfinances.application.viewmodels.notifications.NotificationsScreenViewModel
+import com.orka.myfinances.application.viewmodels.order.OrderScreenViewModel
+import com.orka.myfinances.application.viewmodels.orders.OrdersScreenViewModel
+import com.orka.myfinances.application.viewmodels.receive.add.AddReceiveScreenViewModel
+import com.orka.myfinances.application.viewmodels.receive.details.ReceiveScreenViewModel
+import com.orka.myfinances.application.viewmodels.sale.SaleScreenViewModel
+import com.orka.myfinances.application.viewmodels.template.add.AddTemplateScreenViewModel
+import com.orka.myfinances.application.viewmodels.template.details.TemplateScreenViewModel
+import com.orka.myfinances.application.viewmodels.template.list.TemplatesScreenViewModel
+import com.orka.myfinances.application.viewmodels.title.add.AddProductTitleScreenViewModel
+import com.orka.myfinances.application.viewmodels.title.details.ProductTitleScreenViewModel
+import com.orka.myfinances.application.viewmodels.warehouse.WarehouseScreenViewModel
 import com.orka.myfinances.core.Logger
+import com.orka.myfinances.data.api.client.ClientApi
+import com.orka.myfinances.data.api.debt.DebtApi
+import com.orka.myfinances.data.api.folder.FolderApi
+import com.orka.myfinances.data.api.notification.NotificationApi
+import com.orka.myfinances.data.api.office.OfficeApi
+import com.orka.myfinances.data.api.order.OrderApi
+import com.orka.myfinances.data.api.receive.ReceiveApi
+import com.orka.myfinances.data.api.sale.SaleApi
+import com.orka.myfinances.data.api.stock.StockApi
+import com.orka.myfinances.data.api.template.TemplateApi
+import com.orka.myfinances.data.api.title.ProductTitleApi
+import com.orka.myfinances.data.api.user.UserApi
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.models.folder.Catalog
@@ -16,36 +52,12 @@ import com.orka.myfinances.data.repositories.template.TemplateEvent
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.printer.pos.BluetoothPrinterImpl
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenViewModel
-import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenViewModel
-import com.orka.myfinances.ui.screens.client.viewmodel.ClientScreenViewModel
-import com.orka.myfinances.ui.screens.clients.viewmodel.ClientsScreenViewModel
-import com.orka.myfinances.ui.screens.debt.viewmodel.DebtScreenViewModel
-import com.orka.myfinances.ui.screens.debt.viewmodel.DebtsScreenViewModel
-import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentViewModel
-import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentViewModel
-import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketContentViewModel
-import com.orka.myfinances.ui.screens.home.viewmodel.folder.FoldersContentViewModel
-import com.orka.myfinances.ui.screens.home.viewmodel.profile.ProfileContentViewModel
-import com.orka.myfinances.ui.screens.host.viewmodel.Formatter
-import com.orka.myfinances.ui.screens.notification.NotificationScreenViewModel
-import com.orka.myfinances.ui.screens.order.viewmodel.OrderScreenViewModel
-import com.orka.myfinances.ui.screens.order.viewmodel.OrdersScreenViewModel
-import com.orka.myfinances.ui.screens.product.add.viewmodel.AddProductTitleScreenViewModel
-import com.orka.myfinances.ui.screens.product.viewmodel.ProductTitleScreenViewModel
-import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenViewModel
-import com.orka.myfinances.ui.screens.receive.viewmodel.ReceiveScreenViewModel
-import com.orka.myfinances.ui.screens.sale.viewmodel.SaleScreenViewModel
-import com.orka.myfinances.ui.screens.templates.TemplateScreenViewModel
-import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenViewModel
-import com.orka.myfinances.ui.screens.templates.viewmodel.TemplatesScreenViewModel
-import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class Factory(
     private val session: Session,
-    private val client: HttpClient,
+    client: HttpClient,
     private val printer: BluetoothPrinterImpl,
     private val basketRepository: BasketRepository,
     private val logger: Logger,
@@ -54,6 +66,7 @@ class Factory(
 ) {
     private val loading = UiText.Res(R.string.loading)
     private val failure = UiText.Res(R.string.failure)
+
     private val stockFlow = MutableSharedFlow<StockEvent>()
     private val templateFlow = MutableSharedFlow<TemplateEvent>()
     private val productTitleFlow = MutableSharedFlow<ProductTitleEvent>()
@@ -61,9 +74,23 @@ class Factory(
     private val saleFlow = MutableSharedFlow<SaleEvent>()
     private val receiveFlow = MutableSharedFlow<ReceiveEvent>()
 
+    private val clientApi = ClientApi(client)
+    private val folderApi = FolderApi(client)
+    private val templateApi = TemplateApi(client)
+    private val productTitleApi = ProductTitleApi(client)
+    private val stockApi = StockApi(client, session.office)
+    private val receiveApi = ReceiveApi(client, session.office)
+    private val saleApi = SaleApi(client, session.office)
+    private val orderApi = OrderApi(client, session.office)
+    private val debtApi = DebtApi(client)
+    private val notificationApi = NotificationApi(client)
+    private val officeApi = OfficeApi(client)
+    private val userApi = UserApi(client)
+
     fun foldersViewModel(): FoldersContentViewModel {
         return FoldersContentViewModel(
-            client = client,
+            folderApi = folderApi,
+            templateApi = templateApi,
             navigator = navigator,
             office = session.office,
             logger = logger
@@ -72,7 +99,7 @@ class Factory(
 
     fun templatesViewModel(): TemplatesScreenViewModel {
         return TemplatesScreenViewModel(
-            client = client,
+            templateApi = templateApi,
             navigator = navigator,
             logger = logger,
             events = templateFlow
@@ -81,7 +108,7 @@ class Factory(
 
     fun addTemplateViewModel(): AddTemplateScreenViewModel {
         return AddTemplateScreenViewModel(
-            client = client,
+            templateApi = templateApi,
             navigator = navigator
         )
     }
@@ -89,7 +116,8 @@ class Factory(
     fun addProductViewModel(): AddProductTitleScreenViewModel {
         return AddProductTitleScreenViewModel(
             office = session.office,
-            client = client,
+            folderApi = folderApi,
+            productTitleApi = productTitleApi,
             navigator = navigator,
             logger = logger
         )
@@ -98,7 +126,8 @@ class Factory(
     fun warehouseViewModel(category: Category): WarehouseScreenViewModel {
         return WarehouseScreenViewModel(
             category = category,
-            client = client,
+            productTitleApi = productTitleApi,
+            stockApi = stockApi,
             basketRepository = basketRepository,
             productTitleEvents = productTitleFlow,
             navigator = navigator,
@@ -113,7 +142,8 @@ class Factory(
         return CatalogScreenViewModel(
             office = session.office,
             catalog = catalog,
-            client = client,
+            folderApi = folderApi,
+            templateApi = templateApi,
             events = folderFlow,
             navigator = navigator,
             logger = logger
@@ -132,7 +162,7 @@ class Factory(
 
     fun clientsViewModel(): ClientsScreenViewModel {
         return ClientsScreenViewModel(
-            client = client,
+            clientApi = clientApi,
             loading = loading,
             failure = failure,
             navigator = navigator,
@@ -143,7 +173,7 @@ class Factory(
     fun clientViewModel(id: Id): ClientScreenViewModel {
         return ClientScreenViewModel(
             id = id,
-            client = client,
+            clientApi = clientApi,
             navigator = navigator,
             logger = logger
         )
@@ -153,7 +183,7 @@ class Factory(
         return SaleContentViewModel(
             loading = loading,
             failure = failure,
-            client = client,
+            saleApi = saleApi,
             events = saleFlow,
             navigator = navigator,
             priceFormatter = formatter,
@@ -166,7 +196,7 @@ class Factory(
     fun saleViewModel(id: Id): SaleScreenViewModel {
         return SaleScreenViewModel(
             id = id,
-            client = client,
+            saleApi = saleApi,
             formatPrice = formatter,
             formatDateTime = formatter,
             loading = loading,
@@ -178,7 +208,7 @@ class Factory(
 
     fun receivesViewModel(): ReceiveContentViewModel {
         return ReceiveContentViewModel(
-            client = client,
+            receiveApi = receiveApi,
             events = receiveFlow,
             loading = loading,
             failure = failure,
@@ -193,7 +223,9 @@ class Factory(
 
     fun checkoutViewModel(): CheckoutScreenViewModel {
         return CheckoutScreenViewModel(
-            client = client,
+            clientApi = clientApi,
+            saleApi = saleApi,
+            orderApi = orderApi,
             basketRepository = basketRepository,
             logger = logger,
             navigator = navigator,
@@ -206,16 +238,18 @@ class Factory(
 
     fun addReceiveViewModel(id: Id): AddReceiveScreenViewModel {
         return AddReceiveScreenViewModel(
-            client = client,
             id = id,
+            folderApi = folderApi,
+            productTitleApi = productTitleApi,
+            receiveApi = receiveApi,
             navigator = navigator,
             logger = logger
         )
     }
 
-    fun notificationsViewModel(): NotificationScreenViewModel {
-        return NotificationScreenViewModel(
-            client = client,
+    fun notificationsViewModel(): NotificationsScreenViewModel {
+        return NotificationsScreenViewModel(
+            notificationApi = notificationApi,
             logger = logger,
             loading = loading,
             failure = failure
@@ -224,7 +258,7 @@ class Factory(
 
     fun ordersViewModel(): OrdersScreenViewModel {
         return OrdersScreenViewModel(
-            client = client,
+            orderApi = orderApi,
             loading = loading,
             failure = failure,
             navigator = navigator,
@@ -238,10 +272,10 @@ class Factory(
     fun orderViewModel(id: Id): OrderScreenViewModel {
         return OrderScreenViewModel(
             id = id,
-            client = client,
+            orderApi = orderApi,
             formatPrice = formatter,
-            formatDate = formatter,
-            formatTime = formatter,
+            formatDateTime = formatter,
+            formatDecimal = formatter,
             navigator = navigator,
             logger = logger
         )
@@ -249,7 +283,8 @@ class Factory(
 
     fun debtsViewModel(): DebtsScreenViewModel {
         return DebtsScreenViewModel(
-            client = client,
+            debtApi = debtApi,
+            clientApi = clientApi,
             navigator = navigator,
             logger = logger,
             loading = loading,
@@ -263,7 +298,7 @@ class Factory(
     fun debtViewModel(id: Id): DebtScreenViewModel {
         return DebtScreenViewModel(
             id = id,
-            client = client,
+            debtApi = debtApi,
             formatPrice = formatter,
             formatDate = formatter,
             navigator = navigator,
@@ -274,7 +309,8 @@ class Factory(
     fun profileViewModel(): ProfileContentViewModel {
         return ProfileContentViewModel(
             company = session.office.company,
-            client = client,
+            officeApi = officeApi,
+            userApi = userApi,
             navigator = navigator,
             logger = logger
         )
@@ -283,7 +319,8 @@ class Factory(
     fun productTitleViewModel(id: Id): ProductTitleScreenViewModel {
         return ProductTitleScreenViewModel(
             id = id,
-            client = client,
+            receiveApi = receiveApi,
+            productTitleApi = productTitleApi,
             formatDecimal = formatter,
             formatDate = formatter,
             formatPrice = formatter,
@@ -294,7 +331,7 @@ class Factory(
     fun receiveViewModel(id: Id): ReceiveScreenViewModel {
         return ReceiveScreenViewModel(
             id = id,
-            client = client,
+            receiveApi = receiveApi,
             formatPrice = formatter,
             formatDateTime = formatter,
             formatDecimal = formatter,
@@ -307,7 +344,7 @@ class Factory(
     fun templateViewModel(id: Id): TemplateScreenViewModel {
         return TemplateScreenViewModel(
             id = id,
-            client = client,
+            templateApi = templateApi,
             failure = failure,
             navigator = navigator,
             logger = logger

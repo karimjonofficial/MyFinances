@@ -4,7 +4,9 @@ import com.orka.myfinances.data.models.Credentials
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.ui.screens.login.LoginScreenViewModel
+import com.orka.myfinances.application.manager.NavigationManager
+import com.orka.myfinances.application.viewmodels.office.SelectOfficeScreenViewModel
+import com.orka.myfinances.application.viewmodels.login.LoginScreenViewModel
 
 sealed interface UiState {
     data object Initial : UiState

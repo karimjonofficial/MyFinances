@@ -38,10 +38,10 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.ui.screens.home.components.BasketItemCard
-import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketContentViewModel
+import com.orka.myfinances.application.viewmodels.home.basket.BasketContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketInteractor
 import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketState
-import com.orka.myfinances.ui.screens.home.viewmodel.basket.toUiModel
+import com.orka.myfinances.application.viewmodels.home.basket.toUiModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 

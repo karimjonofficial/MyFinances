@@ -33,6 +33,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
+import com.orka.myfinances.application.viewmodels.login.LoginScreenViewModel
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer

@@ -5,8 +5,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.screens.FailureScreen
-import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.navigation.MainScreen
+import com.orka.myfinances.ui.screens.host.viewmodel.HostScreenInteractor
 import com.orka.myfinances.ui.screens.host.viewmodel.UiState
 import com.orka.myfinances.ui.screens.login.LoginScreen
 
@@ -14,10 +14,15 @@ import com.orka.myfinances.ui.screens.login.LoginScreen
 fun HostScreen(
     modifier: Modifier = Modifier,
     state: UiState,
-    sessionManager: SessionManager
+    interactor: HostScreenInteractor
 ) {
     when (state) {
-        is UiState.Initial -> SplashScreen(modifier)
+        is UiState.Initial -> {
+            SplashScreen(
+                modifier = modifier,
+                action = interactor::initialize
+            )
+        }
 
         is UiState.Guest -> {
             val viewModel = state.viewModel
@@ -53,7 +58,7 @@ fun HostScreen(
             navigationManager = state.navigationManager,
             session = state.session,
             factory = state.factory,
-            sessionManager = sessionManager
+            sessionManager = interactor
         )
     }
 }

@@ -1,7 +1,7 @@
 package com.orka.myfinances.data.api.sale
 
 import com.orka.myfinances.data.api.client.ClientApiModel
-import com.orka.myfinances.ui.screens.home.viewmodel.profile.UserApiModel
+import com.orka.myfinances.data.api.user.UserApiModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.time.Instant

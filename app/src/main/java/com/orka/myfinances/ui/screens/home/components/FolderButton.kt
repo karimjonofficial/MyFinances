@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.fixtures.resources.models.folder.category1
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.ui.screens.home.models.FolderButtonModel
-import com.orka.myfinances.ui.screens.home.viewmodel.folder.toModel
+import com.orka.myfinances.application.viewmodels.home.folder.toModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 private const val roundedCornerRadius = 16

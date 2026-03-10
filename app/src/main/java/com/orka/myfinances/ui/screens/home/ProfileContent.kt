@@ -49,8 +49,10 @@ import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.screens.home.models.ProfileOption
 import com.orka.myfinances.ui.screens.home.parts.ProfileTopBar
 import com.orka.myfinances.ui.screens.home.viewmodel.profile.ProfileContentModel
-import com.orka.myfinances.ui.screens.home.viewmodel.profile.ProfileContentViewModel
+import com.orka.myfinances.application.viewmodels.home.profile.ProfileContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.profile.ProfileInteractor
+import com.orka.myfinances.data.api.office.OfficeApi
+import com.orka.myfinances.data.api.user.UserApi
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 
@@ -199,7 +201,8 @@ private fun ProfileContentPreview() {
     )
     val viewModel = viewModel {
         ProfileContentViewModel(
-            client = client,
+            officeApi = OfficeApi(client),
+            userApi = UserApi(client),
             company = office1.company,
             navigator = DummyNavigator(),
             logger = DummyLogger()
@@ -236,3 +239,5 @@ private fun ProfileContentPreview() {
         )
     }
 }
+
+

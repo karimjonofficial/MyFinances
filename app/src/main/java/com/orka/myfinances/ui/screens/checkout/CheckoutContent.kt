@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
@@ -24,13 +26,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.basket.BasketItem
-import com.orka.myfinances.data.repositories.basket.BasketRepository
-import com.orka.myfinances.fixtures.core.DummyLogger
-import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.clients
 import com.orka.myfinances.fixtures.resources.models.product.product1
 import com.orka.myfinances.fixtures.resources.models.product.product2
@@ -43,10 +41,9 @@ import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.screens.checkout.viewmodel.BasketItemCardModel
-import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenViewModel
-import com.orka.myfinances.ui.screens.checkout.viewmodel.toModel
+import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
+import com.orka.myfinances.application.viewmodels.checkout.toModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
-import io.ktor.client.HttpClient
 
 @Composable
 fun CheckoutContent(
@@ -55,7 +52,7 @@ fun CheckoutContent(
     clients: List<Client>,
     price: Int,
     printerConnected: Boolean,
-    viewModel: CheckoutScreenViewModel
+    interactor: CheckoutScreenInteractor
 ) {
     val price = rememberSaveable { mutableStateOf<Int?>(price) }
     val description = rememberSaveable { mutableStateOf<String?>(null) }
@@ -75,11 +72,13 @@ fun CheckoutContent(
                 Spacer(modifier = Modifier.weight(1f))
                 OutlinedButton(
                     enabled = selectedClient != null && priceValue != null,
-                    onClick = { viewModel.order(
+                    onClick = {
+                        interactor.order(
                             price = priceValue,
                             description = description.value,
                             client = selectedClient
-                        ) }
+                        )
+                    }
                 ) {
                     Text(text = stringResource(R.string.order))
                 }
@@ -87,12 +86,14 @@ fun CheckoutContent(
                 HorizontalSpacer(8)
                 Button(
                     enabled = selectedClient != null && priceValue != null,
-                    onClick = { viewModel.sell(
+                    onClick = {
+                        interactor.sell(
                             price = priceValue,
                             description = description.value,
                             client = selectedClient,
                             print = printReceipt.value
-                        ) }
+                        )
+                    }
                 ) {
                     Text(text = stringResource(R.string.sell))
                 }
@@ -103,6 +104,7 @@ fun CheckoutContent(
         Column(
             modifier = modifier
                 .scaffoldPadding(paddingValues)
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 8.dp)
         ) {
             DividedList(
@@ -149,7 +151,7 @@ fun CheckoutContent(
                 onValueChange = { description.value = it }
             )
 
-            if(printerConnected) {
+            if (printerConnected) {
                 VerticalSpacer(8)
                 Row(
                     modifier = Modifier
@@ -175,32 +177,17 @@ fun CheckoutContent(
 @Preview
 @Composable
 private fun CheckoutContentPreview() {
-    val httpClient = HttpClient()
     val items = listOf(
-        BasketItem(product1, 1000),
-        BasketItem(product2, 10000)
+        BasketItem(product1.map(), 1000),
+        BasketItem(product2.map(), 10000)
     )
-    val viewModel = viewModel {
-        CheckoutScreenViewModel(
-            client = httpClient,
-            basketRepository = BasketRepository(httpClient),
-            logger = DummyLogger(),
-            navigator = DummyNavigator(),
-            formatDecimal = { "" },
-            formatPrice = { "" },
-            printer = object : com.orka.myfinances.printer.Printer {
-                override fun print(sale: com.orka.myfinances.data.models.sale.Sale) {}
-            },
-            printerState = kotlinx.coroutines.flow.MutableStateFlow(com.orka.myfinances.printer.PrinterState.Disconnected)
-        )
-    }
 
     MyFinancesTheme {
         CheckoutContent(
             modifier = Modifier.fillMaxSize(),
-            items = items.map { it.toModel({""}, {""}) },
+            items = items.map { it.toModel({ "" }, { "" }) },
             clients = clients,
-            viewModel = viewModel,
+            interactor = CheckoutScreenInteractor.dummy,
             price = 1000,
             printerConnected = true
         )

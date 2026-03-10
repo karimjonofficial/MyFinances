@@ -4,8 +4,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -14,36 +14,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Session
+import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.viewModel
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
 import com.orka.myfinances.ui.screens.home.parts.BasketScreenTopBar
 import com.orka.myfinances.ui.screens.home.parts.HomeScreenTopBar
 import com.orka.myfinances.ui.screens.home.parts.ProfileTopBar
-import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketInteractor
-import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketState
-import com.orka.myfinances.ui.screens.home.viewmodel.folder.FoldersInteractor
-import com.orka.myfinances.ui.screens.home.viewmodel.folder.FoldersState
-import com.orka.myfinances.ui.screens.home.viewmodel.folder.TemplateState
-import com.orka.myfinances.ui.screens.home.viewmodel.profile.ProfileInteractor
-import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     session: Session,
-    sessionManager: SessionManager,
-    foldersInteractor: FoldersInteractor,
-    foldersState: StateFlow<FoldersState>,
-    folderDialogState: StateFlow<TemplateState>,
-    basketInteractor: BasketInteractor,
-    basketState: StateFlow<BasketState>,
-    profileInteractor: ProfileInteractor,
-    profileState: StateFlow<State>
+    factory: Factory,
+    sessionManager: SessionManager
 ) {
     val navItems = listOf(
         NavItem(
@@ -74,7 +62,9 @@ fun HomeScreen(
     val navState = rememberSaveable { mutableIntStateOf(0) }
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
 
-    fun NavItem.getIconRes() = if (navState.intValue == index) iconRes.selected else iconRes.unSelected
+    fun NavItem.getIconRes() =
+        if (navState.intValue == index) iconRes.selected else iconRes.unSelected
+
     fun showDialog() {
         dialogVisible.value = true
     }
@@ -82,26 +72,33 @@ fun HomeScreen(
         dialogVisible.value = false
     }
 
-    val basketStateValue by basketState.collectAsState()
-
     Scaffold(
         modifier = modifier,
         topBar = {
             when (navState.intValue) {
                 0 -> {
+                    val foldersViewModel = viewModel(session.office) {
+                        factory.foldersViewModel()
+                    }
                     HomeScreenTopBar(
                         onAddClick = { showDialog() },
-                        onNotificationsClick = { foldersInteractor.navigateToNotifications() },
-                        onSearchClick = { foldersInteractor.navigateToSearch() }
+                        onNotificationsClick = { foldersViewModel.navigateToNotifications() },
+                        onSearchClick = { foldersViewModel.navigateToSearch() }
                     )
                 }
 
                 1 -> {
+                    val basketViewModel = viewModel(session.office) {
+                        factory.basketViewModel()
+                    }
+                    val state = basketViewModel.uiState.collectAsState()
+
                     BasketScreenTopBar(
-                        state = basketStateValue,
-                        interactor = basketInteractor
+                        state = state.value,
+                        interactor = basketViewModel
                     )
                 }
+
                 2 -> ProfileTopBar()
             }
         },
@@ -130,26 +127,32 @@ fun HomeScreen(
 
         when (navState.intValue) {
             0 -> {
-                val state by foldersState.collectAsState()
+                val foldersViewModel = viewModel(session.office) {
+                    factory.foldersViewModel()
+                }
+                LaunchedEffect(session) {
+                    foldersViewModel.initialize()
+                }
+                val state = foldersViewModel.uiState.collectAsState()
 
                 FoldersContent(
                     modifier = m,
-                    state = state,
-                    interactor = foldersInteractor
+                    state = state.value,
+                    interactor = foldersViewModel
                 )
 
                 if (dialogVisible.value) {
-                    val dialogState by folderDialogState.collectAsState()
+                    val dialogState = foldersViewModel.dialogState.collectAsState()
 
                     AddFolderDialog(
-                        state = dialogState,
+                        state = dialogState.value,
                         dismissRequest = { hideDialog() },
                         onAddTemplateClick = {
-                            foldersInteractor.navigateToAddTemplate()
+                            foldersViewModel.navigateToAddTemplate()
                             hideDialog()
                         },
                         onSuccess = { name, type, templateId ->
-                            foldersInteractor.addFolder(name, type, templateId)
+                            foldersViewModel.addFolder(name, type, templateId)
                             hideDialog()
                         },
                         onCancel = { hideDialog() }
@@ -158,21 +161,35 @@ fun HomeScreen(
             }
 
             1 -> {
+                val basketViewModel = viewModel(session.office) {
+                    factory.basketViewModel()
+                }
+                LaunchedEffect(session) {
+                    basketViewModel.initialize()
+                }
+                val state = basketViewModel.uiState.collectAsState()
+
                 BasketContent(
                     modifier = m,
-                    state = basketStateValue,
-                    interactor = basketInteractor
+                    state = state.value,
+                    interactor = basketViewModel
                 )
             }
 
             2 -> {
-                val state by profileState.collectAsState()
+                val profileViewModel = viewModel(session.office) {
+                    factory.profileViewModel()
+                }
+                LaunchedEffect(session) {
+                    profileViewModel.initialize()
+                }
+                val state = profileViewModel.uiState.collectAsState()
 
                 ProfileContent(
                     modifier = m,
                     session = session,
-                    state = state,
-                    interactor = profileInteractor,
+                    state = state.value,
+                    interactor = profileViewModel,
                     sessionManager = sessionManager
                 )
             }

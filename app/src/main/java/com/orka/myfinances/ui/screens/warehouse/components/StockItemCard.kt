@@ -25,7 +25,9 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.stockItem1
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.ui.screens.warehouse.viewmodel.toModel
+import com.orka.myfinances.application.viewmodels.warehouse.toModel
+import com.orka.myfinances.fixtures.format.FormatDecimalImpl
+import com.orka.myfinances.fixtures.format.FormatPriceImpl
 
 @Composable
 fun StockItemCard(
@@ -96,7 +98,10 @@ private fun ProductCardPreview() {
             contentAlignment = Alignment.Center
         ) {
             StockItemCard(
-                item = stockItem1.toModel({""}, {""}),
+                item = stockItem1.toModel(
+                    priceFormatter = FormatPriceImpl(),
+                    decimalFormatter = FormatDecimalImpl()
+                ),
                 click = {}
             )
         }

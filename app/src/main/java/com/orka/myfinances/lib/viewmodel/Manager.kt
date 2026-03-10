@@ -1,5 +1,6 @@
 package com.orka.myfinances.lib.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineStart
@@ -20,5 +21,10 @@ abstract class Manager : ViewModel() {
         ) {
             callback.invoke()
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.d("Manager", "onCleared: ${this.javaClass.name}")
     }
 }

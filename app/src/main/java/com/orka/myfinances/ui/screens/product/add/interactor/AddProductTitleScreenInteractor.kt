@@ -1,0 +1,30 @@
+package com.orka.myfinances.ui.screens.product.add.interactor
+
+import com.orka.myfinances.data.models.folder.Category
+import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
+import com.orka.myfinances.lib.ui.viewmodel.StateFul
+
+interface AddProductTitleScreenInteractor : StateFul {
+    fun addProductTitle(
+        properties: List<PropertyModel<*>?>,
+        name: String,
+        price: Int?,
+        salePrice: Int?,
+        description: String?,
+        category: Category
+    )
+
+    companion object {
+        val dummy = object : AddProductTitleScreenInteractor {
+            override fun initialize() {}
+            override fun addProductTitle(
+                properties: List<PropertyModel<*>?>,
+                name: String,
+                price: Int?,
+                salePrice: Int?,
+                description: String?,
+                category: Category
+            ) {}
+        }
+    }
+}

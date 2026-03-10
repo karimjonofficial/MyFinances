@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.home.parts
 
+import android.util.Log
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,6 +21,7 @@ fun BasketScreenTopBar(
     state: BasketState,
     interactor: BasketInteractor
 ) {
+    Log.d("BasketScreenTopBar", "state: $state")
     TopAppBar(
         modifier = modifier,
         title = { Text(text = stringResource(R.string.basket)) },

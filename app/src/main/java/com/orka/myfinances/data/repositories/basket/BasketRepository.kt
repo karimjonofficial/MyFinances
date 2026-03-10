@@ -1,8 +1,8 @@
 package com.orka.myfinances.data.repositories.basket
 
-import com.orka.myfinances.data.models.Id
+import android.util.Log
+import com.orka.myfinances.data.api.product.ProductApiModel
 import com.orka.myfinances.data.models.basket.BasketItem
-import com.orka.myfinances.data.models.product.Product
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -23,7 +23,7 @@ class BasketRepository(private val client: HttpClient) {
         return items.toList()
     }
 
-    suspend fun add(id: Id, amount: Int) {
+    suspend fun add(id: Int, amount: Int) {
         mutex.withLock {
             val index = getIndex(id)
             if (index != null) {
@@ -31,20 +31,20 @@ class BasketRepository(private val client: HttpClient) {
                 items[index] = i.copy(amount = i.amount + amount)
             } else {
                 try {
-                    val response = client.get("products/${id.value}/")
+                    val response = client.get("products/${id}/")
                     if (response.status == HttpStatusCode.OK) {
-                        val product = response.body<Product>()
+                        val product = response.body<ProductApiModel>()
                         items.add(BasketItem(product, amount))
                     }
                 } catch (_: Exception) {
-                    // Handle error
+                    Log.d("BasketRepository", "add: error")
                 }
             }
             emit()
         }
     }
 
-    suspend fun remove(id: Id, amount: Int) {
+    suspend fun remove(id: Int, amount: Int) {
         mutex.withLock {
             val index = getIndex(id)
             if (index != null) {
@@ -68,7 +68,7 @@ class BasketRepository(private val client: HttpClient) {
         _events.emit(BasketEvent)
     }
 
-    private fun getIndex(id: Id): Int? {
+    private fun getIndex(id: Int): Int? {
         val index = items.indexOfFirst { it.product.id == id }
         return if (index == -1) null else index
     }

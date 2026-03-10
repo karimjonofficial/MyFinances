@@ -16,6 +16,7 @@ fun <T> StatefulScreen(
     topBar: @Composable (State) -> Unit = {},
     bottomBar: @Composable (State) -> Unit = {},
     state: State,
+    onInitialize: () -> Unit = {},
     onRetry: () -> Unit = {},
     content: @Composable (Modifier, T) -> Unit
 ) {
@@ -27,7 +28,10 @@ fun <T> StatefulScreen(
         val m = Modifier.scaffoldPadding(paddingValues)
 
         when (state) {
-            is State.Initial -> LoadingScreen(modifier = m)
+            is State.Initial -> LoadingScreen(
+                modifier = m,
+                action = onInitialize
+            )
 
             is State.Loading -> LoadingScreen(
                 modifier = m,
@@ -56,6 +60,7 @@ fun <T> StatefulScreen(
     title: String,
     bottomBar: @Composable (State) -> Unit = {},
     state: State,
+    onInitialize: () -> Unit = {},
     onRetry: () -> Unit = {},
     content: @Composable (Modifier, T) -> Unit
 ) {
@@ -64,6 +69,7 @@ fun <T> StatefulScreen(
         topBar = { TopAppBar(title = { Text(text = title) }) },
         bottomBar = bottomBar,
         state = state,
+        onInitialize = onInitialize,
         onRetry = onRetry,
         content = content
     )

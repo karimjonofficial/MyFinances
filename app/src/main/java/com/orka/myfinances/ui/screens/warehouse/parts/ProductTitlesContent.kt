@@ -6,13 +6,13 @@ import androidx.compose.ui.Modifier
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.ProductsState
-import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
+import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenInteractor
 
 @Composable
 fun ProductTitlesContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
-    viewModel: WarehouseScreenViewModel,
+    viewModel: WarehouseScreenInteractor,
     state: ProductsState
 ) {
     when (state) {

@@ -9,7 +9,6 @@ import kotlin.time.Instant
 data class StockItemApiModel(
     val id: Int,
     val product: ProductApiModel,
-    @SerialName("branch") val officeId: Int,
     val amount: Int,
     @SerialName("date_time") val dateTime: Instant? = null,
     @SerialName("created_at") val createdAt: Instant,

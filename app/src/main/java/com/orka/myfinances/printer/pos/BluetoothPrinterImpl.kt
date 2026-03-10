@@ -8,7 +8,7 @@ import android.os.Build
 import androidx.core.content.ContextCompat
 import com.dantsu.escposprinter.EscPosPrinter
 import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections
-import com.orka.myfinances.data.models.sale.Sale
+import com.orka.myfinances.data.api.sale.SaleApiModel
 import com.orka.myfinances.printer.Printer
 import com.orka.myfinances.printer.PrinterState
 import kotlinx.coroutines.CoroutineScope
@@ -62,7 +62,7 @@ class BluetoothPrinterImpl(
     }
 
     @SuppressLint("MissingPermission")
-    override fun print(sale: Sale) {
+    override fun print(sale: SaleApiModel) {
         if (!hasBluetoothPermission()) {
             return
         }
@@ -73,7 +73,7 @@ class BluetoothPrinterImpl(
                     val printer = EscPosPrinter(connection, 203, 48f, 32)
                     val formattedText = """
                         [C]<b>My Finances</b>
-                        [C]Sale ID: ${sale.id.value}
+                        [C]Sale ID: ${sale.id}
                         [L]--------------------------------
                         ${sale.items.joinToString("\n") { "[L]${it.product.title.name} [R]${it.amount}" }}
                         [L]--------------------------------

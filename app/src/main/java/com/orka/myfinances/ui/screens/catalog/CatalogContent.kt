@@ -7,7 +7,7 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenState
-import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenViewModel
+import com.orka.myfinances.application.viewmodels.catalog.CatalogScreenViewModel
 import com.orka.myfinances.ui.screens.home.parts.FoldersList
 
 @Composable

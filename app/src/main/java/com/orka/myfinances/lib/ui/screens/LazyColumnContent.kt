@@ -20,7 +20,10 @@ fun <T> LazyColumnContent(
     item: @Composable (modifier: Modifier, item: T) -> Unit
 ) {
     when (state) {
-        is State.Initial -> LoadingScreen(modifier)
+        is State.Initial -> LoadingScreen(
+            modifier = modifier,
+            action = viewModel::initialize
+        )
 
         is State.Loading -> LoadingScreen(
             modifier = modifier,
@@ -57,7 +60,10 @@ fun <T> LazyColumnContentWithStickyHeader(
     item: @Composable (modifier: Modifier, item: T) -> Unit
 ) {
     when (state) {
-        is State.Initial -> LoadingScreen(modifier)
+        is State.Initial -> LoadingScreen(
+            modifier = modifier,
+            action = viewModel::initialize
+        )
 
         is State.Loading -> LoadingScreen(
             modifier = modifier,

@@ -37,24 +37,21 @@ import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.components.ClientCard
 import com.orka.myfinances.ui.components.UserCard
-import com.orka.myfinances.ui.screens.debt.components.DescriptionCard
-import com.orka.myfinances.ui.screens.order.viewmodel.OrderInteractor
-import com.orka.myfinances.ui.screens.order.viewmodel.OrderScreenModel
-import com.orka.myfinances.ui.screens.order.viewmodel.map
-import com.orka.myfinances.ui.screens.sale.viewmodel.map
+import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
 fun OrderScreen(
     modifier: Modifier = Modifier,
     state: State,
-    interactor: OrderInteractor
+    interactor: OrderScreenInteractor
 ) {
     @Suppress("UNCHECKED_CAST")
     StatefulScreen<OrderScreenModel>(
         modifier = modifier,
         title = stringResource(R.string.order),
         state = state,
+        onInitialize = interactor::initialize,
         bottomBar = { state ->
             if (!((state as? State.Success<OrderScreenModel>)?.value?.completed ?: false)) {
                 SingleActionBottomBar(
@@ -110,9 +107,11 @@ fun OrderScreen(
                         HorizontalSpacer(16)
                         LabeledDate(
                             modifier = Modifier.weight(1f),
-                            label = if (order.completed) stringResource(R.string.completed_at)
-                            else stringResource(R.string.completion_date),
+                            label = if (order.completed) stringResource(R.string.completed_at) else stringResource(
+                                R.string.completion_date
+                            ),
                             date = order.endDate
+                                ?: stringResource(R.string.end_date_is_not_provided)
                         )
                     }
                 }
@@ -131,17 +130,17 @@ fun OrderScreen(
 
             VerticalSpacer(8)
             ClientCard(
-                model = order.client.model,
-                onClick = { interactor.navigateToClient(order.client.id) }
+                model = order.client,
+                onClick = { interactor.navigateToClient(order.clientId) }
             )
 
             VerticalSpacer(8)
             UserCard(
-                user = order.user.map(),
+                user = order.user,
                 onClick = {}
             )
 
-            if(!order.description.isNullOrBlank()) {
+            if (!order.description.isNullOrBlank()) {
                 VerticalSpacer(8)
                 DescriptionCard(description = order.description)
             }
@@ -178,7 +177,8 @@ private fun LabeledDate(
 @Preview
 @Composable
 private fun OrderScreenPreview() {
-    val interactor = object : OrderInteractor {
+    val interactor = object : OrderScreenInteractor {
+        override fun initialize() {}
         override fun navigateToClient(clientId: Id) {
 
         }
@@ -186,11 +186,13 @@ private fun OrderScreenPreview() {
     MyFinancesTheme {
         OrderScreen(
             modifier = Modifier.fillMaxSize(),
-            state = State.Success(order1.map(
-                formatPrice = FormatPriceImpl(),
-                formatDate = FormatDateImpl(),
-                formatTime = FormatTimeImpl()
-            )),
+            state = State.Success(
+                order1.map(
+                    formatPrice = FormatPriceImpl(),
+                    formatDate = FormatDateImpl(),
+                    formatTime = FormatTimeImpl()
+                )
+            ),
             interactor = interactor
         )
     }
@@ -199,19 +201,20 @@ private fun OrderScreenPreview() {
 @Preview
 @Composable
 private fun CompletedOrderScreenPreview() {
-    val interactor = object : OrderInteractor {
-        override fun navigateToClient(clientId: Id) {
-
-        }
+    val interactor = object : OrderScreenInteractor {
+        override fun initialize() {}
+        override fun navigateToClient(clientId: Id) {}
     }
     MyFinancesTheme {
         OrderScreen(
             modifier = Modifier.fillMaxSize(),
-            state = State.Success(order2.map(
-                formatPrice = FormatPriceImpl(),
-                formatDate = FormatDateImpl(),
-                formatTime = FormatTimeImpl()
-            )),
+            state = State.Success(
+                value = order2.map(
+                    formatPrice = FormatPriceImpl(),
+                    formatDate = FormatDateImpl(),
+                    formatTime = FormatTimeImpl()
+                )
+            ),
             interactor = interactor
         )
     }

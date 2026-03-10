@@ -31,7 +31,7 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.ui.screens.clients.viewmodel.toModel
+import com.orka.myfinances.ui.screens.client.list.toModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable

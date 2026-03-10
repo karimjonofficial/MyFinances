@@ -1,8 +1,10 @@
 package com.orka.myfinances.lib.data.models
 
-import com.orka.myfinances.data.models.Id
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Item(
-    val id: Id,
+    @SerialName("product") val id: Int,
     val amount: Int
 )

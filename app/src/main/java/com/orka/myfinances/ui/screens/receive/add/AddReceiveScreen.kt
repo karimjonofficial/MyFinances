@@ -18,11 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.product.ProductTitle
-import com.orka.myfinances.fixtures.core.DummyLogger
-import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.folder.category1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
@@ -33,20 +30,22 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.theme.MyFinancesTheme
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
 
 @Composable
 fun AddReceiveScreen(
     modifier: Modifier = Modifier,
     state: State,
-    viewModel: AddReceiveScreenViewModel
+    interactor: AddReceiveScreenInteractor
 ) {
     when (state) {
-        is State.Loading, is State.Initial -> LoadingScreen(modifier)
+        is State.Initial -> LoadingScreen(
+            modifier = modifier,
+            action = interactor::initialize
+        )
+        is State.Loading -> LoadingScreen(modifier)
         is State.Failure -> { /* Handle failure */ }
         is State.Success<*> -> {
-            val data = state.value as AddReceiveScreenStateSuccess
+            val data = state.value as AddReceiveScreenModel
             val category = data.category
             val productTitles = data.productTitles
 
@@ -82,7 +81,7 @@ fun AddReceiveScreen(
                         Button(
                             enabled = saveable,
                             onClick = {
-                                viewModel.add(
+                                interactor.add(
                                     title = t,
                                     price = p,
                                     salePrice = sp,
@@ -174,20 +173,11 @@ fun AddReceiveScreen(
 @Preview
 @Composable
 private fun AddReceiveScreenPreview() {
-    val client = HttpClient(OkHttp)
-    val viewModel = viewModel {
-        AddReceiveScreenViewModel(
-            id = category1.id,
-            client = client,
-            navigator = DummyNavigator(),
-            logger = DummyLogger()
-        )
-    }
     MyFinancesTheme {
         AddReceiveScreen(
             modifier = Modifier.fillMaxSize(),
-            state = State.Success(AddReceiveScreenStateSuccess(category1, emptyList())),
-            viewModel = viewModel
+            state = State.Success(AddReceiveScreenModel(category1, emptyList())),
+            interactor = AddReceiveScreenInteractor.dummy
         )
     }
 }

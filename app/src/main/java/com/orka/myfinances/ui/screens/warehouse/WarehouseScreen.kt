@@ -20,22 +20,23 @@ import com.orka.myfinances.ui.screens.warehouse.parts.ProductTitlesContent
 import com.orka.myfinances.ui.screens.warehouse.parts.StockItemsContent
 import com.orka.myfinances.ui.screens.warehouse.parts.WarehouseScreenTopBar
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.ProductsState
-import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenViewModel
-import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenState
+import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenInteractor
+import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenModel
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseState
 
 @Composable
 fun WarehouseScreen(
     modifier: Modifier = Modifier,
     state: State,
-    viewModel: WarehouseScreenViewModel
+    viewModel: WarehouseScreenInteractor
 ) {
-    StatefulScreen<WarehouseScreenState>(
+    StatefulScreen<WarehouseScreenModel>(
         modifier = modifier,
         state = state,
+        onInitialize = viewModel::initialize,
         onRetry = { viewModel.initialize() },
         topBar = {
-            val category = (state as? State.Success<*>)?.let { (it.value as WarehouseScreenState).category }
+            val category = (state as? State.Success<*>)?.let { (it.value as WarehouseScreenModel).category }
             if (category != null) {
                 WarehouseScreenTopBar(
                     category = category,
