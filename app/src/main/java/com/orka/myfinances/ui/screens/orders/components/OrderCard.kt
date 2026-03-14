@@ -45,18 +45,21 @@ fun OrderCard(
         Card(
             modifier = modifier,
             onClick = { onClick() },
+            shape = MaterialTheme.shapes.medium,
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            )
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
         ) {
             OrderCardContent(order = order)
         }
     } else {
-            OutlinedCard(
-                modifier = modifier,
-                onClick = { onClick() }
-            ) {
+        OutlinedCard(
+            modifier = modifier,
+            onClick = { onClick() },
+            shape = MaterialTheme.shapes.medium
+        ) {
             OrderCardContent(order = order)
         }
     }

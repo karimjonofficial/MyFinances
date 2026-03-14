@@ -41,6 +41,7 @@ fun HistoryScreen(
     MultipleTabScreen(
         modifier = modifier,
         title = stringResource(R.string.history),
-        tabs = tabs
+        tabs = tabs,
+        onBack = saleViewModel::back
     )
 }

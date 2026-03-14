@@ -54,4 +54,8 @@ class SaleContentViewModel(
     override fun select(sale: SaleUiModel) {
         launch { navigator.navigateToSale(sale.id) }
     }
+
+    override fun back() {
+        launch { navigator.back() }
+    }
 }

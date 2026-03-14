@@ -29,8 +29,8 @@ import com.orka.myfinances.ui.screens.home.models.FolderButtonModel
 import com.orka.myfinances.application.viewmodels.home.folder.toModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
-private const val roundedCornerRadius = 16
-private const val normalCornerRadius = 4
+private const val roundedCornerRadius = 24
+private const val normalCornerRadius = 8
 
 @Composable
 fun FolderButton(
@@ -121,7 +121,7 @@ private fun BaseFolderButton(
                     bottomStart = bottomStart
                 )
             )
-            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
             .clickable { onClick() }
             .padding(8.dp)
     ) {
@@ -147,7 +147,7 @@ private fun BaseFolderButton(
             Icon(
                 modifier = Modifier.size(36.dp).padding(4.dp),
                 painter = painterResource(folder.iconRes),
-                tint = MaterialTheme.colorScheme.onSurface,
+                tint = MaterialTheme.colorScheme.primary,
                 contentDescription = null
             )
         }

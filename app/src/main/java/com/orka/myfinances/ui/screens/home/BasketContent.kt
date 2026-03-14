@@ -95,8 +95,12 @@ fun BasketContent(
                                     contentDescription = null
                                 )
 
-                                VerticalSpacer(4)
-                                Text(text = stringResource(R.string.basket_is_empty))
+                                VerticalSpacer(16)
+                                Text(
+                                    text = stringResource(R.string.basket_is_empty),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
                             }
                         }
                     }

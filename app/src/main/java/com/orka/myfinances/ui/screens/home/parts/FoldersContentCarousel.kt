@@ -1,36 +1,65 @@
 package com.orka.myfinances.ui.screens.home.parts
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.carousel.CarouselState
-import androidx.compose.material3.carousel.HorizontalMultiBrowseCarousel
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun FoldersContentCarousel(
     modifier: Modifier = Modifier,
-    state: CarouselState
+    folderCount: Int = 0
 ) {
-    HorizontalMultiBrowseCarousel(
-        modifier = modifier,
-        state = state,
-        preferredItemWidth = 240.dp,
-        itemSpacing = 8.dp,
-        contentPadding = PaddingValues(horizontal = 8.dp)
-    ) { index ->
-        Image(
-            modifier = Modifier.maskClip(MaterialTheme.shapes.extraLarge),
-            painter = painterResource(R.drawable.furniture),
-            contentScale = ContentScale.FillWidth,
-            contentDescription = null
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
         )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    text = stringResource(R.string.categories),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                Text(
+                    text = "$folderCount ${stringResource(R.string.categories).lowercase()}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                )
+            }
+            Icon(
+                modifier = Modifier.size(48.dp),
+                painter = painterResource(R.drawable.folder_filled),
+                tint = MaterialTheme.colorScheme.primary,
+                contentDescription = null
+            )
+        }
     }
 }

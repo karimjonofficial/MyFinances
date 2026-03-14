@@ -4,4 +4,5 @@ import com.orka.myfinances.lib.ui.viewmodel.StateFul
 
 interface SaleContentInteractor : StateFul {
     fun select(sale: SaleUiModel)
+    fun back()
 }

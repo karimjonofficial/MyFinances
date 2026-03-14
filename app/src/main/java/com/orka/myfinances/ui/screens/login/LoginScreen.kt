@@ -1,18 +1,30 @@
 package com.orka.myfinances.ui.screens.login
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -21,16 +33,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.application.viewmodels.login.LoginScreenViewModel
@@ -45,153 +58,225 @@ fun LoginScreen(
     state: LoginScreenState,
     viewModel: LoginScreenViewModel
 ) {
+    val isErrorState   = state is LoginScreenState.Error
+    val isLoadingState = state is LoginScreenState.Loading
+    val textFieldError = isErrorState && !(state as? LoginScreenState.Error)?.serverError!!
 
     Scaffold(modifier = modifier) { paddingValues ->
-        Box(modifier = Modifier.scaffoldPadding(paddingValues)) {
-            if(state is LoginScreenState.Error) {
-                Row(
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(top =  16.dp)
-                        .clip(RoundedCornerShape(50))
-                        .background(MaterialTheme.colorScheme.errorContainer)
-                        .padding(vertical = 8.dp, horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.error),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onErrorContainer
-                    )
+        Box(
+            modifier = Modifier
+                .scaffoldPadding(paddingValues)
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            // ── Error banner ────────────────────────────────────────────
+            AnimatedVisibility(
+                visible = isErrorState,
+                modifier = Modifier.align(Alignment.TopCenter),
+                enter = fadeIn() + slideInVertically(),
+                exit  = fadeOut() + slideOutVertically()
+            ) {
+                if (state is LoginScreenState.Error) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 12.dp)
+                            .background(
+                                color = MaterialTheme.colorScheme.errorContainer,
+                                shape = MaterialTheme.shapes.medium
+                            )
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.error),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onErrorContainer
+                        )
 
-                    HorizontalSpacer(16)
-                    Text(
-                        text = state.message.str(),
-                        maxLines = 2,
-                        color = MaterialTheme.colorScheme.onErrorContainer
-                    )
+                        HorizontalSpacer(12)
+                        Text(
+                            text = state.message.str(),
+                            maxLines = 2,
+                            color = MaterialTheme.colorScheme.onErrorContainer,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
                 }
             }
 
+            // ── Main content ─────────────────────────────────────────────
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(32.dp),
+                    .verticalScroll(rememberScrollState())
+                    .imePadding()
+                    .padding(horizontal = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                val username = rememberSaveable { mutableStateOf("admin") }
-                val password = rememberSaveable { mutableStateOf("123") }
-                val remember = rememberSaveable { mutableStateOf(false) }
+                val username       = rememberSaveable { mutableStateOf("") }
+                val password       = rememberSaveable { mutableStateOf("") }
+                val remember       = rememberSaveable { mutableStateOf(false) }
                 val passwordVisible = rememberSaveable { mutableStateOf(false) }
 
                 val usernameText = username.value
                 val passwordText = password.value
 
-                val isErrorState = state is LoginScreenState.Error
-                val isLoadingState = state is LoginScreenState.Loading
-                val textFieldError = isErrorState && !state.serverError
+                VerticalSpacer(48)
 
-                VerticalSpacer(32)
+                // App logo + branding
                 Image(
-                    modifier = Modifier.size(128.dp),
+                    modifier = Modifier.size(88.dp),
                     painter = painterResource(R.drawable.logo),
                     contentDescription = stringResource(R.string.logo)
                 )
 
-                VerticalSpacer(16)
+                VerticalSpacer(24)
+                Text(
+                    text = stringResource(R.string.app_name),
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+                VerticalSpacer(4)
                 Text(
                     text = stringResource(R.string.enter_to_account),
-                    style = MaterialTheme.typography.headlineMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
                 )
 
-                VerticalSpacer(16)
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = !isLoadingState,
-                    isError = textFieldError,
-                    singleLine = true,
-                    value = username.value,
-                    leadingIcon = {
-                        Icon(
-                            painter = painterResource(R.drawable.person),
-                            contentDescription = null
-                        )
-                    },
-                    onValueChange = { username.value = it },
-                    label = { Text(stringResource(R.string.username)) },
-                    supportingText = {
-                        if (textFieldError) {
-                            Text(stringResource(R.string.change_the_username))
-                        }
-                    }
-                )
+                VerticalSpacer(40)
 
-                OutlinedTextField(
+                // ── Form card ───────────────────────────────────────────
+                Card(
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = !isLoadingState,
-                    isError = textFieldError,
-                    singleLine = true,
-                    value = password.value,
-                    leadingIcon = {
-                        Icon(
-                            painter = painterResource(R.drawable.lock),
-                            contentDescription = null
+                    shape = MaterialTheme.shapes.large,
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                    ),
+                    elevation = CardDefaults.cardElevation(0.dp)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(24.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        OutlinedTextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            enabled = !isLoadingState,
+                            isError = textFieldError,
+                            singleLine = true,
+                            value = usernameText,
+                            shape = MaterialTheme.shapes.small,
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(R.drawable.person),
+                                    contentDescription = null
+                                )
+                            },
+                            onValueChange = { username.value = it },
+                            label = { Text(stringResource(R.string.username)) },
+                            supportingText = {
+                                if (textFieldError) {
+                                    Text(stringResource(R.string.change_the_username))
+                                }
+                            }
                         )
-                    },
-                    visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
-                    trailingIcon = {
-                        IconButton(
-                            onClick = { passwordVisible.value = !passwordVisible.value }
+
+                        OutlinedTextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            enabled = !isLoadingState,
+                            isError = textFieldError,
+                            singleLine = true,
+                            value = passwordText,
+                            shape = MaterialTheme.shapes.small,
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(R.drawable.lock),
+                                    contentDescription = null
+                                )
+                            },
+                            visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
+                            trailingIcon = {
+                                IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
+                                    Icon(
+                                        painter = painterResource(
+                                            if (passwordVisible.value) R.drawable.visibility
+                                            else R.drawable.visibility_off
+                                        ),
+                                        contentDescription = null
+                                    )
+                                }
+                            },
+                            onValueChange = { password.value = it },
+                            label = { Text(stringResource(R.string.password)) },
+                            supportingText = {
+                                if (textFieldError) {
+                                    Text(stringResource(R.string.change_the_password))
+                                }
+                            }
+                        )
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Icon(
-                                painter = painterResource(if (passwordVisible.value) R.drawable.visibility else R.drawable.visibility_off),
-                                contentDescription = null
+                            Checkbox(
+                                enabled = !isLoadingState,
+                                checked = remember.value,
+                                onCheckedChange = { remember.value = it }
                             )
-                        }
-                    },
-                    onValueChange = { password.value = it },
-                    label = { Text(stringResource(R.string.password)) },
-                    supportingText = {
-                        if (textFieldError) {
-                            Text(stringResource(R.string.change_the_password))
+                            Text(
+                                text = stringResource(R.string.remember_me),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+
+                            Spacer(Modifier.weight(1f))
+
+                            TextButton(onClick = { /* TODO: forgot password */ }) {
+                                Text(
+                                    text = stringResource(R.string.forgot_password),
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+                            }
                         }
                     }
-                )
-
-                VerticalSpacer(8)
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(
-                        enabled = !isLoadingState,
-                        checked = remember.value,
-                        onCheckedChange = { remember.value = it }
-                    )
-                    HorizontalSpacer(8)
-                    Text(stringResource(R.string.remember_me))
                 }
 
-                VerticalSpacer(8)
+                VerticalSpacer(24)
+
                 Button(
                     modifier = Modifier
-                        .height(48.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .height(52.dp),
+                    shape = MaterialTheme.shapes.small,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    ),
                     onClick = {
-                        val username = username.value
-                        val password = password.value
-                        if (username.isNotEmpty() && password.isNotEmpty()) {
-                            if (remember.value) viewModel.authorizeAndRemember(username, password)
-                            else viewModel.authorize(username, password)
+                        if (usernameText.isNotEmpty() && passwordText.isNotEmpty()) {
+                            if (remember.value) viewModel.authorizeAndRemember(usernameText, passwordText)
+                            else viewModel.authorize(usernameText, passwordText)
                         }
                     },
                     enabled = (usernameText.isNotBlank() && passwordText.isNotBlank()) && !isLoadingState
                 ) {
-                    if (isLoadingState)
-                        CircularProgressIndicator(modifier = Modifier.size(24.dp))
-                    else Text(stringResource(R.string.enter))
+                    if (isLoadingState) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Text(
+                            text = stringResource(R.string.enter),
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 }
 
-                VerticalSpacer(8)
-                Text(stringResource(R.string.forgot_password))
                 VerticalSpacer(64)
             }
         }

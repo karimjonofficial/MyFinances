@@ -3,6 +3,7 @@ package com.orka.myfinances.ui.screens.client.list
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -42,7 +43,12 @@ fun ClientsScreen(
         viewModel = viewModel,
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(R.string.clients)) },
+                title = {
+                    Text(
+                        text = stringResource(R.string.clients),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
                 actions = {
                     IconButton(onClick = { dialogVisible.value = true }) {
                         Icon(
@@ -63,7 +69,7 @@ fun ClientsScreen(
                 }
             )
         },
-        arrangementSpace = 2.dp,
+        arrangementSpace = 8.dp,
         item = { modifier, client ->
             ClientCard(
                 modifier = modifier,

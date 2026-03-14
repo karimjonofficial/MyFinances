@@ -2,7 +2,6 @@ package com.orka.myfinances.ui.screens.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,10 +25,8 @@ fun FoldersContent(
         is FoldersState.Loading -> LoadingScreen(modifier)
 
         is FoldersState.Success -> {
-            val carouselState = rememberCarouselState { 3 }
-
             Column(modifier = modifier) {
-                FoldersContentCarousel(state = carouselState)
+                FoldersContentCarousel(folderCount = state.folders.size)
 
                 VerticalSpacer(24)
                 FoldersList(
