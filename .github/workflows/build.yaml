@@ -42,8 +42,8 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: debug-apk-${{ github.run_number }}
-          path: app/build/outputs/apk/debug/*.apk
+          name: stable-apk-${{ github.run_number }}
+          path: app/build/outputs/apk/stable/*.apk
           retention-days: 7
 
       - name: Send APK to Telegram
@@ -52,7 +52,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          APK_FILE=$(find app/build/outputs/apk/debug/ -name "*.apk" | head -n 1)
+          APK_FILE=$(find app/build/outputs/apk/stable/ -name "*.apk" | head -n 1)
           if [ -z "$APK_FILE" ]; then
             echo "APK file not found!"
             exit 1
