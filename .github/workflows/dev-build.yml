@@ -62,9 +62,9 @@ jobs:
             -F "document=@$APK_FILE" \
             -F "caption=🚀 *New Dev Build*
 
-              📦 Build: ${{ github.run_number }}
-              🌿 Branch: ${{ github.ref_name }}
-              💬 Commit: ${{ github.event.head_commit.message }}
+            📦 Build: ${{ github.run_number }}
+            🌿 Branch: ${{ github.ref_name }}
+            💬 Commit: ${{ github.event.head_commit.message }}
   
-              ⚡ Built with GitHub Actions" \
+            ⚡ Built with GitHub Actions" \
             "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendDocument"
