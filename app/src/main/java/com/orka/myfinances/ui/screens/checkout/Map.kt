@@ -4,10 +4,12 @@ import com.orka.myfinances.data.api.product.ProductApiModel
 import com.orka.myfinances.data.api.template.TemplateFieldApiModel
 import com.orka.myfinances.data.api.title.ProductTitleApiModel
 import com.orka.myfinances.data.api.title.PropertyApiModel
+import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.data.models.product.Property
 import com.orka.myfinances.data.models.template.TemplateField
+import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
 
 fun Product.map(): ProductApiModel {
     return ProductApiModel(
@@ -47,5 +49,12 @@ fun TemplateField.map(): TemplateFieldApiModel {
         id = id.value,
         name = name,
         type = type
+    )
+}
+
+fun Client.map(): ClientItemModel {
+    return ClientItemModel(
+        id = id,
+        name = "$firstName $lastName"
     )
 }

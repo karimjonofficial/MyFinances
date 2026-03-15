@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.orders.components
+package com.orka.myfinances.ui.screens.order.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,7 +23,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.fixtures.format.FormatDateImpl
+import com.orka.myfinances.fixtures.format.FormatDecimalImpl
+import com.orka.myfinances.fixtures.format.FormatNamesImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.format.FormatTimeImpl
 import com.orka.myfinances.fixtures.resources.models.order.order1
@@ -32,7 +33,7 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
-import com.orka.myfinances.ui.screens.order.map
+import com.orka.myfinances.ui.screens.order.list.components.OrderCardModel
 
 @Composable
 fun OrderCard(
@@ -40,8 +41,7 @@ fun OrderCard(
     order: OrderCardModel,
     onClick: () -> Unit
 ) {
-
-    if(!order.completed) {
+    if (!order.completed) {
         Card(
             modifier = modifier,
             onClick = { onClick() },
@@ -53,10 +53,10 @@ fun OrderCard(
             OrderCardContent(order = order)
         }
     } else {
-            OutlinedCard(
-                modifier = modifier,
-                onClick = { onClick() }
-            ) {
+        OutlinedCard(
+            modifier = modifier,
+            onClick = { onClick() }
+        ) {
             OrderCardContent(order = order)
         }
     }
@@ -71,28 +71,25 @@ private fun OrderCardContent(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         Column(
             modifier = Modifier
                 .weight(1f)
                 .padding(16.dp)
         ) {
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-
                 Text(
                     text = order.title,
                     style = MaterialTheme.typography.titleLarge
                 )
-
-                Text(
-                    text = order.price,
-                    style = MaterialTheme.typography.titleMedium
-                )
             }
+
+            Text(
+                text = order.price,
+                style = MaterialTheme.typography.titleMedium
+            )
 
             VerticalSpacer(8)
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -114,7 +111,7 @@ private fun OrderCardContent(
                 modifier = Modifier
                     .clip(RoundedCornerShape(4.dp))
                     .background(
-                        color = if(!order.completed) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant
+                        color = if (!order.completed) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant
                     )
                     .padding(4.dp),
                 contentAlignment = Alignment.Center
@@ -123,14 +120,14 @@ private fun OrderCardContent(
 
                     Icon(
                         painter = painterResource(R.drawable.shopping_bag_outlined),
-                        tint = if(!order.completed) MaterialTheme.colorScheme.primary else LocalContentColor.current,
+                        tint = if (!order.completed) MaterialTheme.colorScheme.primary else LocalContentColor.current,
                         contentDescription = null
                     )
 
                     HorizontalSpacer(4)
                     Text(
                         text = order.size,
-                        color = if(!order.completed) MaterialTheme.colorScheme.primary else LocalContentColor.current
+                        color = if (!order.completed) MaterialTheme.colorScheme.primary else LocalContentColor.current
                     )
                 }
             }
@@ -156,8 +153,9 @@ private fun OrderCardPreview() {
                     modifier = Modifier.fillMaxWidth(),
                     order = order1.map(
                         formatPrice = FormatPriceImpl(),
-                        formatDate = FormatDateImpl(),
-                        formatTime = FormatTimeImpl()
+                        formatTime = FormatTimeImpl(),
+                        formatDecimal = FormatDecimalImpl(),
+                        formatNames = FormatNamesImpl()
                     ),
                     onClick = {}
                 )
@@ -166,8 +164,9 @@ private fun OrderCardPreview() {
                     modifier = Modifier.fillMaxWidth(),
                     order = order2.map(
                         formatPrice = FormatPriceImpl(),
-                        formatDate = FormatDateImpl(),
-                        formatTime = FormatTimeImpl()
+                        formatTime = FormatTimeImpl(),
+                        formatDecimal = FormatDecimalImpl(),
+                        formatNames = FormatNamesImpl()
                     ),
                     onClick = {}
                 )

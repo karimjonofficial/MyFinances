@@ -1,11 +1,11 @@
 package com.orka.myfinances.application.viewmodels.checkout
 
-import com.orka.myfinances.application.viewmodels.client.details.map
+import com.orka.myfinances.application.viewmodels.client.details.toItemModel
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.api.client.ClientApi
 import com.orka.myfinances.data.api.order.OrderApi
 import com.orka.myfinances.data.api.sale.SaleApi
-import com.orka.myfinances.data.models.Client
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.Basket
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.lib.extensions.models.getPrice
@@ -43,12 +43,12 @@ class CheckoutScreenViewModel(
             try {
                 val clientApiModels = clientApi.getAll()
                 if (clientApiModels != null) {
-                    val clients = clientApiModels.map { it.map() }
+                    val clients = clientApiModels.map { it.toItemModel() }
                     setState(
                         CheckoutScreenState.Success(
                             clients = clients,
                             items = items.map { it.toModel(formatPrice, formatDecimal) },
-                            price = items.getPrice().toInt(),//TODO
+                            price = items.getPrice().toInt(),
                             printerConnected = printerState.value is PrinterState.Connected
                         )
                     )
@@ -70,17 +70,17 @@ class CheckoutScreenViewModel(
     }
 
     override fun sell(
-        client: Client?,
+        id: Id,
         price: Int?,
         description: String?,
         print: Boolean
     ) {
         launch {
-            if (client != null && price != null) {
+            if (price != null) {
                 val items = basketRepository.get()
                 val basket = Basket(price, description, items)
                 try {
-                    val response = saleApi.add(basket.toSaleRequest(client.id))
+                    val response = saleApi.add(basket.toSaleRequest(id))
                     if (response != null) {
                         if (print && printerState.value is PrinterState.Connected) {
                             printer.print(response)
@@ -93,13 +93,13 @@ class CheckoutScreenViewModel(
         }
     }
 
-    override fun order(client: Client?, price: Int?, description: String?) {
+    override fun order(id: Id, price: Int?, description: String?) {
         launch {
-            if (client != null && price != null) {
+            if (price != null) {
                 val items = basketRepository.get()
                 val basket = Basket(price, description, items)
                 try {
-                    if (orderApi.add(basket.toOrderRequest(client.id))) {
+                    if (orderApi.add(basket.toOrderRequest(id))) {
                         clearBasket()
                         navigator.back()
                     }

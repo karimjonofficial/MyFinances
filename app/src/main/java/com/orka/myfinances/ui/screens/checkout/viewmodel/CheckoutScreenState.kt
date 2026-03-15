@@ -1,13 +1,13 @@
 package com.orka.myfinances.ui.screens.checkout.viewmodel
 
-import com.orka.myfinances.data.models.Client
+import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
 
 interface CheckoutScreenState {
     object Loading : CheckoutScreenState
     object Failure : CheckoutScreenState
 
     data class Success(
-        val clients: List<Client>,
+        val clients: List<ClientItemModel>,
         val items: List<BasketItemCardModel>,
         val price: Int,
         val printerConnected: Boolean = false

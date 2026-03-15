@@ -1,14 +1,22 @@
 package com.orka.myfinances.application.viewmodels.client.details
 
 import com.orka.myfinances.data.api.client.ClientApiModel
-import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.ui.screens.client.details.ClientScreenModel
+import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
 
-fun ClientApiModel.map(): Client {
-    return Client(
+fun ClientApiModel.toItemModel(): ClientItemModel {
+    return ClientItemModel(
         id = Id(id),
+        name = "$firstName $lastName"
+    )
+}
+
+fun ClientApiModel.toScreenModel(): ClientScreenModel {
+    return ClientScreenModel(
         firstName = firstName,
         lastName = lastName,
+        patronymic = patronymic,
         phone = phone,
         address = address
     )

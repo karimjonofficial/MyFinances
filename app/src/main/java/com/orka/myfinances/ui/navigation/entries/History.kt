@@ -18,7 +18,7 @@ fun historyEntry(
 
     HistoryScreen(
         modifier = modifier,
-        saleViewModel = saleViewModel,
-        receiveViewModel = receiveViewModel
+        saleContentInteractor = saleViewModel,
+        receiveContentInteractor = receiveViewModel
     )
 }

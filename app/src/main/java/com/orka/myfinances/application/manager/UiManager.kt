@@ -42,6 +42,7 @@ class UiManager(
     override fun initialize() {
         launch {
             try {
+                if(state.value !is UiState.Initial) setState(UiState.Loading)
                 val sessionModel = storage.get()
 
                 if (sessionModel != null) {

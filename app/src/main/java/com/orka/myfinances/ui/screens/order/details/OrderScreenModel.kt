@@ -1,9 +1,9 @@
-package com.orka.myfinances.ui.screens.order
+package com.orka.myfinances.ui.screens.order.details
 
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.ui.components.ClientCardModel
 import com.orka.myfinances.ui.components.UserCardModel
-import com.orka.myfinances.ui.screens.orders.components.OrderItemModel
+import com.orka.myfinances.ui.screens.order.list.OrderItemModel
 
 data class OrderScreenModel(
     val price: String,

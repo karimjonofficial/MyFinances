@@ -11,7 +11,9 @@ import com.orka.myfinances.application.viewmodels.login.LoginScreenViewModel
 sealed interface UiState {
     data object Initial : UiState
     data class Guest(val viewModel: LoginScreenViewModel) : UiState
+    data object Loading : UiState
     data class Failure(val message: UiText) : UiState
+
     data class NewUser(
         val credentials: Credentials,
         val viewModel: SelectOfficeScreenViewModel

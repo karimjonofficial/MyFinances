@@ -7,7 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.orka.myfinances.data.models.product.ProductTitle
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.ui.screens.home.components.ProductTitleCard
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.ProductTitleUiModel
 
@@ -16,7 +16,7 @@ fun ProductTitlesList(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     productTitles: List<ProductTitleUiModel>,
-    onProductClick: (ProductTitle) -> Unit
+    onProductClick: (Id) -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
@@ -26,7 +26,7 @@ fun ProductTitlesList(
         items(items = productTitles) { productTitle ->
             ProductTitleCard(
                 productTitle = productTitle.model,
-                onClick = { onProductClick(productTitle.title) }
+                onClick = { onProductClick(productTitle.id) }
             )
         }
     }

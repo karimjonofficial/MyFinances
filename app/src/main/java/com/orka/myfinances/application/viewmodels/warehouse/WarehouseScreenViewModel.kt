@@ -1,13 +1,11 @@
 package com.orka.myfinances.application.viewmodels.warehouse
 
 import androidx.lifecycle.viewModelScope
-import com.orka.myfinances.R
 import com.orka.myfinances.core.Logger
+import com.orka.myfinances.data.api.folder.FolderApi
 import com.orka.myfinances.data.api.stock.StockApi
 import com.orka.myfinances.data.api.title.ProductTitleApi
-import com.orka.myfinances.data.api.title.map
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
 import com.orka.myfinances.data.repositories.stock.StockEvent
@@ -25,7 +23,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class WarehouseScreenViewModel(
-    private val category: Category,
+    private val categoryId: Id,
+    private val folderApi: FolderApi,
     private val productTitleApi: ProductTitleApi,
     private val stockApi: StockApi,
     private val basketRepository: BasketRepository,
@@ -34,6 +33,8 @@ class WarehouseScreenViewModel(
     productTitleEvents: Flow<ProductTitleEvent>,
     stockEvents: Flow<StockEvent>,
     private val navigator: Navigator,
+    private val loading: UiText,
+    private val failure: UiText,
     logger: Logger
 ) : SingleStateViewModel<State>(
     initialState = State.Initial,
@@ -43,57 +44,67 @@ class WarehouseScreenViewModel(
 
     init {
         productTitleEvents.onEach {
-            if (it.categoryId == category.id) initialize()
+            if (it.categoryId == categoryId) {
+                logger.log("WarehouseScreenViewModel ${categoryId.value}", "Initialize called in line 48")
+                initialize()
+            }
         }.launchIn(viewModelScope)
 
         stockEvents.onEach {
-            if (it.category.id == category.id) initialize()
+            if (it.categoryId == categoryId) {
+                logger.log("WarehouseScreenViewModel ${categoryId.value}", "Initialize called in line 55")
+                initialize()
+            }
         }.launchIn(viewModelScope)
     }
 
     override fun initialize() {
         launch {
+            logger.log("WarehouseScreenViewModel ${categoryId.value}", "Initialize called")
             try {
-                val titlesModels = productTitleApi.getByCategory(category.id.value)
-                val stockItemModels = stockApi.getByCategory(category.id.value)
+                if (state.value !is State.Initial) setState(State.Loading(loading))
+                val category = folderApi.getById(categoryId.value)
+                val titlesModels = productTitleApi.getByCategory(categoryId.value)
+                val stockItemModels = stockApi.getByCategory(categoryId)
 
-                if (titlesModels != null && stockItemModels != null) {
-                    val titles = titlesModels.map { it.map(category) }
-                    val stockItems = stockItemModels.map { it.toUiModel(formatPrice, formatDecimal) }
+                if (titlesModels != null && stockItemModels != null && category != null) {
+                    val titles = titlesModels.map { it.toUiModel() }
+                    val stockItems =
+                        stockItemModels.map { it.toUiModel(formatPrice, formatDecimal) }
 
                     setState(
                         State.Success(
                             WarehouseScreenModel(
-                                category = category,
-                                productTitles = titles.map { it.toUiModel() },
+                                title = category.name,
+                                productTitles = titles,
                                 stockItems = stockItems
                             )
-                        ))
+                        )
+                    )
                 } else {
-                    setState(State.Failure(UiText.Res(R.string.failure)))
+                    setState(State.Failure(failure))
                 }
-            } catch (_: Exception) {
-                setState(State.Failure(UiText.Res(R.string.failure)))
+            } catch (e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
             }
         }
     }
 
     override fun addToBasket(id: Id) {
         launch {
-            logger.log("WarehouseScreenViewModel", "Add to basket id: $id")
-            basketRepository.add(id.value, 1)
+            basketRepository.add(id, 1)
         }
     }
 
-    override fun addProduct(category: Category) {
+    override fun addProduct() {
         launch {
-            navigator.navigateToAddProduct(category.id)
+            navigator.navigateToAddProduct(categoryId)
         }
     }
 
-    override fun receive(category: Category) {
+    override fun receive() {
         launch {
-            navigator.navigateToAddStockItem(category.id)
+            navigator.navigateToAddReceive(categoryId)
         }
     }
 

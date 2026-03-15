@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.catalog
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -10,32 +11,34 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.R
+import com.orka.myfinances.fixtures.resources.models.folder.catalog1
 import com.orka.myfinances.lib.ui.components.TopAppBar
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenInteractor
 import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenState
-import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenModel
-import com.orka.myfinances.application.viewmodels.catalog.CatalogScreenViewModel
 import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
+import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
 fun CatalogScreen(
     modifier: Modifier = Modifier,
     state: State,
-    viewModel: CatalogScreenViewModel
+    interactor: CatalogScreenInteractor
 ) {
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
 
     StatefulScreen<CatalogScreenModel>(
         modifier = modifier,
         state = state,
-        onInitialize = viewModel::initialize,
-        onRetry = { viewModel.initialize() },
+        onInitialize = interactor::initialize,
+        onRetry = { interactor.initialize() },
         topBar = { state ->
             TopAppBar(
                 title = if (state is State.Success<*>)
-                    (state.value as CatalogScreenModel).catalog.name else stringResource(R.string.catalog),
+                    (state.value as CatalogScreenModel).name else stringResource(R.string.catalog),
                 actions = {
                     IconButton(onClick = { dialogVisible.value = true}) {
                         Icon(
@@ -52,24 +55,24 @@ fun CatalogScreen(
             state = CatalogScreenState.Success(
                 model.folders
             ),
-            viewModel = viewModel
+            viewModel = interactor
         )
 
         if (dialogVisible.value) {
             LaunchedEffect(Unit) {
-                viewModel.initDialog()
+                interactor.initDialog()
             }
-            val dialogState = viewModel.dialogState.collectAsState()
+            val dialogState = interactor.dialogState.collectAsState()
 
             AddFolderDialog(
                 state = dialogState.value,
                 dismissRequest = { dialogVisible.value = false },
                 onAddTemplateClick = {
-                    viewModel.navigateToAddTemplate()
+                    interactor.navigateToAddTemplate()
                     dialogVisible.value = false
                 },
                 onSuccess = { name, folderType, templateId ->
-                    viewModel.addFolder(name, folderType, templateId)
+                    interactor.addFolder(name, folderType, templateId)
                     dialogVisible.value = false
                 },
                 onCancel = { dialogVisible.value = false }
@@ -78,3 +81,15 @@ fun CatalogScreen(
     }
 }
 
+@Preview
+@Composable
+private fun CatalogScreenPreview() {
+    val state = State.Success(catalog1.map())
+    MyFinancesTheme {
+        CatalogScreen(
+            modifier = Modifier.fillMaxSize(),
+            state = state,
+            interactor = CatalogScreenInteractor.dummy
+        )
+    }
+}

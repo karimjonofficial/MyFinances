@@ -2,16 +2,19 @@ package com.orka.myfinances.data.api.receive
 
 import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
+import com.orka.myfinances.data.repositories.receive.ReceiveEvent
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.HttpStatusCode
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 class ReceiveApi(
     private val client: HttpClient,
-    private val office: Office
+    private val office: Office,
+    private val flow: MutableSharedFlow<ReceiveEvent>
 ) {
     suspend fun getAll(): List<ReceiveApiModel>? {
         val response = client.get("receives/")
@@ -28,6 +31,8 @@ class ReceiveApi(
             urlString = "receives/",
             block = { setBody(request.map(office.id.value)) }
         )
-        return response.status == HttpStatusCode.Created
+        val created = response.status == HttpStatusCode.Created
+        if(created) flow.emit(ReceiveEvent)
+        return created
     }
 }

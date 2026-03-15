@@ -12,20 +12,23 @@ import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequestItem
+import com.orka.myfinances.data.repositories.stock.StockEvent
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenInteractor
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class AddReceiveScreenViewModel(
-    private val id: Id,
+    private val categoryId: Id,
     private val folderApi: FolderApi,
     private val productTitleApi: ProductTitleApi,
     private val receiveApi: ReceiveApi,
     private val navigator: Navigator,
+    private val flow: MutableSharedFlow<StockEvent>,
     logger: Logger
 ) : SingleStateViewModel<State>(
     initialState = State.Initial,
@@ -36,9 +39,9 @@ class AddReceiveScreenViewModel(
     override fun initialize() {
         launch {
             try {
-                val category = folderApi.getById(id.value)?.map() as? Category
+                val category = folderApi.getById(categoryId.value)?.map() as? Category
                 if (category != null) {
-                    val titlesModels = productTitleApi.getByCategory(id.value)
+                    val titlesModels = productTitleApi.getByCategory(categoryId.value)
                     if (titlesModels != null) {
                         val titles = titlesModels.map { it.map(category) }
                         setState(State.Success(AddReceiveScreenModel(category, titles)))
@@ -82,6 +85,7 @@ class AddReceiveScreenViewModel(
                     price = totalPrice
                 )
                 if (receiveApi.add(request)) {
+                    flow.emit(StockEvent(categoryId))
                     navigator.back()
                 }
             }

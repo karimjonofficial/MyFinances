@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.warehouse.parts
 
+import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,7 +24,10 @@ fun ProductTitlesContent(
         ProductsState.Failure -> {
             FailureScreen(
                 modifier = modifier,
-                retry = { viewModel.initialize() }
+                retry = {
+                    Log.d("ProductTitlesContent", "Initialize called in line 36")
+                    viewModel.initialize()
+                }
             )
         }
 
@@ -32,7 +36,7 @@ fun ProductTitlesContent(
                 modifier = modifier,
                 contentPadding = contentPadding,
                 productTitles = state.titles,
-                onProductClick = { viewModel.selectProduct(it.id) }
+                onProductClick = { viewModel.selectProduct(it) }
             )
         }
     }

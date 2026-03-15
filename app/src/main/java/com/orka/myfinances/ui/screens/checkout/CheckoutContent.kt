@@ -19,6 +19,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.retain.retain
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.Client
+import com.orka.myfinances.application.viewmodels.checkout.toModel
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.fixtures.resources.models.clients
 import com.orka.myfinances.fixtures.resources.models.product.product1
@@ -42,14 +43,14 @@ import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.screens.checkout.viewmodel.BasketItemCardModel
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
-import com.orka.myfinances.application.viewmodels.checkout.toModel
+import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
 fun CheckoutContent(
     modifier: Modifier,
     items: List<BasketItemCardModel>,
-    clients: List<Client>,
+    clients: List<ClientItemModel>,
     price: Int,
     printerConnected: Boolean,
     interactor: CheckoutScreenInteractor
@@ -57,9 +58,8 @@ fun CheckoutContent(
     val price = rememberSaveable { mutableStateOf<Int?>(price) }
     val description = rememberSaveable { mutableStateOf<String?>(null) }
     val printReceipt = rememberSaveable { mutableStateOf(printerConnected) }
-    val selectedClientId =
-        rememberSaveable(clients) { mutableStateOf(clients.firstOrNull()?.id?.value) }
-    val selectedClient = clients.find { it.id.value == selectedClientId.value }
+    val selectedClientId = retain { mutableStateOf(clients.firstOrNull()?.id) }
+    val selectedClient = clients.find { it.id == selectedClientId.value }
     val menuExpanded = rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
@@ -76,7 +76,7 @@ fun CheckoutContent(
                         interactor.order(
                             price = priceValue,
                             description = description.value,
-                            client = selectedClient
+                            id = selectedClientId.value!!
                         )
                     }
                 ) {
@@ -90,7 +90,7 @@ fun CheckoutContent(
                         interactor.sell(
                             price = priceValue,
                             description = description.value,
-                            client = selectedClient,
+                            id = selectedClientId.value!!,
                             print = printReceipt.value
                         )
                     }
@@ -119,14 +119,14 @@ fun CheckoutContent(
             Row {
                 OutlinedExposedDropDownTextField(
                     modifier = Modifier.weight(1f),
-                    text = selectedClient?.firstName ?: stringResource(R.string.clients),
+                    text = selectedClient?.name ?: stringResource(R.string.clients),
                     label = stringResource(R.string.clients),
                     menuExpanded = menuExpanded.value,
                     onExpandChange = { menuExpanded.value = it },
                     onDismissRequested = { menuExpanded.value = false },
                     items = clients,
-                    itemText = { it.firstName },
-                    onItemSelected = { selectedClientId.value = it.id.value }
+                    itemText = { it.name },
+                    onItemSelected = { selectedClientId.value = it.id }
                 )
 
                 HorizontalSpacer(8)
@@ -186,7 +186,7 @@ private fun CheckoutContentPreview() {
         CheckoutContent(
             modifier = Modifier.fillMaxSize(),
             items = items.map { it.toModel({ "" }, { "" }) },
-            clients = clients,
+            clients = clients.map { it.map() },
             interactor = CheckoutScreenInteractor.dummy,
             price = 1000,
             printerConnected = true

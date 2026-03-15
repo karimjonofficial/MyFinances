@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 data class AddFolderApiRequest(
     val name: String,
     val type: String,
+    @SerialName("branch") val officeId: Int,
     @SerialName("template") val templateId: Int? = null,
     @SerialName("parent") val parentId: Int? = null
 )

@@ -40,8 +40,6 @@ import com.orka.myfinances.data.api.title.ProductTitleApi
 import com.orka.myfinances.data.api.user.UserApi
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Session
-import com.orka.myfinances.data.models.folder.Catalog
-import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.folder.FolderEvent
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
@@ -74,13 +72,13 @@ class Factory(
     private val saleFlow = MutableSharedFlow<SaleEvent>()
     private val receiveFlow = MutableSharedFlow<ReceiveEvent>()
 
-    private val clientApi = ClientApi(client)
-    private val folderApi = FolderApi(client)
-    private val templateApi = TemplateApi(client)
-    private val productTitleApi = ProductTitleApi(client)
+    private val clientApi = ClientApi(client, session.office.company)
+    private val folderApi = FolderApi(client, session.office, folderFlow)
+    private val templateApi = TemplateApi(client, session.office)
+    private val productTitleApi = ProductTitleApi(client, productTitleFlow)
     private val stockApi = StockApi(client, session.office)
-    private val receiveApi = ReceiveApi(client, session.office)
-    private val saleApi = SaleApi(client, session.office)
+    private val receiveApi = ReceiveApi(client, session.office, receiveFlow)
+    private val saleApi = SaleApi(client, session.office, saleFlow)
     private val orderApi = OrderApi(client, session.office)
     private val debtApi = DebtApi(client)
     private val notificationApi = NotificationApi(client)
@@ -92,7 +90,7 @@ class Factory(
             folderApi = folderApi,
             templateApi = templateApi,
             navigator = navigator,
-            office = session.office,
+            events = folderFlow,
             logger = logger
         )
     }
@@ -115,7 +113,6 @@ class Factory(
 
     fun addProductViewModel(): AddProductTitleScreenViewModel {
         return AddProductTitleScreenViewModel(
-            office = session.office,
             folderApi = folderApi,
             productTitleApi = productTitleApi,
             navigator = navigator,
@@ -123,9 +120,10 @@ class Factory(
         )
     }
 
-    fun warehouseViewModel(category: Category): WarehouseScreenViewModel {
+    fun warehouseViewModel(id: Id): WarehouseScreenViewModel {
         return WarehouseScreenViewModel(
-            category = category,
+            categoryId = id,
+            folderApi = folderApi,
             productTitleApi = productTitleApi,
             stockApi = stockApi,
             basketRepository = basketRepository,
@@ -134,14 +132,15 @@ class Factory(
             formatPrice = formatter,
             formatDecimal = formatter,
             stockEvents = stockFlow,
+            loading = loading,
+            failure = failure,
             logger = logger
         )
     }
 
-    fun catalogViewModel(catalog: Catalog): CatalogScreenViewModel {
+    fun catalogViewModel(id: Id): CatalogScreenViewModel {
         return CatalogScreenViewModel(
-            office = session.office,
-            catalog = catalog,
+            catalogId = id,
             folderApi = folderApi,
             templateApi = templateApi,
             events = folderFlow,
@@ -238,11 +237,12 @@ class Factory(
 
     fun addReceiveViewModel(id: Id): AddReceiveScreenViewModel {
         return AddReceiveScreenViewModel(
-            id = id,
+            categoryId = id,
             folderApi = folderApi,
             productTitleApi = productTitleApi,
             receiveApi = receiveApi,
             navigator = navigator,
+            flow = stockFlow,
             logger = logger
         )
     }
@@ -318,12 +318,14 @@ class Factory(
 
     fun productTitleViewModel(id: Id): ProductTitleScreenViewModel {
         return ProductTitleScreenViewModel(
-            id = id,
+            productId = id,
             receiveApi = receiveApi,
             productTitleApi = productTitleApi,
             formatDecimal = formatter,
             formatDate = formatter,
             formatPrice = formatter,
+            flow = stockFlow,
+            loading = loading,
             logger = logger
         )
     }

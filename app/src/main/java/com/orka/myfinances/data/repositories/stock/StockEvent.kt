@@ -1,5 +1,5 @@
 package com.orka.myfinances.data.repositories.stock
 
-import com.orka.myfinances.data.models.folder.Category
+import com.orka.myfinances.data.models.Id
 
-data class StockEvent(val category: Category)
+data class StockEvent(val categoryId: Id)

@@ -2,6 +2,7 @@ package com.orka.myfinances.application.viewmodels.home.basket
 
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.core.Logger
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.lib.format.FormatDecimal
@@ -37,7 +38,7 @@ class BasketContentViewModel(
         val price = items.sumOf { it.product.salePrice * it.amount }
         setState(
             BasketState.Success(
-                items = items.map { item -> item.toUiModel(formatPrice, formatDecimal)},
+                items = items.map { item -> item.toUiModel(formatPrice, formatDecimal) },
                 price = formatPrice.formatPrice(price.toDouble())
             )
         )
@@ -45,19 +46,19 @@ class BasketContentViewModel(
 
     override fun increase(item: BasketItem) {
         launch {
-            repository.add(id = item.product.id, amount = 1)
+            repository.add(id = Id(item.product.id), amount = 1)
         }
     }
 
     override fun decrease(item: BasketItem) {
         launch {
-            repository.remove(item.product.id, 1)
+            repository.remove(Id(item.product.id), 1)
         }
     }
 
     override fun remove(item: BasketItem) {
         launch {
-            repository.remove(item.product.id, item.amount)
+            repository.remove(Id(item.product.id), item.amount)
         }
     }
 

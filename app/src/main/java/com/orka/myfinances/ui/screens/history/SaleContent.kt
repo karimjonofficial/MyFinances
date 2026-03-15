@@ -7,26 +7,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.ui.screens.LazyColumnContentWithStickyHeader
 import com.orka.myfinances.ui.screens.history.components.SaleCard
-import com.orka.myfinances.application.viewmodels.history.SaleContentViewModel
+import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentInteractor
 
 @Composable
 fun SaleContent(
     modifier: Modifier = Modifier,
-    viewModel: SaleContentViewModel
+    interactor: SaleContentInteractor
 ) {
-    val state = viewModel.uiState.collectAsState()
+    val state = interactor.uiState.collectAsState()
 
     LazyColumnContentWithStickyHeader(
         modifier = modifier,
         contentPadding = PaddingValues(0.dp),
         arrangementSpace = 0.dp,
         state = state.value,
-        viewModel = viewModel,
+        viewModel = interactor,
         item = { modifier, sale ->
             SaleCard(
                 modifier = modifier,
                 sale = sale.model,
-                onClick = { viewModel.select(sale) }
+                onClick = { interactor.select(sale) }
             )
         }
     )

@@ -40,7 +40,7 @@ import com.orka.myfinances.application.viewmodels.sale.map
 @Composable
 fun ReceiveScreen(
     modifier: Modifier = Modifier,
-    viewModel: ReceiveScreenInteractor,
+    interactor: ReceiveScreenInteractor,
     state: State
 ) {
     StatefulScreen<ReceiveUiModel>(
@@ -49,7 +49,7 @@ fun ReceiveScreen(
             CenterAlignedTopAppBar(
                 title = { Text(text = stringResource(R.string.receive_detail)) },
                 navigationIcon = {
-                    IconButton(onClick = viewModel::back) {
+                    IconButton(onClick = interactor::back) {
                         Icon(
                             painter = painterResource(R.drawable.arrow_back),
                             contentDescription = null
@@ -67,7 +67,7 @@ fun ReceiveScreen(
             )
         },
         state = state,
-        onInitialize = viewModel::initialize
+        onInitialize = interactor::initialize
     ) { modifier, uiModel ->
         LazyColumn(
             modifier = modifier.padding(16.dp),

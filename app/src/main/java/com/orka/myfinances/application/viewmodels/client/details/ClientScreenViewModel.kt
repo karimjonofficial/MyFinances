@@ -26,7 +26,7 @@ class ClientScreenViewModel(
         launch {
             val clientModel = clientApi.getById(id.value)
             if (clientModel != null) {
-                setState(State.Success(clientModel))
+                setState(State.Success(clientModel.toScreenModel()))
             } else {
                 setState(State.Failure(UiText.Res(R.string.failure)))
             }

@@ -9,11 +9,9 @@ import com.orka.myfinances.lib.format.FormatTime
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapViewModel
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.orders.OrderUiModel
-import com.orka.myfinances.ui.screens.orders.OrdersScreenInteractor
+import com.orka.myfinances.ui.screens.order.list.OrderUiModel
+import com.orka.myfinances.ui.screens.order.list.OrdersScreenInteractor
 import kotlinx.coroutines.flow.asStateFlow
-
-typealias IMapViewModel<T> = com.orka.myfinances.lib.ui.viewmodel.MapViewModel<T>
 
 class OrdersScreenViewModel(
     private val orderApi: OrderApi,
@@ -35,7 +33,7 @@ class OrdersScreenViewModel(
             }
     },
     logger = logger
-), IMapViewModel<OrderUiModel>, OrdersScreenInteractor {
+), OrdersScreenInteractor {
     override val uiState = state.asStateFlow()
 
     override fun select(order: OrderUiModel) {

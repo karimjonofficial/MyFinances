@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.warehouse.parts
 
+import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -13,29 +14,34 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenInteractor
-import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseState
+import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenModel
 
 @Composable
-fun StockItemsContent(
+fun StockContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
-    viewModel: WarehouseScreenInteractor,
-    state: WarehouseState,
+    interactor: WarehouseScreenInteractor,
+    state: State,
     onStockItemClick: (Id) -> Unit,
 ) {
     when (state) {
-        is WarehouseState.Loading -> LoadingScreen(modifier)
+        is State.Initial -> LoadingScreen()
+        is State.Loading -> LoadingScreen(modifier)
 
-        is WarehouseState.Failure -> FailureScreen(
+        is State.Failure -> FailureScreen(
             modifier = modifier,
-            retry = viewModel::initialize
+            retry = {
+                Log.d("StockContent", "Initialize called in line 36")
+                interactor.initialize()
+            }
         )
 
-        is WarehouseState.Success -> StockItemsGrid(
+        is State.Success<*> -> StockItemsGrid(
             modifier = modifier,
             contentPadding = contentPadding,
-            stockItems = state.stockItems,
+            stockItems = (state.value as WarehouseScreenModel).stockItems,
             onItemClick = onStockItemClick
         )
     }
@@ -43,16 +49,22 @@ fun StockItemsContent(
 
 @Preview
 @Composable
-private fun StockItemContentPreview() {
+private fun StockContentPreview() {
     ScaffoldPreview(
         modifier = Modifier.fillMaxSize(),
         title = stringResource(R.string.warehouse)
     ) { paddingValues ->
-        StockItemsContent(
+        StockContent(
             modifier = Modifier.scaffoldPadding(paddingValues),
             contentPadding = PaddingValues(),
-            viewModel = WarehouseScreenInteractor.dummy,
-            state = WarehouseState.Success(category1, listOf()),
+            interactor = WarehouseScreenInteractor.dummy,
+            state = State.Success(
+                value = WarehouseScreenModel(
+                    title = category1.name,
+                    productTitles = listOf(),
+                    stockItems = listOf()
+                )
+            ),
             onStockItemClick = {}
         )
     }

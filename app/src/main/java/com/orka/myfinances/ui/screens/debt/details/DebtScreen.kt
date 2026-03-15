@@ -35,30 +35,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
-import com.orka.myfinances.application.viewmodels.debt.details.DebtScreenViewModel
-import com.orka.myfinances.data.api.debt.DebtApi
-import com.orka.myfinances.fixtures.core.DummyLogger
 import com.orka.myfinances.fixtures.format.FormatDateImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
-import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.resources.models.debt1
 import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.components.ClientCard
 import com.orka.myfinances.ui.components.UserCard
+import com.orka.myfinances.ui.screens.debt.details.interactor.DebtScreenInteractor
 import com.orka.myfinances.ui.theme.MyFinancesTheme
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DebtScreen(
     modifier: Modifier = Modifier,
     state: State,
-    viewModel: DebtScreenViewModel
+    interactor: DebtScreenInteractor
 ) {
     StatefulScreen<DebtScreenModel>(
         modifier = modifier,
@@ -71,7 +65,7 @@ fun DebtScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = viewModel::back) {
+                    IconButton(onClick = interactor::back) {
                         Icon(
                             painter = painterResource(R.drawable.arrow_back),
                             contentDescription = stringResource(R.string.back)
@@ -107,7 +101,7 @@ fun DebtScreen(
             }
         },
         state = state,
-        onInitialize = viewModel::initialize
+        onInitialize = interactor::initialize
     ) { modifier, model ->
 
         LazyColumn(
@@ -134,7 +128,7 @@ fun DebtScreen(
             item {
                 ClientCard(
                     model = model.client,
-                    onClick = { viewModel.navigateToClient(model.clientId) }
+                    onClick = { interactor.navigateToClient(model.clientId) }
                 )
             }
 
@@ -272,21 +266,10 @@ fun TimelineAndStaffCard(
 )
 @Composable
 private fun DebtScreenPreview() {
-    val client = HttpClient(OkHttp)
-    val viewModel = viewModel {
-        DebtScreenViewModel(
-            id = debt1.id,
-            debtApi = DebtApi(client),
-            formatPrice = FormatPriceImpl(),
-            formatDate = FormatDateImpl(),
-            navigator = DummyNavigator(),
-            logger = DummyLogger()
-        )
-    }
     MyFinancesTheme {
         DebtScreen(
             state = State.Success(debt1.toScreenModel(FormatPriceImpl(), FormatDateImpl())),
-            viewModel = viewModel
+            interactor = DebtScreenInteractor.dummy
         )
     }
 }

@@ -19,7 +19,7 @@ fun clientsEntry(
 
     ClientsScreen(
         modifier = modifier,
-        viewModel = viewModel,
+        interactor = viewModel,
         state = state.value
     )
 }

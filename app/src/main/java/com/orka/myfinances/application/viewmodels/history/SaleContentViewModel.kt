@@ -42,7 +42,7 @@ class SaleContentViewModel(
             }
     },
     logger = logger
-), IMapViewModel<SaleUiModel>, SaleContentInteractor {
+), SaleContentInteractor {
     override val uiState = state.asStateFlow()
 
     init {

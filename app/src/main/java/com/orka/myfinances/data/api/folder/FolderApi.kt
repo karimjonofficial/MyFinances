@@ -1,5 +1,8 @@
 package com.orka.myfinances.data.api.folder
 
+import com.orka.myfinances.data.models.Office
+import com.orka.myfinances.data.repositories.folder.AddFolderRequest
+import com.orka.myfinances.data.repositories.folder.FolderEvent
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -7,22 +10,30 @@ import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.HttpStatusCode
+import kotlinx.coroutines.flow.MutableSharedFlow
 
-class FolderApi(private val client: HttpClient) {
-    suspend fun getByOffice(officeId: Int): List<FolderApiModel>? {
+class FolderApi(
+    private val client: HttpClient,
+    private val office: Office,
+    private val flow: MutableSharedFlow<FolderEvent>
+) {
+    suspend fun getTop(): List<FolderApiModel>? {
         val response = client.get(
             urlString = "categories/",
-            block = { parameter("branch", officeId) }
+            block = {
+                parameter("branch", office.id.value)
+                parameter("parent", "null")
+            }
         )
         return if (response.status == HttpStatusCode.OK) response.body() else null
     }
 
-    suspend fun getByParent(parentId: Int, officeId: Int): List<FolderApiModel>? {
+    suspend fun getByParent(parentId: Int): List<FolderApiModel>? {
         val response = client.get(
             urlString = "categories/",
             block = {
-                parameter("parent_id", parentId)
-                parameter("branch", officeId)
+                parameter("parent", parentId)
+                parameter("branch", office.id.value)
             }
         )
         return if (response.status == HttpStatusCode.OK) response.body() else null
@@ -33,11 +44,12 @@ class FolderApi(private val client: HttpClient) {
         return if (response.status == HttpStatusCode.OK) response.body() else null
     }
 
-    suspend fun add(request: AddFolderApiRequest): FolderApiModel? {
+    suspend fun add(request: AddFolderRequest) {
         val response = client.post(
             urlString = "categories/",
-            block = { setBody(request) }
+            block = { setBody(request.map(office.id.value)) }
         )
-        return if (response.status == HttpStatusCode.Created) response.body() else null
+        val created = response.status == HttpStatusCode.Created
+        if (created) flow.emit(FolderEvent(request.parentId))
     }
 }

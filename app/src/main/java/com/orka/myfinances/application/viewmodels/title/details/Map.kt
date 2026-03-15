@@ -5,7 +5,7 @@ import com.orka.myfinances.data.api.title.PropertyApiModel
 import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.ui.screens.product.details.models.ProductTitleModel
+import com.orka.myfinances.ui.screens.product.details.models.ProductTitleScreenModel
 import com.orka.myfinances.ui.screens.product.details.models.PropertyModel
 import kotlin.time.Instant
 
@@ -13,13 +13,14 @@ fun ProductTitleApiModel.toModel(
     formatDecimal: FormatDecimal,
     formatDate: FormatDate,
     formatPrice: FormatPrice
-): ProductTitleModel {
-    return ProductTitleModel(
+): ProductTitleScreenModel {
+    return ProductTitleScreenModel(
         title = name,
         dateTime = formatDate.formatDate(createdAt),
         price = formatPrice.formatPrice(defaultSalePrice.toDouble()),
         properties = properties.map { it.toModel(formatDecimal, formatDate) },
-        description = description
+        description = description,
+        salePrice = defaultPrice.toInt()
     )
 }
 

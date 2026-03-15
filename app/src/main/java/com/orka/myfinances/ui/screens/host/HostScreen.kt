@@ -5,6 +5,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.screens.FailureScreen
+import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.ui.navigation.MainScreen
 import com.orka.myfinances.ui.screens.host.viewmodel.HostScreenInteractor
 import com.orka.myfinances.ui.screens.host.viewmodel.UiState
@@ -31,7 +32,7 @@ fun HostScreen(
             LoginScreen(
                 modifier = modifier,
                 state = uiState.value,
-                viewModel = viewModel
+                interactor = viewModel
             )
         }
 
@@ -49,6 +50,7 @@ fun HostScreen(
         is UiState.Failure -> {
             FailureScreen(
                 modifier = modifier,
+                retry = interactor::initialize,
                 message = state.message.str()
             )
         }
@@ -60,5 +62,7 @@ fun HostScreen(
             factory = state.factory,
             sessionManager = interactor
         )
+
+        is UiState.Loading -> LoadingScreen(modifier)
     }
 }

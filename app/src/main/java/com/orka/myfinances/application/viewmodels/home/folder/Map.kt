@@ -18,6 +18,7 @@ fun Folder.toModel(): FolderButtonModel = FolderButtonModel(
 fun Folder.toUiModel(): FolderUiModel {
     return FolderUiModel(
         model = toModel(),
-        folder = this
+        id = id,
+        isCatalog = this is Catalog
     )
 }

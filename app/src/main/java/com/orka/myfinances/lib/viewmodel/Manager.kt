@@ -25,6 +25,6 @@ abstract class Manager : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        Log.d("Manager", "onCleared: ${this.javaClass.name}")
+        Log.d(this.javaClass.name, "OnCleared")
     }
 }

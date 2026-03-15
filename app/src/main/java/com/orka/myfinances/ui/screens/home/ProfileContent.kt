@@ -28,11 +28,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Session
-import com.orka.myfinances.fixtures.core.DummyLogger
-import com.orka.myfinances.fixtures.managers.DummyNavigator
 import com.orka.myfinances.fixtures.managers.DummySessionManager
 import com.orka.myfinances.fixtures.resources.models.office1
 import com.orka.myfinances.fixtures.resources.models.session
@@ -49,12 +46,8 @@ import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.screens.home.models.ProfileOption
 import com.orka.myfinances.ui.screens.home.parts.ProfileTopBar
 import com.orka.myfinances.ui.screens.home.viewmodel.profile.ProfileContentModel
-import com.orka.myfinances.application.viewmodels.home.profile.ProfileContentViewModel
 import com.orka.myfinances.ui.screens.home.viewmodel.profile.ProfileInteractor
-import com.orka.myfinances.data.api.office.OfficeApi
-import com.orka.myfinances.data.api.user.UserApi
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
+import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Suppress("UNCHECKED_CAST")
 @Composable
@@ -63,7 +56,7 @@ fun ProfileContent(
     state: State,
     interactor: ProfileInteractor,
     session: Session,
-    sessionManager: SessionManager
+    sessionManager: SessionManager//TODO remove it to viewmodel
 ) {
     val options = listOf(
         ProfileOption(
@@ -172,7 +165,6 @@ fun ProfileContent(
 )
 @Composable
 private fun ProfileContentPreview() {
-    val client = HttpClient(OkHttp)
     val navItems = listOf(
         NavItem(
             index = 0,
@@ -199,44 +191,37 @@ private fun ProfileContentPreview() {
             )
         )
     )
-    val viewModel = viewModel {
-        ProfileContentViewModel(
-            officeApi = OfficeApi(client),
-            userApi = UserApi(client),
-            company = office1.company,
-            navigator = DummyNavigator(),
-            logger = DummyLogger()
-        )
-    }
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = { ProfileTopBar() },
-        bottomBar = {
-            NavigationBar {
-                navItems.forEach {
-                    NavigationBarItem(
-                        selected = false,
-                        onClick = {},
-                        icon = {
-                            Icon(
-                                painter = painterResource(it.iconRes.unSelected),
-                                contentDescription = it.name
-                            )
-                        }
-                    )
+    MyFinancesTheme {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = { ProfileTopBar() },
+            bottomBar = {
+                NavigationBar {
+                    navItems.forEach {
+                        NavigationBarItem(
+                            selected = false,
+                            onClick = {},
+                            icon = {
+                                Icon(
+                                    painter = painterResource(it.iconRes.unSelected),
+                                    contentDescription = it.name
+                                )
+                            }
+                        )
+                    }
                 }
             }
-        }
-    ) { paddingValues ->
+        ) { paddingValues ->
 
-        ProfileContent(
-            modifier = Modifier.scaffoldPadding(paddingValues),
-            session = session,
-            state = State.Success(ProfileContentModel(listOf(office1), user1)),
-            interactor = viewModel,
-            sessionManager = DummySessionManager()
-        )
+            ProfileContent(
+                modifier = Modifier.scaffoldPadding(paddingValues),
+                session = session,
+                state = State.Success(ProfileContentModel(listOf(office1), user1)),
+                interactor = ProfileInteractor.dummy,
+                sessionManager = DummySessionManager()
+            )
+        }
     }
 }
 

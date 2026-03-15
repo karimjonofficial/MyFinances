@@ -6,18 +6,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.ui.components.CommentTextField
 import com.orka.myfinances.lib.ui.components.Dialog
-import com.orka.myfinances.lib.ui.components.IntegerTextField
+import com.orka.myfinances.lib.ui.components.OutlinedCommentTextField
+import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
+import com.orka.myfinances.lib.ui.components.VerticalSpacer
 
 @Composable
 fun ReceiveDialog(
     modifier: Modifier = Modifier,
+    price: Int,
     dismissRequest: () -> Unit,
-    onSuccess: (Int, Int, Int, Int, String?) -> Unit,
+    onSuccess: (Int, Int, String?) -> Unit,
 ) {
-    val price = rememberSaveable { mutableStateOf<Int?>(null) }
-    val salePrice = rememberSaveable { mutableStateOf<Int?>(null) }
     val amount = rememberSaveable { mutableStateOf<Int?>(null) }
     val totalPrice = rememberSaveable { mutableStateOf<Int?>(null) }
     val comment = rememberSaveable { mutableStateOf<String?>(null) }
@@ -28,42 +28,35 @@ fun ReceiveDialog(
         supportingText = stringResource(R.string.fill_the_lines_below_to_receive),
         dismissRequest = dismissRequest,
         onSuccess = {
-            val p = price.value
-            val sp = salePrice.value
             val a = amount.value
             val t = totalPrice.value
             val c = comment.value
 
-            if (p != null && sp != null && a != null && t != null) {
-                onSuccess(p, sp, a, t, c)
+            if (a != null && t != null) {
+                onSuccess(a, t, c)
             }
         }
     ) {
-        IntegerTextField(
-            value = price.value,
-            onValueChange = { price.value = it },
-            label = stringResource(R.string.price)
-        )
-
-        IntegerTextField(
-            value = salePrice.value,
-            onValueChange = { salePrice.value = it },
-            label = stringResource(R.string.sale_price)
-        )
-
-        IntegerTextField(
+        OutlinedIntegerTextField(
             value = amount.value,
-            onValueChange = { amount.value = it },
+            onValueChange = {
+                amount.value = it
+                if(it != null)
+                    totalPrice.value = it * price
+                else totalPrice.value = null
+            },
             label = stringResource(R.string.amount)
         )
 
-        IntegerTextField(
+        VerticalSpacer(4)
+        OutlinedIntegerTextField(
             value = totalPrice.value,
             onValueChange = { totalPrice.value = it },
             label = stringResource(R.string.total_price)
         )
 
-        CommentTextField(
+        VerticalSpacer(4)
+        OutlinedCommentTextField(
             value = comment.value,
             onValueChange = { comment.value = it }
         )

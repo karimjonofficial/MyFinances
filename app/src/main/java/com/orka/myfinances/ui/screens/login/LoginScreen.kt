@@ -31,19 +31,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.application.viewmodels.login.LoginScreenViewModel
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
     state: LoginScreenState,
-    viewModel: LoginScreenViewModel
+    interactor: LoginScreenInteractor
 ) {
 
     Scaffold(modifier = modifier) { paddingValues ->
@@ -52,7 +53,7 @@ fun LoginScreen(
                 Row(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
-                        .padding(top =  16.dp)
+                        .padding(top = 16.dp)
                         .clip(RoundedCornerShape(50))
                         .background(MaterialTheme.colorScheme.errorContainer)
                         .padding(vertical = 8.dp, horizontal = 16.dp),
@@ -179,8 +180,8 @@ fun LoginScreen(
                         val username = username.value
                         val password = password.value
                         if (username.isNotEmpty() && password.isNotEmpty()) {
-                            if (remember.value) viewModel.authorizeAndRemember(username, password)
-                            else viewModel.authorize(username, password)
+                            if (remember.value) interactor.authorizeAndRemember(username, password)
+                            else interactor.authorize(username, password)
                         }
                     },
                     enabled = (usernameText.isNotBlank() && passwordText.isNotBlank()) && !isLoadingState
@@ -195,5 +196,16 @@ fun LoginScreen(
                 VerticalSpacer(64)
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun LoginScreenPreview() {
+    MyFinancesTheme {
+        LoginScreen(
+            state = LoginScreenState.Initial,
+            interactor = LoginScreenInteractor.dummy
+        )
     }
 }
