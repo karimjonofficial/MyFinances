@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -60,7 +59,7 @@ fun LoginScreen(
 ) {
     val isErrorState   = state is LoginScreenState.Error
     val isLoadingState = state is LoginScreenState.Loading
-    val textFieldError = isErrorState && !(state as? LoginScreenState.Error)?.serverError!!
+    val textFieldError = isErrorState && !state.serverError
 
     Scaffold(modifier = modifier) { paddingValues ->
         Box(
@@ -68,7 +67,6 @@ fun LoginScreen(
                 .scaffoldPadding(paddingValues)
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            // ── Error banner ────────────────────────────────────────────
             AnimatedVisibility(
                 visible = isErrorState,
                 modifier = Modifier.align(Alignment.TopCenter),
