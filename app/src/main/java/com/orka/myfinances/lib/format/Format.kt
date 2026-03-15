@@ -1,6 +1,7 @@
 package com.orka.myfinances.lib.format
 
 import com.orka.myfinances.data.models.product.ProductTitle
+import kotlinx.datetime.LocalDate
 import kotlin.time.Instant
 
 fun interface FormatNames {
@@ -25,4 +26,8 @@ fun interface FormatDecimal {
 
 fun interface FormatDateTime {
     fun formatDateTime(instant: Instant): String
+}
+
+fun interface FormatLocalDate {
+    fun formatLocalDate(date: LocalDate): String
 }

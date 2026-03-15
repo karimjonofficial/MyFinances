@@ -6,8 +6,8 @@ import com.orka.myfinances.data.api.receive.ReceiveApi
 import com.orka.myfinances.data.api.receive.ReceiveApiModel
 import com.orka.myfinances.data.api.receive.map
 import com.orka.myfinances.data.repositories.receive.ReceiveEvent
-import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatDecimal
+import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
 import com.orka.myfinances.lib.ui.models.UiText
@@ -19,6 +19,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 class ReceiveContentViewModel(
     private val receiveApi: ReceiveApi,
@@ -26,7 +28,7 @@ class ReceiveContentViewModel(
     loading: UiText,
     failure: UiText,
     formatPrice: FormatPrice,
-    formatDate: FormatDate,
+    formatLocalDate: FormatLocalDate,
     formatTime: FormatTime,
     formatDecimal: FormatDecimal,
     private val navigator: Navigator,
@@ -36,8 +38,9 @@ class ReceiveContentViewModel(
     failure = failure,
     get = { receiveApi.getAll() },
     map = { receives ->
-        receives.groupBy { receive -> receive.dateTime }
-            .mapKeys { entry -> formatDate.formatDate(entry.key) }
+        val timeZone = TimeZone.currentSystemDefault()
+        receives.groupBy { receive -> receive.dateTime.toLocalDateTime(timeZone).date }
+            .mapKeys { entry -> formatLocalDate.formatLocalDate(entry.key) }
             .mapValues { entry ->
                 entry.value.map { receive ->
                     receive.map(

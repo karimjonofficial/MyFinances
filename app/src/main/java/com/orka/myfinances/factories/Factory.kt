@@ -186,7 +186,7 @@ class Factory(
             events = saleFlow,
             navigator = navigator,
             priceFormatter = formatter,
-            dateFormatter = formatter,
+            formatLocalDate = formatter,
             formatDateTime = formatter,
             logger = logger,
         )
@@ -213,7 +213,7 @@ class Factory(
             failure = failure,
             navigator = navigator,
             formatPrice = formatter,
-            formatDate = formatter,
+            formatLocalDate = formatter,
             formatTime = formatter,
             formatDecimal = formatter,
             logger = logger

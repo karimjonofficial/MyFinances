@@ -5,8 +5,8 @@ import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.api.sale.SaleApi
 import com.orka.myfinances.data.api.sale.SaleApiModel
 import com.orka.myfinances.data.repositories.sale.SaleEvent
-import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatDateTime
+import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapViewModel
@@ -17,6 +17,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 class SaleContentViewModel(
     private val saleApi: SaleApi,
@@ -24,7 +26,7 @@ class SaleContentViewModel(
     loading: UiText,
     failure: UiText,
     priceFormatter: FormatPrice,
-    dateFormatter: FormatDate,
+    formatLocalDate: FormatLocalDate,
     formatDateTime: FormatDateTime,
     private val navigator: Navigator,
     logger: Logger
@@ -33,12 +35,11 @@ class SaleContentViewModel(
     failure = failure,
     get = { saleApi.getAll() },
     map = { sales ->
-        sales.groupBy { sale -> sale.dateTime }
-            .mapKeys { entry -> dateFormatter.formatDate(entry.key) }
+        val timeZone = TimeZone.currentSystemDefault()
+        sales.groupBy { sale -> sale.dateTime.toLocalDateTime(timeZone).date }
+            .mapKeys { entry -> formatLocalDate.formatLocalDate(entry.key) }
             .mapValues { entry ->
-                entry.value.map { sale ->
-                    sale.map(priceFormatter, formatDateTime)
-                }
+                entry.value.map { sale -> sale.map(priceFormatter, formatDateTime) }
             }
     },
     logger = logger
