@@ -164,7 +164,7 @@ fun ProfileContent(
                     if (user?.phone != null) {
                         VerticalSpacer(4)
                         Text(
-                            text = user.phone!!,
+                            text = user.phone,
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
                         )
