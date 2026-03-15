@@ -31,7 +31,9 @@ jobs:
         run: |
               mkdir -p app/src/main/java/com/myfinances/core
               cat <<EOF > app/src/main/java/com/myfinances/core/Private.kt
-              val baseUrl = "${{secrets.API_BASE_URL}}"
+              package com.orka.myfinances.core
+          
+              const val baseUrl = "${{secrets.API_BASE_URL}}"
               EOF
 
       - name: Build debug APK
