@@ -58,13 +58,13 @@ jobs:
             exit 1
           fi
           curl -v \
-            -F "chat_id=$TELEGRAM_CHAT_ID" \
-            -F "document=@$APK_FILE" \
-            -F "caption=🚀 *New Dev Build*
+          -F "chat_id=$TELEGRAM_CHAT_ID" \
+          -F "document=@$APK_FILE" \
+          -F "caption=🚀 *New Dev Build*
 
-            📦 Build: ${{ github.run_number }}
-            🌿 Branch: ${{ github.ref_name }}
-            💬 Commit: ${{ github.event.head_commit.message }}
+          📦 Build: ${{ github.run_number }}
+          🌿 Branch: ${{ github.ref_name }}
+          💬 Commit: ${{ github.event.head_commit.message }}
   
-            ⚡ Built with GitHub Actions" \
-            "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendDocument"
+          ⚡ Built with GitHub Actions" \
+          "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendDocument"
