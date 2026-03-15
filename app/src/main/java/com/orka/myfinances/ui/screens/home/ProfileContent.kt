@@ -239,6 +239,8 @@ fun ProfileContent(
                 )
             }
         }
+            }
+        }
     }
 }
 

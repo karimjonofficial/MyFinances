@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,6 +36,7 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.ui.screens.home.components.BasketItemCard
+import com.orka.myfinances.ui.screens.home.parts.BasketScreenTopBar
 import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketInteractor
 import com.orka.myfinances.ui.screens.home.viewmodel.basket.BasketState
 
@@ -52,7 +54,7 @@ fun BasketContent(
         when (state) {
             is BasketState.Loading -> LoadingScreen(m)
 
-            Column(modifier = m) {
+            is BasketState.Success -> Column(modifier = m) {
                 Column(
                     modifier = Modifier
                         .weight(1f)
