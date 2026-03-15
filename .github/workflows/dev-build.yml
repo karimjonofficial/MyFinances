@@ -27,6 +27,13 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Generate Private.kt
+        run: |
+              mkdir -p app/src/main/java/com/myfinances/core
+              cat <<EOF > app/src/main/java/com/myfinances/core/Private.kt
+              val baseUrl = "${{secrets.API_BASE_URL}}"
+              EOF
+
       - name: Build debug APK
         run: ./gradlew assembleDebug --no-daemon
 
