@@ -60,5 +60,11 @@ jobs:
           curl -v \
             -F "chat_id=$TELEGRAM_CHAT_ID" \
             -F "document=@$APK_FILE" \
-            -F "caption=🚀 New Dev Build!%0ABuild: #${{ github.run_number }}%0ABranch: ${{ github.ref_name }}%0ACommit: ${{ github.event.head_commit.message }}" \
+            -F "caption=🚀 *New Dev Build*
+
+              📦 Build: ${{ github.run_number }}
+              🌿 Branch: ${{ github.ref_name }}
+              💬 Commit: ${{ github.event.head_commit.message }}
+  
+              ⚡ Built with GitHub Actions" \
             "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendDocument"
