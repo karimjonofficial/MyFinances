@@ -7,12 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.ShoppingCart
+
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -97,7 +92,7 @@ private fun MyFinancesBottomNavigation(
         NavigationBarItem(
             selected = currentDestination is Destination.Home,
             onClick = { navigator.navigateToHome() },
-            icon = { Icon(Icons.Filled.Home, contentDescription = "Home") },
+            icon = { Icon(painterResource(if (currentDestination is Destination.Home) R.drawable.home_filled else R.drawable.home_outlined), contentDescription = stringResource(R.string.home)) },
             label = { Text(stringResource(R.string.home), fontWeight = FontWeight.SemiBold) },
             colors = colors
         )
@@ -105,7 +100,7 @@ private fun MyFinancesBottomNavigation(
         NavigationBarItem(
             selected = currentDestination is Destination.Basket,
             onClick = { navigator.navigateToBasket() },
-            icon = { Icon(Icons.Filled.ShoppingCart, contentDescription = "Basket") },
+            icon = { Icon(painterResource(if (currentDestination is Destination.Basket) R.drawable.shopping_cart_filled else R.drawable.shopping_cart_outlined), contentDescription = stringResource(R.string.basket)) },
             label = { Text(stringResource(R.string.basket), fontWeight = FontWeight.SemiBold) },
             colors = colors
         )
@@ -113,7 +108,7 @@ private fun MyFinancesBottomNavigation(
         NavigationBarItem(
             selected = currentDestination is Destination.Profile,
             onClick = { navigator.navigateToProfile() },
-            icon = { Icon(Icons.Filled.Person, contentDescription = "Profile") },
+            icon = { Icon(painterResource(if (currentDestination is Destination.Profile) R.drawable.account_circle_filled else R.drawable.account_circle_outlined), contentDescription = stringResource(R.string.profile)) },
             label = { Text(stringResource(R.string.profile), fontWeight = FontWeight.SemiBold) },
             colors = colors
         )
@@ -121,7 +116,7 @@ private fun MyFinancesBottomNavigation(
         NavigationBarItem(
             selected = currentDestination is Destination.Settings,
             onClick = { navigator.navigateToSettings() },
-            icon = { Icon(Icons.Filled.Settings, contentDescription = "Settings") },
+            icon = { Icon(painterResource(R.drawable.settings_filled), contentDescription = stringResource(R.string.settings)) },
             label = { Text(stringResource(R.string.settings), fontWeight = FontWeight.SemiBold) },
             colors = colors
         )
