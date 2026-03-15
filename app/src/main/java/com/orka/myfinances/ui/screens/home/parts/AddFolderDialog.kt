@@ -60,9 +60,12 @@ fun AddFolderDialog(
         }
     ) {
         OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
             value = name.value,
             onValueChange = { name.value = it },
-            label = { Text(stringResource(R.string.name)) }
+            label = { Text(stringResource(R.string.name)) },
+            shape = MaterialTheme.shapes.medium,
+            singleLine = true
         )
 
         VerticalSpacer(16)
@@ -75,6 +78,7 @@ fun AddFolderDialog(
 
             VerticalSpacer(8)
             RadioButton(
+                modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.catalog),
                 selected = folderType.intValue == 0,
                 onClick = {
@@ -86,6 +90,7 @@ fun AddFolderDialog(
             VerticalSpacer(4)
 
             RadioButton(
+                modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.product_folder),
                 selected = folderType.intValue == 1,
                 onClick = {

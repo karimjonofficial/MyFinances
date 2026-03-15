@@ -22,6 +22,14 @@ class NavigationManager(
         updateState { state.value + destination }
     }
 
+    private fun navigateTopLevel(destination: Destination) {
+        updateState { 
+            val root = it.firstOrNull() ?: Destination.Home
+            if (destination == root) listOf(root)
+            else listOf(root, destination)
+        }
+    }
+
     override fun initialize() {}
 
     override fun back() {
@@ -33,7 +41,7 @@ class NavigationManager(
     }
 
     override fun navigateToHome() {
-        navigate(state.value[0])
+        navigateTopLevel(Destination.Home)
     }
 
     override fun navigateToCatalog(id: Id) {
@@ -57,7 +65,7 @@ class NavigationManager(
     }
 
     override fun navigateToSettings() {
-        navigate(Destination.Settings)
+        navigateTopLevel(Destination.Settings)
     }
 
     override fun navigateToTemplates() {
@@ -69,7 +77,7 @@ class NavigationManager(
     }
 
     override fun navigateToClients() {
-        navigate(Destination.Clients)
+        navigateTopLevel(Destination.Clients)
     }
 
     override fun navigateToClient(id: Id) {
@@ -81,7 +89,7 @@ class NavigationManager(
     }
 
     override fun navigateToHistory() {
-        navigate(Destination.History)
+        navigateTopLevel(Destination.History)
     }
 
     override fun navigateToAddReceive(id: Id) {
@@ -118,5 +126,13 @@ class NavigationManager(
 
     override fun navigateToReceive(id: Id) {
         navigate(Destination.Receive(id))
+    }
+
+    override fun navigateToBasket() {
+        navigateTopLevel(Destination.Basket)
+    }
+
+    override fun navigateToProfile() {
+        navigateTopLevel(Destination.Profile)
     }
 }

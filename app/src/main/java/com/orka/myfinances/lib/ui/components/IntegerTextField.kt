@@ -159,7 +159,8 @@ private fun IntegerTextFieldImpl(
             leadingIcon = leadingIcon,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             visualTransformation = visualTransformation,
-            singleLine = true
+            singleLine = true,
+            shape = androidx.compose.material3.MaterialTheme.shapes.medium
         )
     } else {
         TextField(
@@ -170,7 +171,8 @@ private fun IntegerTextFieldImpl(
             leadingIcon = leadingIcon,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             visualTransformation = visualTransformation,
-            singleLine = true
+            singleLine = true,
+            shape = androidx.compose.material3.MaterialTheme.shapes.medium
         )
     }
 }

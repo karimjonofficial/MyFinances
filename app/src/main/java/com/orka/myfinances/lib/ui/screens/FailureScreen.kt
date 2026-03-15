@@ -26,31 +26,32 @@ fun FailureScreen(
 ) {
     Surface(modifier = modifier) {
         Column(
-            modifier = modifier,
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                modifier = Modifier.size(64.dp),
+                modifier = Modifier.size(80.dp),
                 painter = painterResource(R.drawable.error),
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.error
+                tint = MaterialTheme.colorScheme.error.copy(alpha = 0.8f)
             )
 
-            VerticalSpacer(16)
+            VerticalSpacer(24)
             Text(
                 text = message,
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             if (retry != null) {
-                VerticalSpacer(16)
+                VerticalSpacer(24)
                 TextButton(onClick = { retry.invoke() }) {
                     Text(
                         text = stringResource(R.string.retry),
-                        style = MaterialTheme.typography.labelLarge
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }

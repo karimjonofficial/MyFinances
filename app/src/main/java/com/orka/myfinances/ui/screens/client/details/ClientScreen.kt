@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -67,38 +70,43 @@ fun ClientScreen(
         Column(modifier = modifier) {
 
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(top = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 Icon(
                     modifier = Modifier
-                        .size(160.dp)
+                        .size(120.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                        .background(MaterialTheme.colorScheme.primaryContainer)
+                        .padding(24.dp),
                     painter = painterResource(R.drawable.account_circle_outlined),
-                    tint = MaterialTheme.colorScheme.secondary,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     contentDescription = null
                 )
 
-                VerticalSpacer(8)
-                Text(text = client.phone ?: stringResource(R.string.no_phone_number))
+                VerticalSpacer(16)
+                Text(
+                    text = client.phone ?: stringResource(R.string.no_phone_number),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
 
-                VerticalSpacer(8)
+                VerticalSpacer(24)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Button(
-                        modifier = Modifier.width(160.dp),
+                    OutlinedButton(
+                        modifier = Modifier.width(140.dp),
                         onClick = {}
                     ) {
                         Text(text = stringResource(R.string.message))
                     }
 
-                    HorizontalSpacer(8)
+                    HorizontalSpacer(16)
                     Button(
-                        modifier = Modifier.width(160.dp),
+                        modifier = Modifier.width(140.dp),
                         onClick = {}
                     ) {
                         Text(text = stringResource(R.string.call))

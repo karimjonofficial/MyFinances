@@ -39,6 +39,7 @@ fun <T> ExposedDropDownTextField(
             singleLine = true,
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = menuExpanded) },
             colors = ExposedDropdownMenuDefaults.textFieldColors(),
+            shape = androidx.compose.material3.MaterialTheme.shapes.medium
         )
 
         ExposedDropdownMenu(
@@ -86,6 +87,7 @@ fun <T> OutlinedExposedDropDownTextField(
             singleLine = true,
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = menuExpanded) },
             colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+            shape = androidx.compose.material3.MaterialTheme.shapes.medium
         )
 
         ExposedDropdownMenu(
@@ -131,7 +133,8 @@ fun <T> OutlinedExposedDropDownTextField(
             readOnly = true,
             label = { Text(text = label) },
             singleLine = true,
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = menuExpanded) }
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = menuExpanded) },
+            shape = androidx.compose.material3.MaterialTheme.shapes.medium
         )
 
         ExposedDropdownMenu(

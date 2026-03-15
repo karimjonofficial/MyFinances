@@ -7,6 +7,7 @@ import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.navigation.entries.catalogEntry
 import com.orka.myfinances.ui.navigation.entries.checkoutEntry
+import com.orka.myfinances.ui.navigation.entries.basketEntry
 import com.orka.myfinances.ui.navigation.entries.client.clientEntry
 import com.orka.myfinances.ui.navigation.entries.client.clientsEntry
 import com.orka.myfinances.ui.navigation.entries.debt.debtEntry
@@ -18,6 +19,7 @@ import com.orka.myfinances.ui.navigation.entries.order.orderEntry
 import com.orka.myfinances.ui.navigation.entries.order.ordersEntry
 import com.orka.myfinances.ui.navigation.entries.product.addProductEntry
 import com.orka.myfinances.ui.navigation.entries.product.productTitleEntry
+import com.orka.myfinances.ui.navigation.entries.profileEntry
 import com.orka.myfinances.ui.navigation.entries.receive.addReceiveEntry
 import com.orka.myfinances.ui.navigation.entries.receive.receiveEntry
 import com.orka.myfinances.ui.navigation.entries.saleEntry
@@ -58,5 +60,7 @@ fun entryProvider(
         is Destination.Template -> templateEntry(modifier, destination, factory)
         is Destination.Sale -> saleEntry(modifier, destination, factory)
         is Destination.Receive -> receiveEntry(modifier, factory, destination)
+        is Destination.Basket -> basketEntry(modifier, destination, session, factory)
+        is Destination.Profile -> profileEntry(modifier, destination, session, sessionManager, factory)
     }
 }

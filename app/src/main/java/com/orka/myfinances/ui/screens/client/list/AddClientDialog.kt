@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.extensions.valueOrNull
+import androidx.compose.material3.MaterialTheme
 import com.orka.myfinances.lib.ui.components.Dialog
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 
@@ -41,37 +42,52 @@ fun AddClientDialog(
         }
     ) {
         OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
             value = firstName.value,
             onValueChange = { firstName.value = it },
-            label = { Text(text = stringResource(R.string.name)) }
+            label = { Text(text = stringResource(R.string.name)) },
+            shape = MaterialTheme.shapes.medium,
+            singleLine = true
         )
 
         VerticalSpacer(4)
         OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
             value = lastName.value,
             onValueChange = { lastName.value = it },
-            label = { Text(text = stringResource(R.string.lastname)) }
+            label = { Text(text = stringResource(R.string.lastname)) },
+            shape = MaterialTheme.shapes.medium,
+            singleLine = true
         )
 
         VerticalSpacer(4)
         OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
             value = patronymic.value,
             onValueChange = { patronymic.value = it },
-            label = { Text(text = stringResource(R.string.patronymic)) }
+            label = { Text(text = stringResource(R.string.patronymic)) },
+            shape = MaterialTheme.shapes.medium,
+            singleLine = true
         )
 
         VerticalSpacer(4)
         OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
             value = phone.value,
             onValueChange = { phone.value = it },
-            label = { Text(text = stringResource(R.string.phone_number)) }
+            label = { Text(text = stringResource(R.string.phone_number)) },
+            shape = MaterialTheme.shapes.medium,
+            singleLine = true
         )
 
         VerticalSpacer(4)
         OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
             value = address.value,
             onValueChange = { address.value = it },
-            label = { Text(text = stringResource(R.string.address)) }
+            label = { Text(text = stringResource(R.string.address)) },
+            shape = MaterialTheme.shapes.medium,
+            singleLine = true
         )
     }
 }

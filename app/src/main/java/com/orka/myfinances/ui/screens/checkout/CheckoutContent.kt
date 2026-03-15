@@ -115,8 +115,11 @@ fun CheckoutContent(
                 itemSupportingText = { it.price }
             )
 
-            VerticalSpacer(16)
-            Row {
+            VerticalSpacer(24)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
                 OutlinedExposedDropDownTextField(
                     modifier = Modifier.weight(1f),
                     text = selectedClient?.name ?: stringResource(R.string.clients),
@@ -129,9 +132,8 @@ fun CheckoutContent(
                     onItemSelected = { selectedClientId.value = it.id }
                 )
 
-                HorizontalSpacer(8)
                 OutlinedIntegerTextField(
-                    modifier = Modifier.width(160.dp),
+                    modifier = Modifier.weight(0.8f),
                     label = stringResource(R.string.total_price),
                     leadingIcon = {
                         Icon(
@@ -144,7 +146,7 @@ fun CheckoutContent(
                 )
             }
 
-            VerticalSpacer(8)
+            VerticalSpacer(16)
             OutlinedCommentTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = description.value,
@@ -152,24 +154,26 @@ fun CheckoutContent(
             )
 
             if (printerConnected) {
-                VerticalSpacer(8)
+                VerticalSpacer(16)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
                             printReceipt.value = !printReceipt.value
-                        },
+                        }
+                        .padding(vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Checkbox(
                         checked = printReceipt.value,
                         onCheckedChange = { printReceipt.value = it }
                     )
+                    HorizontalSpacer(8)
                     Text(text = stringResource(R.string.print_receipt))
                 }
             }
 
-            VerticalSpacer(8)
+            VerticalSpacer(24)
         }
     }
 }

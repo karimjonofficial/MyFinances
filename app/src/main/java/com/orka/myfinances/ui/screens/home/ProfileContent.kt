@@ -113,10 +113,14 @@ fun ProfileContent(
         listOfNotNull(user.firstName, user.lastName).joinToString(" ")
     } else stringResource(R.string.loading)
 
-    LazyColumn(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(0.dp)
-    ) {
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        topBar = { ProfileTopBar() }
+    ) { paddingValues ->
+        LazyColumn(
+            modifier = Modifier.padding(paddingValues),
+            verticalArrangement = Arrangement.spacedBy(0.dp)
+        ) {
         // ── Profile header card ─────────────────────────────────────────
         item {
             Card(

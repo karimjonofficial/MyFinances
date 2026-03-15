@@ -17,11 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.ui.screens.home.components.FirstFolderButton
 import com.orka.myfinances.ui.screens.home.components.FolderButton
-import com.orka.myfinances.ui.screens.home.components.LastFolderButton
-import com.orka.myfinances.ui.screens.home.components.NotLastFolderButton
-import com.orka.myfinances.ui.screens.home.components.SecondFolderButton
 import com.orka.myfinances.ui.screens.home.models.FolderUiModel
 
 @Composable
@@ -52,64 +48,19 @@ fun FoldersList(
         }
 
         if (size > 0) {
-            item {
-                FirstFolderButton(
+            items(items = items) { item ->
+                FolderButton(
                     modifier = Modifier.fillMaxSize(),
-                    folder = items[0].model,
-                    onClick = { onFolderSelected(items[0]) }
+                    folder = item.model,
+                    onClick = { onFolderSelected(item) }
                 )
             }
-
-            if (size > 1) {
-                item {
-                    SecondFolderButton(
-                        modifier = Modifier.fillMaxSize(),
-                        folder = items[1].model,
-                        onClick = { onFolderSelected(items[1]) }
-                    )
-                }
-            }
-
-            if (size > 4) {
-                items(items = items.subList(2, size - (2 - size % 2))) { item ->
-                    FolderButton(
-                        modifier = Modifier.fillMaxSize(),
-                        folder = item.model,
-                        onClick = { onFolderSelected(item) }
-                    )
-                }
-            }
-
-            if (size > 2) {
-                if (size % 2 == 0) {
-                    item {
-                        NotLastFolderButton(
-                            modifier = Modifier.fillMaxSize(),
-                            folder = items[size - 2].model,
-                            onClick = { onFolderSelected(items[size - 2]) }
-                        )
-                    }
-
-                    item {
-                        LastFolderButton(
-                            modifier = Modifier.fillMaxSize(),
-                            folder = items[size - 1].model,
-                            onClick = { onFolderSelected(items[size - 1]) }
-                        )
-                    }
-                } else {
-                    item {
-                        NotLastFolderButton(
-                            modifier = Modifier.fillMaxSize(),
-                            folder = items[size - 1].model,
-                            onClick = { onFolderSelected(items[size - 1]) }
-                        )
-                    }
-                }
-            }
         } else {
-            item {
-                Text(text = stringResource(R.string.no_folders_found))
+            item(span = { GridItemSpan(2) }) {
+                Text(
+                    text = stringResource(R.string.no_folders_found),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
     }

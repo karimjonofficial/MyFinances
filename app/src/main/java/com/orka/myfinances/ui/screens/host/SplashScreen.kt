@@ -16,10 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.animation.core.*
+import androidx.compose.runtime.getValue
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.theme.MyFinancesTheme
@@ -40,8 +43,21 @@ fun SplashScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            val infiniteTransition = rememberInfiniteTransition(label = "pulse_transition")
+            val scale by infiniteTransition.animateFloat(
+                initialValue = 0.95f,
+                targetValue = 1.05f,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(1200, easing = FastOutSlowInEasing),
+                    repeatMode = RepeatMode.Reverse
+                ),
+                label = "logo_pulse"
+            )
+
             Image(
-                modifier = Modifier.size(96.dp),
+                modifier = Modifier
+                    .size(96.dp)
+                    .graphicsLayer(scaleX = scale, scaleY = scale),
                 painter = painterResource(R.drawable.logo),
                 contentDescription = stringResource(R.string.logo)
             )

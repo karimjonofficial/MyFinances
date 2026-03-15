@@ -45,85 +45,20 @@ fun FolderButton(
     )
 }
 
-@Composable
-fun FirstFolderButton(
-    modifier: Modifier = Modifier,
-    folder: FolderButtonModel,
-    onClick: () -> Unit
-) {
-    BaseFolderButton(
-        modifier = modifier,
-        topStart = roundedCornerRadius.dp,
-        folder = folder,
-        onClick = onClick
-    )
-}
 
-@Composable
-fun SecondFolderButton(
-    modifier: Modifier = Modifier,
-    folder: FolderButtonModel,
-    onClick: () -> Unit
-) {
-    BaseFolderButton(
-        modifier = modifier,
-        topEnd = roundedCornerRadius.dp,
-        folder = folder,
-        onClick = onClick
-    )
-}
-
-@Composable
-fun NotLastFolderButton(
-    modifier: Modifier = Modifier,
-    folder: FolderButtonModel,
-    onClick: () -> Unit
-) {
-    BaseFolderButton(
-        modifier = modifier,
-        bottomStart = roundedCornerRadius.dp,
-        folder = folder,
-        onClick = onClick
-    )
-}
-
-@Composable
-fun LastFolderButton(
-    modifier: Modifier = Modifier,
-    folder: FolderButtonModel,
-    onClick: () -> Unit
-) {
-    BaseFolderButton(
-        modifier = modifier,
-        bottomEnd = roundedCornerRadius.dp,
-        folder = folder,
-        onClick = onClick
-    )
-}
 
 @Composable
 private fun BaseFolderButton(
     modifier: Modifier = Modifier,
-    topStart: Dp = normalCornerRadius.dp,
-    topEnd: Dp = normalCornerRadius.dp,
-    bottomStart: Dp = normalCornerRadius.dp,
-    bottomEnd: Dp = normalCornerRadius.dp,
     folder: FolderButtonModel,
     onClick: () -> Unit
 ) {
     Box(
         modifier = modifier
-            .clip(
-                shape = RoundedCornerShape(
-                    topStart = topStart,
-                    topEnd = topEnd,
-                    bottomEnd = bottomEnd,
-                    bottomStart = bottomStart
-                )
-            )
+            .clip(MaterialTheme.shapes.large)
             .background(MaterialTheme.colorScheme.surfaceContainerHigh)
             .clickable { onClick() }
-            .padding(8.dp)
+            .padding(12.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -137,19 +72,30 @@ private fun BaseFolderButton(
             ) {
                 Text(
                     text = folder.name,
-                    softWrap = false,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
             HorizontalSpacer(8)
-            Icon(
-                modifier = Modifier.size(36.dp).padding(4.dp),
-                painter = painterResource(folder.iconRes),
-                tint = MaterialTheme.colorScheme.primary,
-                contentDescription = null
-            )
+            
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(MaterialTheme.colorScheme.primaryContainer),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    modifier = Modifier.size(28.dp),
+                    painter = painterResource(folder.iconRes),
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    contentDescription = null
+                )
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -31,9 +31,9 @@ import com.orka.myfinances.fixtures.resources.models.folder.categories
 import com.orka.myfinances.fixtures.resources.models.folder.category1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
-import com.orka.myfinances.lib.ui.components.CommentTextField
-import com.orka.myfinances.lib.ui.components.ExposedDropDownTextField
-import com.orka.myfinances.lib.ui.components.IntegerTextField
+import com.orka.myfinances.lib.ui.components.OutlinedCommentTextField
+import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
+import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
@@ -115,15 +115,16 @@ fun AddProductTitleScreen(
                                 .padding(horizontal = 16.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            TextField(
+                            OutlinedTextField(
                                 modifier = innerModifier,
                                 value = name.value,
                                 onValueChange = { name.value = it },
-                                label = { Text(text = stringResource(R.string.name)) }
+                                label = { Text(text = stringResource(R.string.name)) },
+                                shape = androidx.compose.material3.MaterialTheme.shapes.medium
                             )
 
                             VerticalSpacer(8)
-                            ExposedDropDownTextField(
+                            OutlinedExposedDropDownTextField(
                                 modifier = innerModifier,
                                 text = currentCategory.name,
                                 label = stringResource(R.string.category),
@@ -146,27 +147,26 @@ fun AddProductTitleScreen(
                             )
 
                             VerticalSpacer(8)
-                            IntegerTextField(
+                            OutlinedIntegerTextField(
                                 modifier = innerModifier,
                                 value = price.value,
                                 onValueChange = { price.value = it },
-                                label = { Text(text = stringResource(R.string.price)) }
+                                label = stringResource(R.string.price)
                             )
 
                             VerticalSpacer(8)
-                            IntegerTextField(
+                            OutlinedIntegerTextField(
                                 modifier = innerModifier,
                                 value = salePrice.value,
                                 onValueChange = { salePrice.value = it },
-                                label = { Text(text = stringResource(R.string.sale_price)) }
+                                label = stringResource(R.string.sale_price)
                             )
 
                             VerticalSpacer(8)
-                            CommentTextField(
+                            OutlinedCommentTextField(
                                 modifier = innerModifier,
                                 value = description.value,
-                                onValueChange = { description.value = it },
-                                label = stringResource(R.string.description)
+                                onValueChange = { description.value = it }
                             )
                             VerticalSpacer(8)
                         }

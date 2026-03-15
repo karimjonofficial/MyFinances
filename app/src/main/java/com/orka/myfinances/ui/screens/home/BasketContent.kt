@@ -44,11 +44,15 @@ fun BasketContent(
     state: BasketState,
     interactor: BasketInteractor
 ) {
-    when (state) {
-        is BasketState.Loading -> LoadingScreen(modifier)
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        topBar = { BasketScreenTopBar(state = state, interactor = interactor) }
+    ) { paddingValues ->
+        val m = Modifier.padding(paddingValues)
+        when (state) {
+            is BasketState.Loading -> LoadingScreen(m)
 
-        is BasketState.Success -> {
-            Column(modifier = modifier) {
+            Column(modifier = m) {
                 Column(
                     modifier = Modifier
                         .weight(1f)

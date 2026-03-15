@@ -120,7 +120,8 @@ private fun DecimalTextFieldImpl(
             label = label,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             visualTransformation = visualTransformation,
-            singleLine = true
+            singleLine = true,
+            shape = androidx.compose.material3.MaterialTheme.shapes.medium
         )
     } else {
         TextField(
@@ -130,7 +131,8 @@ private fun DecimalTextFieldImpl(
             label = label,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             visualTransformation = visualTransformation,
-            singleLine = true
+            singleLine = true,
+            shape = androidx.compose.material3.MaterialTheme.shapes.medium
         )
     }
 }
