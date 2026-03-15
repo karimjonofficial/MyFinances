@@ -1,11 +1,13 @@
 package com.orka.myfinances.data.api.sale
 
+import android.util.Log
 import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.data.repositories.sale.AddSaleRequest
 import com.orka.myfinances.data.repositories.sale.SaleEvent
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.HttpStatusCode
@@ -17,7 +19,12 @@ class SaleApi(
     private val flow: MutableSharedFlow<SaleEvent>
 ) {
     suspend fun getAll(): List<SaleApiModel>? {
-        val response = client.get("sales/")
+        val response = client.get(
+            urlString = "sales/",
+            block = {
+                parameter("branch", office.id.value)
+            }
+        )
         return if (response.status == HttpStatusCode.OK) response.body() else null
     }
 
@@ -32,7 +39,10 @@ class SaleApi(
             block = { setBody(request.map(office.id.value)) }
         )
         val created = response.status == HttpStatusCode.Created
-        if(created) flow.emit(SaleEvent)
+        if(created) {
+            Log.d("SaleApi", "Emitting")
+            flow.emit(SaleEvent)
+        }
         return if(created) response.body() else null
     }
 }

@@ -6,6 +6,7 @@ import com.orka.myfinances.data.repositories.receive.ReceiveEvent
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.HttpStatusCode
@@ -17,7 +18,10 @@ class ReceiveApi(
     private val flow: MutableSharedFlow<ReceiveEvent>
 ) {
     suspend fun getAll(): List<ReceiveApiModel>? {
-        val response = client.get("receives/")
+        val response = client.get(
+            urlString = "receives/",
+            block = { parameter("branch", office.id.value) }
+        )
         return if (response.status == HttpStatusCode.OK) response.body() else null
     }
 
