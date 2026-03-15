@@ -42,6 +42,6 @@ fun HistoryScreen(
         modifier = modifier,
         title = stringResource(R.string.history),
         tabs = tabs,
-        onBack = saleViewModel::back
+        onBack = saleContentInteractor::back
     )
 }

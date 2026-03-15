@@ -45,7 +45,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.application.viewmodels.login.LoginScreenViewModel
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
@@ -55,7 +54,7 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 fun LoginScreen(
     modifier: Modifier = Modifier,
     state: LoginScreenState,
-    viewModel: LoginScreenViewModel
+    interactor: LoginScreenInteractor
 ) {
     val isErrorState   = state is LoginScreenState.Error
     val isLoadingState = state is LoginScreenState.Loading
@@ -255,8 +254,8 @@ fun LoginScreen(
                     ),
                     onClick = {
                         if (usernameText.isNotEmpty() && passwordText.isNotEmpty()) {
-                            if (remember.value) viewModel.authorizeAndRemember(usernameText, passwordText)
-                            else viewModel.authorize(usernameText, passwordText)
+                            if (remember.value) interactor.authorizeAndRemember(usernameText, passwordText)
+                            else interactor.authorize(usernameText, passwordText)
                         }
                     },
                     enabled = (usernameText.isNotBlank() && passwordText.isNotBlank()) && !isLoadingState

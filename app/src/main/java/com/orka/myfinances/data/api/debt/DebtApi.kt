@@ -22,7 +22,7 @@ class DebtApi(private val client: HttpClient) {
     suspend fun add(request: AddDebtRequest): Boolean {
         val response = client.post(
             urlString = "merchant/debts/",
-            block = { setBody(request) }
+            block = { setBody(request.map()) }
         )
         return response.status == HttpStatusCode.Created
     }
