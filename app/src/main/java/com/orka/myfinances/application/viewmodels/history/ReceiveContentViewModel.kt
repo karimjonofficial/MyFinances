@@ -20,8 +20,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-typealias IMapViewModel<T> = com.orka.myfinances.lib.ui.viewmodel.MapViewModel<T>
-
 class ReceiveContentViewModel(
     private val receiveApi: ReceiveApi,
     events: Flow<ReceiveEvent>,
@@ -51,7 +49,7 @@ class ReceiveContentViewModel(
             }
     },
     logger = logger
-), IMapViewModel<ReceiveUiModel>, ReceiveContentInteractor {
+), ReceiveContentInteractor {
     override val uiState = state.asStateFlow()
 
     init {

@@ -36,7 +36,7 @@ class BasketRepositoryTest : MainDispatcherContext() {
         fun `Add items adds items`() = runTest {
             advanceUntilIdle()
             val items = repository.get()
-            assertNotNull(items.find { it.product.id == id1 })
+            assertNotNull(items.find { it.product.id == id1.value })
             assertEquals(1, items.size)
         }
 
@@ -64,7 +64,7 @@ class BasketRepositoryTest : MainDispatcherContext() {
                 advanceUntilIdle()
                 val items = repository.get()
                 assertTrue(
-                    items.find { it.product.id == id1 } != null
+                    items.find { it.product.id == id1.value } != null
                             && items.size == 1
                             && items[0].amount == 2 * amount
                 )
@@ -76,7 +76,7 @@ class BasketRepositoryTest : MainDispatcherContext() {
                 repository.remove(id1, amount)
                 val items = repository.get()
                 assertTrue(
-                    items.find { it.product.id == id1 } != null
+                    items.find { it.product.id == id1.value } != null
                             && items.size == 1
                             && items[0].amount == amount
                 )
@@ -87,7 +87,7 @@ class BasketRepositoryTest : MainDispatcherContext() {
         fun `Remove removes when item already exists and amount is 1`() = runTest {
             repository.remove(id1, amount)
             val items = repository.get()
-            assertTrue(items.find { it.product.id == id1 } == null)
+            assertTrue(items.find { it.product.id == id1.value } == null)
         }
     }
 }

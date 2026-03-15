@@ -11,7 +11,7 @@ import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.order.OrderScreenInteractor
+import com.orka.myfinances.ui.screens.order.details.OrderScreenInteractor
 import kotlinx.coroutines.flow.asStateFlow
 
 class OrderScreenViewModel(

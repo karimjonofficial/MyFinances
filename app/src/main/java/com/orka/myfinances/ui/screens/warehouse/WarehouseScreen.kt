@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.warehouse
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,39 +14,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.ui.components.TopAppBar
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.warehouse.parts.ProductTitlesContent
-import com.orka.myfinances.ui.screens.warehouse.parts.StockItemsContent
+import com.orka.myfinances.ui.screens.warehouse.parts.StockContent
 import com.orka.myfinances.ui.screens.warehouse.parts.WarehouseScreenTopBar
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.ProductsState
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenInteractor
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenModel
-import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseState
 
 @Composable
 fun WarehouseScreen(
     modifier: Modifier = Modifier,
     state: State,
-    viewModel: WarehouseScreenInteractor
+    interactor: WarehouseScreenInteractor
 ) {
     StatefulScreen<WarehouseScreenModel>(
         modifier = modifier,
         state = state,
-        onInitialize = viewModel::initialize,
-        onRetry = { viewModel.initialize() },
+        onInitialize = {
+            Log.d("WarehouseScreen", "Initialize called in line 36")
+            interactor.initialize()
+        },
+        onRetry = {
+            Log.d("WarehouseScreen", "Retry called in line 39")
+            interactor.initialize()
+        },
         topBar = {
-            val category = (state as? State.Success<*>)?.let { (it.value as WarehouseScreenModel).category }
-            if (category != null) {
-                WarehouseScreenTopBar(
-                    category = category,
-                    onAddProductClick = { viewModel.addProduct(it) },
-                    onAddReceive = { viewModel.receive(it) }
-                )
-            } else {
-                TopAppBar(title = "")
-            }
+            WarehouseScreenTopBar(
+                title = if (state is State.Success<*>)
+                    (state.value as WarehouseScreenModel).title
+                else stringResource(R.string.loading),
+                onAddProductClick = { interactor.addProduct() },
+                onAddReceive = { interactor.receive() }
+            )
         }
     ) { modifier, screenState ->
 
@@ -54,7 +56,6 @@ fun WarehouseScreen(
             val selectedTabValue = selectedTab.intValue
 
             PrimaryTabRow(selectedTabIndex = selectedTabValue) {
-
                 Tab(
                     selected = selectedTabValue == 0,
                     onClick = { selectedTab.intValue = 0 },
@@ -67,22 +68,24 @@ fun WarehouseScreen(
                     text = { Text(text = stringResource(R.string.products)) }
                 )
             }
-            val m = Modifier.weight(1f).fillMaxWidth()
+            val m = Modifier
+                .weight(1f)
+                .fillMaxWidth()
 
             if (selectedTabValue == 0) {
-                StockItemsContent(
+                StockContent(
                     modifier = m,
-                    state = WarehouseState.Success(screenState.category, screenState.stockItems),
-                    viewModel = viewModel,
+                    state = state,
+                    interactor = interactor,
                     contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
-                    onStockItemClick = viewModel::addToBasket
+                    onStockItemClick = interactor::addToBasket
                 )
             } else {
                 ProductTitlesContent(
                     modifier = m,
                     contentPadding = PaddingValues(0.dp),
                     state = ProductsState.Success(screenState.productTitles),
-                    viewModel = viewModel
+                    viewModel = interactor
                 )
             }
         }

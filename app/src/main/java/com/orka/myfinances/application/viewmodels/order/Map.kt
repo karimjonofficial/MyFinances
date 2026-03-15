@@ -7,9 +7,9 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.format.FormatDateTime
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.ui.screens.orders.components.OrderItemModel
-import com.orka.myfinances.ui.screens.order.OrderScreenModel
+import com.orka.myfinances.ui.screens.order.details.OrderScreenModel
 import com.orka.myfinances.application.viewmodels.sale.map
+import com.orka.myfinances.ui.screens.order.list.OrderItemModel
 
 fun OrderApiModel.map(
     formatPrice: FormatPrice,

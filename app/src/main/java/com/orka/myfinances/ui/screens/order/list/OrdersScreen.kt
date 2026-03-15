@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.orders
+package com.orka.myfinances.ui.screens.order.list
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,15 +14,13 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.ui.screens.orders.components.OrderCard
-import com.orka.myfinances.application.viewmodels.orders.OrdersScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrdersScreen(
     modifier: Modifier = Modifier,
     state: State,
-    viewModel: OrdersScreenViewModel
+    interactor: OrdersScreenInteractor
 ) {
     LazyColumnWithStickyHeaderScreen(
         modifier = modifier,
@@ -41,12 +39,12 @@ fun OrdersScreen(
         },
         arrangementSpace = 8.dp,
         state = state,
-        viewModel = viewModel,
+        viewModel = interactor,
         item = { modifier, item ->
             OrderCard(
                 modifier = modifier.padding(horizontal = 8.dp),
                 order = item.model,
-                onClick = { viewModel.select(item) }
+                onClick = { interactor.select(item) }
             )
         }
     )

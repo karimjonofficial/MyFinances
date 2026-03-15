@@ -15,14 +15,14 @@ fun catalogEntry(
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val viewModel = viewModel(
-        key = "${destination.catalog.id.value}",
-        initializer = { factory.catalogViewModel(destination.catalog) }
+        key = "${destination.id.value}",
+        initializer = { factory.catalogViewModel(destination.id) }
     )
     val uiState = viewModel.uiState.collectAsState()
 
     CatalogScreen(
         modifier = modifier,
         state = uiState.value,
-        viewModel = viewModel
+        interactor = viewModel
     )
 }

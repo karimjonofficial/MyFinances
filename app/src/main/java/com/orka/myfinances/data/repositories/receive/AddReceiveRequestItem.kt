@@ -4,8 +4,8 @@ import com.orka.myfinances.data.models.Id
 
 data class AddReceiveRequestItem(
     val productTitleId: Id,
-    val price: Int,
-    val salePrice: Int,
+    val price: Int?,
+    val salePrice: Int?,
     val amount: Int,
     val description: String? = null
 )

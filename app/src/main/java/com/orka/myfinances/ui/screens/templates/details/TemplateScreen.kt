@@ -9,15 +9,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.api.template.TemplateApiModel
 import com.orka.myfinances.fixtures.resources.models.template.template1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.Scaffold
+import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
@@ -36,7 +35,7 @@ fun TemplateScreen(
         is State.Failure -> { /* Handle error */ }
 
         is State.Success<*> -> {
-            val template = state.value as TemplateApiModel
+            val template = state.value as TemplateScreenModel
             Scaffold(
                 modifier = modifier,
                 title = template.name,
@@ -71,7 +70,7 @@ private fun TemplateScreenPreview() {
     MyFinancesTheme {
         TemplateScreen(
             modifier = Modifier.fillMaxSize(),
-            state = State.Success(template1),
+            state = State.Success(template1.map()),
             interactor = TemplateScreenInteractor.dummy
         )
     }

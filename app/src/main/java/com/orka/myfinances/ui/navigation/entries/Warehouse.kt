@@ -15,15 +15,15 @@ fun warehouseEntry(
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val viewModel = viewModel(
-        key = "${destination.category.id.value}",
-        initializer = { factory.warehouseViewModel(destination.category) }
+        key = "${destination.id.value}",
+        initializer = { factory.warehouseViewModel(destination.id) }
     )
     val state = viewModel.uiState.collectAsState()
 
 
     WarehouseScreen(
         modifier = modifier,
-        viewModel = viewModel,
+        interactor = viewModel,
         state = state.value
     )
 }

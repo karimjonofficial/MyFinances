@@ -67,8 +67,8 @@ fun DebtsScreen(
             AddDebtDialog(
                 state = dialogState.value,
                 dismissRequest = { visible.value = false },
-                onSuccess = {
-                    interactor.add(it)
+                onSuccess = { id, price, endDateTime, description ->
+                    interactor.add(id, price, endDateTime, description)
                     visible.value = false
                 },
                 onCancel = { visible.value = false }

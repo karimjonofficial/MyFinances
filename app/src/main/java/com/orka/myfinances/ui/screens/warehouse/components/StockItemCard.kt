@@ -23,11 +23,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.fixtures.resources.models.stockItem1
-import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.application.viewmodels.warehouse.toModel
 import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
+import com.orka.myfinances.fixtures.resources.models.stockItem1
+import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.ui.screens.warehouse.toCardModel
 
 @Composable
 fun StockItemCard(
@@ -98,9 +98,9 @@ private fun ProductCardPreview() {
             contentAlignment = Alignment.Center
         ) {
             StockItemCard(
-                item = stockItem1.toModel(
-                    priceFormatter = FormatPriceImpl(),
-                    decimalFormatter = FormatDecimalImpl()
+                item = stockItem1.toCardModel(
+                    formatPrice = FormatPriceImpl(),
+                    formatDecimal = FormatDecimalImpl()
                 ),
                 click = {}
             )

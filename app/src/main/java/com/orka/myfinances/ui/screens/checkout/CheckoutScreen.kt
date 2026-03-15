@@ -65,7 +65,7 @@ private fun CheckoutScreenPreview() {
         BasketItemCardModel("Product2", "10,000.00 UZS x 10 = 100,000.00 UZS")
     )
     val state = CheckoutScreenState.Success(
-        clients = clients,
+        clients = clients.map { it.map() },
         items = items,
         price = 10000,
         printerConnected = false

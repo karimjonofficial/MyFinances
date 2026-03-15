@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.product.productTitle1
 import com.orka.myfinances.lib.extensions.ui.str
-import com.orka.myfinances.application.viewmodels.warehouse.toModel
+import com.orka.myfinances.ui.screens.home.toCardModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
@@ -51,7 +51,7 @@ private fun ProductTitleCardPreview() {
             contentAlignment = Alignment.Center
         ) {
             ProductTitleCard(
-                productTitle = productTitle1.toModel(),
+                productTitle = productTitle1.toCardModel(),
                 onClick = {}
             )
         }

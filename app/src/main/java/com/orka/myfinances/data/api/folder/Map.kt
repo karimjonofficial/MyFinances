@@ -1,17 +1,18 @@
 package com.orka.myfinances.data.api.folder
 
+import com.orka.myfinances.data.api.template.map
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.folder.Folder
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.repositories.folder.AddFolderRequest
-import com.orka.myfinances.fixtures.resources.models.template.template1
 
-fun AddFolderRequest.map(): AddFolderApiRequest {
+fun AddFolderRequest.map(officeId: Int): AddFolderApiRequest {
     return AddFolderApiRequest(
         name = name,
         type = type,
+        officeId = officeId,
         templateId = templateId?.value,
         parentId = parentId?.value
     )
@@ -39,6 +40,6 @@ fun List<FolderApiModel>.map(): List<Folder> {
 fun FolderApiModel.map(): Folder {
     return when(this) {
         is CatalogApiModel -> map()
-        is CategoryApiModel -> map(template1)//TODO
+        is CategoryApiModel -> map(template.map())
     }
 }

@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.sale
 
-import com.orka.myfinances.application.viewmodels.client.details.map
+import com.orka.myfinances.application.viewmodels.client.list.map
 import com.orka.myfinances.data.api.sale.SaleApiModel
 import com.orka.myfinances.data.api.user.UserApiModel
 import com.orka.myfinances.data.models.Id
@@ -47,7 +47,7 @@ fun SaleApiModel.map(
         id = Id(id),
         price = formatPrice.formatPrice(price.toDouble()),
         dateTime = formatDateTime.formatDateTime(dateTime),
-        client = client.map().toModel(),
+        client = client.map(),
         user = user.map(),
         clientId = Id(client.id),
         items = items.map {

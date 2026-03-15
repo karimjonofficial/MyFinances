@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.order
+package com.orka.myfinances.ui.screens.order.details
 
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Column
@@ -24,11 +24,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.fixtures.format.FormatDateImpl
+import com.orka.myfinances.fixtures.format.FormatDateTimeImpl
+import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
-import com.orka.myfinances.fixtures.format.FormatTimeImpl
 import com.orka.myfinances.fixtures.resources.models.order.order1
 import com.orka.myfinances.fixtures.resources.models.order.order2
+import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
@@ -37,7 +38,6 @@ import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.components.ClientCard
 import com.orka.myfinances.ui.components.UserCard
-import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
@@ -189,8 +189,8 @@ private fun OrderScreenPreview() {
             state = State.Success(
                 order1.map(
                     formatPrice = FormatPriceImpl(),
-                    formatDate = FormatDateImpl(),
-                    formatTime = FormatTimeImpl()
+                    formatDateTime = FormatDateTimeImpl(),
+                    formatDecimal = FormatDecimalImpl()
                 )
             ),
             interactor = interactor
@@ -211,8 +211,8 @@ private fun CompletedOrderScreenPreview() {
             state = State.Success(
                 value = order2.map(
                     formatPrice = FormatPriceImpl(),
-                    formatDate = FormatDateImpl(),
-                    formatTime = FormatTimeImpl()
+                    formatDateTime = FormatDateTimeImpl(),
+                    formatDecimal = FormatDecimalImpl()
                 )
             ),
             interactor = interactor

@@ -10,14 +10,14 @@ import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.ui.screens.home.parts.FoldersContentCarousel
 import com.orka.myfinances.ui.screens.home.parts.FoldersList
-import com.orka.myfinances.ui.screens.home.viewmodel.folder.FoldersInteractor
+import com.orka.myfinances.ui.screens.home.viewmodel.folder.FoldersContentInteractor
 import com.orka.myfinances.ui.screens.home.viewmodel.folder.FoldersState
 
 @Composable
 fun FoldersContent(
     modifier: Modifier = Modifier,
     state: FoldersState,
-    interactor: FoldersInteractor
+    interactor: FoldersContentInteractor
 ) {
     when (state) {
         is FoldersState.Initial -> LoadingScreen(modifier)

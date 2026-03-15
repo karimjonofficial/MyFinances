@@ -7,26 +7,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.ui.screens.LazyColumnContentWithStickyHeader
 import com.orka.myfinances.ui.screens.history.components.ReceiveCard
-import com.orka.myfinances.application.viewmodels.history.ReceiveContentViewModel
+import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentInteractor
 
 @Composable
 fun ReceiveContent(
     modifier: Modifier = Modifier,
-    viewModel: ReceiveContentViewModel
+    interactor: ReceiveContentInteractor
 ) {
-    val state = viewModel.uiState.collectAsState()
+    val state = interactor.uiState.collectAsState()
 
     LazyColumnContentWithStickyHeader(
         modifier = modifier,
         contentPadding = PaddingValues(0.dp),
         arrangementSpace = 0.dp,
         state = state.value,
-        viewModel = viewModel,
+        viewModel = interactor,
         item = { modifier, receive ->
             ReceiveCard(
                 modifier = modifier,
                 receive = receive.model,
-                onClick = { viewModel.select(receive) }
+                onClick = { interactor.select(receive) }
             )
         }
     )

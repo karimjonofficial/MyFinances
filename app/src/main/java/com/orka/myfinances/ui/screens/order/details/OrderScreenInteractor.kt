@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.order
+package com.orka.myfinances.ui.screens.order.details
 
 import com.orka.myfinances.data.models.Id
 

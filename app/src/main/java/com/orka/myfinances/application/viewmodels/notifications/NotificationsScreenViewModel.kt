@@ -8,8 +8,6 @@ import com.orka.myfinances.lib.viewmodel.ListViewModel
 import com.orka.myfinances.ui.screens.notifications.NotificationsScreenInteractor
 import kotlinx.coroutines.flow.asStateFlow
 
-typealias IListViewModel = com.orka.myfinances.lib.ui.viewmodel.ListViewModel<Notification>
-
 class NotificationsScreenViewModel(
     private val notificationApi: NotificationApi,
     logger: Logger,
@@ -20,7 +18,7 @@ class NotificationsScreenViewModel(
     failure = failure,
     repository = { notificationApi.getAll() },
     logger = logger
-), IListViewModel, NotificationsScreenInteractor {
+), NotificationsScreenInteractor {
     override val uiState = state.asStateFlow()
 
     override fun read(notification: Notification) {

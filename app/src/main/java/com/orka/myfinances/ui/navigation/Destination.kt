@@ -2,13 +2,11 @@ package com.orka.myfinances.ui.navigation
 
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
-import com.orka.myfinances.data.models.folder.Catalog as FolderCatalog
-import com.orka.myfinances.data.models.folder.Category
 
 sealed interface Destination {
     data object Home : Destination
-    data class Catalog(val catalog: FolderCatalog) : Destination
-    data class Warehouse(val category: Category) : Destination
+    data class Catalog(val id: Id) : Destination
+    data class Warehouse(val id: Id) : Destination
     data object Notifications : Destination
     data object Settings : Destination
     data object Templates : Destination

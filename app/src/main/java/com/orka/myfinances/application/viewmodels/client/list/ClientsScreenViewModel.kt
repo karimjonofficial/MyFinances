@@ -1,14 +1,13 @@
 package com.orka.myfinances.application.viewmodels.client.list
 
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.data.api.client.AddClientApiRequest
 import com.orka.myfinances.data.api.client.ClientApi
 import com.orka.myfinances.data.api.client.ClientApiModel
+import com.orka.myfinances.data.repositories.client.AddClientRequest
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
 import com.orka.myfinances.lib.viewmodel.MapperListViewModel
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.client.list.viewmodel.ClientModel
+import com.orka.myfinances.ui.screens.client.list.viewmodel.ClientUiModel
 import com.orka.myfinances.ui.screens.client.list.viewmodel.ClientsScreenInteractor
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -18,25 +17,27 @@ class ClientsScreenViewModel(
     failure: UiText,
     private val navigator: Navigator,
     logger: Logger
-) : MapperListViewModel<ClientApiModel, ClientModel>(
+) : MapperListViewModel<ClientApiModel, ClientUiModel>(
     loading = loading,
     failure = failure,
     get = { clientApi.getAll() },
     map = { it.toUiModel() },
     logger = logger
-), ListViewModel<ClientModel>, ClientsScreenInteractor {
+), ClientsScreenInteractor {
     override val uiState = state.asStateFlow()
 
     override fun add(
         name: String,
         lastName: String?,
+        patronymic: String?,
         phone: String?,
         address: String?
     ) {
         launch {
-            val request = AddClientApiRequest(
+            val request = AddClientRequest(
                 firstName = name,
                 lastName = lastName,
+                patronymic = patronymic,
                 phone = phone,
                 address = address
             )
@@ -44,7 +45,7 @@ class ClientsScreenViewModel(
         }
     }
 
-    override fun select(client: ClientModel) {
+    override fun select(client: ClientUiModel) {
         launch {
             navigator.navigateToClient(client.id)
         }

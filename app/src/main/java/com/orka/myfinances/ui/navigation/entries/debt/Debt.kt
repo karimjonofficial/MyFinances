@@ -22,6 +22,6 @@ fun debtEntry(
     DebtScreen(
         modifier = modifier,
         state = state.value,
-        viewModel = viewModel
+        interactor = viewModel
     )
 }

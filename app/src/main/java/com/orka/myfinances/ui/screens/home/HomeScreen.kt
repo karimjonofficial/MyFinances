@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.home
 
+import android.util.Log
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -170,6 +171,7 @@ fun HomeScreen(
                     basketViewModel.initialize()
                 }
                 val state = basketViewModel.uiState.collectAsState()
+                Log.d("BasketContent", "Recomposition. State: ${state.value}")
 
                 BasketContent(
                     modifier = m,

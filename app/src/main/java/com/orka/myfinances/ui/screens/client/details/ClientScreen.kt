@@ -29,13 +29,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.api.client.ClientApiModel
 import com.orka.myfinances.fixtures.resources.models.client1
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.ui.screens.client.list.toUiModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,14 +43,14 @@ fun ClientScreen(
     state: State,
     interactor: ClientInteractor
 ) {
-    StatefulScreen<ClientApiModel>(
+    StatefulScreen<ClientScreenModel>(
         modifier = modifier,
         state = state,
         onInitialize = interactor::initialize,
         topBar = {
             TopAppBar(
                 title = {
-                    val client = (state as? State.Success<*>)?.value as? ClientApiModel
+                    val client = (state as? State.Success<*>)?.value as? ClientScreenModel
                     Text(text = if (client != null) "${client.firstName} ${client.lastName}" else "")
                 },
                 navigationIcon = {
@@ -159,7 +157,7 @@ private fun ClientScreenPreview() {
     MyFinancesTheme {
         ClientScreen(
             modifier = Modifier.fillMaxSize(),
-            state = State.Success(client1.toUiModel()),
+            state = State.Success(client1.map()),
             interactor = ClientInteractor.dummy
         )
     }

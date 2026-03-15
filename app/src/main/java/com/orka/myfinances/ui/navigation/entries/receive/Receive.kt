@@ -21,7 +21,7 @@ fun receiveEntry(
 
     ReceiveScreen(
         modifier = modifier,
-        viewModel = viewModel,
+        interactor = viewModel,
         state = state.value
     )
 }

@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.orders.components
+package com.orka.myfinances.ui.screens.order.list
 
 data class OrderItemModel(
     val name: String,

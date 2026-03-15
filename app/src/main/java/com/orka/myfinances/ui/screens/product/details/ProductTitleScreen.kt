@@ -41,7 +41,7 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.ui.screens.product.details.models.ProductTitleModel
+import com.orka.myfinances.ui.screens.product.details.models.ProductTitleScreenModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -89,7 +89,7 @@ fun ProductTitleScreen(
             is State.Failure -> FailureScreen(modifier = m)
 
             is State.Success<*> -> {
-                val productTitle = state.value as ProductTitleModel
+                val productTitle = state.value as ProductTitleScreenModel
                 LazyColumn(
                     modifier = m,
                     contentPadding = PaddingValues(bottom = 16.dp, start = 16.dp, end = 16.dp)
@@ -131,12 +131,12 @@ fun ProductTitleScreen(
                 }
 
                 if (dialogVisible.value) {
+                    val price = state.value.salePrice
                     ReceiveDialog(
                         dismissRequest = { dialogVisible.value = false },
-                        onSuccess = { p, sp, a, t, c ->
+                        price = price,
+                        onSuccess = { a, t, c ->
                             interactor.receive(
-                                price = p,
-                                salePrice = sp,
                                 amount = a,
                                 totalPrice = t,
                                 comment = c
@@ -166,7 +166,7 @@ private fun HeroImage(modifier: Modifier = Modifier) {
 @Composable
 private fun TitleSection(
     modifier: Modifier = Modifier,
-    productTitle: ProductTitleModel
+    productTitle: ProductTitleScreenModel
 ) {
     Column(modifier = modifier) {
         Text(
@@ -196,7 +196,7 @@ private fun TitleSection(
 @Composable
 private fun PricingSection(
     modifier: Modifier = Modifier,
-    productTitle: ProductTitleModel
+    productTitle: ProductTitleScreenModel
 ) {
     Row(
         modifier = modifier,
