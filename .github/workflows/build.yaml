@@ -39,6 +39,13 @@ jobs:
       - name: Build debug APK
         run: ./gradlew assembleDebug --no-daemon
 
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-apk-${{ github.run_number }}
+          path: app/build/outputs/apk/debug/*.apk
+          retention-days: 7
+
       - name: Send APK to Telegram
         if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
         env:
