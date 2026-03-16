@@ -5,7 +5,7 @@ import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 
-abstract class MapViewModel<T, K>(
+abstract class MapListViewModel<T, K>(
     private val loading: UiText,
     private val failure: UiText,
     private val get: Get<T>,
