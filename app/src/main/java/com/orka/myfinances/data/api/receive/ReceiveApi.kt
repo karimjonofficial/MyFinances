@@ -25,6 +25,18 @@ class ReceiveApi(
         return if (response.status == HttpStatusCode.OK) response.body() else null
     }
 
+    suspend fun getChunk(size: Int, page: Int): List<ReceiveApiModel>? {
+        val response = client.get(
+            urlString = "receives/",
+            block = {
+                parameter("branch", office.id.value)
+                parameter("page_size", size)
+                parameter("page", page)
+            }
+        )
+        return if (response.status == HttpStatusCode.OK) response.body() else null
+    }
+
     suspend fun getById(id: Int): ReceiveApiModel? {
         val response = client.get("receives/$id/")
         return if (response.status == HttpStatusCode.OK) response.body() else null

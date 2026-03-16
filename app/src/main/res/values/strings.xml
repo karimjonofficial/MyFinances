@@ -143,4 +143,5 @@
     <string name="end_date_is_not_provided">End date is not provided</string>
     <string name="select_your_office">Select your office</string>
     <string name="patronymic">Patronymic</string>
+    <string name="load_more">Load more</string>
 </resources>

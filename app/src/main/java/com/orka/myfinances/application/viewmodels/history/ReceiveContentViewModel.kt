@@ -11,7 +11,7 @@ import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.MapViewModel
+import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentInteractor
 import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveUiModel
@@ -33,10 +33,10 @@ class ReceiveContentViewModel(
     formatDecimal: FormatDecimal,
     private val navigator: Navigator,
     logger: Logger
-) : MapViewModel<ReceiveApiModel, ReceiveUiModel>(
+) : MapChunkViewModel<ReceiveApiModel, ReceiveUiModel>(
     loading = loading,
     failure = failure,
-    get = { receiveApi.getAll() },
+    get = { size, page -> receiveApi.getChunk(size, page) },
     map = { receives ->
         val timeZone = TimeZone.currentSystemDefault()
         receives.groupBy { receive -> receive.dateTime.toLocalDateTime(timeZone).date }
