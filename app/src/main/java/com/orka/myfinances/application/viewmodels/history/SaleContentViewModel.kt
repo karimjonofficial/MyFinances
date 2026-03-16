@@ -9,7 +9,7 @@ import com.orka.myfinances.lib.format.FormatDateTime
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.MapViewModel
+import com.orka.myfinances.lib.viewmodel.MapListViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentInteractor
 import com.orka.myfinances.ui.screens.history.viewmodel.SaleUiModel
@@ -30,7 +30,7 @@ class SaleContentViewModel(
     formatDateTime: FormatDateTime,
     private val navigator: Navigator,
     logger: Logger
-) : MapViewModel<SaleApiModel, SaleUiModel>(
+) : MapListViewModel<SaleApiModel, SaleUiModel>(
     loading = loading,
     failure = failure,
     get = { saleApi.getAll() },

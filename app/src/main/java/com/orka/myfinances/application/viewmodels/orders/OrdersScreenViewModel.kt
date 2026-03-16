@@ -7,7 +7,7 @@ import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.MapViewModel
+import com.orka.myfinances.lib.viewmodel.MapListViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.order.list.OrderUiModel
 import com.orka.myfinances.ui.screens.order.list.OrdersScreenInteractor
@@ -22,7 +22,7 @@ class OrdersScreenViewModel(
     loading: UiText,
     failure: UiText,
     logger: Logger
-) : MapViewModel<OrderApiModel, OrderUiModel>(
+) : MapListViewModel<OrderApiModel, OrderUiModel>(
     loading = loading,
     failure = failure,
     get = { orderApi.getAll() },

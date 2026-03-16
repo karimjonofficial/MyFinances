@@ -11,7 +11,7 @@ import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatDateTime
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.MapViewModel
+import com.orka.myfinances.lib.viewmodel.MapListViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.debt.list.DebtUiModel
 import com.orka.myfinances.ui.screens.debt.list.interactor.DebtsScreenInteractor
@@ -32,7 +32,7 @@ class DebtsScreenViewModel(
     failure: UiText,
     logger: Logger,
     private val navigator: Navigator
-) : MapViewModel<DebtApiModel, DebtUiModel>(
+) : MapListViewModel<DebtApiModel, DebtUiModel>(
     loading = loading,
     failure = failure,
     get = { debtApi.getAll() },
