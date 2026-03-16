@@ -36,6 +36,7 @@ fun <T> LazyColumnWithStickHeader(
     map: Map<String, List<T>>,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     arrangementSpace: Dp = 0.dp,
+    footer: @Composable (() -> Unit)? = null,
     item: @Composable ((Modifier, T) -> Unit)
 ) {
     LazyColumn(
@@ -57,6 +58,11 @@ fun <T> LazyColumnWithStickHeader(
                 item(Modifier.fillMaxWidth(), item)
             }
         }
+
+        if(footer != null) {
+            item {
+                footer()
+            }
+        }
     }
 }
-
