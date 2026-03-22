@@ -2,6 +2,7 @@ package com.orka.myfinances.application.viewmodels.template.list
 
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.ui.screens.templates.list.TemplateCardModel
+import com.orka.myfinances.ui.screens.templates.list.TemplateUiModel
 
 fun Template.toModel(): TemplateCardModel {
     return TemplateCardModel(
@@ -10,8 +11,8 @@ fun Template.toModel(): TemplateCardModel {
     )
 }
 
-fun Template.toUiModel(): com.orka.myfinances.ui.screens.templates.list.TemplateUiModel {
-    return _root_ide_package_.com.orka.myfinances.ui.screens.templates.list.TemplateUiModel(
+fun Template.toUiModel(): TemplateUiModel {
+    return TemplateUiModel(
         model = toModel(),
         template = this
     )

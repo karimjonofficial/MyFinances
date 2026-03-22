@@ -10,6 +10,7 @@ import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
+import com.orka.myfinances.ui.screens.debt.details.DebtScreenModel
 import com.orka.myfinances.ui.screens.debt.details.interactor.DebtScreenInteractor
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -19,9 +20,10 @@ class DebtScreenViewModel(
     private val formatPrice: FormatPrice,
     private val formatDate: FormatDate,
     private val navigator: Navigator,
+    loading: UiText,
     logger: Logger
-) : SingleStateViewModel<State>(
-    initialState = State.Initial,
+) : SingleStateViewModel<State<DebtScreenModel>>(
+    initialState = State.Loading(loading),
     logger = logger
 ), DebtScreenInteractor {
     val uiState = state.asStateFlow()

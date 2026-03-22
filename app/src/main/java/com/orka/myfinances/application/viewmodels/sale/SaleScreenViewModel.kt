@@ -1,7 +1,5 @@
 package com.orka.myfinances.application.viewmodels.sale
 
-import android.util.Log
-import com.orka.myfinances.R
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.api.sale.SaleApi
 import com.orka.myfinances.data.models.Id
@@ -13,6 +11,7 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.sale.viewmodel.SaleScreenInteractor
+import com.orka.myfinances.ui.screens.sale.viewmodel.SaleScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class SaleScreenViewModel(
@@ -23,9 +22,10 @@ class SaleScreenViewModel(
     private val formatDecimal: FormatDecimal,
     private val navigator: Navigator,
     private val loading: UiText,
+    private val failure: UiText,
     logger: Logger
-) : SingleStateViewModel<State>(
-    initialState = State.Initial,
+) : SingleStateViewModel<State<SaleScreenModel>>(
+    initialState = State.Loading(loading),
     logger = logger
 ), SaleScreenInteractor {
     val uiState = state.asStateFlow()
@@ -39,11 +39,10 @@ class SaleScreenViewModel(
                     val model = sale.map(formatPrice, formatDateTime, formatDecimal)
                     setState(State.Success(model))
                 } else {
-                    setState(State.Failure(UiText.Res(R.string.failure)))
+                    setState(State.Failure(failure))
                 }
             } catch (e: Exception) {
-                Log.d("SaleScreenViewModel", "Failure: $e")
-                setState(State.Failure(UiText.Res(R.string.failure)))
+                setState(State.Failure(UiText.Str(e.message.toString())))
             }
         }
     }

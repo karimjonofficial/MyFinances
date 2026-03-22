@@ -1,7 +1,6 @@
 package com.orka.myfinances.application.viewmodels.catalog
 
 import androidx.lifecycle.viewModelScope
-import com.orka.myfinances.R
 import com.orka.myfinances.application.viewmodels.home.folder.toUiModel
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.api.folder.CatalogApiModel
@@ -16,8 +15,8 @@ import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenInteractor
 import com.orka.myfinances.ui.screens.catalog.CatalogScreenModel
+import com.orka.myfinances.ui.screens.catalog.viewmodel.CatalogScreenInteractor
 import com.orka.myfinances.ui.screens.home.models.FolderUiModel
 import com.orka.myfinances.ui.screens.home.viewmodel.folder.TemplateState
 import kotlinx.coroutines.flow.Flow
@@ -30,11 +29,13 @@ class CatalogScreenViewModel(
     private val catalogId: Id,
     private val folderApi: FolderApi,
     private val templateApi: TemplateApi,
+    loading: UiText,
+    private val failure: UiText,
     events: Flow<FolderEvent>,
     private val navigator: Navigator,
     logger: Logger
-) : SingleStateViewModel<State>(
-    initialState = State.Initial,
+) : SingleStateViewModel<State<CatalogScreenModel>>(
+    initialState = State.Loading(loading),
     logger = logger
 ), CatalogScreenInteractor {
     private val _dialogState = MutableStateFlow<TemplateState>(TemplateState.Initial)
@@ -62,9 +63,9 @@ class CatalogScreenViewModel(
                             )
                         )
                     )
-                } else setState(State.Failure(UiText.Res(R.string.failure)))
-            } catch (_: Exception) {
-                setState(State.Failure(UiText.Res(R.string.failure)))
+                } else setState(State.Failure(failure))
+            } catch (e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
             }
         }
     }

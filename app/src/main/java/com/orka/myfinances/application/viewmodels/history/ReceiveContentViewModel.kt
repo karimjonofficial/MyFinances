@@ -2,15 +2,17 @@ package com.orka.myfinances.application.viewmodels.history
 
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.data.api.receive.ReceiveApi
-import com.orka.myfinances.data.api.receive.ReceiveApiModel
+import com.orka.myfinances.data.api.receive.ReceiveApi1
 import com.orka.myfinances.data.api.receive.map
+import com.orka.myfinances.data.api.receive.models.response.ReceiveApiModel
 import com.orka.myfinances.data.repositories.receive.ReceiveEvent
+import com.orka.myfinances.lib.data.api.getChunk
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
 import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.ui.screens.ChunkMapState
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentInteractor
@@ -23,7 +25,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 class ReceiveContentViewModel(
-    private val receiveApi: ReceiveApi,
+    private val receiveApi: ReceiveApi1,
     events: Flow<ReceiveEvent>,
     loading: UiText,
     failure: UiText,
@@ -37,19 +39,24 @@ class ReceiveContentViewModel(
     loading = loading,
     failure = failure,
     get = { size, page -> receiveApi.getChunk(size, page) },
-    map = { receives ->
+    map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
-        receives.groupBy { receive -> receive.dateTime.toLocalDateTime(timeZone).date }
-            .mapKeys { entry -> formatLocalDate.formatLocalDate(entry.key) }
-            .mapValues { entry ->
-                entry.value.map { receive ->
-                    receive.map(
-                        formatPrice,
-                        formatDecimal,
-                        formatTime
-                    )
+        val map =
+            chunk.results.groupBy { receive -> receive.dateTime.toLocalDateTime(timeZone).date }
+                .mapKeys { entry -> formatLocalDate.formatLocalDate(entry.key) }
+                .mapValues { entry ->
+                    entry.value.map { receive ->
+                        receive.map(formatPrice, formatDecimal, formatTime)
+                    }
                 }
-            }
+
+        ChunkMapState(
+            count = chunk.count,
+            pageIndex = chunk.pageIndex,
+            nextPageIndex = chunk.nextPageIndex,
+            previousPageIndex = chunk.previousPageIndex,
+            content = map
+        )
     },
     logger = logger
 ), ReceiveContentInteractor {

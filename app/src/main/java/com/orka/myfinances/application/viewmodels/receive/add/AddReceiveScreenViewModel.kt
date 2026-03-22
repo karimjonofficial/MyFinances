@@ -1,6 +1,5 @@
 package com.orka.myfinances.application.viewmodels.receive.add
 
-import com.orka.myfinances.R
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.api.folder.FolderApi
 import com.orka.myfinances.data.api.folder.map
@@ -29,9 +28,11 @@ class AddReceiveScreenViewModel(
     private val receiveApi: ReceiveApi,
     private val navigator: Navigator,
     private val flow: MutableSharedFlow<StockEvent>,
+    loading: UiText,
+    private val failure: UiText,
     logger: Logger
-) : SingleStateViewModel<State>(
-    initialState = State.Initial,
+) : SingleStateViewModel<State<AddReceiveScreenModel>>(
+    initialState = State.Loading(loading),
     logger = logger
 ), AddReceiveScreenInteractor {
     val uiState = state.asStateFlow()
@@ -46,13 +47,13 @@ class AddReceiveScreenViewModel(
                         val titles = titlesModels.map { it.map(category) }
                         setState(State.Success(AddReceiveScreenModel(category, titles)))
                     } else {
-                        setState(State.Failure(UiText.Res(R.string.failure)))
+                        setState(State.Failure(failure))
                     }
                 } else {
-                    setState(State.Failure(UiText.Res(R.string.failure)))
+                    setState(State.Failure(failure))
                 }
-            } catch (_: Exception) {
-                setState(State.Failure(UiText.Res(R.string.failure)))
+            } catch (e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
             }
         }
     }

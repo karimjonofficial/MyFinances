@@ -19,7 +19,7 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 @Composable
 fun OrdersScreen(
     modifier: Modifier = Modifier,
-    state: State,
+    state: State<Map<String, List<OrderUiModel>>>,
     interactor: OrdersScreenInteractor
 ) {
     LazyColumnWithStickyHeaderScreen(

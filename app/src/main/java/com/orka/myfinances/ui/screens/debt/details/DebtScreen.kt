@@ -51,7 +51,7 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 @Composable
 fun DebtScreen(
     modifier: Modifier = Modifier,
-    state: State,
+    state: State<DebtScreenModel>,
     interactor: DebtScreenInteractor
 ) {
     StatefulScreen<DebtScreenModel>(

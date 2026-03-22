@@ -1,10 +1,9 @@
-package com.orka.myfinances.data.api.sale
+package com.orka.myfinances.data.api.receive.models.response
 
-import com.orka.myfinances.data.api.receive.ProductMinimalApiModel
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SaleItemApiModel(
+data class ReceiveItemApiModel(
     val id: Int,
     val product: ProductMinimalApiModel,
     val amount: Long

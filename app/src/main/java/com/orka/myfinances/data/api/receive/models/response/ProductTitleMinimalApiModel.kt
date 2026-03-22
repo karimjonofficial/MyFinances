@@ -1,4 +1,4 @@
-package com.orka.myfinances.data.api.receive
+package com.orka.myfinances.data.api.receive.models.response
 
 import kotlinx.serialization.Serializable
 

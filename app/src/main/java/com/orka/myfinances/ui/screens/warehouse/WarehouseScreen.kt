@@ -26,10 +26,10 @@ import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenModel
 @Composable
 fun WarehouseScreen(
     modifier: Modifier = Modifier,
-    state: State,
+    state: State<WarehouseScreenModel>,
     interactor: WarehouseScreenInteractor
 ) {
-    StatefulScreen<WarehouseScreenModel>(
+    StatefulScreen(
         modifier = modifier,
         state = state,
         onInitialize = {

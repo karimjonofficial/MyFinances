@@ -1,6 +1,7 @@
 package com.orka.myfinances.ui.screens.debt.list.interactor
 
 import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.DialogViewModel
 import com.orka.myfinances.lib.ui.viewmodel.MapViewModel
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -23,7 +24,7 @@ interface DebtsScreenInteractor : StateFul, MapViewModel<DebtUiModel>,
             override fun initializeClients() {}
             override fun select(debt: DebtUiModel) {}
             override fun initialize() {}
-            override val uiState: StateFlow<State> = MutableStateFlow(State.Initial)
+            override val uiState = MutableStateFlow(State.Loading<Map<String, List<DebtUiModel>>>(UiText.Str("loading")))
             override val dialogState: StateFlow<DialogState> = MutableStateFlow(DialogState.Loading)
         }
     }

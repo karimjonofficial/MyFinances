@@ -1,5 +1,6 @@
 package com.orka.myfinances.data.api.sale
 
+import com.orka.myfinances.data.api.sale.models.response.SaleApiModel
 import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.data.repositories.sale.AddSaleRequest
 import com.orka.myfinances.data.repositories.sale.SaleEvent

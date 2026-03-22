@@ -1,8 +1,8 @@
 package com.orka.myfinances.ui.screens.host.components
 
-import com.orka.myfinances.data.models.Office
+import com.orka.myfinances.data.models.Id
 
 data class OfficeUiModel(
     val name: String,
-    val office: Office
+    val officeId: Id
 )

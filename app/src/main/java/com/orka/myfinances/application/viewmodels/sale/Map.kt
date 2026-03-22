@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.sale
 
 import com.orka.myfinances.application.viewmodels.client.list.map
-import com.orka.myfinances.data.api.sale.SaleApiModel
+import com.orka.myfinances.data.api.sale.models.response.SaleApiModel
 import com.orka.myfinances.data.api.user.UserApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.User
@@ -13,14 +13,14 @@ import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.ui.components.UserCardModel
 import com.orka.myfinances.ui.screens.client.list.toModel
 import com.orka.myfinances.ui.screens.sale.viewmodel.Item
-import com.orka.myfinances.ui.screens.sale.viewmodel.SaleUiModel
+import com.orka.myfinances.ui.screens.sale.viewmodel.SaleScreenModel
 
 fun Sale.toUiModel(
     formatPrice: FormatPrice,
     formatDateTime: FormatDateTime,
     formatDecimal: FormatDecimal
-): SaleUiModel {
-    return SaleUiModel(
+): SaleScreenModel {
+    return SaleScreenModel(
         id = id,
         price = formatPrice.formatPrice(price.toDouble()),
         dateTime = formatDateTime.formatDateTime(dateTime),
@@ -42,8 +42,8 @@ fun SaleApiModel.map(
     formatPrice: FormatPrice,
     formatDateTime: FormatDateTime,
     formatDecimal: FormatDecimal
-): SaleUiModel {
-    return SaleUiModel(
+): SaleScreenModel {
+    return SaleScreenModel(
         id = Id(id),
         price = formatPrice.formatPrice(price.toDouble()),
         dateTime = formatDateTime.formatDateTime(dateTime),

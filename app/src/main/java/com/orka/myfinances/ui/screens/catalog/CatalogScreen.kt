@@ -25,12 +25,12 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 @Composable
 fun CatalogScreen(
     modifier: Modifier = Modifier,
-    state: State,
+    state: State<CatalogScreenModel>,
     interactor: CatalogScreenInteractor
 ) {
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
 
-    StatefulScreen<CatalogScreenModel>(
+    StatefulScreen(
         modifier = modifier,
         state = state,
         onInitialize = interactor::initialize,

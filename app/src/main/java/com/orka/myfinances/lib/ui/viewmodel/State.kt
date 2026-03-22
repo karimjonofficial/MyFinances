@@ -2,9 +2,8 @@ package com.orka.myfinances.lib.ui.viewmodel
 
 import com.orka.myfinances.lib.ui.models.UiText
 
-sealed interface State {
-    data object Initial : State
-    data class Loading(val message: UiText) : State
-    data class Success<out T>(val value: T) : State
-    data class Failure(val error: UiText) : State
+sealed class State<T>(open val value: T?) {
+    data class Loading<T>(val message: UiText, override val value: T? = null) : State<T>(value)
+    data class Success<T>(override val value: T) : State<T>(value)
+    data class Failure<T>(val error: UiText, override val value: T? = null) : State<T>(value)
 }

@@ -1,6 +1,5 @@
 package com.orka.myfinances.ui.screens.warehouse.parts
 
-import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -11,10 +10,12 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.fixtures.resources.models.folder.category1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
+import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.ui.viewmodel.extensions.isInitial
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenInteractor
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenModel
 
@@ -23,25 +24,25 @@ fun StockContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     interactor: WarehouseScreenInteractor,
-    state: State,
+    state: State<WarehouseScreenModel>,
     onStockItemClick: (Id) -> Unit,
 ) {
     when (state) {
-        is State.Initial -> LoadingScreen()
-        is State.Loading -> LoadingScreen(modifier)
+        is State.Loading -> LoadingScreen(
+            modifier = modifier,
+            message = state.message.str(),
+            action = if (state.isInitial()) interactor::initialize else null
+        )
 
         is State.Failure -> FailureScreen(
             modifier = modifier,
-            retry = {
-                Log.d("StockContent", "Initialize called in line 36")
-                interactor.initialize()
-            }
+            retry = interactor::initialize
         )
 
-        is State.Success<*> -> StockItemsGrid(
+        is State.Success -> StockItemsGrid(
             modifier = modifier,
             contentPadding = contentPadding,
-            stockItems = (state.value as WarehouseScreenModel).stockItems,
+            stockItems = state.value.stockItems,
             onItemClick = onStockItemClick
         )
     }

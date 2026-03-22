@@ -15,6 +15,7 @@ import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.screens.product.details.ProductTitleScreenInteractor
+import com.orka.myfinances.ui.screens.product.details.models.ProductTitleScreenModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -28,8 +29,8 @@ class ProductTitleScreenViewModel(
     private val flow: MutableSharedFlow<StockEvent>,
     private val loading: UiText,
     logger: Logger
-) : SingleStateViewModel<State>(
-    initialState = State.Initial,
+) : SingleStateViewModel<State<ProductTitleScreenModel>>(
+    initialState = State.Loading(loading),
     logger = logger
 ), ProductTitleScreenInteractor {
     val uiState = state.asStateFlow()

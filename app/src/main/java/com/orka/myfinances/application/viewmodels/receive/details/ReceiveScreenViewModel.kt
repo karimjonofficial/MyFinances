@@ -12,6 +12,7 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.receive.details.ReceiveScreenInteractor
+import com.orka.myfinances.ui.screens.receive.details.ReceiveScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class ReceiveScreenViewModel(
@@ -23,8 +24,8 @@ class ReceiveScreenViewModel(
     private val formatDecimal: FormatDecimal,
     private val loading: UiText,
     logger: Logger
-) : SingleStateViewModel<State>(
-    initialState = State.Initial,
+) : SingleStateViewModel<State<ReceiveScreenModel>>(
+    initialState = State.Loading(loading),
     logger = logger
 ), ReceiveScreenInteractor {
     val uiState = state.asStateFlow()

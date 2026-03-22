@@ -40,17 +40,17 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 @Composable
 fun ClientScreen(
     modifier: Modifier = Modifier,
-    state: State,
+    state: State<ClientScreenModel>,
     interactor: ClientInteractor
 ) {
-    StatefulScreen<ClientScreenModel>(
+    StatefulScreen(
         modifier = modifier,
         state = state,
         onInitialize = interactor::initialize,
         topBar = {
             TopAppBar(
                 title = {
-                    val client = (state as? State.Success<*>)?.value as? ClientScreenModel
+                    val client = (state as? State.Success)?.value
                     Text(text = if (client != null) "${client.firstName} ${client.lastName}" else "")
                 },
                 navigationIcon = {

@@ -6,6 +6,6 @@ import com.orka.myfinances.ui.screens.host.components.OfficeUiModel
 fun Office.toUiModel(): OfficeUiModel {
     return OfficeUiModel(
         name = name,
-        office = this
+        officeId = this.id
     )
 }

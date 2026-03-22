@@ -16,10 +16,10 @@ typealias DialogState = androidx.compose.runtime.State<Boolean>
 @Composable
 fun <T> LazyColumnScreen(
     modifier: Modifier = Modifier,
-    topBar: @Composable (State) -> Unit = {},
-    bottomBar: @Composable (State) -> Unit = {},
+    topBar: @Composable (State<List<T>>) -> Unit = {},
+    bottomBar: @Composable (State<List<T>>) -> Unit = {},
     arrangementSpace: Dp = 0.dp,
-    state: State,
+    state: State<List<T>>,
     viewModel: ListViewModel<T>,
     item: @Composable (Modifier, T) -> Unit,
 ) {
@@ -43,9 +43,9 @@ fun <T> LazyColumnScreen(
 @Composable
 fun <T> LazyColumnScreen(
     modifier: Modifier = Modifier,
-    topBar: @Composable (State) -> Unit = {},
+    topBar: @Composable (State<List<T>>) -> Unit = {},
     arrangementSpace: Dp = 0.dp,
-    state: State,
+    state: State<List<T>>,
     viewModel: ListViewModel<T>,
     dialogState: DialogState,
     dialog: @Composable () -> Unit,
@@ -74,9 +74,9 @@ fun <T> LazyColumnScreen(
 fun <T> LazyColumnScreen(
     modifier: Modifier = Modifier,
     title: String,
-    bottomBar: @Composable (State) -> Unit = {},
+    bottomBar: @Composable (State<List<T>>) -> Unit = {},
     arrangementSpace: Dp = 0.dp,
-    state: State,
+    state: State<List<T>>,
     viewModel: ListViewModel<T>,
     item: @Composable (Modifier, T) -> Unit,
 ) {
@@ -98,9 +98,9 @@ fun <T> LazyColumnScreen(
 @Composable
 fun <T> LazyColumnWithStickyHeaderScreen(
     modifier: Modifier = Modifier,
-    topBar: @Composable (State) -> Unit = {},
+    topBar: @Composable (State<Map<String, List<T>>>) -> Unit = {},
     arrangementSpace: Dp = 0.dp,
-    state: State,
+    state: State<Map<String, List<T>>>,
     viewModel: MapViewModel<T>,
     item: @Composable (Modifier, T) -> Unit,
 ) {
@@ -123,9 +123,9 @@ fun <T> LazyColumnWithStickyHeaderScreen(
 @Composable
 fun <T> LazyColumnWithStickyHeaderScreen(
     modifier: Modifier = Modifier,
-    topBar: @Composable (State) -> Unit = {},
+    topBar: @Composable (State<Map<String, List<T>>>) -> Unit = {},
     arrangementSpace: Dp = 0.dp,
-    state: State,
+    state: State<Map<String, List<T>>>,
     viewModel: MapViewModel<T>,
     dialogState: DialogState,
     dialog: @Composable () -> Unit,

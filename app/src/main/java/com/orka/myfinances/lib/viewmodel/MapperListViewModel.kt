@@ -11,20 +11,20 @@ abstract class MapperListViewModel<T, U>(
     private val get: Get<T>,
     private val map: (T) -> U,
     logger: Logger
-) : SingleStateViewModel<State>(
-    initialState = State.Initial,
+) : SingleStateViewModel<State<List<U>>>(
+    initialState = State.Loading(loading),
     logger = logger
 ) {
     override fun initialize() {
         launch {
-            if(state.value !is State.Loading)
+            if(state.value !is State.Loading<*>)
                 setStateLoading()
             setState(fetchState() ?: State.Failure(failure))
         }
     }
 
     protected open suspend fun fetchState(): State.Success<List<U>>? {
-        val response = get.get()
+        val response = get.getAll()
         return if(response != null) State.Success(filterData(response).map { map(it) }) else null
     }
 

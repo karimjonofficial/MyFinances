@@ -53,7 +53,7 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 @Composable
 fun ProfileContent(
     modifier: Modifier,
-    state: State,
+    state: State<ProfileContentModel>,
     interactor: ProfileInteractor,
     session: Session,
     sessionManager: SessionManager//TODO remove it to viewmodel
@@ -116,8 +116,7 @@ fun ProfileContent(
 
         OutlinedExposedDropDownTextField(
             text = when (state) {
-                is State.Initial -> stringResource(R.string.loading)
-                is State.Success<*> -> session.office.name
+                is State.Success -> session.office.name
                 is State.Failure -> state.error.str()
                 is State.Loading -> state.message.str()
             },

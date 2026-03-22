@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.product.productTitle1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
+import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.lib.ui.components.DividedList
@@ -41,6 +42,7 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.ui.viewmodel.extensions.isInitial
 import com.orka.myfinances.ui.screens.product.details.models.ProductTitleScreenModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
@@ -48,7 +50,7 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 @Composable
 fun ProductTitleScreen(
     modifier: Modifier = Modifier,
-    state: State,
+    state: State<ProductTitleScreenModel>,
     interactor: ProductTitleScreenInteractor
 ) {
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
@@ -84,9 +86,16 @@ fun ProductTitleScreen(
         val m = Modifier.scaffoldPadding(paddingValues)
 
         when (state) {
-            is State.Initial -> LoadingScreen(modifier = m, action = interactor::initialize)
-            is State.Loading -> LoadingScreen(modifier = m)
-            is State.Failure -> FailureScreen(modifier = m)
+            is State.Loading -> LoadingScreen(
+                modifier = m,
+                message = state.message.str(),
+                action = if (state.isInitial()) interactor::initialize else null
+            )
+
+            is State.Failure -> FailureScreen(
+                modifier = m,
+                message = state.error.str()
+            )
 
             is State.Success<*> -> {
                 val productTitle = state.value as ProductTitleScreenModel

@@ -6,20 +6,21 @@ import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.Office
+import com.orka.myfinances.application.viewmodels.office.SelectOfficeScreenViewModel
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.host.components.OfficeCard
-import com.orka.myfinances.application.viewmodels.office.SelectOfficeScreenViewModel
+import com.orka.myfinances.ui.screens.host.components.OfficeUiModel
 
 @Composable
 fun SelectOfficeScreen(
     modifier: Modifier = Modifier,
-    state: State,
+    state: State<List<OfficeUiModel>>,
     viewModel: SelectOfficeScreenViewModel
 ) {
-    val office = retain { mutableStateOf<Office?>(null) }
+    val officeId = retain { mutableStateOf<Id?>(null) }
 
     LazyColumnScreen(
         modifier = modifier,
@@ -30,8 +31,8 @@ fun SelectOfficeScreen(
             SingleActionBottomBar(
                 buttonText = stringResource(R.string.save),
                 action = {
-                    val o = office.value
-                    if (o != null) viewModel.select(o)
+                    val id = officeId.value
+                    if (id != null) viewModel.select(id)
                 }
             )
         },
@@ -39,8 +40,8 @@ fun SelectOfficeScreen(
             OfficeCard(
                 modifier = modifier,
                 model = model,
-                checked = office.value == model.office,
-                onChecked = { office.value = it.office }
+                checked = officeId.value == model.officeId,
+                onChecked = { officeId.value = it.officeId }
             )
         }
     )

@@ -95,6 +95,10 @@ fun FoldersList(
                             onClick = { onFolderSelected(items[size - 1]) }
                         )
                     }
+
+                    item {
+                        VerticalSpacer(4)
+                    }
                 } else {
                     item {
                         NotLastFolderButton(

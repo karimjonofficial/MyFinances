@@ -34,7 +34,7 @@ import com.orka.myfinances.ui.components.ClientCard
 import com.orka.myfinances.ui.components.UserCard
 import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.ui.screens.sale.viewmodel.SaleScreenInteractor
-import com.orka.myfinances.ui.screens.sale.viewmodel.SaleUiModel
+import com.orka.myfinances.ui.screens.sale.viewmodel.SaleScreenModel
 import com.orka.myfinances.application.viewmodels.sale.toUiModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
@@ -42,10 +42,10 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 @Composable
 fun SaleScreen(
     modifier: Modifier = Modifier,
-    state: State,
+    state: State<SaleScreenModel>,
     interactor: SaleScreenInteractor
 ) {
-    StatefulScreen<SaleUiModel>(
+    StatefulScreen(
         modifier = modifier,
         topBar = {
             CenterAlignedTopAppBar(

@@ -19,9 +19,10 @@ class ProfileContentViewModel(
     private val userApi: UserApi,
     private val company: Company,
     private val navigator: Navigator,
+    loading: UiText,
     logger: Logger
-) : SingleStateViewModel<State>(
-    initialState = State.Initial,
+) : SingleStateViewModel<State<ProfileContentModel>>(
+    initialState = State.Loading(loading),
     logger = logger
 ), ProfileInteractor {
     val uiState = state.asStateFlow()

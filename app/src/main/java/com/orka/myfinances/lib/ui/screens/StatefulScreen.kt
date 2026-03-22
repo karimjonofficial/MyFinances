@@ -9,13 +9,14 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.ui.viewmodel.extensions.isInitial
 
 @Composable
 fun <T> StatefulScreen(
     modifier: Modifier = Modifier,
-    topBar: @Composable (State) -> Unit = {},
-    bottomBar: @Composable (State) -> Unit = {},
-    state: State,
+    topBar: @Composable (State<T>) -> Unit = {},
+    bottomBar: @Composable (State<T>) -> Unit = {},
+    state: State<T>,
     onInitialize: () -> Unit = {},
     onRetry: () -> Unit = {},
     content: @Composable (Modifier, T) -> Unit
@@ -25,29 +26,24 @@ fun <T> StatefulScreen(
         topBar = { topBar(state) },
         bottomBar = { bottomBar(state) },
     ) { paddingValues ->
-        val m = Modifier.scaffoldPadding(paddingValues)
+        val modifier = Modifier.scaffoldPadding(paddingValues)
 
         when (state) {
-            is State.Initial -> LoadingScreen(
-                modifier = m,
-                action = onInitialize
-            )
-
             is State.Loading -> LoadingScreen(
-                modifier = m,
-                message = state.message.str()
+                modifier = modifier,
+                message = state.message.str(),
+                action = if(state.isInitial()) onInitialize else null
             )
 
             is State.Failure -> FailureScreen(
-                modifier = m,
+                modifier = modifier,
                 message = state.error.str(),
                 retry = onRetry
             )
 
-            is State.Success<*> -> {
-                @Suppress("UNCHECKED_CAST")
-                val model = state.value as T
-                content(m, model)
+            is State.Success -> {
+                val model = state.value
+                content(modifier, model)
             }
         }
     }
@@ -58,8 +54,8 @@ fun <T> StatefulScreen(
 fun <T> StatefulScreen(
     modifier: Modifier = Modifier,
     title: String,
-    bottomBar: @Composable (State) -> Unit = {},
-    state: State,
+    bottomBar: @Composable (State<T>) -> Unit = {},
+    state: State<T>,
     onInitialize: () -> Unit = {},
     onRetry: () -> Unit = {},
     content: @Composable (Modifier, T) -> Unit

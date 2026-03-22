@@ -11,32 +11,37 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.template.template1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
+import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.ui.viewmodel.extensions.isInitial
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
 fun TemplateScreen(
     modifier: Modifier = Modifier,
-    state: State,
+    state: State<TemplateScreenModel>,
     interactor: TemplateScreenInteractor
 ) {
     when (state) {
-        is State.Initial -> LoadingScreen(
+        is State.Loading -> LoadingScreen(
             modifier = modifier,
-            action = interactor::initialize
+            action = if(state.isInitial()) interactor::initialize else null
         )
 
-        is State.Loading -> LoadingScreen(modifier)
-        is State.Failure -> { /* Handle error */ }
+        is State.Failure -> FailureScreen(
+            modifier = modifier,
+            message = state.error.str()
+        )
 
-        is State.Success<*> -> {
-            val template = state.value as TemplateScreenModel
-            Scaffold(
+        is State.Success -> {
+            val template = state.value
+            Scaffold(//TODO get scaffold out of the state
                 modifier = modifier,
                 title = template.name,
             ) { paddingValues ->

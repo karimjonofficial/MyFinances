@@ -28,7 +28,7 @@ import com.orka.myfinances.ui.screens.debt.list.interactor.DebtsScreenInteractor
 @Composable
 fun DebtsScreen(
     modifier: Modifier,
-    state: State,
+    state: State<Map<String, List<DebtUiModel>>>,
     interactor: DebtsScreenInteractor
 ) {
     val visible = rememberSaveable { mutableStateOf(false) }

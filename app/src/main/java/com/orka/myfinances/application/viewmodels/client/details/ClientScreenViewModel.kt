@@ -1,6 +1,5 @@
 package com.orka.myfinances.application.viewmodels.client.details
 
-import com.orka.myfinances.R
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.api.client.ClientApi
 import com.orka.myfinances.data.models.Id
@@ -9,15 +8,18 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.client.details.ClientInteractor
+import com.orka.myfinances.ui.screens.client.details.ClientScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class ClientScreenViewModel(
     private val id: Id,
     private val clientApi: ClientApi,
     private val navigator: Navigator,
+    loading: UiText,
+    private val failure: UiText,
     logger: Logger
-) : SingleStateViewModel<State>(
-    initialState = State.Initial,
+) : SingleStateViewModel<State<ClientScreenModel>>(
+    initialState = State.Loading(loading),
     logger = logger
 ), ClientInteractor {
     val uiState = state.asStateFlow()
@@ -28,7 +30,7 @@ class ClientScreenViewModel(
             if (clientModel != null) {
                 setState(State.Success(clientModel.toScreenModel()))
             } else {
-                setState(State.Failure(UiText.Res(R.string.failure)))
+                setState(State.Failure(failure))
             }
         }
     }

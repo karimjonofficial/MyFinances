@@ -5,6 +5,7 @@ import com.orka.myfinances.data.api.office.OfficeApi
 import com.orka.myfinances.data.api.office.map
 import com.orka.myfinances.data.models.Company
 import com.orka.myfinances.data.models.Credentials
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
@@ -30,9 +31,12 @@ class SelectOfficeScreenViewModel(
 ), ListViewModel<OfficeUiModel> {
     override val uiState = state.asStateFlow()
 
-    fun select(office: Office) {
+    fun select(id: Id) {
         launch {
-            sessionManager.setOffice(credentials, office)
+            val office = officeApi.getById(id.value)
+            if(office != null) {
+                sessionManager.setOffice(credentials, office.map(company))//TODO No need for the company
+            }
         }
     }
 }

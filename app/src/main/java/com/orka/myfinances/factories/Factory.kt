@@ -33,7 +33,9 @@ import com.orka.myfinances.data.api.notification.NotificationApi
 import com.orka.myfinances.data.api.office.OfficeApi
 import com.orka.myfinances.data.api.order.OrderApi
 import com.orka.myfinances.data.api.receive.ReceiveApi
+import com.orka.myfinances.data.api.receive.ReceiveApi1
 import com.orka.myfinances.data.api.sale.SaleApi
+import com.orka.myfinances.data.api.sale.SaleApi1
 import com.orka.myfinances.data.api.stock.StockApi
 import com.orka.myfinances.data.api.template.TemplateApi
 import com.orka.myfinances.data.api.title.ProductTitleApi
@@ -55,7 +57,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 
 class Factory(
     private val session: Session,
-    client: HttpClient,
+    private val httpClient: HttpClient,
     private val printer: BluetoothPrinterImpl,
     private val basketRepository: BasketRepository,
     private val logger: Logger,
@@ -72,18 +74,18 @@ class Factory(
     private val saleFlow = MutableSharedFlow<SaleEvent>()
     private val receiveFlow = MutableSharedFlow<ReceiveEvent>()
 
-    private val clientApi = ClientApi(client, session.office.company)
-    private val folderApi = FolderApi(client, session.office, folderFlow)
-    private val templateApi = TemplateApi(client, session.office)
-    private val productTitleApi = ProductTitleApi(client, productTitleFlow)
-    private val stockApi = StockApi(client, session.office)
-    private val receiveApi = ReceiveApi(client, session.office, receiveFlow)
-    private val saleApi = SaleApi(client, session.office, saleFlow)
-    private val orderApi = OrderApi(client, session.office)
-    private val debtApi = DebtApi(client)
-    private val notificationApi = NotificationApi(client)
-    private val officeApi = OfficeApi(client)
-    private val userApi = UserApi(client)
+    private val clientApi = ClientApi(httpClient, session.office.company)
+    private val folderApi = FolderApi(httpClient, session.office, folderFlow)
+    private val templateApi = TemplateApi(httpClient, session.office)
+    private val productTitleApi = ProductTitleApi(httpClient, productTitleFlow)
+    private val stockApi = StockApi(httpClient, session.office)
+    private val receiveApi = ReceiveApi(httpClient, session.office, receiveFlow)
+    private val saleApi = SaleApi(httpClient, session.office, saleFlow)
+    private val orderApi = OrderApi(httpClient, session.office)
+    private val debtApi = DebtApi(httpClient)
+    private val notificationApi = NotificationApi(httpClient)
+    private val officeApi = OfficeApi(httpClient)
+    private val userApi = UserApi(httpClient)
 
     fun foldersViewModel(): FoldersContentViewModel {
         return FoldersContentViewModel(
@@ -145,6 +147,8 @@ class Factory(
             templateApi = templateApi,
             events = folderFlow,
             navigator = navigator,
+            loading = loading,
+            failure = failure,
             logger = logger
         )
     }
@@ -174,6 +178,8 @@ class Factory(
             id = id,
             clientApi = clientApi,
             navigator = navigator,
+            loading = loading,
+            failure = failure,
             logger = logger
         )
     }
@@ -182,7 +188,7 @@ class Factory(
         return SaleContentViewModel(
             loading = loading,
             failure = failure,
-            saleApi = saleApi,
+            saleApi = SaleApi1(session.office, httpClient),
             events = saleFlow,
             navigator = navigator,
             priceFormatter = formatter,
@@ -199,6 +205,7 @@ class Factory(
             formatPrice = formatter,
             formatDateTime = formatter,
             loading = loading,
+            failure = failure,
             formatDecimal = formatter,
             navigator = navigator,
             logger = logger
@@ -207,7 +214,7 @@ class Factory(
 
     fun receivesViewModel(): ReceiveContentViewModel {
         return ReceiveContentViewModel(
-            receiveApi = receiveApi,
+            receiveApi = ReceiveApi1(session.office, httpClient),
             events = receiveFlow,
             loading = loading,
             failure = failure,
@@ -243,6 +250,8 @@ class Factory(
             receiveApi = receiveApi,
             navigator = navigator,
             flow = stockFlow,
+            loading = loading,
+            failure = failure,
             logger = logger
         )
     }
@@ -277,6 +286,8 @@ class Factory(
             formatDateTime = formatter,
             formatDecimal = formatter,
             navigator = navigator,
+            loading = loading,
+            failure = failure,
             logger = logger
         )
     }
@@ -302,6 +313,7 @@ class Factory(
             formatPrice = formatter,
             formatDate = formatter,
             navigator = navigator,
+            loading = loading,
             logger = logger
         )
     }
@@ -312,6 +324,7 @@ class Factory(
             officeApi = officeApi,
             userApi = userApi,
             navigator = navigator,
+            loading = loading,
             logger = logger
         )
     }
@@ -349,6 +362,7 @@ class Factory(
             templateApi = templateApi,
             failure = failure,
             navigator = navigator,
+            loading = loading,
             logger = logger
         )
     }

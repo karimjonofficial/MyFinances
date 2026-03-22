@@ -1,4 +1,4 @@
-package com.orka.myfinances.data.api.sale
+package com.orka.myfinances.data.api.sale.models.response
 
 import com.orka.myfinances.data.api.client.ClientApiModel
 import com.orka.myfinances.data.api.user.UserApiModel

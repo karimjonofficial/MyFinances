@@ -1,6 +1,5 @@
 package com.orka.myfinances.application.viewmodels.order
 
-import com.orka.myfinances.R
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.api.order.OrderApi
 import com.orka.myfinances.data.models.Id
@@ -12,6 +11,7 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.order.details.OrderScreenInteractor
+import com.orka.myfinances.ui.screens.order.details.OrderScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class OrderScreenViewModel(
@@ -21,9 +21,11 @@ class OrderScreenViewModel(
     private val formatDateTime: FormatDateTime,
     private val formatDecimal: FormatDecimal,
     private val navigator: Navigator,
+    loading: UiText,
+    private val failure: UiText,
     logger: Logger
-) : SingleStateViewModel<State>(
-    initialState = State.Initial,
+) : SingleStateViewModel<State<OrderScreenModel>>(
+    initialState = State.Loading(loading),
     logger = logger
 ), OrderScreenInteractor {
     val uiState = state.asStateFlow()
@@ -38,7 +40,7 @@ class OrderScreenViewModel(
                     formatDecimal = formatDecimal
                 )))
             } else {
-                setState(State.Failure(UiText.Res(R.string.failure)))
+                setState(State.Failure(failure))
             }
         }
     }

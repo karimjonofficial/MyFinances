@@ -24,7 +24,7 @@ fun factory(
         formatter = formatter,
         printer = printer,
         session = session,
-        client = httpClient,
+        httpClient = httpClient,
         basketRepository = BasketRepository(httpClient)
     )
 }

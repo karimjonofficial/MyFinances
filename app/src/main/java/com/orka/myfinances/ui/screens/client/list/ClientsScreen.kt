@@ -18,6 +18,7 @@ import com.orka.myfinances.fixtures.resources.models.clients
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.components.ClientCard
+import com.orka.myfinances.ui.screens.client.list.viewmodel.ClientUiModel
 import com.orka.myfinances.ui.screens.client.list.viewmodel.ClientsScreenInteractor
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
@@ -25,7 +26,7 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 @Composable
 fun ClientsScreen(
     modifier: Modifier,
-    state: State,
+    state: State<List<ClientUiModel>>,
     interactor: ClientsScreenInteractor
 ) {
     val dialogVisible = rememberSaveable { mutableStateOf(false) }

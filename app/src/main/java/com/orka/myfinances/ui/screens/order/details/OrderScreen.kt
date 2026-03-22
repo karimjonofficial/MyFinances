@@ -43,11 +43,10 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 @Composable
 fun OrderScreen(
     modifier: Modifier = Modifier,
-    state: State,
+    state: State<OrderScreenModel>,
     interactor: OrderScreenInteractor
 ) {
-    @Suppress("UNCHECKED_CAST")
-    StatefulScreen<OrderScreenModel>(
+    StatefulScreen(
         modifier = modifier,
         title = stringResource(R.string.order),
         state = state,

@@ -1,10 +1,10 @@
 package com.orka.myfinances.ui.screens.client.list.viewmodel
 
+import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.ui.viewmodel.StateFul
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 interface ClientsScreenInteractor : StateFul, ListViewModel<ClientUiModel> {
     fun add(name: String, lastName: String?, patronymic: String?,phone: String?, address: String?)
@@ -12,7 +12,7 @@ interface ClientsScreenInteractor : StateFul, ListViewModel<ClientUiModel> {
 
     companion object {
         val dummy = object : ClientsScreenInteractor {
-            override val uiState: StateFlow<State> = MutableStateFlow(State.Initial)
+            override val uiState = MutableStateFlow(State.Loading<List<ClientUiModel>>(UiText.Str("nothing")))
             override fun add(name: String, lastName: String?, patronymic: String?, phone: String?, address: String?) {}
             override fun select(client: ClientUiModel) {}
             override fun initialize() {}

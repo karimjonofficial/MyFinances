@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.R
+import com.orka.myfinances.data.models.Notification
 import com.orka.myfinances.fixtures.resources.models.notifications
 import com.orka.myfinances.lib.ui.screens.LazyColumnScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -13,7 +14,7 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 @Composable
 fun NotificationsScreen(
     modifier: Modifier,
-    state: State,
+    state: State<List<Notification>>,
     viewModel: NotificationsScreenInteractor
 ) {
     LazyColumnScreen(

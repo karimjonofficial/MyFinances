@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.history
 
-import com.orka.myfinances.data.api.sale.SaleApiModel
+import com.orka.myfinances.data.api.sale.models.response.SaleApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.receive.Receive
 import com.orka.myfinances.lib.format.FormatDate
@@ -10,12 +10,14 @@ import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
 import com.orka.myfinances.ui.screens.history.components.ReceiveCardModel
 import com.orka.myfinances.ui.screens.history.components.SaleCardModel
+import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveUiModel
+import com.orka.myfinances.ui.screens.history.viewmodel.SaleUiModel
 
 fun SaleApiModel.map(
     priceFormatter: FormatPrice,
     formatDateTime: FormatDateTime
-): com.orka.myfinances.ui.screens.history.viewmodel.SaleUiModel {
-    return _root_ide_package_.com.orka.myfinances.ui.screens.history.viewmodel.SaleUiModel(
+): SaleUiModel {
+    return SaleUiModel(
         model = SaleCardModel(
             title = items.joinToString { it.product.title.name },
             price = priceFormatter.formatPrice(price.toDouble()),
@@ -45,8 +47,8 @@ fun Receive.toUiModel(
     priceFormatter: FormatPrice,
     dateFormatter: FormatDate,
     timeFormatter: FormatTime
-): com.orka.myfinances.ui.screens.history.viewmodel.ReceiveUiModel {
-    return _root_ide_package_.com.orka.myfinances.ui.screens.history.viewmodel.ReceiveUiModel(
+): ReceiveUiModel {
+    return ReceiveUiModel(
         id = this.id,
         model = this.toModel(format, priceFormatter, dateFormatter, timeFormatter),
         instant = dateTime

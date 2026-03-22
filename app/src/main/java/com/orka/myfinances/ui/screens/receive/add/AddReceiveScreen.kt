@@ -22,30 +22,38 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.fixtures.resources.models.folder.category1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
+import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.components.CommentTextField
 import com.orka.myfinances.lib.ui.components.IntegerTextField
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.ui.viewmodel.extensions.isInitial
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
 fun AddReceiveScreen(
     modifier: Modifier = Modifier,
-    state: State,
+    state: State<AddReceiveScreenModel>,
     interactor: AddReceiveScreenInteractor
 ) {
     when (state) {
-        is State.Initial -> LoadingScreen(
+        is State.Loading -> LoadingScreen(
             modifier = modifier,
-            action = interactor::initialize
+            message = state.message.str(),
+            action = if(state.isInitial()) interactor::initialize else null
         )
-        is State.Loading -> LoadingScreen(modifier)
-        is State.Failure -> { /* Handle failure */ }
-        is State.Success<*> -> {
-            val data = state.value as AddReceiveScreenModel
+
+        is State.Failure -> FailureScreen(
+            modifier = modifier,
+            message = state.error.str()
+        )
+
+        is State.Success -> {
+            val data = state.value
             val category = data.category
             val productTitles = data.productTitles
 

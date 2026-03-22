@@ -13,6 +13,7 @@ import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.ui.viewmodel.extensions.isInitial
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenInteractor
@@ -36,33 +37,27 @@ class WarehouseScreenViewModel(
     private val loading: UiText,
     private val failure: UiText,
     logger: Logger
-) : SingleStateViewModel<State>(
-    initialState = State.Initial,
+) : SingleStateViewModel<State<WarehouseScreenModel>>(
+    initialState = State.Loading(loading),
     logger = logger
 ), WarehouseScreenInteractor {
     val uiState = state.asStateFlow()
 
     init {
         productTitleEvents.onEach {
-            if (it.categoryId == categoryId) {
-                logger.log("WarehouseScreenViewModel ${categoryId.value}", "Initialize called in line 48")
-                initialize()
-            }
+            if (it.categoryId == categoryId) initialize()
         }.launchIn(viewModelScope)
 
         stockEvents.onEach {
-            if (it.categoryId == categoryId) {
-                logger.log("WarehouseScreenViewModel ${categoryId.value}", "Initialize called in line 55")
-                initialize()
-            }
+            if (it.categoryId == categoryId) initialize()
         }.launchIn(viewModelScope)
     }
 
     override fun initialize() {
+        logger.log("WarehouseScreenViewModel", "Initialize called")
         launch {
-            logger.log("WarehouseScreenViewModel ${categoryId.value}", "Initialize called")
             try {
-                if (state.value !is State.Initial) setState(State.Loading(loading))
+                if (!state.value.isInitial()) setState(State.Loading(loading))
                 val category = folderApi.getById(categoryId.value)
                 val titlesModels = productTitleApi.getByCategory(categoryId.value)
                 val stockItemModels = stockApi.getByCategory(categoryId)
@@ -81,9 +76,7 @@ class WarehouseScreenViewModel(
                             )
                         )
                     )
-                } else {
-                    setState(State.Failure(failure))
-                }
+                } else setState(State.Failure(failure))
             } catch (e: Exception) {
                 setState(State.Failure(UiText.Str(e.message.toString())))
             }

@@ -1,4 +1,4 @@
-package com.orka.myfinances.data.api.sale
+package com.orka.myfinances.data.api.sale.models.request
 
 import com.orka.myfinances.lib.data.models.Item
 import kotlinx.serialization.SerialName

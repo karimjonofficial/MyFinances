@@ -8,7 +8,7 @@ import android.os.Build
 import androidx.core.content.ContextCompat
 import com.dantsu.escposprinter.EscPosPrinter
 import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections
-import com.orka.myfinances.data.api.sale.SaleApiModel
+import com.orka.myfinances.data.api.sale.models.response.SaleApiModel
 import com.orka.myfinances.printer.Printer
 import com.orka.myfinances.printer.PrinterState
 import kotlinx.coroutines.CoroutineScope

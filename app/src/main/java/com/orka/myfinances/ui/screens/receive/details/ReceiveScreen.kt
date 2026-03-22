@@ -41,9 +41,9 @@ import com.orka.myfinances.application.viewmodels.sale.map
 fun ReceiveScreen(
     modifier: Modifier = Modifier,
     interactor: ReceiveScreenInteractor,
-    state: State
+    state: State<ReceiveScreenModel>
 ) {
-    StatefulScreen<ReceiveUiModel>(
+    StatefulScreen(
         modifier = modifier,
         topBar = {
             CenterAlignedTopAppBar(

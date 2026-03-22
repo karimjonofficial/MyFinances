@@ -8,6 +8,7 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.templates.details.TemplateScreenInteractor
+import com.orka.myfinances.ui.screens.templates.details.TemplateScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class TemplateScreenViewModel(
@@ -15,9 +16,10 @@ class TemplateScreenViewModel(
     private val templateApi: TemplateApi,
     private val failure: UiText,
     private val navigator: Navigator,
+    loading: UiText,
     logger: Logger
-) : SingleStateViewModel<State>(
-    initialState = State.Initial,
+) : SingleStateViewModel<State<TemplateScreenModel>>(
+    initialState = State.Loading(loading),
     logger = logger
 ), TemplateScreenInteractor {
     val uiState = state.asStateFlow()

@@ -20,7 +20,6 @@ fun warehouseEntry(
     )
     val state = viewModel.uiState.collectAsState()
 
-
     WarehouseScreen(
         modifier = modifier,
         interactor = viewModel,
