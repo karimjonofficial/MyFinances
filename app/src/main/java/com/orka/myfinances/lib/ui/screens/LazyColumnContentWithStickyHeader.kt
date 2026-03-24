@@ -1,12 +1,15 @@
 package com.orka.myfinances.lib.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -58,24 +61,42 @@ fun <T> LazyColumnContentWithStickyHeader(
     arrangementSpace: Dp = 0.dp,
     state: State<ChunkMapState<T>>,
     viewModel: ChunkViewModel<T>,
+    threshold: Int = 5,
     item: @Composable (modifier: Modifier, item: T) -> Unit
 ) {
     if (state.value != null) {
+        val listState = rememberLazyListState()
+
+        LaunchedEffect(listState, state) {
+            snapshotFlow {
+                val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+                val totalItems = listState.layoutInfo.totalItemsCount
+                lastVisible to totalItems
+            }.collect { (lastVisible, totalItems) ->
+                if (lastVisible != null && totalItems - lastVisible <= threshold && state is State.Success) {
+                    if (state.value.nextPageIndex != null) {
+                        Log.d("LazyColumnWithStickyHeaderContent", "State: $state. Lazy list state: $listState. loadMore executed")
+                        viewModel.loadMore()
+                    }
+                }
+            }
+        }
+
         LazyColumnWithStickHeader(
             modifier = modifier,
             contentPadding = contentPadding,
             map = state.value!!.content,
             arrangementSpace = arrangementSpace,
+            listState = listState,
             footer = {
-                if (state.value!!.nextPageIndex != null)
+                if (state.value!!.nextPageIndex != null) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        Button(onClick = viewModel::loadMore) {
-                            Text(text = stringResource(R.string.load_more))
-                        }
+                        CircularProgressIndicator()
                     }
+                }
             },
             item = item
         )

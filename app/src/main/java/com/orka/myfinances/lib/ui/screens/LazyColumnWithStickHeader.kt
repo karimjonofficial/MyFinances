@@ -5,8 +5,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
@@ -18,11 +19,13 @@ fun <T> LazyColumnWithStickHeader(
     map: Map<String, List<T>>,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     arrangementSpace: Dp = 0.dp,
+    listState: LazyListState = rememberLazyListState(),
     footer: @Composable (() -> Unit)? = null,
     item: @Composable ((Modifier, T) -> Unit)
 ) {
     LazyColumn(
         modifier = modifier,
+        state = listState,
         contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(arrangementSpace)
     ) {
@@ -46,31 +49,5 @@ fun <T> LazyColumnWithStickHeader(
                 footer()
             }
         }
-    }
-}
-
-@Composable
-fun <T> LazyColumnWithStickHeader(
-    modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp),
-    map: Map<String, List<T>>,
-    isRefreshing: Boolean,
-    pullToRefresh: () -> Unit,
-    arrangementSpace: Dp = 0.dp,
-    footer: @Composable (() -> Unit)? = null,
-    item: @Composable ((Modifier, T) -> Unit)
-) {
-    PullToRefreshBox(
-        modifier = modifier,
-        isRefreshing = isRefreshing,
-        onRefresh = pullToRefresh
-    ) {
-        LazyColumnWithStickHeader(
-            contentPadding = contentPadding,
-            map = map,
-            arrangementSpace = arrangementSpace,
-            footer = footer,
-            item = item
-        )
     }
 }
