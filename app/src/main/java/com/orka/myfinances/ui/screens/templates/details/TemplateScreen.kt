@@ -19,7 +19,6 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.ui.viewmodel.extensions.isInitial
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
@@ -29,10 +28,7 @@ fun TemplateScreen(
     interactor: TemplateScreenInteractor
 ) {
     when (state) {
-        is State.Loading -> LoadingScreen(
-            modifier = modifier,
-            action = if(state.isInitial()) interactor::initialize else null
-        )
+        is State.Loading -> LoadingScreen(modifier)
 
         is State.Failure -> FailureScreen(
             modifier = modifier,

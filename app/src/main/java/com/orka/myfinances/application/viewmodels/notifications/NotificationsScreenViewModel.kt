@@ -21,6 +21,10 @@ class NotificationsScreenViewModel(
 ), NotificationsScreenInteractor {
     override val uiState = state.asStateFlow()
 
+    init {
+        initialize()
+    }
+
     override fun read(notification: Notification) {
         launch {
             if (!notification.read && notificationApi.read(notification.id.value)) {

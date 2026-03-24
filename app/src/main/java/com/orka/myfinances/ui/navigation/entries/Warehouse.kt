@@ -1,8 +1,6 @@
 package com.orka.myfinances.ui.navigation.entries
 
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
@@ -14,15 +12,9 @@ fun warehouseEntry(
     destination: Destination.Warehouse,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
-    val viewModel = viewModel(
-        key = "${destination.id.value}",
-        initializer = { factory.warehouseViewModel(destination.id) }
-    )
-    val state = viewModel.uiState.collectAsState()
-
     WarehouseScreen(
         modifier = modifier,
-        interactor = viewModel,
-        state = state.value
+        categoryId = destination.id,
+        factory = factory
     )
 }

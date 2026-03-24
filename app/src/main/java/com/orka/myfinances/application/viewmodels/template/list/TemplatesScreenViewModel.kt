@@ -24,6 +24,7 @@ class TemplatesScreenViewModel(
     val uiState = state.asStateFlow()
 
     init {
+        initialize()
         launch {
             events.collect {
                 initialize()

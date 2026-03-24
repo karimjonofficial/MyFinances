@@ -27,6 +27,10 @@ class ProfileContentViewModel(
 ), ProfileInteractor {
     val uiState = state.asStateFlow()
 
+    init {
+        initialize()
+    }
+
     override fun initialize() {
         launch {
             try {

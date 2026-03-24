@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.title.details
 
-import com.orka.myfinances.data.api.title.ProductTitleApiModel
-import com.orka.myfinances.data.api.title.PropertyApiModel
+import com.orka.myfinances.data.api.title.models.response.ProductTitleApiModel
+import com.orka.myfinances.data.api.title.models.response.PropertyApiModel
 import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice

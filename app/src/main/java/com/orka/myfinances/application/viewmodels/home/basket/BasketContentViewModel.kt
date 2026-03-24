@@ -28,6 +28,7 @@ class BasketContentViewModel(
     val uiState = state.asStateFlow()
 
     init {
+        initialize()
         repository.events.onEach {
             initialize()
         }.launchIn(viewModelScope)

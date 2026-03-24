@@ -31,6 +31,10 @@ class SelectOfficeScreenViewModel(
 ), ListViewModel<OfficeUiModel> {
     override val uiState = state.asStateFlow()
 
+    init {
+        initialize()
+    }
+
     fun select(id: Id) {
         launch {
             val office = officeApi.getById(id.value)

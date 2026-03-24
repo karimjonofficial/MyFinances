@@ -1,5 +1,7 @@
 package com.orka.myfinances.data.api.title
 
+import com.orka.myfinances.data.api.title.models.request.AddProductTitleApiRequest
+import com.orka.myfinances.data.api.title.models.response.ProductTitleApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
 import io.ktor.client.HttpClient

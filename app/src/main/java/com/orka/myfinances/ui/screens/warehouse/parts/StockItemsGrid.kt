@@ -31,7 +31,7 @@ fun StockItemsGrid(
             StockItemCard(
                 modifier = Modifier.fillMaxWidth(),
                 item = item.model,
-                click = { onItemClick(item.id) }
+                onClick = { onItemClick(item.id) }
             )
         }
     }

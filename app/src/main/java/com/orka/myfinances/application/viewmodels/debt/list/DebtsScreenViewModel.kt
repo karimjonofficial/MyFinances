@@ -41,6 +41,10 @@ class DebtsScreenViewModel(
 ), IMapViewModel<DebtUiModel>, DebtsScreenInteractor {
     override val uiState = state.asStateFlow()
 
+    init {
+        initialize()
+    }
+
     private val _dialogState = MutableStateFlow<DialogState>(DialogState.Loading)
     override val dialogState = _dialogState.asStateFlow()
 

@@ -1,43 +1,31 @@
 package com.orka.myfinances.ui.screens.warehouse.parts
 
-import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.orka.myfinances.lib.ui.screens.FailureScreen
-import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.ui.screens.warehouse.viewmodel.ProductsState
-import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseScreenInteractor
+import com.orka.myfinances.lib.ui.screens.ChunkMapState
+import com.orka.myfinances.lib.ui.screens.LazyColumnContentWithStickyHeader
+import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.ui.screens.home.components.ProductTitleCard
+import com.orka.myfinances.ui.screens.warehouse.viewmodel.ProductTitleUiModel
+import com.orka.myfinances.ui.screens.warehouse.viewmodel.WarehouseProductTitlesInteractor
 
 @Composable
 fun ProductTitlesContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
-    viewModel: WarehouseScreenInteractor,
-    state: ProductsState
+    viewModel: WarehouseProductTitlesInteractor,
+    state: State<ChunkMapState<ProductTitleUiModel>>
 ) {
-    when (state) {
-        ProductsState.Loading -> {
-            LoadingScreen(modifier)
-        }
-
-        ProductsState.Failure -> {
-            FailureScreen(
-                modifier = modifier,
-                retry = {
-                    Log.d("ProductTitlesContent", "Initialize called in line 36")
-                    viewModel.initialize()
-                }
-            )
-        }
-
-        is ProductsState.Success -> {
-            ProductTitlesList(
-                modifier = modifier,
-                contentPadding = contentPadding,
-                productTitles = state.titles,
-                onProductClick = { viewModel.selectProduct(it) }
-            )
-        }
+    LazyColumnContentWithStickyHeader(
+        modifier = modifier,
+        contentPadding = contentPadding,
+        state = state,
+        viewModel = viewModel
+    ) { _, item ->
+        ProductTitleCard(
+            productTitle = item.model,
+            onClick = { viewModel.selectProduct(item.id) }
+        )
     }
 }

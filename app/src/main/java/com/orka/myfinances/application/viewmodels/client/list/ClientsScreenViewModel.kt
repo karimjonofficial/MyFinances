@@ -26,6 +26,10 @@ class ClientsScreenViewModel(
 ), ClientsScreenInteractor {
     override val uiState = state.asStateFlow()
 
+    init {
+        initialize()
+    }
+
     override fun add(
         name: String,
         lastName: String?,

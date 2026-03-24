@@ -4,68 +4,40 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.viewmodel.ChunkViewModel
-import com.orka.myfinances.lib.ui.viewmodel.MapViewModel
 import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.ui.viewmodel.extensions.isInitial
 
 @Composable
-fun <T> LazyColumnContentWithStickyHeader(
+fun <T> LazyVerticalGridContentWithStickyHeader(
     modifier: Modifier = Modifier,
+    columns: GridCells = GridCells.Fixed(2),
+    reverseLayout: Boolean = false,
+    verticalArrangement: Arrangement.Vertical = if (!reverseLayout) Arrangement.Top else Arrangement.Bottom,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
     contentPadding: PaddingValues = PaddingValues(horizontal = 4.dp),
-    arrangementSpace: Dp = 0.dp,
-    state: State<Map<String, List<T>>>,
-    viewModel: MapViewModel<T>,
-    item: @Composable (modifier: Modifier, item: T) -> Unit
-) {
-    when (state) {
-        is State.Loading -> LoadingScreen(
-            modifier = modifier,
-            message = state.message.str(),
-        )
-
-        is State.Success -> {
-            val groupedItems = state.value
-            LazyColumnWithStickHeader(
-                modifier = modifier,
-                contentPadding = contentPadding,
-                map = groupedItems,
-                arrangementSpace = arrangementSpace,
-                item = item
-            )
-        }
-
-        is State.Failure -> FailureScreen(
-            modifier = modifier,
-            message = state.error.str(),
-            retry = viewModel::initialize
-        )
-    }
-}
-
-@Composable
-fun <T> LazyColumnContentWithStickyHeader(
-    modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(horizontal = 4.dp),
-    arrangementSpace: Dp = 0.dp,
     state: State<ChunkMapState<T>>,
     viewModel: ChunkViewModel<T>,
     item: @Composable (modifier: Modifier, item: T) -> Unit
 ) {
     if (state.value != null) {
-        LazyColumnWithStickHeader(
+        LazyVerticalGridWithStickHeader(
             modifier = modifier,
             contentPadding = contentPadding,
+            columns = columns,
+            reverseLayout = reverseLayout,
+            verticalArrangement = verticalArrangement,
+            horizontalArrangement = horizontalArrangement,
             map = state.value!!.content,
-            arrangementSpace = arrangementSpace,
             footer = {
                 if (state.value!!.nextPageIndex != null)
                     Row(
@@ -83,7 +55,8 @@ fun <T> LazyColumnContentWithStickyHeader(
         if (state is State.Loading) {
             LoadingScreen(
                 modifier = modifier,
-                message = state.message.str()
+                message = state.message.str(),
+                action = if (state.isInitial()) viewModel::initialize else null
             )
         } else {
             FailureScreen(

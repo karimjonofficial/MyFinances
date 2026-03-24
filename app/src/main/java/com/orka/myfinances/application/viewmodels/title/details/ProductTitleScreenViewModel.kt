@@ -36,6 +36,10 @@ class ProductTitleScreenViewModel(
     val uiState = state.asStateFlow()
     private lateinit var categoryId: Id
 
+    init {
+        initialize()
+    }
+
     override fun initialize() {
         launch {
             val productTitle = productTitleApi.getById(productId.value)

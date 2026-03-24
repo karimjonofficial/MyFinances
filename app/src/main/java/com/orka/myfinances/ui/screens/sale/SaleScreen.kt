@@ -68,8 +68,7 @@ fun SaleScreen(
                 }
             )
         },
-        state = state,
-        onInitialize = interactor::initialize
+        state = state
     ) { modifier, model ->
         LazyColumn(
             modifier = modifier.padding(horizontal = 16.dp),

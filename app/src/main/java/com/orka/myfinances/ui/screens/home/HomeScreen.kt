@@ -1,11 +1,9 @@
 package com.orka.myfinances.ui.screens.home
 
-import android.util.Log
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -131,9 +129,6 @@ fun HomeScreen(
                 val foldersViewModel = viewModel(session.office) {
                     factory.foldersViewModel()
                 }
-                LaunchedEffect(session) {
-                    foldersViewModel.initialize()
-                }
                 val state = foldersViewModel.uiState.collectAsState()
 
                 FoldersContent(
@@ -165,11 +160,7 @@ fun HomeScreen(
                 val basketViewModel = viewModel(session.office) {
                     factory.basketViewModel()
                 }
-                LaunchedEffect(session) {
-                    basketViewModel.initialize()
-                }
                 val state = basketViewModel.uiState.collectAsState()
-                Log.d("BasketContent", "Recomposition. State: ${state.value}")
 
                 BasketContent(
                     modifier = m,
@@ -181,9 +172,6 @@ fun HomeScreen(
             2 -> {
                 val profileViewModel = viewModel(session.office) {
                     factory.profileViewModel()
-                }
-                LaunchedEffect(session) {
-                    profileViewModel.initialize()
                 }
                 val state = profileViewModel.uiState.collectAsState()
 

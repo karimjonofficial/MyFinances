@@ -33,7 +33,6 @@ fun CatalogScreen(
     StatefulScreen(
         modifier = modifier,
         state = state,
-        onInitialize = interactor::initialize,
         onRetry = { interactor.initialize() },
         topBar = { state ->
             TopAppBar(

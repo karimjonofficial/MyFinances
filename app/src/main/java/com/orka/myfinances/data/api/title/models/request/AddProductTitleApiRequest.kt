@@ -1,4 +1,4 @@
-package com.orka.myfinances.data.api.title
+package com.orka.myfinances.data.api.title.models.request
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

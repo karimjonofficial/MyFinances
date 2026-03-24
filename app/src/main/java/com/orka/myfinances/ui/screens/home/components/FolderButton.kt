@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.fixtures.resources.models.folder.category1
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.ui.screens.home.models.FolderButtonModel
-import com.orka.myfinances.application.viewmodels.home.folder.toModel
+import com.orka.myfinances.application.viewmodels.home.folder.toButtonModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 private const val roundedCornerRadius = 16
@@ -168,7 +168,7 @@ private fun CatalogPreview() {
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            FolderButton(folder = category1.toModel()) {}
+            FolderButton(folder = category1.toButtonModel()) {}
         }
     }
 }
@@ -186,7 +186,7 @@ private fun ProductFolderPreview() {
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            FolderButton(folder = category1.toModel()) {}
+            FolderButton(folder = category1.toButtonModel()) {}
         }
     }
 }

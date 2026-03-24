@@ -27,7 +27,6 @@ fun <T> LazyColumnScreen(
         modifier = modifier,
         topBar = topBar,
         bottomBar = bottomBar,
-        onInitialize = viewModel::initialize,
         onRetry = { viewModel.initialize() },
         state = state
     ) { modifier, items ->
@@ -54,7 +53,6 @@ fun <T> LazyColumnScreen(
     StatefulScreen<List<T>>(
         modifier = modifier,
         topBar = topBar,
-        onInitialize = viewModel::initialize,
         onRetry = { viewModel.initialize() },
         state = state
     ) { modifier, items ->
@@ -107,7 +105,6 @@ fun <T> LazyColumnWithStickyHeaderScreen(
     StatefulScreen<Map<String, List<T>>>(
         modifier = modifier,
         topBar = topBar,
-        onInitialize = viewModel::initialize,
         onRetry = { viewModel.initialize() },
         state = state
     ) { modifier, map ->
@@ -134,7 +131,6 @@ fun <T> LazyColumnWithStickyHeaderScreen(
     StatefulScreen<Map<String, List<T>>>(
         modifier = modifier,
         topBar = topBar,
-        onInitialize = viewModel::initialize,
         onRetry = { viewModel.initialize() },
         state = state
     ) { modifier, map ->

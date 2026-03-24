@@ -36,6 +36,10 @@ class OrdersScreenViewModel(
 ), OrdersScreenInteractor {
     override val uiState = state.asStateFlow()
 
+    init {
+        initialize()
+    }
+
     override fun select(order: OrderUiModel) {
         launch { navigator.navigateToOrder(order.id) }
     }

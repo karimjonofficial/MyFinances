@@ -21,6 +21,10 @@ fun LoadingScreen(
     message: String = stringResource(R.string.loading),
     action: (() -> Unit)? = null
 ) {
+    LaunchedEffect(action) {
+        action?.invoke()
+    }
+
     Surface(modifier = modifier) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -35,10 +39,6 @@ fun LoadingScreen(
                 VerticalSpacer(4)
                 Text(text = message)
             }
-        }
-
-        if(action != null) LaunchedEffect(Unit) {
-            action()
         }
     }
 }

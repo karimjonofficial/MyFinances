@@ -66,8 +66,7 @@ fun ReceiveScreen(
                 }
             )
         },
-        state = state,
-        onInitialize = interactor::initialize
+        state = state
     ) { modifier, uiModel ->
         LazyColumn(
             modifier = modifier.padding(16.dp),

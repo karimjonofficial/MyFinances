@@ -33,12 +33,12 @@ import com.orka.myfinances.ui.screens.warehouse.toCardModel
 fun StockItemCard(
     modifier: Modifier = Modifier,
     item: StockItemCardModel,
-    click: () -> Unit
+    onClick: () -> Unit
 ) {
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(24.dp))
-            .clickable { click() }
+            .clickable { onClick() }
     ) {
         Box(
             modifier = Modifier
@@ -102,7 +102,7 @@ private fun ProductCardPreview() {
                     formatPrice = FormatPriceImpl(),
                     formatDecimal = FormatDecimalImpl()
                 ),
-                click = {}
+                onClick = {}
             )
         }
     }

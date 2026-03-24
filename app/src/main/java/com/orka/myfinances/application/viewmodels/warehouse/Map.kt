@@ -2,7 +2,7 @@ package com.orka.myfinances.application.viewmodels.warehouse
 
 import com.orka.myfinances.R
 import com.orka.myfinances.data.api.stock.StockItemApiModel
-import com.orka.myfinances.data.api.title.ProductTitleApiModel
+import com.orka.myfinances.data.api.title.models.response.ProductTitleApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
@@ -11,6 +11,11 @@ import com.orka.myfinances.ui.screens.home.components.ProductTitleCardModel
 import com.orka.myfinances.ui.screens.warehouse.components.StockItemCardModel
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.ProductTitleUiModel
 import com.orka.myfinances.ui.screens.warehouse.viewmodel.StockItemUiModel
+
+fun String.stickyHeaderKey(): String {
+    val firstLetter = trim().firstOrNull()?.uppercaseChar()
+    return if (firstLetter != null && firstLetter.isLetter()) firstLetter.toString() else "#"
+}
 
 fun ProductTitleApiModel.toCardModel(): ProductTitleCardModel {
     return ProductTitleCardModel(

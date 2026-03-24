@@ -57,9 +57,8 @@ class SaleContentViewModel(
     override val uiState = state.asStateFlow()
 
     init {
-        events.onEach {
-            initialize()
-        }.launchIn(viewModelScope)
+        initialize()
+        events.onEach { initialize() }.launchIn(viewModelScope)
     }
 
     override fun select(sale: SaleUiModel) {

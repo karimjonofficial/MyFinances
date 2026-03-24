@@ -24,6 +24,10 @@ class TemplateScreenViewModel(
 ), TemplateScreenInteractor {
     val uiState = state.asStateFlow()
 
+    init {
+        initialize()
+    }
+
     override fun initialize() {
         launch {
             val template = templateApi.getById(id.value)

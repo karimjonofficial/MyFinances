@@ -30,6 +30,10 @@ class ReceiveScreenViewModel(
 ), ReceiveScreenInteractor {
     val uiState = state.asStateFlow()
 
+    init {
+        initialize()
+    }
+
     override fun initialize() {
         launch {
             setState(State.Loading(loading))

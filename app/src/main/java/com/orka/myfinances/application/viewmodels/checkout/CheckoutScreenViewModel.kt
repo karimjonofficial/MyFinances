@@ -37,6 +37,10 @@ class CheckoutScreenViewModel(
 ), CheckoutScreenInteractor {
     val uiState = state.asStateFlow()
 
+    init {
+        initialize()
+    }
+
     override fun initialize() {
         launch {
             val items = basketRepository.get()

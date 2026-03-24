@@ -46,7 +46,6 @@ fun ClientScreen(
     StatefulScreen(
         modifier = modifier,
         state = state,
-        onInitialize = interactor::initialize,
         topBar = {
             TopAppBar(
                 title = {

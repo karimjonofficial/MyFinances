@@ -24,7 +24,8 @@ import com.orka.myfinances.application.viewmodels.template.details.TemplateScree
 import com.orka.myfinances.application.viewmodels.template.list.TemplatesScreenViewModel
 import com.orka.myfinances.application.viewmodels.title.add.AddProductTitleScreenViewModel
 import com.orka.myfinances.application.viewmodels.title.details.ProductTitleScreenViewModel
-import com.orka.myfinances.application.viewmodels.warehouse.WarehouseScreenViewModel
+import com.orka.myfinances.application.viewmodels.warehouse.ProductTitlesContentViewModel
+import com.orka.myfinances.application.viewmodels.warehouse.StockItemsContentViewModel
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.api.client.ClientApi
 import com.orka.myfinances.data.api.debt.DebtApi
@@ -37,8 +38,10 @@ import com.orka.myfinances.data.api.receive.ReceiveApi1
 import com.orka.myfinances.data.api.sale.SaleApi
 import com.orka.myfinances.data.api.sale.SaleApi1
 import com.orka.myfinances.data.api.stock.StockApi
+import com.orka.myfinances.data.api.stock.StockApi1
 import com.orka.myfinances.data.api.template.TemplateApi
 import com.orka.myfinances.data.api.title.ProductTitleApi
+import com.orka.myfinances.data.api.title.ProductTitleApi1
 import com.orka.myfinances.data.api.user.UserApi
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Session
@@ -122,18 +125,29 @@ class Factory(
         )
     }
 
-    fun warehouseViewModel(id: Id): WarehouseScreenViewModel {
-        return WarehouseScreenViewModel(
+    fun warehouseStockViewModel(id: Id): StockItemsContentViewModel {
+        return StockItemsContentViewModel(
             categoryId = id,
             folderApi = folderApi,
-            productTitleApi = productTitleApi,
-            stockApi = stockApi,
+            stockApi = StockApi1(session.office, httpClient),
             basketRepository = basketRepository,
-            productTitleEvents = productTitleFlow,
-            navigator = navigator,
             formatPrice = formatter,
             formatDecimal = formatter,
             stockEvents = stockFlow,
+            navigator = navigator,
+            loading = loading,
+            failure = failure,
+            logger = logger
+        )
+    }
+
+    fun warehouseProductTitlesViewModel(id: Id): ProductTitlesContentViewModel {
+        return ProductTitlesContentViewModel(
+            categoryId = id,
+            folderApi = folderApi,
+            productTitleApi = ProductTitleApi1(session.office, httpClient),
+            productTitleEvents = productTitleFlow,
+            navigator = navigator,
             loading = loading,
             failure = failure,
             logger = logger

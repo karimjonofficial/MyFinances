@@ -31,7 +31,6 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.ui.viewmodel.extensions.isInitial
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
@@ -43,8 +42,7 @@ fun AddReceiveScreen(
     when (state) {
         is State.Loading -> LoadingScreen(
             modifier = modifier,
-            message = state.message.str(),
-            action = if(state.isInitial()) interactor::initialize else null
+            message = state.message.str()
         )
 
         is State.Failure -> FailureScreen(

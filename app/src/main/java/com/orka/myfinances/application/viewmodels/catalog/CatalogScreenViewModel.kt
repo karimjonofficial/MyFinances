@@ -5,7 +5,6 @@ import com.orka.myfinances.application.viewmodels.home.folder.toUiModel
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.api.folder.CatalogApiModel
 import com.orka.myfinances.data.api.folder.FolderApi
-import com.orka.myfinances.data.api.folder.map
 import com.orka.myfinances.data.api.template.TemplateApi
 import com.orka.myfinances.data.api.template.map
 import com.orka.myfinances.data.models.Id
@@ -43,6 +42,7 @@ class CatalogScreenViewModel(
     val uiState = state.asStateFlow()
 
     init {
+        initialize()
         events.onEach {
             if (it.catalogId == catalogId) initialize()
         }.launchIn(viewModelScope)
@@ -51,7 +51,7 @@ class CatalogScreenViewModel(
     override fun initialize() {
         launch {
             try {
-                val folders = folderApi.getByParent(catalogId.value)?.map { it.map() }
+                val folders = folderApi.getByParent(catalogId.value)
                 val catalog = folderApi.getById(catalogId.value) as CatalogApiModel
 
                 if (folders != null) {

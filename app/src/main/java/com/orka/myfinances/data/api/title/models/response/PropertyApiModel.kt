@@ -1,4 +1,4 @@
-package com.orka.myfinances.data.api.title
+package com.orka.myfinances.data.api.title.models.response
 
 import com.orka.myfinances.data.api.template.TemplateFieldApiModel
 import kotlinx.serialization.SerialName

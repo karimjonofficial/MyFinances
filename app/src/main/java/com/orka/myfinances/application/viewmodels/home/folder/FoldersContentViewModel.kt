@@ -3,7 +3,6 @@ package com.orka.myfinances.application.viewmodels.home.folder
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.api.folder.FolderApi
-import com.orka.myfinances.data.api.folder.map
 import com.orka.myfinances.data.api.template.TemplateApi
 import com.orka.myfinances.data.api.template.map
 import com.orka.myfinances.data.models.Id
@@ -35,6 +34,7 @@ class FoldersContentViewModel(
     val dialogState = state2.asStateFlow()
 
     init {
+        initialize()
         events
             .onEach { if(it.catalogId == null) initialize() }
             .launchIn(viewModelScope)
@@ -43,7 +43,7 @@ class FoldersContentViewModel(
     override fun initialize() {
         launch {
             try {
-                val folders = folderApi.getTop()?.map { it.map() }
+                val folders = folderApi.getTop()
                 if (folders != null) {
                     setState1(FoldersState.Success(folders.map { it.toUiModel() }))
                 } else {

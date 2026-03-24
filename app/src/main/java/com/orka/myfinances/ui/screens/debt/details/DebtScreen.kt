@@ -54,7 +54,7 @@ fun DebtScreen(
     state: State<DebtScreenModel>,
     interactor: DebtScreenInteractor
 ) {
-    StatefulScreen<DebtScreenModel>(
+    StatefulScreen(
         modifier = modifier,
         topBar = {
             CenterAlignedTopAppBar(
@@ -100,8 +100,7 @@ fun DebtScreen(
                 }
             }
         },
-        state = state,
-        onInitialize = interactor::initialize
+        state = state
     ) { modifier, model ->
 
         LazyColumn(

@@ -24,6 +24,10 @@ class ClientScreenViewModel(
 ), ClientInteractor {
     val uiState = state.asStateFlow()
 
+    init {
+        initialize()
+    }
+
     override fun initialize() {
         launch {
             val clientModel = clientApi.getById(id.value)

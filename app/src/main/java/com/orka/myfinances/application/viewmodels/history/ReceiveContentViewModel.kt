@@ -63,6 +63,7 @@ class ReceiveContentViewModel(
     override val uiState = state.asStateFlow()
 
     init {
+        initialize()
         events.onEach { initialize() }.launchIn(viewModelScope)
     }
 

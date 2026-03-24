@@ -30,6 +30,10 @@ class OrderScreenViewModel(
 ), OrderScreenInteractor {
     val uiState = state.asStateFlow()
 
+    init {
+        initialize()
+    }
+
     override fun initialize() {
         launch {
             val order = orderApi.getById(id.value)

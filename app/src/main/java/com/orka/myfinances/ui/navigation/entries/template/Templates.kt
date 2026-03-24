@@ -1,6 +1,5 @@
 package com.orka.myfinances.ui.navigation.entries.template
 
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -17,9 +16,6 @@ fun templatesEntry(
 ): NavEntry<Destination> = entry(destination) {
     val viewModel = viewModel {
         factory.templatesViewModel()
-    }
-    LaunchedEffect(Unit) {
-        viewModel.initialize()
     }
     val state = viewModel.uiState.collectAsState()
     TemplatesScreen(

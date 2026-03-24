@@ -1,6 +1,10 @@
 package com.orka.myfinances.data.api.title
 
 import com.orka.myfinances.data.api.template.map
+import com.orka.myfinances.data.api.title.models.request.AddProductTitleApiRequest
+import com.orka.myfinances.data.api.title.models.request.PropertyApiRequestModel
+import com.orka.myfinances.data.api.title.models.response.ProductTitleApiModel
+import com.orka.myfinances.data.api.title.models.response.PropertyApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.product.ProductTitle

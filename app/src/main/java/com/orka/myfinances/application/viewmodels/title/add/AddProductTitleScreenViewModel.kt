@@ -25,6 +25,10 @@ class AddProductTitleScreenViewModel(
 ), AddProductTitleScreenInteractor {
     val uiState = state.asStateFlow()
 
+    init {
+        initialize()
+    }
+
     override fun initialize() {
         launch {
             try {

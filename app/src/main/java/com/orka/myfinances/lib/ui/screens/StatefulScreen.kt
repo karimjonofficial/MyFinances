@@ -9,7 +9,6 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.Scaffold
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.ui.viewmodel.extensions.isInitial
 
 @Composable
 fun <T> StatefulScreen(
@@ -17,7 +16,6 @@ fun <T> StatefulScreen(
     topBar: @Composable (State<T>) -> Unit = {},
     bottomBar: @Composable (State<T>) -> Unit = {},
     state: State<T>,
-    onInitialize: () -> Unit = {},
     onRetry: () -> Unit = {},
     content: @Composable (Modifier, T) -> Unit
 ) {
@@ -31,8 +29,7 @@ fun <T> StatefulScreen(
         when (state) {
             is State.Loading -> LoadingScreen(
                 modifier = modifier,
-                message = state.message.str(),
-                action = if(state.isInitial()) onInitialize else null
+                message = state.message.str()
             )
 
             is State.Failure -> FailureScreen(
@@ -56,7 +53,6 @@ fun <T> StatefulScreen(
     title: String,
     bottomBar: @Composable (State<T>) -> Unit = {},
     state: State<T>,
-    onInitialize: () -> Unit = {},
     onRetry: () -> Unit = {},
     content: @Composable (Modifier, T) -> Unit
 ) {
@@ -65,7 +61,6 @@ fun <T> StatefulScreen(
         topBar = { TopAppBar(title = { Text(text = title) }) },
         bottomBar = bottomBar,
         state = state,
-        onInitialize = onInitialize,
         onRetry = onRetry,
         content = content
     )

@@ -50,7 +50,6 @@ fun OrderScreen(
         modifier = modifier,
         title = stringResource(R.string.order),
         state = state,
-        onInitialize = interactor::initialize,
         bottomBar = { state ->
             if (!((state as? State.Success<OrderScreenModel>)?.value?.completed ?: false)) {
                 SingleActionBottomBar(

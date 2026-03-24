@@ -28,6 +28,10 @@ class DebtScreenViewModel(
 ), DebtScreenInteractor {
     val uiState = state.asStateFlow()
 
+    init {
+        initialize()
+    }
+
     override fun initialize() {
         launch {
             val debt = debtApi.getById(id.value)

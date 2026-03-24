@@ -81,15 +81,7 @@ fun DebtsScreen(
 @Composable
 private fun DebtsScreenPreview() {
     val data = debts.toMutableList()
-    data.addAll(debts)
-    data.addAll(debts)
-    data.addAll(debts)
-    data.addAll(debts)
-    data.addAll(debts)
-    data.addAll(debts)
-    data.addAll(debts)
-    data.addAll(debts)
-    data.addAll(debts)
+    repeat(10) { data.addAll(debts) }
     val state = State.Success(
         value = data.map(
             formatPrice = FormatPriceImpl(),

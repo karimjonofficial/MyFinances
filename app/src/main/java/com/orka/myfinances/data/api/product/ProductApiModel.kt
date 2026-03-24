@@ -1,6 +1,6 @@
 package com.orka.myfinances.data.api.product
 
-import com.orka.myfinances.data.api.title.ProductTitleApiModel
+import com.orka.myfinances.data.api.title.models.response.ProductTitleApiModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.time.Instant
