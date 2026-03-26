@@ -9,25 +9,8 @@ import com.orka.myfinances.data.repositories.receive.AddReceiveRequestItem
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
-import com.orka.myfinances.ui.screens.history.components.ReceiveCardModel
-import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveUiModel
-
-fun ReceiveApiModel.map(
-    formatPrice: FormatPrice,
-    formatDecimal: FormatDecimal,
-    formatTime: FormatTime
-): ReceiveUiModel {
-    return ReceiveUiModel(
-        id = Id(id),
-        model = ReceiveCardModel(
-            title = items.joinToString { it.product.title.name },
-            price = formatPrice.formatPrice(price.toDouble()),
-            size = "${formatDecimal.formatDecimal(items.size.toDouble())} items",
-            dateTime = formatTime.formatTime(dateTime)
-        ),
-        instant = dateTime,
-    )
-}
+import com.orka.myfinances.ui.screens.receive.list.components.ReceiveCardModel
+import com.orka.myfinances.ui.screens.receive.list.viewmodel.ReceiveUiModel
 
 fun AddReceiveRequest.map(officeId: Int): AddReceiveApiRequest {
     return AddReceiveApiRequest(

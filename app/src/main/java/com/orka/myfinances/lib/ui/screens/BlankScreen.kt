@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
-import com.orka.myfinances.lib.ui.Scaffold
+import com.orka.myfinances.lib.ui.components.Scaffold
 
 @Composable
 fun BlankScreen(

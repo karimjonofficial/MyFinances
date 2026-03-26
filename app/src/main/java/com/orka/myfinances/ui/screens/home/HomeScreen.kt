@@ -10,20 +10,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
-import com.orka.myfinances.lib.ui.Scaffold
-import com.orka.myfinances.lib.ui.models.IconRes
+import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.models.NavItem
 import com.orka.myfinances.lib.viewmodel.viewModel
 import com.orka.myfinances.ui.managers.SessionManager
-import com.orka.myfinances.ui.screens.home.parts.AddFolderDialog
-import com.orka.myfinances.ui.screens.home.parts.BasketScreenTopBar
-import com.orka.myfinances.ui.screens.home.parts.HomeScreenTopBar
-import com.orka.myfinances.ui.screens.home.parts.ProfileTopBar
+import com.orka.myfinances.ui.screens.basket.BasketContent
+import com.orka.myfinances.ui.screens.basket.BasketScreenTopBar
+import com.orka.myfinances.ui.screens.folder.home.FoldersContent
+import com.orka.myfinances.ui.screens.folder.home.parts.AddFolderDialog
+import com.orka.myfinances.ui.screens.folder.home.parts.FoldersContentTopBar
+import com.orka.myfinances.ui.screens.profile.ProfileContent
+import com.orka.myfinances.ui.screens.profile.ProfileTopBar
 
 @Composable
 fun HomeScreen(
@@ -32,32 +32,7 @@ fun HomeScreen(
     factory: Factory,
     sessionManager: SessionManager
 ) {
-    val navItems = listOf(
-        NavItem(
-            index = 0,
-            name = stringResource(R.string.home),
-            iconRes = IconRes(
-                selected = R.drawable.home_filled,
-                unSelected = R.drawable.home_outlined
-            )
-        ),
-        NavItem(
-            index = 1,
-            name = stringResource(R.string.basket),
-            iconRes = IconRes(
-                unSelected = R.drawable.shopping_cart_outlined,
-                selected = R.drawable.shopping_cart_filled
-            )
-        ),
-        NavItem(
-            index = 2,
-            name = stringResource(R.string.profile),
-            iconRes = IconRes(
-                unSelected = R.drawable.account_circle_outlined,
-                selected = R.drawable.account_circle_filled
-            )
-        )
-    )
+    val navItems = navItems()
     val navState = rememberSaveable { mutableIntStateOf(0) }
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
 
@@ -79,7 +54,7 @@ fun HomeScreen(
                     val foldersViewModel = viewModel(session.office) {
                         factory.foldersViewModel()
                     }
-                    HomeScreenTopBar(
+                    FoldersContentTopBar(
                         onAddClick = { showDialog() },
                         onNotificationsClick = { foldersViewModel.navigateToNotifications() },
                         onSearchClick = { foldersViewModel.navigateToSearch() }

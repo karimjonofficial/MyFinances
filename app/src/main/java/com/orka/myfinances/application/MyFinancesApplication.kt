@@ -10,11 +10,12 @@ import kotlinx.coroutines.CoroutineScope
 
 class MyFinancesApplication : Application() {
     private val database by lazy {
-        Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java,
-            "my-finances-db"
-        )
+        Room
+            .databaseBuilder(
+                context = applicationContext,
+                klass = AppDatabase::class.java,
+                name = "my-finances-db"
+            )
             .fallbackToDestructiveMigration(true)
             .build()
     }

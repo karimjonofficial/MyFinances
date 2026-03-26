@@ -24,7 +24,6 @@ fun <T> ExposedDropDownTextField(
     itemText: (T) -> String,
     onItemSelected: (T) -> Unit
 ) {
-
     ExposedDropdownMenuBox(
         modifier = modifier,
         expanded = menuExpanded,
@@ -71,7 +70,6 @@ fun <T> OutlinedExposedDropDownTextField(
     itemText: (T) -> String,
     onItemSelected: (T) -> Unit
 ) {
-
     ExposedDropdownMenuBox(
         modifier = modifier,
         expanded = menuExpanded,
@@ -118,7 +116,6 @@ fun <T> OutlinedExposedDropDownTextField(
     itemText: (T) -> String,
     onItemSelected: (Int, T) -> Unit
 ) {
-
     ExposedDropdownMenuBox(
         modifier = modifier,
         expanded = menuExpanded,

@@ -41,7 +41,7 @@ class NavigationManager(
     }
 
     override fun navigateToCategory(id: Id) {
-        navigate(Destination.Warehouse(id))
+        navigate(Destination.Category(id))
     }
 
     override fun navigateToNotifications() {

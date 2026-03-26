@@ -7,7 +7,7 @@ import com.orka.myfinances.lib.data.now
 import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.ui.screens.debt.details.DebtScreenModel
-import com.orka.myfinances.application.viewmodels.sale.map
+import com.orka.myfinances.application.viewmodels.sale.details.map
 
 
 fun DebtApiModel.map(

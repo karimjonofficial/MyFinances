@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun OfficeCard(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     checked: Boolean,
     onChecked: (OfficeUiModel) -> Unit,
     model: OfficeUiModel

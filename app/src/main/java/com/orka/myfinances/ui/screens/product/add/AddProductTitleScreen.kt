@@ -30,7 +30,7 @@ import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 import com.orka.myfinances.fixtures.resources.models.folder.categories
 import com.orka.myfinances.fixtures.resources.models.folder.category1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
-import com.orka.myfinances.lib.ui.Scaffold
+import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.CommentTextField
 import com.orka.myfinances.lib.ui.components.ExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.IntegerTextField

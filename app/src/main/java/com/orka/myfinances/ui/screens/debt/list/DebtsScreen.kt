@@ -48,11 +48,10 @@ fun DebtsScreen(
                 }
             )
         },
-        viewModel = interactor,
+        refresh = interactor::initialize,
         state = state,
-        item = { modifier, item ->
+        item = { item ->
             DebtCard(
-                modifier = modifier,
                 debt = item.model,
                 onClick = { interactor.select(item) }
             )

@@ -34,7 +34,7 @@ import com.orka.myfinances.fixtures.resources.models.clients
 import com.orka.myfinances.fixtures.resources.models.product.product1
 import com.orka.myfinances.fixtures.resources.models.product.product2
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
-import com.orka.myfinances.lib.ui.Scaffold
+import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.OutlinedCommentTextField

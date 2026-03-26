@@ -1,6 +1,6 @@
 package com.orka.myfinances.ui.screens.order.details
 
-import com.orka.myfinances.application.viewmodels.sale.map
+import com.orka.myfinances.application.viewmodels.sale.details.map
 import com.orka.myfinances.data.models.order.Order
 import com.orka.myfinances.data.models.order.OrderItem
 import com.orka.myfinances.lib.format.FormatDateTime

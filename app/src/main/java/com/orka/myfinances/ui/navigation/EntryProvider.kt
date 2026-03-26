@@ -26,7 +26,7 @@ import com.orka.myfinances.ui.navigation.entries.settingsEntry
 import com.orka.myfinances.ui.navigation.entries.template.addTemplateEntry
 import com.orka.myfinances.ui.navigation.entries.template.templateEntry
 import com.orka.myfinances.ui.navigation.entries.template.templatesEntry
-import com.orka.myfinances.ui.navigation.entries.warehouseEntry
+import com.orka.myfinances.ui.navigation.entries.categoryEntry
 
 fun entryProvider(
     modifier: Modifier = Modifier,
@@ -38,7 +38,7 @@ fun entryProvider(
     return when(destination) {
         is Destination.Home -> homeEntry(modifier, destination, session, sessionManager, factory)
         is Destination.Catalog -> catalogEntry(modifier, destination, factory)
-        is Destination.Warehouse -> warehouseEntry(modifier, destination, factory)
+        is Destination.Category -> categoryEntry(modifier, destination, factory)
         is Destination.Notifications -> notificationsEntry(modifier, destination, factory)
         is Destination.AddTemplate -> addTemplateEntry(modifier, destination, factory)
         is Destination.Settings -> settingsEntry(modifier, destination)

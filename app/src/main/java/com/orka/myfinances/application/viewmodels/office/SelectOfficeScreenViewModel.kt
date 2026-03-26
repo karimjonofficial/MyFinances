@@ -11,6 +11,7 @@ import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
 import com.orka.myfinances.lib.viewmodel.MapperListViewModel
 import com.orka.myfinances.ui.managers.SessionManager
+import com.orka.myfinances.ui.screens.host.SelectOfficeScreenInteractor
 import com.orka.myfinances.ui.screens.host.components.OfficeUiModel
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -28,14 +29,14 @@ class SelectOfficeScreenViewModel(
     loading = loading,
     failure = failure,
     logger = logger
-), ListViewModel<OfficeUiModel> {
+), ListViewModel<OfficeUiModel>, SelectOfficeScreenInteractor {
     override val uiState = state.asStateFlow()
 
     init {
         initialize()
     }
 
-    fun select(id: Id) {
+    override fun select(id: Id) {
         launch {
             val office = officeApi.getById(id.value)
             if(office != null) {

@@ -6,8 +6,10 @@ import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.models.ScreenTab
 import com.orka.myfinances.lib.ui.screens.MultipleTabScreen
-import com.orka.myfinances.ui.screens.history.viewmodel.ReceiveContentInteractor
-import com.orka.myfinances.ui.screens.history.viewmodel.SaleContentInteractor
+import com.orka.myfinances.ui.screens.receive.list.ReceiveContent
+import com.orka.myfinances.ui.screens.receive.list.viewmodel.ReceiveContentInteractor
+import com.orka.myfinances.ui.screens.sale.list.SaleContent
+import com.orka.myfinances.ui.screens.sale.list.SaleContentInteractor
 
 @Composable
 fun HistoryScreen(

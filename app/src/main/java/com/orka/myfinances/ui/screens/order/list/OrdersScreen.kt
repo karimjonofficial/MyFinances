@@ -39,10 +39,10 @@ fun OrdersScreen(
         },
         arrangementSpace = 8.dp,
         state = state,
-        viewModel = interactor,
-        item = { modifier, item ->
+        refresh = interactor::initialize,
+        item = { item ->
             OrderCard(
-                modifier = modifier.padding(horizontal = 8.dp),
+                modifier = Modifier.padding(horizontal = 8.dp),
                 order = item.model,
                 onClick = { interactor.select(item) }
             )

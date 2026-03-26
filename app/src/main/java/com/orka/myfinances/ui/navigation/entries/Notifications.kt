@@ -22,6 +22,6 @@ fun notificationsEntry(
     NotificationsScreen(
         modifier = modifier,
         state = state.value,
-        viewModel = viewModel
+        interactor = viewModel
     )
 }

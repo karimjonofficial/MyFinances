@@ -7,7 +7,7 @@ import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.navigation.Destination
-import com.orka.myfinances.ui.screens.sale.SaleScreen
+import com.orka.myfinances.ui.screens.sale.details.SaleScreen
 
 fun saleEntry(
     modifier: Modifier = Modifier,

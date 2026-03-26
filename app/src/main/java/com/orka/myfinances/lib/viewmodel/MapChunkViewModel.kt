@@ -2,8 +2,8 @@ package com.orka.myfinances.lib.viewmodel
 
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.lib.data.repositories.GetChunk
+import com.orka.myfinances.lib.ui.models.ChunkMapState
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.screens.ChunkMapState
 import com.orka.myfinances.lib.ui.viewmodel.State
 import kotlinx.coroutines.flow.MutableStateFlow
 

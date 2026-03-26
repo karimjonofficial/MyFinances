@@ -43,7 +43,7 @@ fun HostScreen(
             SelectOfficeScreen(
                 modifier = modifier,
                 state = uiState.value,
-                viewModel = viewModel
+                interactor = viewModel
             )
         }
 

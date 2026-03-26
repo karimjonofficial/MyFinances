@@ -7,8 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
-import com.orka.myfinances.lib.ui.viewmodel.MapViewModel
+import com.orka.myfinances.lib.ui.components.LazyColumn
 import com.orka.myfinances.lib.ui.viewmodel.State
 
 typealias DialogState = androidx.compose.runtime.State<Boolean>
@@ -20,14 +19,14 @@ fun <T> LazyColumnScreen(
     bottomBar: @Composable (State<List<T>>) -> Unit = {},
     arrangementSpace: Dp = 0.dp,
     state: State<List<T>>,
-    viewModel: ListViewModel<T>,
-    item: @Composable (Modifier, T) -> Unit,
+    refresh: () -> Unit,
+    item: @Composable (T) -> Unit,
 ) {
     StatefulScreen<List<T>>(
         modifier = modifier,
         topBar = topBar,
         bottomBar = bottomBar,
-        onRetry = { viewModel.initialize() },
+        onRetry = refresh,
         state = state
     ) { modifier, items ->
         LazyColumn(
@@ -45,15 +44,15 @@ fun <T> LazyColumnScreen(
     topBar: @Composable (State<List<T>>) -> Unit = {},
     arrangementSpace: Dp = 0.dp,
     state: State<List<T>>,
-    viewModel: ListViewModel<T>,
+    refresh: () -> Unit,
     dialogState: DialogState,
     dialog: @Composable () -> Unit,
-    item: @Composable (Modifier, T) -> Unit,
+    item: @Composable (T) -> Unit,
 ) {
     StatefulScreen<List<T>>(
         modifier = modifier,
         topBar = topBar,
-        onRetry = { viewModel.initialize() },
+        onRetry = refresh,
         state = state
     ) { modifier, items ->
         LazyColumn(
@@ -75,8 +74,8 @@ fun <T> LazyColumnScreen(
     bottomBar: @Composable (State<List<T>>) -> Unit = {},
     arrangementSpace: Dp = 0.dp,
     state: State<List<T>>,
-    viewModel: ListViewModel<T>,
-    item: @Composable (Modifier, T) -> Unit,
+    refresh: () -> Unit,
+    item: @Composable (T) -> Unit,
 ) {
     LazyColumnScreen(
         modifier = modifier,
@@ -86,61 +85,9 @@ fun <T> LazyColumnScreen(
             )
         },
         state = state,
-        viewModel = viewModel,
+        refresh = refresh,
         bottomBar = bottomBar,
         item = item,
         arrangementSpace = arrangementSpace,
     )
-}
-
-@Composable
-fun <T> LazyColumnWithStickyHeaderScreen(
-    modifier: Modifier = Modifier,
-    topBar: @Composable (State<Map<String, List<T>>>) -> Unit = {},
-    arrangementSpace: Dp = 0.dp,
-    state: State<Map<String, List<T>>>,
-    viewModel: MapViewModel<T>,
-    item: @Composable (Modifier, T) -> Unit,
-) {
-    StatefulScreen<Map<String, List<T>>>(
-        modifier = modifier,
-        topBar = topBar,
-        onRetry = { viewModel.initialize() },
-        state = state
-    ) { modifier, map ->
-        LazyColumnWithStickHeader(
-            modifier = modifier,
-            map = map,
-            arrangementSpace = arrangementSpace,
-            item = item
-        )
-    }
-}
-
-@Composable
-fun <T> LazyColumnWithStickyHeaderScreen(
-    modifier: Modifier = Modifier,
-    topBar: @Composable (State<Map<String, List<T>>>) -> Unit = {},
-    arrangementSpace: Dp = 0.dp,
-    state: State<Map<String, List<T>>>,
-    viewModel: MapViewModel<T>,
-    dialogState: DialogState,
-    dialog: @Composable () -> Unit,
-    item: @Composable (Modifier, T) -> Unit,
-) {
-    StatefulScreen<Map<String, List<T>>>(
-        modifier = modifier,
-        topBar = topBar,
-        onRetry = { viewModel.initialize() },
-        state = state
-    ) { modifier, map ->
-        LazyColumnWithStickHeader(
-            modifier = modifier,
-            map = map,
-            arrangementSpace = arrangementSpace,
-            item = item
-        )
-
-        if (dialogState.value) dialog()
-    }
 }

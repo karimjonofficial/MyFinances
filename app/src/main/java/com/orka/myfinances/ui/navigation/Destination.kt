@@ -6,7 +6,7 @@ import com.orka.myfinances.data.models.basket.BasketItem
 sealed interface Destination {
     data object Home : Destination
     data class Catalog(val id: Id) : Destination
-    data class Warehouse(val id: Id) : Destination
+    data class Category(val id: Id) : Destination
     data object Notifications : Destination
     data object Settings : Destination
     data object Templates : Destination

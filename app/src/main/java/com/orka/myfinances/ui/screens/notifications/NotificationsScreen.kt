@@ -15,18 +15,18 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 fun NotificationsScreen(
     modifier: Modifier,
     state: State<List<Notification>>,
-    viewModel: NotificationsScreenInteractor
+    interactor: NotificationsScreenInteractor
 ) {
     LazyColumnScreen(
         modifier = modifier,
         title = stringResource(R.string.notifications),
-        viewModel = viewModel,
+        refresh = interactor::initialize,
         state = state,
-        item = { modifier, notification ->
+        item = { notification ->
             NotificationCard(
                 modifier = modifier,
                 notification = notification,
-                onClick = { viewModel.read(notification) }
+                onClick = { interactor.read(notification) }
             )
         }
     )
@@ -38,6 +38,6 @@ private fun NotificationsScreenPreview() {
     NotificationsScreen(
         modifier = Modifier.fillMaxSize(),
         state = State.Success(notifications),
-        viewModel = NotificationsScreenInteractor.dummy
+        interactor = NotificationsScreenInteractor.dummy
     )
 }

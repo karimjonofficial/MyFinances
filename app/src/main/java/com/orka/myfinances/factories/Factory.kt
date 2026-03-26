@@ -2,30 +2,31 @@ package com.orka.myfinances.factories
 
 import com.orka.myfinances.R
 import com.orka.myfinances.application.factories.Formatter
-import com.orka.myfinances.application.viewmodels.catalog.CatalogScreenViewModel
+import com.orka.myfinances.application.viewmodels.folder.catalog.CatalogScreenViewModel
+import com.orka.myfinances.application.viewmodels.folder.category.CategoryScreenViewModel
 import com.orka.myfinances.application.viewmodels.checkout.CheckoutScreenViewModel
 import com.orka.myfinances.application.viewmodels.client.details.ClientScreenViewModel
 import com.orka.myfinances.application.viewmodels.client.list.ClientsScreenViewModel
 import com.orka.myfinances.application.viewmodels.debt.details.DebtScreenViewModel
 import com.orka.myfinances.application.viewmodels.debt.list.DebtsScreenViewModel
-import com.orka.myfinances.application.viewmodels.history.ReceiveContentViewModel
-import com.orka.myfinances.application.viewmodels.history.SaleContentViewModel
-import com.orka.myfinances.application.viewmodels.home.basket.BasketContentViewModel
-import com.orka.myfinances.application.viewmodels.home.folder.FoldersContentViewModel
-import com.orka.myfinances.application.viewmodels.home.profile.ProfileContentViewModel
-import com.orka.myfinances.application.viewmodels.notifications.NotificationsScreenViewModel
-import com.orka.myfinances.application.viewmodels.order.OrderScreenViewModel
-import com.orka.myfinances.application.viewmodels.orders.OrdersScreenViewModel
+import com.orka.myfinances.application.viewmodels.receive.list.ReceiveContentViewModel
+import com.orka.myfinances.application.viewmodels.sale.list.SaleContentViewModel
+import com.orka.myfinances.application.viewmodels.basket.BasketContentViewModel
+import com.orka.myfinances.application.viewmodels.folder.home.FoldersContentViewModel
+import com.orka.myfinances.application.viewmodels.profile.ProfileContentViewModel
+import com.orka.myfinances.application.viewmodels.notification.NotificationsScreenViewModel
+import com.orka.myfinances.application.viewmodels.order.details.OrderScreenViewModel
+import com.orka.myfinances.application.viewmodels.order.list.OrdersScreenViewModel
 import com.orka.myfinances.application.viewmodels.receive.add.AddReceiveScreenViewModel
 import com.orka.myfinances.application.viewmodels.receive.details.ReceiveScreenViewModel
-import com.orka.myfinances.application.viewmodels.sale.SaleScreenViewModel
+import com.orka.myfinances.application.viewmodels.sale.details.SaleScreenViewModel
 import com.orka.myfinances.application.viewmodels.template.add.AddTemplateScreenViewModel
 import com.orka.myfinances.application.viewmodels.template.details.TemplateScreenViewModel
 import com.orka.myfinances.application.viewmodels.template.list.TemplatesScreenViewModel
-import com.orka.myfinances.application.viewmodels.title.add.AddProductTitleScreenViewModel
-import com.orka.myfinances.application.viewmodels.title.details.ProductTitleScreenViewModel
-import com.orka.myfinances.application.viewmodels.warehouse.ProductTitlesContentViewModel
-import com.orka.myfinances.application.viewmodels.warehouse.StockItemsContentViewModel
+import com.orka.myfinances.application.viewmodels.product.add.AddProductTitleScreenViewModel
+import com.orka.myfinances.application.viewmodels.product.details.ProductTitleScreenViewModel
+import com.orka.myfinances.application.viewmodels.product.list.ProductTitlesContentViewModel
+import com.orka.myfinances.application.viewmodels.stock.StockItemsContentViewModel
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.api.client.ClientApi
 import com.orka.myfinances.data.api.debt.DebtApi
@@ -37,7 +38,6 @@ import com.orka.myfinances.data.api.receive.ReceiveApi
 import com.orka.myfinances.data.api.receive.ReceiveApi1
 import com.orka.myfinances.data.api.sale.SaleApi
 import com.orka.myfinances.data.api.sale.SaleApi1
-import com.orka.myfinances.data.api.stock.StockApi
 import com.orka.myfinances.data.api.stock.StockApi1
 import com.orka.myfinances.data.api.template.TemplateApi
 import com.orka.myfinances.data.api.title.ProductTitleApi
@@ -81,7 +81,6 @@ class Factory(
     private val folderApi = FolderApi(httpClient, session.office, folderFlow)
     private val templateApi = TemplateApi(httpClient, session.office)
     private val productTitleApi = ProductTitleApi(httpClient, productTitleFlow)
-    private val stockApi = StockApi(httpClient, session.office)
     private val receiveApi = ReceiveApi(httpClient, session.office, receiveFlow)
     private val saleApi = SaleApi(httpClient, session.office, saleFlow)
     private val orderApi = OrderApi(httpClient, session.office)
@@ -125,26 +124,23 @@ class Factory(
         )
     }
 
-    fun warehouseStockViewModel(id: Id): StockItemsContentViewModel {
+    fun stockItemsViewModel(id: Id): StockItemsContentViewModel {
         return StockItemsContentViewModel(
             categoryId = id,
-            folderApi = folderApi,
             stockApi = StockApi1(session.office, httpClient),
             basketRepository = basketRepository,
             formatPrice = formatter,
             formatDecimal = formatter,
             stockEvents = stockFlow,
-            navigator = navigator,
             loading = loading,
             failure = failure,
             logger = logger
         )
     }
 
-    fun warehouseProductTitlesViewModel(id: Id): ProductTitlesContentViewModel {
+    fun productTitlesViewModel(id: Id): ProductTitlesContentViewModel {
         return ProductTitlesContentViewModel(
             categoryId = id,
-            folderApi = folderApi,
             productTitleApi = ProductTitleApi1(session.office, httpClient),
             productTitleEvents = productTitleFlow,
             navigator = navigator,
@@ -377,6 +373,17 @@ class Factory(
             failure = failure,
             navigator = navigator,
             loading = loading,
+            logger = logger
+        )
+    }
+
+    fun categoryViewModel(id: Id): CategoryScreenViewModel {
+        return CategoryScreenViewModel(
+            categoryId = id,
+            folderApi = folderApi,
+            loading = loading,
+            failure = failure,
+            navigator = navigator,
             logger = logger
         )
     }
