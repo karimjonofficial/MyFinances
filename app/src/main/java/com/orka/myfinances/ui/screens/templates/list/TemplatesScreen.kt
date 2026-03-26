@@ -12,12 +12,13 @@ import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.components.Scaffold
+import com.orka.myfinances.lib.ui.viewmodel.State
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TemplatesScreen(
     modifier: Modifier = Modifier,
-    state: TemplatesScreenState,
+    state: State<TemplatesScreenModel>,
     interactor: TemplatesScreenInteractor
 ) {
     Scaffold(

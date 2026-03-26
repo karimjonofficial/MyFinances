@@ -12,9 +12,9 @@ import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.template.template1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.extensions.ui.str
-import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.lib.ui.components.DividedList
+import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
@@ -24,23 +24,22 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 @Composable
 fun TemplateScreen(
     modifier: Modifier = Modifier,
-    state: State<TemplateScreenModel>,
-    interactor: TemplateScreenInteractor
+    state: State<TemplateScreenModel>
 ) {
-    when (state) {
-        is State.Loading -> LoadingScreen(modifier)
+    Scaffold(
+        modifier = modifier,
+        title = if (state is State.Success) state.value.name else stringResource(R.string.loading),
+    ) { paddingValues ->
+        when (state) {
+            is State.Loading -> LoadingScreen(modifier)
 
-        is State.Failure -> FailureScreen(
-            modifier = modifier,
-            message = state.error.str()
-        )
-
-        is State.Success -> {
-            val template = state.value
-            Scaffold(//TODO get scaffold out of the state
+            is State.Failure -> FailureScreen(
                 modifier = modifier,
-                title = template.name,
-            ) { paddingValues ->
+                message = state.error.str()
+            )
+
+            is State.Success -> {
+                val template = state.value
 
                 Column(
                     modifier = Modifier
@@ -71,8 +70,7 @@ private fun TemplateScreenPreview() {
     MyFinancesTheme {
         TemplateScreen(
             modifier = Modifier.fillMaxSize(),
-            state = State.Success(template1.map()),
-            interactor = TemplateScreenInteractor.dummy
+            state = State.Success(template1.map())
         )
     }
 }

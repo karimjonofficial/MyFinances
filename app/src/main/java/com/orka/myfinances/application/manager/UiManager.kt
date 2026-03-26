@@ -138,7 +138,12 @@ class UiManager(
 
     private fun setStateGuest() {
         val apiService = AuthenticationApi(client)
-        val viewModel = LoginScreenViewModel(logger, apiService, this)
+        val viewModel = LoginScreenViewModel(
+            authApi = apiService,
+            manager = this,
+            loading = UiText.Res(R.string.loading),
+            logger = logger
+        )
         setState(UiState.Guest(viewModel))
     }
 

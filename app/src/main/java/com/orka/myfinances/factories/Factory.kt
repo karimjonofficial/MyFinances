@@ -95,6 +95,8 @@ class Factory(
             templateApi = templateApi,
             navigator = navigator,
             events = folderFlow,
+            loading = loading,
+            failure = failure,
             logger = logger
         )
     }
@@ -103,6 +105,8 @@ class Factory(
         return TemplatesScreenViewModel(
             templateApi = templateApi,
             navigator = navigator,
+            loading = loading,
+            failure = failure,
             logger = logger,
             events = templateFlow
         )
@@ -120,6 +124,8 @@ class Factory(
             folderApi = folderApi,
             productTitleApi = productTitleApi,
             navigator = navigator,
+            loading = loading,
+            failure = failure,
             logger = logger
         )
     }
@@ -169,6 +175,7 @@ class Factory(
             navigator = navigator,
             formatPrice = formatter,
             formatDecimal = formatter,
+            loading = loading,
             logger = logger
         )
     }
@@ -248,6 +255,8 @@ class Factory(
             formatPrice = formatter,
             formatDecimal = formatter,
             printer = printer,
+            loading = loading,
+            failure = failure,
             printerState = printer.state
         )
     }

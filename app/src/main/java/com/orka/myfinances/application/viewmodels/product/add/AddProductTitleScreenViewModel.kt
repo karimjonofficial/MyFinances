@@ -8,19 +8,23 @@ import com.orka.myfinances.data.api.title.map
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.repositories.product.title.models.AddProductTitleRequest
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
+import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenInteractor
-import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenState
+import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class AddProductTitleScreenViewModel(
     private val folderApi: FolderApi,
     private val productTitleApi: ProductTitleApi,
     private val navigator: Navigator,
+    loading: UiText,
+    private val failure: UiText,
     logger: Logger
-) : SingleStateViewModel<AddProductTitleScreenState>(
-    initialState = AddProductTitleScreenState.Loading,
+) : SingleStateViewModel<State<AddProductTitleScreenModel>>(
+    initialState = State.Loading(loading),
     logger = logger
 ), AddProductTitleScreenInteractor {
     val uiState = state.asStateFlow()
@@ -32,16 +36,12 @@ class AddProductTitleScreenViewModel(
     override fun initialize() {
         launch {
             try {
-                val categories = folderApi.getTop()
-                    ?.map { it.map() }
-                    ?.filterIsInstance<Category>()
+                val categories = folderApi.getTop()?.map { it.map() }?.filterIsInstance<Category>()
                 if (categories != null) {
-                    setState(AddProductTitleScreenState.Success(categories))
-                } else {
-                    setState(AddProductTitleScreenState.Failure)
-                }
-            } catch (_: Exception) {
-                setState(AddProductTitleScreenState.Failure)
+                    setState(State.Success(AddProductTitleScreenModel(categories)))//TODO don't map to entities
+                } else setState(State.Failure(failure))
+            } catch (e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
             }
         }
     }

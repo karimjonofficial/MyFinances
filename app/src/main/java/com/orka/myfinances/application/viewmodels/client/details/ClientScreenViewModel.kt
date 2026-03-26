@@ -30,11 +30,13 @@ class ClientScreenViewModel(
 
     override fun initialize() {
         launch {
-            val clientModel = clientApi.getById(id.value)
-            if (clientModel != null) {
-                setState(State.Success(clientModel.toScreenModel()))
-            } else {
-                setState(State.Failure(failure))
+            try {
+                val clientModel = clientApi.getById(id.value)
+                if (clientModel != null) {
+                    setState(State.Success(clientModel.toScreenModel()))
+                } else setState(State.Failure(failure))
+            } catch (e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
             }
         }
     }

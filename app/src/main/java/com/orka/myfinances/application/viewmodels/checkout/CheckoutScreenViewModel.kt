@@ -1,5 +1,6 @@
 package com.orka.myfinances.application.viewmodels.checkout
 
+import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.application.viewmodels.client.details.toItemModel
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.api.client.ClientApi
@@ -11,14 +12,18 @@ import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.lib.extensions.models.getPrice
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.printer.Printer
 import com.orka.myfinances.printer.PrinterState
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
-import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenState
+import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenModel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class CheckoutScreenViewModel(
     private val clientApi: ClientApi,
@@ -30,15 +35,29 @@ class CheckoutScreenViewModel(
     private val printerState: StateFlow<PrinterState>,
     private val formatDecimal: FormatDecimal,
     private val formatPrice: FormatPrice,
+    loading: UiText,
+    private val failure: UiText,
     logger: Logger
-) : SingleStateViewModel<CheckoutScreenState>(
-    initialState = CheckoutScreenState.Loading,
+) : SingleStateViewModel<State<CheckoutScreenModel>>(
+    initialState = State.Loading(loading),
     logger = logger
 ), CheckoutScreenInteractor {
     val uiState = state.asStateFlow()
 
     init {
         initialize()
+        printerState.onEach { newState ->
+            updateState { currentState ->
+                val successState = (currentState as? State.Success)?.value
+                if (successState != null) {
+                    State.Success(
+                        value = successState.copy(
+                            printerConnected = newState is PrinterState.Connected
+                        )
+                    )
+                } else currentState
+            }
+        }.launchIn(viewModelScope)
     }
 
     override fun initialize() {
@@ -49,26 +68,18 @@ class CheckoutScreenViewModel(
                 if (clientApiModels != null) {
                     val clients = clientApiModels.map { it.toItemModel() }
                     setState(
-                        CheckoutScreenState.Success(
-                            clients = clients,
-                            items = items.map { it.toModel(formatPrice, formatDecimal) },
-                            price = items.getPrice().toInt(),
-                            printerConnected = printerState.value is PrinterState.Connected
+                        State.Success(
+                            value = CheckoutScreenModel(
+                                clients = clients,
+                                items = items.map { it.toModel(formatPrice, formatDecimal) },
+                                price = items.getPrice().toInt(),
+                                printerConnected = printerState.value is PrinterState.Connected
+                            )
                         )
                     )
-                } else setState(CheckoutScreenState.Failure)
-            } catch (_: Exception) {
-                setState(CheckoutScreenState.Failure)
-            }
-        }
-
-        launch {
-            printerState.collect { newState ->
-                updateState { currentState ->
-                    if (currentState is CheckoutScreenState.Success) {
-                        currentState.copy(printerConnected = newState is PrinterState.Connected)
-                    } else currentState
-                }
+                } else setState(State.Failure(failure))
+            } catch (e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
             }
         }
     }
@@ -91,8 +102,10 @@ class CheckoutScreenViewModel(
                         }
                         clearBasket()
                         navigator.back()
-                    }
-                } catch (_: Exception) { }
+                    } else setState(State.Failure(failure))
+                } catch (e: Exception) {
+                    setState(State.Failure(UiText.Str(e.message.toString())))
+                }
             }
         }
     }
@@ -107,8 +120,8 @@ class CheckoutScreenViewModel(
                         clearBasket()
                         navigator.back()
                     }
-                } catch (_: Exception) {
-                    // Handle error
+                } catch (e: Exception) {
+                    setState(State.Failure(UiText.Str(e.message.toString())))
                 }
             }
         }

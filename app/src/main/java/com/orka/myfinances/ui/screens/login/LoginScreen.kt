@@ -38,18 +38,18 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    state: LoginScreenState,
+    state: State<LoginScreenModel>,
     interactor: LoginScreenInteractor
 ) {
-
     Scaffold(modifier = modifier) { paddingValues ->
         Box(modifier = Modifier.scaffoldPadding(paddingValues)) {
-            if(state is LoginScreenState.Error) {
+            if(state is State.Failure) {
                 Row(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
@@ -67,7 +67,7 @@ fun LoginScreen(
 
                     HorizontalSpacer(16)
                     Text(
-                        text = state.message.str(),
+                        text = state.error.str(),
                         maxLines = 2,
                         color = MaterialTheme.colorScheme.onErrorContainer
                     )
@@ -89,9 +89,9 @@ fun LoginScreen(
                 val usernameText = username.value
                 val passwordText = password.value
 
-                val isErrorState = state is LoginScreenState.Error
-                val isLoadingState = state is LoginScreenState.Loading
-                val textFieldError = isErrorState && !state.serverError
+                val isErrorState = state is State.Failure
+                val isLoadingState = state is State.Loading
+                val textFieldError = isErrorState && state.value?.textFieldError ?: false
 
                 VerticalSpacer(32)
                 Image(
@@ -204,7 +204,7 @@ fun LoginScreen(
 private fun LoginScreenPreview() {
     MyFinancesTheme {
         LoginScreen(
-            state = LoginScreenState.Initial,
+            state = State.Success(LoginScreenModel(serverError = false, textFieldError = false)),
             interactor = LoginScreenInteractor.dummy
         )
     }

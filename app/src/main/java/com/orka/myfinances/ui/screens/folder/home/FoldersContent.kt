@@ -9,23 +9,23 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.folder.home.interactor.FoldersContentInteractor
 import com.orka.myfinances.ui.screens.folder.home.parts.FoldersContentCarousel
 import com.orka.myfinances.ui.screens.folder.home.parts.FoldersList
-import com.orka.myfinances.ui.screens.folder.home.state.FoldersState
+import com.orka.myfinances.ui.screens.folder.home.state.FoldersContentModel
 
 @Composable
 fun FoldersContent(
     modifier: Modifier = Modifier,
-    state: FoldersState,
+    state: State<FoldersContentModel>,
     interactor: FoldersContentInteractor
 ) {
     when (state) {
-        is FoldersState.Initial -> LoadingScreen(modifier)
-        is FoldersState.Error -> FailureScreen(modifier)
-        is FoldersState.Loading -> LoadingScreen(modifier)
+        is State.Failure -> FailureScreen(modifier)
+        is State.Loading -> LoadingScreen(modifier)
 
-        is FoldersState.Success -> {
+        is State.Success -> {
             val carouselState = rememberCarouselState { 3 }
 
             Column(modifier = modifier) {
@@ -33,7 +33,7 @@ fun FoldersContent(
 
                 VerticalSpacer(24)
                 FoldersList(
-                    items = state.folders,
+                    items = state.value.folders,
                     contentPadding = PaddingValues(horizontal = 16.dp),
                     onFolderSelected = { interactor.select(it) }
                 )

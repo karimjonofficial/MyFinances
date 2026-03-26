@@ -10,18 +10,18 @@ import io.ktor.http.HttpStatusCode
 
 class DebtApi(private val client: HttpClient) {
     suspend fun getAll(): List<DebtApiModel>? {
-        val response = client.get("merchant/debts/")
+        val response = client.get("debts/")
         return if (response.status == HttpStatusCode.OK) response.body() else null
     }
 
     suspend fun getById(id: Int): DebtApiModel? {
-        val response = client.get("merchant/debts/$id/")
+        val response = client.get("debts/$id/")
         return if (response.status == HttpStatusCode.OK) response.body() else null
     }
 
     suspend fun add(request: AddDebtRequest): Boolean {
         val response = client.post(
-            urlString = "merchant/debts/",
+            urlString = "debts/",
             block = { setBody(request) }
         )
         return response.status == HttpStatusCode.Created

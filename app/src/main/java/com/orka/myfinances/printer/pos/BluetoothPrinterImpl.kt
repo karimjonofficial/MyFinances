@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log.d
 import androidx.core.content.ContextCompat
 import com.dantsu.escposprinter.EscPosPrinter
 import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections
@@ -55,8 +56,9 @@ class BluetoothPrinterImpl(
                 } else {
                     _state.value = PrinterState.Disconnected
                 }
-            } catch (_: Exception) {
+            } catch (e: Exception) {
                 _state.value = PrinterState.Disconnected
+                d("BluetoothPrinterImpl", e.message.toString())
             }
         }
     }

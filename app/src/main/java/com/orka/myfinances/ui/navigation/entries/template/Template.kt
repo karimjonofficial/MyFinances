@@ -21,7 +21,6 @@ fun templateEntry(
 
     TemplateScreen(
         modifier = modifier,
-        state = uiState.value,
-        interactor = viewModel
+        state = uiState.value
     )
 }

@@ -9,11 +9,13 @@ import com.orka.myfinances.data.api.template.map
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.folder.AddFolderRequest
 import com.orka.myfinances.data.repositories.folder.FolderEvent
+import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.DualStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.folder.models.FolderUiModel
 import com.orka.myfinances.ui.screens.folder.home.interactor.FoldersContentInteractor
-import com.orka.myfinances.ui.screens.folder.home.state.FoldersState
+import com.orka.myfinances.ui.screens.folder.home.state.FoldersContentModel
 import com.orka.myfinances.ui.screens.folder.home.state.TemplateState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,9 +27,11 @@ class FoldersContentViewModel(
     private val templateApi: TemplateApi,
     private val navigator: Navigator,
     events: Flow<FolderEvent>,
+    private val loading: UiText,
+    private val failure: UiText,
     logger: Logger
-) : DualStateViewModel<FoldersState, TemplateState>(
-    initialState1 = FoldersState.Initial,
+) : DualStateViewModel<State<FoldersContentModel>, TemplateState>(
+    initialState1 = State.Loading(loading),
     initialState2 = TemplateState.Initial,
     logger = logger
 ), FoldersContentInteractor {
@@ -43,15 +47,14 @@ class FoldersContentViewModel(
 
     override fun initialize() {
         launch {
+            setState1(State.Loading(loading))
             try {
                 val folders = folderApi.getTop()
                 if (folders != null) {
-                    setState1(FoldersState.Success(folders.map { it.toUiModel() }))
-                } else {
-                    setState1(FoldersState.Error)
-                }
-            } catch (_: Exception) {
-                setState1(FoldersState.Error)
+                    setState1(State.Success(FoldersContentModel(folders.map { it.toUiModel() })))
+                } else setState1(State.Failure(failure))
+            } catch (e: Exception) {
+                setState1(State.Failure(UiText.Str(e.message.toString())))
             }
             try {
                 val templates = templateApi.getAll()?.map { it.map() }
@@ -60,15 +63,19 @@ class FoldersContentViewModel(
                 } else {
                     setState2(TemplateState.Error)
                 }
-            } catch (_: Exception) {
+            } catch (e: Exception) {
                 setState2(TemplateState.Error)
+                logger.log(
+                    tag = "FoldersContentViewModel",
+                    message = e.message.toString()
+                )
             }
         }
     }
 
     override fun addFolder(name: String, type: String, templateId: Id?) {
         launch {
-            setState1(FoldersState.Loading)
+            setState1(State.Loading(loading))
             val request = AddFolderRequest(name, type, templateId, null)
             folderApi.add(request)
         }

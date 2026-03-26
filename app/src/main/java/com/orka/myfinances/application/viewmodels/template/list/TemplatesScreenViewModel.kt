@@ -5,10 +5,12 @@ import com.orka.myfinances.data.api.template.TemplateApi
 import com.orka.myfinances.data.api.template.map
 import com.orka.myfinances.data.models.template.Template
 import com.orka.myfinances.data.repositories.template.TemplateEvent
+import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.templates.list.TemplatesScreenInteractor
-import com.orka.myfinances.ui.screens.templates.list.TemplatesScreenState
+import com.orka.myfinances.ui.screens.templates.list.TemplatesScreenModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -16,9 +18,11 @@ class TemplatesScreenViewModel(
     private val templateApi: TemplateApi,
     private val events: Flow<TemplateEvent>,
     private val navigator: Navigator,
+    loading: UiText,
+    private val failure: UiText,
     logger: Logger
-) : SingleStateViewModel<TemplatesScreenState>(
-    initialState = TemplatesScreenState.Loading,
+) : SingleStateViewModel<State<TemplatesScreenModel>>(
+    initialState = State.Loading(loading),
     logger = logger
 ), TemplatesScreenInteractor {
     val uiState = state.asStateFlow()
@@ -37,12 +41,14 @@ class TemplatesScreenViewModel(
             try {
                 val templates = templateApi.getAll()?.map { it.map() }
                 if (templates != null) {
-                    updateState { TemplatesScreenState.Success(templates.map { it.toUiModel() }) }
-                } else {
-                    updateState { TemplatesScreenState.Error }
-                }
-            } catch (_: Exception) {
-                updateState { TemplatesScreenState.Error }
+                    setState(
+                        State.Success(
+                            value = TemplatesScreenModel(templates.map { it.toUiModel() })
+                        )
+                    )
+                } else setState(State.Failure(failure))
+            } catch (e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
             }
         }
     }

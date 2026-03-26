@@ -6,7 +6,7 @@ import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 
 abstract class MapperListViewModel<T, U>(
-    private val loading: UiText,
+    loading: UiText,
     private val failure: UiText,
     private val get: Get<T>,
     private val map: (T) -> U,
@@ -17,19 +17,17 @@ abstract class MapperListViewModel<T, U>(
 ) {
     override fun initialize() {
         launch {
-            if(state.value !is State.Loading<*>)
-                setStateLoading()
-            setState(fetchState() ?: State.Failure(failure))
+            try {
+                setState(fetchState() ?: State.Failure(failure))
+            } catch(e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
+            }
         }
     }
 
     protected open suspend fun fetchState(): State.Success<List<U>>? {
         val response = get.getAll()
         return if(response != null) State.Success(filterData(response).map { map(it) }) else null
-    }
-
-    protected open fun setStateLoading() {
-        setState(State.Loading(loading))
     }
 
     protected open fun filterData(data: List<T>): List<T> {

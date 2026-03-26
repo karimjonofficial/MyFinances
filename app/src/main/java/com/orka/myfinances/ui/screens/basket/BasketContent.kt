@@ -31,21 +31,33 @@ import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.basket.basketItems
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
+import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
+import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.basket.components.BasketItemCard
 
 @Composable
 fun BasketContent(
     modifier: Modifier = Modifier,
-    state: BasketState,
+    state: State<BasketScreenModel>,
     interactor: BasketInteractor
 ) {
     when (state) {
-        is BasketState.Loading -> LoadingScreen(modifier)
+        is State.Loading -> LoadingScreen(
+            modifier = modifier,
+            message = state.message.str()
+        )
 
-        is BasketState.Success -> {
+        is State.Failure -> FailureScreen(
+            modifier = modifier,
+            message = state.error.str(),
+            retry = interactor::initialize
+        )
+
+        is State.Success -> {
             Column(modifier = modifier) {
                 Column(
                     modifier = Modifier
@@ -53,7 +65,7 @@ fun BasketContent(
                         .padding(horizontal = 8.dp)
                 ) {
 
-                    if (state.items.isNotEmpty()) {
+                    if (state.value.items.isNotEmpty()) {
                         Text(
                             text = stringResource(R.string.items),
                             fontWeight = FontWeight.Bold
@@ -64,7 +76,7 @@ fun BasketContent(
                             modifier = Modifier.weight(1f),
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            items(items = state.items) { uiModel ->
+                            items(items = state.value.items) { uiModel ->
                                 BasketItemCard(
                                     item = uiModel.model,
                                     increase = { interactor.increase(uiModel.item) },
@@ -93,7 +105,7 @@ fun BasketContent(
                     }
                 }
 
-                if (state.items.isNotEmpty()) {
+                if (state.value.items.isNotEmpty()) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -114,7 +126,7 @@ fun BasketContent(
                             )
 
                             Text(
-                                text = state.price,
+                                text = state.value.price,
                                 color = MaterialTheme.colorScheme.secondary,
                                 style = MaterialTheme.typography.headlineSmall,
                                 fontWeight = FontWeight.Bold
@@ -140,9 +152,16 @@ private fun BasketContentPreview() {
     ) { paddingValues ->
         BasketContent(
             modifier = Modifier.scaffoldPadding(paddingValues),
-            state = BasketState.Success(
-                items = basketItems.map { it.toUiModel(FormatPriceImpl(), FormatDecimalImpl()) },
-                price = "100000.00 UZS"
+            state = State.Success(
+                BasketScreenModel(
+                    items = basketItems.map {
+                        it.toUiModel(
+                            FormatPriceImpl(),
+                            FormatDecimalImpl()
+                        )
+                    },
+                    price = "100000.00 UZS"
+                )
             ),
             interactor = BasketInteractor.dummy
         )

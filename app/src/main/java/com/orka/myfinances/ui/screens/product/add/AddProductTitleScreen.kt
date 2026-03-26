@@ -30,22 +30,23 @@ import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 import com.orka.myfinances.fixtures.resources.models.folder.categories
 import com.orka.myfinances.fixtures.resources.models.folder.category1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
-import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.CommentTextField
 import com.orka.myfinances.lib.ui.components.ExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.IntegerTextField
+import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenInteractor
-import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenState
+import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
 fun AddProductTitleScreen(
     modifier: Modifier = Modifier,
     categoryId: Id,
-    state: AddProductTitleScreenState,
+    state: State<AddProductTitleScreenModel>,
     interactor: AddProductTitleScreenInteractor
 ) {
     val selectedCategory = retain { mutableStateOf<Category?>(null) }
@@ -94,16 +95,21 @@ fun AddProductTitleScreen(
         val modifier = Modifier.scaffoldPadding(paddingValues)
 
         when (state) {
-            is AddProductTitleScreenState.Loading -> LoadingScreen(modifier)
+            is State.Loading -> LoadingScreen(modifier)
+            is State.Failure -> FailureScreen(
+                modifier = modifier,
+                retry = interactor::initialize
+            )
 
-            is AddProductTitleScreenState.Success -> {
+            is State.Success -> {
+                val model = state.value
                 if (selectedCategory.value == null) {
-                    selectedCategory.value = state.categories.find { it.id == categoryId } ?: state.categories.firstOrNull()
+                    selectedCategory.value = model.categories.find { it.id == categoryId } ?: model.categories.firstOrNull()
                 }
 
                 val currentCategory = selectedCategory.value
                 if (currentCategory != null) {
-                    val categories = state.categories
+                    val categories = model.categories
                     val fields = currentCategory.template.fields
                     val innerModifier = Modifier.fillMaxWidth()
 
@@ -173,11 +179,6 @@ fun AddProductTitleScreen(
                     }
                 }
             }
-
-            is AddProductTitleScreenState.Failure -> FailureScreen(
-                modifier = modifier,
-                retry = interactor::initialize
-            )
         }
     }
 }
@@ -189,7 +190,7 @@ private fun AddProductTitleScreenPreview() {
         AddProductTitleScreen(
             modifier = Modifier.fillMaxSize(),
             categoryId = category1.id,
-            state = AddProductTitleScreenState.Success(categories),
+            state = State.Success(AddProductTitleScreenModel(categories)),
             interactor = AddProductTitleScreenInteractor.dummy
         )
     }

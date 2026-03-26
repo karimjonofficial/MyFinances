@@ -36,15 +36,21 @@ class OrderScreenViewModel(
 
     override fun initialize() {
         launch {
-            val order = orderApi.getById(id.value)
-            if (order != null) {
-                setState(State.Success(order.toScreenModel(
-                    formatPrice = formatPrice,
-                    formatDateTime = formatDateTime,
-                    formatDecimal = formatDecimal
-                )))
-            } else {
-                setState(State.Failure(failure))
+            try {
+                val order = orderApi.getById(id.value)
+                if (order != null) {
+                    setState(
+                        State.Success(
+                            order.toScreenModel(
+                                formatPrice = formatPrice,
+                                formatDateTime = formatDateTime,
+                                formatDecimal = formatDecimal
+                            )
+                        )
+                    )
+                } else setState(State.Failure(failure))
+            } catch (e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
             }
         }
     }

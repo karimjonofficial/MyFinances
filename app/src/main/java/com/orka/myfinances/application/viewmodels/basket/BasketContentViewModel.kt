@@ -7,10 +7,12 @@ import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.basket.BasketInteractor
-import com.orka.myfinances.ui.screens.basket.BasketState
+import com.orka.myfinances.ui.screens.basket.BasketScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -20,9 +22,10 @@ class BasketContentViewModel(
     private val navigator: Navigator,
     private val formatPrice: FormatPrice,
     private val formatDecimal: FormatDecimal,
+    loading: UiText,
     logger: Logger
-) : SingleStateViewModel<BasketState>(
-    initialState = BasketState.Loading,
+) : SingleStateViewModel<State<BasketScreenModel>>(
+    initialState = State.Loading(loading),
     logger = logger
 ), BasketInteractor {
     val uiState = state.asStateFlow()
@@ -38,9 +41,11 @@ class BasketContentViewModel(
         val items = repository.get()
         val price = items.sumOf { it.product.salePrice * it.amount }
         setState(
-            BasketState.Success(
-                items = items.map { item -> item.toUiModel(formatPrice, formatDecimal) },
-                price = formatPrice.formatPrice(price.toDouble())
+            State.Success(
+                value = BasketScreenModel(
+                    items = items.map { item -> item.toUiModel(formatPrice, formatDecimal) },
+                    price = formatPrice.formatPrice(price.toDouble())
+                )
             )
         )
     }
@@ -71,9 +76,9 @@ class BasketContentViewModel(
 
     override fun checkout() {
         launch {
-            val currentState = state.value
-            if (currentState is BasketState.Success) {
-                navigator.navigateToCheckout(currentState.items.map { it.item })
+            val successState = (state.value as? State.Success)?.value
+            if (successState != null) {
+                navigator.navigateToCheckout(successState.items.map { it.item })
             }
         }
     }

@@ -65,8 +65,11 @@ class DebtsScreenViewModel(
                 if (clients != null) {
                     _dialogState.value = DialogState.Success(clients.map { it.toItemModel() })
                 }
-            } catch (_: Exception) {
-                // Keep existing behavior.
+            } catch (e: Exception) {
+                logger.log(
+                    tag = "DebtsScreenViewModel",
+                    message = e.message.toString()
+                )
             }
         }
     }

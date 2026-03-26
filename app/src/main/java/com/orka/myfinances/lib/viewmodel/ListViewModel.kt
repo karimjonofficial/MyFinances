@@ -6,7 +6,7 @@ import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 
 abstract class ListViewModel<T>(
-    private val loading: UiText,
+    loading: UiText,
     private val failure: UiText,
     private val repository: Get<T>,
     logger: Logger
@@ -16,19 +16,17 @@ abstract class ListViewModel<T>(
 ) {
     override fun initialize() {
         launch {
-            if(state.value !is State.Loading<*>)
-                setStateLoading()
-            setState(fetchState() ?: State.Failure(failure))
+            try {
+                setState(fetchState() ?: State.Failure(failure))
+            } catch (e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
+            }
         }
     }
 
     protected open suspend fun fetchState(): State.Success<List<T>>? {
         val response = repository.getAll()
         return if(response != null) State.Success(filterData(response)) else null
-    }
-
-    protected open fun setStateLoading() {
-        setState(State.Loading(loading))
     }
 
     protected open fun filterData(data: List<T>): List<T> {

@@ -25,7 +25,7 @@ fun FoldersContentCarousel(
         preferredItemWidth = 240.dp,
         itemSpacing = 8.dp,
         contentPadding = PaddingValues(horizontal = 8.dp)
-    ) { index ->
+    ) {
         Image(
             modifier = Modifier.maskClip(MaterialTheme.shapes.extraLarge),
             painter = painterResource(R.drawable.furniture),

@@ -17,13 +17,15 @@ abstract class MapListViewModel<T, K>(
 ) {
     override fun initialize() {
         launch {
-            setState(State.Loading(loading))
-            val data = get.getAll()
-            if (data != null) {
-                val groupedData = map(data)
-                setState(State.Success(groupedData))
-            } else {
-                setState(State.Failure(failure))
+            try {
+                setState(State.Loading(loading))
+                val data = get.getAll()
+                if (data != null) {
+                    val groupedData = map(data)
+                    setState(State.Success(groupedData))
+                } else setState(State.Failure(failure))
+            } catch (e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
             }
         }
     }

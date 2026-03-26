@@ -11,19 +11,20 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.checkout.viewmodel.BasketItemCardModel
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
-import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenState
+import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
 fun CheckoutScreen(
     modifier: Modifier,
     interactor: CheckoutScreenInteractor,
-    state: CheckoutScreenState
+    state: State<CheckoutScreenModel>
 ) {
     when (state) {
-        is CheckoutScreenState.Loading -> {
+        is State.Loading -> {
             Scaffold(
                 modifier = modifier,
                 title = stringResource(R.string.checkout)
@@ -32,7 +33,7 @@ fun CheckoutScreen(
             }
         }
 
-        is CheckoutScreenState.Failure -> {
+        is State.Failure -> {
             Scaffold(
                 modifier = modifier,
                 title = stringResource(R.string.checkout)
@@ -41,7 +42,9 @@ fun CheckoutScreen(
             }
         }
 
-        is CheckoutScreenState.Success -> {
+        is State.Success -> {
+            val state = state.value
+
             CheckoutContent(
                 modifier = modifier,
                 items = state.items,
@@ -64,11 +67,13 @@ private fun CheckoutScreenPreview() {
         BasketItemCardModel("Product1", "10,000.00 UZS x 10 = 100,000.00 UZS"),
         BasketItemCardModel("Product2", "10,000.00 UZS x 10 = 100,000.00 UZS")
     )
-    val state = CheckoutScreenState.Success(
-        clients = clients.map { it.map() },
-        items = items,
-        price = 10000,
-        printerConnected = false
+    val state = State.Success(
+        CheckoutScreenModel(
+            clients = clients.map { it.map() },
+            items = items,
+            price = 10000,
+            printerConnected = false
+        )
     )
 
     MyFinancesTheme {

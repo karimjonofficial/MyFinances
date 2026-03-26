@@ -71,8 +71,12 @@ class CatalogScreenViewModel(
                 } else {
                     _dialogState.value = TemplateState.Error
                 }
-            } catch (_: Exception) {
+            } catch (e: Exception) {
                 _dialogState.value = TemplateState.Error
+                logger.log(
+                    tag = "CatalogScreenViewModel",
+                    message = e.message.toString()
+                )
             }
         }
     }

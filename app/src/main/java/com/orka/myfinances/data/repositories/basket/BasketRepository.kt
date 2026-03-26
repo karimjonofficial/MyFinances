@@ -37,8 +37,8 @@ class BasketRepository(private val client: HttpClient) {
                         val product = response.body<ProductApiModel>()
                         items.add(BasketItem(product, amount))
                     }
-                } catch (_: Exception) {
-                    Log.d("BasketRepository", "add: error")
+                } catch (e: Exception) {
+                    Log.d("BasketRepository", "${e.message}")
                 }
             }
             emit()
