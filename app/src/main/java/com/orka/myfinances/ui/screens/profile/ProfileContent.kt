@@ -94,7 +94,7 @@ fun ProfileContent(
                 onExpandChange = { exposed.value = it },
                 onDismissRequested = { exposed.value = false },
                 items = when (state) {
-                    is State.Success<*> -> (state.value as ProfileContentModel).offices
+                    is State.Success -> state.value.offices
                     else -> emptyList()
                 },
                 itemText = { it.name },
@@ -110,11 +110,10 @@ fun ProfileContent(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             )
-
-            VerticalSpacer(16)
         }
 
         item {
+            VerticalSpacer(16)
             Column(
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
@@ -150,6 +149,10 @@ fun ProfileContent(
                     }
                 }
             }
+        }
+
+        item {
+            VerticalSpacer(8)
         }
     }
 }
