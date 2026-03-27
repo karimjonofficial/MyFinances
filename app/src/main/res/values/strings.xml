@@ -145,4 +145,5 @@
     <string name="patronymic">Patronymic</string>
     <string name="load_more">Load more</string>
     <string name="unresolved_error">Unresolved error</string>
+    <string name="option">Option</string>
 </resources>
