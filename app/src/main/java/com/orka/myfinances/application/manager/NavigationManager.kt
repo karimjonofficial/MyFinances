@@ -22,8 +22,6 @@ class NavigationManager(
         updateState { state.value + destination }
     }
 
-    override fun initialize() {}
-
     override fun back() {
         updateState {
             if (it.size > 1)

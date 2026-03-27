@@ -29,7 +29,7 @@ fun TemplatesContent(
         is State.Failure -> FailureScreen(
             modifier = modifier,
             message = state.error.str(),
-            retry = interactor::initialize
+            retry = interactor::refresh
         )
 
         is State.Success -> {

@@ -39,7 +39,11 @@ class UiManager(
 
     val uiState = state.asStateFlow()
 
-    override fun initialize() {
+    init {
+        initialize()
+    }
+
+    private fun initialize() {
         launch {
             try {
                 if(state.value !is UiState.Initial) setState(UiState.Loading)
@@ -209,6 +213,3 @@ class UiManager(
         }
     }
 }
-
-
-

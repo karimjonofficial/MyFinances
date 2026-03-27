@@ -7,10 +7,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,17 +25,18 @@ import com.orka.myfinances.ui.screens.debt.list.interactor.DebtsScreenInteractor
 fun DebtsScreen(
     modifier: Modifier,
     state: State<Map<String, List<DebtUiModel>>>,
-    interactor: DebtsScreenInteractor
+    dialogVisible: Boolean,
+    interactor: DebtsScreenInteractor,
+    onAddDebt: () -> Unit,
+    dialog: @Composable () -> Unit
 ) {
-    val visible = rememberSaveable { mutableStateOf(false) }
-
     LazyColumnWithStickyHeaderScreen(
         modifier = modifier,
         topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(R.string.debts)) },
                 actions = {
-                    IconButton(onClick = { visible.value = true }) {
+                    IconButton(onClick = onAddDebt) {
                         Icon(
                             painter = painterResource(R.drawable.add),
                             contentDescription = stringResource(R.string.add)
@@ -48,7 +45,7 @@ fun DebtsScreen(
                 }
             )
         },
-        refresh = interactor::initialize,
+        refresh = interactor::refresh,
         state = state,
         item = { item ->
             DebtCard(
@@ -56,23 +53,8 @@ fun DebtsScreen(
                 onClick = { interactor.select(item) }
             )
         },
-        dialogState = visible,
-        dialog = {
-            LaunchedEffect(Unit) {
-                interactor.initializeClients()
-            }
-            val dialogState = interactor.dialogState.collectAsState()
-
-            AddDebtDialog(
-                state = dialogState.value,
-                dismissRequest = { visible.value = false },
-                onSuccess = { id, price, endDateTime, description ->
-                    interactor.add(id, price, endDateTime, description)
-                    visible.value = false
-                },
-                onCancel = { visible.value = false }
-            )
-        }
+        dialogVisible = dialogVisible,
+        dialog = dialog
     )
 }
 
@@ -92,6 +74,9 @@ private fun DebtsScreenPreview() {
     DebtsScreen(
         modifier = Modifier.fillMaxSize(),
         state = state,
-        interactor = DebtsScreenInteractor.dummy
+        dialogVisible = false,
+        interactor = DebtsScreenInteractor.dummy,
+        onAddDebt = {},
+        dialog = {}
     )
 }

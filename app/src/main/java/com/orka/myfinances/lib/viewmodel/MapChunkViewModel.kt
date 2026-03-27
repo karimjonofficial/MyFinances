@@ -13,7 +13,7 @@ abstract class MapChunkViewModel<T, K>(
     private val get: GetChunk<T>,
     private val map: (Chunk<T>) -> ChunkMapState<K>,
     logger: Logger
-) : SingleStateViewModel<State<ChunkMapState<K>>>(
+) : StateFul<State<ChunkMapState<K>>>(
     initialState = State.Loading(loading),
     logger = logger
 ) {
@@ -21,11 +21,26 @@ abstract class MapChunkViewModel<T, K>(
     protected val size = 10
     protected var index = 1
 
-    override fun initialize() {
+    final override fun initialize() {
+        launch {
+            try {
+                val chunk = get.getChunk(size, 1)
+                if (chunk != null) {
+                    dataState.value = chunk.results
+                    val groupedData = map(chunk)
+                    setState(State.Success(groupedData))
+                } else setState(State.Failure(failure))
+            } catch(e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
+            }
+        }
+    }
+
+    final override fun refresh() {
         launch {
             try {
                 val oldState = state.value
-                if (!(oldState is State.Loading && oldState.value != null)) {
+                if(!(oldState is State.Loading && oldState.value != null)) {
                     setState(State.Loading(loading))
                     resetPagination()
                 }
@@ -47,8 +62,8 @@ abstract class MapChunkViewModel<T, K>(
                 val oldState = state.value
                 setState(
                     State.Loading(
-                        loading,
-                        if (oldState is State.Success) oldState.value else null
+                        message = loading,
+                        value = if(oldState is State.Success) oldState.value else null
                     )
                 )
                 val oldData = dataState.value

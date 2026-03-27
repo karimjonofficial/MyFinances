@@ -47,7 +47,7 @@ class ProductTitlesContentViewModel(
     },
     logger = logger
 ), ProductTitlesContentInteractor {
-    override val uiState = state.asStateFlow()
+    val uiState = state.asStateFlow()
 
     init {
         initialize()

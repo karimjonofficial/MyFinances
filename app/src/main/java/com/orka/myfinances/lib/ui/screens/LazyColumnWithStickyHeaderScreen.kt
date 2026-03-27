@@ -38,8 +38,8 @@ fun <T> LazyColumnWithStickyHeaderScreen(
     arrangementSpace: Dp = 0.dp,
     state: State<Map<String, List<T>>>,
     refresh: () -> Unit,
-    dialogState: DialogState,
     dialog: @Composable () -> Unit,
+    dialogVisible: Boolean,
     item: @Composable (T) -> Unit,
 ) {
     StatefulScreen<Map<String, List<T>>>(
@@ -48,6 +48,7 @@ fun <T> LazyColumnWithStickyHeaderScreen(
         onRetry = refresh,
         state = state
     ) { modifier, map ->
+
         LazyColumnWithStickHeader(
             modifier = modifier,
             map = map,
@@ -55,6 +56,6 @@ fun <T> LazyColumnWithStickyHeaderScreen(
             item = item
         )
 
-        if (dialogState.value) dialog()
+        if (dialogVisible) dialog()
     }
 }

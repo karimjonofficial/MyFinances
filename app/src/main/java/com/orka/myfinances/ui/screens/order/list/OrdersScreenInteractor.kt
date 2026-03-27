@@ -1,7 +1,7 @@
 package com.orka.myfinances.ui.screens.order.list
 
-import com.orka.myfinances.lib.ui.viewmodel.MapViewModel
+import com.orka.myfinances.lib.ui.viewmodel.StateFul
 
-interface OrdersScreenInteractor : MapViewModel<OrderUiModel> {
+interface OrdersScreenInteractor : StateFul {
     fun select(order: OrderUiModel)
 }

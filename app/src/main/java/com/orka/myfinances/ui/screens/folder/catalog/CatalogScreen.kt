@@ -4,10 +4,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -17,29 +13,28 @@ import com.orka.myfinances.fixtures.resources.models.folder.catalog1
 import com.orka.myfinances.lib.ui.components.TopAppBar
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.ui.screens.folder.catalog.viewmodel.CatalogScreenInteractor
-import com.orka.myfinances.ui.screens.folder.catalog.viewmodel.CatalogScreenState
-import com.orka.myfinances.ui.screens.folder.home.parts.AddFolderDialog
+import com.orka.myfinances.ui.screens.folder.catalog.interactor.CatalogScreenInteractor
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
 fun CatalogScreen(
     modifier: Modifier = Modifier,
     state: State<CatalogScreenModel>,
-    interactor: CatalogScreenInteractor
+    dialogVisible: Boolean,
+    interactor: CatalogScreenInteractor,
+    onAddFolder: () -> Unit,
+    dialog: @Composable () -> Unit
 ) {
-    val dialogVisible = rememberSaveable { mutableStateOf(false) }
 
     StatefulScreen(
         modifier = modifier,
         state = state,
-        onRetry = { interactor.initialize() },
+        onRetry = interactor::refresh,
         topBar = { state ->
             TopAppBar(
-                title = if (state is State.Success<*>)
-                    (state.value as CatalogScreenModel).name else stringResource(R.string.catalog),
+                title = if (state is State.Success) state.value.name else stringResource(R.string.catalog),
                 actions = {
-                    IconButton(onClick = { dialogVisible.value = true}) {
+                    IconButton(onClick = onAddFolder) {
                         Icon(
                             painter = painterResource(R.drawable.add),
                             contentDescription = stringResource(R.string.add)
@@ -51,32 +46,11 @@ fun CatalogScreen(
     ) { modifier, model ->
         CatalogContent(
             modifier = modifier,
-            state = CatalogScreenState.Success(
-                model.folders
-            ),
-            viewModel = interactor
+            model = model,
+            interactor = interactor
         )
 
-        if (dialogVisible.value) {
-            LaunchedEffect(Unit) {
-                interactor.initDialog()
-            }
-            val dialogState = interactor.dialogState.collectAsState()
-
-            AddFolderDialog(
-                state = dialogState.value,
-                dismissRequest = { dialogVisible.value = false },
-                onAddTemplateClick = {
-                    interactor.navigateToAddTemplate()
-                    dialogVisible.value = false
-                },
-                onSuccess = { name, folderType, templateId ->
-                    interactor.addFolder(name, folderType, templateId)
-                    dialogVisible.value = false
-                },
-                onCancel = { dialogVisible.value = false }
-            )
-        }
+        if(dialogVisible) dialog()
     }
 }
 
@@ -88,7 +62,10 @@ private fun CatalogScreenPreview() {
         CatalogScreen(
             modifier = Modifier.fillMaxSize(),
             state = state,
-            interactor = CatalogScreenInteractor.dummy
+            dialogVisible = false,
+            interactor = CatalogScreenInteractor.dummy,
+            onAddFolder = {},
+            dialog = {}
         )
     }
 }

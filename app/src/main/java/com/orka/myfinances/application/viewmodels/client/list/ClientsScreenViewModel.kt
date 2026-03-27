@@ -24,7 +24,7 @@ class ClientsScreenViewModel(
     map = { it.toUiModel() },
     logger = logger
 ), ClientsScreenInteractor {
-    override val uiState = state.asStateFlow()
+    val uiState = state.asStateFlow()
 
     init {
         initialize()

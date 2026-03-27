@@ -9,7 +9,7 @@ import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
+import com.orka.myfinances.lib.viewmodel.StateFul
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.receive.details.ReceiveScreenInteractor
 import com.orka.myfinances.ui.screens.receive.details.ReceiveScreenModel
@@ -24,7 +24,7 @@ class ReceiveScreenViewModel(
     private val formatDecimal: FormatDecimal,
     private val loading: UiText,
     logger: Logger
-) : SingleStateViewModel<State<ReceiveScreenModel>>(
+) : StateFul<State<ReceiveScreenModel>>(
     initialState = State.Loading(loading),
     logger = logger
 ), ReceiveScreenInteractor {
@@ -36,7 +36,6 @@ class ReceiveScreenViewModel(
 
     override fun initialize() {
         launch {
-            setState(State.Loading(loading))
             val receive = receiveApi.getById(id.value)
             if (receive != null) {
                 setState(State.Success(receive.toUiModel(formatPrice, formatDateTime, formatDecimal)))
@@ -49,6 +48,18 @@ class ReceiveScreenViewModel(
     override fun back() {
         launch {
             navigator.back()
+        }
+    }
+
+    override fun refresh() {
+        launch {
+            setState(State.Loading(loading))
+            val receive = receiveApi.getById(id.value)
+            if (receive != null) {
+                setState(State.Success(receive.toUiModel(formatPrice, formatDateTime, formatDecimal)))
+            } else {
+                setState(State.Failure(UiText.Res(R.string.failure)))
+            }
         }
     }
 }

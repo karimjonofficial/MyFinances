@@ -9,7 +9,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.contents.LazyVerticalGridContentWithStickyHeader
 import com.orka.myfinances.lib.ui.models.ChunkMapState
@@ -21,8 +20,7 @@ fun StockContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     interactor: StockContentInteractor,
-    state: State<ChunkMapState<StockItemUiModel>>,
-    onStockItemClick: (Id) -> Unit,
+    state: State<ChunkMapState<StockItemUiModel>>
 ) {
     LazyVerticalGridContentWithStickyHeader(
         modifier = modifier,
@@ -30,12 +28,12 @@ fun StockContent(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         state = state,
-        refresh = interactor::initialize,
+        refresh = interactor::refresh,
         loadMore = interactor::loadMore,
         item = { item ->
             StockItemCard(
                 item = item.model,
-                onClick = { onStockItemClick(item.id) }
+                onClick = { interactor.addToBasket(item.id) }
             )
         }
     )
@@ -60,8 +58,7 @@ private fun StockContentPreview() {
                     previousPageIndex = null,
                     content = emptyMap()
                 )
-            ),
-            onStockItemClick = {}
+            )
         )
     }
 }

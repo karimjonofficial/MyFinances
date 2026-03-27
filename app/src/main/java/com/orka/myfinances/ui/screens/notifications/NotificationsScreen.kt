@@ -20,7 +20,7 @@ fun NotificationsScreen(
     LazyColumnScreen(
         modifier = modifier,
         title = stringResource(R.string.notifications),
-        refresh = interactor::initialize,
+        refresh = interactor::refresh,
         state = state,
         item = { notification ->
             NotificationCard(

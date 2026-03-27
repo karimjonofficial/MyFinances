@@ -11,7 +11,7 @@ interface TemplatesScreenInteractor : StateFul {
         val dummy = object : TemplatesScreenInteractor {
             override fun addTemplate() {}
             override fun select(template: Template) {}
-            override fun initialize() {}
+            override fun refresh() {}
         }
     }
 }

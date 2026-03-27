@@ -1,13 +1,14 @@
 package com.orka.myfinances.lib.ui.screens
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
@@ -23,12 +24,13 @@ import kotlinx.coroutines.launch
 @Composable
 fun MultipleTabScreen(
     modifier: Modifier = Modifier,
-    title: String,
-    tabs: List<ScreenTab>
+    topBar: @Composable () -> Unit = {},
+    tabs: List<ScreenTab>,
+    tabContent: @Composable (index: Int) -> Unit
 ) {
     Scaffold(
         modifier = modifier,
-        title = title,
+        topBar = topBar,
     ) { paddingValues ->
         Column(modifier = Modifier.scaffoldPadding(paddingValues)) {
             val selectedTab = rememberSaveable { mutableIntStateOf(0) }
@@ -55,11 +57,33 @@ fun MultipleTabScreen(
             }
 
             HorizontalPager(
-                modifier = Modifier.weight(1f).fillMaxWidth(),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
                 state = pagerState,
             ) { page ->
-                tabs[page].content?.invoke(Modifier.fillMaxSize())
+                tabContent(tabs[page].index)
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MultipleTabScreen(
+    modifier: Modifier = Modifier,
+    title: String,
+    tabs: List<ScreenTab>,
+    tabContent: @Composable (index: Int) -> Unit
+) {
+    MultipleTabScreen(
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                title = { Text(text = title) }
+            )
+        },
+        tabs = tabs,
+        tabContent = tabContent
+    )
 }

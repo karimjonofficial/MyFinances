@@ -59,7 +59,7 @@ class ReceiveContentViewModel(
     },
     logger = logger
 ), ReceiveContentInteractor {
-    override val uiState = state.asStateFlow()
+    val uiState = state.asStateFlow()
 
     init {
         initialize()

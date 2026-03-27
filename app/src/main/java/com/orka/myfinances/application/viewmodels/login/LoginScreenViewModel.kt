@@ -22,8 +22,6 @@ class LoginScreenViewModel(
 ), LoginScreenInteractor {
     val uiState = state.asStateFlow()
 
-    override fun initialize() {}
-
     override fun authorize(username: String, password: String) {
         launch {
             authorize(username, password) {

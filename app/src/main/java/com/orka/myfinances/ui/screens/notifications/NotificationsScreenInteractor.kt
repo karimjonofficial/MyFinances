@@ -1,20 +1,15 @@
 package com.orka.myfinances.ui.screens.notifications
 
 import com.orka.myfinances.data.models.Notification
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
-import com.orka.myfinances.lib.ui.viewmodel.State
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import com.orka.myfinances.lib.ui.viewmodel.StateFul
 
-interface NotificationsScreenInteractor : ListViewModel<Notification> {
+interface NotificationsScreenInteractor : StateFul {
     fun read(notification: Notification)
 
     companion object {
         val dummy = object : NotificationsScreenInteractor {
-            override val uiState: StateFlow<State<List<Notification>>> = MutableStateFlow(State.Loading(UiText.Str("loading")))
             override fun read(notification: Notification) {}
-            override fun initialize() {}
+            override fun refresh() {}
         }
     }
 }

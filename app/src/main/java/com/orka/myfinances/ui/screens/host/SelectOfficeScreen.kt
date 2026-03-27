@@ -25,7 +25,7 @@ fun SelectOfficeScreen(
         modifier = modifier,
         title = stringResource(R.string.select_your_office),
         state = state,
-        refresh = interactor::initialize,
+        refresh = interactor::refresh,
         bottomBar = {
             SingleActionBottomBar(
                 buttonText = stringResource(R.string.save),

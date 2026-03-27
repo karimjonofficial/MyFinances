@@ -10,7 +10,7 @@ import com.orka.myfinances.data.repositories.product.title.models.AddProductTitl
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
+import com.orka.myfinances.lib.viewmodel.StateFul
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenInteractor
 import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
@@ -20,10 +20,10 @@ class AddProductTitleScreenViewModel(
     private val folderApi: FolderApi,
     private val productTitleApi: ProductTitleApi,
     private val navigator: Navigator,
-    loading: UiText,
+    private val loading: UiText,
     private val failure: UiText,
     logger: Logger
-) : SingleStateViewModel<State<AddProductTitleScreenModel>>(
+) : StateFul<State<AddProductTitleScreenModel>>(
     initialState = State.Loading(loading),
     logger = logger
 ), AddProductTitleScreenInteractor {
@@ -74,6 +74,20 @@ class AddProductTitleScreenViewModel(
                 if (productTitleApi.add(request.map())) {
                     navigator.back()
                 }
+            }
+        }
+    }
+
+    override fun refresh() {
+        launch {
+            try {
+                setState(State.Loading(loading))
+                val categories = folderApi.getTop()?.map { it.map() }?.filterIsInstance<Category>()
+                if (categories != null) {
+                    setState(State.Success(AddProductTitleScreenModel(categories)))//TODO don't map to entities
+                } else setState(State.Failure(failure))
+            } catch (e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
             }
         }
     }

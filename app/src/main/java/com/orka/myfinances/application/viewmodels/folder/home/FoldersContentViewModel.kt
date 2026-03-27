@@ -39,15 +39,12 @@ class FoldersContentViewModel(
     val dialogState = state2.asStateFlow()
 
     init {
-        initialize()
-        events
-            .onEach { if(it.catalogId == null) initialize() }
+        events.onEach { if(it.catalogId == null) initialize() }
             .launchIn(viewModelScope)
     }
 
-    override fun initialize() {
+    fun initialize() {
         launch {
-            setState1(State.Loading(loading))
             try {
                 val folders = folderApi.getTop()
                 if (folders != null) {
@@ -105,6 +102,34 @@ class FoldersContentViewModel(
     override fun navigateToAddTemplate() {
         launch {
             navigator.navigateToAddTemplate()
+        }
+    }
+
+    override fun refresh() {
+        launch {
+            setState1(State.Loading(loading))
+            try {
+                val folders = folderApi.getTop()
+                if (folders != null) {
+                    setState1(State.Success(FoldersContentModel(folders.map { it.toUiModel() })))
+                } else setState1(State.Failure(failure))
+            } catch (e: Exception) {
+                setState1(State.Failure(UiText.Str(e.message.toString())))
+            }
+            try {
+                val templates = templateApi.getAll()?.map { it.map() }
+                if (templates != null) {
+                    setState2(TemplateState.Success(templates))
+                } else {
+                    setState2(TemplateState.Error)
+                }
+            } catch (e: Exception) {
+                setState2(TemplateState.Error)
+                logger.log(
+                    tag = "FoldersContentViewModel",
+                    message = e.message.toString()
+                )
+            }
         }
     }
 }

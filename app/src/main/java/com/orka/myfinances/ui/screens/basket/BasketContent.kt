@@ -54,7 +54,7 @@ fun BasketContent(
         is State.Failure -> FailureScreen(
             modifier = modifier,
             message = state.error.str(),
-            retry = interactor::initialize
+            retry = interactor::refresh
         )
 
         is State.Success -> {
@@ -85,6 +85,8 @@ fun BasketContent(
                                 )
                             }
                         }
+
+                        VerticalSpacer(4)
                     } else {
                         Box(
                             modifier = Modifier.fillMaxSize(),

@@ -9,7 +9,7 @@ import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
+import com.orka.myfinances.lib.viewmodel.StateFul
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.basket.BasketInteractor
 import com.orka.myfinances.ui.screens.basket.BasketScreenModel
@@ -22,32 +22,42 @@ class BasketContentViewModel(
     private val navigator: Navigator,
     private val formatPrice: FormatPrice,
     private val formatDecimal: FormatDecimal,
-    loading: UiText,
+    private val loading: UiText,
     logger: Logger
-) : SingleStateViewModel<State<BasketScreenModel>>(
+) : StateFul<State<BasketScreenModel>>(
     initialState = State.Loading(loading),
     logger = logger
 ), BasketInteractor {
     val uiState = state.asStateFlow()
 
     init {
-        initialize()
         repository.events.onEach {
             initialize()
         }.launchIn(viewModelScope)
     }
 
     override fun initialize() {
-        val items = repository.get()
-        val price = items.sumOf { it.product.salePrice * it.amount }
-        setState(
-            State.Success(
-                value = BasketScreenModel(
-                    items = items.map { item -> item.toUiModel(formatPrice, formatDecimal) },
-                    price = formatPrice.formatPrice(price.toDouble())
+        launch {
+            try {
+                val items = repository.get()
+                val price = items.sumOf { it.product.salePrice * it.amount }
+                setState(
+                    State.Success(
+                        value = BasketScreenModel(
+                            items = items.map { item ->
+                                item.toUiModel(
+                                    formatPrice,
+                                    formatDecimal
+                                )
+                            },
+                            price = formatPrice.formatPrice(price.toDouble())
+                        )
+                    )
                 )
-            )
-        )
+            } catch (e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
+            }
+        }
     }
 
     override fun increase(item: BasketItem) {
@@ -79,6 +89,31 @@ class BasketContentViewModel(
             val successState = (state.value as? State.Success)?.value
             if (successState != null) {
                 navigator.navigateToCheckout(successState.items.map { it.item })
+            }
+        }
+    }
+
+    override fun refresh() {
+        launch {
+            try {
+                setState(State.Loading(loading))
+                val items = repository.get()
+                val price = items.sumOf { it.product.salePrice * it.amount }
+                setState(
+                    State.Success(
+                        value = BasketScreenModel(
+                            items = items.map { item ->
+                                item.toUiModel(
+                                    formatPrice,
+                                    formatDecimal
+                                )
+                            },
+                            price = formatPrice.formatPrice(price.toDouble())
+                        )
+                    )
+                )
+            } catch (e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
             }
         }
     }

@@ -54,7 +54,7 @@ class SaleContentViewModel(
     },
     logger = logger
 ), SaleContentInteractor {
-    override val uiState = state.asStateFlow()
+    val uiState = state.asStateFlow()
 
     init {
         initialize()

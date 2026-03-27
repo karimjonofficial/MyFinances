@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.update
 abstract class SingleStateViewModel<T>(
     initialState: T,
     protected val logger: Logger
-) : StateFul() {
+) : Manager() {
     protected val state: MutableStateFlow<T> = MutableStateFlow(initialState)
 
     protected fun setState(value: T) {

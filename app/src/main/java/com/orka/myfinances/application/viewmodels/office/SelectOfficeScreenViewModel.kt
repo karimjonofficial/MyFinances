@@ -8,7 +8,6 @@ import com.orka.myfinances.data.models.Credentials
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.ListViewModel
 import com.orka.myfinances.lib.viewmodel.MapperListViewModel
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.screens.host.SelectOfficeScreenInteractor
@@ -29,8 +28,8 @@ class SelectOfficeScreenViewModel(
     loading = loading,
     failure = failure,
     logger = logger
-), ListViewModel<OfficeUiModel>, SelectOfficeScreenInteractor {
-    override val uiState = state.asStateFlow()
+), SelectOfficeScreenInteractor {
+    val uiState = state.asStateFlow()
 
     init {
         initialize()

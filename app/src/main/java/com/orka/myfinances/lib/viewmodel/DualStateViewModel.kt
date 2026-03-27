@@ -7,7 +7,7 @@ abstract class DualStateViewModel<P, S>(
     initialState1: P,
     initialState2: S,
     protected val logger: Logger
-) : StateFul() {
+) : Manager() {
     protected val state1 = MutableStateFlow(initialState1)
     protected val state2 = MutableStateFlow(initialState2)
 

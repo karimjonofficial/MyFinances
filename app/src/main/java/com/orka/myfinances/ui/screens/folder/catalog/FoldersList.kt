@@ -1,9 +1,8 @@
-package com.orka.myfinances.ui.screens.folder.home.parts
+package com.orka.myfinances.ui.screens.folder.catalog
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -26,7 +25,7 @@ import com.orka.myfinances.ui.screens.folder.models.FolderUiModel
 @Composable
 fun FoldersList(
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(horizontal = 8.dp),
+    contentPadding: PaddingValues,
     items: List<FolderUiModel>,
     onFolderSelected: (FolderUiModel) -> Unit
 ) {
@@ -52,7 +51,6 @@ fun FoldersList(
         if (size > 0) {
             item {
                 FirstFolderButton(
-                    modifier = Modifier.fillMaxSize(),
                     folder = items[0].model,
                     onClick = { onFolderSelected(items[0]) }
                 )
@@ -61,7 +59,6 @@ fun FoldersList(
             if (size > 1) {
                 item {
                     SecondFolderButton(
-                        modifier = Modifier.fillMaxSize(),
                         folder = items[1].model,
                         onClick = { onFolderSelected(items[1]) }
                     )
@@ -71,7 +68,6 @@ fun FoldersList(
             if (size > 4) {
                 items(items = items.subList(2, size - (2 - size % 2))) { item ->
                     FolderButton(
-                        modifier = Modifier.fillMaxSize(),
                         folder = item.model,
                         onClick = { onFolderSelected(item) }
                     )
@@ -82,7 +78,6 @@ fun FoldersList(
                 if (size % 2 == 0) {
                     item {
                         NotLastFolderButton(
-                            modifier = Modifier.fillMaxSize(),
                             folder = items[size - 2].model,
                             onClick = { onFolderSelected(items[size - 2]) }
                         )
@@ -90,7 +85,6 @@ fun FoldersList(
 
                     item {
                         LastFolderButton(
-                            modifier = Modifier.fillMaxSize(),
                             folder = items[size - 1].model,
                             onClick = { onFolderSelected(items[size - 1]) }
                         )
@@ -102,7 +96,6 @@ fun FoldersList(
                 } else {
                     item {
                         NotLastFolderButton(
-                            modifier = Modifier.fillMaxSize(),
                             folder = items[size - 1].model,
                             onClick = { onFolderSelected(items[size - 1]) }
                         )

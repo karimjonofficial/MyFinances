@@ -18,7 +18,7 @@ fun ProductTitlesContent(
         modifier = modifier,
         contentPadding = PaddingValues(0.dp),
         state = state,
-        refresh = interactor::initialize,
+        refresh = interactor::refresh,
         loadMore = interactor::loadMore
     ) { item ->
         ProductTitleCard(

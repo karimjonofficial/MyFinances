@@ -11,7 +11,7 @@ interface DebtScreenInteractor : StateFul {
         val dummy = object : DebtScreenInteractor {
             override fun back() {}
             override fun navigateToClient(id: Id) {}
-            override fun initialize() {}
+            override fun refresh() {}
         }
     }
 }

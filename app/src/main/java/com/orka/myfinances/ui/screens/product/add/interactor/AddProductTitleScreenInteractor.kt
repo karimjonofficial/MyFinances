@@ -16,7 +16,6 @@ interface AddProductTitleScreenInteractor : StateFul {
 
     companion object {
         val dummy = object : AddProductTitleScreenInteractor {
-            override fun initialize() {}
             override fun addProductTitle(
                 properties: List<PropertyModel<*>?>,
                 name: String,
@@ -25,6 +24,8 @@ interface AddProductTitleScreenInteractor : StateFul {
                 description: String?,
                 category: Category
             ) {}
+
+            override fun refresh() {}
         }
     }
 }

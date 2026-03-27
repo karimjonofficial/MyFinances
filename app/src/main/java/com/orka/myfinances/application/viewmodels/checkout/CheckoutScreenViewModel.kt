@@ -14,7 +14,7 @@ import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
+import com.orka.myfinances.lib.viewmodel.StateFul
 import com.orka.myfinances.printer.Printer
 import com.orka.myfinances.printer.PrinterState
 import com.orka.myfinances.ui.navigation.Navigator
@@ -35,10 +35,10 @@ class CheckoutScreenViewModel(
     private val printerState: StateFlow<PrinterState>,
     private val formatDecimal: FormatDecimal,
     private val formatPrice: FormatPrice,
-    loading: UiText,
+    private val loading: UiText,
     private val failure: UiText,
     logger: Logger
-) : SingleStateViewModel<State<CheckoutScreenModel>>(
+) : StateFul<State<CheckoutScreenModel>>(
     initialState = State.Loading(loading),
     logger = logger
 ), CheckoutScreenInteractor {
@@ -62,6 +62,31 @@ class CheckoutScreenViewModel(
 
     override fun initialize() {
         launch {
+            val items = basketRepository.get()
+            try {
+                val clientApiModels = clientApi.getAll()
+                if (clientApiModels != null) {
+                    val clients = clientApiModels.map { it.toItemModel() }
+                    setState(
+                        State.Success(
+                            value = CheckoutScreenModel(
+                                clients = clients,
+                                items = items.map { it.toModel(formatPrice, formatDecimal) },
+                                price = items.getPrice().toInt(),
+                                printerConnected = printerState.value is PrinterState.Connected
+                            )
+                        )
+                    )
+                } else setState(State.Failure(failure))
+            } catch (e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
+            }
+        }
+    }
+
+    override fun refresh() {
+        launch {
+            setState(State.Loading(loading))
             val items = basketRepository.get()
             try {
                 val clientApiModels = clientApi.getAll()

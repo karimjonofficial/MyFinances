@@ -98,7 +98,7 @@ fun AddProductTitleScreen(
             is State.Loading -> LoadingScreen(modifier)
             is State.Failure -> FailureScreen(
                 modifier = modifier,
-                retry = interactor::initialize
+                retry = interactor::refresh
             )
 
             is State.Success -> {

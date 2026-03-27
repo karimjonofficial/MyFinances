@@ -16,10 +16,10 @@ class NotificationsScreenViewModel(
 ) : ListViewModel<Notification>(
     loading = loading,
     failure = failure,
-    repository = { notificationApi.getAll() },
+    get = { notificationApi.getAll() },
     logger = logger
 ), NotificationsScreenInteractor {
-    override val uiState = state.asStateFlow()
+    val uiState = state.asStateFlow()
 
     init {
         initialize()

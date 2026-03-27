@@ -156,9 +156,7 @@ fun CheckoutContent(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable {
-                            printReceipt.value = !printReceipt.value
-                        },
+                        .clickable { printReceipt.value = !printReceipt.value },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Checkbox(

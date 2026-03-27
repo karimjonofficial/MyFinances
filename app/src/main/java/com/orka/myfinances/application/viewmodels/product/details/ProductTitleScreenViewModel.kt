@@ -13,7 +13,7 @@ import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
+import com.orka.myfinances.lib.viewmodel.StateFul
 import com.orka.myfinances.ui.screens.product.details.ProductTitleScreenInteractor
 import com.orka.myfinances.ui.screens.product.details.models.ProductTitleScreenModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,7 +29,7 @@ class ProductTitleScreenViewModel(
     private val flow: MutableSharedFlow<StockEvent>,
     private val loading: UiText,
     logger: Logger
-) : SingleStateViewModel<State<ProductTitleScreenModel>>(
+) : StateFul<State<ProductTitleScreenModel>>(
     initialState = State.Loading(loading),
     logger = logger
 ), ProductTitleScreenInteractor {
@@ -42,13 +42,15 @@ class ProductTitleScreenViewModel(
 
     override fun initialize() {
         launch {
-            val productTitle = productTitleApi.getById(productId.value)
-            if (productTitle != null) {
-                val title = productTitle.toModel(formatDecimal, formatDate, formatPrice)
-                categoryId = Id(productTitle.category)
-                setState(State.Success(title))
-            } else {
-                setState(State.Failure(UiText.Res(R.string.failure)))
+            try {
+                val productTitle = productTitleApi.getById(productId.value)
+                if (productTitle != null) {
+                    val title = productTitle.toModel(formatDecimal, formatDate, formatPrice)
+                    categoryId = Id(productTitle.category)
+                    setState(State.Success(title))
+                } else setState(State.Failure(UiText.Res(R.string.failure)))
+            } catch(e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
             }
         }
     }
@@ -75,6 +77,22 @@ class ProductTitleScreenViewModel(
             val created = receiveApi.add(request)
             if(created) flow.emit(StockEvent(categoryId))
             setState(old)
+        }
+    }
+
+    override fun refresh() {
+        launch {
+            try {
+                setState(State.Loading(loading))
+                val productTitle = productTitleApi.getById(productId.value)
+                if (productTitle != null) {
+                    val title = productTitle.toModel(formatDecimal, formatDate, formatPrice)
+                    categoryId = Id(productTitle.category)
+                    setState(State.Success(title))
+                } else setState(State.Failure(UiText.Res(R.string.failure)))
+            } catch(e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
+            }
         }
     }
 }

@@ -39,7 +39,7 @@ fun OrdersScreen(
         },
         arrangementSpace = 8.dp,
         state = state,
-        refresh = interactor::initialize,
+        refresh = interactor::refresh,
         item = { item ->
             OrderCard(
                 modifier = Modifier.padding(horizontal = 8.dp),

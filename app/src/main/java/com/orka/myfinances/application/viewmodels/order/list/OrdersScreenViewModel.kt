@@ -34,7 +34,7 @@ class OrdersScreenViewModel(
     },
     logger = logger
 ), OrdersScreenInteractor {
-    override val uiState = state.asStateFlow()
+    val uiState = state.asStateFlow()
 
     init {
         initialize()

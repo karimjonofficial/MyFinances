@@ -33,7 +33,7 @@ fun ClientsScreen(
 
     LazyColumnScreen(
         modifier = modifier,
-        refresh = interactor::initialize,
+        refresh = interactor::refresh,
         topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(R.string.clients)) },

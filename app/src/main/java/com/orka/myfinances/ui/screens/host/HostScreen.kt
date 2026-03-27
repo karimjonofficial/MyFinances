@@ -18,12 +18,7 @@ fun HostScreen(
     interactor: HostScreenInteractor
 ) {
     when (state) {
-        is UiState.Initial -> {
-            SplashScreen(
-                modifier = modifier,
-                action = interactor::initialize
-            )
-        }
+        is UiState.Initial -> SplashScreen(modifier)
 
         is UiState.Guest -> {
             val viewModel = state.viewModel
@@ -50,7 +45,6 @@ fun HostScreen(
         is UiState.Failure -> {
             FailureScreen(
                 modifier = modifier,
-                retry = interactor::initialize,
                 message = state.message.str()
             )
         }

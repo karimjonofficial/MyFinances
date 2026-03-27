@@ -6,43 +6,27 @@ import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.models.ScreenTab
 import com.orka.myfinances.lib.ui.screens.MultipleTabScreen
-import com.orka.myfinances.ui.screens.receive.list.ReceiveContent
-import com.orka.myfinances.ui.screens.receive.list.viewmodel.ReceiveContentInteractor
-import com.orka.myfinances.ui.screens.sale.list.SaleContent
-import com.orka.myfinances.ui.screens.sale.list.SaleContentInteractor
 
 @Composable
 fun HistoryScreen(
     modifier: Modifier = Modifier,
-    saleContentInteractor: SaleContentInteractor,
-    receiveContentInteractor: ReceiveContentInteractor
+    tabContent: @Composable (index: Int) -> Unit
 ) {
     val tabs = listOf(
         ScreenTab(
             index = 0,
-            title = stringResource(R.string.sale),
-            content = { modifier ->
-                SaleContent(
-                    modifier = modifier,
-                    interactor = saleContentInteractor
-                )
-            }
+            title = stringResource(R.string.sale)
         ),
         ScreenTab(
             index = 1,
-            title = stringResource(R.string.receive),
-            content = { modifier ->
-                ReceiveContent(
-                    modifier = modifier,
-                    interactor = receiveContentInteractor
-                )
-            }
+            title = stringResource(R.string.receive)
         )
     )
 
     MultipleTabScreen(
         modifier = modifier,
         title = stringResource(R.string.history),
-        tabs = tabs
+        tabs = tabs,
+        tabContent = tabContent
     )
 }

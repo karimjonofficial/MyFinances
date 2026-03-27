@@ -14,7 +14,7 @@ import com.orka.myfinances.data.repositories.receive.AddReceiveRequestItem
 import com.orka.myfinances.data.repositories.stock.StockEvent
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
+import com.orka.myfinances.lib.viewmodel.StateFul
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenInteractor
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenModel
@@ -28,10 +28,10 @@ class AddReceiveScreenViewModel(
     private val receiveApi: ReceiveApi,
     private val navigator: Navigator,
     private val flow: MutableSharedFlow<StockEvent>,
-    loading: UiText,
+    private val loading: UiText,
     private val failure: UiText,
     logger: Logger
-) : SingleStateViewModel<State<AddReceiveScreenModel>>(
+) : StateFul<State<AddReceiveScreenModel>>(
     initialState = State.Loading(loading),
     logger = logger
 ), AddReceiveScreenInteractor {
@@ -44,6 +44,28 @@ class AddReceiveScreenViewModel(
     override fun initialize() {
         launch {
             try {
+                val category = folderApi.getById(categoryId.value)?.map() as? Category
+                if (category != null) {
+                    val titlesModels = productTitleApi.getByCategory(categoryId.value)
+                    if (titlesModels != null) {
+                        val titles = titlesModels.map { it.map(category) }
+                        setState(State.Success(AddReceiveScreenModel(category, titles)))
+                    } else {
+                        setState(State.Failure(failure))
+                    }
+                } else {
+                    setState(State.Failure(failure))
+                }
+            } catch (e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
+            }
+        }
+    }
+
+    override fun refresh() {
+        launch {
+            try {
+                setState(State.Loading(loading))
                 val category = folderApi.getById(categoryId.value)?.map() as? Category
                 if (category != null) {
                     val titlesModels = productTitleApi.getByCategory(categoryId.value)

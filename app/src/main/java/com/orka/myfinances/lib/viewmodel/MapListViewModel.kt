@@ -11,11 +11,25 @@ abstract class MapListViewModel<T, K>(
     private val get: Get<T>,
     private val map: (List<T>) -> Map<String, List<K>>,
     logger: Logger
-) : SingleStateViewModel<State<Map<String, List<K>>>>(
+) : StateFul<State<Map<String, List<K>>>>(
     initialState = State.Loading(loading),
     logger = logger
 ) {
-    override fun initialize() {
+    final override fun initialize() {
+        launch {
+            try {
+                val data = get.getAll()
+                if (data != null) {
+                    val groupedData = map(data)
+                    setState(State.Success(groupedData))
+                } else setState(State.Failure(failure))
+            } catch (e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
+            }
+        }
+    }
+
+    final override fun refresh() {
         launch {
             try {
                 setState(State.Loading(loading))
