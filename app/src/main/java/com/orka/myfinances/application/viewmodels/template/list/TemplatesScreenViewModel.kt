@@ -1,28 +1,45 @@
 package com.orka.myfinances.application.viewmodels.template.list
 
 import com.orka.myfinances.core.Logger
-import com.orka.myfinances.data.api.template.TemplateApi
-import com.orka.myfinances.data.api.template.map
-import com.orka.myfinances.data.models.template.Template
+import com.orka.myfinances.data.api.template.TemplateApi1
+import com.orka.myfinances.data.api.template.TemplateApiModel
 import com.orka.myfinances.data.repositories.template.TemplateEvent
+import com.orka.myfinances.lib.data.api.scoped.office.getChunk
+import com.orka.myfinances.lib.extensions.stickyHeaderKey
+import com.orka.myfinances.lib.ui.models.ChunkMapState
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.StateFul
+import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.navigation.Navigator
+import com.orka.myfinances.ui.screens.templates.list.TemplateUiModel
 import com.orka.myfinances.ui.screens.templates.list.TemplatesScreenInteractor
-import com.orka.myfinances.ui.screens.templates.list.TemplatesScreenModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
 
 class TemplatesScreenViewModel(
-    private val templateApi: TemplateApi,
+    private val templateApi: TemplateApi1,
     private val events: Flow<TemplateEvent>,
     private val navigator: Navigator,
-    private val loading: UiText,
-    private val failure: UiText,
+    loading: UiText,
+    failure: UiText,
     logger: Logger
-) : StateFul<State<TemplatesScreenModel>>(
-    initialState = State.Loading(loading),
+) : MapChunkViewModel<TemplateApiModel, TemplateUiModel>(
+    loading = loading,
+    failure = failure,
+    get = { size, page -> templateApi.getChunk(size, page) },
+    map = { chunk ->
+        val map = chunk.results
+            .sortedBy { it.name }
+            .groupBy { it.name.stickyHeaderKey() }
+            .mapValues { it.value.map { template -> template.toUiModel() } }
+
+        ChunkMapState(
+            count = chunk.count,
+            pageIndex = chunk.pageIndex,
+            nextPageIndex = chunk.nextPageIndex,
+            previousPageIndex = chunk.previousPageIndex,
+            content = map
+        )
+    },
     logger = logger
 ), TemplatesScreenInteractor {
     val uiState = state.asStateFlow()
@@ -36,50 +53,15 @@ class TemplatesScreenViewModel(
         }
     }
 
-    override fun initialize() {
-        launch {
-            try {
-                val templates = templateApi.getAll()?.map { it.map() }
-                if (templates != null) {
-                    setState(
-                        State.Success(
-                            value = TemplatesScreenModel(templates.map { it.toUiModel() })
-                        )
-                    )
-                } else setState(State.Failure(failure))
-            } catch (e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString())))
-            }
-        }
-    }
-
     override fun addTemplate() {
         launch {
             navigator.navigateToAddTemplate()
         }
     }
 
-    override fun select(template: Template) {
+    override fun select(template: TemplateUiModel) {
         launch {
             navigator.navigateToTemplate(template.id)
-        }
-    }
-
-    override fun refresh() {
-        launch {
-            try {
-                setState(State.Loading(loading))
-                val templates = templateApi.getAll()?.map { it.map() }
-                if (templates != null) {
-                    setState(
-                        State.Success(
-                            value = TemplatesScreenModel(templates.map { it.toUiModel() })
-                        )
-                    )
-                } else setState(State.Failure(failure))
-            } catch (e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString())))
-            }
         }
     }
 }

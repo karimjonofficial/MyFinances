@@ -7,17 +7,17 @@ import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import kotlinx.coroutines.flow.MutableStateFlow
 
-abstract class MapChunkViewModel<T, K>(
+abstract class MapChunkViewModel<TApi, TUi>(
     private val loading: UiText,
     private val failure: UiText,
-    private val get: GetChunk<T>,
-    private val map: (Chunk<T>) -> ChunkMapState<K>,
+    private val get: GetChunk<TApi>,
+    private val map: (Chunk<TApi>) -> ChunkMapState<TUi>,
     logger: Logger
-) : StateFul<State<ChunkMapState<K>>>(
+) : StateFul<State<ChunkMapState<TUi>>>(
     initialState = State.Loading(loading),
     logger = logger
 ) {
-    protected val dataState = MutableStateFlow<List<T>?>(null)
+    protected val dataState = MutableStateFlow<List<TApi>?>(null)
     protected val size = 10
     protected var index = 1
 

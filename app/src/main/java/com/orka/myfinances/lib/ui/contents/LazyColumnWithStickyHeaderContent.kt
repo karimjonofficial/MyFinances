@@ -90,7 +90,7 @@ fun <T> LazyColumnWithStickyHeaderContent(
             arrangementSpace = arrangementSpace,
             listState = listState,
             footer = {
-                if (state.value!!.nextPageIndex != null) {
+                if (state.value!!.nextPageIndex != null && state is State.Loading) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
