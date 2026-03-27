@@ -50,7 +50,7 @@ class CatalogScreenViewModel(
     override fun initialize() {
         launch {
             try {
-                val folders = folderApi.getByParent(catalogId.value)
+                val folders = folderApi.getByParent(catalogId.value)?.sortedBy { it.name }
                 val catalog = folderApi.getById(catalogId.value)
 
                 if (folders != null && catalog != null && catalog is CatalogApiModel) {

@@ -46,7 +46,7 @@ class FoldersContentViewModel(
     fun initialize() {
         launch {
             try {
-                val folders = folderApi.getTop()
+                val folders = folderApi.getTop()?.sortedBy { it.name }
                 if (folders != null) {
                     setState1(State.Success(FoldersContentModel(folders.map { it.toUiModel() })))
                 } else setState1(State.Failure(failure))
