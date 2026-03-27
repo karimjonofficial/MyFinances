@@ -12,6 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
+import com.orka.myfinances.lib.ui.models.ChunkMapState
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 
@@ -19,7 +20,7 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 @Composable
 fun OrdersScreen(
     modifier: Modifier = Modifier,
-    state: State<Map<String, List<OrderUiModel>>>,
+    state: State<ChunkMapState<OrderUiModel>>,
     interactor: OrdersScreenInteractor
 ) {
     LazyColumnWithStickyHeaderScreen(
@@ -40,6 +41,7 @@ fun OrdersScreen(
         arrangementSpace = 8.dp,
         state = state,
         refresh = interactor::refresh,
+        loadMore = interactor::loadMore,
         item = { item ->
             OrderCard(
                 modifier = Modifier.padding(horizontal = 8.dp),

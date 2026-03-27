@@ -3,22 +3,20 @@ package com.orka.myfinances.application.viewmodels.order.list
 import com.orka.myfinances.data.api.order.OrderApiModel
 import com.orka.myfinances.data.api.order.OrderItemApiModel
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
+import com.orka.myfinances.ui.screens.order.list.OrderItemModel
 import com.orka.myfinances.ui.screens.order.list.OrderUiModel
 import com.orka.myfinances.ui.screens.order.list.components.OrderCardModel
-import com.orka.myfinances.ui.screens.order.list.OrderItemModel
 
 fun OrderApiModel.toModel(
     formatPrice: FormatPrice,
-    formatDate: FormatDate,
     formatTime: FormatTime
 ): OrderCardModel {
     return OrderCardModel(
         title = "${client.firstName} ${client.lastName ?: ""}",
-        dateTime = "${formatDate.formatDate(createdAt)} ${formatTime.formatTime(createdAt)}",
+        dateTime = formatTime.formatTime(createdAt),
         size = "${items.size} items",
         price = formatPrice.formatPrice(price.toDouble()),
         completed = completed
@@ -26,13 +24,12 @@ fun OrderApiModel.toModel(
 }
 
 fun OrderApiModel.toUiModel(
-    priceFormatter: FormatPrice,
-    dateFormatter: FormatDate,
-    timeFormatter: FormatTime
+    formatPrice: FormatPrice,
+    formatTime: FormatTime
 ): OrderUiModel {
     return OrderUiModel(
         id = Id(id),
-        model = this.toModel(priceFormatter, dateFormatter, timeFormatter)
+        model = this.toModel(formatPrice, formatTime)
     )
 }
 

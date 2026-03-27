@@ -34,6 +34,7 @@ import com.orka.myfinances.data.api.folder.FolderApi
 import com.orka.myfinances.data.api.notification.NotificationApi
 import com.orka.myfinances.data.api.office.OfficeApi
 import com.orka.myfinances.data.api.order.OrderApi
+import com.orka.myfinances.data.api.order.OrderApi1
 import com.orka.myfinances.data.api.receive.ReceiveApi
 import com.orka.myfinances.data.api.receive.ReceiveApi1
 import com.orka.myfinances.data.api.sale.SaleApi
@@ -286,13 +287,13 @@ class Factory(
 
     fun ordersViewModel(): OrdersScreenViewModel {
         return OrdersScreenViewModel(
-            orderApi = orderApi,
+            orderApi = OrderApi1(session.office, httpClient),
             loading = loading,
             failure = failure,
             navigator = navigator,
-            priceFormatter = formatter,
-            dateFormatter = formatter,
-            timeFormatter = formatter,
+            formatPrice = formatter,
+            formatTime = formatter,
+            formatLocalDate = formatter,
             logger = logger
         )
     }
