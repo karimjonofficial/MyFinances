@@ -1,16 +1,27 @@
 package com.orka.myfinances.ui.screens.checkout
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.retain.retain
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.clients
-import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
-import com.orka.myfinances.lib.ui.components.Scaffold
-import com.orka.myfinances.lib.ui.screens.FailureScreen
-import com.orka.myfinances.lib.ui.screens.LoadingScreen
+import com.orka.myfinances.lib.ui.components.HorizontalSpacer
+import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.checkout.viewmodel.BasketItemCardModel
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
@@ -23,37 +34,70 @@ fun CheckoutScreen(
     interactor: CheckoutScreenInteractor,
     state: State<CheckoutScreenModel>
 ) {
-    when (state) {
-        is State.Loading -> {
-            Scaffold(
-                modifier = modifier,
-                title = stringResource(R.string.checkout)
-            ) { paddingValues ->
-                LoadingScreen(modifier = Modifier.scaffoldPadding(paddingValues))
+    val price = rememberSaveable { mutableStateOf(if(state is State.Success) state.value.price else null) }
+    val description = rememberSaveable { mutableStateOf<String?>(null) }
+    val printReceipt = rememberSaveable { mutableStateOf(if(state is State.Success) state.value.printerConnected else false) }
+    val selectedClientId = retain { mutableStateOf(if(state is State.Success) state.value.clients.firstOrNull()?.id else null) }
+    val selectedClient = if(state is State.Success) state.value.clients.find { it.id == selectedClientId.value } else null
+
+    StatefulScreen(
+        modifier = modifier,
+        title = stringResource(R.string.checkout),
+        bottomBar = {
+            if(it is State.Success) {
+                BottomAppBar(contentPadding = PaddingValues(horizontal = 16.dp)) {
+                    val priceValue = price.value
+
+                    Spacer(modifier = Modifier.weight(1f))
+                    OutlinedButton(
+                        enabled = selectedClient != null && priceValue != null,
+                        onClick = {
+                            interactor.order(
+                                price = priceValue,
+                                description = description.value,
+                                id = selectedClientId.value!!
+                            )
+                        }
+                    ) {
+                        Text(text = stringResource(R.string.order))
+                    }
+
+                    HorizontalSpacer(8)
+                    Button(
+                        enabled = selectedClient != null && priceValue != null,
+                        onClick = {
+                            interactor.sell(
+                                price = priceValue,
+                                description = description.value,
+                                id = selectedClientId.value!!,
+                                print = printReceipt.value
+                            )
+                        }
+                    ) {
+                        Text(text = stringResource(R.string.sell))
+                    }
+                }
             }
-        }
-
-        is State.Failure -> {
-            Scaffold(
-                modifier = modifier,
-                title = stringResource(R.string.checkout)
-            ) { paddingValues ->
-                FailureScreen(modifier = Modifier.scaffoldPadding(paddingValues))
-            }
-        }
-
-        is State.Success -> {
-            val state = state.value
-
-            CheckoutContent(
-                modifier = modifier,
-                items = state.items,
-                clients = state.clients,
-                price = state.price,
-                printerConnected = state.printerConnected,
-                interactor = interactor
-            )
-        }
+        },
+        state = state,
+        onRetry = interactor::refresh
+    ) { modifier, state ->
+        CheckoutContent(
+            modifier = modifier
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 8.dp),
+            items = state.items,
+            clients = state.clients,
+            price = state.price,
+            selectedClient = selectedClient,
+            printerConnected = state.printerConnected,
+            description = description.value,
+            printReceipt = printReceipt.value,
+            onClientSelected = { selectedClientId.value = it },
+            onPriceChanged = { price.value = it },
+            onDescriptionChanged = { description.value = it },
+            onPrintReceiptChanged = { printReceipt.value = it }
+        )
     }
 }
 
