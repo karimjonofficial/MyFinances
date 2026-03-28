@@ -6,7 +6,7 @@ import com.orka.myfinances.data.models.template.TemplateField
 import com.orka.myfinances.data.repositories.template.AddTemplateRequest
 import com.orka.myfinances.ui.screens.templates.add.TemplateFieldModel
 
-fun TemplateFieldApiModel.map(): TemplateField {
+fun TemplateApiModelField.map(): TemplateField {
     return TemplateField(
         id = Id(id),
         name = name,

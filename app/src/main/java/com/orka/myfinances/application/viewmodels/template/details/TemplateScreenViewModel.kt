@@ -32,7 +32,7 @@ class TemplateScreenViewModel(
         launch {
             val template = templateApi.getById(id.value)
             if (template != null) {
-                setState(State.Success(template.map()))
+                setState(State.Success(template.toScreenModel()))
             } else {
                 setState(State.Failure(failure))
             }

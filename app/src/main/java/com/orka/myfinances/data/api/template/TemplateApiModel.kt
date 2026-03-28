@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 data class TemplateApiModel(
     val id: Int,
     val name: String,
-    val fields: List<TemplateFieldApiModel>,
+    val fields: List<TemplateApiModelField>,
     val description: String?
 )
