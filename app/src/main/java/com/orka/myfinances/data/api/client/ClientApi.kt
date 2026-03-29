@@ -1,8 +1,8 @@
 package com.orka.myfinances.data.api.client
 
-import com.orka.myfinances.data.models.Company
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.client.AddClientRequest
-import com.orka.myfinances.lib.data.api.Api
+import com.orka.myfinances.lib.data.api.scoped.company.CompanyScopedApi
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -12,9 +12,9 @@ import io.ktor.http.HttpStatusCode
 
 class ClientApi(
     override val httpClient: HttpClient,
-    private val company: Company,
+    override val companyId: Id,
     override val baseUrl: String = "clients/"
-) : Api {
+) : CompanyScopedApi {
     suspend fun getById(id: Int): ClientApiModel? {
         val response = httpClient.get("$baseUrl$id/")
         return if (response.status == HttpStatusCode.OK) response.body() else null
@@ -23,7 +23,7 @@ class ClientApi(
     suspend fun add(request: AddClientRequest): Boolean {
         val response = httpClient.post(
             urlString = baseUrl,
-            block = { setBody(request.map(company.id.value)) }
+            block = { setBody(request.map(companyId.value)) }
         )
         return response.status == HttpStatusCode.Created
     }
