@@ -43,6 +43,7 @@ fun HomeScreenContent(
         0 -> {
             LaunchedEffect(officeId) {
                 foldersViewModel.initialize()
+                sheetViewModel.initialize()
             }
 
             val sheetState = rememberModalBottomSheetState()
@@ -70,9 +71,6 @@ fun HomeScreenContent(
             }
 
             if (sheetVisible.value) {
-                LaunchedEffect(officeId) {
-                    sheetViewModel.initialize()
-                }
                 val state = sheetViewModel.uiState.collectAsState()
                 SelectTemplateBottomSheet(
                     onDismissRequest = {
