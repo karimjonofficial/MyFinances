@@ -23,7 +23,7 @@ class DebtApi(
     suspend fun add(request: AddDebtRequest): Boolean {
         val response = httpClient.post(
             urlString = baseUrl,
-            block = { setBody(request) }
+            block = { setBody(request.toApiRequest(office.id.value)) }
         )
         return response.status == HttpStatusCode.Created
     }

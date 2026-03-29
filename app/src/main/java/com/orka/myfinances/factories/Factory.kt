@@ -4,6 +4,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.application.factories.Formatter
 import com.orka.myfinances.application.viewmodels.basket.BasketContentViewModel
 import com.orka.myfinances.application.viewmodels.checkout.CheckoutScreenViewModel
+import com.orka.myfinances.application.viewmodels.client.bottomsheet.ClientBottomSheetViewModel
 import com.orka.myfinances.application.viewmodels.client.details.ClientScreenViewModel
 import com.orka.myfinances.application.viewmodels.client.list.ClientsScreenViewModel
 import com.orka.myfinances.application.viewmodels.debt.details.DebtScreenViewModel
@@ -246,7 +247,6 @@ class Factory(
 
     fun checkoutViewModel(): CheckoutScreenViewModel {
         return CheckoutScreenViewModel(
-            clientApi = clientApi,
             saleApi = saleApi,
             orderApi = orderApi,
             basketRepository = basketRepository,
@@ -258,6 +258,15 @@ class Factory(
             loading = loading,
             failure = failure,
             printerState = printer.state
+        )
+    }
+
+    fun clientBottomSheetViewModel(): ClientBottomSheetViewModel {
+        return ClientBottomSheetViewModel(
+            clientApi = clientApi,
+            loading = loading,
+            failure = failure,
+            logger = logger
         )
     }
 
@@ -316,7 +325,6 @@ class Factory(
     fun debtsViewModel(): DebtsScreenViewModel {
         return DebtsScreenViewModel(
             debtApi = debtApi,
-            clientApi = clientApi,
             navigator = navigator,
             logger = logger,
             loading = loading,

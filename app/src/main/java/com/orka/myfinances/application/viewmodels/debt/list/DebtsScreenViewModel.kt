@@ -1,13 +1,9 @@
 package com.orka.myfinances.application.viewmodels.debt.list
 
-import com.orka.myfinances.application.viewmodels.client.details.toItemModel
-import com.orka.myfinances.data.api.client.ClientApi
-import com.orka.myfinances.data.api.client.ClientApiModel
 import com.orka.myfinances.data.api.debt.DebtApi
 import com.orka.myfinances.data.api.debt.DebtApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.debt.AddDebtRequest
-import com.orka.myfinances.lib.data.api.getAll
 import com.orka.myfinances.lib.data.api.scoped.office.getChunk
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
@@ -15,12 +11,11 @@ import com.orka.myfinances.lib.format.FormatTime
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkMapState
 import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.debt.list.DebtUiModel
-import com.orka.myfinances.ui.screens.debt.list.DialogState
 import com.orka.myfinances.ui.screens.debt.list.interactor.DebtsScreenInteractor
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -28,12 +23,11 @@ import kotlin.time.Instant
 
 class DebtsScreenViewModel(
     private val debtApi: DebtApi,
-    private val clientApi: ClientApi,
     private val formatPrice: FormatPrice,
     private val formatLocalDate: FormatLocalDate,
     private val formatTime: FormatTime,
-    loading: UiText,
-    failure: UiText,
+    private val loading: UiText,
+    private val failure: UiText,
     logger: Logger,
     private val navigator: Navigator
 ) : MapChunkViewModel<DebtApiModel, DebtUiModel>(
@@ -45,8 +39,8 @@ class DebtsScreenViewModel(
         val map = chunk.results
             .groupBy { it.dateTime.toLocalDateTime(timeZone).date }
             .mapKeys { formatLocalDate.formatLocalDate(it.key) }
-            .mapValues { entry -> 
-                entry.value.map { model -> model.toUiModel(formatPrice, formatTime) } 
+            .mapValues { entry ->
+                entry.value.map { model -> model.toUiModel(formatPrice, formatTime) }
             }
 
         ChunkMapState(
@@ -60,8 +54,6 @@ class DebtsScreenViewModel(
     logger = logger
 ), DebtsScreenInteractor {
     val uiState = state.asStateFlow()
-    private val _dialogState = MutableStateFlow<DialogState>(DialogState.Loading)
-    val dialogState = _dialogState.asStateFlow()
 
     init {
         initialize()
@@ -69,26 +61,15 @@ class DebtsScreenViewModel(
 
     override fun add(id: Id, price: Int, endDateTime: Instant?, description: String?) {
         launch {
-            val request = AddDebtRequest(id, price, description, endDateTime)
-            if (debtApi.add(request)) {
-                initialize()
-            }
-        }
-    }
-
-    override fun initializeClients() {
-        launch {
-            _dialogState.value = DialogState.Loading
+            val oldState = state.value
             try {
-                val clients = clientApi.getAll<ClientApiModel>()
-                if (clients != null) {
-                    _dialogState.value = DialogState.Success(clients.map { it.toItemModel() })
-                }
+                setState(State.Loading(loading, oldState.value))
+                val request = AddDebtRequest(id, price, description, endDateTime)
+                if (debtApi.add(request)) {
+                    refresh()
+                } else setState(State.Failure(failure, oldState.value))
             } catch (e: Exception) {
-                logger.log(
-                    tag = "DebtsScreenViewModel",
-                    message = e.message.toString()
-                )
+                setState(State.Failure(UiText.Str(e.message.toString()), oldState.value))
             }
         }
     }

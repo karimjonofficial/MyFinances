@@ -1,9 +1,12 @@
 package com.orka.myfinances.ui.screens.debt.list
 
+import androidx.compose.foundation.clickable
+import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -11,28 +14,28 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.ui.components.Dialog
 import com.orka.myfinances.lib.ui.components.OutlinedCommentTextField
-import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import kotlin.time.Instant
 
 @Composable
 fun AddDebtDialog(
-    state: DialogState,
+    selectedClient: ClientItemModel?,
+    onOpenClients: () -> Unit,
     dismissRequest: () -> Unit,
     onSuccess: (Id, Int, Instant?, String?) -> Unit,
     onCancel: () -> Unit
 ) {
     val price = rememberSaveable { mutableStateOf<Int?>(null) }
     val description = rememberSaveable { mutableStateOf("") }
-    val client = rememberSaveable { mutableStateOf<ClientItemModel?>(null) }
-    val clientDropDownMenuExpanded = rememberSaveable { mutableStateOf(false) }
     val endDateTime = rememberSaveable { mutableStateOf<Instant?>(null) }
     val showDatePicker = rememberSaveable { mutableStateOf(false) }
 
@@ -45,23 +48,25 @@ fun AddDebtDialog(
         onCancel = onCancel,
         onSuccess = {
             val priceValue = price.value
-            val clientValue = client.value?.id
+            val clientValue = selectedClient?.id
             val endDateTimeValue = endDateTime.value
             if (priceValue != null && clientValue != null && endDateTimeValue != null) {
                 onSuccess(clientValue, priceValue, endDateTimeValue, description.value)
             }
         }
     ) {
-        OutlinedExposedDropDownTextField(
-            text = client.value?.name ?: "",
-            label = stringResource(R.string.client),
-            menuExpanded = clientDropDownMenuExpanded.value,
-            onExpandChange = { clientDropDownMenuExpanded.value = it },
-            onDismissRequested = { clientDropDownMenuExpanded.value = false },
-            items = if(state is DialogState.Success) state.clients else emptyList(),
-            itemText = { it.name },
-            onItemSelected = { client.value = it }
-        )
+        if(selectedClient == null) {
+            Button(onClick = onOpenClients) {
+                Text(text = stringResource(R.string.select_client))
+            }
+        } else {
+            Text(
+                modifier = Modifier.clickable { onOpenClients() },
+                text = selectedClient.name,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary,
+            )
+        }
 
         VerticalSpacer(8)
         OutlinedIntegerTextField(

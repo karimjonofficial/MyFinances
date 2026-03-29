@@ -147,4 +147,5 @@
     <string name="unresolved_error">Unresolved error</string>
     <string name="option">Option</string>
     <string name="select_template">Select template</string>
+    <string name="select_client">Select client</string>
 </resources>

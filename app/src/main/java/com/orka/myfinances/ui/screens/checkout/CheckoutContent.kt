@@ -7,26 +7,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.fixtures.resources.models.clients
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.OutlinedCommentTextField
-import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
@@ -37,19 +35,16 @@ import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
 fun CheckoutContent(
     modifier: Modifier,
     items: List<BasketItemCardModel>,
-    clients: List<ClientItemModel>,
     price: Int,
     description: String?,
     printReceipt: Boolean,
     selectedClient: ClientItemModel?,
     printerConnected: Boolean,
-    onClientSelected: (Id) -> Unit,
+    onOpenClients: () -> Unit,
     onPriceChanged: (Int?) -> Unit,
     onDescriptionChanged: (String?) -> Unit,
     onPrintReceiptChanged: (Boolean) -> Unit,
 ) {
-    val menuExpanded = rememberSaveable { mutableStateOf(false) }
-
     Column(modifier = modifier) {
         DividedList(
             modifier = Modifier.fillMaxWidth(),
@@ -61,17 +56,18 @@ fun CheckoutContent(
 
         VerticalSpacer(16)
         Row {
-            OutlinedExposedDropDownTextField(
-                modifier = Modifier.weight(1f),
-                text = selectedClient?.name ?: stringResource(R.string.clients),
-                label = stringResource(R.string.clients),
-                menuExpanded = menuExpanded.value,
-                onExpandChange = { menuExpanded.value = it },
-                onDismissRequested = { menuExpanded.value = false },
-                items = clients,
-                itemText = { it.name },
-                onItemSelected = { onClientSelected(it.id) }
-            )
+            if(selectedClient == null) {
+                Button(onClick = onOpenClients) {
+                    Text(text = stringResource(R.string.select_client))
+                }
+            } else {
+                Text(
+                    modifier = Modifier.clickable { onOpenClients() },
+                    text = selectedClient.name,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            }
 
             HorizontalSpacer(8)
             OutlinedIntegerTextField(
@@ -128,15 +124,16 @@ private fun CheckoutContentPreview() {
         title = "Checkout"
     ) { paddingValues ->
         CheckoutContent(
-            modifier = Modifier.scaffoldPadding(paddingValues).padding(horizontal = 8.dp),
+            modifier = Modifier
+                .scaffoldPadding(paddingValues)
+                .padding(horizontal = 8.dp),
             items = items,
-            clients = clients.map { it.map() },
             price = 1000,
             printerConnected = true,
             description = "",
             printReceipt = false,
             selectedClient = null,
-            onClientSelected = {},
+            onOpenClients = {},
             onPriceChanged = {},
             onDescriptionChanged = {},
             onPrintReceiptChanged = {}
