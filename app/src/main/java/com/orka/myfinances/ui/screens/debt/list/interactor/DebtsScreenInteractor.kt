@@ -1,11 +1,12 @@
 package com.orka.myfinances.ui.screens.debt.list.interactor
 
 import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.lib.ui.viewmodel.ChunkViewModel
 import com.orka.myfinances.lib.ui.viewmodel.StateFul
 import com.orka.myfinances.ui.screens.debt.list.DebtUiModel
 import kotlin.time.Instant
 
-interface DebtsScreenInteractor : StateFul {
+interface DebtsScreenInteractor : StateFul, ChunkViewModel {
     fun add(id: Id, price: Int, endDateTime: Instant?, description: String?)
     fun initializeClients()
     fun select(debt: DebtUiModel)
@@ -17,6 +18,7 @@ interface DebtsScreenInteractor : StateFul {
             override fun select(debt: DebtUiModel) {}
             override fun initialize() {}
             override fun refresh() {}
+            override fun loadMore() {}
         }
     }
 }

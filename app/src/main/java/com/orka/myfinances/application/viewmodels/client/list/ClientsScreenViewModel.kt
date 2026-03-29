@@ -1,11 +1,14 @@
 package com.orka.myfinances.application.viewmodels.client.list
 
-import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.client.ClientApi
 import com.orka.myfinances.data.api.client.ClientApiModel
 import com.orka.myfinances.data.repositories.client.AddClientRequest
+import com.orka.myfinances.lib.data.api.getChunk
+import com.orka.myfinances.lib.extensions.stickyHeaderKey
+import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.lib.ui.models.ChunkMapState
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.FormatListViewModel
+import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.client.list.viewmodel.ClientUiModel
 import com.orka.myfinances.ui.screens.client.list.viewmodel.ClientsScreenInteractor
@@ -17,11 +20,24 @@ class ClientsScreenViewModel(
     failure: UiText,
     private val navigator: Navigator,
     logger: Logger
-) : FormatListViewModel<ClientApiModel, ClientUiModel>(
+) : MapChunkViewModel<ClientApiModel, ClientUiModel>(
     loading = loading,
     failure = failure,
-    get = { clientApi.getAll() },
-    map = { it.toUiModel() },
+    get = { size, page -> clientApi.getChunk(size, page, "first_name") },
+    map = { chunk ->
+        val map = chunk.results
+            .sortedBy { it.firstName }
+            .groupBy { it.firstName.stickyHeaderKey() }
+            .mapValues { it.value.map { client -> client.toUiModel() } }
+
+        ChunkMapState(
+            count = chunk.count,
+            pageIndex = chunk.pageIndex,
+            nextPageIndex = chunk.nextPageIndex,
+            previousPageIndex = chunk.previousPageIndex,
+            content = map
+        )
+    },
     logger = logger
 ), ClientsScreenInteractor {
     val uiState = state.asStateFlow()

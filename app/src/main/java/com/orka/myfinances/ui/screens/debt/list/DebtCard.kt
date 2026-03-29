@@ -41,13 +41,13 @@ private fun DebtCardPreview() {
             repeat(5) {
                 DebtCard(
                     modifier = Modifier.fillMaxWidth(),
-                    debt = debt1.map(FormatPriceImpl(), FormatDateTimeImpl()),
+                    debt = debt1.toCardModel(FormatPriceImpl(), FormatDateTimeImpl()),
                     onClick = {}
                 )
 
                 DebtCard(
                     modifier = Modifier.fillMaxWidth(),
-                    debt = debt2.map(FormatPriceImpl(), FormatDateTimeImpl()),
+                    debt = debt2.toCardModel(FormatPriceImpl(), FormatDateTimeImpl()),
                     onClick = {}
                 )
             }

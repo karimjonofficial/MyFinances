@@ -1,40 +1,62 @@
 package com.orka.myfinances.application.viewmodels.debt.list
 
 import com.orka.myfinances.application.viewmodels.client.details.toItemModel
-import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.client.ClientApi
+import com.orka.myfinances.data.api.client.ClientApiModel
 import com.orka.myfinances.data.api.debt.DebtApi
 import com.orka.myfinances.data.api.debt.DebtApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.debt.AddDebtRequest
-import com.orka.myfinances.lib.format.FormatDate
-import com.orka.myfinances.lib.format.FormatDateTime
+import com.orka.myfinances.lib.data.api.getAll
+import com.orka.myfinances.lib.data.api.getChunk
+import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.lib.format.FormatTime
+import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.lib.ui.models.ChunkMapState
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.MapListViewModel
+import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.debt.list.DebtUiModel
 import com.orka.myfinances.ui.screens.debt.list.DialogState
 import com.orka.myfinances.ui.screens.debt.list.interactor.DebtsScreenInteractor
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Instant
 
 class DebtsScreenViewModel(
     private val debtApi: DebtApi,
     private val clientApi: ClientApi,
-    formatPrice: FormatPrice,
-    formatDate: FormatDate,
-    formatDateTime: FormatDateTime,
+    private val formatPrice: FormatPrice,
+    private val formatLocalDate: FormatLocalDate,
+    private val formatTime: FormatTime,
     loading: UiText,
     failure: UiText,
     logger: Logger,
     private val navigator: Navigator
-) : MapListViewModel<DebtApiModel, DebtUiModel>(
+) : MapChunkViewModel<DebtApiModel, DebtUiModel>(
     loading = loading,
     failure = failure,
-    get = { debtApi.getAll() },
-    map = { it.toMap(formatPrice, formatDate, formatDateTime) },
+    get = { size, page -> debtApi.getChunk(size, page) },
+    map = { chunk ->
+        val timeZone = TimeZone.currentSystemDefault()
+        val map = chunk.results
+            .groupBy { it.dateTime.toLocalDateTime(timeZone).date }
+            .mapKeys { formatLocalDate.formatLocalDate(it.key) }
+            .mapValues { entry -> 
+                entry.value.map { model -> model.toUiModel(formatPrice, formatTime) } 
+            }
+
+        ChunkMapState(
+            count = chunk.count,
+            pageIndex = chunk.pageIndex,
+            nextPageIndex = chunk.nextPageIndex,
+            previousPageIndex = chunk.previousPageIndex,
+            content = map
+        )
+    },
     logger = logger
 ), DebtsScreenInteractor {
     val uiState = state.asStateFlow()
@@ -58,7 +80,7 @@ class DebtsScreenViewModel(
         launch {
             _dialogState.value = DialogState.Loading
             try {
-                val clients = clientApi.getAll()
+                val clients = clientApi.getAll<ClientApiModel>()
                 if (clients != null) {
                     _dialogState.value = DialogState.Success(clients.map { it.toItemModel() })
                 }

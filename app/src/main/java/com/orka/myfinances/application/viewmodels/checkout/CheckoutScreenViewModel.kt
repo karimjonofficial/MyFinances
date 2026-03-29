@@ -4,11 +4,13 @@ import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.application.viewmodels.client.details.toItemModel
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.client.ClientApi
+import com.orka.myfinances.data.api.client.ClientApiModel
 import com.orka.myfinances.data.api.order.OrderApi
 import com.orka.myfinances.data.api.sale.SaleApi
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.Basket
 import com.orka.myfinances.data.repositories.basket.BasketRepository
+import com.orka.myfinances.lib.data.api.getAll
 import com.orka.myfinances.lib.extensions.models.getPrice
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
@@ -64,7 +66,7 @@ class CheckoutScreenViewModel(
         launch {
             val items = basketRepository.get()
             try {
-                val clientApiModels = clientApi.getAll()
+                val clientApiModels = clientApi.getAll<ClientApiModel>()
                 if (clientApiModels != null) {
                     val clients = clientApiModels.map { it.toItemModel() }
                     setState(
@@ -89,7 +91,7 @@ class CheckoutScreenViewModel(
             setState(State.Loading(loading))
             val items = basketRepository.get()
             try {
-                val clientApiModels = clientApi.getAll()
+                val clientApiModels = clientApi.getAll<ClientApiModel>()
                 if (clientApiModels != null) {
                     val clients = clientApiModels.map { it.toItemModel() }
                     setState(

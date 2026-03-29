@@ -66,6 +66,36 @@ fun <T> LazyColumnWithStickyHeaderScreen(
 @Composable
 fun <T> LazyColumnWithStickyHeaderScreen(
     modifier: Modifier = Modifier,
+    topBar: @Composable (State<ChunkMapState<T>>) -> Unit = {},
+    arrangementSpace: Dp = 0.dp,
+    state: State<ChunkMapState<T>>,
+    refresh: () -> Unit,
+    loadMore: () -> Unit,
+    dialogVisible: Boolean,
+    dialog: @Composable () -> Unit,
+    item: @Composable (T) -> Unit,
+) {
+    Scaffold(
+        modifier = modifier,
+        topBar = { topBar(state) }
+    ) { paddingValues ->
+        LazyColumnWithStickyHeaderContent(
+            modifier = Modifier.padding(paddingValues),
+            contentPadding = PaddingValues(0.dp),
+            arrangementSpace = arrangementSpace,
+            state = state,
+            refresh = refresh,
+            loadMore = loadMore,
+            item = item
+        )
+
+        if (dialogVisible) dialog()
+    }
+}
+
+@Composable
+fun <T> LazyColumnWithStickyHeaderScreen(
+    modifier: Modifier = Modifier,
     title: String,
     arrangementSpace: Dp = 0.dp,
     state: State<ChunkMapState<T>>,

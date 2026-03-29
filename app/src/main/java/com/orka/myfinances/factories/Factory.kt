@@ -321,8 +321,8 @@ class Factory(
             logger = logger,
             loading = loading,
             formatPrice = formatter,
-            formatDate = formatter,
-            formatDateTime = formatter,
+            formatTime = formatter,
+            formatLocalDate = formatter,
             failure = failure,
         )
     }

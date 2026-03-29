@@ -1,6 +1,5 @@
 package com.orka.myfinances.ui.screens.debt.list
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -10,12 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.R
-import com.orka.myfinances.fixtures.format.FormatDateImpl
-import com.orka.myfinances.fixtures.format.FormatDateTimeImpl
-import com.orka.myfinances.fixtures.format.FormatPriceImpl
-import com.orka.myfinances.fixtures.resources.models.debts
+import com.orka.myfinances.lib.ui.models.ChunkMapState
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.debt.list.interactor.DebtsScreenInteractor
@@ -24,7 +19,7 @@ import com.orka.myfinances.ui.screens.debt.list.interactor.DebtsScreenInteractor
 @Composable
 fun DebtsScreen(
     modifier: Modifier,
-    state: State<Map<String, List<DebtUiModel>>>,
+    state: State<ChunkMapState<DebtUiModel>>,
     dialogVisible: Boolean,
     interactor: DebtsScreenInteractor,
     onAddDebt: () -> Unit,
@@ -45,38 +40,16 @@ fun DebtsScreen(
                 }
             )
         },
-        refresh = interactor::refresh,
         state = state,
+        refresh = interactor::refresh,
+        loadMore = interactor::loadMore,
+        dialogVisible = dialogVisible,
+        dialog = dialog,
         item = { item ->
             DebtCard(
                 debt = item.model,
                 onClick = { interactor.select(item) }
             )
-        },
-        dialogVisible = dialogVisible,
-        dialog = dialog
-    )
-}
-
-@Preview
-@Composable
-private fun DebtsScreenPreview() {
-    val data = debts.toMutableList()
-    repeat(10) { data.addAll(debts) }
-    val state = State.Success(
-        value = data.map(
-            formatPrice = FormatPriceImpl(),
-            formatDate = FormatDateImpl(),
-            formatDateTime = FormatDateTimeImpl()
-        )
-    )
-
-    DebtsScreen(
-        modifier = Modifier.fillMaxSize(),
-        state = state,
-        dialogVisible = false,
-        interactor = DebtsScreenInteractor.dummy,
-        onAddDebt = {},
-        dialog = {}
+        }
     )
 }
