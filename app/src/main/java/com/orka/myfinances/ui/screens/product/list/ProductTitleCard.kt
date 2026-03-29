@@ -25,7 +25,12 @@ fun ProductTitleCard(
     ListItem(
         modifier = modifier.clickable { onClick() },
         headlineContent = { Text(text = productTitle.title) },
-        supportingContent = { Text(text = productTitle.description.str()) },
+        supportingContent = {
+            Text(
+                text = productTitle.description.str(),
+                maxLines = 2
+            )
+        },
         leadingContent = {
             Icon(
                 painter = painterResource(R.drawable.star_outlined),
