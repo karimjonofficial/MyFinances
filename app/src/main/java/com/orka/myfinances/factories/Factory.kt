@@ -80,7 +80,7 @@ class Factory(
     private val saleFlow = MutableSharedFlow<SaleEvent>()
     private val receiveFlow = MutableSharedFlow<ReceiveEvent>()
 
-    private val clientApi = ClientApi(httpClient, session.office.company)
+    private val clientApi = ClientApi(httpClient, session.office.company.id)
     private val folderApi = FolderApi(httpClient, session.office, folderFlow)
     private val templateApi = TemplateApi(httpClient, session.office)
     private val productTitleApi = ProductTitleApi(httpClient, productTitleFlow)
