@@ -17,6 +17,7 @@ interface BasketInteractor : StateFul {
             override fun remove(item: BasketItem) {}
             override fun clear() {}
             override fun checkout() {}
+            override fun initialize() {}
             override fun refresh() {}
         }
     }

@@ -28,7 +28,6 @@ import com.orka.myfinances.application.viewmodels.template.add.AddTemplateScreen
 import com.orka.myfinances.application.viewmodels.template.bottomsheet.TemplateBottomSheetViewModel
 import com.orka.myfinances.application.viewmodels.template.details.TemplateScreenViewModel
 import com.orka.myfinances.application.viewmodels.template.list.TemplatesScreenViewModel
-import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.client.ClientApi
 import com.orka.myfinances.data.api.debt.DebtApi
 import com.orka.myfinances.data.api.folder.FolderApi
@@ -55,6 +54,7 @@ import com.orka.myfinances.data.repositories.receive.ReceiveEvent
 import com.orka.myfinances.data.repositories.sale.SaleEvent
 import com.orka.myfinances.data.repositories.stock.StockEvent
 import com.orka.myfinances.data.repositories.template.TemplateEvent
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.printer.pos.BluetoothPrinterImpl
 import com.orka.myfinances.ui.navigation.Navigator
@@ -88,7 +88,6 @@ class Factory(
     private val saleApi = SaleApi(httpClient, session.office, saleFlow)
     private val orderApi = OrderApi(httpClient, session.office)
     private val debtApi = DebtApi(httpClient)
-    private val notificationApi = NotificationApi(httpClient)
     private val officeApi = OfficeApi(httpClient)
     private val userApi = UserApi(httpClient)
 
@@ -278,7 +277,9 @@ class Factory(
 
     fun notificationsViewModel(): NotificationsScreenViewModel {
         return NotificationsScreenViewModel(
-            notificationApi = notificationApi,
+            api = NotificationApi(httpClient),
+            formatLocalDate = formatter,
+            formatTime = formatter,
             logger = logger,
             loading = loading,
             failure = failure

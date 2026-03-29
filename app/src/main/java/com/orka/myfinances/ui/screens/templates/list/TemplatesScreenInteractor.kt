@@ -11,6 +11,7 @@ interface TemplatesScreenInteractor : StateFul, ChunkViewModel {
         val dummy = object : TemplatesScreenInteractor {
             override fun addTemplate() {}
             override fun select(template: TemplateUiModel) {}
+            override fun initialize() {}
             override fun refresh() {}
             override fun loadMore() {}
         }

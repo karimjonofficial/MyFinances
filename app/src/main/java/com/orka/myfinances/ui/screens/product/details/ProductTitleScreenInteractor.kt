@@ -8,6 +8,7 @@ interface ProductTitleScreenInteractor : StateFul {
     companion object {
         val dummy = object : ProductTitleScreenInteractor {
             override fun receive(amount: Int, totalPrice: Int, comment: String?) {}
+            override fun initialize() {}
             override fun refresh() {}
         }
     }

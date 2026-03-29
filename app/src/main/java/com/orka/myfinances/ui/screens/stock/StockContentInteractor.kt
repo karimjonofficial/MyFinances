@@ -10,6 +10,7 @@ interface StockContentInteractor : ChunkViewModel {
         val dummy = object : StockContentInteractor {
             override fun addToBasket(id: Id) {}
             override fun loadMore() {}
+            override fun initialize() {}
             override fun refresh() {}
         }
     }

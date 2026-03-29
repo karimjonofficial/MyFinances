@@ -14,7 +14,7 @@ import com.orka.myfinances.data.repositories.receive.AddReceiveRequestItem
 import com.orka.myfinances.data.repositories.stock.StockEvent
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.StateFul
+import com.orka.myfinances.lib.viewmodel.StateFulViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenInteractor
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenModel
@@ -31,7 +31,7 @@ class AddReceiveScreenViewModel(
     private val loading: UiText,
     private val failure: UiText,
     logger: Logger
-) : StateFul<State<AddReceiveScreenModel>>(
+) : StateFulViewModel<State<AddReceiveScreenModel>>(
     initialState = State.Loading(loading),
     logger = logger
 ), AddReceiveScreenInteractor {

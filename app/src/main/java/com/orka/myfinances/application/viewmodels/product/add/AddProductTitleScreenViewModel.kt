@@ -10,7 +10,7 @@ import com.orka.myfinances.data.repositories.product.title.models.AddProductTitl
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.StateFul
+import com.orka.myfinances.lib.viewmodel.StateFulViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenInteractor
 import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
@@ -23,7 +23,7 @@ class AddProductTitleScreenViewModel(
     private val loading: UiText,
     private val failure: UiText,
     logger: Logger
-) : StateFul<State<AddProductTitleScreenModel>>(
+) : StateFulViewModel<State<AddProductTitleScreenModel>>(
     initialState = State.Loading(loading),
     logger = logger
 ), AddProductTitleScreenInteractor {

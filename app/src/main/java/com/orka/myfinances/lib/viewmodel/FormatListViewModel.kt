@@ -5,13 +5,13 @@ import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 
-abstract class MapperListViewModel<T, U>(
+abstract class FormatListViewModel<T, U>(
     private val loading: UiText,
     private val failure: UiText,
     private val get: Get<T>,
     private val map: (T) -> U,
     logger: Logger
-) : StateFul<State<List<U>>>(
+) : StateFulViewModel<State<List<U>>>(
     initialState = State.Loading(loading),
     logger = logger
 ) {

@@ -13,7 +13,7 @@ abstract class MapChunkViewModel<TApi, TUi>(
     private val get: GetChunk<TApi>,
     private val map: (Chunk<TApi>) -> ChunkMapState<TUi>,
     logger: Logger
-) : StateFul<State<ChunkMapState<TUi>>>(
+) : StateFulViewModel<State<ChunkMapState<TUi>>>(
     initialState = State.Loading(loading),
     logger = logger
 ) {

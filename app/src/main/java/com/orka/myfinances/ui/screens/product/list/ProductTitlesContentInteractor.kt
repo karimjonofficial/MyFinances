@@ -10,6 +10,7 @@ interface ProductTitlesContentInteractor : ChunkViewModel {
         val dummy = object : ProductTitlesContentInteractor {
             override fun selectProduct(id: Id) {}
             override fun loadMore() {}
+            override fun initialize() {}
             override fun refresh() {}
         }
     }

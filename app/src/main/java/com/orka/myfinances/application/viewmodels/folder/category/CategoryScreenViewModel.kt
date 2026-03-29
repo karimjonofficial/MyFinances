@@ -6,7 +6,7 @@ import com.orka.myfinances.data.api.folder.FolderApi
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.StateFul
+import com.orka.myfinances.lib.viewmodel.StateFulViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.folder.category.CategoryScreenInteractor
 import com.orka.myfinances.ui.screens.folder.category.CategoryScreenModel
@@ -19,7 +19,7 @@ class CategoryScreenViewModel(
     private val failure: UiText,
     private val navigator: Navigator,
     logger: Logger
-) : StateFul<State<CategoryScreenModel>>(
+) : StateFulViewModel<State<CategoryScreenModel>>(
     initialState = State.Loading(loading),
     logger = logger
 ), CategoryScreenInteractor {

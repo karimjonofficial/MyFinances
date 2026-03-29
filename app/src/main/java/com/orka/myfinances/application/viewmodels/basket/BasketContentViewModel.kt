@@ -9,7 +9,7 @@ import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.StateFul
+import com.orka.myfinances.lib.viewmodel.StateFulViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.basket.BasketInteractor
 import com.orka.myfinances.ui.screens.basket.BasketScreenModel
@@ -24,7 +24,7 @@ class BasketContentViewModel(
     private val formatDecimal: FormatDecimal,
     private val loading: UiText,
     logger: Logger
-) : StateFul<State<BasketScreenModel>>(
+) : StateFulViewModel<State<BasketScreenModel>>(
     initialState = State.Loading(loading),
     logger = logger
 ), BasketInteractor {

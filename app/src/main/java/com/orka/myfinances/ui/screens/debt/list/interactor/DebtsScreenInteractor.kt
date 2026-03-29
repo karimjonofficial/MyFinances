@@ -15,6 +15,7 @@ interface DebtsScreenInteractor : StateFul {
             override fun add(id: Id, price: Int, endDateTime: Instant?, description: String?) {}
             override fun initializeClients() {}
             override fun select(debt: DebtUiModel) {}
+            override fun initialize() {}
             override fun refresh() {}
         }
     }

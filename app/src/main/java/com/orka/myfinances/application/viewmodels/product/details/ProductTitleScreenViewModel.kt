@@ -13,7 +13,7 @@ import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.StateFul
+import com.orka.myfinances.lib.viewmodel.StateFulViewModel
 import com.orka.myfinances.ui.screens.product.details.ProductTitleScreenInteractor
 import com.orka.myfinances.ui.screens.product.details.models.ProductTitleScreenModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,7 +29,7 @@ class ProductTitleScreenViewModel(
     private val flow: MutableSharedFlow<StockEvent>,
     private val loading: UiText,
     logger: Logger
-) : StateFul<State<ProductTitleScreenModel>>(
+) : StateFulViewModel<State<ProductTitleScreenModel>>(
     initialState = State.Loading(loading),
     logger = logger
 ), ProductTitleScreenInteractor {

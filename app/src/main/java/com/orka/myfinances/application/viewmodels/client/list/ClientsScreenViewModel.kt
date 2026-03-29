@@ -5,7 +5,7 @@ import com.orka.myfinances.data.api.client.ClientApi
 import com.orka.myfinances.data.api.client.ClientApiModel
 import com.orka.myfinances.data.repositories.client.AddClientRequest
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.MapperListViewModel
+import com.orka.myfinances.lib.viewmodel.FormatListViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.client.list.viewmodel.ClientUiModel
 import com.orka.myfinances.ui.screens.client.list.viewmodel.ClientsScreenInteractor
@@ -17,7 +17,7 @@ class ClientsScreenViewModel(
     failure: UiText,
     private val navigator: Navigator,
     logger: Logger
-) : MapperListViewModel<ClientApiModel, ClientUiModel>(
+) : FormatListViewModel<ClientApiModel, ClientUiModel>(
     loading = loading,
     failure = failure,
     get = { clientApi.getAll() },

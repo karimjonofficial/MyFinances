@@ -11,7 +11,7 @@ abstract class MapListViewModel<T, K>(
     private val get: Get<T>,
     private val map: (List<T>) -> Map<String, List<K>>,
     logger: Logger
-) : StateFul<State<Map<String, List<K>>>>(
+) : StateFulViewModel<State<Map<String, List<K>>>>(
     initialState = State.Loading(loading),
     logger = logger
 ) {

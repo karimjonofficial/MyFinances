@@ -11,6 +11,7 @@ interface CheckoutScreenInteractor : StateFul {
         val dummy = object : CheckoutScreenInteractor {
             override fun order(id: Id, price: Int?, description: String?) {}
             override fun sell(id: Id, price: Int?, description: String?, print: Boolean) {}
+            override fun initialize() {}
             override fun refresh() {}
         }
     }

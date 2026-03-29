@@ -10,7 +10,7 @@ abstract class ListViewModel<T>(
     private val failure: UiText,
     private val get: Get<T>,
     logger: Logger
-) : StateFul<State<List<T>>>(
+) : StateFulViewModel<State<List<T>>>(
     initialState = State.Loading(loading),
     logger = logger
 ) {

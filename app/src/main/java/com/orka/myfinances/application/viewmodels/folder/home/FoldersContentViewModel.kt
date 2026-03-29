@@ -9,7 +9,7 @@ import com.orka.myfinances.data.repositories.folder.AddFolderRequest
 import com.orka.myfinances.data.repositories.folder.FolderEvent
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.StateFul
+import com.orka.myfinances.lib.viewmodel.StateFulViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.folder.home.interactor.FoldersContentInteractor
 import com.orka.myfinances.ui.screens.folder.home.FoldersContentModel
@@ -26,7 +26,7 @@ class FoldersContentViewModel(
     private val loading: UiText,
     private val failure: UiText,
     logger: Logger
-) : StateFul<State<FoldersContentModel>>(
+) : StateFulViewModel<State<FoldersContentModel>>(
     initialState = State.Loading(loading),
     logger = logger
 ), FoldersContentInteractor {

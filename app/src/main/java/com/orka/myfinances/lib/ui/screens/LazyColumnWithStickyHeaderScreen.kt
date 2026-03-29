@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.ui.components.LazyColumnWithStickHeader
 import com.orka.myfinances.lib.ui.components.Scaffold
+import com.orka.myfinances.lib.ui.components.TopAppBar
 import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
 import com.orka.myfinances.lib.ui.models.ChunkMapState
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -49,6 +50,32 @@ fun <T> LazyColumnWithStickyHeaderScreen(
     Scaffold(
         modifier = modifier,
         topBar = { topBar(state) }
+    ) { paddingValues ->
+        LazyColumnWithStickyHeaderContent(
+            modifier = Modifier.padding(paddingValues),
+            contentPadding = PaddingValues(0.dp),
+            arrangementSpace = arrangementSpace,
+            state = state,
+            refresh = refresh,
+            loadMore = loadMore,
+            item = item
+        )
+    }
+}
+
+@Composable
+fun <T> LazyColumnWithStickyHeaderScreen(
+    modifier: Modifier = Modifier,
+    title: String,
+    arrangementSpace: Dp = 0.dp,
+    state: State<ChunkMapState<T>>,
+    refresh: () -> Unit,
+    loadMore: () -> Unit,
+    item: @Composable (T) -> Unit,
+) {
+    Scaffold(
+        modifier = modifier,
+        topBar = { TopAppBar(title = title) }
     ) { paddingValues ->
         LazyColumnWithStickyHeaderContent(
             modifier = Modifier.padding(paddingValues),

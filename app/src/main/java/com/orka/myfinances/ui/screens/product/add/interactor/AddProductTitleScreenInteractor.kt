@@ -25,6 +25,7 @@ interface AddProductTitleScreenInteractor : StateFul {
                 category: Category
             ) {}
 
+            override fun initialize() {}
             override fun refresh() {}
         }
     }

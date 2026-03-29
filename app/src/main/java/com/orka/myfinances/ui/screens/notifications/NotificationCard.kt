@@ -15,18 +15,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.orka.myfinances.data.models.Notification
-import kotlin.time.Clock
-import kotlin.time.Duration.Companion.days
-import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Instant
 
 @Composable
 fun NotificationCard(
     modifier: Modifier,
-    notification: Notification,
-    onClick: (Notification) -> Unit
+    notification: NotificationCardModel,
+    onClick: () -> Unit
 ) {
     val read = notification.read
     val backgroundColor = if (read) {
@@ -61,7 +55,7 @@ fun NotificationCard(
 
     BadgedBox(
         modifier = modifier
-            .clickable { onClick(notification) }
+            .clickable { onClick() }
             .background(backgroundColor)
             .border(width = 1.dp, color = borderColor),
         badge = { if (!read) Badge() },
@@ -79,7 +73,7 @@ fun NotificationCard(
                         fontWeight = titleFontWeight
                     )
                     Text(
-                        text = formatDateTime(notification.dateTime),
+                        text = notification.time,
                         color = timestampColor,
                         style = timestampStyle
                     )
@@ -92,17 +86,4 @@ fun NotificationCard(
             }
         }
     )
-}
-
-private fun formatDateTime(dateTime: Instant): String {
-    val now = Clock.System.now()
-    val duration = now - dateTime
-
-    return when {
-        duration < 1.minutes -> "now"
-        duration < 1.hours -> "${duration.inWholeMinutes}m ago"
-        duration < 24.hours -> "${duration.inWholeHours}h ago"
-        duration < 2.days -> "Yesterday"
-        else -> "${duration.inWholeDays} days ago"
-    }
 }

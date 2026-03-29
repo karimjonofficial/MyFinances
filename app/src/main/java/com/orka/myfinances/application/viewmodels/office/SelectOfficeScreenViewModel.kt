@@ -8,7 +8,7 @@ import com.orka.myfinances.data.models.Credentials
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.MapperListViewModel
+import com.orka.myfinances.lib.viewmodel.FormatListViewModel
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.screens.host.SelectOfficeScreenInteractor
 import com.orka.myfinances.ui.screens.host.components.OfficeUiModel
@@ -22,7 +22,7 @@ class SelectOfficeScreenViewModel(
     loading: UiText,
     failure: UiText,
     logger: Logger
-) : MapperListViewModel<Office, OfficeUiModel>(
+) : FormatListViewModel<Office, OfficeUiModel>(
     get = { officeApi.get(company.id.value)?.map { it.map(company) } },
     map = { it.toUiModel() },
     loading = loading,

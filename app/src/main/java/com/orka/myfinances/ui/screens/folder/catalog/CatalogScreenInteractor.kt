@@ -14,6 +14,7 @@ interface CatalogScreenInteractor : StateFul {
             override fun select(folder: FolderUiModel) {}
             override fun addFolder(name: String, type: String, templateId: Id?) {}
             override fun navigateToAddTemplate() {}
+            override fun initialize() {}
             override fun refresh() {}
         }
     }

@@ -11,6 +11,7 @@ interface ClientsScreenInteractor : StateFul {
         val dummy = object : ClientsScreenInteractor {
             override fun add(name: String, lastName: String?, patronymic: String?, phone: String?, address: String?) {}
             override fun select(client: ClientUiModel) {}
+            override fun initialize() {}
             override fun refresh() {}
         }
     }

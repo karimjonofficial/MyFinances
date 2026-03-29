@@ -9,7 +9,7 @@ import com.orka.myfinances.data.repositories.folder.AddFolderRequest
 import com.orka.myfinances.data.repositories.folder.FolderEvent
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.StateFul
+import com.orka.myfinances.lib.viewmodel.StateFulViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.folder.catalog.CatalogScreenModel
 import com.orka.myfinances.ui.screens.folder.catalog.CatalogScreenInteractor
@@ -27,7 +27,7 @@ class CatalogScreenViewModel(
     events: Flow<FolderEvent>,
     private val navigator: Navigator,
     logger: Logger
-) : StateFul<State<CatalogScreenModel>>(
+) : StateFulViewModel<State<CatalogScreenModel>>(
     initialState = State.Loading(loading),
     logger = logger
 ), CatalogScreenInteractor {

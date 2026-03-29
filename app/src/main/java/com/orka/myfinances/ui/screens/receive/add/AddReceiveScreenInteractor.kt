@@ -9,6 +9,8 @@ interface AddReceiveScreenInteractor : StateFul {
     companion object {
         val dummy = object : AddReceiveScreenInteractor {
             override fun add(title: ProductTitle?, amount: Int?, price: Int?, salePrice: Int?, totalPrice: Int?, description: String?) {}
+            override fun initialize() {}
+
             override fun refresh() {}
         }
     }

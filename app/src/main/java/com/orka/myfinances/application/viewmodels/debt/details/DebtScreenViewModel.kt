@@ -8,7 +8,7 @@ import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.StateFul
+import com.orka.myfinances.lib.viewmodel.StateFulViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.debt.details.DebtScreenModel
 import com.orka.myfinances.ui.screens.debt.details.interactor.DebtScreenInteractor
@@ -22,7 +22,7 @@ class DebtScreenViewModel(
     private val navigator: Navigator,
     private val loading: UiText,
     logger: Logger
-) : StateFul<State<DebtScreenModel>>(
+) : StateFulViewModel<State<DebtScreenModel>>(
     initialState = State.Loading(loading),
     logger = logger
 ), DebtScreenInteractor {

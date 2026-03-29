@@ -14,7 +14,7 @@ import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.StateFul
+import com.orka.myfinances.lib.viewmodel.StateFulViewModel
 import com.orka.myfinances.printer.Printer
 import com.orka.myfinances.printer.PrinterState
 import com.orka.myfinances.ui.navigation.Navigator
@@ -38,7 +38,7 @@ class CheckoutScreenViewModel(
     private val loading: UiText,
     private val failure: UiText,
     logger: Logger
-) : StateFul<State<CheckoutScreenModel>>(
+) : StateFulViewModel<State<CheckoutScreenModel>>(
     initialState = State.Loading(loading),
     logger = logger
 ), CheckoutScreenInteractor {
