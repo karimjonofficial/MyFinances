@@ -34,6 +34,9 @@ fun catalogEntry(
         key = "sheet_${destination.id.value}",
         initializer = { factory.templateBottomSheetViewModel() }
     )
+    LaunchedEffect(Unit) {
+        sheetViewModel.initialize()
+    }
     val uiState = viewModel.uiState.collectAsState()
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
     val templatesState = sheetViewModel.uiState.collectAsState()
@@ -54,19 +57,12 @@ fun catalogEntry(
                 dismissRequest = { dialogVisible.value = false },
                 onUnfoldTemplates = { sheetVisible.value = true },
                 onSuccess = { name, type, templateId ->
-                    viewModel.addFolder(
-                        name,
-                        type,
-                        templateId
-                    )
+                    viewModel.addFolder(name, type, templateId)
                 },
                 onCancel = { dialogVisible.value = false }
             )
         },
         bottomSheet = {
-            LaunchedEffect(Unit) {
-                sheetViewModel.initialize()
-            }
             SelectTemplateBottomSheet(
                 state = templatesState.value,
                 onDismissRequest = {
