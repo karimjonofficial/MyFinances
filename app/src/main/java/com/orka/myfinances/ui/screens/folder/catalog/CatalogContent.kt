@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.orka.myfinances.ui.screens.folder.catalog.CatalogScreenInteractor
 
 @Composable
 fun CatalogContent(

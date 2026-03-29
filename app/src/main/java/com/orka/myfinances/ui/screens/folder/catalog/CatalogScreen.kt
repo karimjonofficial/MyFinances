@@ -13,7 +13,6 @@ import com.orka.myfinances.fixtures.resources.models.folder.catalog1
 import com.orka.myfinances.lib.ui.components.TopAppBar
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.ui.screens.folder.catalog.CatalogScreenInteractor
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable

@@ -13,7 +13,6 @@ import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.folder.home.interactor.FoldersContentInteractor
 import com.orka.myfinances.ui.screens.folder.home.parts.FoldersContentCarousel
-import com.orka.myfinances.ui.screens.folder.home.FoldersContentModel
 
 @Composable
 fun FoldersContent(
