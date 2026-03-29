@@ -256,8 +256,7 @@ class Factory(
             formatDecimal = formatter,
             printer = printer,
             loading = loading,
-            failure = failure,
-            printerState = printer.state
+            failure = failure
         )
     }
 

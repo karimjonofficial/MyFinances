@@ -1,7 +1,5 @@
 package com.orka.myfinances.application.viewmodels.checkout
 
-import androidx.lifecycle.viewModelScope
-import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.order.OrderApi
 import com.orka.myfinances.data.api.sale.SaleApi
 import com.orka.myfinances.data.models.Id
@@ -10,18 +8,15 @@ import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.lib.extensions.models.getPrice
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.StateFulViewModel
 import com.orka.myfinances.printer.Printer
-import com.orka.myfinances.printer.PrinterState
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenModel
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 class CheckoutScreenViewModel(
     private val saleApi: SaleApi,
@@ -29,7 +24,6 @@ class CheckoutScreenViewModel(
     private val basketRepository: BasketRepository,
     private val navigator: Navigator,
     private val printer: Printer,
-    private val printerState: StateFlow<PrinterState>,
     private val formatDecimal: FormatDecimal,
     private val formatPrice: FormatPrice,
     private val loading: UiText,
@@ -43,18 +37,6 @@ class CheckoutScreenViewModel(
 
     init {
         initialize()
-        printerState.onEach { newState ->
-            updateState { currentState ->
-                val successState = (currentState as? State.Success)?.value
-                if (successState != null) {
-                    State.Success(
-                        value = successState.copy(
-                            printerConnected = newState is PrinterState.Connected
-                        )
-                    )
-                } else currentState
-            }
-        }.launchIn(viewModelScope)
     }
 
     override fun initialize() {
@@ -66,7 +48,6 @@ class CheckoutScreenViewModel(
                         value = CheckoutScreenModel(
                             items = items.map { it.toModel(formatPrice, formatDecimal) },
                             price = items.getPrice().toInt(),
-                            printerConnected = printerState.value is PrinterState.Connected
                         )
                     )
                 )
@@ -85,8 +66,7 @@ class CheckoutScreenViewModel(
                     State.Success(
                         value = CheckoutScreenModel(
                             items = items.map { it.toModel(formatPrice, formatDecimal) },
-                            price = items.getPrice().toInt(),
-                            printerConnected = printerState.value is PrinterState.Connected
+                            price = items.getPrice().toInt()
                         )
                     )
                 )
@@ -109,7 +89,7 @@ class CheckoutScreenViewModel(
                 try {
                     val response = saleApi.add(basket.toSaleRequest(id))
                     if (response != null) {
-                        if (print && printerState.value is PrinterState.Connected) {
+                        if (print) {
                             printer.print(response)
                         }
                         clearBasket()

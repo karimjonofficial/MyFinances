@@ -40,7 +40,7 @@ fun CheckoutScreen(
 ) {
     val price = rememberSaveable { mutableStateOf(if(state is State.Success) state.value.price else null) }
     val description = rememberSaveable { mutableStateOf<String?>(null) }
-    val printReceipt = rememberSaveable { mutableStateOf(if(state is State.Success) state.value.printerConnected else false) }
+    val printReceipt = rememberSaveable { mutableStateOf(state is State.Success) }
     val selectedClient = retain { mutableStateOf<ClientItemModel?>(null) }
     val sheetVisible = rememberSaveable { mutableStateOf(false) }
     val sheetState = androidx.compose.material3.rememberModalBottomSheetState()
@@ -100,7 +100,6 @@ fun CheckoutScreen(
             items = state.items,
             price = state.price,
             selectedClient = selectedClient.value,
-            printerConnected = state.printerConnected,
             description = description.value,
             printReceipt = printReceipt.value,
             onOpenClients = { sheetVisible.value = true },

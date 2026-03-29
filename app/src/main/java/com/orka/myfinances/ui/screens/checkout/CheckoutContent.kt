@@ -39,7 +39,6 @@ fun CheckoutContent(
     description: String?,
     printReceipt: Boolean,
     selectedClient: ClientItemModel?,
-    printerConnected: Boolean,
     onOpenClients: () -> Unit,
     onPriceChanged: (Int?) -> Unit,
     onDescriptionChanged: (String?) -> Unit,
@@ -56,7 +55,7 @@ fun CheckoutContent(
 
         VerticalSpacer(16)
         Row {
-            if(selectedClient == null) {
+            if (selectedClient == null) {
                 Button(onClick = onOpenClients) {
                     Text(text = stringResource(R.string.select_client))
                 }
@@ -91,20 +90,18 @@ fun CheckoutContent(
             onValueChange = { onDescriptionChanged(it) }
         )
 
-        if (printerConnected) {
-            VerticalSpacer(8)
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onPrintReceiptChanged(!printReceipt) },
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Checkbox(
-                    checked = printReceipt,
-                    onCheckedChange = { onPrintReceiptChanged(it) }
-                )
-                Text(text = stringResource(R.string.print_receipt))
-            }
+        VerticalSpacer(8)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onPrintReceiptChanged(!printReceipt) },
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
+                checked = printReceipt,
+                onCheckedChange = { onPrintReceiptChanged(it) }
+            )
+            Text(text = stringResource(R.string.print_receipt))
         }
 
         VerticalSpacer(8)
@@ -129,7 +126,6 @@ private fun CheckoutContentPreview() {
                 .padding(horizontal = 8.dp),
             items = items,
             price = 1000,
-            printerConnected = true,
             description = "",
             printReceipt = false,
             selectedClient = null,

@@ -11,21 +11,14 @@ import com.dantsu.escposprinter.EscPosPrinter
 import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections
 import com.orka.myfinances.data.api.sale.models.response.SaleApiModel
 import com.orka.myfinances.printer.Printer
-import com.orka.myfinances.printer.PrinterState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class BluetoothPrinterImpl(
     private val context: Context,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) : Printer {
-
-    private val _state = MutableStateFlow<PrinterState>(PrinterState.Disconnected)
-    val state: StateFlow<PrinterState> = _state.asStateFlow()
 
     init {
         checkConnection()
@@ -45,19 +38,12 @@ class BluetoothPrinterImpl(
     @SuppressLint("MissingPermission")
     private fun checkConnection() {
         if (!hasBluetoothPermission()) {
-            _state.value = PrinterState.Disconnected
             return
         }
         scope.launch {
             try {
-                val connection = BluetoothPrintersConnections.selectFirstPaired()
-                if (connection != null) {
-                    _state.value = PrinterState.Connected
-                } else {
-                    _state.value = PrinterState.Disconnected
-                }
+                BluetoothPrintersConnections.selectFirstPaired()
             } catch (e: Exception) {
-                _state.value = PrinterState.Disconnected
                 d("BluetoothPrinterImpl", e.message.toString())
             }
         }
@@ -76,9 +62,7 @@ class BluetoothPrinterImpl(
                     val formattedText = """
                         [C]<b>My Finances</b>
                         [C]Sale ID: ${sale.id}
-                        [L]--------------------------------
                         ${sale.items.joinToString("\n") { "[L]${it.product.title.name} [R]${it.amount}" }}
-                        [L]--------------------------------
                         [R]TOTAL: [R]<b>${sale.price} UZS</b>
                         [C]Thank you!
                     """.trimIndent()
