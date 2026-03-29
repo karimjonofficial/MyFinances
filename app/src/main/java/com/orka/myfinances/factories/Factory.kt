@@ -87,7 +87,7 @@ class Factory(
     private val receiveApi = ReceiveApi(httpClient, session.office, receiveFlow)
     private val saleApi = SaleApi(httpClient, session.office, saleFlow)
     private val orderApi = OrderApi(httpClient, session.office)
-    private val debtApi = DebtApi(httpClient)
+    private val debtApi = DebtApi(httpClient, session.office)
     private val officeApi = OfficeApi(httpClient)
     private val userApi = UserApi(httpClient)
 

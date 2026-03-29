@@ -8,7 +8,7 @@ import com.orka.myfinances.data.api.debt.DebtApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.debt.AddDebtRequest
 import com.orka.myfinances.lib.data.api.getAll
-import com.orka.myfinances.lib.data.api.getChunk
+import com.orka.myfinances.lib.data.api.scoped.office.getChunk
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
