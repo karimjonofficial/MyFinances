@@ -15,9 +15,9 @@ import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.navigation.entries.home.SelectTemplateBottomSheet
-import com.orka.myfinances.ui.navigation.entries.home.TemplateItemModel
+import com.orka.myfinances.ui.screens.folder.models.TemplateItemModel
 import com.orka.myfinances.ui.screens.folder.catalog.CatalogScreen
-import com.orka.myfinances.ui.screens.folder.home.parts.AddFolderDialog
+import com.orka.myfinances.ui.screens.folder.components.AddFolderDialog
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

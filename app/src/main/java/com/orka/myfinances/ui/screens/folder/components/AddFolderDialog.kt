@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.folder.home.parts
+package com.orka.myfinances.ui.screens.folder.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,7 +27,7 @@ import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.RadioButton
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
-import com.orka.myfinances.ui.navigation.entries.home.TemplateItemModel
+import com.orka.myfinances.ui.screens.folder.models.TemplateItemModel
 import com.orka.myfinances.ui.screens.folder.home.toItemModel
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)

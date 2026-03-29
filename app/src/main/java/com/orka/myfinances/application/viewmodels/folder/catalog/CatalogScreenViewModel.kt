@@ -12,7 +12,7 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.StateFul
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.folder.catalog.CatalogScreenModel
-import com.orka.myfinances.ui.screens.folder.catalog.interactor.CatalogScreenInteractor
+import com.orka.myfinances.ui.screens.folder.catalog.CatalogScreenInteractor
 import com.orka.myfinances.ui.screens.folder.models.FolderUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow

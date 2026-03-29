@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.folder.catalog.interactor
+package com.orka.myfinances.ui.screens.folder.catalog
 
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.ui.viewmodel.StateFul

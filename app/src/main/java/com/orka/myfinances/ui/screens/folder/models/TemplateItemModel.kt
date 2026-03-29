@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.navigation.entries.home
+package com.orka.myfinances.ui.screens.folder.models
 
 import com.orka.myfinances.data.models.Id
 

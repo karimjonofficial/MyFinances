@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.folder.home.state
+package com.orka.myfinances.ui.screens.folder.home
 
 import com.orka.myfinances.ui.screens.folder.models.FolderUiModel
 

@@ -9,11 +9,10 @@ import com.orka.myfinances.data.repositories.folder.AddFolderRequest
 import com.orka.myfinances.data.repositories.folder.FolderEvent
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.DualStateViewModel
+import com.orka.myfinances.lib.viewmodel.StateFul
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.folder.home.interactor.FoldersContentInteractor
-import com.orka.myfinances.ui.screens.folder.home.state.FoldersContentModel
-import com.orka.myfinances.ui.screens.folder.home.state.TemplateState
+import com.orka.myfinances.ui.screens.folder.home.FoldersContentModel
 import com.orka.myfinances.ui.screens.folder.models.FolderUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,34 +26,33 @@ class FoldersContentViewModel(
     private val loading: UiText,
     private val failure: UiText,
     logger: Logger
-) : DualStateViewModel<State<FoldersContentModel>, TemplateState>(
-    initialState1 = State.Loading(loading),
-    initialState2 = TemplateState.Initial,
+) : StateFul<State<FoldersContentModel>>(
+    initialState = State.Loading(loading),
     logger = logger
 ), FoldersContentInteractor {
-    val uiState = state1.asStateFlow()
+    val uiState = state.asStateFlow()
 
     init {
         events.onEach { if(it.catalogId == null) initialize() }
             .launchIn(viewModelScope)
     }
 
-    fun initialize() {
+    override fun initialize() {
         launch {
             try {
                 val folders = folderApi.getTop()?.sortedBy { it.name }
                 if (folders != null) {
-                    setState1(State.Success(FoldersContentModel(folders.map { it.toUiModel() })))
-                } else setState1(State.Failure(failure))
+                    setState(State.Success(FoldersContentModel(folders.map { it.toUiModel() })))
+                } else setState(State.Failure(failure))
             } catch (e: Exception) {
-                setState1(State.Failure(UiText.Str(e.message.toString())))
+                setState(State.Failure(UiText.Str(e.message.toString())))
             }
         }
     }
 
     override fun addFolder(name: String, type: String, templateId: Id?) {
         launch {
-            setState1(State.Loading(loading))
+            setState(State.Loading(loading))
             val request = AddFolderRequest(name, type, templateId, null)
             folderApi.add(request)
         }
@@ -89,14 +87,14 @@ class FoldersContentViewModel(
 
     override fun refresh() {
         launch {
-            setState1(State.Loading(loading))
+            setState(State.Loading(loading))
             try {
                 val folders = folderApi.getTop()
                 if (folders != null) {
-                    setState1(State.Success(FoldersContentModel(folders.map { it.toUiModel() })))
-                } else setState1(State.Failure(failure))
+                    setState(State.Success(FoldersContentModel(folders.map { it.toUiModel() })))
+                } else setState(State.Failure(failure))
             } catch (e: Exception) {
-                setState1(State.Failure(UiText.Str(e.message.toString())))
+                setState(State.Failure(UiText.Str(e.message.toString())))
             }
         }
     }

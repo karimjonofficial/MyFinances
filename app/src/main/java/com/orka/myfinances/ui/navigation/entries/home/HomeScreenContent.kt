@@ -19,7 +19,8 @@ import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.screens.basket.BasketContent
 import com.orka.myfinances.ui.screens.folder.home.FoldersContent
-import com.orka.myfinances.ui.screens.folder.home.parts.AddFolderDialog
+import com.orka.myfinances.ui.screens.folder.components.AddFolderDialog
+import com.orka.myfinances.ui.screens.folder.models.TemplateItemModel
 import com.orka.myfinances.ui.screens.profile.ProfileContent
 import kotlinx.coroutines.launch
 

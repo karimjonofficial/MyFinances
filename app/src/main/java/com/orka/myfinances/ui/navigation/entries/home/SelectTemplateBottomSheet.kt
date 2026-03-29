@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import com.orka.myfinances.lib.ui.components.StickyHeader
 import com.orka.myfinances.lib.ui.models.ChunkMapState
 import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.ui.screens.folder.models.TemplateItemModel
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
