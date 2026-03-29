@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.factories
 
-import com.orka.myfinances.core.Logger
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.factories.Factory

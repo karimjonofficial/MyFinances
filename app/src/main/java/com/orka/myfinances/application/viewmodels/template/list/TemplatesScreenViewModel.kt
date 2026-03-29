@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.template.list
 
-import com.orka.myfinances.core.Logger
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.template.TemplateApi1
 import com.orka.myfinances.data.api.template.TemplateApiModel
 import com.orka.myfinances.data.repositories.template.TemplateEvent

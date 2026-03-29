@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.login
 
-import com.orka.myfinances.core.Logger
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.auth.AuthenticationApi
 import com.orka.myfinances.data.models.Credentials
 import com.orka.myfinances.lib.ui.models.UiText

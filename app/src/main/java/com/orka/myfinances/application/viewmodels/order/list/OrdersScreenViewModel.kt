@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.order.list
 
-import com.orka.myfinances.core.Logger
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.order.OrderApi1
 import com.orka.myfinances.data.api.order.OrderApiModel
 import com.orka.myfinances.lib.data.api.getChunk

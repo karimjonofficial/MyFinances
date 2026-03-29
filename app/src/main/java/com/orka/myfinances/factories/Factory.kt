@@ -28,7 +28,7 @@ import com.orka.myfinances.application.viewmodels.template.add.AddTemplateScreen
 import com.orka.myfinances.application.viewmodels.template.bottomsheet.TemplateBottomSheetViewModel
 import com.orka.myfinances.application.viewmodels.template.details.TemplateScreenViewModel
 import com.orka.myfinances.application.viewmodels.template.list.TemplatesScreenViewModel
-import com.orka.myfinances.core.Logger
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.client.ClientApi
 import com.orka.myfinances.data.api.debt.DebtApi
 import com.orka.myfinances.data.api.folder.FolderApi

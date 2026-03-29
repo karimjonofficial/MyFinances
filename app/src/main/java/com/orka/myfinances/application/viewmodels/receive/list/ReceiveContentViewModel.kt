@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.receive.list
 
 import androidx.lifecycle.viewModelScope
-import com.orka.myfinances.core.Logger
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.receive.ReceiveApi1
 import com.orka.myfinances.data.api.receive.models.response.ReceiveApiModel
 import com.orka.myfinances.data.repositories.receive.ReceiveEvent

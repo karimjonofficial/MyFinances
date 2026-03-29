@@ -1,6 +1,6 @@
 package com.orka.myfinances.lib.viewmodel
 
-import com.orka.myfinances.core.Logger
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.viewmodel.StateFul
 
 abstract class StateFul<T>(

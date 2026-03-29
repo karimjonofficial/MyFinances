@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.template.bottomsheet
 
 import com.orka.myfinances.application.viewmodels.folder.home.toItemModel
-import com.orka.myfinances.core.Logger
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.template.TemplateApi1
 import com.orka.myfinances.data.api.template.TemplateApiModel
 import com.orka.myfinances.lib.data.api.scoped.office.getChunk

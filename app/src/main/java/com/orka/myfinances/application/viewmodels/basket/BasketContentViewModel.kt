@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.basket
 
 import androidx.lifecycle.viewModelScope
-import com.orka.myfinances.core.Logger
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.repositories.basket.BasketRepository

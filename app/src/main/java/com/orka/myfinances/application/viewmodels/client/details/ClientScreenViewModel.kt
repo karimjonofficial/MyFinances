@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.client.details
 
-import com.orka.myfinances.core.Logger
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.client.ClientApi
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.ui.models.UiText

@@ -6,7 +6,7 @@ import com.orka.myfinances.application.factories.httpClient
 import com.orka.myfinances.application.factories.httpLogger
 import com.orka.myfinances.application.viewmodels.login.LoginScreenViewModel
 import com.orka.myfinances.application.viewmodels.office.SelectOfficeScreenViewModel
-import com.orka.myfinances.core.Logger
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.auth.AuthenticationApi
 import com.orka.myfinances.data.api.office.OfficeApi
 import com.orka.myfinances.data.api.office.map

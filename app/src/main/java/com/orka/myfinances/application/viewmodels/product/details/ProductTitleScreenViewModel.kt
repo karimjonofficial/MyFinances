@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.product.details
 
 import com.orka.myfinances.R
-import com.orka.myfinances.core.Logger
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.receive.ReceiveApi
 import com.orka.myfinances.data.api.title.ProductTitleApi
 import com.orka.myfinances.data.models.Id

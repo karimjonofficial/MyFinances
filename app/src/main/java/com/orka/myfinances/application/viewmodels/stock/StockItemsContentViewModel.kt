@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.stock
 
 import androidx.lifecycle.viewModelScope
-import com.orka.myfinances.core.Logger
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.stock.StockApi1
 import com.orka.myfinances.data.api.stock.StockItemApiModel
 import com.orka.myfinances.data.api.stock.getByCategory

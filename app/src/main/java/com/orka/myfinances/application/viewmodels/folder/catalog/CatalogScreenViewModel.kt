@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.folder.catalog
 
 import androidx.lifecycle.viewModelScope
-import com.orka.myfinances.core.Logger
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.folder.CatalogApiModel
 import com.orka.myfinances.data.api.folder.FolderApi
 import com.orka.myfinances.data.models.Id

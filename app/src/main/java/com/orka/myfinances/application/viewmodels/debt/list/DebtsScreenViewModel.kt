@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.debt.list
 
 import com.orka.myfinances.application.viewmodels.client.details.toItemModel
-import com.orka.myfinances.core.Logger
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.client.ClientApi
 import com.orka.myfinances.data.api.debt.DebtApi
 import com.orka.myfinances.data.api.debt.DebtApiModel

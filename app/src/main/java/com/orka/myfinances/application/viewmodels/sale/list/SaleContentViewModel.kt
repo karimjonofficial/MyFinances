@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.sale.list
 
 import androidx.lifecycle.viewModelScope
-import com.orka.myfinances.core.Logger
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.sale.SaleApi1
 import com.orka.myfinances.data.api.sale.models.response.SaleApiModel
 import com.orka.myfinances.data.repositories.sale.SaleEvent

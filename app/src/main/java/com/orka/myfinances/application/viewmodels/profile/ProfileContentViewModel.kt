@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.profile
 
 import com.orka.myfinances.R
-import com.orka.myfinances.core.Logger
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.office.OfficeApi
 import com.orka.myfinances.data.api.office.map
 import com.orka.myfinances.data.api.user.UserApi

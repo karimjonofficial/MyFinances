@@ -2,7 +2,7 @@ package com.orka.myfinances.application.viewmodels.checkout
 
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.application.viewmodels.client.details.toItemModel
-import com.orka.myfinances.core.Logger
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.client.ClientApi
 import com.orka.myfinances.data.api.order.OrderApi
 import com.orka.myfinances.data.api.sale.SaleApi

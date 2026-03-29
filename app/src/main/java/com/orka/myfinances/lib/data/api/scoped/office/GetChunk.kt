@@ -8,13 +8,18 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.http.HttpStatusCode
 
-suspend inline fun <reified T> OfficeScopedApi.getChunk(size: Int, page: Int): Chunk<T>? {
+suspend inline fun <reified T> OfficeScopedApi.getChunk(
+    size: Int,
+    page: Int,
+    orderBy: String? = null
+): Chunk<T>? {
     val response = httpClient.get(
         urlString = baseUrl,
         block = {
             parameter("branch", office.id.value)
             parameter("page_size", size)
             parameter("page", page)
+            if(orderBy != null) parameter("ordering", orderBy)
         }
     )
     return if (response.status == HttpStatusCode.OK) response.body<ChunkApiModel<T>>().map() else null

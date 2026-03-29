@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.notification
 
-import com.orka.myfinances.core.Logger
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.notification.NotificationApi
 import com.orka.myfinances.data.models.Notification
 import com.orka.myfinances.lib.ui.models.UiText
