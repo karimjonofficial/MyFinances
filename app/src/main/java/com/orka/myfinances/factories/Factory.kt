@@ -2,31 +2,32 @@ package com.orka.myfinances.factories
 
 import com.orka.myfinances.R
 import com.orka.myfinances.application.factories.Formatter
-import com.orka.myfinances.application.viewmodels.folder.catalog.CatalogScreenViewModel
-import com.orka.myfinances.application.viewmodels.folder.category.CategoryScreenViewModel
+import com.orka.myfinances.application.viewmodels.basket.BasketContentViewModel
 import com.orka.myfinances.application.viewmodels.checkout.CheckoutScreenViewModel
 import com.orka.myfinances.application.viewmodels.client.details.ClientScreenViewModel
 import com.orka.myfinances.application.viewmodels.client.list.ClientsScreenViewModel
 import com.orka.myfinances.application.viewmodels.debt.details.DebtScreenViewModel
 import com.orka.myfinances.application.viewmodels.debt.list.DebtsScreenViewModel
-import com.orka.myfinances.application.viewmodels.receive.list.ReceiveContentViewModel
-import com.orka.myfinances.application.viewmodels.sale.list.SaleContentViewModel
-import com.orka.myfinances.application.viewmodels.basket.BasketContentViewModel
+import com.orka.myfinances.application.viewmodels.folder.catalog.CatalogScreenViewModel
+import com.orka.myfinances.application.viewmodels.folder.category.CategoryScreenViewModel
 import com.orka.myfinances.application.viewmodels.folder.home.FoldersContentViewModel
-import com.orka.myfinances.application.viewmodels.profile.ProfileContentViewModel
 import com.orka.myfinances.application.viewmodels.notification.NotificationsScreenViewModel
 import com.orka.myfinances.application.viewmodels.order.details.OrderScreenViewModel
 import com.orka.myfinances.application.viewmodels.order.list.OrdersScreenViewModel
-import com.orka.myfinances.application.viewmodels.receive.add.AddReceiveScreenViewModel
-import com.orka.myfinances.application.viewmodels.receive.details.ReceiveScreenViewModel
-import com.orka.myfinances.application.viewmodels.sale.details.SaleScreenViewModel
-import com.orka.myfinances.application.viewmodels.template.add.AddTemplateScreenViewModel
-import com.orka.myfinances.application.viewmodels.template.details.TemplateScreenViewModel
-import com.orka.myfinances.application.viewmodels.template.list.TemplatesScreenViewModel
 import com.orka.myfinances.application.viewmodels.product.add.AddProductTitleScreenViewModel
 import com.orka.myfinances.application.viewmodels.product.details.ProductTitleScreenViewModel
 import com.orka.myfinances.application.viewmodels.product.list.ProductTitlesContentViewModel
+import com.orka.myfinances.application.viewmodels.profile.ProfileContentViewModel
+import com.orka.myfinances.application.viewmodels.receive.add.AddReceiveScreenViewModel
+import com.orka.myfinances.application.viewmodels.receive.details.ReceiveScreenViewModel
+import com.orka.myfinances.application.viewmodels.receive.list.ReceiveContentViewModel
+import com.orka.myfinances.application.viewmodels.sale.details.SaleScreenViewModel
+import com.orka.myfinances.application.viewmodels.sale.list.SaleContentViewModel
 import com.orka.myfinances.application.viewmodels.stock.StockItemsContentViewModel
+import com.orka.myfinances.application.viewmodels.template.add.AddTemplateScreenViewModel
+import com.orka.myfinances.application.viewmodels.template.bottomsheet.TemplateBottomSheetViewModel
+import com.orka.myfinances.application.viewmodels.template.details.TemplateScreenViewModel
+import com.orka.myfinances.application.viewmodels.template.list.TemplatesScreenViewModel
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.api.client.ClientApi
 import com.orka.myfinances.data.api.debt.DebtApi
@@ -94,7 +95,6 @@ class Factory(
     fun foldersViewModel(): FoldersContentViewModel {
         return FoldersContentViewModel(
             folderApi = folderApi,
-            templateApi = templateApi,
             navigator = navigator,
             events = folderFlow,
             loading = loading,
@@ -162,7 +162,6 @@ class Factory(
         return CatalogScreenViewModel(
             catalogId = id,
             folderApi = folderApi,
-            templateApi = templateApi,
             events = folderFlow,
             navigator = navigator,
             loading = loading,
@@ -395,6 +394,15 @@ class Factory(
             loading = loading,
             failure = failure,
             navigator = navigator,
+            logger = logger
+        )
+    }
+
+    fun templateBottomSheetViewModel(): TemplateBottomSheetViewModel {
+        return TemplateBottomSheetViewModel(
+            templateApi = TemplateApi1(httpClient, session.office),
+            loading = loading,
+            failure = failure,
             logger = logger
         )
     }

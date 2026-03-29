@@ -1,17 +1,16 @@
 package com.orka.myfinances.ui.screens.folder.home.parts
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -19,32 +18,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.fixtures.resources.models.template.templates
+import com.orka.myfinances.fixtures.resources.models.template.template1
 import com.orka.myfinances.lib.ui.components.Dialog
-import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
+import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.RadioButton
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
-import com.orka.myfinances.ui.screens.folder.home.state.TemplateState
+import com.orka.myfinances.ui.navigation.entries.home.TemplateItemModel
+import com.orka.myfinances.ui.screens.folder.home.toItemModel
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AddFolderDialog(
-    state: TemplateState,
+    template: TemplateItemModel?,
     dismissRequest: () -> Unit,
-    onAddTemplateClick: () -> Unit,
+    onUnfoldTemplates: () -> Unit,
     onSuccess: (String, String, Id?) -> Unit,
-    showTemplates: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     onCancel: () -> Unit
 ) {
     val name = rememberSaveable { mutableStateOf("") }
     val folderType = rememberSaveable { mutableIntStateOf(0) }
-    val templateId = rememberSaveable { mutableStateOf<Id?>(null) }
-    val templates = if (state is TemplateState.Success) state.templates else null
-
-    val templatesVisibleValue = showTemplates.value
 
     Dialog(
         dismissRequest = dismissRequest,
@@ -56,7 +52,7 @@ fun AddFolderDialog(
         onSuccess = {
             val nameValue = name.value
             val folderTypeValue = if (folderType.intValue == 0) "catalog" else "category"
-            if (nameValue.isNotBlank()) onSuccess(nameValue, folderTypeValue, templateId.value)
+            if (nameValue.isNotBlank()) onSuccess(nameValue, folderTypeValue, template?.id)
         }
     ) {
         OutlinedTextField(
@@ -79,7 +75,6 @@ fun AddFolderDialog(
                 selected = folderType.intValue == 0,
                 onClick = {
                     folderType.intValue = 0
-                    showTemplates.value = false
                 }
             )
 
@@ -90,38 +85,29 @@ fun AddFolderDialog(
                 selected = folderType.intValue == 1,
                 onClick = {
                     folderType.intValue = 1
-                    showTemplates.value = true
                 }
             )
 
-            if (templatesVisibleValue) {
-                val dropDownMenuExpanded = rememberSaveable { mutableStateOf(false) }
-                val templateValue = templates?.find { it.id == templateId.value }
-
+            if (folderType.intValue == 1) {
                 VerticalSpacer(8)
-                OutlinedExposedDropDownTextField(
-                    text = templateValue?.name ?: stringResource(R.string.select),
-                    label = stringResource(R.string.templates),
-                    menuExpanded = dropDownMenuExpanded.value,
-                    onExpandChange = { dropDownMenuExpanded.value = it },
-                    onDismissRequested = { dropDownMenuExpanded.value = false },
-                    items = templates,
-                    itemText = { it.name },
-                    onItemSelected = {
-                        templateId.value = it.id
+                if(template == null) {
+                    Button(onClick = onUnfoldTemplates) {
+                        Text(text = stringResource(R.string.select_template))
                     }
-                )
-
-                VerticalSpacer(8)
-                Row {
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Text(
-                        modifier = Modifier.clickable { onAddTemplateClick() },
-                        text = stringResource(R.string.add_template),
-                        color = ButtonDefaults.textButtonColors().contentColor,
-                        style = MaterialTheme.typography.labelLarge
-                    )
+                } else {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp)
+                    ) {
+                        Text(text = stringResource(R.string.template))
+                        HorizontalSpacer(8)
+                        Text(
+                            text = template.name,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 }
             }
         }
@@ -130,16 +116,28 @@ fun AddFolderDialog(
 
 @Preview
 @Composable
-private fun AddFolderDialogPreview() {
+private fun AddFolderDialogPreview1() {
     ScaffoldPreview(title = "Home") {
-
         AddFolderDialog(
-            state = TemplateState.Success(templates),
+            template = template1.toItemModel(),
             dismissRequest = {},
-            onAddTemplateClick = {},
+            onUnfoldTemplates = {},
             onSuccess = { _, _, _ -> },
-            onCancel = {},
-            showTemplates = rememberSaveable { mutableStateOf(true) }
+            onCancel = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AddFolderDialogPreview2() {
+    ScaffoldPreview(title = "Home") {
+        AddFolderDialog(
+            template = template1.toItemModel(),
+            dismissRequest = {},
+            onUnfoldTemplates = {},
+            onSuccess = { _, _, _ -> },
+            onCancel = {}
         )
     }
 }

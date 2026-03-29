@@ -1,6 +1,6 @@
 package com.orka.myfinances.data.api.title
 
-import com.orka.myfinances.data.api.template.map
+import com.orka.myfinances.data.api.folder.toEntity
 import com.orka.myfinances.data.api.title.models.request.AddProductTitleApiRequest
 import com.orka.myfinances.data.api.title.models.request.PropertyApiRequestModel
 import com.orka.myfinances.data.api.title.models.response.ProductTitleApiModel
@@ -13,7 +13,7 @@ import com.orka.myfinances.data.repositories.product.title.models.AddProductTitl
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 import com.orka.myfinances.fixtures.resources.Types
 
-fun ProductTitleApiModel.map(category: Category): ProductTitle {
+fun ProductTitleApiModel.toEntity(category: Category): ProductTitle {
     return ProductTitle(
         id = Id(id),
         name = name,
@@ -21,14 +21,14 @@ fun ProductTitleApiModel.map(category: Category): ProductTitle {
         defaultSalePrice = defaultSalePrice.toInt(),
         dateTime = createdAt,
         category = category,
-        properties = properties.map { it.map() }
+        properties = properties.map { it.toEntity() }
     )
 }
 
-fun PropertyApiModel.map(): Property {
+fun PropertyApiModel.toEntity(): Property {
     return Property(
         id = Id(id),
-        field = field.map(),
+        field = field.toEntity(),
         value = when(field.type) {
             Types.TEXT -> value
             Types.NUMBER -> value.toInt()

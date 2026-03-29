@@ -23,7 +23,9 @@ fun CatalogScreen(
     dialogVisible: Boolean,
     interactor: CatalogScreenInteractor,
     onAddFolder: () -> Unit,
-    dialog: @Composable () -> Unit
+    dialog: @Composable () -> Unit,
+    bottomSheet: @Composable () -> Unit,
+    sheetVisible: Boolean
 ) {
 
     StatefulScreen(
@@ -51,6 +53,7 @@ fun CatalogScreen(
         )
 
         if(dialogVisible) dialog()
+        if(sheetVisible) bottomSheet()
     }
 }
 
@@ -65,7 +68,9 @@ private fun CatalogScreenPreview() {
             dialogVisible = false,
             interactor = CatalogScreenInteractor.dummy,
             onAddFolder = {},
-            dialog = {}
+            dialog = {},
+            bottomSheet = {},
+            sheetVisible = false
         )
     }
 }

@@ -38,15 +38,18 @@ fun FoldersContent(
                 item {
                     val carouselState = rememberCarouselState { 3 }
                     FoldersContentCarousel(state = carouselState)
-                    VerticalSpacer(24)
                 }
 
                 item {
+                    VerticalSpacer(24)
                     FoldersList(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         items = state.value.folders,
                         onFolderSelected = { interactor.select(it) }
                     )
+                }
+
+                item {
                     VerticalSpacer(8)
                 }
             }

@@ -12,7 +12,7 @@ import com.orka.myfinances.ui.navigation.entries.client.clientsEntry
 import com.orka.myfinances.ui.navigation.entries.debt.debtEntry
 import com.orka.myfinances.ui.navigation.entries.debt.debtsEntry
 import com.orka.myfinances.ui.navigation.entries.historyEntry
-import com.orka.myfinances.ui.navigation.entries.homeEntry
+import com.orka.myfinances.ui.navigation.entries.home.homeEntry
 import com.orka.myfinances.ui.navigation.entries.notificationsEntry
 import com.orka.myfinances.ui.navigation.entries.order.orderEntry
 import com.orka.myfinances.ui.navigation.entries.order.ordersEntry

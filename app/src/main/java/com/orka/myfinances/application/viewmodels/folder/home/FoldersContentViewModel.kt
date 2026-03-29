@@ -4,8 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.application.viewmodels.folder.toUiModel
 import com.orka.myfinances.core.Logger
 import com.orka.myfinances.data.api.folder.FolderApi
-import com.orka.myfinances.data.api.template.TemplateApi
-import com.orka.myfinances.data.api.template.map
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.folder.AddFolderRequest
 import com.orka.myfinances.data.repositories.folder.FolderEvent
@@ -13,10 +11,10 @@ import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.DualStateViewModel
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.folder.models.FolderUiModel
 import com.orka.myfinances.ui.screens.folder.home.interactor.FoldersContentInteractor
 import com.orka.myfinances.ui.screens.folder.home.state.FoldersContentModel
 import com.orka.myfinances.ui.screens.folder.home.state.TemplateState
+import com.orka.myfinances.ui.screens.folder.models.FolderUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -24,7 +22,6 @@ import kotlinx.coroutines.flow.onEach
 
 class FoldersContentViewModel(
     private val folderApi: FolderApi,
-    private val templateApi: TemplateApi,
     private val navigator: Navigator,
     events: Flow<FolderEvent>,
     private val loading: UiText,
@@ -36,7 +33,6 @@ class FoldersContentViewModel(
     logger = logger
 ), FoldersContentInteractor {
     val uiState = state1.asStateFlow()
-    val dialogState = state2.asStateFlow()
 
     init {
         events.onEach { if(it.catalogId == null) initialize() }
@@ -52,20 +48,6 @@ class FoldersContentViewModel(
                 } else setState1(State.Failure(failure))
             } catch (e: Exception) {
                 setState1(State.Failure(UiText.Str(e.message.toString())))
-            }
-            try {
-                val templates = templateApi.getAll()?.map { it.map() }
-                if (templates != null) {
-                    setState2(TemplateState.Success(templates))
-                } else {
-                    setState2(TemplateState.Error)
-                }
-            } catch (e: Exception) {
-                setState2(TemplateState.Error)
-                logger.log(
-                    tag = "FoldersContentViewModel",
-                    message = e.message.toString()
-                )
             }
         }
     }
@@ -115,20 +97,6 @@ class FoldersContentViewModel(
                 } else setState1(State.Failure(failure))
             } catch (e: Exception) {
                 setState1(State.Failure(UiText.Str(e.message.toString())))
-            }
-            try {
-                val templates = templateApi.getAll()?.map { it.map() }
-                if (templates != null) {
-                    setState2(TemplateState.Success(templates))
-                } else {
-                    setState2(TemplateState.Error)
-                }
-            } catch (e: Exception) {
-                setState2(TemplateState.Error)
-                logger.log(
-                    tag = "FoldersContentViewModel",
-                    message = e.message.toString()
-                )
             }
         }
     }

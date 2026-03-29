@@ -5,7 +5,7 @@ import com.orka.myfinances.data.api.folder.FolderApi
 import com.orka.myfinances.data.api.folder.map
 import com.orka.myfinances.data.api.receive.ReceiveApi
 import com.orka.myfinances.data.api.title.ProductTitleApi
-import com.orka.myfinances.data.api.title.map
+import com.orka.myfinances.data.api.title.toEntity
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.product.ProductTitle
@@ -48,7 +48,7 @@ class AddReceiveScreenViewModel(
                 if (category != null) {
                     val titlesModels = productTitleApi.getByCategory(categoryId.value)
                     if (titlesModels != null) {
-                        val titles = titlesModels.map { it.map(category) }
+                        val titles = titlesModels.map { it.toEntity(category) }
                         setState(State.Success(AddReceiveScreenModel(category, titles)))
                     } else {
                         setState(State.Failure(failure))
@@ -70,7 +70,7 @@ class AddReceiveScreenViewModel(
                 if (category != null) {
                     val titlesModels = productTitleApi.getByCategory(categoryId.value)
                     if (titlesModels != null) {
-                        val titles = titlesModels.map { it.map(category) }
+                        val titles = titlesModels.map { it.toEntity(category) }
                         setState(State.Success(AddReceiveScreenModel(category, titles)))
                     } else {
                         setState(State.Failure(failure))
