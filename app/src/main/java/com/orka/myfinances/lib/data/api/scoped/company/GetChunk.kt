@@ -1,7 +1,6 @@
 package com.orka.myfinances.lib.data.api.scoped.company
 
 import com.orka.myfinances.lib.data.api.map
-import com.orka.myfinances.lib.data.api.scoped.office.OfficeScopedApi
 import com.orka.myfinances.lib.data.models.ChunkApiModel
 import com.orka.myfinances.lib.viewmodel.Chunk
 import io.ktor.client.call.body
