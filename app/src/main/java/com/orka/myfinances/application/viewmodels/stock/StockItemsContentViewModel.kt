@@ -2,7 +2,7 @@ package com.orka.myfinances.application.viewmodels.stock
 
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.lib.logger.Logger
-import com.orka.myfinances.data.api.stock.StockApi1
+import com.orka.myfinances.data.api.stock.StockApi
 import com.orka.myfinances.data.api.stock.models.StockItemApiModel
 import com.orka.myfinances.data.api.stock.getByCategory
 import com.orka.myfinances.data.models.Id
@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.onEach
 
 class StockItemsContentViewModel(
     private val categoryId: Id,
-    private val stockApi: StockApi1,
+    private val stockApi: StockApi,
     private val basketRepository: BasketRepository,
     private val formatPrice: FormatPrice,
     private val formatDecimal: FormatDecimal,

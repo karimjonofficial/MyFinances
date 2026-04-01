@@ -38,7 +38,7 @@ import com.orka.myfinances.data.api.order.OrderApi
 import com.orka.myfinances.data.api.receive.ReceiveApi
 import com.orka.myfinances.data.api.sale.SaleApi
 import com.orka.myfinances.data.api.sale.SaleApi1
-import com.orka.myfinances.data.api.stock.StockApi1
+import com.orka.myfinances.data.api.stock.StockApi
 import com.orka.myfinances.data.api.template.TemplateApi
 import com.orka.myfinances.data.api.template.TemplateApi1
 import com.orka.myfinances.data.api.title.ProductTitleApi
@@ -133,7 +133,7 @@ class Factory(
     fun stockItemsViewModel(id: Id): StockItemsContentViewModel {
         return StockItemsContentViewModel(
             categoryId = id,
-            stockApi = StockApi1(session.office, httpClient),
+            stockApi = StockApi(session.office, httpClient),
             basketRepository = basketRepository,
             formatPrice = formatter,
             formatDecimal = formatter,
