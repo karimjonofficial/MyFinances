@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.client.list
 
 import com.orka.myfinances.data.api.client.ClientApi
-import com.orka.myfinances.data.api.client.ClientApiModel
+import com.orka.myfinances.data.api.client.models.response.ClientApiModel
 import com.orka.myfinances.data.repositories.client.AddClientRequest
 import com.orka.myfinances.lib.data.api.scoped.company.getChunk
 import com.orka.myfinances.lib.extensions.stickyHeaderKey

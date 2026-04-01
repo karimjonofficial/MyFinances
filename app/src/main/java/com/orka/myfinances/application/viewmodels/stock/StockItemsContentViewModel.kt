@@ -3,7 +3,7 @@ package com.orka.myfinances.application.viewmodels.stock
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.stock.StockApi1
-import com.orka.myfinances.data.api.stock.StockItemApiModel
+import com.orka.myfinances.data.api.stock.models.StockItemApiModel
 import com.orka.myfinances.data.api.stock.getByCategory
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.basket.BasketRepository

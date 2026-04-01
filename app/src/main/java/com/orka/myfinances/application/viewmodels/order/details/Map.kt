@@ -1,8 +1,8 @@
 package com.orka.myfinances.application.viewmodels.order.details
 
 import com.orka.myfinances.application.viewmodels.client.list.map
-import com.orka.myfinances.data.api.order.OrderApiModel
-import com.orka.myfinances.data.api.order.OrderItemApiModel
+import com.orka.myfinances.data.api.order.models.response.OrderApiModel
+import com.orka.myfinances.data.api.order.models.response.OrderItemApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.format.FormatDateTime
 import com.orka.myfinances.lib.format.FormatDecimal

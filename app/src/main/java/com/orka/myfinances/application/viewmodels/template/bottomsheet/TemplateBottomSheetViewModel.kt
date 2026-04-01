@@ -3,7 +3,7 @@ package com.orka.myfinances.application.viewmodels.template.bottomsheet
 import com.orka.myfinances.application.viewmodels.folder.home.toItemModel
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.template.TemplateApi1
-import com.orka.myfinances.data.api.template.TemplateApiModel
+import com.orka.myfinances.data.api.template.models.response.TemplateApiModel
 import com.orka.myfinances.lib.data.api.scoped.office.getChunk
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.ui.models.ChunkMapState

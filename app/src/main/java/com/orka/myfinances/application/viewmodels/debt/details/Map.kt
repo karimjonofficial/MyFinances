@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.debt.details
 
 import com.orka.myfinances.application.viewmodels.client.list.map
-import com.orka.myfinances.data.api.debt.DebtApiModel
+import com.orka.myfinances.data.api.debt.models.response.DebtApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.now
 import com.orka.myfinances.lib.format.FormatDate

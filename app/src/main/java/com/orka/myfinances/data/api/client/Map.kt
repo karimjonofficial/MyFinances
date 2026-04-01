@@ -1,5 +1,6 @@
 package com.orka.myfinances.data.api.client
 
+import com.orka.myfinances.data.api.client.models.request.AddClientApiRequest
 import com.orka.myfinances.data.repositories.client.AddClientRequest
 
 fun AddClientRequest.map(companyId: Int): AddClientApiRequest {

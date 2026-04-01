@@ -1,12 +1,14 @@
 package com.orka.myfinances.application.viewmodels.receive.details
 
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.receive.ReceiveApi
+import com.orka.myfinances.data.api.receive.models.response.ReceiveApiModel
 import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.lib.data.api.getById
 import com.orka.myfinances.lib.format.FormatDateTime
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.StateFulViewModel
@@ -36,7 +38,7 @@ class ReceiveScreenViewModel(
 
     override fun initialize() {
         launch {
-            val receive = receiveApi.getById(id.value)
+            val receive = receiveApi.getById<ReceiveApiModel>(id)
             if (receive != null) {
                 setState(State.Success(receive.toUiModel(formatPrice, formatDateTime, formatDecimal)))
             } else {
@@ -54,7 +56,7 @@ class ReceiveScreenViewModel(
     override fun refresh() {
         launch {
             setState(State.Loading(loading))
-            val receive = receiveApi.getById(id.value)
+            val receive = receiveApi.getById<ReceiveApiModel>(id)
             if (receive != null) {
                 setState(State.Success(receive.toUiModel(formatPrice, formatDateTime, formatDecimal)))
             } else {

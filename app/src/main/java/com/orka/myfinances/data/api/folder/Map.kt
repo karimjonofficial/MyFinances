@@ -1,7 +1,11 @@
 package com.orka.myfinances.data.api.folder
 
-import com.orka.myfinances.data.api.template.TemplateApiModel
-import com.orka.myfinances.data.api.template.TemplateApiModelField
+import com.orka.myfinances.data.api.folder.models.request.AddFolderApiRequest
+import com.orka.myfinances.data.api.folder.models.response.CatalogApiModel
+import com.orka.myfinances.data.api.folder.models.response.CategoryApiModel
+import com.orka.myfinances.data.api.folder.models.response.FolderApiModel
+import com.orka.myfinances.data.api.template.models.response.TemplateApiModel
+import com.orka.myfinances.data.api.template.models.response.TemplateApiModelField
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Category

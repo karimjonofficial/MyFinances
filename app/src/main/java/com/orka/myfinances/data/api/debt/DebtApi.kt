@@ -1,5 +1,6 @@
 package com.orka.myfinances.data.api.debt
 
+import com.orka.myfinances.data.api.debt.models.response.DebtApiModel
 import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.data.repositories.debt.AddDebtRequest
 import com.orka.myfinances.lib.data.api.scoped.office.OfficeScopedApi

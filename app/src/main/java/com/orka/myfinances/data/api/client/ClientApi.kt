@@ -1,5 +1,6 @@
 package com.orka.myfinances.data.api.client
 
+import com.orka.myfinances.data.api.client.models.response.ClientApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.client.AddClientRequest
 import com.orka.myfinances.lib.data.api.scoped.company.CompanyScopedApi

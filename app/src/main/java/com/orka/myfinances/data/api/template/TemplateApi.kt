@@ -1,5 +1,6 @@
 package com.orka.myfinances.data.api.template
 
+import com.orka.myfinances.data.api.template.models.response.TemplateApiModel
 import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.data.repositories.template.AddTemplateRequest
 import io.ktor.client.HttpClient

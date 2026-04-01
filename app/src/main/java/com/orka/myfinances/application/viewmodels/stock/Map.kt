@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.stock
 
-import com.orka.myfinances.data.api.stock.StockItemApiModel
+import com.orka.myfinances.data.api.stock.models.StockItemApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice

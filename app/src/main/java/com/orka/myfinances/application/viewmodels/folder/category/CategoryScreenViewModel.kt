@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.folder.category
 
 import com.orka.myfinances.lib.logger.Logger
-import com.orka.myfinances.data.api.folder.CategoryApiModel
+import com.orka.myfinances.data.api.folder.models.response.CategoryApiModel
 import com.orka.myfinances.data.api.folder.FolderApi
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.ui.models.UiText

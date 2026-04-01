@@ -1,5 +1,6 @@
 package com.orka.myfinances.data.api.folder
 
+import com.orka.myfinances.data.api.folder.models.response.FolderApiModel
 import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.data.repositories.folder.AddFolderRequest
 import com.orka.myfinances.data.repositories.folder.FolderEvent

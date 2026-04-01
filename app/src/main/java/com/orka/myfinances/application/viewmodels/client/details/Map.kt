@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.client.details
 
-import com.orka.myfinances.data.api.client.ClientApiModel
+import com.orka.myfinances.data.api.client.models.response.ClientApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.ui.screens.client.details.ClientScreenModel
 import com.orka.myfinances.ui.screens.debt.list.ClientItemModel

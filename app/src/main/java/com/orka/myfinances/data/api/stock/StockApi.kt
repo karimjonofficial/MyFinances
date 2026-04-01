@@ -1,5 +1,6 @@
 package com.orka.myfinances.data.api.stock
 
+import com.orka.myfinances.data.api.stock.models.StockItemApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Office
 import io.ktor.client.HttpClient

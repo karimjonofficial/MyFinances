@@ -1,6 +1,6 @@
 package com.orka.myfinances.data.api.sale.models.response
 
-import com.orka.myfinances.data.api.client.ClientApiModel
+import com.orka.myfinances.data.api.client.models.response.ClientApiModel
 import com.orka.myfinances.data.api.user.UserApiModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -1,16 +1,18 @@
 package com.orka.myfinances.application.viewmodels.product.details
 
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.receive.ReceiveApi
+import com.orka.myfinances.data.api.receive.toApiRequest
 import com.orka.myfinances.data.api.title.ProductTitleApi
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequestItem
 import com.orka.myfinances.data.repositories.stock.StockEvent
+import com.orka.myfinances.lib.data.api.scoped.office.add
 import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.StateFulViewModel
@@ -74,7 +76,10 @@ class ProductTitleScreenViewModel(
                 price = totalPrice,
                 comment = comment
             )
-            val created = receiveApi.add(request)
+            val created = receiveApi.add(
+                request = request,
+                map = AddReceiveRequest::toApiRequest
+            )
             if(created) flow.emit(StockEvent(categoryId))
             setState(old)
         }

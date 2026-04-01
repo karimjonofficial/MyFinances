@@ -2,7 +2,7 @@ package com.orka.myfinances.application.viewmodels.receive.list
 
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.lib.logger.Logger
-import com.orka.myfinances.data.api.receive.ReceiveApi1
+import com.orka.myfinances.data.api.receive.ReceiveApi
 import com.orka.myfinances.data.api.receive.models.response.ReceiveApiModel
 import com.orka.myfinances.data.repositories.receive.ReceiveEvent
 import com.orka.myfinances.lib.data.api.getChunk
@@ -24,7 +24,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 class ReceiveContentViewModel(
-    private val receiveApi: ReceiveApi1,
+    private val receiveApi: ReceiveApi,
     events: Flow<ReceiveEvent>,
     loading: UiText,
     failure: UiText,

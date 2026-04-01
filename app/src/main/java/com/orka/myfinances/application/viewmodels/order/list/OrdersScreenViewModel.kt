@@ -2,7 +2,7 @@ package com.orka.myfinances.application.viewmodels.order.list
 
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.order.OrderApi
-import com.orka.myfinances.data.api.order.OrderApiModel
+import com.orka.myfinances.data.api.order.models.response.OrderApiModel
 import com.orka.myfinances.lib.data.api.getChunk
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice

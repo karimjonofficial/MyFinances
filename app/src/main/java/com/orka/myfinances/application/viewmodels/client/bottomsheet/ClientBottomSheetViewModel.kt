@@ -2,7 +2,7 @@ package com.orka.myfinances.application.viewmodels.client.bottomsheet
 
 import com.orka.myfinances.application.viewmodels.client.details.toItemModel
 import com.orka.myfinances.data.api.client.ClientApi
-import com.orka.myfinances.data.api.client.ClientApiModel
+import com.orka.myfinances.data.api.client.models.response.ClientApiModel
 import com.orka.myfinances.lib.data.api.scoped.company.getChunk
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.logger.Logger

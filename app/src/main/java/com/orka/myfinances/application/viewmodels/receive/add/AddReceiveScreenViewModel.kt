@@ -4,6 +4,7 @@ import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.folder.FolderApi
 import com.orka.myfinances.data.api.folder.map
 import com.orka.myfinances.data.api.receive.ReceiveApi
+import com.orka.myfinances.data.api.receive.toApiRequest
 import com.orka.myfinances.data.api.title.ProductTitleApi
 import com.orka.myfinances.data.api.title.toEntity
 import com.orka.myfinances.data.models.Id
@@ -12,6 +13,7 @@ import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequestItem
 import com.orka.myfinances.data.repositories.stock.StockEvent
+import com.orka.myfinances.lib.data.api.scoped.office.add
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.StateFulViewModel
@@ -111,7 +113,11 @@ class AddReceiveScreenViewModel(
                     ),
                     price = totalPrice
                 )
-                if (receiveApi.add(request)) {
+                val created = receiveApi.add(
+                    request = request,
+                    map = AddReceiveRequest::toApiRequest
+                )
+                if (created) {
                     flow.emit(StockEvent(categoryId))
                     navigator.back()
                 }

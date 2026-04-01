@@ -1,6 +1,6 @@
 package com.orka.myfinances.data.api.order
 
-import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.data.api.order.models.request.AddOrderApiRequest
 import com.orka.myfinances.data.models.Office
 import com.orka.myfinances.data.repositories.order.AddOrderRequest
 

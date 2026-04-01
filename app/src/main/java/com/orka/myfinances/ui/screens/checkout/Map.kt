@@ -1,7 +1,7 @@
 package com.orka.myfinances.ui.screens.checkout
 
 import com.orka.myfinances.data.api.product.ProductApiModel
-import com.orka.myfinances.data.api.template.TemplateApiModelField
+import com.orka.myfinances.data.api.template.models.response.TemplateApiModelField
 import com.orka.myfinances.data.api.title.models.response.ProductTitleApiModel
 import com.orka.myfinances.data.api.title.models.response.PropertyApiModel
 import com.orka.myfinances.data.models.Client

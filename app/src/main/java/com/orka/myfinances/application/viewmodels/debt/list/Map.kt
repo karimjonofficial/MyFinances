@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.debt.list
 
-import com.orka.myfinances.data.api.debt.DebtApiModel
+import com.orka.myfinances.data.api.debt.models.response.DebtApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime

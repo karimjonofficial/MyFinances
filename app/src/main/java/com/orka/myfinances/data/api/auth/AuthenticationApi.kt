@@ -1,5 +1,8 @@
 package com.orka.myfinances.data.api.auth
 
+import com.orka.myfinances.data.api.auth.models.request.AuthRequest
+import com.orka.myfinances.data.api.auth.models.request.RefreshRequest
+import com.orka.myfinances.data.api.auth.models.response.CredentialsModel
 import com.orka.myfinances.data.models.Credentials
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
