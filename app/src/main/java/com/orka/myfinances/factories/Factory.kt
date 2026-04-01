@@ -39,7 +39,6 @@ import com.orka.myfinances.data.api.receive.ReceiveApi
 import com.orka.myfinances.data.api.sale.SaleApi
 import com.orka.myfinances.data.api.stock.StockApi
 import com.orka.myfinances.data.api.template.TemplateApi
-import com.orka.myfinances.data.api.template.TemplateApi1
 import com.orka.myfinances.data.api.title.ProductTitleApi
 import com.orka.myfinances.data.api.title.ProductTitleApi1
 import com.orka.myfinances.data.api.user.UserApi
@@ -102,7 +101,7 @@ class Factory(
 
     fun templatesViewModel(): TemplatesScreenViewModel {
         return TemplatesScreenViewModel(
-            templateApi = TemplateApi1(httpClient, session.office),
+            templateApi = templateApi,
             navigator = navigator,
             loading = loading,
             failure = failure,
@@ -405,7 +404,7 @@ class Factory(
 
     fun templateBottomSheetViewModel(): TemplateBottomSheetViewModel {
         return TemplateBottomSheetViewModel(
-            templateApi = TemplateApi1(httpClient, session.office),
+            templateApi = templateApi,
             loading = loading,
             failure = failure,
             logger = logger

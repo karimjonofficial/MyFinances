@@ -2,7 +2,7 @@ package com.orka.myfinances.application.viewmodels.template.list
 
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.lib.logger.Logger
-import com.orka.myfinances.data.api.template.TemplateApi1
+import com.orka.myfinances.data.api.template.TemplateApi
 import com.orka.myfinances.data.api.template.models.response.TemplateApiModel
 import com.orka.myfinances.data.repositories.template.TemplateEvent
 import com.orka.myfinances.lib.data.api.scoped.office.getChunk
@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class TemplatesScreenViewModel(
-    private val templateApi: TemplateApi1,
+    private val templateApi: TemplateApi,
     private val events: Flow<TemplateEvent>,
     private val navigator: Navigator,
     loading: UiText,

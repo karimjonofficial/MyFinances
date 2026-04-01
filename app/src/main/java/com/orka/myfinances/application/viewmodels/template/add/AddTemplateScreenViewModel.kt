@@ -1,21 +1,25 @@
 package com.orka.myfinances.application.viewmodels.template.add
 
 import com.orka.myfinances.data.api.template.TemplateApi
+import com.orka.myfinances.data.api.template.toApiRequest
 import com.orka.myfinances.data.repositories.template.AddTemplateRequest
+import com.orka.myfinances.lib.data.api.scoped.office.insert
 import com.orka.myfinances.lib.viewmodel.Manager
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.templates.add.AddTemplateInteractor
+import com.orka.myfinances.ui.screens.templates.add.AddTemplateScreenInteractor
 
 class AddTemplateScreenViewModel(
     private val templateApi: TemplateApi,
     private val navigator: Navigator
-) : Manager(), AddTemplateInteractor {
+) : Manager(), AddTemplateScreenInteractor {
 
-    override fun addTemplate(template: AddTemplateRequest) {
+    override fun addTemplate(request: AddTemplateRequest) {
         launch {
-            if (templateApi.add(template)) {
-                navigator.back()
-            }
+            val created = templateApi.insert(
+                request = request,
+                map = AddTemplateRequest::toApiRequest
+            )
+            if (created) navigator.back()
         }
     }
 

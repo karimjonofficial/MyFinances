@@ -41,7 +41,7 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 fun AddTemplateScreen(
     modifier: Modifier = Modifier,
     types: List<String>,
-    interactor: AddTemplateInteractor
+    interactor: AddTemplateScreenInteractor
 ) {
     val name = rememberSaveable { mutableStateOf("") }
     val fields = rememberSaveable { mutableStateListOf<TemplateFieldModel>() }
@@ -156,8 +156,8 @@ fun AddTemplateScreen(
 @Composable
 private fun TemplateScreenPreview() {
     val types = listOf("text", "number", "range")
-    val dummyInteractor = object : AddTemplateInteractor {
-        override fun addTemplate(template: AddTemplateRequest) {}
+    val dummyInteractor = object : AddTemplateScreenInteractor {
+        override fun addTemplate(request: AddTemplateRequest) {}
         override fun back() {}
     }
 
