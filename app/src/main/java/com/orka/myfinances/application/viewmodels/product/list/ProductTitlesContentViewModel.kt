@@ -53,7 +53,7 @@ class ProductTitlesContentViewModel(
         initialize()
 
         productTitleEvents.onEach {
-            if (it.categoryId == categoryId) initialize()
+            if (it.categoryId == categoryId) refresh()
         }.launchIn(viewModelScope)
     }
 

@@ -1,11 +1,13 @@
 package com.orka.myfinances.application.viewmodels.order.details
 
-import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.order.OrderApi
+import com.orka.myfinances.data.api.order.OrderApiModel
 import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.lib.data.api.getById
 import com.orka.myfinances.lib.format.FormatDateTime
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
@@ -37,11 +39,11 @@ class OrderScreenViewModel(
     override fun initialize() {
         launch {
             try {
-                val order = orderApi.getById(id.value)
+                val order = orderApi.getById<OrderApiModel>(id)
                 if (order != null) {
                     setState(
                         State.Success(
-                            order.toScreenModel(
+                            value = order.toScreenModel(
                                 formatPrice = formatPrice,
                                 formatDateTime = formatDateTime,
                                 formatDecimal = formatDecimal

@@ -7,8 +7,7 @@ import io.ktor.http.HttpStatusCode
 
 suspend inline fun <reified T, reified R> OfficeScopedApi.add(
     request: T,
-    map: T.(Office) -> R,
-    onSuccess: suspend (R) -> Unit
+    map: T.(Office) -> R
 ): Boolean {
     val apiRequest = request.map(office)
     val response = httpClient.post(
@@ -16,6 +15,14 @@ suspend inline fun <reified T, reified R> OfficeScopedApi.add(
         block = { setBody(apiRequest) }
     )
     val created = response.status == HttpStatusCode.Created
-    if (created) onSuccess(apiRequest)
+    return created
+}
+
+suspend inline fun <reified T> OfficeScopedApi.add(request: T): Boolean {
+    val response = httpClient.post(
+        urlString = baseUrl,
+        block = { setBody(request) }
+    )
+    val created = response.status == HttpStatusCode.Created
     return created
 }

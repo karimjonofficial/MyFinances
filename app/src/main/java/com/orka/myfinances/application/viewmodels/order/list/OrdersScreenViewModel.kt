@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.order.list
 
 import com.orka.myfinances.lib.logger.Logger
-import com.orka.myfinances.data.api.order.OrderApi1
+import com.orka.myfinances.data.api.order.OrderApi
 import com.orka.myfinances.data.api.order.OrderApiModel
 import com.orka.myfinances.lib.data.api.getChunk
 import com.orka.myfinances.lib.format.FormatLocalDate
@@ -18,7 +18,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 class OrdersScreenViewModel(
-    private val orderApi: OrderApi1,
+    private val orderApi: OrderApi,
     private val formatPrice: FormatPrice,
     private val formatTime: FormatTime,
     private val formatLocalDate: FormatLocalDate,

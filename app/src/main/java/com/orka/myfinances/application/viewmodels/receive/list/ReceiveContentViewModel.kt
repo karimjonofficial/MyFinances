@@ -63,7 +63,9 @@ class ReceiveContentViewModel(
 
     init {
         initialize()
-        events.onEach { initialize() }.launchIn(viewModelScope)
+        events.onEach {
+            refresh()
+        }.launchIn(viewModelScope)
     }
 
     override fun select(receive: ReceiveUiModel) {

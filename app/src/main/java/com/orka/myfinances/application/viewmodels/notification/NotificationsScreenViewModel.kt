@@ -55,7 +55,7 @@ class NotificationsScreenViewModel(
         launch {
             try {
                 if (api.read(notification.id)) {
-                    initialize()
+                    refresh()
                 } else setState(State.Failure(failure))
             } catch (e: Exception) {
                 setState(State.Failure(UiText.Str(e.message.toString())))

@@ -1,10 +1,13 @@
 package com.orka.myfinances.application.viewmodels.checkout
 
 import com.orka.myfinances.data.api.order.OrderApi
+import com.orka.myfinances.data.api.order.toApiRequest
 import com.orka.myfinances.data.api.sale.SaleApi
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.Basket
 import com.orka.myfinances.data.repositories.basket.BasketRepository
+import com.orka.myfinances.data.repositories.order.AddOrderRequest
+import com.orka.myfinances.lib.data.api.scoped.office.add
 import com.orka.myfinances.lib.extensions.models.getPrice
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
@@ -77,38 +80,41 @@ class CheckoutScreenViewModel(
     }
 
     override fun sell(
-        id: Id,
+        clientId: Id,
         price: Int?,
         description: String?,
         print: Boolean
     ) {
         launch {
-            if (price != null) {
-                val items = basketRepository.get()
-                val basket = Basket(price, description, items)
-                try {
-                    val response = saleApi.add(basket.toSaleRequest(id))
+            try {
+                if (price != null) {
+                    setState(State.Loading(loading))
+                    val items = basketRepository.get()
+                    val basket = Basket(price, description, items)
+                    val response = saleApi.add(basket.toSaleRequest(clientId))
                     if (response != null) {
-                        if (print) {
-                            printer.print(response)
-                        }
+                        if (print) printer.print(response)
                         clearBasket()
                         navigator.back()
                     } else setState(State.Failure(failure))
-                } catch (e: Exception) {
-                    setState(State.Failure(UiText.Str(e.message.toString())))
-                }
+                } else setState(State.Failure(failure))
+            } catch (e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
             }
         }
     }
 
-    override fun order(id: Id, price: Int?, description: String?) {
+    override fun order(clientId: Id, price: Int?, description: String?) {
         launch {
             if (price != null) {
                 val items = basketRepository.get()
                 val basket = Basket(price, description, items)
                 try {
-                    if (orderApi.add(basket.toOrderRequest(id))) {
+                    val created = orderApi.add(
+                        request = basket.toOrderRequest(clientId),
+                        map = AddOrderRequest::toApiRequest,
+                    )
+                    if (created) {
                         clearBasket()
                         navigator.back()
                     }

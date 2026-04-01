@@ -59,7 +59,7 @@ class StockItemsContentViewModel(
         initialize()
 
         stockEvents.onEach {
-            if (it.categoryId == categoryId) initialize()
+            if (it.categoryId == categoryId) refresh()
         }.launchIn(viewModelScope)
     }
 

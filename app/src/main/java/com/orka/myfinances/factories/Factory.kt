@@ -35,7 +35,6 @@ import com.orka.myfinances.data.api.folder.FolderApi
 import com.orka.myfinances.data.api.notification.NotificationApi
 import com.orka.myfinances.data.api.office.OfficeApi
 import com.orka.myfinances.data.api.order.OrderApi
-import com.orka.myfinances.data.api.order.OrderApi1
 import com.orka.myfinances.data.api.receive.ReceiveApi
 import com.orka.myfinances.data.api.receive.ReceiveApi1
 import com.orka.myfinances.data.api.sale.SaleApi
@@ -87,7 +86,7 @@ class Factory(
     private val productTitleApi = ProductTitleApi(httpClient, productTitleFlow)
     private val receiveApi = ReceiveApi(httpClient, session.office, receiveFlow)
     private val saleApi = SaleApi(httpClient, session.office, saleFlow)
-    private val orderApi = OrderApi(httpClient, session.office)
+    private val orderApi = OrderApi(session.office, httpClient)
     private val debtApi = DebtApi(httpClient, session.office)
     private val officeApi = OfficeApi(httpClient)
     private val userApi = UserApi(httpClient)
@@ -296,7 +295,7 @@ class Factory(
 
     fun ordersViewModel(): OrdersScreenViewModel {
         return OrdersScreenViewModel(
-            orderApi = OrderApi1(session.office, httpClient),
+            orderApi = orderApi,
             loading = loading,
             failure = failure,
             navigator = navigator,

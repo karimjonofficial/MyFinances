@@ -1,5 +1,6 @@
 package com.orka.myfinances.application.viewmodels.template.list
 
+import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.template.TemplateApi1
 import com.orka.myfinances.data.api.template.TemplateApiModel
@@ -14,6 +15,8 @@ import com.orka.myfinances.ui.screens.templates.list.TemplateUiModel
 import com.orka.myfinances.ui.screens.templates.list.TemplatesScreenInteractor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class TemplatesScreenViewModel(
     private val templateApi: TemplateApi1,
@@ -47,9 +50,9 @@ class TemplatesScreenViewModel(
     init {
         initialize()
         launch {
-            events.collect {
-                initialize()
-            }
+            events.onEach {
+                refresh()
+            }.launchIn(viewModelScope)
         }
     }
 

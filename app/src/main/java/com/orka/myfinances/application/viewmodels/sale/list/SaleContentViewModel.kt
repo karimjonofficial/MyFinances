@@ -58,7 +58,9 @@ class SaleContentViewModel(
 
     init {
         initialize()
-        events.onEach { initialize() }.launchIn(viewModelScope)
+        events.onEach {
+            refresh()
+        }.launchIn(viewModelScope)
     }
 
     override fun select(sale: SaleUiModel) {
