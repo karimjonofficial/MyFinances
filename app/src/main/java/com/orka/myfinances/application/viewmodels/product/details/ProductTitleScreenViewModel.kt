@@ -8,7 +8,7 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequestItem
 import com.orka.myfinances.data.repositories.stock.StockEvent
-import com.orka.myfinances.lib.data.api.scoped.office.add
+import com.orka.myfinances.lib.data.api.scoped.office.insert
 import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
@@ -76,7 +76,7 @@ class ProductTitleScreenViewModel(
                 price = totalPrice,
                 comment = comment
             )
-            val created = receiveApi.add(
+            val created = receiveApi.insert(
                 request = request,
                 map = AddReceiveRequest::toApiRequest
             )

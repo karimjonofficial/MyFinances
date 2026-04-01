@@ -1,54 +1,42 @@
 package com.orka.myfinances.application.viewmodels.sale.details
 
-import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.sale.SaleApi
+import com.orka.myfinances.data.api.sale.models.response.SaleApiModel
 import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.lib.data.api.getById
 import com.orka.myfinances.lib.format.FormatDateTime
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
+import com.orka.myfinances.lib.viewmodel.MapSingleViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.sale.details.interactor.SaleScreenInteractor
 import com.orka.myfinances.ui.screens.sale.details.interactor.SaleScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class SaleScreenViewModel(
-    private val id: Id,
+    id: Id,
     private val saleApi: SaleApi,
     private val formatPrice: FormatPrice,
     private val formatDateTime: FormatDateTime,
     private val formatDecimal: FormatDecimal,
     private val navigator: Navigator,
-    private val loading: UiText,
-    private val failure: UiText,
+    loading: UiText,
+    failure: UiText,
     logger: Logger
-) : SingleStateViewModel<State<SaleScreenModel>>(
-    initialState = State.Loading(loading),
+) : MapSingleViewModel<SaleApiModel, SaleScreenModel>(
+    id = id,
+    get = { saleApi.getById(it) },
+    map = { it.toScreenModel(formatPrice, formatDateTime, formatDecimal) },
+    loading = loading,
+    failure = failure,
     logger = logger
 ), SaleScreenInteractor {
     val uiState = state.asStateFlow()
 
     init {
         initialize()
-    }
-
-    override fun initialize() {
-        launch {
-            setState(State.Loading(loading))
-            try {
-                val sale = saleApi.getById(id.value)
-                if (sale != null) {
-                    val model = sale.map(formatPrice, formatDateTime, formatDecimal)
-                    setState(State.Success(model))
-                } else {
-                    setState(State.Failure(failure))
-                }
-            } catch (e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString())))
-            }
-        }
     }
 
     override fun navigateToClient(clientId: Id) {

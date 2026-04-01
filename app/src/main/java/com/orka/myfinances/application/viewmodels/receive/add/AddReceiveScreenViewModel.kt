@@ -13,7 +13,7 @@ import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequestItem
 import com.orka.myfinances.data.repositories.stock.StockEvent
-import com.orka.myfinances.lib.data.api.scoped.office.add
+import com.orka.myfinances.lib.data.api.scoped.office.insert
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.StateFulViewModel
@@ -113,7 +113,7 @@ class AddReceiveScreenViewModel(
                     ),
                     price = totalPrice
                 )
-                val created = receiveApi.add(
+                val created = receiveApi.insert(
                     request = request,
                     map = AddReceiveRequest::toApiRequest
                 )

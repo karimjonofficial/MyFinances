@@ -2,7 +2,7 @@ package com.orka.myfinances.application.viewmodels.sale.list
 
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.lib.logger.Logger
-import com.orka.myfinances.data.api.sale.SaleApi1
+import com.orka.myfinances.data.api.sale.SaleApi
 import com.orka.myfinances.data.api.sale.models.response.SaleApiModel
 import com.orka.myfinances.data.repositories.sale.SaleEvent
 import com.orka.myfinances.lib.data.api.getChunk
@@ -23,7 +23,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 class SaleContentViewModel(
-    private val saleApi: SaleApi1,
+    private val saleApi: SaleApi,
     events: Flow<SaleEvent>,
     loading: UiText,
     failure: UiText,

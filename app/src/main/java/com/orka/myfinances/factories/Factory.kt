@@ -37,7 +37,6 @@ import com.orka.myfinances.data.api.office.OfficeApi
 import com.orka.myfinances.data.api.order.OrderApi
 import com.orka.myfinances.data.api.receive.ReceiveApi
 import com.orka.myfinances.data.api.sale.SaleApi
-import com.orka.myfinances.data.api.sale.SaleApi1
 import com.orka.myfinances.data.api.stock.StockApi
 import com.orka.myfinances.data.api.template.TemplateApi
 import com.orka.myfinances.data.api.template.TemplateApi1
@@ -84,7 +83,7 @@ class Factory(
     private val templateApi = TemplateApi(httpClient, session.office)
     private val productTitleApi = ProductTitleApi(httpClient, productTitleFlow)
     private val receiveApi = ReceiveApi(session.office, httpClient)
-    private val saleApi = SaleApi(httpClient, session.office, saleFlow)
+    private val saleApi = SaleApi(session.office, httpClient)
     private val orderApi = OrderApi(session.office, httpClient)
     private val debtApi = DebtApi(httpClient, session.office)
     private val officeApi = OfficeApi(httpClient)
@@ -204,7 +203,7 @@ class Factory(
         return SaleContentViewModel(
             loading = loading,
             failure = failure,
-            saleApi = SaleApi1(session.office, httpClient),
+            saleApi = SaleApi(session.office, httpClient),
             events = saleFlow,
             navigator = navigator,
             priceFormatter = formatter,

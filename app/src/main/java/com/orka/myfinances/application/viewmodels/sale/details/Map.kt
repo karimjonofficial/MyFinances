@@ -38,7 +38,7 @@ fun SaleItem.toModel(formatDecimal: FormatDecimal): Item {
     )
 }
 
-fun SaleApiModel.map(
+fun SaleApiModel.toScreenModel(
     formatPrice: FormatPrice,
     formatDateTime: FormatDateTime,
     formatDecimal: FormatDecimal
