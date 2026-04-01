@@ -14,11 +14,6 @@ class TemplateApi(
     private val client: HttpClient,
     private val office: Office,
 ) {
-    suspend fun getAll(): List<TemplateApiModel>? {
-        val response = client.get("templates/")
-        return if (response.status == HttpStatusCode.OK) response.body() else null
-    }
-
     suspend fun getById(id: Int): TemplateApiModel? {
         val response = client.get("templates/$id/")
         return if (response.status == HttpStatusCode.OK) response.body() else null
