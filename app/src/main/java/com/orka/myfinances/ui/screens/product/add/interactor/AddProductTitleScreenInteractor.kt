@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.product.add.interactor
 
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 import com.orka.myfinances.lib.ui.viewmodel.StateFul
@@ -11,7 +12,7 @@ interface AddProductTitleScreenInteractor : StateFul {
         price: Int?,
         salePrice: Int?,
         description: String?,
-        category: Category
+        categoryId: Id
     )
 
     companion object {
@@ -22,7 +23,7 @@ interface AddProductTitleScreenInteractor : StateFul {
                 price: Int?,
                 salePrice: Int?,
                 description: String?,
-                category: Category
+                categoryId: Id
             ) {}
 
             override fun initialize() {}

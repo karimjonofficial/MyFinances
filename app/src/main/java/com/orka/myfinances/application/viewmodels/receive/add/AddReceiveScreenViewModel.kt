@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.receive.add
 
 import com.orka.myfinances.data.api.folder.FolderApi
-import com.orka.myfinances.data.api.folder.map
+import com.orka.myfinances.data.api.folder.toEntity
 import com.orka.myfinances.data.api.receive.ReceiveApi
 import com.orka.myfinances.data.api.receive.toApiRequest
 import com.orka.myfinances.data.models.Id
@@ -43,12 +43,10 @@ class AddReceiveScreenViewModel(
     override fun initialize() {
         launch {
             try {
-                val category = folderApi.getById(categoryId.value)?.map() as? Category
+                val category = folderApi.getById(categoryId.value)?.toEntity() as? Category
                 if (category != null) {
                     setState(State.Success(AddReceiveScreenModel(category)))
-                } else {
-                    setState(State.Failure(failure))
-                }
+                } else setState(State.Failure(failure))
             } catch (e: Exception) {
                 setState(State.Failure(UiText.Str(e.message.toString())))
             }
@@ -59,7 +57,7 @@ class AddReceiveScreenViewModel(
         launch {
             try {
                 setState(State.Loading(loading))
-                val category = folderApi.getById(categoryId.value)?.map() as? Category
+                val category = folderApi.getById(categoryId.value)?.toEntity() as? Category
                 if (category != null) {
                     setState(State.Success(AddReceiveScreenModel(category)))
                 } else {

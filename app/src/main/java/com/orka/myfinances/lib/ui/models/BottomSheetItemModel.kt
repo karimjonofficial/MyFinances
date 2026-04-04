@@ -1,5 +1,5 @@
 package com.orka.myfinances.lib.ui.models
 
-interface ItemModel {
+interface BottomSheetItemModel {
     val title: String
 }

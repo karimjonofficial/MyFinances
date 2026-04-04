@@ -117,8 +117,9 @@ class Factory(
         )
     }
 
-    fun addProductViewModel(): AddProductTitleScreenViewModel {
+    fun addProductViewModel(categoryId: Id): AddProductTitleScreenViewModel {
         return AddProductTitleScreenViewModel(
+            categoryId = categoryId,
             folderApi = folderApi,
             productTitleApi = productTitleApi,
             flow = productTitleFlow,

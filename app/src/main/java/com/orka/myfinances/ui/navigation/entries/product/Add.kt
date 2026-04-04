@@ -14,12 +14,15 @@ fun addProductEntry(
     destination: Destination.AddProduct,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
-    val viewModel = viewModel(key = "${destination.id}") { factory.addProductViewModel() }
+    val viewModel = viewModel(
+        key = "${destination.id}",
+        initializer = { factory.addProductViewModel(categoryId = destination.id) }
+    )
     val uiState = viewModel.uiState.collectAsState()
 
     AddProductTitleScreen(
         modifier = modifier,
-        categoryId = destination.id,
+
         state = uiState.value,
         interactor = viewModel
     )

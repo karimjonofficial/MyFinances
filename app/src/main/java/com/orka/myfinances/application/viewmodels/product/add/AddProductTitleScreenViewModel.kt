@@ -1,10 +1,10 @@
 package com.orka.myfinances.application.viewmodels.product.add
 
 import com.orka.myfinances.data.api.folder.FolderApi
-import com.orka.myfinances.data.api.folder.map
+import com.orka.myfinances.data.api.folder.models.response.CategoryApiModel
 import com.orka.myfinances.data.api.title.ProductTitleApi
 import com.orka.myfinances.data.api.title.toApiRequest
-import com.orka.myfinances.data.models.folder.Category
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
 import com.orka.myfinances.data.repositories.product.title.models.AddProductTitleRequest
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class AddProductTitleScreenViewModel(
+    private val categoryId: Id,
     private val folderApi: FolderApi,
     private val productTitleApi: ProductTitleApi,
     private val flow: MutableSharedFlow<ProductTitleEvent>,
@@ -40,9 +41,9 @@ class AddProductTitleScreenViewModel(
     override fun initialize() {
         launch {
             try {
-                val categories = folderApi.getTop()?.map { it.map() }?.filterIsInstance<Category>()
+                val categories = folderApi.getTop()?.filterIsInstance<CategoryApiModel>()?.map { it.toItemModel() }
                 if (categories != null) {
-                    setState(State.Success(AddProductTitleScreenModel(categories)))//TODO don't map to entities
+                    setState(State.Success(AddProductTitleScreenModel(categories, categoryId)))
                 } else setState(State.Failure(failure))
             } catch (e: Exception) {
                 setState(State.Failure(UiText.Str(e.message.toString())))
@@ -56,32 +57,36 @@ class AddProductTitleScreenViewModel(
         price: Int?,
         salePrice: Int?,
         description: String?,
-        category: Category
+        categoryId: Id
     ) {
         launch {
             val p = properties.filterNotNull()
-
-            if (
-                price != null && salePrice != null &&
-                p.size == category.template.fields.size && name.isNotEmpty() &&
-                price > 0 && salePrice > 0 && salePrice > price &&
-                category.id.value > 0
-            ) {
-                val request = AddProductTitleRequest(
-                    category = category,
-                    name = name,
-                    price = price,
-                    salePrice = salePrice,
-                    properties = p,
-                    description = description
-                )
-                val created = productTitleApi.insert(
-                    request = request,
-                    map = AddProductTitleRequest::toApiRequest
-                )
-                if (created) {
-                    flow.emit(ProductTitleEvent(category.id))
-                    navigator.back()
+            val oldState = state.value
+            if (oldState is State.Success) {
+                val category = oldState.value.categories.find { it.id == categoryId }
+                if (
+                    category != null && name.isNotBlank() &&
+                    price != null && salePrice != null &&
+                    p.size == category.template.fields.size && name.isNotEmpty() &&
+                    price > 0 && salePrice > 0 && salePrice > price &&
+                    category.id.value > 0
+                ) {
+                    val request = AddProductTitleRequest(
+                        categoryId = category.id,
+                        name = name,
+                        price = price,
+                        salePrice = salePrice,
+                        properties = p,
+                        description = description
+                    )
+                    val created = productTitleApi.insert(
+                        request = request,
+                        map = AddProductTitleRequest::toApiRequest
+                    )
+                    if (created) {
+                        flow.emit(ProductTitleEvent(category.id))
+                        navigator.back()
+                    }
                 }
             }
         }
@@ -91,9 +96,9 @@ class AddProductTitleScreenViewModel(
         launch {
             try {
                 setState(State.Loading(loading))
-                val categories = folderApi.getTop()?.map { it.map() }?.filterIsInstance<Category>()
+                val categories = folderApi.getTop()?.filterIsInstance<CategoryApiModel>()?.map { it.toItemModel() }
                 if (categories != null) {
-                    setState(State.Success(AddProductTitleScreenModel(categories)))//TODO don't map to entities
+                    setState(State.Success(AddProductTitleScreenModel(categories, categoryId)))
                 } else setState(State.Failure(failure))
             } catch (e: Exception) {
                 setState(State.Failure(UiText.Str(e.message.toString())))

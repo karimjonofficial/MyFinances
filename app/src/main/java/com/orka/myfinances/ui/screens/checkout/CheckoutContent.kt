@@ -33,7 +33,7 @@ import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
 
 @Composable
 fun CheckoutContent(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     items: List<BasketItemCardModel>,
     price: Int,
     description: String?,

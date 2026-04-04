@@ -24,12 +24,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.models.ChunkMapState
-import com.orka.myfinances.lib.ui.models.ItemModel
+import com.orka.myfinances.lib.ui.models.BottomSheetItemModel
 import com.orka.myfinances.lib.ui.viewmodel.State
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <T: ItemModel> SelectionBottomSheet(
+fun <T: BottomSheetItemModel> SelectionBottomSheet(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
     sheetState: SheetState,
@@ -101,7 +101,7 @@ fun <T: ItemModel> SelectionBottomSheet(
 }
 
 @Composable
-fun <T: ItemModel> BottomSheetItem(
+fun <T: BottomSheetItemModel> BottomSheetItem(
     modifier: Modifier = Modifier,
     item: T,
     selected: Boolean,

@@ -1,7 +1,8 @@
 package com.orka.myfinances.ui.screens.product.add.interactor
 
-import com.orka.myfinances.data.models.folder.Category
+import com.orka.myfinances.data.models.Id
 
 data class AddProductTitleScreenModel(
-    val categories: List<Category>
+    val categories: List<CategoryItemModel>,
+    val categoryId: Id
 )

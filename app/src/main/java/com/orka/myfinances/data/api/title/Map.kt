@@ -9,7 +9,7 @@ import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 fun AddProductTitleRequest.toApiRequest(office: Office): AddProductTitleApiRequest {
     return AddProductTitleApiRequest(
         name = name,
-        category = category.id.value,
+        category = categoryId.value,
         properties = properties.map { it.toApiRequest() },
         defaultPrice = price.toLong(),
         defaultSalePrice = salePrice.toLong(),

@@ -48,7 +48,7 @@ class FolderApi(
     suspend fun add(request: AddFolderRequest) {
         val response = client.post(
             urlString = "categories/",
-            block = { setBody(request.map(office.id.value)) }
+            block = { setBody(request.toApiRequest(office.id.value)) }
         )
         val created = response.status == HttpStatusCode.Created
         if (created) flow.emit(FolderEvent(request.parentId))
