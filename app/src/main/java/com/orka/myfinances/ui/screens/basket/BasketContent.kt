@@ -31,11 +31,9 @@ import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.basket.basketItems
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
-import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.contents.StateFulContent
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
-import com.orka.myfinances.lib.ui.screens.FailureScreen
-import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.basket.components.BasketItemCard
 
@@ -45,99 +43,85 @@ fun BasketContent(
     state: State<BasketScreenModel>,
     interactor: BasketInteractor
 ) {
-    when (state) {
-        is State.Loading -> LoadingScreen(
-            modifier = modifier,
-            message = state.message.str()
-        )
+    StateFulContent(
+        modifier = modifier,
+        state = state,
+        onRetry = interactor::refresh
+    ) { modifier, model ->
+        Column(modifier = modifier) {
+            Column(modifier = Modifier.weight(1f).padding(horizontal = 8.dp)) {
+                if (model.items.isNotEmpty()) {
+                    Text(
+                        text = stringResource(R.string.items),
+                        fontWeight = FontWeight.Bold
+                    )
 
-        is State.Failure -> FailureScreen(
-            modifier = modifier,
-            message = state.error.str(),
-            retry = interactor::refresh
-        )
-
-        is State.Success -> {
-            Column(modifier = modifier) {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 8.dp)
-                ) {
-
-                    if (state.value.items.isNotEmpty()) {
-                        Text(
-                            text = stringResource(R.string.items),
-                            fontWeight = FontWeight.Bold
-                        )
-
-                        VerticalSpacer(4)
-                        LazyColumn(
-                            modifier = Modifier.weight(1f),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            items(items = state.value.items) { item ->
-                                BasketItemCard(
-                                    item = item.model,
-                                    increase = { interactor.increase(item) },
-                                    decrease = { interactor.decrease(item) },
-                                    remove = { interactor.remove(item) }
-                                )
-                            }
+                    VerticalSpacer(4)
+                    LazyColumn(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(items = model.items) { item ->
+                            BasketItemCard(
+                                item = item.model,
+                                increase = { interactor.increase(item) },
+                                decrease = { interactor.decrease(item) },
+                                remove = { interactor.remove(item) }
+                            )
                         }
+                    }
 
-                        VerticalSpacer(4)
-                    } else {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Icon(
-                                    modifier = Modifier.size(96.dp),
-                                    painter = painterResource(R.drawable.shopping_cart_off),
-                                    tint = MaterialTheme.colorScheme.surfaceVariant,
-                                    contentDescription = null
-                                )
+                    VerticalSpacer(4)
+                } else {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(
+                                modifier = Modifier.size(96.dp),
+                                painter = painterResource(R.drawable.shopping_cart_off),
+                                tint = MaterialTheme.colorScheme.surfaceVariant,
+                                contentDescription = null
+                            )
 
-                                VerticalSpacer(4)
-                                Text(text = stringResource(R.string.basket_is_empty))
-                            }
+                            VerticalSpacer(4)
+                            Text(text = stringResource(R.string.basket_is_empty))
                         }
                     }
                 }
+            }
 
-                if (state.value.items.isNotEmpty()) {
-                    Row(
+            if (model.items.isNotEmpty()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surfaceContainer)
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.surfaceContainer)
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                            .clip(RoundedCornerShape(8.dp))
+                            .padding(vertical = 8.dp, horizontal = 16.dp)
                     ) {
-                        Column(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(8.dp))
-                                .padding(vertical = 8.dp, horizontal = 16.dp)
-                        ) {
-                            Text(
-                                text = stringResource(R.string.total_price),
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                        Text(
+                            text = stringResource(R.string.total_price),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
 
-                            Text(
-                                text = state.value.price,
-                                color = MaterialTheme.colorScheme.secondary,
-                                style = MaterialTheme.typography.headlineSmall,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
+                        Text(
+                            text = model.price,
+                            color = MaterialTheme.colorScheme.secondary,
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
 
-                        Button(onClick = { interactor.checkout() }) {
-                            Text(text = stringResource(R.string.checkout))
-                        }
+                    Button(onClick = { interactor.checkout() }) {
+                        Text(text = stringResource(R.string.checkout))
                     }
                 }
             }

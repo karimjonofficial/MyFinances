@@ -90,6 +90,7 @@ fun HomeScreenContent(
                             }
                         }
                     },
+                    selectedItem = template.value,
                     onLoadMore = sheetViewModel::loadMore
                 )
             }

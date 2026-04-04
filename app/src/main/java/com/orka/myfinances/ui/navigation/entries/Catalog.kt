@@ -81,6 +81,7 @@ fun catalogEntry(
                     }
                 },
                 sheetState = sheetState,
+                selectedItem = template.value,
                 onLoadMore = sheetViewModel::loadMore
             )
         },

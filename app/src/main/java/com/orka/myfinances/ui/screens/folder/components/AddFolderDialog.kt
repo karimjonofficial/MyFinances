@@ -103,7 +103,7 @@ fun AddFolderDialog(
                         Text(text = stringResource(R.string.template))
                         HorizontalSpacer(8)
                         Text(
-                            text = template.name,
+                            text = template.title,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary
                         )

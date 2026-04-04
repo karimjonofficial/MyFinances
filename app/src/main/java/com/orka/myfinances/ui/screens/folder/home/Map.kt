@@ -6,6 +6,6 @@ import com.orka.myfinances.ui.screens.folder.models.TemplateItemModel
 fun Template.toItemModel(): TemplateItemModel {
     return TemplateItemModel(
         id = id,
-        name = name
+        title = name
     )
 }

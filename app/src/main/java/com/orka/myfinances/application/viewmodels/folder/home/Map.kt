@@ -7,6 +7,6 @@ import com.orka.myfinances.ui.screens.folder.models.TemplateItemModel
 fun TemplateApiModel.toItemModel(): TemplateItemModel {
     return TemplateItemModel(
         id = Id(id),
-        name = name
+        title = name
     )
 }
