@@ -1,12 +1,12 @@
 package com.orka.myfinances.application.viewmodels.order.list
 
-import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.order.OrderApi
 import com.orka.myfinances.data.api.order.models.response.OrderApiModel
 import com.orka.myfinances.lib.data.api.getChunk
+import com.orka.myfinances.lib.format.FormatDateTime
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.lib.format.FormatTime
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkMapState
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
@@ -20,7 +20,7 @@ import kotlinx.datetime.toLocalDateTime
 class OrdersScreenViewModel(
     private val orderApi: OrderApi,
     private val formatPrice: FormatPrice,
-    private val formatTime: FormatTime,
+    private val formatDateTime: FormatDateTime,
     private val formatLocalDate: FormatLocalDate,
     private val navigator: Navigator,
     loading: UiText,
@@ -37,7 +37,7 @@ class OrdersScreenViewModel(
                 .mapKeys { entry -> formatLocalDate.formatLocalDate(entry.key) }
                 .mapValues { entry ->
                     entry.value.map { order ->
-                        order.toUiModel(formatPrice, formatTime)
+                        order.toUiModel(formatPrice, formatDateTime)
                     }
                 }
 

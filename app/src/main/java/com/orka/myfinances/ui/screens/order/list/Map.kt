@@ -5,7 +5,6 @@ import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatNames
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
-import com.orka.myfinances.ui.screens.order.list.components.OrderCardModel
 
 fun Order.map(
     formatNames: FormatNames,
