@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.folder.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -103,6 +104,7 @@ fun AddFolderDialog(
                         Text(text = stringResource(R.string.template))
                         HorizontalSpacer(8)
                         Text(
+                            modifier = Modifier.clickable { onUnfoldTemplates() },
                             text = template.title,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary
