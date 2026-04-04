@@ -118,7 +118,7 @@ fun ProfileContent(
             Column(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .clip(RoundedCornerShape(8.dp))
+                    .clip(RoundedCornerShape(16.dp))
             ) {
                 options(interactor).forEach {
                     Row(

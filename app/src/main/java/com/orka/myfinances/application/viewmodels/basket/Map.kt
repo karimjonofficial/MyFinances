@@ -1,6 +1,7 @@
 package com.orka.myfinances.application.viewmodels.basket
 
 import com.orka.myfinances.R
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
@@ -33,7 +34,8 @@ fun BasketItem.toUiModel(
     formatDecimal: FormatDecimal
 ): BasketItemUiModel {
     return BasketItemUiModel(
-        item = this,
+        productTitleId = Id(product.title.id),
+        amount = amount,
         model = this.toModel(formatPrice, formatDecimal)
     )
 }

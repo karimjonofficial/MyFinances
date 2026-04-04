@@ -76,12 +76,12 @@ fun BasketContent(
                             modifier = Modifier.weight(1f),
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            items(items = state.value.items) { uiModel ->
+                            items(items = state.value.items) { item ->
                                 BasketItemCard(
-                                    item = uiModel.model,
-                                    increase = { interactor.increase(uiModel.item) },
-                                    decrease = { interactor.decrease(uiModel.item) },
-                                    remove = { interactor.remove(uiModel.item) }
+                                    item = item.model,
+                                    increase = { interactor.increase(item) },
+                                    decrease = { interactor.decrease(item) },
+                                    remove = { interactor.remove(item) }
                                 )
                             }
                         }

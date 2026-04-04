@@ -360,6 +360,7 @@ class Factory(
             userApi = userApi,
             navigator = navigator,
             loading = loading,
+            failure = failure,
             logger = logger
         )
     }

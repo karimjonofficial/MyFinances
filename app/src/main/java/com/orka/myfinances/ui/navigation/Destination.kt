@@ -1,7 +1,6 @@
 package com.orka.myfinances.ui.navigation
 
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.data.models.basket.BasketItem
 
 sealed interface Destination {
     data object Home : Destination
@@ -16,7 +15,7 @@ sealed interface Destination {
     data class AddTemplate(val types: List<String>) : Destination
     data class AddProduct(val id: Id) : Destination
     data object History : Destination
-    data class Checkout(val items: List<BasketItem>) : Destination
+    data object Checkout : Destination
     data class AddStockItem(val id: Id) : Destination
     data object Orders : Destination
     data class Order(val id: Id) : Destination

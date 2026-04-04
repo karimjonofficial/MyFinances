@@ -1,12 +1,12 @@
 package com.orka.myfinances.application.viewmodels.office
 
-import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.office.OfficeApi
+import com.orka.myfinances.data.api.office.OfficeApiModel
 import com.orka.myfinances.data.api.office.map
 import com.orka.myfinances.data.models.Company
 import com.orka.myfinances.data.models.Credentials
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.data.models.Office
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.FormatListViewModel
 import com.orka.myfinances.ui.managers.SessionManager
@@ -22,8 +22,8 @@ class SelectOfficeScreenViewModel(
     loading: UiText,
     failure: UiText,
     logger: Logger
-) : FormatListViewModel<Office, OfficeUiModel>(
-    get = { officeApi.get(company.id.value)?.map { it.map(company) } },
+) : FormatListViewModel<OfficeApiModel, OfficeUiModel>(
+    get = { officeApi.get(company.id.value) },
     map = { it.toUiModel() },
     loading = loading,
     failure = failure,

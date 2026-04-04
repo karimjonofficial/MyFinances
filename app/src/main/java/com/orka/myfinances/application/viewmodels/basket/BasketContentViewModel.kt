@@ -1,17 +1,16 @@
 package com.orka.myfinances.application.viewmodels.basket
 
 import androidx.lifecycle.viewModelScope
-import com.orka.myfinances.lib.logger.Logger
-import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.StateFulViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.basket.BasketInteractor
+import com.orka.myfinances.ui.screens.basket.BasketItemUiModel
 import com.orka.myfinances.ui.screens.basket.BasketScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -44,12 +43,7 @@ class BasketContentViewModel(
                 setState(
                     State.Success(
                         value = BasketScreenModel(
-                            items = items.map { item ->
-                                item.toUiModel(
-                                    formatPrice,
-                                    formatDecimal
-                                )
-                            },
+                            items = items.map { item -> item.toUiModel(formatPrice, formatDecimal) },
                             price = formatPrice.formatPrice(price.toDouble())
                         )
                     )
@@ -60,21 +54,21 @@ class BasketContentViewModel(
         }
     }
 
-    override fun increase(item: BasketItem) {
+    override fun increase(item: BasketItemUiModel) {
         launch {
-            repository.add(id = Id(item.product.id), amount = 1)
+            repository.add(id = item.productTitleId, amount = 1)
         }
     }
 
-    override fun decrease(item: BasketItem) {
+    override fun decrease(item: BasketItemUiModel) {
         launch {
-            repository.remove(Id(item.product.id), 1)
+            repository.remove(item.productTitleId, 1)
         }
     }
 
-    override fun remove(item: BasketItem) {
+    override fun remove(item: BasketItemUiModel) {
         launch {
-            repository.remove(Id(item.product.id), item.amount)
+            repository.remove(item.productTitleId, item.amount)
         }
     }
 
@@ -88,7 +82,7 @@ class BasketContentViewModel(
         launch {
             val successState = (state.value as? State.Success)?.value
             if (successState != null) {
-                navigator.navigateToCheckout(successState.items.map { it.item })
+                navigator.navigateToCheckout()
             }
         }
     }

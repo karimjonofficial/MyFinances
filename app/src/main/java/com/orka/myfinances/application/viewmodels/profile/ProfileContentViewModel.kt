@@ -1,11 +1,10 @@
 package com.orka.myfinances.application.viewmodels.profile
 
-import com.orka.myfinances.R
-import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.office.OfficeApi
 import com.orka.myfinances.data.api.office.map
 import com.orka.myfinances.data.api.user.UserApi
 import com.orka.myfinances.data.models.Company
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
@@ -19,7 +18,8 @@ class ProfileContentViewModel(
     private val userApi: UserApi,
     private val company: Company,
     private val navigator: Navigator,
-    loading: UiText,
+    private val loading: UiText,
+    private val failure: UiText,
     logger: Logger
 ) : SingleStateViewModel<State<ProfileContentModel>>(
     initialState = State.Loading(loading),
@@ -35,7 +35,7 @@ class ProfileContentViewModel(
 
                 if (offices != null && user != null)
                     setState(State.Success(ProfileContentModel(offices, user)))
-                else setState(State.Failure(UiText.Res(R.string.failure)))
+                else setState(State.Failure(failure))
             } catch (e: Exception) {
                 setState(State.Failure(UiText.Str(e.message.toString())))
             }
@@ -43,7 +43,20 @@ class ProfileContentViewModel(
     }
 
     override fun refresh() {
+        launch {
+            val oldState = state.value
+            try {
+                setState(State.Loading(loading, oldState.value))
+                val offices = officeApi.get(company.id.value)?.map { it.map(company) }
+                val user = userApi.getMe()?.map()
 
+                if (offices != null && user != null)
+                    setState(State.Success(ProfileContentModel(offices, user)))
+                else setState(State.Failure(failure, oldState.value))
+            } catch (e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString()), oldState.value))
+            }
+        }
     }
 
     override fun history() {

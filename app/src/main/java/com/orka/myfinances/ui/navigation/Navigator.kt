@@ -17,7 +17,7 @@ interface Navigator {
     fun navigateToClients()
     fun navigateToClient(id: Id)
     fun navigateToHistory()
-    fun navigateToCheckout(items: List<BasketItem>)
+    fun navigateToCheckout()
     fun navigateToAddReceive(id: Id)
     fun navigateToOrders()
     fun navigateToOrder(id: Id)
