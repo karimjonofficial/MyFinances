@@ -24,6 +24,7 @@ class FolderApi(
             block = {
                 parameter("branch", office.id.value)
                 parameter("parent", "null")
+                parameter("ordering", "name")
             }
         )
         return if (response.status == HttpStatusCode.OK) response.body() else null
@@ -35,6 +36,7 @@ class FolderApi(
             block = {
                 parameter("parent", parentId)
                 parameter("branch", office.id.value)
+                parameter("ordering", "name")
             }
         )
         return if (response.status == HttpStatusCode.OK) response.body() else null

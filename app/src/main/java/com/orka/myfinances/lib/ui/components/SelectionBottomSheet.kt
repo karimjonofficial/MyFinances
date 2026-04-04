@@ -66,11 +66,11 @@ fun <T: BottomSheetItemModel> SelectionBottomSheet(
                 val itemModifier = Modifier.fillMaxWidth()
 
                 if (selectedItem != null) {
-                    item {
+                    item(key = "selected") {
                         StickyHeader(key = stringResource(R.string.selected_string))
                     }
 
-                    item {
+                    item(key = "selected_item") {
                         BottomSheetItem(
                             modifier = itemModifier,
                             item = selectedItem,
@@ -81,12 +81,15 @@ fun <T: BottomSheetItemModel> SelectionBottomSheet(
                 }
                 state.value!!.content.forEach { (key, items) ->
                     if (key.isNotEmpty()) {
-                        item {
+                        item(key = key) {
                             StickyHeader(key = key)
                         }
                     }
 
-                    items(items = items) { item ->
+                    items(
+                        items = items,
+                        key = { it.id.value }
+                    ) { item ->
                         BottomSheetItem(
                             modifier = itemModifier,
                             item = item,
