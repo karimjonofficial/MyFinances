@@ -1,7 +1,6 @@
 package com.orka.myfinances.ui.navigation
 
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.data.models.basket.BasketItem
 
 interface Navigator {
     fun back()
