@@ -121,6 +121,7 @@ fun CheckoutScreen(
                     }
                 }
             },
+            selectedClient = selectedClient.value,
             onSelected = {
                 selectedClient.value = it
                 coroutineScope.launch {

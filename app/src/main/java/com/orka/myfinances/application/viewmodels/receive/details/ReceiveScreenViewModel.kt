@@ -1,6 +1,5 @@
 package com.orka.myfinances.application.viewmodels.receive.details
 
-import com.orka.myfinances.R
 import com.orka.myfinances.data.api.receive.ReceiveApi
 import com.orka.myfinances.data.api.receive.models.response.ReceiveApiModel
 import com.orka.myfinances.data.models.Id
@@ -10,24 +9,28 @@ import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.StateFulViewModel
+import com.orka.myfinances.lib.viewmodel.MapSingleViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.receive.details.ReceiveScreenInteractor
 import com.orka.myfinances.ui.screens.receive.details.ReceiveScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class ReceiveScreenViewModel(
-    private val id: Id,
+    id: Id,
     private val receiveApi: ReceiveApi,
     private val navigator: Navigator,
     private val formatPrice: FormatPrice,
     private val formatDateTime: FormatDateTime,
     private val formatDecimal: FormatDecimal,
-    private val loading: UiText,
+    loading: UiText,
+    failure: UiText,
     logger: Logger
-) : StateFulViewModel<State<ReceiveScreenModel>>(
-    initialState = State.Loading(loading),
+) : MapSingleViewModel<ReceiveApiModel, ReceiveScreenModel>(
+    id = id,
+    get = { receiveApi.getById(it) },
+    map = { it.toScreenModel(formatPrice, formatDateTime, formatDecimal) },
+    loading = loading,
+    failure = failure,
     logger = logger
 ), ReceiveScreenInteractor {
     val uiState = state.asStateFlow()
@@ -36,32 +39,9 @@ class ReceiveScreenViewModel(
         initialize()
     }
 
-    override fun initialize() {
-        launch {
-            val receive = receiveApi.getById<ReceiveApiModel>(id)
-            if (receive != null) {
-                setState(State.Success(receive.toUiModel(formatPrice, formatDateTime, formatDecimal)))
-            } else {
-                setState(State.Failure(UiText.Res(R.string.failure)))
-            }
-        }
-    }
-
     override fun back() {
         launch {
             navigator.back()
-        }
-    }
-
-    override fun refresh() {
-        launch {
-            setState(State.Loading(loading))
-            val receive = receiveApi.getById<ReceiveApiModel>(id)
-            if (receive != null) {
-                setState(State.Success(receive.toUiModel(formatPrice, formatDateTime, formatDecimal)))
-            } else {
-                setState(State.Failure(UiText.Res(R.string.failure)))
-            }
         }
     }
 }

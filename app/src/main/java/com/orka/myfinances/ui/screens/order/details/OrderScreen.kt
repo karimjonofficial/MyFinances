@@ -23,7 +23,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.fixtures.format.FormatDateTimeImpl
 import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
@@ -175,12 +174,6 @@ private fun LabeledDate(
 @Preview
 @Composable
 private fun OrderScreenPreview() {
-    val interactor = object : OrderScreenInteractor {
-        override fun initialize() {}
-        override fun navigateToClient(clientId: Id) {
-
-        }
-    }
     MyFinancesTheme {
         OrderScreen(
             modifier = Modifier.fillMaxSize(),
@@ -191,7 +184,7 @@ private fun OrderScreenPreview() {
                     formatDecimal = FormatDecimalImpl()
                 )
             ),
-            interactor = interactor
+            interactor = OrderScreenInteractor.dummy
         )
     }
 }
@@ -199,10 +192,6 @@ private fun OrderScreenPreview() {
 @Preview
 @Composable
 private fun CompletedOrderScreenPreview() {
-    val interactor = object : OrderScreenInteractor {
-        override fun initialize() {}
-        override fun navigateToClient(clientId: Id) {}
-    }
     MyFinancesTheme {
         OrderScreen(
             modifier = Modifier.fillMaxSize(),
@@ -213,7 +202,7 @@ private fun CompletedOrderScreenPreview() {
                     formatDecimal = FormatDecimalImpl()
                 )
             ),
-            interactor = interactor
+            interactor = OrderScreenInteractor.dummy
         )
     }
 }

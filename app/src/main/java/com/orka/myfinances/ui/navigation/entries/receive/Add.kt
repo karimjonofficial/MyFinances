@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.navigation.entries.receive
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -17,11 +18,21 @@ fun addReceiveEntry(
     val viewModel = viewModel(key = "${destination.id}") {
         factory.addReceiveViewModel(destination.id)
     }
+    val productTitleBottomSheetViewModel = viewModel(key = "product-title-sheet-${destination.id}") {
+        factory.productTitleBottomSheetViewModel(destination.id)
+    }
     val state = viewModel.uiState.collectAsState()
+    val productTitleSheetState = productTitleBottomSheetViewModel.uiState.collectAsState()
+
+    LaunchedEffect(destination.id) {
+        productTitleBottomSheetViewModel.initialize()
+    }
 
     AddReceiveScreen(
         modifier = modifier,
         interactor = viewModel,
-        state = state.value
+        state = state.value,
+        productTitleSheetState = productTitleSheetState.value,
+        productTitleSheetInteractor = productTitleBottomSheetViewModel
     )
 }

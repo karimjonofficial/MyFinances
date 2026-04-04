@@ -1,24 +1,28 @@
 package com.orka.myfinances.application.viewmodels.product.add
 
-import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.folder.FolderApi
 import com.orka.myfinances.data.api.folder.map
 import com.orka.myfinances.data.api.title.ProductTitleApi
-import com.orka.myfinances.data.api.title.map
+import com.orka.myfinances.data.api.title.toApiRequest
 import com.orka.myfinances.data.models.folder.Category
+import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
 import com.orka.myfinances.data.repositories.product.title.models.AddProductTitleRequest
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
+import com.orka.myfinances.lib.data.api.scoped.office.insert
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.StateFulViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenInteractor
 import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class AddProductTitleScreenViewModel(
     private val folderApi: FolderApi,
     private val productTitleApi: ProductTitleApi,
+    private val flow: MutableSharedFlow<ProductTitleEvent>,
     private val navigator: Navigator,
     private val loading: UiText,
     private val failure: UiText,
@@ -71,7 +75,12 @@ class AddProductTitleScreenViewModel(
                     properties = p,
                     description = description
                 )
-                if (productTitleApi.add(request.map())) {
+                val created = productTitleApi.insert(
+                    request = request,
+                    map = AddProductTitleRequest::toApiRequest
+                )
+                if (created) {
+                    flow.emit(ProductTitleEvent(category.id))
                     navigator.back()
                 }
             }

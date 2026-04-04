@@ -42,6 +42,10 @@ class ProfileContentViewModel(
         }
     }
 
+    override fun refresh() {
+
+    }
+
     override fun history() {
         launch { navigator.navigateToHistory() }
     }

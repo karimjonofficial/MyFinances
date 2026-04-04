@@ -75,6 +75,7 @@ fun debtsEntry(
                     }
                 }
             },
+            selectedClient = selectedClient.value,
             onSelected = {
                 selectedClient.value = it
                 coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {

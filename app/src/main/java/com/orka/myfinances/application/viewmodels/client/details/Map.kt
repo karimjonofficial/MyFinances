@@ -8,7 +8,7 @@ import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
 fun ClientApiModel.toItemModel(): ClientItemModel {
     return ClientItemModel(
         id = Id(id),
-        name = "$firstName $lastName"
+        title = "$firstName $lastName"
     )
 }
 

@@ -2,9 +2,11 @@ package com.orka.myfinances.application.viewmodels.debt.list
 
 import com.orka.myfinances.data.api.debt.DebtApi
 import com.orka.myfinances.data.api.debt.models.response.DebtApiModel
+import com.orka.myfinances.data.api.debt.toApiRequest
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.debt.AddDebtRequest
 import com.orka.myfinances.lib.data.api.scoped.office.getChunk
+import com.orka.myfinances.lib.data.api.scoped.office.insert
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
@@ -65,9 +67,12 @@ class DebtsScreenViewModel(
             try {
                 setState(State.Loading(loading, oldState.value))
                 val request = AddDebtRequest(id, price, description, endDateTime)
-                if (debtApi.add(request)) {
-                    refresh()
-                } else setState(State.Failure(failure, oldState.value))
+                val created = debtApi.insert(
+                    request = request,
+                    map = AddDebtRequest::toApiRequest
+                )
+                if (created) refresh()
+                else setState(State.Failure(failure, oldState.value))
             } catch (e: Exception) {
                 setState(State.Failure(UiText.Str(e.message.toString()), oldState.value))
             }

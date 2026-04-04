@@ -36,6 +36,7 @@ import com.orka.myfinances.fixtures.resources.models.session
 import com.orka.myfinances.fixtures.resources.models.user1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.extensions.ui.str
+import com.orka.myfinances.lib.ui.components.FooterSpacer
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
@@ -116,7 +117,7 @@ fun ProfileContent(
             VerticalSpacer(16)
             Column(
                 modifier = Modifier
-                    .padding(horizontal = 8.dp)
+                    .padding(horizontal = 16.dp)
                     .clip(RoundedCornerShape(8.dp))
             ) {
                 options(interactor).forEach {
@@ -152,7 +153,7 @@ fun ProfileContent(
         }
 
         item {
-            VerticalSpacer(8)
+            FooterSpacer()
         }
     }
 }

@@ -1,11 +1,12 @@
 package com.orka.myfinances.application.viewmodels.client.details
 
-import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.client.ClientApi
+import com.orka.myfinances.data.api.client.models.response.ClientApiModel
 import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.lib.data.api.getById
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
+import com.orka.myfinances.lib.viewmodel.MapSingleViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.client.details.ClientInteractor
 import com.orka.myfinances.ui.screens.client.details.ClientScreenModel
@@ -16,29 +17,20 @@ class ClientScreenViewModel(
     private val clientApi: ClientApi,
     private val navigator: Navigator,
     loading: UiText,
-    private val failure: UiText,
+    failure: UiText,
     logger: Logger
-) : SingleStateViewModel<State<ClientScreenModel>>(
-    initialState = State.Loading(loading),
+) : MapSingleViewModel<ClientApiModel, ClientScreenModel>(
+    id = id,
+    get = { clientApi.getById(id) },
+    map = { it.toScreenModel() },
+    loading = loading,
+    failure = failure,
     logger = logger
 ), ClientInteractor {
     val uiState = state.asStateFlow()
 
     init {
         initialize()
-    }
-
-    override fun initialize() {
-        launch {
-            try {
-                val clientModel = clientApi.getById(id.value)
-                if (clientModel != null) {
-                    setState(State.Success(clientModel.toScreenModel()))
-                } else setState(State.Failure(failure))
-            } catch (e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString())))
-            }
-        }
     }
 
     override fun back() {

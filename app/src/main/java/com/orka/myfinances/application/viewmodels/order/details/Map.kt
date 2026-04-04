@@ -1,6 +1,7 @@
 package com.orka.myfinances.application.viewmodels.order.details
 
 import com.orka.myfinances.application.viewmodels.client.list.map
+import com.orka.myfinances.application.viewmodels.toCardModel
 import com.orka.myfinances.data.api.order.models.response.OrderApiModel
 import com.orka.myfinances.data.api.order.models.response.OrderItemApiModel
 import com.orka.myfinances.data.models.Id
@@ -8,7 +9,6 @@ import com.orka.myfinances.lib.format.FormatDateTime
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.ui.screens.order.details.OrderScreenModel
-import com.orka.myfinances.application.viewmodels.sale.details.map
 import com.orka.myfinances.ui.screens.order.list.OrderItemModel
 
 fun OrderApiModel.toScreenModel(
@@ -24,7 +24,7 @@ fun OrderApiModel.toScreenModel(
         items = items.map { it.toItemModel(formatDecimal) },
         client = client.map(),
         clientId = Id(client.id),
-        user = user.map(),
+        user = user.toCardModel(),
         userId = Id(user.id),
         description = description
     )

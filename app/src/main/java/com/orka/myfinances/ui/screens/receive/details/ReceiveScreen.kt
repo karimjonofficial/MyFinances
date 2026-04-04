@@ -34,7 +34,6 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.components.UserCard
-import com.orka.myfinances.application.viewmodels.sale.details.map
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -118,7 +117,7 @@ fun ReceiveScreen(
 
             item {
                 UserCard(
-                    user = uiModel.user.map(),
+                    user = uiModel.user,
                     onClick = {}
                 )
             }

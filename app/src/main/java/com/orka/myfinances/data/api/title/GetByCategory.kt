@@ -10,7 +10,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.http.HttpStatusCode
 
-suspend fun ProductTitleApi1.getByCategory(
+suspend fun ProductTitleApi.getByCategory(
     size: Int,
     pageIndex: Int,
     categoryId: Id

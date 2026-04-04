@@ -148,4 +148,5 @@
     <string name="option">Option</string>
     <string name="select_template">Select template</string>
     <string name="select_client">Select client</string>
+    <string name="selected_string">Selected</string>
 </resources>

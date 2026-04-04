@@ -13,6 +13,11 @@ fun VerticalSpacer(height: Int) {
 }
 
 @Composable
+fun FooterSpacer() {
+    VerticalSpacer(16)
+}
+
+@Composable
 fun HorizontalSpacer(width: Int) {
     Spacer(modifier = Modifier.width(width.dp))
 }

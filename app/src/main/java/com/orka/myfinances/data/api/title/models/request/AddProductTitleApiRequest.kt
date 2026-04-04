@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 data class AddProductTitleApiRequest(
     val category: Int,
     val name: String,
+    val branch: Int,
     val properties: List<PropertyApiRequestModel>,
     @SerialName("default_price") val defaultPrice: Long,
     @SerialName("default_sale_price") val defaultSalePrice: Long,

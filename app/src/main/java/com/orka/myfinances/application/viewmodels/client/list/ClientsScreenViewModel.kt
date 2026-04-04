@@ -2,8 +2,10 @@ package com.orka.myfinances.application.viewmodels.client.list
 
 import com.orka.myfinances.data.api.client.ClientApi
 import com.orka.myfinances.data.api.client.models.response.ClientApiModel
+import com.orka.myfinances.data.api.client.toApiRequest
 import com.orka.myfinances.data.repositories.client.AddClientRequest
 import com.orka.myfinances.lib.data.api.scoped.company.getChunk
+import com.orka.myfinances.lib.data.api.scoped.company.insert
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkMapState
@@ -61,7 +63,11 @@ class ClientsScreenViewModel(
                 phone = phone,
                 address = address
             )
-            if (clientApi.add(request)) initialize()
+            val created = clientApi.insert(
+                request = request,
+                map = AddClientRequest::toApiRequest
+            )
+            if (created) initialize()
         }
     }
 

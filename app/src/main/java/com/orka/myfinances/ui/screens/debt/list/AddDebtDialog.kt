@@ -62,7 +62,7 @@ fun AddDebtDialog(
         } else {
             Text(
                 modifier = Modifier.clickable { onOpenClients() },
-                text = selectedClient.name,
+                text = selectedClient.title,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary,
             )

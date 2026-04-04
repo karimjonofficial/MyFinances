@@ -1,7 +1,8 @@
 package com.orka.myfinances.ui.screens.profile
 
-interface ProfileInteractor {
-    fun initialize()
+import com.orka.myfinances.lib.ui.viewmodel.StateFul
+
+interface ProfileInteractor : StateFul {
     fun debts()
     fun orders()
     fun clients()
@@ -12,6 +13,7 @@ interface ProfileInteractor {
     companion object {
         val dummy = object : ProfileInteractor {
             override fun initialize() {}
+            override fun refresh() {}
             override fun debts() {}
             override fun orders() {}
             override fun clients() {}

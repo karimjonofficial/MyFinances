@@ -55,6 +55,6 @@ fun TemplateField.map(): TemplateApiModelField {
 fun Client.map(): ClientItemModel {
     return ClientItemModel(
         id = id,
-        name = "$firstName $lastName"
+        title = "$firstName $lastName"
     )
 }

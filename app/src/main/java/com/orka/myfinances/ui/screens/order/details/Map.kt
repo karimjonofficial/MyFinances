@@ -1,6 +1,6 @@
 package com.orka.myfinances.ui.screens.order.details
 
-import com.orka.myfinances.application.viewmodels.sale.details.map
+import com.orka.myfinances.application.viewmodels.sale.details.toCardModel
 import com.orka.myfinances.data.models.order.Order
 import com.orka.myfinances.data.models.order.OrderItem
 import com.orka.myfinances.lib.format.FormatDateTime
@@ -22,7 +22,7 @@ fun Order.map(
         items = items.map { it.map(formatDecimal) },
         client = client.toModel(),
         clientId = client.id,
-        user = user.map(),
+        user = user.toCardModel(),
         userId = user.id,
         description = description
     )

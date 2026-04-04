@@ -20,6 +20,7 @@ import com.orka.myfinances.application.viewmodels.product.details.ProductTitleSc
 import com.orka.myfinances.application.viewmodels.product.list.ProductTitlesContentViewModel
 import com.orka.myfinances.application.viewmodels.profile.ProfileContentViewModel
 import com.orka.myfinances.application.viewmodels.receive.add.AddReceiveScreenViewModel
+import com.orka.myfinances.application.viewmodels.receive.bottomsheet.ProductTitleBottomSheetViewModel
 import com.orka.myfinances.application.viewmodels.receive.details.ReceiveScreenViewModel
 import com.orka.myfinances.application.viewmodels.receive.list.ReceiveContentViewModel
 import com.orka.myfinances.application.viewmodels.sale.details.SaleScreenViewModel
@@ -40,7 +41,6 @@ import com.orka.myfinances.data.api.sale.SaleApi
 import com.orka.myfinances.data.api.stock.StockApi
 import com.orka.myfinances.data.api.template.TemplateApi
 import com.orka.myfinances.data.api.title.ProductTitleApi
-import com.orka.myfinances.data.api.title.ProductTitleApi1
 import com.orka.myfinances.data.api.user.UserApi
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Session
@@ -79,8 +79,8 @@ class Factory(
 
     private val clientApi = ClientApi(httpClient, session.office.company.id)
     private val folderApi = FolderApi(httpClient, session.office, folderFlow)
+    private val productTitleApi = ProductTitleApi(session.office, httpClient)
     private val templateApi = TemplateApi(httpClient, session.office)
-    private val productTitleApi = ProductTitleApi(httpClient, productTitleFlow)
     private val receiveApi = ReceiveApi(session.office, httpClient)
     private val saleApi = SaleApi(session.office, httpClient)
     private val orderApi = OrderApi(session.office, httpClient)
@@ -121,6 +121,7 @@ class Factory(
         return AddProductTitleScreenViewModel(
             folderApi = folderApi,
             productTitleApi = productTitleApi,
+            flow = productTitleFlow,
             navigator = navigator,
             loading = loading,
             failure = failure,
@@ -145,7 +146,7 @@ class Factory(
     fun productTitlesViewModel(id: Id): ProductTitlesContentViewModel {
         return ProductTitlesContentViewModel(
             categoryId = id,
-            productTitleApi = ProductTitleApi1(session.office, httpClient),
+            productTitleApi = ProductTitleApi(session.office, httpClient),
             productTitleEvents = productTitleFlow,
             navigator = navigator,
             loading = loading,
@@ -269,10 +270,19 @@ class Factory(
         return AddReceiveScreenViewModel(
             categoryId = id,
             folderApi = folderApi,
-            productTitleApi = productTitleApi,
             receiveApi = receiveApi,
             navigator = navigator,
             flow = stockFlow,
+            loading = loading,
+            failure = failure,
+            logger = logger
+        )
+    }
+
+    fun productTitleBottomSheetViewModel(id: Id): ProductTitleBottomSheetViewModel {
+        return ProductTitleBottomSheetViewModel(
+            categoryId = id,
+            productTitleApi = productTitleApi,
             loading = loading,
             failure = failure,
             logger = logger
@@ -338,6 +348,7 @@ class Factory(
             formatDate = formatter,
             navigator = navigator,
             loading = loading,
+            failure = failure,
             logger = logger
         )
     }
@@ -363,6 +374,7 @@ class Factory(
             formatPrice = formatter,
             flow = stockFlow,
             loading = loading,
+            failure = failure,
             logger = logger
         )
     }
@@ -376,6 +388,7 @@ class Factory(
             formatDecimal = formatter,
             loading = loading,
             navigator = navigator,
+            failure = failure,
             logger = logger
         )
     }

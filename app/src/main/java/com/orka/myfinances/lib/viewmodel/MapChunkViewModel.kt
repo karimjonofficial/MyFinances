@@ -40,11 +40,11 @@ abstract class MapChunkViewModel<TApi, TUi>(
         launch {
             try {
                 val oldState = state.value
+                resetPagination()
                 if(!(oldState is State.Loading && oldState.value != null)) {
                     setState(State.Loading(loading))
-                    resetPagination()
                 }
-                val chunk = get.getChunk(size, 1)
+                val chunk = get.getChunk(size, index)
                 if (chunk != null) {
                     dataState.value = chunk.results
                     val groupedData = map(chunk)

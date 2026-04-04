@@ -2,7 +2,7 @@ package com.orka.myfinances.application.viewmodels.product.list
 
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.lib.logger.Logger
-import com.orka.myfinances.data.api.title.ProductTitleApi1
+import com.orka.myfinances.data.api.title.ProductTitleApi
 import com.orka.myfinances.data.api.title.getByCategory
 import com.orka.myfinances.data.api.title.models.response.ProductTitleApiModel
 import com.orka.myfinances.data.models.Id
@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.onEach
 
 class ProductTitlesContentViewModel(
     private val categoryId: Id,
-    private val productTitleApi: ProductTitleApi1,
+    private val productTitleApi: ProductTitleApi,
     productTitleEvents: Flow<ProductTitleEvent>,
     private val navigator: Navigator,
     loading: UiText,

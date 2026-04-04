@@ -9,7 +9,7 @@ import com.orka.myfinances.ui.screens.product.details.models.ProductTitleScreenM
 import com.orka.myfinances.ui.screens.product.details.models.PropertyModel
 import kotlin.time.Instant
 
-fun ProductTitleApiModel.toModel(
+fun ProductTitleApiModel.toScreenModel(
     formatDecimal: FormatDecimal,
     formatDate: FormatDate,
     formatPrice: FormatPrice

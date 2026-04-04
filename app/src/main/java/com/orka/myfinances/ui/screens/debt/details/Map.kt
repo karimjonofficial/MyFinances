@@ -1,6 +1,6 @@
 package com.orka.myfinances.ui.screens.debt.details
 
-import com.orka.myfinances.application.viewmodels.sale.details.map
+import com.orka.myfinances.application.viewmodels.sale.details.toCardModel
 import com.orka.myfinances.data.models.Debt
 import com.orka.myfinances.lib.data.now
 import com.orka.myfinances.lib.format.FormatDate
@@ -19,7 +19,7 @@ fun Debt.toScreenModel(
         client = client.toModel(),
         isOverdue = endDateTime != null && endDateTime < now(),
         id = this.id,
-        user = user.map(),
+        user = user.toCardModel(),
         clientId = client.id,
         description = description
     )

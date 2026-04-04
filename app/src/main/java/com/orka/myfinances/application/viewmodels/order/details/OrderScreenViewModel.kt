@@ -9,52 +9,34 @@ import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
+import com.orka.myfinances.lib.viewmodel.MapSingleViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.order.details.OrderScreenInteractor
 import com.orka.myfinances.ui.screens.order.details.OrderScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class OrderScreenViewModel(
-    private val id: Id,
+    id: Id,
     private val orderApi: OrderApi,
     private val formatPrice: FormatPrice,
     private val formatDateTime: FormatDateTime,
     private val formatDecimal: FormatDecimal,
     private val navigator: Navigator,
     loading: UiText,
-    private val failure: UiText,
+    failure: UiText,
     logger: Logger
-) : SingleStateViewModel<State<OrderScreenModel>>(
-    initialState = State.Loading(loading),
+) : MapSingleViewModel<OrderApiModel, OrderScreenModel>(
+    id = id,
+    get = { orderApi.getById(it) },
+    map = { it.toScreenModel(formatPrice, formatDateTime, formatDecimal) },
+    loading = loading,
+    failure = failure,
     logger = logger
 ), OrderScreenInteractor {
     val uiState = state.asStateFlow()
 
     init {
         initialize()
-    }
-
-    override fun initialize() {
-        launch {
-            try {
-                val order = orderApi.getById<OrderApiModel>(id)
-                if (order != null) {
-                    setState(
-                        State.Success(
-                            value = order.toScreenModel(
-                                formatPrice = formatPrice,
-                                formatDateTime = formatDateTime,
-                                formatDecimal = formatDecimal
-                            )
-                        )
-                    )
-                } else setState(State.Failure(failure))
-            } catch (e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString())))
-            }
-        }
     }
 
     override fun navigateToClient(clientId: Id) {
