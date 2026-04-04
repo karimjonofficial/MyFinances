@@ -23,13 +23,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
+import com.orka.myfinances.fixtures.format.FormatDateTimeImpl
 import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatNamesImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
-import com.orka.myfinances.fixtures.format.FormatTimeImpl
 import com.orka.myfinances.fixtures.resources.models.order.order1
 import com.orka.myfinances.fixtures.resources.models.order.order2
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
+import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
@@ -100,7 +101,7 @@ private fun OrderCardContent(
 
                 HorizontalSpacer(4)
                 Text(
-                    text = order.dateTime,
+                    text = order.dateTime.str(),
                     style = MaterialTheme.typography.labelMedium
                 )
             }
@@ -152,7 +153,7 @@ private fun OrderCardPreview() {
                     modifier = Modifier.fillMaxWidth(),
                     order = order1.map(
                         formatPrice = FormatPriceImpl(),
-                        formatTime = FormatTimeImpl(),
+                        formatDateTime = FormatDateTimeImpl(),
                         formatDecimal = FormatDecimalImpl(),
                         formatNames = FormatNamesImpl()
                     ),
@@ -163,7 +164,7 @@ private fun OrderCardPreview() {
                     modifier = Modifier.fillMaxWidth(),
                     order = order2.map(
                         formatPrice = FormatPriceImpl(),
-                        formatTime = FormatTimeImpl(),
+                        formatDateTime = FormatDateTimeImpl(),
                         formatDecimal = FormatDecimalImpl(),
                         formatNames = FormatNamesImpl()
                     ),
