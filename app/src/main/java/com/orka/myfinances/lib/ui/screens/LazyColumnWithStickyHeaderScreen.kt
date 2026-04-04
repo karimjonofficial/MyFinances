@@ -98,6 +98,7 @@ fun <T> LazyColumnWithStickyHeaderScreen(
     modifier: Modifier = Modifier,
     title: String,
     arrangementSpace: Dp = 0.dp,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
     state: State<ChunkMapState<T>>,
     refresh: () -> Unit,
     loadMore: () -> Unit,
@@ -109,8 +110,8 @@ fun <T> LazyColumnWithStickyHeaderScreen(
     ) { paddingValues ->
         LazyColumnWithStickyHeaderContent(
             modifier = Modifier.padding(paddingValues),
-            contentPadding = PaddingValues(0.dp),
             arrangementSpace = arrangementSpace,
+            contentPadding = contentPadding,
             state = state,
             refresh = refresh,
             loadMore = loadMore,

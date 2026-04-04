@@ -4,9 +4,7 @@ import com.orka.myfinances.data.models.Client
 
 fun Client.map(): ClientScreenModel {
     return ClientScreenModel(
-        firstName = firstName,
-        lastName = lastName,
-        patronymic = patronymic,
+        fullName = if(lastName.isNullOrEmpty()) firstName else "$firstName $lastName",
         phone = phone,
         address = address
     )

@@ -14,9 +14,7 @@ fun ClientApiModel.toItemModel(): ClientItemModel {
 
 fun ClientApiModel.toScreenModel(): ClientScreenModel {
     return ClientScreenModel(
-        firstName = firstName,
-        lastName = lastName,
-        patronymic = patronymic,
+        fullName = if(lastName.isNullOrEmpty()) firstName else "$firstName $lastName",
         phone = phone,
         address = address
     )

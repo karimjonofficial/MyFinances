@@ -50,7 +50,7 @@ fun ClientScreen(
             TopAppBar(
                 title = {
                     val client = (state as? State.Success)?.value
-                    Text(text = if (client != null) "${client.firstName} ${client.lastName}" else "")
+                    Text(text = client?.fullName ?: stringResource(R.string.loading))
                 },
                 navigationIcon = {
                     IconButton(onClick = interactor::back) {
@@ -62,7 +62,7 @@ fun ClientScreen(
                 }
             )
         }
-    ) { modifier, client ->
+    ) { modifier, model ->
         Column(modifier = modifier) {
 
             Column(
@@ -81,7 +81,7 @@ fun ClientScreen(
                 )
 
                 VerticalSpacer(8)
-                Text(text = client.phone ?: stringResource(R.string.no_phone_number))
+                Text(text = model.phone ?: stringResource(R.string.no_phone_number))
 
                 VerticalSpacer(8)
                 Row(
@@ -113,11 +113,11 @@ fun ClientScreen(
                 leadingContent = {
                     Icon(
                         painter = painterResource(R.drawable.call_outlined),
-                        contentDescription = client.phone
+                        contentDescription = model.phone
                     )
                 },
                 headlineContent = { Text(text = stringResource(R.string.phone_number)) },
-                supportingContent = { Text(text = client.phone ?: stringResource(R.string.no_phone_number)) },
+                supportingContent = { Text(text = model.phone ?: stringResource(R.string.no_phone_number)) },
                 trailingContent = {
                     Icon(
                         painter = painterResource(R.drawable.arrow_right),
@@ -131,11 +131,11 @@ fun ClientScreen(
                 leadingContent = {
                     Icon(
                         painter = painterResource(R.drawable.map_outlined),
-                        contentDescription = client.address
+                        contentDescription = model.address
                     )
                 },
                 headlineContent = { Text(text = stringResource(R.string.address)) },
-                supportingContent = { Text(text = client.address ?: stringResource(R.string.no_address)) },
+                supportingContent = { Text(text = model.address ?: stringResource(R.string.no_address)) },
                 trailingContent = {
                     Icon(
                         painter = painterResource(R.drawable.arrow_right),
