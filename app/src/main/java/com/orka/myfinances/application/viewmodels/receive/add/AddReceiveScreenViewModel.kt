@@ -1,7 +1,6 @@
 package com.orka.myfinances.application.viewmodels.receive.add
 
 import com.orka.myfinances.data.api.folder.FolderApi
-import com.orka.myfinances.data.api.folder.toEntity
 import com.orka.myfinances.data.api.receive.ReceiveApi
 import com.orka.myfinances.data.api.receive.toApiRequest
 import com.orka.myfinances.data.models.Id
