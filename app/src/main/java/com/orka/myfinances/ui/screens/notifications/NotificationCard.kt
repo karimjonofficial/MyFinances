@@ -1,7 +1,6 @@
 package com.orka.myfinances.ui.screens.notifications
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,11 +38,6 @@ fun NotificationCard(
         MaterialTheme.colorScheme.outline
     } else {
         MaterialTheme.colorScheme.onSurfaceVariant
-    }
-    val borderColor = if (read) {
-        MaterialTheme.colorScheme.outlineVariant
-    } else {
-        MaterialTheme.colorScheme.outline
     }
 
     val titleStyle = MaterialTheme.typography.bodyLarge
