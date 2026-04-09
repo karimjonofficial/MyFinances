@@ -24,7 +24,6 @@ fun HomeScreen(
     val navItems = navItems()
     val pagerState = rememberPagerState(pageCount = { navItems.size })
     val coroutineScope = rememberCoroutineScope()
-
     fun NavItem.getIconRes() = if (pagerState.currentPage == index) iconRes.selected else iconRes.unSelected
 
     Scaffold(

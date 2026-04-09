@@ -1,7 +1,7 @@
 package com.orka.myfinances.data.api.folder
 
 import com.orka.myfinances.data.api.folder.models.response.FolderApiModel
-import com.orka.myfinances.data.models.Office
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.folder.AddFolderRequest
 import com.orka.myfinances.data.repositories.folder.FolderEvent
 import io.ktor.client.HttpClient
@@ -15,14 +15,14 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 
 class FolderApi(
     private val client: HttpClient,
-    private val office: Office,
+    private val officeId: Id,
     private val flow: MutableSharedFlow<FolderEvent>
 ) {
     suspend fun getTop(): List<FolderApiModel>? {
         val response = client.get(
             urlString = "categories/",
             block = {
-                parameter("branch", office.id.value)
+                parameter("branch", officeId.value)
                 parameter("parent", "null")
                 parameter("ordering", "name")
             }
@@ -35,7 +35,7 @@ class FolderApi(
             urlString = "categories/",
             block = {
                 parameter("parent", parentId)
-                parameter("branch", office.id.value)
+                parameter("branch", officeId.value)
                 parameter("ordering", "name")
             }
         )
@@ -50,7 +50,7 @@ class FolderApi(
     suspend fun add(request: AddFolderRequest) {
         val response = client.post(
             urlString = "categories/",
-            block = { setBody(request.toApiRequest(office.id.value)) }
+            block = { setBody(request.toApiRequest(officeId.value)) }
         )
         val created = response.status == HttpStatusCode.Created
         if (created) flow.emit(FolderEvent(request.parentId))

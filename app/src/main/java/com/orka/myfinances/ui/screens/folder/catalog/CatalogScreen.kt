@@ -1,16 +1,10 @@
 package com.orka.myfinances.ui.screens.folder.catalog
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.folder.catalog1
-import com.orka.myfinances.lib.ui.components.TopAppBar
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.theme.MyFinancesTheme
@@ -32,16 +26,9 @@ fun CatalogScreen(
         state = state,
         onRetry = interactor::refresh,
         topBar = { state ->
-            TopAppBar(
-                title = if (state is State.Success) state.value.name else stringResource(R.string.catalog),
-                actions = {
-                    IconButton(onClick = onAddFolder) {
-                        Icon(
-                            painter = painterResource(R.drawable.add),
-                            contentDescription = stringResource(R.string.add)
-                        )
-                    }
-                }
+            CatalogScreenTopBar(
+                state = state,
+                onAddFolder = onAddFolder
             )
         },
     ) { modifier, model ->

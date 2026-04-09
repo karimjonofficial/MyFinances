@@ -2,14 +2,14 @@ package com.orka.myfinances.data.api.receive
 
 import com.orka.myfinances.data.api.receive.models.request.AddReceiveApiRequest
 import com.orka.myfinances.data.api.receive.models.request.AddReceiveApiRequestItem
-import com.orka.myfinances.data.models.Office
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequestItem
 
-fun AddReceiveRequest.toApiRequest(office: Office): AddReceiveApiRequest {
+fun AddReceiveRequest.toApiRequest(officeId: Id): AddReceiveApiRequest {
     return AddReceiveApiRequest(
         items = items.map { it.toApiRequest() },
-        officeId = office.id.value,
+        officeId = officeId.value,
         price = price,
     )
 }

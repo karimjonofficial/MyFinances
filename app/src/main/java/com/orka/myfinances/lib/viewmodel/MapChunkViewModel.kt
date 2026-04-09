@@ -8,8 +8,8 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 import kotlinx.coroutines.flow.MutableStateFlow
 
 abstract class MapChunkViewModel<TApi, TUi>(
-    private val loading: UiText,
-    private val failure: UiText,
+    protected val loading: UiText,
+    protected val failure: UiText,
     private val get: GetChunk<TApi>,
     private val map: (Chunk<TApi>) -> ChunkMapState<TUi>,
     logger: Logger

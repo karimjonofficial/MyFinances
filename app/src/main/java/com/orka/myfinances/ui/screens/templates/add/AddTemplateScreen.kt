@@ -3,7 +3,6 @@ package com.orka.myfinances.ui.screens.templates.add
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,14 +10,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -30,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.repositories.template.AddTemplateRequest
+import com.orka.myfinances.data.repositories.template.TemplateFieldModel
 import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.screens.templates.add.components.TemplateFieldCard
@@ -48,37 +44,13 @@ fun AddTemplateScreen(
 
     Scaffold(
         modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(R.string.templates)) },
-                navigationIcon = {
-                    IconButton(onClick = { interactor.back() }) {
-                        Icon(
-                            painter = painterResource(R.drawable.arrow_back),
-                            contentDescription = stringResource(R.string.back)
-                        )
-                    }
-                }
-            )
-        },
+        topBar = { AddTemplateScreenTopBar(interactor = interactor) },
         bottomBar = {
-            BottomAppBar(modifier = Modifier.fillMaxWidth()) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    Button(
-                        onClick = {
-                            if (name.value.isNotBlank() && fields.isNotEmpty()) {
-                                val template = AddTemplateRequest(name.value, fields)
-                                interactor.addTemplate(template)
-                            }
-                        }
-                    ) {
-                        Text(text = stringResource(R.string.save))
-                    }
-                }
-            }
+            AddTemplateScreenBottomBar(
+                name = name.value,
+                fields = fields,
+                interactor = interactor
+            )
         }
     ) { paddingValues ->
         val showDialog = rememberSaveable { mutableStateOf(false) }
@@ -156,21 +128,12 @@ fun AddTemplateScreen(
 @Composable
 private fun TemplateScreenPreview() {
     val types = listOf("text", "number", "range")
-    val dummyInteractor = object : AddTemplateScreenInteractor {
-        override fun addTemplate(request: AddTemplateRequest) {}
-        override fun back() {}
-    }
 
     MyFinancesTheme {
         AddTemplateScreen(
             modifier = Modifier.fillMaxSize(),
             types = types,
-            interactor = dummyInteractor
+            interactor = AddTemplateScreenInteractor.dummy
         )
     }
 }
-
-data class TemplateFieldModel(
-    val name: String,
-    val type: String
-)

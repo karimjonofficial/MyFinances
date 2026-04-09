@@ -18,7 +18,7 @@ suspend fun StockApi.getByCategory(
     val response = httpClient.get(
         urlString = "stock-items/",
         block = {
-            parameter("branch", office.id.value)
+            parameter("branch", officeId.value)
             parameter("category", categoryId.value)
             parameter("page_size", size)
             parameter("page", pageIndex)

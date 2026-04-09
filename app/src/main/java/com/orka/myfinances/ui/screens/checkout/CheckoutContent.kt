@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
+import com.orka.myfinances.fixtures.resources.description
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
@@ -29,6 +30,7 @@ import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.ui.screens.checkout.viewmodel.BasketItemCardModel
+import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
 import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
 
 @Composable
@@ -99,8 +101,10 @@ fun CheckoutContent(
         ) {
             Checkbox(
                 checked = printReceipt,
-                onCheckedChange = { onPrintReceiptChanged(it) }
+                onCheckedChange = null
             )
+
+            HorizontalSpacer(4)
             Text(text = stringResource(R.string.print_receipt))
         }
 
@@ -118,6 +122,15 @@ private fun CheckoutContentPreview() {
 
     ScaffoldPreview(
         modifier = Modifier.fillMaxSize(),
+        bottomBar = {
+            CheckoutScreenBottomBar(
+                price = 1000,
+                selectedClient = null,
+                interactor = CheckoutScreenInteractor.dummy,
+                description = description,
+                printReceipt = true
+            )
+        },
         title = "Checkout"
     ) { paddingValues ->
         CheckoutContent(

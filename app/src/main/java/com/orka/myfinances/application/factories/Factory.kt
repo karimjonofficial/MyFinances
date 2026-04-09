@@ -1,10 +1,11 @@
 package com.orka.myfinances.application.factories
 
-import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.models.Session
-import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.factories.Factory
+import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.printer.pos.BluetoothPrinterImpl
+import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.navigation.Navigator
 import io.ktor.client.HttpClient
 
@@ -13,7 +14,10 @@ fun factory(
     printer: BluetoothPrinterImpl,
     logger: Logger,
     httpClient: HttpClient,
-    navigator: Navigator
+    navigator: Navigator,
+    sessionManager: SessionManager,
+    loading: UiText,
+    failure: UiText
 ): Factory {
     val formatter = Formatter()
     val printer = printer
@@ -25,7 +29,9 @@ fun factory(
         printer = printer,
         session = session,
         httpClient = httpClient,
-        basketRepository = BasketRepository(httpClient)
+        sessionManager = sessionManager,
+        loading = loading,
+        failure = failure
     )
 }
 

@@ -30,7 +30,7 @@ class ProductTitleScreenViewModel(
     private val formatDate: FormatDate,
     private val formatPrice: FormatPrice,
     private val flow: MutableSharedFlow<StockEvent>,
-    private val loading: UiText,
+    loading: UiText,
     failure: UiText,
     logger: Logger
 ) : MapSingleViewModel<ProductTitleApiModel, ProductTitleScreenModel>(
@@ -50,29 +50,35 @@ class ProductTitleScreenViewModel(
 
     override fun receive(amount: Int, totalPrice: Int, comment: String?) {
         launch {
-            val old = state.value//TODO kill it before does you
-            setState(State.Loading(loading))
-            val title = productTitleApi.getById<ProductTitleApiModel?>(productId)
-            val price = title?.defaultPrice?.toInt()
-            val salePrice = title?.defaultSalePrice?.toInt()
-            val request = AddReceiveRequest(
-                items = listOf(
-                    AddReceiveRequestItem(
-                        productTitleId = productId,
-                        price = price,
-                        salePrice = salePrice,
-                        amount = amount
-                    )
-                ),
-                price = totalPrice,
-                comment = comment
-            )
-            val created = receiveApi.insert(
-                request = request,
-                map = AddReceiveRequest::toApiRequest
-            )
-            if(created) flow.emit(StockEvent(categoryId))
-            setState(old)
+            val oldState = state.value
+            try {
+                setState(State.Loading(loading, oldState.value))
+                val title = productTitleApi.getById<ProductTitleApiModel?>(productId)
+                val price = title?.defaultPrice?.toInt()
+                val salePrice = title?.defaultSalePrice?.toInt()
+                val request = AddReceiveRequest(
+                    items = listOf(
+                        AddReceiveRequestItem(
+                            productTitleId = productId,
+                            price = price,
+                            salePrice = salePrice,
+                            amount = amount
+                        )
+                    ),
+                    price = totalPrice,
+                    comment = comment
+                )
+                val created = receiveApi.insert(
+                    request = request,
+                    map = AddReceiveRequest::toApiRequest
+                )
+                if (created) {
+                    flow.emit(StockEvent(categoryId))
+                    setState(oldState)
+                } else setState(State.Failure(failure, oldState.value))
+            } catch(e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
+            }
         }
     }
 }

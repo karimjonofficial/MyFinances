@@ -1,18 +1,18 @@
 package com.orka.myfinances.application.viewmodels.folder.catalog
 
 import androidx.lifecycle.viewModelScope
-import com.orka.myfinances.lib.logger.Logger
-import com.orka.myfinances.data.api.folder.models.response.CatalogApiModel
 import com.orka.myfinances.data.api.folder.FolderApi
+import com.orka.myfinances.data.api.folder.models.response.CatalogApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.folder.AddFolderRequest
 import com.orka.myfinances.data.repositories.folder.FolderEvent
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.StateFulViewModel
+import com.orka.myfinances.lib.viewmodel.BaseViewModel
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.folder.catalog.CatalogScreenModel
 import com.orka.myfinances.ui.screens.folder.catalog.CatalogScreenInteractor
+import com.orka.myfinances.ui.screens.folder.catalog.CatalogScreenModel
 import com.orka.myfinances.ui.screens.folder.models.FolderUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,13 +22,22 @@ import kotlinx.coroutines.flow.onEach
 class CatalogScreenViewModel(
     private val catalogId: Id,
     private val folderApi: FolderApi,
-    private val loading: UiText,
-    private val failure: UiText,
+    loading: UiText,
+    failure: UiText,
     events: Flow<FolderEvent>,
     private val navigator: Navigator,
     logger: Logger
-) : StateFulViewModel<State<CatalogScreenModel>>(
-    initialState = State.Loading(loading),
+) : BaseViewModel<CatalogScreenModel>(
+    loading = loading,
+    failure = failure,
+    produceSuccess = {
+        val folders = folderApi.getByParent(catalogId.value)?.sortedBy { it.name }
+        val catalog = folderApi.getById(catalogId.value)
+
+        if (folders != null && catalog != null && catalog is CatalogApiModel) {
+            State.Success(catalog.toScreenModel(folders))
+        } else null
+    },
     logger = logger
 ), CatalogScreenInteractor {
     val uiState = state.asStateFlow()
@@ -38,21 +47,6 @@ class CatalogScreenViewModel(
         events.onEach {
             if (it.catalogId == catalogId) initialize()
         }.launchIn(viewModelScope)
-    }
-
-    override fun initialize() {
-        launch {
-            try {
-                val folders = folderApi.getByParent(catalogId.value)?.sortedBy { it.name }
-                val catalog = folderApi.getById(catalogId.value)
-
-                if (folders != null && catalog != null && catalog is CatalogApiModel) {
-                    setState(State.Success(catalog.toScreenModel(folders)))
-                } else setState(State.Failure(failure))
-            } catch (e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString())))
-            }
-        }
     }
 
     override fun addFolder(
@@ -83,22 +77,6 @@ class CatalogScreenViewModel(
     override fun navigateToAddTemplate() {
         launch {
             navigator.navigateToAddTemplate()
-        }
-    }
-
-    override fun refresh() {
-        launch {
-            try {
-                setState(State.Loading(loading))
-                val folders = folderApi.getByParent(catalogId.value)
-                val catalog = folderApi.getById(catalogId.value)
-
-                if (folders != null && catalog != null && catalog is CatalogApiModel) {
-                    setState(State.Success(catalog.toScreenModel(folders)))
-                } else setState(State.Failure(failure))
-            } catch (e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString())))
-            }
         }
     }
 }

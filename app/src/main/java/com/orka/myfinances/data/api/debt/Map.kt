@@ -1,13 +1,13 @@
 package com.orka.myfinances.data.api.debt
 
 import com.orka.myfinances.data.api.debt.models.request.AddDebtApiRequest
-import com.orka.myfinances.data.models.Office
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.debt.AddDebtRequest
 
-fun AddDebtRequest.toApiRequest(office: Office): AddDebtApiRequest {
+fun AddDebtRequest.toApiRequest(officeId: Id): AddDebtApiRequest {
     return AddDebtApiRequest(
         clientId = clientId.value,
-        officeId = office.id.value,
+        officeId = officeId.value,
         price = price,
         description = description,
     )

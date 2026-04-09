@@ -18,7 +18,7 @@ import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.StateFulViewModel
+import com.orka.myfinances.lib.viewmodel.BaseViewModel
 import com.orka.myfinances.printer.Printer
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
@@ -33,54 +33,27 @@ class CheckoutScreenViewModel(
     private val printer: Printer,
     private val formatDecimal: FormatDecimal,
     private val formatPrice: FormatPrice,
-    private val loading: UiText,
-    private val failure: UiText,
+    loading: UiText,
+    failure: UiText,
     logger: Logger
-) : StateFulViewModel<State<CheckoutScreenModel>>(
-    initialState = State.Loading(loading),
+) : BaseViewModel<CheckoutScreenModel>(
+    loading = loading,
+    failure = failure,
+    produceSuccess = {
+        val items = basketRepository.get()
+        State.Success(
+            value = CheckoutScreenModel(
+                items = items.map { it.toModel(formatPrice, formatDecimal) },
+                price = items.getPrice().toInt(),
+            )
+        )
+    },
     logger = logger
 ), CheckoutScreenInteractor {
     val uiState = state.asStateFlow()
 
     init {
         initialize()
-    }
-
-    override fun initialize() {
-        launch {
-            val items = basketRepository.get()
-            try {
-                setState(
-                    State.Success(
-                        value = CheckoutScreenModel(
-                            items = items.map { it.toModel(formatPrice, formatDecimal) },
-                            price = items.getPrice().toInt(),
-                        )
-                    )
-                )
-            } catch (e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString())))
-            }
-        }
-    }
-
-    override fun refresh() {
-        launch {
-            setState(State.Loading(loading))
-            val items = basketRepository.get()
-            try {
-                setState(
-                    State.Success(
-                        value = CheckoutScreenModel(
-                            items = items.map { it.toModel(formatPrice, formatDecimal) },
-                            price = items.getPrice().toInt()
-                        )
-                    )
-                )
-            } catch (e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString())))
-            }
-        }
     }
 
     override fun sell(

@@ -18,7 +18,7 @@ suspend fun getCompany(client: HttpClient, access: String): ApiResponse {
         }
     )
     return when(response.status) {
-        HttpStatusCode.OK -> ApiResponse.Success(response.body<CompanyApiModel>().map())
+        HttpStatusCode.OK -> ApiResponse.Success(response.body<CompanyApiModel>())
         HttpStatusCode.Unauthorized -> ApiResponse.Unauthorized
         else -> ApiResponse.Failure
     }

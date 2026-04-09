@@ -8,7 +8,7 @@ import io.ktor.http.HttpStatusCode
 suspend inline fun <reified T> OfficeScopedApi.getAll(): List<T>? {
     val response = httpClient.get(
         urlString = baseUrl,
-        block = { parameter("branch", office.id.value) }
+        block = { parameter("branch", officeId.value) }
     )
     return if (response.status == HttpStatusCode.OK) response.body() else null
 }

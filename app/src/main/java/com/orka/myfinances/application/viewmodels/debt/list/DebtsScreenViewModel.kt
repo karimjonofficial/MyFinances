@@ -28,8 +28,8 @@ class DebtsScreenViewModel(
     private val formatPrice: FormatPrice,
     private val formatLocalDate: FormatLocalDate,
     private val formatTime: FormatTime,
-    private val loading: UiText,
-    private val failure: UiText,
+    loading: UiText,
+    failure: UiText,
     logger: Logger,
     private val navigator: Navigator
 ) : MapChunkViewModel<DebtApiModel, DebtUiModel>(

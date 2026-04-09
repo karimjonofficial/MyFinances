@@ -15,11 +15,9 @@ import com.orka.myfinances.application.viewmodels.basket.BasketContentViewModel
 import com.orka.myfinances.application.viewmodels.folder.home.FoldersContentViewModel
 import com.orka.myfinances.application.viewmodels.profile.ProfileContentViewModel
 import com.orka.myfinances.application.viewmodels.template.bottomsheet.TemplateBottomSheetViewModel
-import com.orka.myfinances.data.models.Session
-import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.screens.basket.BasketContent
-import com.orka.myfinances.ui.screens.folder.home.FoldersContent
 import com.orka.myfinances.ui.screens.folder.components.AddFolderDialog
+import com.orka.myfinances.ui.screens.folder.home.FoldersContent
 import com.orka.myfinances.ui.screens.folder.models.TemplateItemModel
 import com.orka.myfinances.ui.screens.profile.ProfileContent
 import kotlinx.coroutines.launch
@@ -34,9 +32,7 @@ fun HomeScreenContent(
     dialogVisible: MutableState<Boolean>,
     basketViewModel: BasketContentViewModel,
     profileViewModel: ProfileContentViewModel,
-    sheetViewModel: TemplateBottomSheetViewModel,
-    session: Session,
-    sessionManager: SessionManager
+    sheetViewModel: TemplateBottomSheetViewModel
 ) {
     val sheetVisible = rememberSaveable { mutableStateOf(false) }
     when (index) {
@@ -120,10 +116,8 @@ fun HomeScreenContent(
 
             ProfileContent(
                 modifier = modifier,
-                session = session,
                 state = profileState.value,
-                interactor = profileViewModel,
-                sessionManager = sessionManager
+                interactor = profileViewModel
             )
         }
     }

@@ -23,7 +23,7 @@ class NotificationsScreenViewModel(
     private val formatTime: FormatTime,
     logger: Logger,
     loading: UiText,
-    private val failure: UiText
+    failure: UiText
 ) : MapChunkViewModel<NotificationApiModel, NotificationUiModel>(
     loading = loading,
     failure = failure,

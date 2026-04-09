@@ -1,6 +1,5 @@
 package com.orka.myfinances.factories
 
-import com.orka.myfinances.R
 import com.orka.myfinances.application.factories.Formatter
 import com.orka.myfinances.application.viewmodels.basket.BasketContentViewModel
 import com.orka.myfinances.application.viewmodels.checkout.CheckoutScreenViewModel
@@ -54,6 +53,7 @@ import com.orka.myfinances.data.repositories.template.TemplateEvent
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.printer.pos.BluetoothPrinterImpl
+import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.navigation.Navigator
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -62,14 +62,13 @@ class Factory(
     private val session: Session,
     private val httpClient: HttpClient,
     private val printer: BluetoothPrinterImpl,
-    private val basketRepository: BasketRepository,
     private val logger: Logger,
     private val navigator: Navigator,
-    private val formatter: Formatter
+    private val formatter: Formatter,
+    private val sessionManager: SessionManager,
+    private val loading: UiText,
+    private val failure: UiText
 ) {
-    private val loading = UiText.Res(R.string.loading)
-    private val failure = UiText.Res(R.string.failure)
-
     private val stockFlow = MutableSharedFlow<StockEvent>()
     private val templateFlow = MutableSharedFlow<TemplateEvent>()
     private val productTitleFlow = MutableSharedFlow<ProductTitleEvent>()
@@ -77,16 +76,18 @@ class Factory(
     private val saleFlow = MutableSharedFlow<SaleEvent>()
     private val receiveFlow = MutableSharedFlow<ReceiveEvent>()
 
-    private val clientApi = ClientApi(httpClient, session.office.company.id)
-    private val folderApi = FolderApi(httpClient, session.office, folderFlow)
-    private val productTitleApi = ProductTitleApi(session.office, httpClient)
-    private val templateApi = TemplateApi(httpClient, session.office)
-    private val receiveApi = ReceiveApi(session.office, httpClient)
-    private val saleApi = SaleApi(session.office, httpClient)
-    private val orderApi = OrderApi(session.office, httpClient)
-    private val debtApi = DebtApi(httpClient, session.office)
-    private val officeApi = OfficeApi(httpClient)
+    private val clientApi = ClientApi(httpClient, session.companyId)
+    private val folderApi = FolderApi(httpClient, session.officeId, folderFlow)
+    private val productTitleApi = ProductTitleApi(session.officeId, httpClient)
+    private val templateApi = TemplateApi(httpClient, session.officeId)
+    private val receiveApi = ReceiveApi(session.officeId, httpClient)
+    private val saleApi = SaleApi(session.officeId, httpClient)
+    private val orderApi = OrderApi(session.officeId, httpClient)
+    private val debtApi = DebtApi(httpClient, session.officeId)
+    private val officeApi = OfficeApi(session.companyId, httpClient)
     private val userApi = UserApi(httpClient)
+    private val stockApi = StockApi(session.officeId, httpClient)
+    private val basketRepository = BasketRepository(httpClient)
 
     fun foldersViewModel(): FoldersContentViewModel {
         return FoldersContentViewModel(
@@ -133,7 +134,7 @@ class Factory(
     fun stockItemsViewModel(id: Id): StockItemsContentViewModel {
         return StockItemsContentViewModel(
             categoryId = id,
-            stockApi = StockApi(session.office, httpClient),
+            stockApi = stockApi,
             basketRepository = basketRepository,
             formatPrice = formatter,
             formatDecimal = formatter,
@@ -147,7 +148,7 @@ class Factory(
     fun productTitlesViewModel(id: Id): ProductTitlesContentViewModel {
         return ProductTitlesContentViewModel(
             categoryId = id,
-            productTitleApi = ProductTitleApi(session.office, httpClient),
+            productTitleApi = productTitleApi,
             productTitleEvents = productTitleFlow,
             navigator = navigator,
             loading = loading,
@@ -175,6 +176,7 @@ class Factory(
             formatPrice = formatter,
             formatDecimal = formatter,
             loading = loading,
+            failure = failure,
             logger = logger
         )
     }
@@ -204,7 +206,7 @@ class Factory(
         return SaleContentViewModel(
             loading = loading,
             failure = failure,
-            saleApi = SaleApi(session.office, httpClient),
+            saleApi = saleApi,
             events = saleFlow,
             navigator = navigator,
             priceFormatter = formatter,
@@ -356,10 +358,11 @@ class Factory(
 
     fun profileViewModel(): ProfileContentViewModel {
         return ProfileContentViewModel(
-            company = session.office.company,
+            officeId = session.officeId,
             officeApi = officeApi,
             userApi = userApi,
             navigator = navigator,
+            sessionManager = sessionManager,
             loading = loading,
             failure = failure,
             logger = logger

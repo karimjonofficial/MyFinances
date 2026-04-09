@@ -1,6 +1,7 @@
 package com.orka.myfinances.ui.screens.profile
 
 import com.orka.myfinances.lib.ui.viewmodel.StateFul
+import com.orka.myfinances.ui.screens.profile.models.OfficeItemModel
 
 interface ProfileInteractor : StateFul {
     fun debts()
@@ -9,6 +10,7 @@ interface ProfileInteractor : StateFul {
     fun templates()
     fun history()
     fun settings()
+    fun setOffice(office: OfficeItemModel)
 
     companion object {
         val dummy = object : ProfileInteractor {
@@ -20,6 +22,7 @@ interface ProfileInteractor : StateFul {
             override fun templates() {}
             override fun history() {}
             override fun settings() {}
+            override fun setOffice(office: OfficeItemModel) {}
         }
     }
 }

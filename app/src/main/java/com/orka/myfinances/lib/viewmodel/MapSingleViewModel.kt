@@ -10,38 +10,17 @@ abstract class MapSingleViewModel<TApi, TUi>(
     private val id: Id,
     private val get: GetById<TApi>,
     private val map: (TApi) -> TUi,
-    private val loading: UiText,
-    private val failure: UiText,
+    loading: UiText,
+    failure: UiText,
     logger: Logger
-) : StateFulViewModel<State<TUi>>(
-    initialState = State.Loading(loading),
+) : BaseViewModel<TUi>(
+    loading = loading,
+    failure = failure,
+    produceSuccess = {
+        val response = get.getById(id)
+        if (response != null) {
+            State.Success(map(response))
+        } else null
+    },
     logger = logger
-) {
-    final override fun initialize() {
-        launch {
-            try {
-                val response = get.getById(id)
-                if (response != null) {
-                    setState(State.Success(map(response)))
-                } else setState(State.Failure(failure))
-            } catch (e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString())))
-            }
-        }
-    }
-
-    final override fun refresh() {
-        launch {
-            val oldValue = state.value.value
-            try {
-                setState(State.Loading(loading, oldValue))
-                val response = get.getById(id)
-                if (response != null) {
-                    setState(State.Success(map(response)))
-                } else setState(State.Failure(failure, oldValue))
-            } catch (e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString()), oldValue))
-            }
-        }
-    }
-}
+)

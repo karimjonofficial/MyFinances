@@ -6,6 +6,6 @@ import com.orka.myfinances.data.zipped.SessionModel
 fun Session.toModel(): SessionModel {
     return SessionModel(
         credentials = credentials,
-        officeId = office.id.value
+        officeId = officeId.value
     )
 }

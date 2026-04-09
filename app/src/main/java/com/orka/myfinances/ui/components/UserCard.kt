@@ -31,7 +31,7 @@ import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.ui.screens.client.list.toModel
+import com.orka.myfinances.ui.screens.client.list.toCardModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
@@ -102,7 +102,7 @@ private fun ClientCardPreview() {
                     repeat(10) {
                         ClientCard(
                             modifier = Modifier.fillMaxWidth(),
-                            model = client1.toModel(),
+                            model = client1.toCardModel(),
                             onClick = {}
                         )
                     }

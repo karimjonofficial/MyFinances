@@ -1,6 +1,7 @@
 package com.orka.myfinances.ui.screens.profile
 
 import com.orka.myfinances.R
+import com.orka.myfinances.ui.screens.profile.models.ProfileOption
 
 fun options(interactor: ProfileInteractor): List<ProfileOption> {
     return listOf(

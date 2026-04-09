@@ -4,8 +4,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
-import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.navigation.entries.catalogEntry
+import com.orka.myfinances.ui.navigation.entries.categoryEntry
 import com.orka.myfinances.ui.navigation.entries.checkoutEntry
 import com.orka.myfinances.ui.navigation.entries.client.clientEntry
 import com.orka.myfinances.ui.navigation.entries.client.clientsEntry
@@ -26,17 +26,15 @@ import com.orka.myfinances.ui.navigation.entries.settingsEntry
 import com.orka.myfinances.ui.navigation.entries.template.addTemplateEntry
 import com.orka.myfinances.ui.navigation.entries.template.templateEntry
 import com.orka.myfinances.ui.navigation.entries.template.templatesEntry
-import com.orka.myfinances.ui.navigation.entries.categoryEntry
 
 fun entryProvider(
     modifier: Modifier = Modifier,
     session: Session,
-    sessionManager: SessionManager,
     destination: Destination,
     factory: Factory
 ): NavEntry<Destination> {
     return when(destination) {
-        is Destination.Home -> homeEntry(modifier, destination, session, sessionManager, factory)
+        is Destination.Home -> homeEntry(modifier, destination, session, factory)
         is Destination.Catalog -> catalogEntry(modifier, destination, factory)
         is Destination.Category -> categoryEntry(modifier, destination, factory)
         is Destination.Notifications -> notificationsEntry(modifier, destination, factory)

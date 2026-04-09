@@ -2,11 +2,11 @@ package com.orka.myfinances.data.api.title
 
 import com.orka.myfinances.data.api.title.models.request.AddProductTitleApiRequest
 import com.orka.myfinances.data.api.title.models.request.PropertyApiRequestModel
-import com.orka.myfinances.data.models.Office
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.title.models.AddProductTitleRequest
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 
-fun AddProductTitleRequest.toApiRequest(office: Office): AddProductTitleApiRequest {
+fun AddProductTitleRequest.toApiRequest(officeId: Id): AddProductTitleApiRequest {
     return AddProductTitleApiRequest(
         name = name,
         category = categoryId.value,
@@ -14,7 +14,7 @@ fun AddProductTitleRequest.toApiRequest(office: Office): AddProductTitleApiReque
         defaultPrice = price.toLong(),
         defaultSalePrice = salePrice.toLong(),
         description = description,
-        branch = office.id.value
+        branch = officeId.value
     )
 }
 

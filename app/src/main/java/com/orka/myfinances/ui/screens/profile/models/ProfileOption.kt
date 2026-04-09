@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.profile
+package com.orka.myfinances.ui.screens.profile.models
 
 data class ProfileOption(
     val index: Int,

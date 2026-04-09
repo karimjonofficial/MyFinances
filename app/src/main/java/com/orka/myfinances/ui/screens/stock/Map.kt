@@ -1,10 +1,22 @@
-package com.orka.myfinances.ui.screens.folder.category
+package com.orka.myfinances.ui.screens.stock
 
 import com.orka.myfinances.data.models.StockItem
+import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.ui.screens.stock.StockItemCardModel
-import com.orka.myfinances.ui.screens.stock.StockItemUiModel
+
+fun List<StockItem>.toMap(
+    formatPrice: FormatPrice,
+    formatDecimal: FormatDecimal
+): Map<String, List<StockItemUiModel>> {
+    val map = sortedBy { it.product.title.name }
+        .groupBy { it.product.title.name.stickyHeaderKey() }
+        .mapValues { (_, stockItems) ->
+            stockItems.map { it.toUiModel(formatPrice, formatDecimal) }
+        }
+
+    return map
+}
 
 fun StockItem.toCardModel(
     formatPrice: FormatPrice,

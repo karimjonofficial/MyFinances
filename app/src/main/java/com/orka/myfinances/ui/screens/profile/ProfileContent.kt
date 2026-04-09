@@ -1,22 +1,16 @@
 package com.orka.myfinances.ui.screens.profile
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -25,14 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.Session
-import com.orka.myfinances.fixtures.managers.DummySessionManager
 import com.orka.myfinances.fixtures.resources.models.office1
-import com.orka.myfinances.fixtures.resources.models.session
+import com.orka.myfinances.fixtures.resources.models.offices
 import com.orka.myfinances.fixtures.resources.models.user1
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.extensions.ui.str
@@ -43,7 +34,9 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.ui.managers.SessionManager
+import com.orka.myfinances.ui.screens.profile.components.OptionButton
+import com.orka.myfinances.ui.screens.profile.components.UserIcon
+import com.orka.myfinances.ui.screens.profile.models.ProfileContentModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
@@ -51,8 +44,6 @@ fun ProfileContent(
     modifier: Modifier,
     state: State<ProfileContentModel>,
     interactor: ProfileInteractor,
-    session: Session,
-    sessionManager: SessionManager//TODO remove it to viewmodel
 ) {
     val exposed = rememberSaveable { mutableStateOf(false) }
 
@@ -61,32 +52,15 @@ fun ProfileContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
-            Icon(
-                modifier = Modifier
-                    .size(160.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
-                painter = painterResource(R.drawable.account_circle_outlined),
-                tint = MaterialTheme.colorScheme.secondary,
-                contentDescription = null
-            )
+            UserIcon(Modifier.size(160.dp))
 
             VerticalSpacer(8)
-            Text(
-                text = "ID: ${
-                    if (state is State.Success) state.value.user.id.value else stringResource(
-                        R.string.loading
-                    )
-                }"
-            )
-            Text(
-                text = if (state is State.Success) state.value.user.phone
-                    ?: stringResource(R.string.no_phone_number) else stringResource(R.string.loading)
-            )
+            NameText(state = state)
+            PhoneText(state = state)
 
             OutlinedExposedDropDownTextField(
                 text = when (state) {
-                    is State.Success -> session.office.name
+                    is State.Success -> state.value.officeName
                     is State.Failure -> state.error.str()
                     is State.Loading -> state.message.str()
                 },
@@ -98,9 +72,9 @@ fun ProfileContent(
                     is State.Success -> state.value.offices
                     else -> emptyList()
                 },
-                itemText = { it.name },
+                itemText = { it.title },
                 onItemSelected = { office ->
-                    sessionManager.setOffice(session.credentials, office)
+                    interactor.setOffice(office)
                     exposed.value = false
                 }
             )
@@ -121,38 +95,15 @@ fun ProfileContent(
                     .clip(RoundedCornerShape(16.dp))
             ) {
                 options(interactor).forEach {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { it.action() }
-                            .background(MaterialTheme.colorScheme.surfaceVariant)
-                            .padding(horizontal = 12.dp, vertical = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            painter = painterResource(it.iconRes),
-                            contentDescription = stringResource(it.titleRes)
-                        )
-
-                        Text(
-                            modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
-                            text = stringResource(it.titleRes),
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 1,
-                            fontWeight = FontWeight.Bold
-                        )
-
-                        Icon(
-                            painter = painterResource(R.drawable.arrow_right),
-                            contentDescription = null
-                        )
-                    }
+                    OptionButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        title = stringResource(it.titleRes),
+                        painter = painterResource(it.iconRes),
+                        action = it.action
+                    )
                 }
             }
-        }
 
-        item {
             FooterSpacer()
         }
     }
@@ -215,10 +166,15 @@ private fun ProfileContentPreview() {
 
             ProfileContent(
                 modifier = Modifier.scaffoldPadding(paddingValues),
-                session = session,
-                state = State.Success(ProfileContentModel(listOf(office1), user1)),
-                interactor = ProfileInteractor.dummy,
-                sessionManager = DummySessionManager()
+                state = State.Success(
+                    ProfileContentModel(
+                        offices = offices.map { it.toItemModel() },
+                        officeName = office1.name,
+                        name = "${user1.firstName} ${user1.lastName}",
+                        phone = user1.phone
+                    )
+                ),
+                interactor = ProfileInteractor.dummy
             )
         }
     }

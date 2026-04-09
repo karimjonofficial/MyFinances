@@ -10,18 +10,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
+import com.orka.myfinances.lib.ui.viewmodel.State
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryScreenTopBar(
     modifier: Modifier = Modifier,
-    title: String,
+    state: State<CategoryScreenModel>,
     onAddProductClick: () -> Unit,
     onAddReceive: () -> Unit
 ) {
     TopAppBar(
         modifier = modifier,
-        title = { Text(text = title) },
+        title = { Text(text = if (state is State.Success) state.value.title else stringResource(R.string.loading)) },
         actions = {
             IconButton(onClick = { onAddProductClick() }) {
                 Icon(

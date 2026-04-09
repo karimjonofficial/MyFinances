@@ -7,18 +7,16 @@ import androidx.compose.ui.Modifier
 import androidx.navigation3.ui.NavDisplay
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
-import com.orka.myfinances.ui.managers.SessionManager
 
 @Composable
 fun NavigationGraph(
     modifier: Modifier = Modifier,
     session: Session,
-    sessionManager: SessionManager,
     backStack: List<Destination>,
     navigator: Navigator,
     factory: Factory
 ) {
-    key(session.office.id) {
+    key(session.officeId.value) {
         NavDisplay(
             modifier = modifier,
             backStack = backStack,
@@ -27,7 +25,6 @@ fun NavigationGraph(
                 entryProvider(
                     modifier = Modifier.fillMaxSize(),
                     session = session,
-                    sessionManager = sessionManager,
                     destination = destination,
                     factory = factory
                 )

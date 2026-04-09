@@ -24,7 +24,7 @@ fun CategoryScreen(
         modifier = modifier,
         topBar = {
             CategoryScreenTopBar(
-                title = if (state is State.Success) state.value.title else stringResource(R.string.loading),
+                state = state,
                 onAddProductClick = interactor::addProduct,
                 onAddReceive = interactor::receive
             )

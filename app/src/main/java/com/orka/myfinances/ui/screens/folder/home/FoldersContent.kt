@@ -6,51 +6,40 @@ import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.orka.myfinances.lib.extensions.ui.str
+import com.orka.myfinances.lib.ui.components.FooterSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.lib.ui.screens.FailureScreen
-import com.orka.myfinances.lib.ui.screens.LoadingScreen
+import com.orka.myfinances.lib.ui.contents.StateFulContent
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.folder.home.interactor.FoldersContentInteractor
 import com.orka.myfinances.ui.screens.folder.home.parts.FoldersContentCarousel
+import com.orka.myfinances.ui.screens.folder.models.FolderUiModel
 
 @Composable
 fun FoldersContent(
     modifier: Modifier = Modifier,
-    state: State<FoldersContentModel>,
+    state: State<List<FolderUiModel>>,
     interactor: FoldersContentInteractor
 ) {
-    when (state) {
-        is State.Loading -> LoadingScreen(
-            modifier = modifier,
-            message = state.message.str()
-        )
+    StateFulContent(
+        modifier = modifier,
+        state = state,
+        onRetry = interactor::refresh
+    ) { modifier, folder ->
+        LazyColumn(modifier = modifier) {
+            item {
+                val carouselState = rememberCarouselState { 3 }
+                FoldersContentCarousel(state = carouselState)
+            }
 
-        is State.Failure -> FailureScreen(
-            modifier = modifier,
-            message = state.error.str(),
-            retry = interactor::refresh
-        )
+            item {
+                VerticalSpacer(24)
+                FoldersList(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    items = folder,
+                    onFolderSelected = { interactor.select(it) }
+                )
 
-        is State.Success -> {
-            LazyColumn(modifier = modifier) {
-                item {
-                    val carouselState = rememberCarouselState { 3 }
-                    FoldersContentCarousel(state = carouselState)
-                }
-
-                item {
-                    VerticalSpacer(24)
-                    FoldersList(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        items = state.value.folders,
-                        onFolderSelected = { interactor.select(it) }
-                    )
-                }
-
-                item {
-                    VerticalSpacer(8)
-                }
+                FooterSpacer()
             }
         }
     }

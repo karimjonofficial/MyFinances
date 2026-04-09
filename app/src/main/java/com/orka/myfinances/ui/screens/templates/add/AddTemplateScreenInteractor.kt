@@ -1,14 +1,14 @@
 package com.orka.myfinances.ui.screens.templates.add
 
-import com.orka.myfinances.data.repositories.template.AddTemplateRequest
+import com.orka.myfinances.data.repositories.template.TemplateFieldModel
 
 interface AddTemplateScreenInteractor {
-    fun addTemplate(request: AddTemplateRequest)
+    fun addTemplate(name: String, fields: List<TemplateFieldModel>)
     fun back()
 
     companion object {
         val dummy = object : AddTemplateScreenInteractor {
-            override fun addTemplate(request: AddTemplateRequest) {}
+            override fun addTemplate(name: String, fields: List<TemplateFieldModel>) {}
             override fun back() {}
         }
     }

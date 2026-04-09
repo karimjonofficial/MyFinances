@@ -16,7 +16,7 @@ suspend inline fun <reified T> OfficeScopedApi.getChunk(
     val response = httpClient.get(
         urlString = baseUrl,
         block = {
-            parameter("branch", office.id.value)
+            parameter("branch", officeId.value)
             parameter("page_size", size)
             parameter("page", page)
             if(orderBy != null) parameter("ordering", orderBy)

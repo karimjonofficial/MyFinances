@@ -17,7 +17,7 @@ fun <T> StatefulScreen(
     bottomBar: @Composable (State<T>) -> Unit = {},
     state: State<T>,
     onRetry: () -> Unit = {},
-    content: @Composable (Modifier, T) -> Unit
+    successContent: @Composable (Modifier, T) -> Unit
 ) {
     Scaffold(
         modifier = modifier,
@@ -40,7 +40,7 @@ fun <T> StatefulScreen(
 
             is State.Success -> {
                 val model = state.value
-                content(modifier, model)
+                successContent(modifier, model)
             }
         }
     }
@@ -62,6 +62,6 @@ fun <T> StatefulScreen(
         bottomBar = bottomBar,
         state = state,
         onRetry = onRetry,
-        content = content
+        successContent = content
     )
 }

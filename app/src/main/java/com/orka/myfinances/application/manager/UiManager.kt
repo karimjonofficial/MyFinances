@@ -1,24 +1,21 @@
 package com.orka.myfinances.application.manager
 
-import com.orka.myfinances.R
 import com.orka.myfinances.application.factories.factory
 import com.orka.myfinances.application.factories.httpClient
 import com.orka.myfinances.application.factories.httpLogger
-import com.orka.myfinances.application.viewmodels.login.LoginScreenViewModel
-import com.orka.myfinances.application.viewmodels.office.SelectOfficeScreenViewModel
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.application.models.CompanyApiModel
 import com.orka.myfinances.data.api.auth.AuthenticationApi
-import com.orka.myfinances.data.api.office.OfficeApi
-import com.orka.myfinances.data.api.office.map
-import com.orka.myfinances.data.models.Company
 import com.orka.myfinances.data.models.Credentials
-import com.orka.myfinances.data.models.Office
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.lib.extensions.models.toModel
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.printer.pos.BluetoothPrinterImpl
+import com.orka.myfinances.ui.screens.host.LoginScreenViewModelFactory
+import com.orka.myfinances.ui.screens.host.SelectOfficeScreenViewModelFactory
 import com.orka.myfinances.ui.screens.host.viewmodel.HostScreenInteractor
 import com.orka.myfinances.ui.screens.host.viewmodel.UiState
 import kotlinx.coroutines.CoroutineScope
@@ -28,6 +25,8 @@ import kotlinx.coroutines.flow.asStateFlow
 class UiManager(
     private val storage: LocalSessionStorage,
     private val printer: (CoroutineScope) -> BluetoothPrinterImpl,
+    private val loading: UiText,
+    private val failure: UiText,
     logger: Logger,
 ) : SingleStateViewModel<UiState>(
     initialState = UiState.Initial,
@@ -36,7 +35,6 @@ class UiManager(
     private var store: Boolean = false
     private val client = httpClient(httpLogger(logger))
     private val authApi = AuthenticationApi(client)
-
     val uiState = state.asStateFlow()
 
     init {
@@ -46,54 +44,53 @@ class UiManager(
     private fun initialize() {
         launch {
             try {
-                if(state.value !is UiState.Initial) setState(UiState.Loading)
                 val sessionModel = storage.get()
 
                 if (sessionModel != null) {
                     val credentials = sessionModel.credentials
                     when (val response = getCompany(client, credentials.access)) {
                         is ApiResponse.Success -> {
-                            val company = (response.data as Company)
-                            val office =
-                                getOffice(client, sessionModel.officeId, credentials.access)?.map(company)
+                            val company = (response.data as CompanyApiModel)
+                            val office = getOffice(
+                                client = client,
+                                officeId = sessionModel.officeId,
+                                access = credentials.access
+                            )
                             if (office != null) {
                                 val session = Session(
                                     credentials = credentials,
-                                    office = office
+                                    officeId = Id(office.id),
+                                    companyId = Id(company.id)
                                 )
-                                setStateSignedIn(credentials, session)
+                                setStateSignedIn(session)
                             } else setStateNewUser(credentials)
                         }
 
                         ApiResponse.Unauthorized -> {
                             val newCredentials = getNewCredentials(credentials.refresh)
                             if (newCredentials != null) {
-                                val client = httpClient(
-                                    logger = httpLogger(logger = logger),
-                                    credentials = newCredentials,
-                                    onUnauthorized = this::refreshCredentials
-                                )
                                 val company = ((getCompany(
-                                    client,
-                                    newCredentials.access
-                                ) as ApiResponse.Success).data as Company)
+                                    client = client,
+                                    access = newCredentials.access
+                                ) as ApiResponse.Success).data as CompanyApiModel)
                                 val office = getOffice(
-                                    client,
-                                    sessionModel.officeId,
-                                    newCredentials.access
-                                )?.map(company)!!
+                                    client = client,
+                                    officeId = sessionModel.officeId,
+                                    access = newCredentials.access
+                                )!!
                                 val session = Session(
                                     credentials = newCredentials,
-                                    office = office
+                                    officeId = Id(office.id),
+                                    companyId = Id(company.id)
                                 )
-                                setStateSignedIn(newCredentials, session)
+                                setStateSignedIn(session)
                             } else setStateGuest()
                         }
 
                         else -> onCompanyNotFound()
                     }
                 } else setStateGuest()
-            } catch(e: Exception) {
+            } catch (e: Exception) {
                 setStateFailure(UiText.Str(e.message.toString()))
             }
         }
@@ -102,10 +99,10 @@ class UiManager(
     override fun refreshCredentials(credentials: Credentials) {
         launch {
             val stateValue = state.value
-            if(stateValue is UiState.SignedIn) {
+            if (stateValue is UiState.SignedIn) {
                 val newCredentials = getNewCredentials(credentials.refresh)
-                if(newCredentials != null)
-                    setStateSignedIn(newCredentials, stateValue.session)
+                if (newCredentials != null)
+                    setStateSignedIn(stateValue.session.copy(credentials = newCredentials))
                 else setStateGuest()
             }
         }
@@ -124,14 +121,26 @@ class UiManager(
         }
     }
 
-    override fun setOffice(credentials: Credentials, office: Office) {
+    override fun setOffice(officeId: Id) {
         launch {
-            val session = Session(
-                office = office,
-                credentials = credentials
-            )
-            if(store) storage.store(session.toModel())
-            setStateSignedIn(credentials, session)
+            when (val oldState = state.value) {
+                is UiState.SignedIn -> {
+                    val session = oldState.session.copy(officeId = officeId)
+                    if (store) storage.store(session.toModel())
+                    setStateSignedIn(session)
+                }
+
+                is UiState.NewUser -> {
+                    val session = Session(
+                        credentials = oldState.credentials,
+                        officeId = officeId,
+                        companyId = oldState.companyId
+                    )
+                    setStateSignedIn(session)
+                }
+
+                else -> setStateFailure(UiText.Str("Attempt to change office when state is changeable"))
+            }
         }
     }
 
@@ -141,44 +150,40 @@ class UiManager(
     }
 
     private fun setStateGuest() {
-        val apiService = AuthenticationApi(client)
-        val viewModel = LoginScreenViewModel(
-            authApi = apiService,
-            manager = this,
-            loading = UiText.Res(R.string.loading),
+        val factory = LoginScreenViewModelFactory(
+            authApi = authApi,
+            sessionManager = this,
+            loading = loading,
             logger = logger
         )
-        setState(UiState.Guest(viewModel))
+        setState(UiState.Guest(factory))
     }
 
     private suspend fun setStateNewUser(credentials: Credentials) {
-        val client = httpClient(
+        val httpClient = httpClient(
             logger = httpLogger(logger),
             credentials = credentials,
             onUnauthorized = this::refreshCredentials
         )
         val response = getCompany(this.client, credentials.access)
-        if(response is ApiResponse.Success) {
-            val viewModel = SelectOfficeScreenViewModel(
-                officeApi = OfficeApi(client),
-                company = (response.data as Company),
+        if (response is ApiResponse.Success) {
+            val company = response.data as CompanyApiModel
+            val companyId = Id(company.id)
+            val factory = SelectOfficeScreenViewModelFactory(
+                httpClient = httpClient,
                 sessionManager = this,
-                credentials = credentials,
-                loading = UiText.Res(R.string.loading),
-                failure = UiText.Res(R.string.failure),
+                loading = loading,
+                failure = failure,
                 logger = logger
             )
-            setState(UiState.NewUser(credentials, viewModel))
+            setState(UiState.NewUser(credentials, companyId, factory))
         } else onCompanyNotFound()
     }
 
-    private fun setStateSignedIn(
-        credentials: Credentials,
-        session: Session
-    ) {
+    private fun setStateSignedIn(session: Session) {
         val httpClient = httpClient(
             logger = httpLogger(logger),
-            credentials = credentials,
+            credentials = session.credentials,
             onUnauthorized = this::refreshCredentials
         )
         val navigationManager = NavigationManager(logger)
@@ -187,7 +192,10 @@ class UiManager(
             printer = printer(CoroutineScope(Dispatchers.Default)),
             logger = logger,
             httpClient = httpClient,
-            navigator = navigationManager
+            sessionManager = this,
+            navigator = navigationManager,
+            loading = loading,
+            failure = failure
         )
         setState(UiState.SignedIn(session, navigationManager, factory))
     }
@@ -204,7 +212,7 @@ class UiManager(
     private suspend fun getNewCredentials(refresh: String): Credentials? {
         val credentials = authApi.refresh(refresh)
 
-        if(credentials != null) {
+        if (credentials != null) {
             storage.updateCredentials(credentials)
             return credentials
         } else {

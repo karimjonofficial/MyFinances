@@ -4,7 +4,7 @@ import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.ui.components.ClientCardModel
 import com.orka.myfinances.ui.screens.client.list.viewmodel.ClientUiModel
 
-fun Client.toModel(): ClientCardModel {
+fun Client.toCardModel(): ClientCardModel {
     return ClientCardModel(
         shortName = "${firstName[0]}${lastName?.firstOrNull() ?: ""}",
         fullName = "$firstName $lastName",
@@ -15,6 +15,6 @@ fun Client.toModel(): ClientCardModel {
 fun Client.toUiModel(): ClientUiModel {
     return ClientUiModel(
         id = id,
-        model = toModel()
+        model = toCardModel()
     )
 }

@@ -1,16 +1,11 @@
 package com.orka.myfinances.ui.screens.product.add
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -61,33 +56,16 @@ fun AddProductTitleScreen(
         state = state,
         onRetry = interactor::refresh,
         bottomBar = {
-            BottomAppBar(contentPadding = PaddingValues(horizontal = 16.dp)) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    Button(
-                        enabled = name.value.isNotEmpty() &&
-                                price.value != null &&
-                                salePrice.value != null && propertiesValid &&
-                                selectedCategory.value != null,
-                        onClick = {
-                            selectedCategory.value?.let { category ->
-                                interactor.addProductTitle(
-                                    properties = properties,
-                                    name = name.value,
-                                    price = price.value,
-                                    salePrice = salePrice.value,
-                                    description = description.value,
-                                    categoryId = category.id,
-                                )
-                            }
-                        }
-                    ) {
-                        Text(text = stringResource(R.string.save))
-                    }
-                }
-            }
+            AddProductTitleScreenBottomBar(
+                name = name,
+                price = price,
+                salePrice = salePrice,
+                propertiesValid = propertiesValid,
+                selectedCategory = selectedCategory.value,
+                interactor = interactor,
+                properties = properties,
+                description = description
+            )
         },
     ) { modifier, model ->
         if (selectedCategory.value == null) {

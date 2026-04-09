@@ -9,6 +9,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
+import com.orka.myfinances.fixtures.format.FormatDecimalImpl
+import com.orka.myfinances.fixtures.format.FormatPriceImpl
+import com.orka.myfinances.fixtures.resources.models.stockItems
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.contents.LazyVerticalGridContentWithStickyHeader
 import com.orka.myfinances.lib.ui.models.ChunkMapState
@@ -48,7 +51,7 @@ private fun StockContentPreview() {
     ) { paddingValues ->
         StockContent(
             modifier = Modifier.scaffoldPadding(paddingValues),
-            contentPadding = PaddingValues(),
+            contentPadding = PaddingValues(horizontal = 16.dp),
             interactor = StockContentInteractor.dummy,
             state = State.Success(
                 value = ChunkMapState(
@@ -56,7 +59,7 @@ private fun StockContentPreview() {
                     pageIndex = 1,
                     nextPageIndex = null,
                     previousPageIndex = null,
-                    content = emptyMap()
+                    content = stockItems.toMap(FormatPriceImpl(), FormatDecimalImpl())
                 )
             )
         )
