@@ -8,6 +8,7 @@ import android.os.Build
 import android.util.Log.d
 import androidx.core.content.ContextCompat
 import com.dantsu.escposprinter.EscPosPrinter
+import com.dantsu.escposprinter.connection.bluetooth.BluetoothConnection
 import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections
 import com.orka.myfinances.data.api.sale.models.response.SaleApiModel
 import com.orka.myfinances.printer.Printer
@@ -51,14 +52,12 @@ class BluetoothPrinterImpl(
 
     @SuppressLint("MissingPermission")
     override fun print(sale: SaleApiModel) {
-        if (!hasBluetoothPermission()) {
-            return
-        }
+        if (!hasBluetoothPermission()) return
         scope.launch {
             try {
                 val connection = BluetoothPrintersConnections.selectFirstPaired()
                 if (connection != null) {
-                    val printer = EscPosPrinter(connection, 203, 48f, 32)
+                    val printer = printer(connection)
                     val formattedText = """
                         [C]<b>My Finances</b>
                         [C]Sale ID: ${sale.id}
@@ -67,10 +66,23 @@ class BluetoothPrinterImpl(
                         [C]Thank you!
                     """.trimIndent()
                     printer.printFormattedText(formattedText)
+                    printer.disconnectPrinter()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
+    }
+
+    private fun printer(connection: BluetoothConnection): EscPosPrinter {
+        val dpi = 203
+        val width = 48f
+        val charactersPerLine = 32
+        return EscPosPrinter(
+            connection,
+            dpi,
+            width,
+            charactersPerLine
+        )
     }
 }

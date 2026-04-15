@@ -10,7 +10,6 @@ const val salePrice = 1100
 const val amount = 100
 
 val dateTime = Instant.parse("2024-01-01T12:00:00Z")
-val types = listOf("text", "number", "range")
 
 object Types {
     const val TEXT = "text"

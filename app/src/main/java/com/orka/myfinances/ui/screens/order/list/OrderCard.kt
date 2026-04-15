@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.format.FormatDateTimeImpl
 import com.orka.myfinances.fixtures.format.FormatDecimalImpl
-import com.orka.myfinances.fixtures.format.FormatNamesImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.order.order1
 import com.orka.myfinances.fixtures.resources.models.order.order2
@@ -151,22 +150,20 @@ private fun OrderCardPreview() {
             repeat(5) {
                 OrderCard(
                     modifier = Modifier.fillMaxWidth(),
-                    order = order1.map(
+                    order = order1.toCardModel(
                         formatPrice = FormatPriceImpl(),
                         formatDateTime = FormatDateTimeImpl(),
-                        formatDecimal = FormatDecimalImpl(),
-                        formatNames = FormatNamesImpl()
+                        formatDecimal = FormatDecimalImpl()
                     ),
                     onClick = {}
                 )
 
                 OrderCard(
                     modifier = Modifier.fillMaxWidth(),
-                    order = order2.map(
+                    order = order2.toCardModel(
                         formatPrice = FormatPriceImpl(),
                         formatDateTime = FormatDateTimeImpl(),
-                        formatDecimal = FormatDecimalImpl(),
-                        formatNames = FormatNamesImpl()
+                        formatDecimal = FormatDecimalImpl()
                     ),
                     onClick = {}
                 )

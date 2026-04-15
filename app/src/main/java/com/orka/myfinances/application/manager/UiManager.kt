@@ -18,13 +18,11 @@ import com.orka.myfinances.ui.screens.host.LoginScreenViewModelFactory
 import com.orka.myfinances.ui.screens.host.SelectOfficeScreenViewModelFactory
 import com.orka.myfinances.ui.screens.host.viewmodel.HostScreenInteractor
 import com.orka.myfinances.ui.screens.host.viewmodel.UiState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asStateFlow
 
 class UiManager(
     private val storage: LocalSessionStorage,
-    private val printer: (CoroutineScope) -> BluetoothPrinterImpl,
+    private val printer: BluetoothPrinterImpl,
     private val loading: UiText,
     private val failure: UiText,
     logger: Logger,
@@ -189,7 +187,7 @@ class UiManager(
         val navigationManager = NavigationManager(logger)
         val factory = factory(
             session = session,
-            printer = printer(CoroutineScope(Dispatchers.Default)),
+            printer = printer,
             logger = logger,
             httpClient = httpClient,
             sessionManager = this,

@@ -14,6 +14,8 @@ import com.orka.myfinances.application.MyFinancesApplication
 import com.orka.myfinances.printer.pos.BluetoothPrinterImpl
 import com.orka.myfinances.ui.screens.host.HostScreen
 import com.orka.myfinances.ui.theme.MyFinancesTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 class MainActivity : ComponentActivity() {
     private val requestBluetoothPermissionLauncher = registerForActivityResult(
@@ -38,14 +40,11 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            val manager = (application as MyFinancesApplication).manager(
-                printer = {
-                    BluetoothPrinterImpl(
-                        context = this,
-                        scope = it
-                    )
-                }
+            val printer = BluetoothPrinterImpl(
+                context = this,
+                scope = CoroutineScope(Dispatchers.Default)
             )
+            val manager = (application as MyFinancesApplication).manager(printer)
             val uiState = manager.uiState.collectAsState()
 
             MyFinancesTheme {

@@ -1,36 +1,51 @@
 package com.orka.myfinances.ui.screens.receive.list
 
 import com.orka.myfinances.data.models.receive.Receive
-import com.orka.myfinances.lib.format.FormatDate
-import com.orka.myfinances.lib.format.FormatNames
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
+import com.orka.myfinances.lib.ui.models.ChunkMapState
 import com.orka.myfinances.ui.screens.receive.list.components.ReceiveCardModel
 import com.orka.myfinances.ui.screens.receive.list.viewmodel.ReceiveUiModel
 
 fun Receive.toCardModel(
-    format: FormatNames,
-    priceFormatter: FormatPrice,
-    dateFormatter: FormatDate,
-    timeFormatter: FormatTime
+    formatPrice: FormatPrice,
+    formatTime: FormatTime
 ): ReceiveCardModel {
     return ReceiveCardModel(
-        title = format.formatNames(items.map { it.product.title }),
-        price = priceFormatter.formatPrice(price.toDouble()),
+        title = items.joinToString { it.product.title.name },
+        price = formatPrice.formatPrice(price.toDouble()),
         size = "${items.size} items",
-        dateTime = "${dateFormatter.formatDate(dateTime)} ${timeFormatter.formatTime(dateTime)}"
+        dateTime = formatTime.formatTime(dateTime)
     )
 }
 
 fun Receive.toUiModel(
-    format: FormatNames,
-    priceFormatter: FormatPrice,
-    dateFormatter: FormatDate,
-    timeFormatter: FormatTime
+    formatPrice: FormatPrice,
+    formatTime: FormatTime
 ): ReceiveUiModel {
     return ReceiveUiModel(
         id = this.id,
-        model = this.toCardModel(format, priceFormatter, dateFormatter, timeFormatter),
+        model = this.toCardModel(formatPrice, formatTime),
         instant = dateTime
+    )
+}
+
+fun List<Receive>.toChunkMapState(
+    formatPrice: FormatPrice,
+    formatTime: FormatTime
+): ChunkMapState<ReceiveUiModel> {
+    return ChunkMapState(
+        count = 1,
+        pageIndex = 1,
+        nextPageIndex = 1,
+        previousPageIndex = 1,
+        content = groupBy { it.dateTime }.mapKeys { it.key.toString() }.mapValues { entry ->
+            entry.value.map {
+                it.toUiModel(
+                    formatPrice,
+                    formatTime
+                )
+            }
+        }
     )
 }
