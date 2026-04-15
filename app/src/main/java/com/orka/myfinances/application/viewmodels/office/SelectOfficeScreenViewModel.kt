@@ -3,6 +3,8 @@ package com.orka.myfinances.application.viewmodels.office
 import com.orka.myfinances.data.api.office.OfficeApi
 import com.orka.myfinances.data.api.office.OfficeApiModel
 import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.lib.data.api.getById
+import com.orka.myfinances.lib.data.api.scoped.company.getAll
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.FormatListViewModel
@@ -18,7 +20,7 @@ class SelectOfficeScreenViewModel(
     failure: UiText,
     logger: Logger
 ) : FormatListViewModel<OfficeApiModel, OfficeUiModel>(
-    get = { officeApi.get() },
+    get = { officeApi.getAll() },
     map = { it.toUiModel() },
     loading = loading,
     failure = failure,
@@ -32,7 +34,7 @@ class SelectOfficeScreenViewModel(
 
     override fun select(id: Id) {
         launch {
-            val office = officeApi.getById(id.value)
+            val office: OfficeApiModel? = officeApi.getById(id)
             if(office != null) {
                 sessionManager.setOffice(Id(office.id))
             }

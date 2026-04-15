@@ -106,6 +106,13 @@ class UiManager(
         }
     }
 
+    override fun logout() {
+        launch {
+            storage.clear()
+            setStateGuest()
+        }
+    }
+
     override fun open(credentials: Credentials) {
         launch {
             setStateNewUser(credentials)
@@ -134,6 +141,7 @@ class UiManager(
                         officeId = officeId,
                         companyId = oldState.companyId
                     )
+                    if (store) storage.store(session.toModel())
                     setStateSignedIn(session)
                 }
 

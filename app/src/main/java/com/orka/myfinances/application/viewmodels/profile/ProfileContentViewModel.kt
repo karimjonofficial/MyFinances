@@ -1,8 +1,10 @@
 package com.orka.myfinances.application.viewmodels.profile
 
 import com.orka.myfinances.data.api.office.OfficeApi
+import com.orka.myfinances.data.api.office.OfficeApiModel
 import com.orka.myfinances.data.api.user.UserApi
 import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.lib.data.api.scoped.company.getAll
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -27,7 +29,7 @@ class ProfileContentViewModel(
     loading = loading,
     failure = failure,
     produceSuccess = {
-        val offices = officeApi.get()
+        val offices: List<OfficeApiModel>? = officeApi.getAll()
         val user = userApi.getMe()
 
         if (offices != null && user != null)
@@ -56,6 +58,12 @@ class ProfileContentViewModel(
     override fun setOffice(office: OfficeItemModel) {
         launch {
             sessionManager.setOffice(office.id)
+        }
+    }
+
+    override fun logout() {
+        launch {
+            sessionManager.logout()
         }
     }
 

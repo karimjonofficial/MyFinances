@@ -11,6 +11,7 @@ interface ProfileInteractor : StateFul {
     fun history()
     fun settings()
     fun setOffice(office: OfficeItemModel)
+    fun logout()
 
     companion object {
         val dummy = object : ProfileInteractor {
@@ -23,6 +24,7 @@ interface ProfileInteractor : StateFul {
             override fun history() {}
             override fun settings() {}
             override fun setOffice(office: OfficeItemModel) {}
+            override fun logout() {}
         }
     }
 }

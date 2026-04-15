@@ -13,15 +13,18 @@ import com.orka.myfinances.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileTopBar(modifier: Modifier = Modifier) {
+fun ProfileTopBar(
+    modifier: Modifier = Modifier,
+    interactor: ProfileInteractor
+) {
     TopAppBar(
         modifier = modifier,
         title = { Text(text = stringResource(R.string.profile)) },
         actions = {
-            IconButton(onClick = {}) {
+            IconButton(onClick = interactor::logout) {
                 Icon(
-                    painterResource(R.drawable.edit_outlined),
-                    contentDescription = stringResource(R.string.edit)
+                    painterResource(R.drawable.logout),
+                    contentDescription = stringResource(R.string.exit)
                 )
             }
         }

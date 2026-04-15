@@ -8,4 +8,5 @@ interface SessionManager {
     fun store(credentials: Credentials)
     fun setOffice(officeId: Id)
     fun refreshCredentials(credentials: Credentials)
+    fun logout()
 }

@@ -145,7 +145,7 @@ private fun ProfileContentPreview() {
     MyFinancesTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            topBar = { ProfileTopBar() },
+            topBar = { ProfileTopBar(interactor = ProfileInteractor.dummy) },
             bottomBar = {
                 NavigationBar {
                     navItems.forEach {

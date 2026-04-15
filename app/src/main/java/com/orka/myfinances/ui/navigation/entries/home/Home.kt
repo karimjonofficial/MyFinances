@@ -40,7 +40,8 @@ fun homeEntry(
                 index = it,
                 onAddFolder = { dialogVisible.value = true },
                 foldersViewModel = foldersViewModel,
-                basketViewModel = basketViewModel
+                basketViewModel = basketViewModel,
+                profileViewModel = profileViewModel
             )
         },
         content = { contentModifier, index ->

@@ -151,4 +151,5 @@
     <string name="selected_string">Selected</string>
     <string name="select_category">Select category</string>
     <string name="name_left_blank">Name left blank</string>
+    <string name="exit">Exit</string>
 </resources>
