@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.home
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -25,6 +26,12 @@ fun HomeScreen(
     val pagerState = rememberPagerState(pageCount = { navItems.size })
     val coroutineScope = rememberCoroutineScope()
     fun NavItem.getIconRes() = if (pagerState.currentPage == index) iconRes.selected else iconRes.unSelected
+
+    BackHandler(enabled = pagerState.currentPage != 0) {
+        coroutineScope.launch {
+            pagerState.animateScrollToPage(0)
+        }
+    }
 
     Scaffold(
         modifier = modifier,
