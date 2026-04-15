@@ -8,7 +8,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.http.HttpStatusCode
 
-suspend inline fun <reified T> CompanyScopedApi.getChunk(
+suspend inline fun <reified T> CompanyScopedApi<T>.getChunk(
     size: Int,
     page: Int,
     orderBy: String? = null

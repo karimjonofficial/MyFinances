@@ -53,7 +53,7 @@ class ProductTitleScreenViewModel(
             val oldState = state.value
             try {
                 setState(State.Loading(loading, oldState.value))
-                val title = productTitleApi.getById<ProductTitleApiModel?>(productId)
+                val title = productTitleApi.getById(productId)
                 val price = title?.defaultPrice?.toInt()
                 val salePrice = title?.defaultSalePrice?.toInt()
                 val request = AddReceiveRequest(

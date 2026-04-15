@@ -8,4 +8,4 @@ class OfficeApi(
     override val companyId: Id,
     override val httpClient: HttpClient,
     override val baseUrl: String = "branches/"
-) : CompanyScopedApi
+) : CompanyScopedApi<OfficeApiModel>

@@ -5,7 +5,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.HttpStatusCode
 
-suspend inline fun <reified T, reified R> CompanyScopedApi.insert(
+suspend inline fun <reified T, reified R> CompanyScopedApi<*>.insert(
     request: T,
     map: T.(Id) -> R
 ): Boolean {

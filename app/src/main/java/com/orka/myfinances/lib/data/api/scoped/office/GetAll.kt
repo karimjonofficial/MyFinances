@@ -5,7 +5,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.http.HttpStatusCode
 
-suspend inline fun <reified T> OfficeScopedApi.getAll(): List<T>? {
+suspend inline fun <reified T> OfficeScopedApi<T>.getAll(): List<T>? {
     val response = httpClient.get(
         urlString = baseUrl,
         block = { parameter("branch", officeId.value) }

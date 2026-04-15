@@ -5,7 +5,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.http.HttpStatusCode
 
-suspend inline fun <reified T> CompanyScopedApi.getAll(): List<T>? {
+suspend inline fun <reified T> CompanyScopedApi<T>.getAll(): List<T>? {
     val response = httpClient.get(
         urlString = baseUrl,
         block = { parameter("company", companyId.value) }

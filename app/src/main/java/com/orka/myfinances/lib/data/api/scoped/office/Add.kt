@@ -4,9 +4,8 @@ import com.orka.myfinances.data.models.Id
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import io.ktor.http.HttpStatusCode
 
-suspend inline fun <reified T, reified Request, reified Response> OfficeScopedApi.add(
+suspend inline fun <reified T, reified Request, reified Response> OfficeScopedApi<Response>.add(
     request: T,
     map: T.(Id) -> Request
 ): Response? {
@@ -16,13 +15,4 @@ suspend inline fun <reified T, reified Request, reified Response> OfficeScopedAp
         block = { setBody(apiRequest) }
     )
     return response.body()
-}
-
-suspend inline fun <reified T> OfficeScopedApi.add(request: T): Boolean {
-    val response = httpClient.post(
-        urlString = baseUrl,
-        block = { setBody(request) }
-    )
-    val created = response.status == HttpStatusCode.Created
-    return created
 }

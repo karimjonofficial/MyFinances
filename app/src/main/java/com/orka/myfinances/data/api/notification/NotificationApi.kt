@@ -6,4 +6,4 @@ import io.ktor.client.HttpClient
 class NotificationApi(
     override val httpClient: HttpClient,
     override val baseUrl: String = "notifications/"
-) : Api
+) : Api<NotificationApiModel>
