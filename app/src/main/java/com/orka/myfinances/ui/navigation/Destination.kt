@@ -15,7 +15,7 @@ sealed interface Destination {
     data class AddTemplate(val types: List<String>) : Destination
     data class AddProduct(val id: Id) : Destination
     data object History : Destination
-    data object Checkout : Destination
+    data class Checkout(val index: Int) : Destination
     data class AddStockItem(val id: Id) : Destination
     data object Orders : Destination
     data class Order(val id: Id) : Destination

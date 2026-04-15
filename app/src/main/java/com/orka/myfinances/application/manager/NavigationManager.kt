@@ -16,6 +16,7 @@ class NavigationManager(
     logger = logger
 ), Navigator {
     val backStack = state.asStateFlow()
+    private var checkoutIndex = 0
 
     private fun navigate(destination: Destination) {
         updateState { state.value + destination }
@@ -74,7 +75,7 @@ class NavigationManager(
     }
 
     override fun navigateToCheckout() {
-        navigate(Destination.Checkout)
+        navigate(Destination.Checkout(checkoutIndex++))
     }
 
     override fun navigateToHistory() {

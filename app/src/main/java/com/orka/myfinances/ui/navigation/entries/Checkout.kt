@@ -14,7 +14,10 @@ fun checkoutEntry(
     destination: Destination.Checkout,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
-    val viewModel = viewModel { factory.checkoutViewModel() }
+    val viewModel = viewModel(
+        key = destination.index.toString(),
+        initializer = { factory.checkoutViewModel() }
+    )
     val clientSheetViewModel = viewModel { factory.clientBottomSheetViewModel() }
     val state = viewModel.uiState.collectAsState()
 

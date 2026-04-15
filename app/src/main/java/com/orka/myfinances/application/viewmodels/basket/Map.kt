@@ -13,7 +13,6 @@ fun BasketItem.toModel(
     formatPrice: FormatPrice,
     formatDecimal: FormatDecimal
 ): BasketItemCardModel {
-    val product = product
     val propertiesText = product.title.properties
         .joinToString(" | ") { "${it.field.name}: ${it.value}" }
 
@@ -25,7 +24,7 @@ fun BasketItem.toModel(
         else UiText.Res(R.string.no_description_provided),
         price = formatPrice.formatPrice(product.salePrice.toDouble()),
         amount = formatDecimal.formatDecimal(amount.toDouble()),
-        imageRes = R.drawable.furniture1 // Default image or map from category if possible
+        imageRes = R.drawable.furniture1
     )
 }
 
@@ -34,7 +33,7 @@ fun BasketItem.toUiModel(
     formatDecimal: FormatDecimal
 ): BasketItemUiModel {
     return BasketItemUiModel(
-        productTitleId = Id(product.title.id),
+        productTitleId = Id(product.id),
         amount = amount,
         model = this.toModel(formatPrice, formatDecimal)
     )
