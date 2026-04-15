@@ -47,8 +47,8 @@ fun NavigationGraph(
     }
 }
 
-private const val NavigationAnimationDurationMillis = 280
-private const val NavigationFadeDurationMillis = 220
+private const val NavigationAnimationDurationMillis = 500//280
+private const val NavigationFadeDurationMillis = 380//220
 private const val NavigationOffsetDivisor = 4
 private const val NavigationPredictiveOffsetDivisor = 3
 
