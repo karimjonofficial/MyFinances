@@ -16,10 +16,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class BluetoothPrinterImpl(
+class BluetoothPrinter(
     private val context: Context,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) : Printer {
+    private val tag = "BluetoothPrinter"
 
     init {
         checkConnection()
@@ -27,25 +28,19 @@ class BluetoothPrinterImpl(
 
     private fun hasBluetoothPermission(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.BLUETOOTH_CONNECT
-            ) == PackageManager.PERMISSION_GRANTED
-        } else {
-            true
-        }
+            val permission = Manifest.permission.BLUETOOTH_CONNECT
+            ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
+        } else true
     }
 
     @SuppressLint("MissingPermission")
     private fun checkConnection() {
-        if (!hasBluetoothPermission()) {
-            return
-        }
+        if (!hasBluetoothPermission()) return
         scope.launch {
             try {
                 BluetoothPrintersConnections.selectFirstPaired()
             } catch (e: Exception) {
-                d("BluetoothPrinterImpl", e.message.toString())
+                d(tag, e.message.toString())
             }
         }
     }
@@ -65,11 +60,11 @@ class BluetoothPrinterImpl(
                         [R]TOTAL: [R]<b>${sale.price} UZS</b>
                         [C]Thank you!
                     """.trimIndent()
+                    printer.useEscAsteriskCommand(true)
                     printer.printFormattedText(formattedText)
-                    printer.disconnectPrinter()
-                }
+                } else d(tag, "Permissions are not granted")
             } catch (e: Exception) {
-                e.printStackTrace()
+                d(tag, e.message.toString())
             }
         }
     }
@@ -78,6 +73,7 @@ class BluetoothPrinterImpl(
         val dpi = 203
         val width = 48f
         val charactersPerLine = 32
+
         return EscPosPrinter(
             connection,
             dpi,

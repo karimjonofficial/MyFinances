@@ -52,7 +52,7 @@ import com.orka.myfinances.data.repositories.stock.StockEvent
 import com.orka.myfinances.data.repositories.template.TemplateEvent
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.printer.pos.BluetoothPrinterImpl
+import com.orka.myfinances.printer.pos.BluetoothPrinter
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.navigation.Navigator
 import io.ktor.client.HttpClient
@@ -61,7 +61,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 class Factory(
     private val session: Session,
     private val httpClient: HttpClient,
-    private val printer: BluetoothPrinterImpl,
+    private val printer: BluetoothPrinter,
     private val logger: Logger,
     private val navigator: Navigator,
     private val formatter: Formatter,

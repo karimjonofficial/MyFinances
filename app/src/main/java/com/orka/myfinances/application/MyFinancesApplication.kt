@@ -7,7 +7,7 @@ import com.orka.myfinances.application.manager.UiManager
 import com.orka.myfinances.data.storages.room.AppDatabase
 import com.orka.myfinances.data.storages.room.LocalSessionStorageImpl
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.printer.pos.BluetoothPrinterImpl
+import com.orka.myfinances.printer.pos.BluetoothPrinter
 
 class MyFinancesApplication : Application() {
     private val database by lazy {
@@ -21,7 +21,7 @@ class MyFinancesApplication : Application() {
             .build()
     }
 
-    fun manager(printer: BluetoothPrinterImpl): UiManager {
+    fun manager(printer: BluetoothPrinter): UiManager {
         val loading =  UiText.Res(R.string.loading)
         val failure = UiText.Res(R.string.failure)
         val logger = Logger()

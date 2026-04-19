@@ -13,7 +13,7 @@ import com.orka.myfinances.lib.extensions.models.toModel
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
-import com.orka.myfinances.printer.pos.BluetoothPrinterImpl
+import com.orka.myfinances.printer.pos.BluetoothPrinter
 import com.orka.myfinances.ui.screens.host.LoginScreenViewModelFactory
 import com.orka.myfinances.ui.screens.host.SelectOfficeScreenViewModelFactory
 import com.orka.myfinances.ui.screens.host.viewmodel.HostScreenInteractor
@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class UiManager(
     private val storage: LocalSessionStorage,
-    private val printer: BluetoothPrinterImpl,
+    private val printer: BluetoothPrinter,
     private val loading: UiText,
     private val failure: UiText,
     logger: Logger,

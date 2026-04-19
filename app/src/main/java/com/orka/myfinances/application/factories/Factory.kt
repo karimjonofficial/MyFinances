@@ -4,14 +4,14 @@ import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.printer.pos.BluetoothPrinterImpl
+import com.orka.myfinances.printer.pos.BluetoothPrinter
 import com.orka.myfinances.ui.managers.SessionManager
 import com.orka.myfinances.ui.navigation.Navigator
 import io.ktor.client.HttpClient
 
 fun factory(
     session: Session,
-    printer: BluetoothPrinterImpl,
+    printer: BluetoothPrinter,
     logger: Logger,
     httpClient: HttpClient,
     navigator: Navigator,
