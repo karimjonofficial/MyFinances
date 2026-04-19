@@ -29,7 +29,8 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 fun PropertiesCard(
     modifier: Modifier = Modifier,
     fields: List<TemplateField>,
-    properties: SnapshotStateList<PropertyModel<*>?>//TODO make it list
+    properties: SnapshotStateList<PropertyModel<*>?>,
+    initialProperties: List<PropertyModel<*>> = emptyList()
 ) {
     Column(
         modifier = modifier
@@ -60,6 +61,7 @@ fun PropertiesCard(
             PropertiesList(
                 modifier = Modifier.fillMaxWidth(),
                 fields = fields,
+                initialProperties = initialProperties,
                 onSuccess = { model ->//TODO put it inside view model
                     Log.d("Properties(fields: ${fields.size})", "Size: ${properties.size}")
                     val index = properties.indexOfFirst { it?.fieldId == model.fieldId }

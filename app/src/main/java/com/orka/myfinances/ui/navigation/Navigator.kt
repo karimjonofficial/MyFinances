@@ -10,6 +10,7 @@ interface Navigator {
     fun navigateToNotifications()
     fun navigateToAddTemplate()
     fun navigateToAddProduct(id: Id)
+    fun navigateToEditProduct(id: Id)
     fun navigateToSettings()
     fun navigateToTemplates()
     fun navigateToProductTitle(id: Id)

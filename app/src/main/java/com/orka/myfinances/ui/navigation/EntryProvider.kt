@@ -17,6 +17,7 @@ import com.orka.myfinances.ui.navigation.entries.notificationsEntry
 import com.orka.myfinances.ui.navigation.entries.order.orderEntry
 import com.orka.myfinances.ui.navigation.entries.order.ordersEntry
 import com.orka.myfinances.ui.navigation.entries.product.addProductEntry
+import com.orka.myfinances.ui.navigation.entries.product.editProductEntry
 import com.orka.myfinances.ui.navigation.entries.product.productTitleEntry
 import com.orka.myfinances.ui.navigation.entries.receive.addReceiveEntry
 import com.orka.myfinances.ui.navigation.entries.receive.receiveEntry
@@ -42,6 +43,7 @@ fun entryProvider(
         is Destination.Settings -> settingsEntry(modifier, destination)
         is Destination.Templates -> templatesEntry(modifier, destination, factory)
         is Destination.AddProduct -> addProductEntry(modifier, destination, factory)
+        is Destination.EditProduct -> editProductEntry(modifier, destination, factory)
         is Destination.ProductTitle -> productTitleEntry(modifier, destination, factory)
         is Destination.Clients -> clientsEntry(modifier, destination, factory)
         is Destination.Client -> clientEntry(modifier, destination, factory)

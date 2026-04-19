@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
-import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenInteractor
 import com.orka.myfinances.ui.screens.product.add.interactor.CategoryItemModel
 
 @Composable
@@ -24,9 +24,9 @@ fun AddProductTitleScreenBottomBar(
     salePrice: MutableState<Int?>,
     propertiesValid: Boolean,
     selectedCategory: CategoryItemModel?,
-    interactor: AddProductTitleScreenInteractor,
     properties: List<PropertyModel<*>?>,
-    description: MutableState<String?>
+    description: MutableState<String?>,
+    onSave: (List<PropertyModel<*>?>, String, Int?, Int?, String?, Id) -> Unit
 ) {
     BottomAppBar(contentPadding = PaddingValues(horizontal = 16.dp)) {
         Row(
@@ -40,13 +40,13 @@ fun AddProductTitleScreenBottomBar(
                         selectedCategory != null,
                 onClick = {
                     selectedCategory?.let { category ->
-                        interactor.addProductTitle(
-                            properties = properties,
-                            name = name.value,
-                            price = price.value,
-                            salePrice = salePrice.value,
-                            description = description.value,
-                            categoryId = category.id,
+                        onSave(
+                            properties,
+                            name.value,
+                            price.value,
+                            salePrice.value,
+                            description.value,
+                            category.id
                         )
                     }
                 }

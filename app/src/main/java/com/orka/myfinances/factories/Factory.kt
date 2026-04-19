@@ -16,6 +16,7 @@ import com.orka.myfinances.application.viewmodels.order.details.OrderScreenViewM
 import com.orka.myfinances.application.viewmodels.order.list.OrdersScreenViewModel
 import com.orka.myfinances.application.viewmodels.product.add.AddProductTitleScreenViewModel
 import com.orka.myfinances.application.viewmodels.product.details.ProductTitleScreenViewModel
+import com.orka.myfinances.application.viewmodels.product.edit.EditProductTitleScreenViewModel
 import com.orka.myfinances.application.viewmodels.product.list.ProductTitlesContentViewModel
 import com.orka.myfinances.application.viewmodels.profile.ProfileContentViewModel
 import com.orka.myfinances.application.viewmodels.receive.add.AddReceiveScreenViewModel
@@ -121,6 +122,19 @@ class Factory(
     fun addProductViewModel(categoryId: Id): AddProductTitleScreenViewModel {
         return AddProductTitleScreenViewModel(
             categoryId = categoryId,
+            folderApi = folderApi,
+            productTitleApi = productTitleApi,
+            flow = productTitleFlow,
+            navigator = navigator,
+            loading = loading,
+            failure = failure,
+            logger = logger
+        )
+    }
+
+    fun editProductViewModel(id: Id): EditProductTitleScreenViewModel {
+        return EditProductTitleScreenViewModel(
+            productId = id,
             folderApi = folderApi,
             productTitleApi = productTitleApi,
             flow = productTitleFlow,
@@ -374,10 +388,12 @@ class Factory(
             productId = id,
             receiveApi = receiveApi,
             productTitleApi = productTitleApi,
+            productTitleEvents = productTitleFlow,
             formatDecimal = formatter,
             formatDate = formatter,
             formatPrice = formatter,
             flow = stockFlow,
+            navigator = navigator,
             loading = loading,
             failure = failure,
             logger = logger

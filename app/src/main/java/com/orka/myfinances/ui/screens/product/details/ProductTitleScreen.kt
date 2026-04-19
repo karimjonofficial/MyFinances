@@ -66,10 +66,10 @@ fun ProductTitleScreen(
                     )
                 },
                 actions = {
-                    IconButton(onClick = {}) {//TODO
+                    IconButton(onClick = interactor::edit) {
                         Icon(
                             painter = painterResource(R.drawable.edit_outlined),
-                            contentDescription = stringResource(R.string.more)
+                            contentDescription = stringResource(R.string.edit)
                         )
                     }
                 }

@@ -54,6 +54,10 @@ class NavigationManager(
         navigate(Destination.AddProduct(id))
     }
 
+    override fun navigateToEditProduct(id: Id) {
+        navigate(Destination.EditProduct(id))
+    }
+
     override fun navigateToSettings() {
         navigate(Destination.Settings)
     }

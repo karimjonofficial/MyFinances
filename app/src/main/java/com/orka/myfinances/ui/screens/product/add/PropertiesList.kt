@@ -27,6 +27,7 @@ import com.orka.myfinances.lib.ui.components.RangeField
 fun PropertiesList(
     modifier: Modifier = Modifier,
     fields: List<TemplateField>,
+    initialProperties: List<PropertyModel<*>> = emptyList(),
     onSuccess: (PropertyModel<*>) -> Unit,
     onFail: (Id) -> Unit
 ) {
@@ -36,9 +37,13 @@ fun PropertiesList(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         fields.forEach { field ->
+            val initialValue = initialProperties.firstOrNull { it.fieldId == field.id }?.value
+
             when (field.type) {
                 Types.TEXT -> {
-                    val value = rememberSaveable { mutableStateOf("") }
+                    val value = rememberSaveable(field.id.value, initialValue as? String) {
+                        mutableStateOf(initialValue as? String ?: "")
+                    }
 
                     OutlinedTextField(
                         modifier = Modifier.fillMaxWidth(),
@@ -54,7 +59,9 @@ fun PropertiesList(
                 }
 
                 Types.NUMBER -> {
-                    val value = rememberSaveable { mutableStateOf<Int?>(null) }
+                    val value = rememberSaveable(field.id.value, initialValue as? Int) {
+                        mutableStateOf(initialValue as? Int)
+                    }
 
                     OutlinedIntegerTextField(
                         modifier = Modifier.fillMaxWidth(),
@@ -70,10 +77,12 @@ fun PropertiesList(
                 }
 
                 Types.BOOLEAN -> {
-                    val value = rememberSaveable { mutableStateOf(false) }
+                    val value = rememberSaveable(field.id.value, initialValue as? Boolean) {
+                        mutableStateOf(initialValue as? Boolean ?: false)
+                    }
 
-                    LaunchedEffect(Unit) {
-                        onSuccess(PropertyModel(field.id, false))
+                    LaunchedEffect(value.value) {
+                        onSuccess(PropertyModel(field.id, value.value))
                     }
 
                     Row(
@@ -97,8 +106,13 @@ fun PropertiesList(
                 }
 
                 Types.RANGE -> {
-                    val min = rememberSaveable { mutableStateOf<Int?>(null) }
-                    val max = rememberSaveable { mutableStateOf<Int?>(null) }
+                    val initialRange = initialValue as? Range
+                    val min = rememberSaveable(field.id.value, initialRange?.min) {
+                        mutableStateOf(initialRange?.min)
+                    }
+                    val max = rememberSaveable(field.id.value, initialRange?.max) {
+                        mutableStateOf(initialRange?.max)
+                    }
 
                     RangeField(
                         modifier = Modifier.fillMaxWidth(),
