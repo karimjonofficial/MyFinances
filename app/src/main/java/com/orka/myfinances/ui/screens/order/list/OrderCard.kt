@@ -23,11 +23,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.fixtures.format.FormatDateTimeImpl
+import com.orka.myfinances.fixtures.format.FormatDateImpl
 import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.order.order1
 import com.orka.myfinances.fixtures.resources.models.order.order2
+import com.orka.myfinances.fixtures.resources.models.order.order3
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
@@ -41,15 +42,28 @@ fun OrderCard(
     onClick: () -> Unit
 ) {
     if (!order.completed) {
-        Card(
-            modifier = modifier,
-            onClick = { onClick() },
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            )
-        ) {
-            OrderCardContent(order = order)
+        if (order.expired) {
+            Card(
+                modifier = modifier,
+                onClick = { onClick() },
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.error,
+                    contentColor = MaterialTheme.colorScheme.onError
+                )
+            ) {
+                OrderCardContent(order = order)
+            }
+        } else {
+            Card(
+                modifier = modifier,
+                onClick = { onClick() },
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
+                OrderCardContent(order = order)
+            }
         }
     } else {
         OutlinedCard(
@@ -110,7 +124,11 @@ private fun OrderCardContent(
                 modifier = Modifier
                     .clip(RoundedCornerShape(4.dp))
                     .background(
-                        color = if (!order.completed) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant
+                        color = when {
+                            order.expired -> MaterialTheme.colorScheme.errorContainer
+                            !order.completed -> MaterialTheme.colorScheme.primaryContainer
+                            else -> MaterialTheme.colorScheme.surfaceVariant
+                        }
                     )
                     .padding(4.dp),
                 contentAlignment = Alignment.Center
@@ -119,14 +137,22 @@ private fun OrderCardContent(
 
                     Icon(
                         painter = painterResource(R.drawable.shopping_bag_outlined),
-                        tint = if (!order.completed) MaterialTheme.colorScheme.primary else LocalContentColor.current,
+                        tint = when {
+                            order.expired -> MaterialTheme.colorScheme.error
+                            !order.completed -> MaterialTheme.colorScheme.primary
+                            else -> LocalContentColor.current
+                        },
                         contentDescription = null
                     )
 
                     HorizontalSpacer(4)
                     Text(
                         text = order.size,
-                        color = if (!order.completed) MaterialTheme.colorScheme.primary else LocalContentColor.current
+                        color = when {
+                            order.expired -> MaterialTheme.colorScheme.error
+                            !order.completed -> MaterialTheme.colorScheme.primary
+                            else -> LocalContentColor.current
+                        }
                     )
                 }
             }
@@ -146,28 +172,35 @@ private fun OrderCardPreview() {
                 .padding(horizontal = 8.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
+            OrderCard(
+                modifier = Modifier.fillMaxWidth(),
+                order = order1.toCardModel(
+                    formatPrice = FormatPriceImpl(),
+                    formatDate = FormatDateImpl(),
+                    formatDecimal = FormatDecimalImpl()
+                ),
+                onClick = {}
+            )
 
-            repeat(5) {
-                OrderCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    order = order1.toCardModel(
-                        formatPrice = FormatPriceImpl(),
-                        formatDateTime = FormatDateTimeImpl(),
-                        formatDecimal = FormatDecimalImpl()
-                    ),
-                    onClick = {}
-                )
+            OrderCard(
+                modifier = Modifier.fillMaxWidth(),
+                order = order2.toCardModel(
+                    formatPrice = FormatPriceImpl(),
+                    formatDate = FormatDateImpl(),
+                    formatDecimal = FormatDecimalImpl()
+                ),
+                onClick = {}
+            )
 
-                OrderCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    order = order2.toCardModel(
-                        formatPrice = FormatPriceImpl(),
-                        formatDateTime = FormatDateTimeImpl(),
-                        formatDecimal = FormatDecimalImpl()
-                    ),
-                    onClick = {}
-                )
-            }
+            OrderCard(
+                modifier = Modifier.fillMaxWidth(),
+                order = order3.toCardModel(
+                    formatPrice = FormatPriceImpl(),
+                    formatDate = FormatDateImpl(),
+                    formatDecimal = FormatDecimalImpl()
+                ),
+                onClick = {}
+            )
         }
     }
 }

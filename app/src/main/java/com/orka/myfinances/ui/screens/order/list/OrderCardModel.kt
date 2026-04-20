@@ -7,5 +7,6 @@ data class OrderCardModel(
     val price: String,
     val dateTime: UiText,
     val size: String,
-    val completed: Boolean
+    val completed: Boolean,
+    val expired: Boolean
 )

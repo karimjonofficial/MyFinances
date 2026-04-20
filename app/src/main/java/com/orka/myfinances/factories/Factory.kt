@@ -327,7 +327,7 @@ class Factory(
             failure = failure,
             navigator = navigator,
             formatPrice = formatter,
-            formatDateTime = formatter,
+            formatDate = formatter,
             formatLocalDate = formatter,
             logger = logger
         )

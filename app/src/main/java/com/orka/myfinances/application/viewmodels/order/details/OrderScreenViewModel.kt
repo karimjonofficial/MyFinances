@@ -3,6 +3,7 @@ package com.orka.myfinances.application.viewmodels.order.details
 import com.orka.myfinances.data.api.order.OrderApi
 import com.orka.myfinances.data.api.order.models.response.OrderApiModel
 import com.orka.myfinances.data.api.order.complete
+import com.orka.myfinances.data.api.order.setEndDate
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.order.OrderEvent
 import com.orka.myfinances.lib.data.api.getById
@@ -15,6 +16,7 @@ import com.orka.myfinances.lib.viewmodel.MapSingleViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.order.details.OrderScreenInteractor
 import com.orka.myfinances.ui.screens.order.details.OrderScreenModel
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -52,6 +54,15 @@ class OrderScreenViewModel(
     override fun complete() {
         launch {
             if (orderApi.complete(id)) {
+                flow.emit(OrderEvent)
+                refresh()
+            }
+        }
+    }
+
+    override fun setEndDate(endDateTime: Instant) {
+        launch {
+            if (orderApi.setEndDate(id, endDateTime)) {
                 flow.emit(OrderEvent)
                 refresh()
             }

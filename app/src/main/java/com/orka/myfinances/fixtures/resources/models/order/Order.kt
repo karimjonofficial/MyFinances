@@ -7,6 +7,7 @@ import com.orka.myfinances.fixtures.resources.models.client1
 import com.orka.myfinances.fixtures.resources.models.client2
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.id2
+import com.orka.myfinances.fixtures.resources.models.id3
 import com.orka.myfinances.fixtures.resources.models.user1
 import com.orka.myfinances.fixtures.resources.price
 
@@ -32,4 +33,15 @@ val order2 = Order(
     completed = true,
     description = description
 )
-val orders = listOf(order1, order2)
+val order3 = Order(
+    id = id3,
+    user = user1,
+    client = client2,
+    items = orderItems,
+    price = price,
+    dateTime = dateTime,
+    endDateTime = null,
+    completed = false,
+    description = description
+)
+val orders = listOf(order1, order2, order3)

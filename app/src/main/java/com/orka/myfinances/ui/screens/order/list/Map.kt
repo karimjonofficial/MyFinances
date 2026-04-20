@@ -1,37 +1,41 @@
 package com.orka.myfinances.ui.screens.order.list
 
 import com.orka.myfinances.data.models.order.Order
-import com.orka.myfinances.lib.format.FormatDateTime
+import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.ChunkMapState
 import com.orka.myfinances.lib.ui.models.UiText
+import kotlin.time.Clock
 
 fun Order.toCardModel(
     formatPrice: FormatPrice,
     formatDecimal: FormatDecimal,
-    formatDateTime: FormatDateTime
+    formatDate: FormatDate
 ): OrderCardModel {
+    val expired = endDateTime?.let { it < Clock.System.now() } ?: false && !completed
+
     return OrderCardModel(
         title = items.joinToString { it.product.title.name },
         price = formatPrice.formatPrice(price.toDouble()),
-        dateTime = UiText.Str(if (endDateTime != null) formatDateTime.formatDateTime(endDateTime) else "♦"),
+        dateTime = UiText.Str(if (endDateTime != null) formatDate.formatDate(endDateTime) else "Date is not provided"),
         size = formatDecimal.formatDecimal(items.size.toDouble()),
-        completed = completed
+        completed = completed,
+        expired = expired
     )
 }
 
 fun Order.toUiModel(
     formatPrice: FormatPrice,
     formatDecimal: FormatDecimal,
-    formatDateTime: FormatDateTime
+    formatDate: FormatDate
 ): OrderUiModel {
     return OrderUiModel(
         id = this.id,
         model = this.toCardModel(
             formatPrice = formatPrice,
             formatDecimal = formatDecimal,
-            formatDateTime = formatDateTime
+            formatDate = formatDate
         )
     )
 }
@@ -39,7 +43,7 @@ fun Order.toUiModel(
 fun List<Order>.toChunkMapState(
     formatPrice: FormatPrice,
     formatDecimal: FormatDecimal,
-    formatDateTime: FormatDateTime
+    formatDate: FormatDate
 ): ChunkMapState<OrderUiModel> {
     return ChunkMapState(
         count = 1,
@@ -51,7 +55,7 @@ fun List<Order>.toChunkMapState(
                 it.toUiModel(
                     formatPrice,
                     formatDecimal,
-                    formatDateTime
+                    formatDate
                 )
             }
         }

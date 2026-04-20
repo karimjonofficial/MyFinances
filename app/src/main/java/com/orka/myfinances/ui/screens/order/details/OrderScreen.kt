@@ -9,16 +9,27 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -30,18 +41,22 @@ import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.order.order1
 import com.orka.myfinances.fixtures.resources.models.order.order2
+import com.orka.myfinances.fixtures.resources.models.order.order3
 import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.lib.ui.components.Dialog
 import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
+import com.orka.myfinances.lib.ui.components.TopAppBar
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.components.ClientCard
 import com.orka.myfinances.ui.components.UserCard
 import com.orka.myfinances.ui.theme.MyFinancesTheme
+import kotlin.time.Instant
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrderScreen(
     modifier: Modifier = Modifier,
@@ -49,10 +64,26 @@ fun OrderScreen(
     interactor: OrderScreenInteractor
 ) {
     val showCompleteDialog = rememberSaveable { mutableStateOf(false) }
+    val showDatePicker = rememberSaveable { mutableStateOf(false) }
 
     StatefulScreen(
         modifier = modifier,
-        title = stringResource(R.string.order),
+        topBar = { state ->
+            TopAppBar(
+                title = stringResource(R.string.order),
+                actions = {
+                    val model = (state as? State.Success<OrderScreenModel>)?.value
+                    if (model?.endDate == null && model?.completed == false) {
+                        IconButton(onClick = { showDatePicker.value = true }) {
+                            Icon(
+                                painter = painterResource(R.drawable.calendar_today),
+                                contentDescription = stringResource(R.string.completion_date)
+                            )
+                        }
+                    }
+                }
+            )
+        },
         state = state,
         bottomBar = { state ->
             if (!((state as? State.Success<OrderScreenModel>)?.value?.completed ?: false)) {
@@ -63,7 +94,6 @@ fun OrderScreen(
             }
         }
     ) { modifier, order ->
-
         Column(
             modifier = modifier
                 .padding(horizontal = 16.dp)
@@ -157,6 +187,37 @@ fun OrderScreen(
             onSuccess = interactor::complete
         )
     }
+
+    if (showDatePicker.value) {
+        val datePickerState = rememberDatePickerState()
+        val confirmEnabled by remember {
+            derivedStateOf { datePickerState.selectedDateMillis != null }
+        }
+
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker.value = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        datePickerState.selectedDateMillis?.let {
+                            interactor.setEndDate(Instant.fromEpochMilliseconds(it))
+                        }
+                        showDatePicker.value = false
+                    },
+                    enabled = confirmEnabled
+                ) {
+                    Text(stringResource(R.string.ok))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker.value = false }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
 }
 
 @Composable
@@ -187,7 +248,25 @@ private fun LabeledDate(
 
 @Preview
 @Composable
-private fun OrderScreenPreview() {
+private fun NewOrderScreenPreview() {
+    MyFinancesTheme {
+        OrderScreen(
+            modifier = Modifier.fillMaxSize(),
+            state = State.Success(
+                order3.map(
+                    formatPrice = FormatPriceImpl(),
+                    formatDateTime = FormatDateTimeImpl(),
+                    formatDecimal = FormatDecimalImpl()
+                )
+            ),
+            interactor = OrderScreenInteractor.dummy
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun UnCompletedOrderScreenPreview() {
     MyFinancesTheme {
         OrderScreen(
             modifier = Modifier.fillMaxSize(),
