@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.fixtures.format.FormatDateTimeImpl
+import com.orka.myfinances.fixtures.format.FormatDateImpl
 import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.order.orders
@@ -69,7 +69,7 @@ private fun OrdersScreenPreview() {
                 value = orders.toChunkMapState(
                     FormatPriceImpl(),
                     FormatDecimalImpl(),
-                    FormatDateTimeImpl()
+                    FormatDateImpl()
                 )
             ),
             interactor = OrdersScreenInteractor.dummy

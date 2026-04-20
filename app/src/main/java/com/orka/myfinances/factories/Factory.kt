@@ -265,6 +265,8 @@ class Factory(
         return CheckoutScreenViewModel(
             saleApi = saleApi,
             orderApi = orderApi,
+            saleFlow = saleFlow,
+            orderFlow = orderFlow,
             basketRepository = basketRepository,
             logger = logger,
             navigator = navigator,

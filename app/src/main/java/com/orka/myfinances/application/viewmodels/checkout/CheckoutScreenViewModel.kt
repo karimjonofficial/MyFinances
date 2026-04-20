@@ -9,7 +9,9 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.Basket
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.order.AddOrderRequest
+import com.orka.myfinances.data.repositories.order.OrderEvent
 import com.orka.myfinances.data.repositories.sale.AddSaleRequest
+import com.orka.myfinances.data.repositories.sale.SaleEvent
 import com.orka.myfinances.lib.data.api.scoped.office.add
 import com.orka.myfinances.lib.data.api.scoped.office.insert
 import com.orka.myfinances.lib.extensions.models.getPrice
@@ -23,11 +25,14 @@ import com.orka.myfinances.printer.Printer
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class CheckoutScreenViewModel(
     private val saleApi: SaleApi,
     private val orderApi: OrderApi,
+    private val orderFlow: MutableSharedFlow<OrderEvent>,
+    private val saleFlow: MutableSharedFlow<SaleEvent>,
     private val basketRepository: BasketRepository,
     private val navigator: Navigator,
     private val printer: Printer,
@@ -75,6 +80,7 @@ class CheckoutScreenViewModel(
                     if (response != null) {
                         if (print) printer.print(response)
                         clearBasket()
+                        saleFlow.emit(SaleEvent)
                         navigator.back()
                     } else setState(State.Failure(failure))
                 } else setState(State.Failure(failure))
@@ -96,6 +102,7 @@ class CheckoutScreenViewModel(
                     )
                     if (created) {
                         clearBasket()
+                        orderFlow.emit(OrderEvent)
                         navigator.back()
                     }
                 } catch (e: Exception) {
