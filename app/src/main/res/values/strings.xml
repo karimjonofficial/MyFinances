@@ -126,6 +126,8 @@
     <string name="comment">Comment</string>
     <string name="no_phone_provided">No phone number provided</string>
     <string name="complete">Complete</string>
+    <string name="complete_order">Complete order</string>
+    <string name="complete_order_confirmation">Do you really want to complete this order?</string>
     <string name="registered_at">Registered at:</string>
     <string name="completed_at">Completed at:</string>
     <string name="completion_date">Completion date:</string>

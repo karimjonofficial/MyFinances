@@ -1,7 +1,9 @@
 package com.orka.myfinances.application.viewmodels.order.list
 
+import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.api.order.OrderApi
 import com.orka.myfinances.data.api.order.models.response.OrderApiModel
+import com.orka.myfinances.data.repositories.order.OrderEvent
 import com.orka.myfinances.lib.data.api.getChunk
 import com.orka.myfinances.lib.format.FormatDateTime
 import com.orka.myfinances.lib.format.FormatLocalDate
@@ -13,12 +15,16 @@ import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.order.list.OrderUiModel
 import com.orka.myfinances.ui.screens.order.list.OrdersScreenInteractor
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 class OrdersScreenViewModel(
     private val orderApi: OrderApi,
+    events: Flow<OrderEvent>,
     private val formatPrice: FormatPrice,
     private val formatDateTime: FormatDateTime,
     private val formatLocalDate: FormatLocalDate,
@@ -54,6 +60,7 @@ class OrdersScreenViewModel(
     val uiState = state.asStateFlow()
 
     init {
+        events.onEach { initialize() }.launchIn(viewModelScope)
         initialize()
     }
 

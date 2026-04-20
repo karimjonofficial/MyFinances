@@ -1,6 +1,7 @@
 package com.orka.myfinances.data.api.order
 
 import com.orka.myfinances.data.api.order.models.request.AddOrderApiRequest
+import com.orka.myfinances.data.api.order.models.request.CompleteOrderApiRequest
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.order.AddOrderRequest
 
@@ -12,5 +13,12 @@ fun AddOrderRequest.toApiRequest(officeId: Id): AddOrderApiRequest {
         price = price,
         endDateTime = endDateTime,
         description = description
+    )
+}
+
+fun Id.toCompleteOrderApiRequest(): CompleteOrderApiRequest {
+    return CompleteOrderApiRequest(
+        id = value,
+        completed = true
     )
 }

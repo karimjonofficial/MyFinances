@@ -15,6 +15,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,6 +31,7 @@ import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.order.order1
 import com.orka.myfinances.fixtures.resources.models.order.order2
 import com.orka.myfinances.lib.ui.components.DescriptionCard
+import com.orka.myfinances.lib.ui.components.Dialog
 import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
@@ -45,6 +48,8 @@ fun OrderScreen(
     state: State<OrderScreenModel>,
     interactor: OrderScreenInteractor
 ) {
+    val showCompleteDialog = rememberSaveable { mutableStateOf(false) }
+
     StatefulScreen(
         modifier = modifier,
         title = stringResource(R.string.order),
@@ -53,7 +58,7 @@ fun OrderScreen(
             if (!((state as? State.Success<OrderScreenModel>)?.value?.completed ?: false)) {
                 SingleActionBottomBar(
                     buttonText = stringResource(R.string.complete),
-                    action = {}//TODO
+                    action = { showCompleteDialog.value = true }
                 )
             }
         }
@@ -142,6 +147,15 @@ fun OrderScreen(
                 DescriptionCard(description = order.description)
             }
         }
+    }
+
+    if (showCompleteDialog.value) {
+        Dialog(
+            dismissRequest = { showCompleteDialog.value = false },
+            title = stringResource(R.string.complete_order),
+            supportingText = stringResource(R.string.complete_order_confirmation),
+            onSuccess = interactor::complete
+        )
     }
 }
 

@@ -5,10 +5,12 @@ import com.orka.myfinances.lib.ui.viewmodel.StateFul
 
 interface OrderScreenInteractor : StateFul {
     fun navigateToClient(clientId: Id)
+    fun complete()
 
     companion object {
         val dummy = object : OrderScreenInteractor {
             override fun navigateToClient(clientId: Id) {}
+            override fun complete() {}
             override fun initialize() {}
             override fun refresh() {}
         }

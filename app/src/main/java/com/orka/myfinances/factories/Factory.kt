@@ -46,6 +46,7 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.folder.FolderEvent
+import com.orka.myfinances.data.repositories.order.OrderEvent
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
 import com.orka.myfinances.data.repositories.receive.ReceiveEvent
 import com.orka.myfinances.data.repositories.sale.SaleEvent
@@ -76,6 +77,7 @@ class Factory(
     private val folderFlow = MutableSharedFlow<FolderEvent>()
     private val saleFlow = MutableSharedFlow<SaleEvent>()
     private val receiveFlow = MutableSharedFlow<ReceiveEvent>()
+    private val orderFlow = MutableSharedFlow<OrderEvent>()
 
     private val clientApi = ClientApi(httpClient, session.companyId)
     private val folderApi = FolderApi(httpClient, session.officeId, folderFlow)
@@ -320,6 +322,7 @@ class Factory(
     fun ordersViewModel(): OrdersScreenViewModel {
         return OrdersScreenViewModel(
             orderApi = orderApi,
+            events = orderFlow,
             loading = loading,
             failure = failure,
             navigator = navigator,
@@ -334,6 +337,7 @@ class Factory(
         return OrderScreenViewModel(
             id = id,
             orderApi = orderApi,
+            flow = orderFlow,
             formatPrice = formatter,
             formatDateTime = formatter,
             formatDecimal = formatter,
