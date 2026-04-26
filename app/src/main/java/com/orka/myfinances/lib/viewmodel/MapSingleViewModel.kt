@@ -7,7 +7,7 @@ import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 
 abstract class MapSingleViewModel<TApi, TUi>(
-    private val id: Id,
+    protected val id: Id,
     private val get: GetById<TApi>,
     private val map: (TApi) -> TUi,
     loading: UiText,

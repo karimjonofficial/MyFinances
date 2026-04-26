@@ -11,7 +11,7 @@ data class DebtApiModel(
     val id: Int,
     val user: UserApiModel,
     val client: ClientApiModel,
-    val completed: Boolean,
+    @SerialName("is_completed") val completed: Boolean,
     val price: Long,
     val notified: Boolean,
     @SerialName("created_at") val dateTime: Instant,

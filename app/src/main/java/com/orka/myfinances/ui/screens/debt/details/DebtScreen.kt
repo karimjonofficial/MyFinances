@@ -25,7 +25,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +38,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.format.FormatDateImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.debt1
+import com.orka.myfinances.fixtures.resources.models.debt2
 import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -71,32 +71,25 @@ fun DebtScreen(
                             contentDescription = stringResource(R.string.back)
                         )
                     }
-                },
-                actions = {
-                    TextButton(onClick = {}) {//TODO
-                        Text(
-                            text = stringResource(R.string.edit),
-                            style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
                 }
             )
         },
         bottomBar = {
-            BottomAppBar(containerColor = MaterialTheme.colorScheme.surface) {
-                Button(
-                    onClick = {},//TODO
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.check_circle),
-                        contentDescription = null
-                    )
-                    Spacer(Modifier.size(8.dp))
-                    Text(stringResource(R.string.mark_as_paid))
+            if(it is State.Success && !it.value.completed) {
+                BottomAppBar(containerColor = MaterialTheme.colorScheme.surface) {
+                    Button(
+                        onClick = interactor::setPaid,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.check_circle),
+                            contentDescription = null
+                        )
+                        Spacer(Modifier.size(8.dp))
+                        Text(stringResource(R.string.mark_as_paid))
+                    }
                 }
             }
         },
@@ -118,7 +111,8 @@ fun DebtScreen(
             item {
                 NotificationStatusCard(
                     notified = model.notified,
-                    lastSent = stringResource(R.string.last_sent_today_9_41_am)
+                    lastSent = stringResource(R.string.last_sent_today_9_41_am),
+                    onCheckedChanged = interactor::setNotified
                 )
             }
 
@@ -264,10 +258,24 @@ fun TimelineAndStaffCard(
     showBackground = true
 )
 @Composable
-private fun DebtScreenPreview() {
+private fun InCompletedDebtScreenPreview() {
     MyFinancesTheme {
         DebtScreen(
             state = State.Success(debt1.toScreenModel(FormatPriceImpl(), FormatDateImpl())),
+            interactor = DebtScreenInteractor.dummy
+        )
+    }
+}
+
+@Preview(
+    showSystemUi = true,
+    showBackground = true
+)
+@Composable
+private fun CompletedDebtScreenPreview() {
+    MyFinancesTheme {
+        DebtScreen(
+            state = State.Success(debt2.toScreenModel(FormatPriceImpl(), FormatDateImpl())),
             interactor = DebtScreenInteractor.dummy
         )
     }

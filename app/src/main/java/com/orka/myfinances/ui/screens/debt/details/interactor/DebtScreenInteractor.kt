@@ -6,6 +6,8 @@ import com.orka.myfinances.lib.ui.viewmodel.StateFul
 interface DebtScreenInteractor : StateFul {
     fun back()
     fun navigateToClient(id: Id)
+    fun setNotified(notified: Boolean)
+    fun setPaid()
 
     companion object {
         val dummy = object : DebtScreenInteractor {
@@ -13,6 +15,8 @@ interface DebtScreenInteractor : StateFul {
             override fun navigateToClient(id: Id) {}
             override fun initialize() {}
             override fun refresh() {}
+            override fun setNotified(notified: Boolean) {}
+            override fun setPaid() {}
         }
     }
 }

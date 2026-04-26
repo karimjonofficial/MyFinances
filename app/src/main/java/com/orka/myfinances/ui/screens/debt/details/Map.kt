@@ -21,6 +21,7 @@ fun Debt.toScreenModel(
         id = this.id,
         user = user.toCardModel(),
         clientId = client.id,
+        completed = completed,
         description = description
     )
 }

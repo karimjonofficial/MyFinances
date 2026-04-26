@@ -29,7 +29,8 @@ import com.orka.myfinances.lib.ui.components.TintIcon
 fun NotificationStatusCard(
     modifier: Modifier = Modifier,
     notified: Boolean,
-    lastSent: String
+    lastSent: String,
+    onCheckedChanged: (Boolean) -> Unit
 ) {
     val isChecked = remember { mutableStateOf(notified) }
 
@@ -80,7 +81,8 @@ fun NotificationStatusCard(
             Switch(
                 checked = isChecked.value,
                 onCheckedChange = {
-                    isChecked.value = it//TODO
+                    isChecked.value = it
+                    onCheckedChanged(it)
                 }
             )
         }

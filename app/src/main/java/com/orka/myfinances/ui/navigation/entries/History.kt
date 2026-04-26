@@ -32,7 +32,7 @@ fun historyEntry(
         ),
         Tab(
             index = 2,
-            title = stringResource(R.string.history)
+            title = stringResource(R.string.orders)
         )
     )
     val saleViewModel = viewModel { factory.salesViewModel() }

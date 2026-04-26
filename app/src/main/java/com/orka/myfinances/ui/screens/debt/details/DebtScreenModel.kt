@@ -5,6 +5,7 @@ import com.orka.myfinances.ui.components.ClientCardModel
 import com.orka.myfinances.ui.components.UserCardModel
 
 data class DebtScreenModel(
+    val completed: Boolean,
     val price: String,
     val startDate: String,
     val endDateTime: String?,

@@ -13,7 +13,7 @@ import com.orka.myfinances.ui.screens.client.details.ClientScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class ClientScreenViewModel(
-    private val id: Id,
+    id: Id,
     private val clientApi: ClientApi,
     private val navigator: Navigator,
     loading: UiText,

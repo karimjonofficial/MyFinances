@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class OrderScreenViewModel(
-    private val id: Id,
+    id: Id,
     private val orderApi: OrderApi,
     private val flow: MutableSharedFlow<OrderEvent>,
     private val formatPrice: FormatPrice,

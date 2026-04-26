@@ -23,6 +23,7 @@ fun DebtApiModel.toScreenModel(
         id = Id(id),
         user = user.toCardModel(),
         clientId = Id(client.id),
+        completed = completed,
         description = description
     )
 }
