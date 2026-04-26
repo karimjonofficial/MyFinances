@@ -11,6 +11,7 @@ import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.lib.ui.models.Tab
 import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.ui.screens.debt.history.DebtsHistoryContent
 import com.orka.myfinances.ui.screens.history.HistoryScreen
 import com.orka.myfinances.ui.screens.order.list.completed.OrdersHistoryContent
 import com.orka.myfinances.ui.screens.receive.list.ReceiveContent
@@ -33,15 +34,21 @@ fun historyEntry(
         Tab(
             index = 2,
             title = stringResource(R.string.orders)
+        ),
+        Tab(
+            index = 3,
+            title = stringResource(R.string.debts)
         )
     )
     val saleViewModel = viewModel { factory.salesViewModel() }
     val receiveViewModel = viewModel { factory.receivesViewModel() }
     val ordersViewModel = viewModel { factory.ordersHistoryViewModel()}
+    val debtsViewModel = viewModel { factory.debtHistoryViewModel()}
 
     val receiveState = receiveViewModel.uiState.collectAsState()
     val saleState = saleViewModel.uiState.collectAsState()
     val ordersState = ordersViewModel.uiState.collectAsState()
+    val debtsState = debtsViewModel.uiState.collectAsState()
 
     HistoryScreen(
         modifier = modifier,
@@ -71,6 +78,14 @@ fun historyEntry(
                         modifier = contentModifier,
                         state = ordersState.value,
                         interactor = ordersViewModel
+                    )
+                }
+
+                3 -> {
+                    DebtsHistoryContent(
+                        modifier = contentModifier,
+                        interactor = debtsViewModel,
+                        state = debtsState.value
                     )
                 }
             }

@@ -7,6 +7,7 @@ import com.orka.myfinances.application.viewmodels.client.bottomsheet.ClientBotto
 import com.orka.myfinances.application.viewmodels.client.details.ClientScreenViewModel
 import com.orka.myfinances.application.viewmodels.client.list.ClientsScreenViewModel
 import com.orka.myfinances.application.viewmodels.debt.details.DebtScreenViewModel
+import com.orka.myfinances.application.viewmodels.debt.history.DebtsHistoryContentViewModel
 import com.orka.myfinances.application.viewmodels.debt.list.DebtsScreenViewModel
 import com.orka.myfinances.application.viewmodels.folder.catalog.CatalogScreenViewModel
 import com.orka.myfinances.application.viewmodels.folder.category.CategoryScreenViewModel
@@ -46,6 +47,7 @@ import com.orka.myfinances.data.api.user.UserApi
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.repositories.basket.BasketRepository
+import com.orka.myfinances.data.repositories.debt.DebtEvent
 import com.orka.myfinances.data.repositories.folder.FolderEvent
 import com.orka.myfinances.data.repositories.order.OrderEvent
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
@@ -79,6 +81,7 @@ class Factory(
     private val saleFlow = MutableSharedFlow<SaleEvent>()
     private val receiveFlow = MutableSharedFlow<ReceiveEvent>()
     private val orderFlow = MutableSharedFlow<OrderEvent>()
+    private val debtFlow = MutableSharedFlow<DebtEvent>()
 
     private val clientApi = ClientApi(httpClient, session.companyId)
     private val folderApi = FolderApi(httpClient, session.officeId, folderFlow)
@@ -368,6 +371,7 @@ class Factory(
     fun debtsViewModel(): DebtsScreenViewModel {
         return DebtsScreenViewModel(
             debtApi = debtApi,
+            events = debtFlow,
             navigator = navigator,
             logger = logger,
             loading = loading,
@@ -381,6 +385,7 @@ class Factory(
     fun debtViewModel(id: Id): DebtScreenViewModel {
         return DebtScreenViewModel(
             id = id,
+            flow = debtFlow,
             debtApi = debtApi,
             formatPrice = formatter,
             formatDate = formatter,
@@ -463,6 +468,20 @@ class Factory(
             loading = loading,
             failure = failure,
             logger = logger
+        )
+    }
+
+    fun debtHistoryViewModel(): DebtsHistoryContentViewModel {
+        return DebtsHistoryContentViewModel(
+            debtApi = debtApi,
+            events = debtFlow,
+            formatPrice = formatter,
+            formatLocalDate = formatter,
+            formatTime = formatter,
+            loading = loading,
+            failure = failure,
+            logger = logger,
+            navigator = navigator
         )
     }
 }

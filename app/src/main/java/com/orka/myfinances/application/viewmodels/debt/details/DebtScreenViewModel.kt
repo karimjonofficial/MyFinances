@@ -5,6 +5,7 @@ import com.orka.myfinances.data.api.debt.models.response.DebtApiModel
 import com.orka.myfinances.data.api.debt.setNotified
 import com.orka.myfinances.data.api.debt.setPaid
 import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.data.repositories.debt.DebtEvent
 import com.orka.myfinances.lib.data.api.getById
 import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatPrice
@@ -15,10 +16,12 @@ import com.orka.myfinances.lib.viewmodel.MapSingleViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.debt.details.DebtScreenModel
 import com.orka.myfinances.ui.screens.debt.details.interactor.DebtScreenInteractor
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class DebtScreenViewModel(
     id: Id,
+    private val flow: MutableSharedFlow<DebtEvent>,
     private val debtApi: DebtApi,
     private val formatPrice: FormatPrice,
     private val formatDate: FormatDate,
@@ -78,8 +81,10 @@ class DebtScreenViewModel(
                 if (oldState is State.Success) {
                     setState(State.Loading(loading, oldState.value))
                     val success = debtApi.setPaid(id)
-                    if (success)
+                    if (success) {
+                        flow.emit(DebtEvent)
                         setState(State.Success(oldState.value.copy(completed = true)))
+                    }
                     else setState(State.Success(oldState.value))
                 } else {
                     setState(State.Failure(UiText.Str("Action executed in wrong state")))

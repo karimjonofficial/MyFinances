@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SetPaidApiRequest(
-    @SerialName("is_completed") val completed: Boolean = true
+    @SerialName("is_completed") val completed: Boolean
 )

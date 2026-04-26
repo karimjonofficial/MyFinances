@@ -8,7 +8,7 @@ import io.ktor.http.HttpStatusCode
 suspend fun DebtApi.setPaid(id: Id): Boolean {
     val response = httpClient.patch(
         urlString = "$baseUrl${id.value}/",
-        block = { setBody(SetPaidApiRequest()) }
+        block = { setBody(SetPaidApiRequest(true)) }
     )
 
     return response.status == HttpStatusCode.OK
