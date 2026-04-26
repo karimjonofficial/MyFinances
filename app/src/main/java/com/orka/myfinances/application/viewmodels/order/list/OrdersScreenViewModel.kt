@@ -2,9 +2,9 @@ package com.orka.myfinances.application.viewmodels.order.list
 
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.api.order.OrderApi
+import com.orka.myfinances.data.api.order.getChunk
 import com.orka.myfinances.data.api.order.models.response.OrderApiModel
 import com.orka.myfinances.data.repositories.order.OrderEvent
-import com.orka.myfinances.lib.data.api.getChunk
 import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
@@ -22,8 +22,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-class OrdersScreenViewModel(
+abstract class OrdersScreenViewModel(
     private val orderApi: OrderApi,
+    private val completed: Boolean,
     events: Flow<OrderEvent>,
     private val formatPrice: FormatPrice,
     private val formatDate: FormatDate,
@@ -35,7 +36,7 @@ class OrdersScreenViewModel(
 ) : MapChunkViewModel<OrderApiModel, OrderUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page -> orderApi.getChunk(size, page) },
+    get = { size, page -> orderApi.getChunk(size, page, completed) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map =
@@ -64,7 +65,7 @@ class OrdersScreenViewModel(
         initialize()
     }
 
-    override fun select(order: OrderUiModel) {
+    final override fun select(order: OrderUiModel) {
         launch { navigator.navigateToOrder(order.id) }
     }
 }

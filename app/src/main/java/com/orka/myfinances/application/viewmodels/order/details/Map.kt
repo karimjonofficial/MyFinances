@@ -9,7 +9,7 @@ import com.orka.myfinances.lib.format.FormatDateTime
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.ui.screens.order.details.OrderScreenModel
-import com.orka.myfinances.ui.screens.order.list.OrderItemModel
+import com.orka.myfinances.ui.screens.order.details.OrderItemModel
 
 fun OrderApiModel.toScreenModel(
     formatPrice: FormatPrice,

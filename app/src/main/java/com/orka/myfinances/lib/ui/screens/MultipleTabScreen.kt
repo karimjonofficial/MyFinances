@@ -18,14 +18,14 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.components.Scaffold
-import com.orka.myfinances.lib.ui.models.ScreenTab
+import com.orka.myfinances.lib.ui.models.Tab
 import kotlinx.coroutines.launch
 
 @Composable
 fun MultipleTabScreen(
     modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit = {},
-    tabs: List<ScreenTab>,
+    tabs: List<Tab>,
     tabContent: @Composable (index: Int) -> Unit
 ) {
     Scaffold(
@@ -73,7 +73,7 @@ fun MultipleTabScreen(
 fun MultipleTabScreen(
     modifier: Modifier = Modifier,
     title: String,
-    tabs: List<ScreenTab>,
+    tabs: List<Tab>,
     tabContent: @Composable (index: Int) -> Unit
 ) {
     MultipleTabScreen(

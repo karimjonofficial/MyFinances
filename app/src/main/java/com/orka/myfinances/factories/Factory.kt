@@ -14,6 +14,8 @@ import com.orka.myfinances.application.viewmodels.folder.home.FoldersContentView
 import com.orka.myfinances.application.viewmodels.notification.NotificationsScreenViewModel
 import com.orka.myfinances.application.viewmodels.order.details.OrderScreenViewModel
 import com.orka.myfinances.application.viewmodels.order.list.OrdersScreenViewModel
+import com.orka.myfinances.application.viewmodels.order.list.completed.OrdersHistoryContentViewModel
+import com.orka.myfinances.application.viewmodels.order.list.incompleted.OrdersListScreenViewModel
 import com.orka.myfinances.application.viewmodels.product.add.AddProductTitleScreenViewModel
 import com.orka.myfinances.application.viewmodels.product.details.ProductTitleScreenViewModel
 import com.orka.myfinances.application.viewmodels.product.edit.EditProductTitleScreenViewModel
@@ -321,8 +323,22 @@ class Factory(
         )
     }
 
-    fun ordersViewModel(): OrdersScreenViewModel {
-        return OrdersScreenViewModel(
+    fun ordersViewModel(): OrdersListScreenViewModel {
+        return OrdersListScreenViewModel(
+            orderApi = orderApi,
+            events = orderFlow,
+            loading = loading,
+            failure = failure,
+            navigator = navigator,
+            formatPrice = formatter,
+            formatDate = formatter,
+            formatLocalDate = formatter,
+            logger = logger
+        )
+    }
+
+    fun ordersHistoryViewModel(): OrdersHistoryContentViewModel {
+        return OrdersHistoryContentViewModel(
             orderApi = orderApi,
             events = orderFlow,
             loading = loading,

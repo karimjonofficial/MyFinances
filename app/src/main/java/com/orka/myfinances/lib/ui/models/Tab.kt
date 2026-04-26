@@ -1,6 +1,6 @@
 package com.orka.myfinances.lib.ui.models
 
-data class ScreenTab(
+data class Tab(
     val index: Int,
     val title: String
 )

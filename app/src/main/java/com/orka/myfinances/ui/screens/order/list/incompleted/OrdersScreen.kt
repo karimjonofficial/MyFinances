@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.order.list
+package com.orka.myfinances.ui.screens.order.list.incompleted
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -21,6 +21,10 @@ import com.orka.myfinances.fixtures.resources.models.order.orders
 import com.orka.myfinances.lib.ui.models.ChunkMapState
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.ui.screens.order.list.OrderCard
+import com.orka.myfinances.ui.screens.order.list.OrderUiModel
+import com.orka.myfinances.ui.screens.order.list.OrdersScreenInteractor
+import com.orka.myfinances.ui.screens.order.list.toChunkMapState
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -2,15 +2,12 @@ package com.orka.myfinances.application.viewmodels.order.list
 
 import com.orka.myfinances.R
 import com.orka.myfinances.data.api.order.models.response.OrderApiModel
-import com.orka.myfinances.data.api.order.models.response.OrderItemApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.now
 import com.orka.myfinances.lib.format.FormatDate
-import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.ui.screens.order.list.OrderCardModel
-import com.orka.myfinances.ui.screens.order.list.OrderItemModel
 import com.orka.myfinances.ui.screens.order.list.OrderUiModel
 
 fun OrderApiModel.toModel(
@@ -38,12 +35,5 @@ fun OrderApiModel.toUiModel(
     return OrderUiModel(
         id = Id(id),
         model = this.toModel(formatPrice, formatDate)
-    )
-}
-
-fun OrderItemApiModel.toModel(formatDecimal: FormatDecimal): OrderItemModel {
-    return OrderItemModel(
-        name = "Product ${product.title}",
-        amount = formatDecimal.formatDecimal(amount.toDouble())
     )
 }

@@ -8,7 +8,6 @@ import kotlin.time.Instant
 data class OrderProductApiModel(
     val id: Int,
     @SerialName("product_title") val title: OrderProductTitleApiModel,
-    val branch: Int,
     val price: Long,
     @SerialName("sale_price") val salePrice: Long,
     @SerialName("created_at") val createdAt: Instant,
