@@ -6,6 +6,7 @@ data class Debt(
     val id: Id,
     val user: User,
     val client: Client,
+    val completed: Boolean,
     val price: Int,
     val notified: Boolean,
     val dateTime: Instant,

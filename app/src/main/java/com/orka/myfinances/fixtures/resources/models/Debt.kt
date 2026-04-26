@@ -11,6 +11,7 @@ val debt1 = Debt(
     price = 100,
     notified = false,
     dateTime = dateTime,
+    completed = false,
     endDateTime = dateTime,
     description = description
 )
@@ -22,6 +23,7 @@ val debt2 = Debt(
     notified = true,
     dateTime = dateTime,
     endDateTime = dateTime,
+    completed = true,
     description = description
 )
 
