@@ -64,7 +64,7 @@ fun CheckoutContent(
     }
 
     val remainders = remember(price) {
-        listOf(10, 100, 1000, 10000)
+        listOf(10, 100, 1000, 10000, 100000)
             .map { price % it }
             .filter { it in 1..<price }
             .distinct()
@@ -205,7 +205,7 @@ private fun CheckoutContentPreview() {
                 .scaffoldPadding(paddingValues)
                 .padding(horizontal = 8.dp),
             items = items,
-            price = 10231,
+            price = 142312,
             description = "",
             printReceipt = false,
             selectedClient = null,
