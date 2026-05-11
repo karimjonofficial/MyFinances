@@ -96,10 +96,6 @@ fun HomeScreenContent(
         1 -> {
             val basketState = basketViewModel.uiState.collectAsState()
 
-            LaunchedEffect(officeId) {
-                basketViewModel.initialize()
-            }
-
             BasketContent(
                 modifier = modifier,
                 state = basketState.value,

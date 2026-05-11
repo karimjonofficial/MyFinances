@@ -18,12 +18,21 @@ fun CategoryScreenTopBar(
     modifier: Modifier = Modifier,
     state: State<CategoryScreenModel>,
     onAddProductClick: () -> Unit,
-    onAddReceive: () -> Unit
+    onAddReceive: () -> Unit,
+    onExposeClick: () -> Unit,
+    onUnExposeClick: () -> Unit
 ) {
     TopAppBar(
         modifier = modifier,
         title = { Text(text = if (state is State.Success) state.value.title else stringResource(R.string.loading)) },
         actions = {
+            IconButton(onClick = if(state.value?.exposed ?: false) onUnExposeClick else onExposeClick) {
+                Icon(
+                    painter = painterResource(if(state.value?.exposed ?: false) R.drawable.visibility_off else R.drawable.visibility),
+                    contentDescription = stringResource(R.string.add)
+                )
+            }
+
             IconButton(onClick = { onAddProductClick() }) {
                 Icon(
                     painter = painterResource(R.drawable.add),

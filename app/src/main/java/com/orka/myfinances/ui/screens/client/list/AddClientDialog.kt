@@ -50,28 +50,28 @@ fun AddClientDialog(
         OutlinedTextField(
             value = lastName.value,
             onValueChange = { lastName.value = it },
-            label = { Text(text = stringResource(R.string.lastname)) }
+            label = { Text(text = stringResource(R.string.lastname) + "*") }
         )
 
         VerticalSpacer(4)
         OutlinedTextField(
             value = patronymic.value,
             onValueChange = { patronymic.value = it },
-            label = { Text(text = stringResource(R.string.patronymic)) }
+            label = { Text(text = stringResource(R.string.patronymic) + "*") }
         )
 
         VerticalSpacer(4)
         OutlinedTextField(
             value = phone.value,
             onValueChange = { phone.value = it },
-            label = { Text(text = stringResource(R.string.phone_number)) }
+            label = { Text(text = stringResource(R.string.phone_number) + "*") }
         )
 
         VerticalSpacer(4)
         OutlinedTextField(
             value = address.value,
             onValueChange = { address.value = it },
-            label = { Text(text = stringResource(R.string.address)) }
+            label = { Text(text = stringResource(R.string.address) + "*") }
         )
     }
 }

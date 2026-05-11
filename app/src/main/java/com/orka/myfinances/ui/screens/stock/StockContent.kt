@@ -36,7 +36,8 @@ fun StockContent(
         item = { item ->
             StockItemCard(
                 item = item.model,
-                onClick = { interactor.addToBasket(item.id) }
+                onIncrease = { interactor.addToBasket(item.id) },
+                onDecrease = { interactor.removeFromBasket(item.id) }
             )
         }
     )

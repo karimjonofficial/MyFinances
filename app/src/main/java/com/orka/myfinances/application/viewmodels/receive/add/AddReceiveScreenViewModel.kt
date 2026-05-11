@@ -48,6 +48,7 @@ class AddReceiveScreenViewModel(
         amount: Int?,
         price: Int?,
         salePrice: Int?,
+        exposedPrice: Int?,
         totalPrice: Int?,
         description: String?
     ) {
@@ -56,7 +57,8 @@ class AddReceiveScreenViewModel(
             if (
                 title != null && amount != null && amount > 0 &&
                 price != null && price > 0 &&
-                salePrice != null && salePrice > 0 &&
+                salePrice != null && salePrice > price &&
+                exposedPrice != null && exposedPrice > salePrice &&
                 totalPrice != null
             ) {
                 setState(State.Loading(loading, oldState.value))
@@ -67,6 +69,7 @@ class AddReceiveScreenViewModel(
                             amount = amount,
                             price = price,
                             salePrice = salePrice,
+                            exposedPrice = exposedPrice,
                             description = description
                         )
                     ),

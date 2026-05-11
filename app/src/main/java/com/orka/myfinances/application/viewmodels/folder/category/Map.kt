@@ -7,6 +7,7 @@ import com.orka.myfinances.ui.screens.folder.category.CategoryScreenModel
 fun CategoryApiModel.toScreenModel(): CategoryScreenModel {
     return CategoryScreenModel(
         id = Id(id),
-        title = name
+        title = name,
+        exposed = false
     )
 }

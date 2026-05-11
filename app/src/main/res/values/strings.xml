@@ -154,4 +154,6 @@
     <string name="select_category">Select category</string>
     <string name="name_left_blank">Name left blank</string>
     <string name="exit">Exit</string>
+    <string name="uzs">UZS</string>
+    <string name="exposed_price">Exposed price</string>
 </resources>

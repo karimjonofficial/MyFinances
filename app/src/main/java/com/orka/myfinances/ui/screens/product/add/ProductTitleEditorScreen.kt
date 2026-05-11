@@ -14,7 +14,7 @@ fun ProductTitleEditorScreen(
     title: String,
     state: State<AddProductTitleScreenModel>,
     onRetry: () -> Unit,
-    onSave: (List<PropertyModel<*>?>, String, Int?, Int?, String?, Id) -> Unit
+    onSave: (List<PropertyModel<*>?>, String, Int?, Int?, Int?, String?, Id) -> Unit
 ) {
     StatefulScreen(
         modifier = modifier,

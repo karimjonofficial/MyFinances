@@ -13,6 +13,7 @@ import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.ChunkMapState
 import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.screens.stock.StockContentInteractor
 import com.orka.myfinances.ui.screens.stock.StockItemUiModel
@@ -36,11 +37,18 @@ class StockItemsContentViewModel(
     failure = failure,
     get = { size, page -> stockApi.getByCategory(size, page, categoryId) },
     map = { chunk ->
+        val counts = basketRepository.getCounts()
         val content = chunk.results
             .sortedBy { it.product.title.name }
             .groupBy { it.product.title.name.stickyHeaderKey() }
             .mapValues { (_, stockItems) ->
-                stockItems.map { it.toUiModel(formatPrice, formatDecimal) }
+                stockItems.map {
+                    val count = counts[Id(it.product.id)]
+                    val amountStr = if (count != null && count > 0) {
+                        formatDecimal.formatDecimal(count.toDouble())
+                    } else null
+                    it.toUiModel(formatPrice, formatDecimal, amountStr)
+                }
             }
 
         ChunkMapState(
@@ -61,9 +69,47 @@ class StockItemsContentViewModel(
         stockEvents.onEach {
             if (it.categoryId == categoryId) refresh()
         }.launchIn(viewModelScope)
+
+        basketRepository.events.onEach {
+            tryTransition { oldState ->
+                if (oldState is State.Success) {
+                    val counts = basketRepository.getCounts()
+                    val newContent = oldState.value.content.mapValues { (_, items) ->
+                        items.map { item ->
+                            val count = counts[item.id]
+                            val amountStr = if (count != null && count > 0) {
+                                formatDecimal.formatDecimal(count.toDouble())
+                            } else null
+                            item.copy(model = item.model.copy(basketAmount = amountStr))
+                        }
+                    }
+                    State.Success(oldState.value.copy(content = newContent))
+                } else oldState
+            }
+        }.launchIn(viewModelScope)
     }
 
     override fun addToBasket(id: Id) {
         launch { basketRepository.add(id, 1) }
+    }
+
+    override fun removeFromBasket(id: Id) {
+        launch { basketRepository.remove(id, 1) }
+    }
+
+    override fun expose() {
+        tryTransition { oldState ->
+            if(oldState is State.Success) {
+                oldState.toExposed()
+            } else State.Failure(failure, oldState.value)//TODO change error message
+        }
+    }
+
+    override fun unExpose() {
+        tryTransition { oldState ->
+            if(oldState is State.Success) {
+                oldState.toHidden()
+            } else State.Failure(failure, oldState.value)//TODO change error message
+        }
     }
 }

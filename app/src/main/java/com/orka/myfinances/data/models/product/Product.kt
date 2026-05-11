@@ -8,5 +8,6 @@ data class Product(
     val title: ProductTitle,
     val price: Int,
     val salePrice: Int,
+    val exposedPrice: Int,
     val dateTime: Instant
 )

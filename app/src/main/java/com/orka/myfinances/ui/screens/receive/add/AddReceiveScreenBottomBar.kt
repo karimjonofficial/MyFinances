@@ -17,13 +17,15 @@ fun AddReceiveScreenBottomBar(
     productTitle: ProductTitleItemModel?,
     price: Int?,
     salePrice: Int?,
+    exposedPrice: Int?,
     amount: Int?,
     totalPrice: Int?,
     description: String?
 ) {
     val saveable = productTitle != null && amount != null && amount > 0 &&
             price != null && price > 0 &&
-            salePrice != null && salePrice > 0 &&
+            salePrice != null && salePrice > price &&
+            exposedPrice != null && exposedPrice > salePrice &&
             totalPrice != null
 
     BottomAppBar(contentPadding = PaddingValues(horizontal = 8.dp)) {
@@ -35,6 +37,7 @@ fun AddReceiveScreenBottomBar(
                     title = productTitle,
                     price = price,
                     salePrice = salePrice,
+                    exposedPrice = exposedPrice,
                     amount = amount,
                     totalPrice = totalPrice,
                     description = description

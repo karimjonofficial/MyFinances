@@ -8,6 +8,7 @@ interface AddReceiveScreenInteractor : StateFul {
         amount: Int?,
         price: Int?,
         salePrice: Int?,
+        exposedPrice: Int?,
         totalPrice: Int?,
         description: String?
     )
@@ -21,6 +22,7 @@ interface AddReceiveScreenInteractor : StateFul {
                 amount: Int?,
                 price: Int?,
                 salePrice: Int?,
+                exposedPrice: Int?,
                 totalPrice: Int?,
                 description: String?
             ) {}

@@ -18,6 +18,7 @@ fun Product.map(): ProductApiModel {
         price = price.toLong(),
         salePrice = salePrice.toLong(),
         createdAt = dateTime,
+        exposedPrice = exposedPrice.toLong(),
         modifiedAt = dateTime
     )
 }
@@ -32,6 +33,7 @@ fun ProductTitle.map(): ProductTitleApiModel {
         modifiedAt = dateTime,
         category = category.id.value,
         defaultPrice = defaultPrice.toLong(),
+        defaultExposedPrice = defaultExposedPrice.toLong(),
         defaultSalePrice = defaultSalePrice.toLong()
     )
 }

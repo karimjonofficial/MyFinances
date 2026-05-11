@@ -12,6 +12,7 @@ val product1 = Product(
     title = productTitle1,
     price = price,
     salePrice = salePrice,
+    exposedPrice = salePrice,
     dateTime = dateTime
 )
 val product2 = Product(
@@ -19,6 +20,7 @@ val product2 = Product(
     title = productTitle2,
     price = price,
     salePrice = salePrice,
+    exposedPrice = salePrice,
     dateTime = dateTime
 )
 

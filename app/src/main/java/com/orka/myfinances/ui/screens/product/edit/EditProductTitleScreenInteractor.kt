@@ -10,6 +10,7 @@ interface EditProductTitleScreenInteractor : StateFul {
         name: String,
         price: Int?,
         salePrice: Int?,
+        exposedPrice: Int?,
         description: String?,
         categoryId: Id
     )
@@ -21,6 +22,7 @@ interface EditProductTitleScreenInteractor : StateFul {
                 name: String,
                 price: Int?,
                 salePrice: Int?,
+                exposedPrice: Int?,
                 description: String?,
                 categoryId: Id
             ) {}

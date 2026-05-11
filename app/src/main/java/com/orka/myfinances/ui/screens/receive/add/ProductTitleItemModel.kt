@@ -7,5 +7,6 @@ data class ProductTitleItemModel(
     override val id: Id,
     override val title: String,
     val defaultPrice: Int,
-    val defaultSalePrice: Int
+    val defaultSalePrice: Int,
+    val defaultExposedPrice: Int
 ) : BottomSheetItemModel

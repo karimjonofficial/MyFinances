@@ -8,16 +8,12 @@ plugins {
 android {
     namespace = "com.orka.myfinances"
 
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.orka.myfinances"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
 
@@ -88,6 +84,7 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
     testImplementation(libs.mockk)
+    testImplementation(libs.ktor.client.mock)
 
     testImplementation(libs.junit.jupiter)
     testImplementation(platform(libs.junit.bom))

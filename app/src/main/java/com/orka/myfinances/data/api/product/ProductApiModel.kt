@@ -11,6 +11,7 @@ data class ProductApiModel(
     @SerialName("product_title") val title: ProductTitleApiModel,
     val price: Long,
     @SerialName("sale_price") val salePrice: Long,
+    @SerialName("exposed_price") val exposedPrice: Long,
     @SerialName("created_at") val createdAt: Instant,
     @SerialName("modified_at") val modifiedAt: Instant
 )

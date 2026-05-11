@@ -12,6 +12,7 @@ import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.screens.folder.category.CategoryScreen
+import com.orka.myfinances.ui.screens.folder.category.CategoryScreenTopBar
 import com.orka.myfinances.ui.screens.product.list.ProductTitlesContent
 import com.orka.myfinances.ui.screens.stock.StockContent
 
@@ -39,8 +40,21 @@ fun categoryEntry(
 
     CategoryScreen(
         modifier = modifier,
-        state = categoryState,
-        interactor = categoryViewModel,
+        topBar = {
+            CategoryScreenTopBar(
+                state = categoryState,
+                onAddProductClick = categoryViewModel::addProduct,
+                onAddReceive = categoryViewModel::receive,
+                onExposeClick = {
+                    categoryViewModel.expose()
+                    stockViewModel.expose()
+                },
+                onUnExposeClick = {
+                    categoryViewModel.unExpose()
+                    stockViewModel.unExpose()
+                }
+            )
+        },
         tabContent = { index ->
             val fillMaxSizeModifier = Modifier.fillMaxSize()
             when (index) {

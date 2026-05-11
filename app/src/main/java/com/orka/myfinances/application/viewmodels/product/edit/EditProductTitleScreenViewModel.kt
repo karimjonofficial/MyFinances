@@ -55,6 +55,7 @@ class EditProductTitleScreenViewModel(
         name: String,
         price: Int?,
         salePrice: Int?,
+        exposedPrice: Int?,
         description: String?,
         categoryId: Id
     ) {
@@ -67,7 +68,7 @@ class EditProductTitleScreenViewModel(
 
                     if (
                         selectedCategory != null && name.isNotBlank() &&
-                        price != null && salePrice != null &&
+                        price != null && salePrice != null && exposedPrice != null &&
                         validProperties.size == selectedCategory.template.fields.size &&
                         price > 0 && salePrice > 0 && salePrice > price &&
                         categoryId.value > 0
@@ -78,6 +79,7 @@ class EditProductTitleScreenViewModel(
                             name = name,
                             price = price,
                             salePrice = salePrice,
+                            exposedPrice = exposedPrice,
                             properties = validProperties,
                             description = description
                         )

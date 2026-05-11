@@ -34,17 +34,16 @@ import com.orka.myfinances.ui.screens.product.add.interactor.CategoryItemModel
 fun ProductTitleEditorContent(
     modifier: Modifier = Modifier,
     model: AddProductTitleScreenModel,
-    onSave: (List<PropertyModel<*>?>, String, Int?, Int?, String?, Id) -> Unit
+    onSave: (List<PropertyModel<*>?>, String, Int?, Int?, Int?, String?, Id) -> Unit
 ) {
     val selectedCategory = retain { mutableStateOf<CategoryItemModel?>(null) }
     val scrollState = rememberScrollState()
     val menuVisible = rememberSaveable { mutableStateOf(false) }
     val name = rememberSaveable(model.initialName) { mutableStateOf(model.initialName) }
     val price = rememberSaveable(model.initialPrice) { mutableStateOf(model.initialPrice) }
-    val salePrice =
-        rememberSaveable(model.initialSalePrice) { mutableStateOf(model.initialSalePrice) }
-    val description =
-        rememberSaveable(model.initialDescription) { mutableStateOf(model.initialDescription) }
+    val salePrice = rememberSaveable(model.initialSalePrice) { mutableStateOf(model.initialSalePrice) }
+    val exposedPrice = rememberSaveable(model.initialExposedPrice) { mutableStateOf(model.initialExposedPrice) }
+    val description = rememberSaveable(model.initialDescription) { mutableStateOf(model.initialDescription) }
 
     LaunchedEffect(model.categories, model.categoryId) {
         if (selectedCategory.value == null || model.categories.none { it.id == selectedCategory.value?.id }) {
@@ -128,6 +127,14 @@ fun ProductTitleEditorContent(
             )
 
             VerticalSpacer(8)
+            IntegerTextField(
+                modifier = fullWidth,
+                value = exposedPrice.value,
+                onValueChange = { exposedPrice.value = it },
+                label = { Text(text = stringResource(R.string.exposed_price)) }
+            )
+
+            VerticalSpacer(8)
             CommentTextField(
                 modifier = fullWidth,
                 value = description.value,
@@ -141,6 +148,7 @@ fun ProductTitleEditorContent(
             name = name,
             price = price,
             salePrice = salePrice,
+            exposedPrice = exposedPrice,
             propertiesValid = propertiesValid,
             selectedCategory = currentCategory,
             properties = properties,

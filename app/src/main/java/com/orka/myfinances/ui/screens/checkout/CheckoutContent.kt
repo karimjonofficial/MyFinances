@@ -1,18 +1,24 @@
 package com.orka.myfinances.ui.screens.checkout
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -32,7 +38,10 @@ import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.ui.screens.checkout.viewmodel.BasketItemCardModel
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
 import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
+import java.text.NumberFormat
+import java.util.Locale
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CheckoutContent(
     modifier: Modifier = Modifier,
@@ -46,6 +55,20 @@ fun CheckoutContent(
     onDescriptionChanged: (String?) -> Unit,
     onPrintReceiptChanged: (Boolean) -> Unit,
 ) {
+    val formatter = remember {
+        NumberFormat.getIntegerInstance(Locale.US).apply {
+            isGroupingUsed = true
+        }
+    }
+
+    val remainders = remember(price) {
+        listOf(10, 100, 1000, 10000)
+            .map { price % it }
+            .filter { it in 1..<price }
+            .distinct()
+            .sorted()
+    }
+
     Column(modifier = modifier) {
         DividedList(
             modifier = Modifier.fillMaxWidth(),
@@ -57,9 +80,30 @@ fun CheckoutContent(
 
         VerticalSpacer(16)
         Row {
-            if (selectedClient == null) {
-                Button(onClick = onOpenClients) {
-                    Text(text = stringResource(R.string.select_client))
+            if(selectedClient == null) {
+                Row {
+                    Button(
+                        contentPadding = ButtonDefaults.contentPaddingFor(
+                            buttonHeight = ButtonDefaults.MinHeight,
+                            hasEndIcon = true
+                        ),
+                        onClick = onOpenClients
+                    ) {
+                        Text(text = stringResource(R.string.select_client))
+                        HorizontalSpacer(8)
+                        Icon(
+                            painter = painterResource(R.drawable.unfold_more),
+                            contentDescription = null
+                        )
+                    }
+
+                    HorizontalSpacer(4)
+                    Button(onClick = {}) {//TODO
+                        Icon(
+                            painter = painterResource(R.drawable.add),
+                            contentDescription = null
+                        )
+                    }
                 }
             } else {
                 Text(
@@ -69,20 +113,36 @@ fun CheckoutContent(
                     color = MaterialTheme.colorScheme.primary,
                 )
             }
+        }
 
-            HorizontalSpacer(8)
-            OutlinedIntegerTextField(
-                modifier = Modifier.width(160.dp),
-                label = stringResource(R.string.total_price),
-                leadingIcon = {
-                    Icon(
-                        painter = painterResource(R.drawable.attach_money),
-                        contentDescription = stringResource(R.string.price)
+        OutlinedIntegerTextField(
+            modifier = Modifier.width(160.dp),
+            label = stringResource(R.string.total_price),
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(R.drawable.attach_money),
+                    contentDescription = stringResource(R.string.price)
+                )
+            },
+            value = price,
+            onValueChange = { onPriceChanged(it) }
+        )
+
+        if (remainders.isNotEmpty()) {
+            VerticalSpacer(4)
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                remainders.forEach { remainder ->
+                    SuggestionChip(
+                        onClick = { onPriceChanged(price - remainder) },
+                        label = {
+                            Text(text = "-${formatter.format(remainder)} ${stringResource(R.string.uzs)}")
+                        }
                     )
-                },
-                value = price,
-                onValueChange = { onPriceChanged(it) }
-            )
+                }
+            }
         }
 
         VerticalSpacer(8)
@@ -138,7 +198,7 @@ private fun CheckoutContentPreview() {
                 .scaffoldPadding(paddingValues)
                 .padding(horizontal = 8.dp),
             items = items,
-            price = 1000,
+            price = 10231,
             description = "",
             printReceipt = false,
             selectedClient = null,

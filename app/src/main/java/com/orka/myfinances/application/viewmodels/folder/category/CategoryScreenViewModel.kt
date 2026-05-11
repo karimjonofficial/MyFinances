@@ -44,4 +44,20 @@ class CategoryScreenViewModel(
     override fun receive() {
         launch { navigator.navigateToAddReceive(categoryId) }
     }
+
+    fun expose() {
+        tryTransition { oldState ->
+            if(oldState is State.Success)
+                State.Success(oldState.value.copy(exposed = true))
+            else State.Failure(error = failure, oldState.value)//TODO change the error message
+        }
+    }
+
+    fun unExpose() {
+        tryTransition { oldState ->
+            if(oldState is State.Success)
+                State.Success(oldState.value.copy(exposed = false))
+            else State.Failure(error = failure, oldState.value)//TODO change the error message
+        }
+    }
 }

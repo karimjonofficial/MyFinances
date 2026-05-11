@@ -27,19 +27,29 @@ abstract class BaseViewModel<T>(
     }
 
     final override fun refresh() {
+        tryTransition { oldState ->
+            val success = produceSuccess()
+            success ?: State.Failure(failure, oldState.value)
+        }
+    }
+
+    protected fun tryTransition(produceState: suspend (State<T>) -> State<T>) {
         launch {
             val oldState = state.value
-            if(oldState !is State.Loading) {
+            if (oldState !is State.Loading) {
                 try {
                     setState(State.Loading(loading, oldState.value))
-                    val success = produceSuccess()
-                    if (success != null) {
-                        setState(success)
-                    } else setState(State.Failure(failure, oldState.value))
+                    val newState = produceState(oldState)
+                    setState(newState)
                 } catch (e: Exception) {
                     setState(State.Failure(UiText.Str(e.message.toString()), oldState.value))
                 }
-            } else setState(State.Failure(UiText.Str("Refreshed when state was Loading"), oldState.value))
+            } else setState(
+                State.Failure(
+                    UiText.Str("Refreshed when state was Loading"),
+                    oldState.value
+                )
+            )
         }
     }
 }

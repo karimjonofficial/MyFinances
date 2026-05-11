@@ -40,10 +40,23 @@ class BasketContentViewModel(
     logger = logger
 ), BasketInteractor {
     val uiState = state.asStateFlow()
+    private var isStale = true
 
     init {
         repository.events.onEach {
-            initialize()
+            if (state.subscriptionCount.value > 0) {
+                initialize()
+                isStale = false
+            } else {
+                isStale = true
+            }
+        }.launchIn(viewModelScope)
+
+        state.subscriptionCount.onEach { count ->
+            if (count > 0 && isStale) {
+                initialize()
+                isStale = false
+            }
         }.launchIn(viewModelScope)
     }
 

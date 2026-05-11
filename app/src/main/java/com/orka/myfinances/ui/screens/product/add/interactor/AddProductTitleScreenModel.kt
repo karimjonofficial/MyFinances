@@ -9,6 +9,7 @@ data class AddProductTitleScreenModel(
     val initialName: String = "",
     val initialPrice: Int? = null,
     val initialSalePrice: Int? = null,
+    val initialExposedPrice: Int? = null,
     val initialDescription: String? = null,
     val initialProperties: List<PropertyModel<*>> = emptyList(),
     val isEditMode: Boolean = false

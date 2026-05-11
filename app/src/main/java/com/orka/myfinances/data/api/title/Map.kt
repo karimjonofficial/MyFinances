@@ -15,6 +15,7 @@ fun AddProductTitleRequest.toApiRequest(officeId: Id): AddProductTitleApiRequest
         properties = properties.map { it.toApiRequest() },
         defaultPrice = price.toLong(),
         defaultSalePrice = salePrice.toLong(),
+        defaultExposedPrice = exposedPrice.toLong(),
         description = description,
         branch = officeId.value
     )
@@ -34,6 +35,7 @@ fun UpdateProductTitleRequest.toApiRequest(officeId: Id): UpdateProductTitleApiR
         properties = properties.map { it.toApiRequest() },
         defaultPrice = price.toLong(),
         defaultSalePrice = salePrice.toLong(),
+        defaultExposedPrice = exposedPrice.toLong(),
         description = description,
         branch = officeId.value
     )

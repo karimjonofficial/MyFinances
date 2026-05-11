@@ -78,12 +78,14 @@ class ProductTitleScreenViewModel(
                 categoryId = Id(title.category)
                 val price = title.defaultPrice.toInt()
                 val salePrice = title.defaultSalePrice.toInt()
+                val exposedPrice = title.defaultExposedPrice.toInt()
                 val request = AddReceiveRequest(
                     items = listOf(
                         AddReceiveRequestItem(
                             productTitleId = productId,
                             price = price,
                             salePrice = salePrice,
+                            exposedPrice = exposedPrice,
                             amount = amount
                         )
                     ),

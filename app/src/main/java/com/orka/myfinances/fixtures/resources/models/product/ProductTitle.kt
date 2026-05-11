@@ -20,6 +20,7 @@ val productTitle1 = ProductTitle(
     dateTime = dateTime,
     category = category1,
     properties = properties,
+    defaultExposedPrice = salePrice,
     description = description
 )
 val productTitle2 = ProductTitle(
@@ -30,6 +31,7 @@ val productTitle2 = ProductTitle(
     dateTime = dateTime,
     category = category2,
     properties = properties,
+    defaultExposedPrice = salePrice,
     description = description
 )
 

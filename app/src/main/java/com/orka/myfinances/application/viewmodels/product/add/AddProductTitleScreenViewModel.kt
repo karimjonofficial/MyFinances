@@ -50,6 +50,7 @@ class AddProductTitleScreenViewModel(
         name: String,
         price: Int?,
         salePrice: Int?,
+        exposedPrice: Int?,
         description: String?,
         categoryId: Id
     ) {
@@ -61,7 +62,7 @@ class AddProductTitleScreenViewModel(
                     val category = oldState.value.categories.find { it.id == categoryId }
                     if (
                         category != null && name.isNotBlank() &&
-                        price != null && salePrice != null &&
+                        price != null && salePrice != null && exposedPrice != null &&
                         p.size == category.template.fields.size && name.isNotEmpty() &&
                         price > 0 && salePrice > 0 && salePrice > price &&
                         category.id.value > 0
@@ -72,6 +73,7 @@ class AddProductTitleScreenViewModel(
                             name = name,
                             price = price,
                             salePrice = salePrice,
+                            exposedPrice = exposedPrice,
                             properties = p,
                             description = description
                         )

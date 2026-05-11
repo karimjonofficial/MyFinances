@@ -28,6 +28,7 @@ import com.orka.myfinances.ui.navigation.entries.template.addTemplateEntry
 import com.orka.myfinances.ui.navigation.entries.template.templateEntry
 import com.orka.myfinances.ui.navigation.entries.template.templatesEntry
 
+
 fun entryProvider(
     modifier: Modifier = Modifier,
     session: Session,

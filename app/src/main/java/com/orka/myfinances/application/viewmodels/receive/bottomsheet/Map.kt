@@ -9,6 +9,7 @@ fun ProductTitleApiModel.toItemModel(): ProductTitleItemModel {
         id = Id(id),
         title = name,
         defaultPrice = defaultPrice.toInt(),
-        defaultSalePrice = defaultSalePrice.toInt()
+        defaultSalePrice = defaultSalePrice.toInt(),
+        defaultExposedPrice = defaultExposedPrice.toInt()
     )
 }

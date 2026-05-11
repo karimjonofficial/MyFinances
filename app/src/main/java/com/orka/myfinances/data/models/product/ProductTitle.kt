@@ -9,6 +9,7 @@ data class ProductTitle(
     val name: String,
     val defaultPrice: Int,
     val defaultSalePrice: Int,
+    val defaultExposedPrice: Int,
     val dateTime: Instant,
     val category: Category,
     val properties: List<Property>,

@@ -6,6 +6,7 @@ data class AddReceiveRequestItem(
     val productTitleId: Id,
     val price: Int?,
     val salePrice: Int?,
+    val exposedPrice: Int?,
     val amount: Int,
     val description: String? = null
 )

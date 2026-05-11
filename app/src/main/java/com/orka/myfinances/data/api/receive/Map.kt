@@ -20,6 +20,7 @@ fun AddReceiveRequestItem.toApiRequest(): AddReceiveApiRequestItem {
         price = price,
         salePrice = salePrice,
         amount = amount,
+        exposedPrice = exposedPrice,
         description = description
     )
 }

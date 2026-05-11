@@ -22,11 +22,12 @@ fun AddProductTitleScreenBottomBar(
     name: MutableState<String>,
     price: MutableState<Int?>,
     salePrice: MutableState<Int?>,
+    exposedPrice: MutableState<Int?>,
     propertiesValid: Boolean,
     selectedCategory: CategoryItemModel?,
     properties: List<PropertyModel<*>?>,
     description: MutableState<String?>,
-    onSave: (List<PropertyModel<*>?>, String, Int?, Int?, String?, Id) -> Unit
+    onSave: (List<PropertyModel<*>?>, String, Int?, Int?, Int?, String?, Id) -> Unit
 ) {
     BottomAppBar(contentPadding = PaddingValues(horizontal = 16.dp)) {
         Row(
@@ -45,6 +46,7 @@ fun AddProductTitleScreenBottomBar(
                             name.value,
                             price.value,
                             salePrice.value,
+                            exposedPrice.value,
                             description.value,
                             category.id
                         )

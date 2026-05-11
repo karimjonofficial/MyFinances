@@ -6,13 +6,11 @@ import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.models.Tab
 import com.orka.myfinances.lib.ui.screens.MultipleTabScreen
-import com.orka.myfinances.lib.ui.viewmodel.State
 
 @Composable
 fun CategoryScreen(
     modifier: Modifier = Modifier,
-    state: State<CategoryScreenModel>,
-    interactor: CategoryScreenInteractor,
+    topBar: @Composable () -> Unit,
     tabContent: @Composable (index: Int) -> Unit
 ) {
     val tabs = listOf(
@@ -22,13 +20,7 @@ fun CategoryScreen(
 
     MultipleTabScreen(
         modifier = modifier,
-        topBar = {
-            CategoryScreenTopBar(
-                state = state,
-                onAddProductClick = interactor::addProduct,
-                onAddReceive = interactor::receive
-            )
-        },
+        topBar = topBar,
         tabs = tabs,
         tabContent = tabContent
     )

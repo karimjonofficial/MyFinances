@@ -44,6 +44,7 @@ fun AddReceiveScreen(
     val amount = rememberSaveable { mutableStateOf<Int?>(null) }
     val price = rememberSaveable { mutableStateOf<Int?>(null) }
     val salePrice = rememberSaveable { mutableStateOf<Int?>(null) }
+    val exposedPrice = rememberSaveable { mutableStateOf<Int?>(null) }
     val totalPrice = rememberSaveable { mutableStateOf<Int?>(null) }
     val description = rememberSaveable { mutableStateOf<String?>(null) }
     val sheetVisible = rememberSaveable { mutableStateOf(false) }
@@ -66,6 +67,7 @@ fun AddReceiveScreen(
                 productTitle = title.value,
                 price = price.value,
                 salePrice = salePrice.value,
+                exposedPrice = exposedPrice.value,
                 amount = amount.value,
                 totalPrice = totalPrice.value,
                 description = description.value
@@ -143,6 +145,14 @@ fun AddReceiveScreen(
             VerticalSpacer(8)
             IntegerTextField(
                 modifier = Modifier.fillMaxWidth(),
+                label = { Text(text = stringResource(R.string.exposed_price)) },
+                value = exposedPrice.value,
+                onValueChange = { exposedPrice.value = it }
+            )
+
+            VerticalSpacer(8)
+            IntegerTextField(
+                modifier = Modifier.fillMaxWidth(),
                 label = { Text(text = stringResource(R.string.total_price)) },
                 value = totalPrice.value,
                 onValueChange = { totalPrice.value = it }
@@ -173,6 +183,7 @@ fun AddReceiveScreen(
                 title.value = it
                 price.value = it.defaultPrice
                 salePrice.value = it.defaultSalePrice
+                exposedPrice.value = it.defaultExposedPrice
                 refreshTotalPrice(amount.value, it.defaultPrice)
                 coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
                     if (!sheetState.isVisible) {

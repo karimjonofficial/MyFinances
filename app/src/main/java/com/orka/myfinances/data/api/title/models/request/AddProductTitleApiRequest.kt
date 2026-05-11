@@ -11,5 +11,6 @@ data class AddProductTitleApiRequest(
     val properties: List<PropertyApiRequestModel>,
     @SerialName("default_price") val defaultPrice: Long,
     @SerialName("default_sale_price") val defaultSalePrice: Long,
+    @SerialName("default_exposed_price") val defaultExposedPrice: Long,
     val description: String?
 )

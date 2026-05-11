@@ -35,6 +35,8 @@ fun StockItem.toUiModel(
 ): StockItemUiModel {
     return StockItemUiModel(
         model = toCardModel(formatPrice, formatDecimal),
-        id = this.product.id
+        id = this.product.id,
+        exposedPrice = formatPrice.formatPrice(product.exposedPrice.toDouble()),
+        salePrice = formatPrice.formatPrice(product.price.toDouble())
     )
 }

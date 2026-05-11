@@ -82,6 +82,26 @@ abstract class MapChunkViewModel<TApi, TUi>(
         }
     }
 
+    protected fun tryTransition(produceState: suspend (State<ChunkMapState<TUi>>) -> State<ChunkMapState<TUi>>) {
+        launch {
+            val oldState = state.value
+            if (oldState !is State.Loading) {
+                try {
+                    setState(State.Loading(loading, oldState.value))
+                    val newState = produceState(oldState)
+                    setState(newState)
+                } catch (e: Exception) {
+                    setState(State.Failure(UiText.Str(e.message.toString()), oldState.value))
+                }
+            } else setState(
+                State.Failure(
+                    UiText.Str("Refreshed when state was Loading"),
+                    oldState.value
+                )
+            )
+        }
+    }
+
     protected fun resetPagination() {
         index = 1
     }

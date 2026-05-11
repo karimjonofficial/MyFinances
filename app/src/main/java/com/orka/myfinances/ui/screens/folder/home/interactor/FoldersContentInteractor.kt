@@ -10,4 +10,16 @@ interface FoldersContentInteractor : StateFul {
     fun navigateToNotifications()
     fun navigateToSearch()
     fun navigateToAddTemplate()
+
+    companion object {
+        val dummy = object : FoldersContentInteractor {
+            override fun addFolder(name: String, type: String, templateId: Id?) {}
+            override fun select(folder: FolderUiModel) {}
+            override fun navigateToNotifications() {}
+            override fun navigateToSearch() {}
+            override fun navigateToAddTemplate() {}
+            override fun initialize() {}
+            override fun refresh() {}
+        }
+    }
 }
