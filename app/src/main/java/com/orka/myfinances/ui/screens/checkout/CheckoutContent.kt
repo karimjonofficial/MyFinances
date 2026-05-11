@@ -50,7 +50,9 @@ fun CheckoutContent(
     description: String?,
     printReceipt: Boolean,
     selectedClient: ClientItemModel?,
+    newClientFirstName: String?,
     onOpenClients: () -> Unit,
+    onOpenAddClient: () -> Unit,
     onPriceChanged: (Int?) -> Unit,
     onDescriptionChanged: (String?) -> Unit,
     onPrintReceiptChanged: (Boolean) -> Unit,
@@ -80,7 +82,7 @@ fun CheckoutContent(
 
         VerticalSpacer(16)
         Row {
-            if(selectedClient == null) {
+            if(selectedClient == null && newClientFirstName == null) {
                 Row {
                     Button(
                         contentPadding = ButtonDefaults.contentPaddingFor(
@@ -98,7 +100,7 @@ fun CheckoutContent(
                     }
 
                     HorizontalSpacer(4)
-                    Button(onClick = {}) {//TODO
+                    Button(onClick = onOpenAddClient) {
                         Icon(
                             painter = painterResource(R.drawable.add),
                             contentDescription = null
@@ -108,7 +110,7 @@ fun CheckoutContent(
             } else {
                 Text(
                     modifier = Modifier.clickable { onOpenClients() },
-                    text = selectedClient.title,
+                    text = selectedClient?.title ?: newClientFirstName!!,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
                 )
@@ -186,6 +188,11 @@ private fun CheckoutContentPreview() {
             CheckoutScreenBottomBar(
                 price = 1000,
                 selectedClient = null,
+                newClientFirstName = null,
+                newClientLastName = null,
+                newClientPatronymic = null,
+                newClientPhone = null,
+                newClientAddress = null,
                 interactor = CheckoutScreenInteractor.dummy,
                 description = description,
                 printReceipt = true
@@ -202,7 +209,9 @@ private fun CheckoutContentPreview() {
             description = "",
             printReceipt = false,
             selectedClient = null,
+            newClientFirstName = null,
             onOpenClients = {},
+            onOpenAddClient = {},
             onPriceChanged = {},
             onDescriptionChanged = {},
             onPrintReceiptChanged = {}

@@ -47,6 +47,7 @@ import com.orka.myfinances.data.api.user.UserApi
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.repositories.basket.BasketRepository
+import com.orka.myfinances.data.repositories.client.ClientEvent
 import com.orka.myfinances.data.repositories.debt.DebtEvent
 import com.orka.myfinances.data.repositories.folder.FolderEvent
 import com.orka.myfinances.data.repositories.order.OrderEvent
@@ -82,6 +83,7 @@ class Factory(
     private val receiveFlow = MutableSharedFlow<ReceiveEvent>()
     private val orderFlow = MutableSharedFlow<OrderEvent>()
     private val debtFlow = MutableSharedFlow<DebtEvent>()
+    private val clientFlow = MutableSharedFlow<ClientEvent>()
 
     private val clientApi = ClientApi(httpClient, session.companyId)
     private val folderApi = FolderApi(httpClient, session.officeId, folderFlow)
@@ -269,8 +271,10 @@ class Factory(
         return CheckoutScreenViewModel(
             saleApi = saleApi,
             orderApi = orderApi,
+            clientApi = clientApi,
             saleFlow = saleFlow,
             orderFlow = orderFlow,
+            clientFlow = clientFlow,
             basketRepository = basketRepository,
             logger = logger,
             navigator = navigator,

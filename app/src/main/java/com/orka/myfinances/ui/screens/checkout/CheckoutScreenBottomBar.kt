@@ -19,21 +19,39 @@ import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
 fun CheckoutScreenBottomBar(
     price: Int?,
     selectedClient: ClientItemModel?,
+    newClientFirstName: String?,
+    newClientLastName: String?,
+    newClientPatronymic: String?,
+    newClientPhone: String?,
+    newClientAddress: String?,
     interactor: CheckoutScreenInteractor,
     description: String?,
     printReceipt: Boolean
 ) {
     BottomAppBar(contentPadding = PaddingValues(horizontal = 16.dp)) {
+        val filled = (selectedClient != null || newClientFirstName != null) && price != null
 
         Spacer(modifier = Modifier.weight(1f))
         OutlinedButton(
-            enabled = selectedClient != null && price != null,
+            enabled = filled,
             onClick = {
-                interactor.order(
-                    price = price,
-                    description = description,
-                    clientId = selectedClient!!.id
-                )
+                if (selectedClient != null) {
+                    interactor.order(
+                        price = price,
+                        description = description,
+                        clientId = selectedClient.id
+                    )
+                } else {
+                    interactor.order(
+                        firstName = newClientFirstName!!,
+                        lastName = newClientLastName,
+                        patronymic = newClientPatronymic,
+                        phone = newClientPhone,
+                        address = newClientAddress,
+                        price = price,
+                        description = description
+                    )
+                }
             }
         ) {
             Text(text = stringResource(R.string.order))
@@ -41,14 +59,27 @@ fun CheckoutScreenBottomBar(
 
         HorizontalSpacer(8)
         Button(
-            enabled = selectedClient != null && price != null,
+            enabled = filled,
             onClick = {
-                interactor.sell(
-                    price = price,
-                    description = description,
-                    clientId = selectedClient!!.id,
-                    print = printReceipt
-                )
+                if (selectedClient != null) {
+                    interactor.sell(
+                        price = price,
+                        description = description,
+                        clientId = selectedClient.id,
+                        print = printReceipt
+                    )
+                } else {
+                    interactor.sell(
+                        firstName = newClientFirstName!!,
+                        lastName = newClientLastName,
+                        patronymic = newClientPatronymic,
+                        phone = newClientPhone,
+                        address = newClientAddress,
+                        price = price,
+                        description = description,
+                        print = printReceipt
+                    )
+                }
             }
         ) {
             Text(text = stringResource(R.string.sell))

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -20,6 +21,7 @@ import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenModel
+import com.orka.myfinances.ui.screens.client.list.AddClientDialog
 import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
 import kotlinx.coroutines.launch
 
@@ -35,13 +37,28 @@ fun CheckoutScreen(
     val description = rememberSaveable { mutableStateOf<String?>(null) }
     val printReceipt = rememberSaveable { mutableStateOf(state is State.Success) }
     val selectedClient = retain { mutableStateOf<ClientItemModel?>(null) }
+
+    val newClientFirstName = rememberSaveable { mutableStateOf<String?>(null) }
+    val newClientLastName = rememberSaveable { mutableStateOf<String?>(null) }
+    val newClientPatronymic = rememberSaveable { mutableStateOf<String?>(null) }
+    val newClientPhone = rememberSaveable { mutableStateOf<String?>(null) }
+    val newClientAddress = rememberSaveable { mutableStateOf<String?>(null) }
+
     val sheetVisible = rememberSaveable { mutableStateOf(false) }
-    val sheetState = androidx.compose.material3.rememberModalBottomSheetState()
+    val addClientDialogVisible = rememberSaveable { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
     val clientSheetState = clientSheetViewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
         clientSheetViewModel.initialize()
+    }
+
+    LaunchedEffect(state) {
+        if (state is State.Success) {
+            if (price.value == null) price.value = state.value.price
+            if (!printReceipt.value) printReceipt.value = true
+        }
     }
 
     StatefulScreen(
@@ -52,6 +69,11 @@ fun CheckoutScreen(
                 CheckoutScreenBottomBar(
                     price = price.value,
                     selectedClient = selectedClient.value,
+                    newClientFirstName = newClientFirstName.value,
+                    newClientLastName = newClientLastName.value,
+                    newClientPatronymic = newClientPatronymic.value,
+                    newClientPhone = newClientPhone.value,
+                    newClientAddress = newClientAddress.value,
                     interactor = interactor,
                     description = description.value,
                     printReceipt = printReceipt.value
@@ -60,20 +82,38 @@ fun CheckoutScreen(
         },
         state = state,
         onRetry = interactor::refresh
-    ) { modifier, state ->
+    ) { modifier, model ->
         CheckoutContent(
             modifier = modifier
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 8.dp),
-            items = state.items,
-            price = state.price,
+            items = model.items,
+            price = price.value ?: 0,
             selectedClient = selectedClient.value,
+            newClientFirstName = newClientFirstName.value,
             description = description.value,
             printReceipt = printReceipt.value,
             onOpenClients = { sheetVisible.value = true },
+            onOpenAddClient = { addClientDialogVisible.value = true },
             onPriceChanged = { price.value = it },
             onDescriptionChanged = { description.value = it },
             onPrintReceiptChanged = { printReceipt.value = it }
+        )
+    }
+
+    if (addClientDialogVisible.value) {
+        AddClientDialog(
+            dismissRequest = { addClientDialogVisible.value = false },
+            onSuccess = { firstName, lastName, patronymic, phone, address ->
+                newClientFirstName.value = firstName
+                newClientLastName.value = lastName
+                newClientPatronymic.value = patronymic
+                newClientPhone.value = phone
+                newClientAddress.value = address
+
+                selectedClient.value = null
+                addClientDialogVisible.value = false
+            }
         )
     }
 
@@ -91,6 +131,12 @@ fun CheckoutScreen(
             selectedClient = selectedClient.value,
             onSelected = {
                 selectedClient.value = it
+                newClientFirstName.value = null
+                newClientLastName.value = null
+                newClientPatronymic.value = null
+                newClientPhone.value = null
+                newClientAddress.value = null
+
                 coroutineScope.launch {
                     sheetState.hide()
                 }.invokeOnCompletion {
