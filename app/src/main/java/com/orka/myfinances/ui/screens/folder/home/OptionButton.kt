@@ -37,6 +37,7 @@ fun OptionButton(
         Text(
             text = text,
             style = MaterialTheme.typography.bodyLarge,
+            maxLines = 1,
             fontWeight = FontWeight.Bold
         )
     }
