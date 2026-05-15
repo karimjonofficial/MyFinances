@@ -41,29 +41,16 @@ fun OrderCard(
     order: OrderCardModel,
     onClick: () -> Unit
 ) {
-    if (!order.completed) {
-        if (order.expired) {
-            Card(
-                modifier = modifier,
-                onClick = { onClick() },
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.error,
-                    contentColor = MaterialTheme.colorScheme.onError
-                )
-            ) {
-                OrderCardContent(order = order)
-            }
-        } else {
-            Card(
-                modifier = modifier,
-                onClick = { onClick() },
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                )
-            ) {
-                OrderCardContent(order = order)
-            }
+    if (order.expired) {
+        Card(
+            modifier = modifier,
+            onClick = { onClick() },
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.errorContainer,
+                contentColor = MaterialTheme.colorScheme.onErrorContainer
+            )
+        ) {
+            OrderCardContent(order = order)
         }
     } else {
         OutlinedCard(
@@ -125,8 +112,7 @@ private fun OrderCardContent(
                     .clip(RoundedCornerShape(4.dp))
                     .background(
                         color = when {
-                            order.expired -> MaterialTheme.colorScheme.errorContainer
-                            !order.completed -> MaterialTheme.colorScheme.primaryContainer
+                            order.expired -> MaterialTheme.colorScheme.error
                             else -> MaterialTheme.colorScheme.surfaceVariant
                         }
                     )
@@ -138,8 +124,7 @@ private fun OrderCardContent(
                     Icon(
                         painter = painterResource(R.drawable.shopping_bag_outlined),
                         tint = when {
-                            order.expired -> MaterialTheme.colorScheme.error
-                            !order.completed -> MaterialTheme.colorScheme.primary
+                            order.expired -> MaterialTheme.colorScheme.onError
                             else -> LocalContentColor.current
                         },
                         contentDescription = null
@@ -149,8 +134,7 @@ private fun OrderCardContent(
                     Text(
                         text = order.size,
                         color = when {
-                            order.expired -> MaterialTheme.colorScheme.error
-                            !order.completed -> MaterialTheme.colorScheme.primary
+                            order.expired -> MaterialTheme.colorScheme.onError
                             else -> LocalContentColor.current
                         }
                     )
