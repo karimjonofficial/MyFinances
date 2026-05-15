@@ -15,12 +15,15 @@ import com.orka.myfinances.data.repositories.client.AddClientRequest
 import com.orka.myfinances.data.repositories.client.ClientEvent
 import com.orka.myfinances.data.repositories.order.AddOrderRequest
 import com.orka.myfinances.data.repositories.order.OrderEvent
+import com.orka.myfinances.data.repositories.order.toOrderRequest
 import com.orka.myfinances.data.repositories.sale.AddSaleRequest
 import com.orka.myfinances.data.repositories.sale.SaleEvent
+import com.orka.myfinances.data.repositories.sale.toSaleRequest
 import com.orka.myfinances.lib.data.api.scoped.company.add
 import com.orka.myfinances.lib.data.api.scoped.office.add
 import com.orka.myfinances.lib.data.api.scoped.office.insert
-import com.orka.myfinances.lib.extensions.models.getPrice
+import com.orka.myfinances.lib.extensions.models.getExposedPrice
+import com.orka.myfinances.lib.extensions.models.getSalePrice
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.logger.Logger
@@ -57,7 +60,8 @@ class CheckoutScreenViewModel(
         State.Success(
             value = CheckoutScreenModel(
                 items = items.map { it.toModel(formatPrice, formatDecimal) },
-                price = items.getPrice().toInt(),
+                exposedPrice = items.getExposedPrice().toInt(),
+                salePrice = formatPrice.formatPrice(items.getSalePrice().toDouble())
             )
         )
     },

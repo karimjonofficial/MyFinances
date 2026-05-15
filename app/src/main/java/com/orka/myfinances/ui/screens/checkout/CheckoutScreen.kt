@@ -13,9 +13,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.retain.retain
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.orka.myfinances.R
 import com.orka.myfinances.application.viewmodels.client.bottomsheet.ClientBottomSheetViewModel
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -33,7 +31,7 @@ fun CheckoutScreen(
     state: State<CheckoutScreenModel>,
     clientSheetViewModel: ClientBottomSheetViewModel
 ) {
-    val price = rememberSaveable { mutableStateOf(if (state is State.Success) state.value.price else null) }
+    val price = rememberSaveable { mutableStateOf(if (state is State.Success) state.value.exposedPrice else null) }
     val description = rememberSaveable { mutableStateOf<String?>(null) }
     val printReceipt = rememberSaveable { mutableStateOf(state is State.Success) }
     val selectedClient = retain { mutableStateOf<ClientItemModel?>(null) }
@@ -50,20 +48,27 @@ fun CheckoutScreen(
     val coroutineScope = rememberCoroutineScope()
     val clientSheetState = clientSheetViewModel.uiState.collectAsState()
 
+    val exposed = rememberSaveable(state) { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
         clientSheetViewModel.initialize()
     }
 
     LaunchedEffect(state) {
         if (state is State.Success) {
-            if (price.value == null) price.value = state.value.price
+            if (price.value == null) price.value = state.value.exposedPrice
             if (!printReceipt.value) printReceipt.value = true
         }
     }
 
     StatefulScreen(
         modifier = modifier,
-        title = stringResource(R.string.checkout),
+        topBar = {
+            CheckoutScreenTopBar(
+                exposed = exposed.value,
+                onExposedChange = { exposed.value = !exposed.value }
+            )
+        },
         bottomBar = {
             if (it is State.Success) {
                 CheckoutScreenBottomBar(
@@ -88,7 +93,9 @@ fun CheckoutScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 8.dp),
             items = model.items,
+            hiddenPrice = model.salePrice,
             price = price.value ?: 0,
+            exposed = exposed.value,
             selectedClient = selectedClient.value,
             newClientFirstName = newClientFirstName.value,
             description = description.value,

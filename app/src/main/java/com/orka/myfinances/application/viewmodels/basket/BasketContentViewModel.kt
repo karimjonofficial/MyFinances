@@ -29,7 +29,7 @@ class BasketContentViewModel(
     failure = failure,
     produceSuccess = {
         val items = repository.get()
-        val price = items.sumOf { it.product.salePrice * it.amount }
+        val price = items.sumOf { it.product.exposedPrice * it.amount }
         State.Success(
             value = BasketScreenModel(
                 items = items.map { item -> item.toUiModel(formatPrice, formatDecimal) },

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
@@ -28,6 +27,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.description
+import com.orka.myfinances.fixtures.resources.models.id1
+import com.orka.myfinances.fixtures.resources.name
 import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
@@ -47,7 +48,9 @@ fun CheckoutContent(
     modifier: Modifier = Modifier,
     items: List<BasketItemCardModel>,
     price: Int,
+    hiddenPrice: String,
     description: String?,
+    exposed: Boolean,
     printReceipt: Boolean,
     selectedClient: ClientItemModel?,
     newClientFirstName: String?,
@@ -117,18 +120,25 @@ fun CheckoutContent(
             }
         }
 
-        OutlinedIntegerTextField(
-            modifier = Modifier.width(160.dp),
-            label = stringResource(R.string.total_price),
-            leadingIcon = {
-                Icon(
-                    painter = painterResource(R.drawable.attach_money),
-                    contentDescription = stringResource(R.string.price)
-                )
-            },
-            value = price,
-            onValueChange = { onPriceChanged(it) }
-        )
+        VerticalSpacer(8)
+        Row {
+            OutlinedIntegerTextField(
+                label = stringResource(R.string.total_price),
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(R.drawable.attach_money),
+                        contentDescription = stringResource(R.string.price)
+                    )
+                },
+                value = price,
+                onValueChange = { onPriceChanged(it) }
+            )
+
+            if(exposed) {
+                HorizontalSpacer(16)
+                Text(text = hiddenPrice)
+            }
+        }
 
         if (remainders.isNotEmpty()) {
             VerticalSpacer(4)
@@ -205,10 +215,110 @@ private fun CheckoutContentPreview() {
                 .scaffoldPadding(paddingValues)
                 .padding(horizontal = 8.dp),
             items = items,
-            price = 142312,
+            price = 200012,
+            hiddenPrice = "",
             description = "",
+            exposed = false,
             printReceipt = false,
             selectedClient = null,
+            newClientFirstName = null,
+            onOpenClients = {},
+            onOpenAddClient = {},
+            onPriceChanged = {},
+            onDescriptionChanged = {},
+            onPrintReceiptChanged = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun CheckoutContentWithExposedPricePreview() {
+    val items = listOf(
+        BasketItemCardModel("Product1", "10,000.00 UZS x 10 = 100,000.00 UZS"),
+        BasketItemCardModel("Product2", "10,000.00 UZS x 10 = 100,000.00 UZS")
+    )
+
+    ScaffoldPreview(
+        modifier = Modifier.fillMaxSize(),
+        bottomBar = {
+            CheckoutScreenBottomBar(
+                price = 1000,
+                selectedClient = null,
+                newClientFirstName = null,
+                newClientLastName = null,
+                newClientPatronymic = null,
+                newClientPhone = null,
+                newClientAddress = null,
+                interactor = CheckoutScreenInteractor.dummy,
+                description = description,
+                printReceipt = true
+            )
+        },
+        title = "Checkout"
+    ) { paddingValues ->
+        CheckoutContent(
+            modifier = Modifier
+                .scaffoldPadding(paddingValues)
+                .padding(horizontal = 8.dp),
+            items = items,
+            price = 200012,
+            hiddenPrice = "10, 000 UZS",
+            description = "",
+            exposed = true,
+            printReceipt = false,
+            selectedClient = null,
+            newClientFirstName = null,
+            onOpenClients = {},
+            onOpenAddClient = {},
+            onPriceChanged = {},
+            onDescriptionChanged = {},
+            onPrintReceiptChanged = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun CheckoutContentWithSelectedClientPreview() {
+    val items = listOf(
+        BasketItemCardModel("Product1", "10,000.00 UZS x 10 = 100,000.00 UZS"),
+        BasketItemCardModel("Product2", "10,000.00 UZS x 10 = 100,000.00 UZS")
+    )
+    val client = ClientItemModel(
+        id = id1,
+        title = name
+    )
+
+    ScaffoldPreview(
+        modifier = Modifier.fillMaxSize(),
+        bottomBar = {
+            CheckoutScreenBottomBar(
+                price = 1000,
+                selectedClient = null,
+                newClientFirstName = null,
+                newClientLastName = null,
+                newClientPatronymic = null,
+                newClientPhone = null,
+                newClientAddress = null,
+                interactor = CheckoutScreenInteractor.dummy,
+                description = description,
+                printReceipt = true
+            )
+        },
+        title = "Checkout"
+    ) { paddingValues ->
+        CheckoutContent(
+            modifier = Modifier
+                .scaffoldPadding(paddingValues)
+                .padding(horizontal = 8.dp),
+            items = items,
+            price = 200012,
+            hiddenPrice = "",
+            description = "",
+            exposed = false,
+            printReceipt = false,
+            selectedClient = client,
             newClientFirstName = null,
             onOpenClients = {},
             onOpenAddClient = {},

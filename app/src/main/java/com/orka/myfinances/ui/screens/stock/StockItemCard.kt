@@ -102,7 +102,7 @@ fun StockItemCard(
                     )
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.shopping_cart_outlined),
+                        painter = painterResource(R.drawable.add_shopping_cart),
                         contentDescription = "Add to Basket"
                     )
                 }

@@ -2,6 +2,7 @@ package com.orka.myfinances.fixtures.resources
 
 import kotlin.time.Instant
 
+const val name = "Name"
 const val description = "Lorem ipsum dolor"
 const val productName1 = "Classic Canvas Sneakers"
 const val productName2 = "iPhone 17 Pro Max"

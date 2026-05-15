@@ -16,6 +16,7 @@ data class OrderApiModel(
     val price: Long,
     @SerialName("end_date_time") val endDateTime: Instant? = null,
     val completed: Boolean,
+    @SerialName("completed_date_time") val completedDateTime: Instant?,
     val description: String? = null,
     val items: List<OrderItemApiModel>,
     @SerialName("created_at") val createdAt: Instant,

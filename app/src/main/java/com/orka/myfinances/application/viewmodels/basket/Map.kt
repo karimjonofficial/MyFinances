@@ -22,7 +22,7 @@ fun BasketItem.toModel(
         description = if (product.title.description != null)
             UiText.Str(product.title.description)
         else UiText.Res(R.string.no_description_provided),
-        price = formatPrice.formatPrice(product.salePrice.toDouble()),
+        price = formatPrice.formatPrice(product.exposedPrice.toDouble()),
         amount = formatDecimal.formatDecimal(amount.toDouble()),
         imageRes = R.drawable.furniture1
     )
