@@ -75,6 +75,7 @@ dependencies {
     implementation (libs.ktor.client.auth)
 
     implementation(libs.escpos.printer)
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
 
     // Room
     implementation(libs.androidx.room.runtime)

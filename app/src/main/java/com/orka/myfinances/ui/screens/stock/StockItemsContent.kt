@@ -19,7 +19,7 @@ import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.viewmodel.State
 
 @Composable
-fun StockContent(
+fun StockItemsContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     interactor: StockContentInteractor,
@@ -45,12 +45,12 @@ fun StockContent(
 
 @Preview
 @Composable
-private fun StockContentPreview() {
+private fun StockItemsContentPreview() {
     ScaffoldPreview(
         modifier = Modifier.fillMaxSize(),
         title = stringResource(R.string.warehouse)
     ) { paddingValues ->
-        StockContent(
+        StockItemsContent(
             modifier = Modifier.scaffoldPadding(paddingValues),
             contentPadding = PaddingValues(horizontal = 16.dp),
             interactor = StockContentInteractor.dummy,

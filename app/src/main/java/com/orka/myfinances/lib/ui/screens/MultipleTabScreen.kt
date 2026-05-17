@@ -61,6 +61,7 @@ fun MultipleTabScreen(
                     .weight(1f)
                     .fillMaxWidth(),
                 state = pagerState,
+                userScrollEnabled = false,
             ) { page ->
                 tabContent(tabs[page].index)
             }

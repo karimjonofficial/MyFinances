@@ -85,7 +85,7 @@ fun CheckoutContent(
 
         VerticalSpacer(16)
         Row {
-            if(selectedClient == null && newClientFirstName == null) {
+            if (selectedClient == null && newClientFirstName == null) {
                 Row {
                     Button(
                         contentPadding = ButtonDefaults.contentPaddingFor(
@@ -120,28 +120,43 @@ fun CheckoutContent(
             }
         }
 
-        VerticalSpacer(8)
-        Row {
-            OutlinedIntegerTextField(
-                label = stringResource(R.string.total_price),
-                leadingIcon = {
-                    Icon(
-                        painter = painterResource(R.drawable.attach_money),
-                        contentDescription = stringResource(R.string.price)
-                    )
-                },
-                value = price,
-                onValueChange = { onPriceChanged(it) }
-            )
+        VerticalSpacer(12)
+        OutlinedIntegerTextField(
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text(stringResource(R.string.total_price)) },
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(R.drawable.attach_money),
+                    contentDescription = stringResource(R.string.total_price)
+                )
+            },
+            trailingIcon = {
+                Text(
+                    stringResource(R.string.uzs),
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            value = price,
+            onValueChange = { onPriceChanged(it) }
+        )
 
-            if(exposed) {
-                HorizontalSpacer(16)
-                Text(text = hiddenPrice)
-            }
+        if (exposed) {
+            VerticalSpacer(8)
+            Text(
+                modifier = Modifier.align(Alignment.End),
+                text = hiddenPrice,
+                style = MaterialTheme.typography.bodySmall,
+                fontWeight = FontWeight.Bold
+            )
         }
 
         if (remainders.isNotEmpty()) {
-            VerticalSpacer(4)
+            VerticalSpacer(12)
+            Text(
+                text = stringResource(R.string.quick_discounts),
+                style = MaterialTheme.typography.titleMedium
+            )
+
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)

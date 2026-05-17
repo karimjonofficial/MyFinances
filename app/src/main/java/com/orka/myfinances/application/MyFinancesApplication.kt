@@ -8,8 +8,14 @@ import com.orka.myfinances.data.storages.room.AppDatabase
 import com.orka.myfinances.data.storages.room.LocalSessionStorageImpl
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.printer.pos.BluetoothPrinter
+import net.posprinter.POSConnect
 
 class MyFinancesApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        POSConnect.init(this)
+    }
+
     private val database by lazy {
         Room
             .databaseBuilder(

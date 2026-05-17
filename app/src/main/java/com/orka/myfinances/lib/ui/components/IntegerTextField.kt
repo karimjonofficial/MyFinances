@@ -71,7 +71,8 @@ fun OutlinedIntegerTextField(
     onValueChange: (Int?) -> Unit,
     modifier: Modifier = Modifier,
     label: @Composable (() -> Unit)? = null,
-    leadingIcon: @Composable (() -> Unit)? = null
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
 ) {
     IntegerTextFieldImpl(
         value = value,
@@ -79,6 +80,7 @@ fun OutlinedIntegerTextField(
         modifier = modifier,
         label = label,
         leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
         outlined = true
     )
 }
@@ -108,6 +110,7 @@ private fun IntegerTextFieldImpl(
     onValueChange: (Int?) -> Unit,
     label: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
     outlined: Boolean
 ) {
     var rawText by remember {
@@ -157,6 +160,7 @@ private fun IntegerTextFieldImpl(
             onValueChange = onValueChangeInternal,
             label = label,
             leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             visualTransformation = visualTransformation,
             singleLine = true
@@ -168,6 +172,7 @@ private fun IntegerTextFieldImpl(
             onValueChange = onValueChangeInternal,
             label = label,
             leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             visualTransformation = visualTransformation,
             singleLine = true

@@ -14,7 +14,7 @@ import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.screens.folder.category.CategoryScreen
 import com.orka.myfinances.ui.screens.folder.category.CategoryScreenTopBar
 import com.orka.myfinances.ui.screens.product.list.ProductTitlesContent
-import com.orka.myfinances.ui.screens.stock.StockContent
+import com.orka.myfinances.ui.screens.stock.StockItemsContent
 
 fun categoryEntry(
     modifier: Modifier,
@@ -58,7 +58,7 @@ fun categoryEntry(
         tabContent = { index ->
             val fillMaxSizeModifier = Modifier.fillMaxSize()
             when (index) {
-                0 -> StockContent(
+                0 -> StockItemsContent(
                     modifier = fillMaxSizeModifier,
                     interactor = stockViewModel,
                     state = stockState,

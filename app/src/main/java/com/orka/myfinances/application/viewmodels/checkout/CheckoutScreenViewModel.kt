@@ -30,7 +30,7 @@ import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.BaseViewModel
-import com.orka.myfinances.printer.pos.BluetoothPrinter
+import com.orka.myfinances.printer.Printer
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenModel
@@ -46,7 +46,7 @@ class CheckoutScreenViewModel(
     private val clientFlow: MutableSharedFlow<ClientEvent>,
     private val basketRepository: BasketRepository,
     private val navigator: Navigator,
-    private val printer: BluetoothPrinter,
+    private val printer: Printer,
     private val formatDecimal: FormatDecimal,
     private val formatPrice: FormatPrice,
     loading: UiText,

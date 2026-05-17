@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val printer = BluetoothPrinter(
-                context = this,
+                mainActivity = this,
                 scope = CoroutineScope(Dispatchers.Default)
             )
             val manager = (application as MyFinancesApplication).manager(printer)
