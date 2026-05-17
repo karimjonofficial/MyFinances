@@ -10,6 +10,8 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.orka.myfinances.data.api.sale.models.response.SaleApiModel
+import com.orka.myfinances.lib.format.FormatDecimal
+import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.printer.Printer
 import com.orka.myfinances.printer.PrinterStatus
 import kotlinx.coroutines.CoroutineScope
@@ -25,6 +27,8 @@ import net.posprinter.POSPrinter
 
 class BluetoothPrinter(
     private val mainActivity: Activity,
+    private val formatPrice: FormatPrice,
+    private val formatDecimal: FormatDecimal,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) : Printer {
     private val tag = "BluetoothPrinter"
@@ -141,7 +145,7 @@ class BluetoothPrinter(
 
             sale.items.forEach { item ->
                 printer.printText(
-                    "${item.product.title.name} x ${item.amount}\n",
+                    "${item.product.title.name} x ${formatDecimal.formatDecimal(item.amount.toDouble())}\n",
                     POSConst.ALIGNMENT_LEFT,
                     POSConst.FNT_DEFAULT,
                     POSConst.TXT_1WIDTH
@@ -149,7 +153,7 @@ class BluetoothPrinter(
             }
 
             printer.printText("--------------------------------\n", POSConst.ALIGNMENT_LEFT, POSConst.FNT_DEFAULT, POSConst.TXT_1WIDTH)
-                .printText("TOTAL: ${sale.price}\n", POSConst.ALIGNMENT_RIGHT, POSConst.FNT_BOLD, POSConst.TXT_2WIDTH or POSConst.TXT_1HEIGHT)
+                .printText("TOTAL: ${formatPrice.formatPrice(sale.price.toDouble())}\n", POSConst.ALIGNMENT_RIGHT, POSConst.FNT_BOLD, POSConst.TXT_2WIDTH or POSConst.TXT_1HEIGHT)
                 .feedLine(3)
                 .cutHalfAndFeed(1)
 

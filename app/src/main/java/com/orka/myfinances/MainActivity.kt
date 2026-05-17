@@ -9,8 +9,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.application.MyFinancesApplication
+import com.orka.myfinances.application.factories.Formatter
+import com.orka.myfinances.application.manager.UiManager
 import com.orka.myfinances.printer.pos.BluetoothPrinter
 import com.orka.myfinances.ui.screens.host.HostScreen
 import com.orka.myfinances.ui.theme.MyFinancesTheme
@@ -40,11 +44,18 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            val printer = BluetoothPrinter(
-                mainActivity = this,
-                scope = CoroutineScope(Dispatchers.Default)
-            )
-            val manager = (application as MyFinancesApplication).manager(printer)
+            val formatter = remember { Formatter() }
+            val printer = remember {
+                BluetoothPrinter(
+                    mainActivity = this@MainActivity,
+                    formatPrice = formatter,
+                    formatDecimal = formatter,
+                    scope = CoroutineScope(Dispatchers.Default)
+                )
+            }
+            val manager: UiManager = viewModel {
+                (application as MyFinancesApplication).manager(printer)
+            }
             val uiState = manager.uiState.collectAsState()
 
             MyFinancesTheme {

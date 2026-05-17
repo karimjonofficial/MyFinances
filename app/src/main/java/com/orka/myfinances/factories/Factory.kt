@@ -242,6 +242,7 @@ class Factory(
         return SaleScreenViewModel(
             id = id,
             saleApi = saleApi,
+            printer = printer,
             formatPrice = formatter,
             formatDateTime = formatter,
             loading = loading,

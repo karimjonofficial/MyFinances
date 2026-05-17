@@ -9,7 +9,9 @@ import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.MapSingleViewModel
+import com.orka.myfinances.printer.Printer
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.sale.details.interactor.SaleScreenInteractor
 import com.orka.myfinances.ui.screens.sale.details.interactor.SaleScreenModel
@@ -17,6 +19,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class SaleScreenViewModel(
     id: Id,
+    private val printer: Printer,
     private val saleApi: SaleApi,
     private val formatPrice: FormatPrice,
     private val formatDateTime: FormatDateTime,
@@ -37,6 +40,16 @@ class SaleScreenViewModel(
 
     init {
         initialize()
+    }
+
+    override fun print() {
+        tryTransition {
+            val response = get.getById(id)
+            if(response != null) {
+                printer.print(response)
+                State.Success(map(response))
+            } else State.Failure(failure, it.value)
+        }
     }
 
     override fun navigateToClient(clientId: Id) {

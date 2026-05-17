@@ -22,7 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.fixtures.format.FormatDateTimeImpl
 import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
@@ -51,7 +50,8 @@ fun SaleScreen(
             CenterAlignedTopAppBar(
                 title = { Text(text = stringResource(R.string.sale_details)) },
                 navigationIcon = {
-                    IconButton(onClick = { interactor.back() }) {
+
+                    IconButton(onClick = interactor::back) {
                         Icon(
                             painter = painterResource(R.drawable.arrow_back),
                             contentDescription = null
@@ -59,6 +59,13 @@ fun SaleScreen(
                     }
                 },
                 actions = {
+                    IconButton(onClick = interactor::print) {
+                        Icon(
+                            painter = painterResource(R.drawable.print),
+                            contentDescription = null
+                        )
+                    }
+
                     IconButton(onClick = {}) {
                         Icon(
                             painter = painterResource(R.drawable.more_vert),
@@ -144,11 +151,6 @@ fun SaleScreen(
 @Preview(showBackground = true)
 @Composable
 fun SaleScreenPreview() {
-    val dummyInteractor = object : SaleScreenInteractor {
-        override fun initialize() {}
-        override fun navigateToClient(clientId: Id) {}
-        override fun back() {}
-    }
     MyFinancesTheme {
         SaleScreen(
             state = State.Success(
@@ -158,7 +160,7 @@ fun SaleScreenPreview() {
                     formatDecimal = FormatDecimalImpl()
                 )
             ),
-            interactor = dummyInteractor
+            interactor = SaleScreenInteractor.dummy
         )
     }
 }

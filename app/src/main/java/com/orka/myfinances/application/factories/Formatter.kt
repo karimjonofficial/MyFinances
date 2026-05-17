@@ -20,8 +20,8 @@ import kotlin.time.Instant
 class Formatter : FormatNames, FormatDate, FormatTime, FormatPrice, FormatDecimal, FormatDateTime, FormatLocalDate {
     private val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
     private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-    private val priceFormat = DecimalFormat("#,###.##")
-    private val decimalFormat = DecimalFormat("#,###.##")
+    private val priceFormat = (DecimalFormat.getInstance(Locale.US) as DecimalFormat).apply { applyPattern("#,###.##") }
+    private val decimalFormat = (DecimalFormat.getInstance(Locale.US) as DecimalFormat).apply { applyPattern("#,###.##") }
 
     override fun formatNames(items: List<ProductTitle>): String {
         return items.joinToString { it.name }

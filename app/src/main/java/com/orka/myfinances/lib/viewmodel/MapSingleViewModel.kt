@@ -8,8 +8,8 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 
 abstract class MapSingleViewModel<TApi, TUi>(
     protected val id: Id,
-    private val get: GetById<TApi>,
-    private val map: (TApi) -> TUi,
+    protected val get: GetById<TApi>,
+    protected val map: (TApi) -> TUi,
     loading: UiText,
     failure: UiText,
     logger: Logger

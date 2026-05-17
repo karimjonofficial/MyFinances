@@ -21,6 +21,7 @@ suspend fun ProductTitleApi.getByCategory(
             parameter("category", categoryId.value)
             parameter("page_size", size)
             parameter("page", pageIndex)
+            parameter("ordering", "name")
         }
     )
     return if (response.status == HttpStatusCode.OK) response.body<ChunkApiModel<ProductTitleApiModel>>().map() else null

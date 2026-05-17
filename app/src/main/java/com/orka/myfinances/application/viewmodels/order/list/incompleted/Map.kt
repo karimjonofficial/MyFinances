@@ -1,4 +1,4 @@
-package com.orka.myfinances.application.viewmodels.order.list
+package com.orka.myfinances.application.viewmodels.order.list.incompleted
 
 import com.orka.myfinances.R
 import com.orka.myfinances.data.api.order.models.response.OrderApiModel

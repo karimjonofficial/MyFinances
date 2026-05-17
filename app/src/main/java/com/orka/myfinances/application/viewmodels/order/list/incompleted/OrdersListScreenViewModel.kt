@@ -1,15 +1,26 @@
 package com.orka.myfinances.application.viewmodels.order.list.incompleted
 
-import com.orka.myfinances.application.viewmodels.order.list.OrdersScreenViewModel
+import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.api.order.OrderApi
+import com.orka.myfinances.data.api.order.getChunk
+import com.orka.myfinances.data.api.order.models.response.OrderApiModel
 import com.orka.myfinances.data.repositories.order.OrderEvent
 import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.lib.ui.models.ChunkMapState
 import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.navigation.Navigator
+import com.orka.myfinances.ui.screens.order.list.OrderUiModel
+import com.orka.myfinances.ui.screens.order.list.OrdersScreenInteractor
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 class OrdersListScreenViewModel(
     orderApi: OrderApi,
@@ -17,19 +28,43 @@ class OrdersListScreenViewModel(
     formatPrice: FormatPrice,
     formatDate: FormatDate,
     formatLocalDate: FormatLocalDate,
-    navigator: Navigator,
+    private val navigator: Navigator,
     loading: UiText,
     failure: UiText,
     logger: Logger
-) : OrdersScreenViewModel(
-    orderApi = orderApi,
-    completed = false,
-    events = events,
-    formatPrice = formatPrice,
-    formatDate = formatDate,
-    formatLocalDate = formatLocalDate,
-    navigator = navigator,
+)  : MapChunkViewModel<OrderApiModel, OrderUiModel>(
     loading = loading,
     failure = failure,
+    get = { size, page -> orderApi.getChunk(size, page, false, "end_date_time") },
+    map = { chunk ->
+        val timeZone = TimeZone.currentSystemDefault()
+        val map =
+            chunk.results.groupBy { orders -> orders.endDateTime?.toLocalDateTime(timeZone)?.date }
+                .mapKeys { entry -> if(entry.key != null) formatLocalDate.formatLocalDate(entry.key!!) else "End date time is not provided" }
+                .mapValues { entry ->
+                    entry.value.map { order ->
+                        order.toUiModel(formatPrice, formatDate)
+                    }
+                }
+
+        ChunkMapState(
+            count = chunk.count,
+            pageIndex = chunk.pageIndex,
+            nextPageIndex = chunk.nextPageIndex,
+            previousPageIndex = chunk.previousPageIndex,
+            content = map
+        )
+    },
     logger = logger
-)
+), OrdersScreenInteractor {
+    val uiState = state.asStateFlow()
+
+    init {
+        events.onEach { initialize() }.launchIn(viewModelScope)
+        initialize()
+    }
+
+    override fun select(order: OrderUiModel) {
+        launch { navigator.navigateToOrder(order.id) }
+    }
+}
