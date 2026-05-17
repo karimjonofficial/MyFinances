@@ -1,10 +1,12 @@
 package com.orka.myfinances.application.viewmodels.stock
 
+import com.orka.myfinances.R
 import com.orka.myfinances.data.api.stock.models.StockItemApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.stock.StockItemCardModel
 import com.orka.myfinances.ui.screens.stock.StockItemUiModel
@@ -14,10 +16,14 @@ fun StockItemApiModel.toCardModel(
     formatDecimal: FormatDecimal,
     basketAmount: String? = null
 ): StockItemCardModel {
+    val properties = product.title.properties.joinToString { "${it.field.name}: ${it.value}" }
+
     return StockItemCardModel(
         title = product.title.name,
         price = price,
-        amount = formatDecimal.formatDecimal(amount.toDouble()),
+        amount = "${formatDecimal.formatDecimal(amount.toDouble())} left",
+        properties = UiText.Str(properties),
+        description = if(!product.title.description.isNullOrBlank()) UiText.Str(product.title.description) else UiText.Res(R.string.no_description_provided),
         basketAmount = basketAmount
     )
 }

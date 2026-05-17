@@ -4,6 +4,7 @@ import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.lib.ui.models.UiText
 
 fun List<StockItem>.toMap(
     formatPrice: FormatPrice,
@@ -22,10 +23,14 @@ fun StockItem.toCardModel(
     formatPrice: FormatPrice,
     formatDecimal: FormatDecimal
 ): StockItemCardModel {
+    val properties = product.title.properties.joinToString { "${it.field.name}: ${it.value}" }
+
     return StockItemCardModel(
         title = product.title.name,
         price = formatPrice.formatPrice(product.price.toDouble()),
-        amount = formatDecimal.formatDecimal(amount.toDouble())
+        amount = formatDecimal.formatDecimal(amount.toDouble()),
+        properties = UiText.Str(properties),
+        description = UiText.Str(product.title.description ?: "")
     )
 }
 

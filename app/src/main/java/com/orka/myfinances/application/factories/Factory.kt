@@ -16,12 +16,10 @@ fun factory(
     httpClient: HttpClient,
     navigator: Navigator,
     sessionManager: SessionManager,
+    formatter: Formatter,
     loading: UiText,
     failure: UiText
 ): Factory {
-    val formatter = Formatter()
-    val printer = printer
-
     return Factory(
         logger = logger,
         navigator = navigator,

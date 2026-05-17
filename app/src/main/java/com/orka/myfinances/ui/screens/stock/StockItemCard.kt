@@ -31,6 +31,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.stockItem1
+import com.orka.myfinances.lib.extensions.ui.str
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 
 @Composable
@@ -79,6 +80,15 @@ fun StockItemCard(
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1
+            )
+
+            VerticalSpacer(2)
+
+            Text(
+                text = item.properties.str(),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 2
             )
 
             VerticalSpacer(4)

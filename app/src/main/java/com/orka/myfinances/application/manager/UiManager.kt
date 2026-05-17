@@ -1,5 +1,6 @@
 package com.orka.myfinances.application.manager
 
+import com.orka.myfinances.application.factories.Formatter
 import com.orka.myfinances.application.factories.factory
 import com.orka.myfinances.application.factories.httpClient
 import com.orka.myfinances.application.factories.httpLogger
@@ -25,6 +26,7 @@ class UiManager(
     private val printer: Printer,
     private val loading: UiText,
     private val failure: UiText,
+    private val formatter: Formatter,
     logger: Logger,
 ) : SingleStateViewModel<UiState>(
     initialState = UiState.Initial,
@@ -200,6 +202,7 @@ class UiManager(
             httpClient = httpClient,
             sessionManager = this,
             navigator = navigationManager,
+            formatter = formatter,
             loading = loading,
             failure = failure
         )
