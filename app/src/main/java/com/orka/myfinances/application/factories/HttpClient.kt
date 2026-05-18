@@ -15,7 +15,9 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.header
 import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
@@ -24,11 +26,13 @@ import kotlinx.serialization.json.Json
 fun httpClient(logger: Logger): HttpClient {
     return HttpClient(OkHttp) {
         install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-                prettyPrint = true
-                isLenient = true
-            })
+            json(
+                Json {
+                    ignoreUnknownKeys = true
+                    prettyPrint = true
+                    isLenient = true
+                }
+            )
         }
 
         install(Logging) {
@@ -37,9 +41,9 @@ fun httpClient(logger: Logger): HttpClient {
         }
 
         install(HttpTimeout) {
-            requestTimeoutMillis = 10000
-            connectTimeoutMillis = 10000
-            socketTimeoutMillis = 10000
+            requestTimeoutMillis = 5000
+            connectTimeoutMillis = 5000
+            socketTimeoutMillis = 5000
         }
 
         defaultRequest {
@@ -56,11 +60,13 @@ fun httpClient(
 ): HttpClient {
     return HttpClient(OkHttp) {
         install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-                prettyPrint = true
-                isLenient = true
-            })
+            json(
+                Json {
+                    ignoreUnknownKeys = true
+                    prettyPrint = true
+                    isLenient = true
+                }
+            )
         }
 
         install(Logging) {
@@ -69,13 +75,13 @@ fun httpClient(
         }
 
         install(HttpTimeout) {
-            requestTimeoutMillis = 10000
-            connectTimeoutMillis = 10000
-            socketTimeoutMillis = 10000
+            requestTimeoutMillis = 5000
+            connectTimeoutMillis = 5000
+            socketTimeoutMillis = 5000
         }
 
         HttpResponseValidator {
-            validateResponse  {
+            validateResponse {
                 if (it.status == HttpStatusCode.Unauthorized) {
                     Log.d("HttpClient.Validate", "Unauthorized")
                     onUnauthorized(credentials)
@@ -97,6 +103,7 @@ fun httpClient(
         defaultRequest {
             url(urlString = baseUrl)
             contentType(ContentType.Application.Json)
+            header(HttpHeaders.Connection, "close")
         }
     }
 }

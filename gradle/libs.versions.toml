@@ -21,7 +21,7 @@ ktor = "3.5.0"
 escpos = "3.3.0"
 mockk = "1.14.9"
 room = "2.8.4"
-ksp = "2.3.3"
+ksp = "2.3.8"
 
 [libraries]
 androidx-adaptive = { module = "androidx.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
