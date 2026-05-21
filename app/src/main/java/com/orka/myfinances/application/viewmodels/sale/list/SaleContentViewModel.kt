@@ -1,16 +1,16 @@
 package com.orka.myfinances.application.viewmodels.sale.list
 
 import androidx.lifecycle.viewModelScope
-import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.sale.SaleApi
 import com.orka.myfinances.data.api.sale.models.response.SaleApiModel
 import com.orka.myfinances.data.repositories.sale.SaleEvent
 import com.orka.myfinances.lib.data.api.getChunk
-import com.orka.myfinances.lib.format.FormatDateTime
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.format.FormatTime
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.sale.list.SaleContentInteractor
@@ -29,7 +29,7 @@ class SaleContentViewModel(
     failure: UiText,
     priceFormatter: FormatPrice,
     formatLocalDate: FormatLocalDate,
-    formatDateTime: FormatDateTime,
+    formatTime: FormatTime,
     private val navigator: Navigator,
     logger: Logger
 ) : MapChunkViewModel<SaleApiModel, SaleUiModel>(
@@ -41,7 +41,7 @@ class SaleContentViewModel(
         val map = chunk.results.groupBy { sale -> sale.dateTime.toLocalDateTime(timeZone).date }
             .mapKeys { entry -> formatLocalDate.formatLocalDate(entry.key) }
             .mapValues { entry ->
-                entry.value.map { sale -> sale.map(priceFormatter, formatDateTime) }
+                entry.value.map { sale -> sale.map(priceFormatter, formatTime) }
             }
 
         ChunkMapState(

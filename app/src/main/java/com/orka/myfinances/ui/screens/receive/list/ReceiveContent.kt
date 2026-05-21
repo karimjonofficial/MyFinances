@@ -1,6 +1,5 @@
 package com.orka.myfinances.ui.screens.receive.list
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -9,8 +8,8 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.format.FormatTimeImpl
 import com.orka.myfinances.fixtures.resources.models.receive.receives
-import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
 import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
+import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.models.ChunkMapState
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -26,7 +25,6 @@ fun ReceiveContent(
 ) {
     LazyColumnWithStickyHeaderContent(
         modifier = modifier,
-        contentPadding = PaddingValues(0.dp),
         arrangementSpace = 0.dp,
         state = state,
         refresh = interactor::refresh,

@@ -14,10 +14,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.extensions.ui.str
+import com.orka.myfinances.lib.ui.components.LazyColumnWithStickHeader
+import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.models.ChunkMapState
 import com.orka.myfinances.lib.ui.screens.FailureScreen
-import com.orka.myfinances.lib.ui.components.LazyColumnWithStickHeader
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 
@@ -58,7 +58,7 @@ fun <T> LazyColumnWithStickyHeaderContent(
 @Composable
 fun <T> LazyColumnWithStickyHeaderContent(
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(horizontal = 4.dp),
+    contentPadding: PaddingValues = PaddingValues(horizontal = 0.dp),
     arrangementSpace: Dp = 0.dp,
     state: State<ChunkMapState<T>>,
     loadMore: () -> Unit,

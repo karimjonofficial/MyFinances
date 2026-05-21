@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.extensions.ui.str
+import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.ListItem
 import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
 import com.orka.myfinances.lib.ui.models.ChunkMapState

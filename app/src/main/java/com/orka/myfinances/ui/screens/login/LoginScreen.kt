@@ -34,8 +34,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
-import com.orka.myfinances.lib.extensions.ui.str
+import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
+import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.viewmodel.State

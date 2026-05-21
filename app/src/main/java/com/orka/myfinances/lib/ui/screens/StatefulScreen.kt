@@ -5,8 +5,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
-import com.orka.myfinances.lib.extensions.ui.str
+import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
+import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.viewmodel.State
 

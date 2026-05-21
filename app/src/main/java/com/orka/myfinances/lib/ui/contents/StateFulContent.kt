@@ -2,7 +2,7 @@ package com.orka.myfinances.lib.ui.contents
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.orka.myfinances.lib.extensions.ui.str
+import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.viewmodel.State

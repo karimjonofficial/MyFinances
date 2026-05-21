@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.orka.myfinances.lib.extensions.ui.str
+import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.LazyColumn
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen

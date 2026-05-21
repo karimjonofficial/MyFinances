@@ -25,8 +25,8 @@ import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.office1
 import com.orka.myfinances.fixtures.resources.models.offices
 import com.orka.myfinances.fixtures.resources.models.user1
-import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
-import com.orka.myfinances.lib.extensions.ui.str
+import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
+import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.FooterSpacer
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.Scaffold

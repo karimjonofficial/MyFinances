@@ -21,7 +21,6 @@ fun DebtsHistoryContent(
         state = state,
         refresh = interactor::refresh,
         loadMore = interactor::loadMore,
-        arrangementSpace = 8.dp,
         item = { item ->
             DebtCard(
                 modifier = Modifier.padding(horizontal = 8.dp),

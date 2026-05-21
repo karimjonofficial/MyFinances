@@ -36,8 +36,8 @@ import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.basket.basketItem1
 import com.orka.myfinances.fixtures.resources.models.basket.basketItem2
-import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
-import com.orka.myfinances.lib.extensions.ui.str
+import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
+import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.application.viewmodels.basket.toModel

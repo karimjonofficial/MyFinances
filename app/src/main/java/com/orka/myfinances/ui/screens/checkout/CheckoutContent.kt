@@ -29,7 +29,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.description
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.name
-import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
+import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.OutlinedCommentTextField

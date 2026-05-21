@@ -1,4 +1,4 @@
-package com.orka.myfinances.lib.extensions.ui
+package com.orka.myfinances.lib.ui.extensions
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize

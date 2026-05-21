@@ -13,7 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.product.productTitle1
-import com.orka.myfinances.lib.extensions.ui.str
+import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable

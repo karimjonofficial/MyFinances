@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun CheckoutScreen(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     interactor: CheckoutScreenInteractor,
     state: State<CheckoutScreenModel>,
     clientSheetViewModel: ClientBottomSheetViewModel

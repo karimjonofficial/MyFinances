@@ -11,8 +11,8 @@ import com.orka.myfinances.fixtures.format.FormatDateTimeImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.debt1
 import com.orka.myfinances.fixtures.resources.models.debt2
-import com.orka.myfinances.lib.extensions.ui.description
-import com.orka.myfinances.lib.extensions.ui.scaffoldPadding
+import com.orka.myfinances.lib.ui.extensions.description
+import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.components.ListItem
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 
