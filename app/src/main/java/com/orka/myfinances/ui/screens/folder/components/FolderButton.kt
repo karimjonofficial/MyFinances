@@ -120,7 +120,7 @@ private fun BaseFolderButton(
                     bottomStart = bottomStart
                 )
             )
-            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
             .clickable { onClick() }
             .padding(8.dp)
     ) {
@@ -138,7 +138,7 @@ private fun BaseFolderButton(
                     text = folder.name,
                     softWrap = false,
                     overflow = TextOverflow.Ellipsis,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 

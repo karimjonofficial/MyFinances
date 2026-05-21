@@ -1,5 +1,10 @@
 package com.orka.myfinances.ui.screens.checkout
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -10,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.retain.retain
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -51,8 +57,11 @@ fun CheckoutScreen(
 
     val exposed = rememberSaveable(state) { mutableStateOf(false) }
 
+    val bottomBarVisible = remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
         clientSheetViewModel.initialize()
+        bottomBarVisible.value = true
     }
 
     LaunchedEffect(state) {
@@ -71,19 +80,25 @@ fun CheckoutScreen(
             )
         },
         bottomBar = {
-            if (it is State.Success) {
-                CheckoutScreenBottomBar(
-                    price = price.value,
-                    selectedClient = selectedClient.value,
-                    newClientFirstName = newClientFirstName.value,
-                    newClientLastName = newClientLastName.value,
-                    newClientPatronymic = newClientPatronymic.value,
-                    newClientPhone = newClientPhone.value,
-                    newClientAddress = newClientAddress.value,
-                    interactor = interactor,
-                    description = description.value,
-                    printReceipt = printReceipt.value
-                )
+            AnimatedVisibility(
+                visible = it is State.Success && bottomBarVisible.value,
+                enter = expandVertically() + fadeIn(),
+                exit = shrinkVertically() + fadeOut()
+            ) {
+                if (it is State.Success) {
+                    CheckoutScreenBottomBar(
+                        price = price.value,
+                        selectedClient = selectedClient.value,
+                        newClientFirstName = newClientFirstName.value,
+                        newClientLastName = newClientLastName.value,
+                        newClientPatronymic = newClientPatronymic.value,
+                        newClientPhone = newClientPhone.value,
+                        newClientAddress = newClientAddress.value,
+                        interactor = interactor,
+                        description = description.value,
+                        printReceipt = printReceipt.value
+                    )
+                }
             }
         },
         state = state,
