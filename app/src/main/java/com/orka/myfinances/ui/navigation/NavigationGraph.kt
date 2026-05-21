@@ -3,7 +3,6 @@ package com.orka.myfinances.ui.navigation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scrim
 import androidx.compose.runtime.Composable
@@ -20,7 +19,6 @@ import androidx.navigation3.ui.NavDisplay
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationGraph(
     modifier: Modifier = Modifier,
