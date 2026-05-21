@@ -233,7 +233,7 @@ class Factory(
             navigator = navigator,
             priceFormatter = formatter,
             formatLocalDate = formatter,
-            formatDateTime = formatter,
+            formatTime = formatter,
             logger = logger,
         )
     }

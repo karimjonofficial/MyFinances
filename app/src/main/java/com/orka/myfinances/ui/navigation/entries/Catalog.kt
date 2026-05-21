@@ -1,7 +1,8 @@
 package com.orka.myfinances.ui.navigation.entries
 
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -15,9 +16,9 @@ import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.navigation.entries.home.SelectTemplateBottomSheet
-import com.orka.myfinances.ui.screens.folder.models.TemplateItemModel
 import com.orka.myfinances.ui.screens.folder.catalog.CatalogScreen
 import com.orka.myfinances.ui.screens.folder.components.AddFolderDialog
+import com.orka.myfinances.ui.screens.folder.models.TemplateItemModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,7 +41,7 @@ fun catalogEntry(
     val uiState = viewModel.uiState.collectAsState()
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
     val templatesState = sheetViewModel.uiState.collectAsState()
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
     val sheetVisible = rememberSaveable { mutableStateOf(false) }
     val template = retain { mutableStateOf<TemplateItemModel?>(null) }
     val coroutineScope = rememberCoroutineScope()

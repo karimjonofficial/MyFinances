@@ -1,7 +1,8 @@
 package com.orka.myfinances.ui.navigation.entries.home
 
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -42,7 +43,7 @@ fun HomeScreenContent(
                 sheetViewModel.initialize()
             }
 
-            val sheetState = rememberModalBottomSheetState()
+            val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
             val coroutineScope = rememberCoroutineScope()
             val foldersState = foldersViewModel.uiState.collectAsState()
             val template = retain { mutableStateOf<TemplateItemModel?>(null) }

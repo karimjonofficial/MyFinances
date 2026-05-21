@@ -1,7 +1,8 @@
 package com.orka.myfinances.ui.navigation.entries.debt
 
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -13,10 +14,10 @@ import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.ui.screens.checkout.SelectClientBottomSheet
 import com.orka.myfinances.ui.screens.debt.list.AddDebtDialog
 import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
 import com.orka.myfinances.ui.screens.debt.list.DebtsScreen
-import com.orka.myfinances.ui.screens.checkout.SelectClientBottomSheet
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,7 +33,7 @@ fun debtsEntry(
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
     val clientSheetVisible = rememberSaveable { mutableStateOf(false) }
     val selectedClient = retain { mutableStateOf<ClientItemModel?>(null) }
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
 
     DebtsScreen(
