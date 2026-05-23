@@ -13,43 +13,34 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
-import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
 
 @Composable
 fun CheckoutScreenBottomBar(
-    price: Int?,
-    selectedClient: ClientItemModel?,
-    newClientFirstName: String?,
-    newClientLastName: String?,
-    newClientPatronymic: String?,
-    newClientPhone: String?,
-    newClientAddress: String?,
+    uiState: CheckoutUIState,
     interactor: CheckoutScreenInteractor,
-    description: String?,
-    printReceipt: Boolean
 ) {
     BottomAppBar(contentPadding = PaddingValues(horizontal = 16.dp)) {
-        val filled = (selectedClient != null || newClientFirstName != null) && price != null
+        val filled = (uiState.selectedClient != null || uiState.newClientFirstName != null) && uiState.price != null
 
         Spacer(modifier = Modifier.weight(1f))
         OutlinedButton(
             enabled = filled,
             onClick = {
-                if (selectedClient != null) {
+                if (uiState.selectedClient != null) {
                     interactor.order(
-                        price = price,
-                        description = description,
-                        clientId = selectedClient.id
+                        price = uiState.price,
+                        description = uiState.description,
+                        clientId = uiState.selectedClient!!.id
                     )
                 } else {
                     interactor.order(
-                        firstName = newClientFirstName!!,
-                        lastName = newClientLastName,
-                        patronymic = newClientPatronymic,
-                        phone = newClientPhone,
-                        address = newClientAddress,
-                        price = price,
-                        description = description
+                        firstName = uiState.newClientFirstName!!,
+                        lastName = uiState.newClientLastName,
+                        patronymic = uiState.newClientPatronymic,
+                        phone = uiState.newClientPhone,
+                        address = uiState.newClientAddress,
+                        price = uiState.price,
+                        description = uiState.description
                     )
                 }
             }
@@ -61,23 +52,23 @@ fun CheckoutScreenBottomBar(
         Button(
             enabled = filled,
             onClick = {
-                if (selectedClient != null) {
+                if (uiState.selectedClient != null) {
                     interactor.sell(
-                        price = price,
-                        description = description,
-                        clientId = selectedClient.id,
-                        print = printReceipt
+                        price = uiState.price,
+                        description = uiState.description,
+                        clientId = uiState.selectedClient!!.id,
+                        print = uiState.printReceipt
                     )
                 } else {
                     interactor.sell(
-                        firstName = newClientFirstName!!,
-                        lastName = newClientLastName,
-                        patronymic = newClientPatronymic,
-                        phone = newClientPhone,
-                        address = newClientAddress,
-                        price = price,
-                        description = description,
-                        print = printReceipt
+                        firstName = uiState.newClientFirstName!!,
+                        lastName = uiState.newClientLastName,
+                        patronymic = uiState.newClientPatronymic,
+                        phone = uiState.newClientPhone,
+                        address = uiState.newClientAddress,
+                        price = uiState.price,
+                        description = uiState.description,
+                        print = uiState.printReceipt
                     )
                 }
             }

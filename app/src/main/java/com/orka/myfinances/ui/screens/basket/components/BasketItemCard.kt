@@ -41,6 +41,7 @@ import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.application.viewmodels.basket.toModel
+import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 
 @Composable
 fun BasketItemCard(
@@ -57,7 +58,15 @@ fun BasketItemCard(
         )
     ) {
         Box {
-            Box(modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)) {
+            Box(
+                modifier = Modifier
+                    .padding(
+                        top = 16.dp,
+                        start = 16.dp,
+                        end = 16.dp,
+                        bottom = 8.dp
+                    )
+            ) {
                 Column {
                     Row(
                         modifier = Modifier
@@ -89,7 +98,7 @@ fun BasketItemCard(
 
                             Text(
                                 text = item.properties.ifEmpty {
-                                    stringResource(R.string.no_description_provided)
+                                    stringResource(R.string.no_properties_provided)
                                 },
                                 style = MaterialTheme.typography.bodySmall,
                                 maxLines = 1,
@@ -115,15 +124,22 @@ fun BasketItemCard(
                             )
                         )
 
+                        HorizontalSpacer(8)
                         Row(
                             modifier = Modifier.weight(1f),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.End
                         ) {
+                            Text(text = item.available)
+
+                            HorizontalSpacer(8)
                             IconButton(
                                 onClick = decrease,
+                                enabled = item.decreaseEnabled,
                                 colors = IconButtonDefaults.iconButtonColors(
-                                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                    disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+                                    disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
                                 )
                             ) {
                                 Icon(
@@ -140,9 +156,12 @@ fun BasketItemCard(
 
                             IconButton(
                                 onClick = increase,
+                                enabled = item.increaseEnabled,
                                 colors = IconButtonDefaults.iconButtonColors(
                                     containerColor = MaterialTheme.colorScheme.primary,
-                                    contentColor = MaterialTheme.colorScheme.onPrimary
+                                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                                    disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+                                    disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
                                 )
                             ) {
                                 Icon(
@@ -170,7 +189,12 @@ fun BasketItemCard(
 }
 
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    device = "id:pixel_10_pro_xl",
+    fontScale = 0.85f
+)
 @Composable
 private fun BasketItemCardPreview() {
     ScaffoldPreview(

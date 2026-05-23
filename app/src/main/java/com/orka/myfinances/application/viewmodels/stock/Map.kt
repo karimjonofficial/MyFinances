@@ -12,26 +12,28 @@ import com.orka.myfinances.ui.screens.stock.StockItemCardModel
 import com.orka.myfinances.ui.screens.stock.StockItemUiModel
 
 fun StockItemApiModel.toCardModel(
-    price: String,
+    price: Int,
     formatDecimal: FormatDecimal,
-    basketAmount: String? = null
+    formatPrice: FormatPrice,
+    basketAmount: Int? = null
 ): StockItemCardModel {
     val properties = product.title.properties.joinToString { "${it.field.name}: ${it.value}" }
 
     return StockItemCardModel(
         title = product.title.name,
-        price = price,
+        price = formatPrice.formatPrice(price.toDouble()),
         amount = "${formatDecimal.formatDecimal(amount.toDouble())} left",
         properties = UiText.Str(properties),
         description = if(!product.title.description.isNullOrBlank()) UiText.Str(product.title.description) else UiText.Res(R.string.no_description_provided),
-        basketAmount = basketAmount
+        basketAmount = if(basketAmount != null) formatDecimal.formatDecimal(basketAmount.toDouble()) else null,
+        increaseEnabled = if(basketAmount != null) basketAmount < amount else false
     )
 }
 
 fun StockItemApiModel.toUiModel(
     formatPrice: FormatPrice,
     formatDecimal: FormatDecimal,
-    basketAmount: String? = null
+    basketAmount: Int? = null
 ): StockItemUiModel {
     val price = formatPrice.formatPrice(product.salePrice.toDouble())
     val exposedPrice = formatPrice.formatPrice(product.exposedPrice.toDouble())
@@ -40,7 +42,8 @@ fun StockItemApiModel.toUiModel(
         id = Id(product.id),
         salePrice = price,
         exposedPrice = exposedPrice,
-        model = toCardModel(exposedPrice, formatDecimal, basketAmount),
+        model = toCardModel(product.exposedPrice.toInt(), formatDecimal, formatPrice, basketAmount),
+        amount = amount
     )
 }
 

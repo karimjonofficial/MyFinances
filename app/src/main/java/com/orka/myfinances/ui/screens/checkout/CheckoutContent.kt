@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
@@ -26,7 +28,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.fixtures.resources.description
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.name
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
@@ -34,6 +35,7 @@ import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.OutlinedCommentTextField
 import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
+import com.orka.myfinances.lib.ui.components.SectionTitle
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.ui.screens.checkout.viewmodel.BasketItemCardModel
@@ -47,25 +49,19 @@ import java.util.Locale
 fun CheckoutContent(
     modifier: Modifier = Modifier,
     items: List<BasketItemCardModel>,
-    price: Int,
     hiddenPrice: String,
-    description: String?,
-    exposed: Boolean,
-    printReceipt: Boolean,
-    selectedClient: ClientItemModel?,
-    newClientFirstName: String?,
+    uiState: CheckoutUIState,
     onOpenClients: () -> Unit,
     onOpenAddClient: () -> Unit,
-    onPriceChanged: (Int?) -> Unit,
-    onDescriptionChanged: (String?) -> Unit,
-    onPrintReceiptChanged: (Boolean) -> Unit,
 ) {
+    val scrollState = rememberScrollState()
     val formatter = remember {
         NumberFormat.getIntegerInstance(Locale.US).apply {
             isGroupingUsed = true
         }
     }
 
+    val price = uiState.price ?: 0
     val remainders = remember(price) {
         listOf(10, 100, 1000, 10000, 100000)
             .map { price % it }
@@ -74,7 +70,11 @@ fun CheckoutContent(
             .sorted()
     }
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .verticalScroll(scrollState)
+            .padding(horizontal = 12.dp)
+    ) {
         DividedList(
             modifier = Modifier.fillMaxWidth(),
             title = stringResource(R.string.items_purchased),
@@ -84,8 +84,11 @@ fun CheckoutContent(
         )
 
         VerticalSpacer(16)
+        SectionTitle(text = stringResource(R.string.client))
+
+        VerticalSpacer(4)
         Row {
-            if (selectedClient == null && newClientFirstName == null) {
+            if (uiState.selectedClient == null && uiState.newClientFirstName == null) {
                 Row {
                     Button(
                         contentPadding = ButtonDefaults.contentPaddingFor(
@@ -113,7 +116,7 @@ fun CheckoutContent(
             } else {
                 Text(
                     modifier = Modifier.clickable { onOpenClients() },
-                    text = selectedClient?.title ?: newClientFirstName!!,
+                    text = uiState.selectedClient?.title ?: uiState.newClientFirstName!!,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
                 )
@@ -121,9 +124,11 @@ fun CheckoutContent(
         }
 
         VerticalSpacer(12)
+        SectionTitle(text = stringResource(R.string.total_price))
+
+        VerticalSpacer(4)
         OutlinedIntegerTextField(
             modifier = Modifier.fillMaxWidth(),
-            label = { Text(stringResource(R.string.total_price)) },
             leadingIcon = {
                 Icon(
                     painter = painterResource(R.drawable.attach_money),
@@ -136,11 +141,11 @@ fun CheckoutContent(
                     fontWeight = FontWeight.Bold
                 )
             },
-            value = price,
-            onValueChange = { onPriceChanged(it) }
+            value = uiState.price ?: 0,
+            onValueChange = { uiState.price = it }
         )
 
-        if (exposed) {
+        if (uiState.exposed) {
             VerticalSpacer(8)
             Text(
                 modifier = Modifier.align(Alignment.End),
@@ -151,19 +156,13 @@ fun CheckoutContent(
         }
 
         if (remainders.isNotEmpty()) {
-            VerticalSpacer(12)
-            Text(
-                text = stringResource(R.string.quick_discounts),
-                style = MaterialTheme.typography.titleMedium
-            )
-
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 remainders.forEach { remainder ->
                     SuggestionChip(
-                        onClick = { onPriceChanged(price - remainder) },
+                        onClick = { uiState.price = price - remainder },
                         label = {
                             Text(text = "-${formatter.format(remainder)} ${stringResource(R.string.uzs)}")
                         }
@@ -175,19 +174,19 @@ fun CheckoutContent(
         VerticalSpacer(8)
         OutlinedCommentTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = description,
-            onValueChange = { onDescriptionChanged(it) }
+            value = uiState.description,
+            onValueChange = { uiState.description = it }
         )
 
         VerticalSpacer(8)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onPrintReceiptChanged(!printReceipt) },
+                .clickable { uiState.printReceipt = !uiState.printReceipt },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
-                checked = printReceipt,
+                checked = uiState.printReceipt,
                 onCheckedChange = null
             )
 
@@ -211,16 +210,8 @@ private fun CheckoutContentPreview() {
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             CheckoutScreenBottomBar(
-                price = 1000,
-                selectedClient = null,
-                newClientFirstName = null,
-                newClientLastName = null,
-                newClientPatronymic = null,
-                newClientPhone = null,
-                newClientAddress = null,
+                uiState = CheckoutUIState().apply { price = 1000 },
                 interactor = CheckoutScreenInteractor.dummy,
-                description = description,
-                printReceipt = true
             )
         },
         title = "Checkout"
@@ -230,18 +221,10 @@ private fun CheckoutContentPreview() {
                 .scaffoldPadding(paddingValues)
                 .padding(horizontal = 8.dp),
             items = items,
-            price = 200012,
             hiddenPrice = "",
-            description = "",
-            exposed = false,
-            printReceipt = false,
-            selectedClient = null,
-            newClientFirstName = null,
+            uiState = CheckoutUIState().apply { price = 200012 },
             onOpenClients = {},
             onOpenAddClient = {},
-            onPriceChanged = {},
-            onDescriptionChanged = {},
-            onPrintReceiptChanged = {}
         )
     }
 }
@@ -258,16 +241,8 @@ private fun CheckoutContentWithExposedPricePreview() {
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             CheckoutScreenBottomBar(
-                price = 1000,
-                selectedClient = null,
-                newClientFirstName = null,
-                newClientLastName = null,
-                newClientPatronymic = null,
-                newClientPhone = null,
-                newClientAddress = null,
+                uiState = CheckoutUIState().apply { price = 1000 },
                 interactor = CheckoutScreenInteractor.dummy,
-                description = description,
-                printReceipt = true
             )
         },
         title = "Checkout"
@@ -277,23 +252,18 @@ private fun CheckoutContentWithExposedPricePreview() {
                 .scaffoldPadding(paddingValues)
                 .padding(horizontal = 8.dp),
             items = items,
-            price = 200012,
             hiddenPrice = "10, 000 UZS",
-            description = "",
-            exposed = true,
-            printReceipt = false,
-            selectedClient = null,
-            newClientFirstName = null,
+            uiState = CheckoutUIState().apply { 
+                price = 200012
+                exposed = true
+            },
             onOpenClients = {},
             onOpenAddClient = {},
-            onPriceChanged = {},
-            onDescriptionChanged = {},
-            onPrintReceiptChanged = {}
         )
     }
 }
 
-@Preview
+@Preview(device = "id:pixel_10_pro_xl")
 @Composable
 private fun CheckoutContentWithSelectedClientPreview() {
     val items = listOf(
@@ -309,16 +279,8 @@ private fun CheckoutContentWithSelectedClientPreview() {
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             CheckoutScreenBottomBar(
-                price = 1000,
-                selectedClient = null,
-                newClientFirstName = null,
-                newClientLastName = null,
-                newClientPatronymic = null,
-                newClientPhone = null,
-                newClientAddress = null,
+                uiState = CheckoutUIState().apply { price = 1000 },
                 interactor = CheckoutScreenInteractor.dummy,
-                description = description,
-                printReceipt = true
             )
         },
         title = "Checkout"
@@ -328,18 +290,13 @@ private fun CheckoutContentWithSelectedClientPreview() {
                 .scaffoldPadding(paddingValues)
                 .padding(horizontal = 8.dp),
             items = items,
-            price = 200012,
             hiddenPrice = "",
-            description = "",
-            exposed = false,
-            printReceipt = false,
-            selectedClient = client,
-            newClientFirstName = null,
+            uiState = CheckoutUIState().apply { 
+                price = 200012
+                selectedClient = client
+            },
             onOpenClients = {},
             onOpenAddClient = {},
-            onPriceChanged = {},
-            onDescriptionChanged = {},
-            onPrintReceiptChanged = {}
         )
     }
 }

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,8 +30,9 @@ import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.stockItem1
-import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.extensions.str
+import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
 fun StockItemCard(
@@ -108,7 +108,9 @@ fun StockItemCard(
                         .clip(RoundedCornerShape(12.dp)),
                     colors = IconButtonDefaults.iconButtonColors(
                         containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = MaterialTheme.colorScheme.onPrimary
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                        disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+                        disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
                     )
                 ) {
                     Icon(
@@ -124,10 +126,11 @@ fun StockItemCard(
                 ) {
                     IconButton(
                         onClick = onDecrease,
-                        modifier = Modifier.clip(CircleShape),
                         colors = IconButtonDefaults.iconButtonColors(
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+                            disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
                         )
                     ) {
                         Icon(
@@ -144,11 +147,13 @@ fun StockItemCard(
 
                     IconButton(
                         onClick = onIncrease,
-                        modifier = Modifier.clip(CircleShape),
                         colors = IconButtonDefaults.iconButtonColors(
                             containerColor = MaterialTheme.colorScheme.primary,
-                            contentColor = MaterialTheme.colorScheme.onPrimary
-                        )
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+                            disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                        ),
+                        enabled = item.increaseEnabled
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.add),
@@ -166,19 +171,21 @@ fun StockItemCard(
 @Preview
 @Composable
 private fun ProductCardPreview() {
-    Surface {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            StockItemCard(
-                item = stockItem1.toCardModel(
-                    formatPrice = FormatPriceImpl(),
-                    formatDecimal = FormatDecimalImpl()
-                ),
-                onIncrease = {},
-                onDecrease = {}
-            )
+    MyFinancesTheme {
+        Surface {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                StockItemCard(
+                    item = stockItem1.toCardModel(
+                        formatPrice = FormatPriceImpl(),
+                        formatDecimal = FormatDecimalImpl()
+                    ),
+                    onIncrease = {},
+                    onDecrease = {}
+                )
+            }
         }
     }
 }

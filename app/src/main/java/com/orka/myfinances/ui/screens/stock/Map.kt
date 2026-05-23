@@ -30,7 +30,8 @@ fun StockItem.toCardModel(
         price = formatPrice.formatPrice(product.price.toDouble()),
         amount = formatDecimal.formatDecimal(amount.toDouble()),
         properties = UiText.Str(properties),
-        description = UiText.Str(product.title.description ?: "")
+        description = UiText.Str(product.title.description ?: ""),
+        increaseEnabled = true
     )
 }
 
@@ -42,6 +43,7 @@ fun StockItem.toUiModel(
         model = toCardModel(formatPrice, formatDecimal),
         id = this.product.id,
         exposedPrice = formatPrice.formatPrice(product.exposedPrice.toDouble()),
-        salePrice = formatPrice.formatPrice(product.price.toDouble())
+        salePrice = formatPrice.formatPrice(product.price.toDouble()),
+        amount = amount
     )
 }

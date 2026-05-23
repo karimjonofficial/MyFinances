@@ -27,10 +27,8 @@ fun NavigationGraph(
     navigator: Navigator,
     factory: Factory
 ) {
-    // Track previous size to detect direction
     val prevBackStackSize = remember { mutableIntStateOf(backStack.size) }
-    
-    // Detect if we just navigated
+
     val lastActionWasPop = remember(backStack) {
         val isPop = backStack.size < prevBackStackSize.intValue
         prevBackStackSize.intValue = backStack.size
@@ -50,11 +48,8 @@ fun NavigationGraph(
             )
 
             NavEntry(navEntry = originalEntry) {
-                // Use lifecycle to know when transition is done
                 val lifecycleOwner = LocalLifecycleOwner.current
                 val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
-                
-                // Transition is happening if we are not RESUMED
                 val isTransitioning = lifecycleState == Lifecycle.State.STARTED
                 
                 Box(Modifier.fillMaxSize()) {

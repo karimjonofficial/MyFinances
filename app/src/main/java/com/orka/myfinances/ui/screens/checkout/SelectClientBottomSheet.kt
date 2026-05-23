@@ -9,8 +9,8 @@ import com.orka.myfinances.lib.ui.models.ChunkMapState
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
 
-@Composable
 @OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun SelectClientBottomSheet(
     modifier: Modifier = Modifier,
     state: State<ChunkMapState<ClientItemModel>>,

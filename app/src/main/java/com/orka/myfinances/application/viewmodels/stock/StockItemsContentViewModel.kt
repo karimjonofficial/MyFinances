@@ -43,11 +43,11 @@ class StockItemsContentViewModel(
             .groupBy { it.product.title.name.stickyHeaderKey() }
             .mapValues { (_, stockItems) ->
                 stockItems.map {
-                    val count = counts[Id(it.product.id)]
-                    val amountStr = if (count != null && count > 0) {
-                        formatDecimal.formatDecimal(count.toDouble())
-                    } else null
-                    it.toUiModel(formatPrice, formatDecimal, amountStr)
+                    it.toUiModel(
+                        formatPrice = formatPrice,
+                        formatDecimal = formatDecimal,
+                        basketAmount = counts[Id(it.product.id)]
+                    )
                 }
             }
 
@@ -70,7 +70,7 @@ class StockItemsContentViewModel(
             if (it.categoryId == categoryId) refresh()
         }.launchIn(viewModelScope)
 
-        basketRepository.events.onEach {
+        basketRepository.events.onEach { //TODO it can get optimization for increase and decrease
             tryTransition { oldState ->
                 if (oldState is State.Success) {
                     val counts = basketRepository.getCounts()
@@ -80,7 +80,12 @@ class StockItemsContentViewModel(
                             val amountStr = if (count != null && count > 0) {
                                 formatDecimal.formatDecimal(count.toDouble())
                             } else null
-                            item.copy(model = item.model.copy(basketAmount = amountStr))
+                            item.copy(
+                                model = item.model.copy(
+                                    basketAmount = amountStr,
+                                    increaseEnabled = if (count != null) item.amount > count else false
+                                )
+                            )
                         }
                     }
                     State.Success(oldState.value.copy(content = newContent))

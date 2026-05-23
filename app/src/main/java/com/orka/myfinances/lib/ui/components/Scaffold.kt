@@ -1,5 +1,7 @@
 package com.orka.myfinances.lib.ui.components
 
+import android.os.Build
+import android.view.RoundedCorner
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -7,8 +9,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Scaffold as MScaffold
 
@@ -20,8 +26,10 @@ fun Scaffold(
     floatingActionButton: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit
 ) {
+    val screenRadius = rememberScreenCornerRadius()
+
     MScaffold(
-        modifier = modifier.clip(RoundedCornerShape(16.dp)),
+        modifier = modifier.clip(RoundedCornerShape(screenRadius)),
         topBar = topBar,
         bottomBar = bottomBar,
         floatingActionButton = floatingActionButton,
@@ -51,4 +59,24 @@ fun Scaffold(
         floatingActionButton = floatingActionButton,
         content = content
     )
+}
+
+@Composable
+fun rememberScreenCornerRadius(): Dp {
+    val view = LocalView.current
+    val density = LocalDensity.current
+
+    return remember(view, density) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val insets = view.rootWindowInsets
+            val corner = insets?.getRoundedCorner(RoundedCorner.POSITION_TOP_LEFT)
+            if (corner != null) {
+                with(density) { corner.radius.toDp() }
+            } else {
+                16.dp
+            }
+        } else {
+            16.dp
+        }
+    }
 }

@@ -29,7 +29,7 @@ fun <T> DividedList(
         modifier = modifier
     ) {
         DividedListTitle(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
+            modifier = Modifier.fillMaxWidth(),
             title = title,
             size = items.size
         )
@@ -77,10 +77,7 @@ private fun DividedListTitle(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium
-        )
+        SectionTitle(text = title)
 
         Surface(
             shape = androidx.compose.foundation.shape.RoundedCornerShape(50),

@@ -8,5 +8,6 @@ data class StockItemCardModel(
     val amount: String,
     val properties: UiText,
     val description: UiText,
-    val basketAmount: String? = null
+    val basketAmount: String? = null,
+    val increaseEnabled: Boolean
 )

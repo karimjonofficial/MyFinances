@@ -5,8 +5,11 @@ import com.orka.myfinances.lib.ui.models.UiText
 data class BasketItemCardModel(
     val title: String,
     val properties: String,
+    val available: String,
     val description: UiText,
     val price: String,
     val amount: String,
-    val imageRes: Int
+    val imageRes: Int,
+    val increaseEnabled: Boolean,
+    val decreaseEnabled: Boolean
 )

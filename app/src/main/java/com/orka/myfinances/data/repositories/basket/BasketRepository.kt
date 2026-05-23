@@ -31,10 +31,17 @@ class BasketRepository(private val client: HttpClient) {
                         val response = client.get("products/${id.value}/")
                         if (response.status == HttpStatusCode.OK) {
                             val product = response.body<ProductApiModel>()
-                            BasketItem(product, amount)
-                        } else {
-                            null
-                        }
+                            val stockItem = client.getStockItem(product.id)
+                            if(stockItem != null)
+                                BasketItem(
+                                    product = product,
+                                    amount = amount,
+                                    available = stockItem.amount,
+                                    increaseEnabled = stockItem.amount > amount,
+                                    decreaseEnabled = amount > 1
+                                )
+                            else null
+                        } else null
                     } catch (e: Exception) {
                         Log.d("BasketRepository", "${e.message}")
                         null

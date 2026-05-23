@@ -19,12 +19,13 @@ fun BasketItem.toModel(
     return BasketItemCardModel(
         title = product.title.name,
         properties = propertiesText,
-        description = if (product.title.description != null)
-            UiText.Str(product.title.description)
-        else UiText.Res(R.string.no_description_provided),
+        description = if (product.title.description != null) UiText.Str(product.title.description) else UiText.Res(R.string.no_description_provided),
         price = formatPrice.formatPrice(product.exposedPrice.toDouble()),
         amount = formatDecimal.formatDecimal(amount.toDouble()),
-        imageRes = R.drawable.furniture1
+        imageRes = R.drawable.furniture1,
+        available = "Available: ${formatDecimal.formatDecimal(available.toDouble())}",
+        increaseEnabled = increaseEnabled,
+        decreaseEnabled = decreaseEnabled
     )
 }
 
