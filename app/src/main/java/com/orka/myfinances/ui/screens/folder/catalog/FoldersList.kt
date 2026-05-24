@@ -3,11 +3,13 @@ package com.orka.myfinances.ui.screens.folder.catalog
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,84 +29,91 @@ fun FoldersList(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     items: List<FolderUiModel>,
-    onFolderSelected: (FolderUiModel) -> Unit
+    onFolderSelected: (FolderUiModel) -> Unit,
+    refresh: () -> Unit
 ) {
-    LazyVerticalGrid(
+    PullToRefreshBox(
         modifier = modifier,
-        columns = GridCells.Fixed(2),
-        contentPadding = contentPadding,
-        verticalArrangement = Arrangement.spacedBy(2.dp),
-        horizontalArrangement = Arrangement.spacedBy(2.dp)
+        isRefreshing = false,
+        onRefresh = refresh
     ) {
-        val size = items.size
+        LazyVerticalGrid(
+            modifier = Modifier.fillMaxSize(),
+            columns = GridCells.Fixed(2),
+            contentPadding = contentPadding,
+            verticalArrangement = Arrangement.spacedBy(2.dp),
+            horizontalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            val size = items.size
 
-        item(span = { GridItemSpan(2) }) {
-            Column {
-                Text(
-                    text = stringResource(R.string.categories),
-                    fontWeight = FontWeight.Bold
-                )
-                VerticalSpacer(8)
+            item(span = { GridItemSpan(2) }) {
+                Column {
+                    Text(
+                        text = stringResource(R.string.categories),
+                        fontWeight = FontWeight.Bold
+                    )
+                    VerticalSpacer(8)
+                }
             }
-        }
 
-        if (size > 0) {
-            item {
-                FirstFolderButton(
-                    folder = items[0].model,
-                    onClick = { onFolderSelected(items[0]) }
-                )
-            }
-
-            if (size > 1) {
+            if (size > 0) {
                 item {
-                    SecondFolderButton(
-                        folder = items[1].model,
-                        onClick = { onFolderSelected(items[1]) }
+                    FirstFolderButton(
+                        folder = items[0].model,
+                        onClick = { onFolderSelected(items[0]) }
                     )
                 }
-            }
 
-            if (size > 4) {
-                items(items = items.subList(2, size - (2 - size % 2))) { item ->
-                    FolderButton(
-                        folder = item.model,
-                        onClick = { onFolderSelected(item) }
-                    )
-                }
-            }
-
-            if (size > 2) {
-                if (size % 2 == 0) {
+                if (size > 1) {
                     item {
-                        NotLastFolderButton(
-                            folder = items[size - 2].model,
-                            onClick = { onFolderSelected(items[size - 2]) }
-                        )
-                    }
-
-                    item {
-                        LastFolderButton(
-                            folder = items[size - 1].model,
-                            onClick = { onFolderSelected(items[size - 1]) }
-                        )
-                    }
-
-                    item {
-                        VerticalSpacer(4)
-                    }
-                } else {
-                    item {
-                        NotLastFolderButton(
-                            folder = items[size - 1].model,
-                            onClick = { onFolderSelected(items[size - 1]) }
+                        SecondFolderButton(
+                            folder = items[1].model,
+                            onClick = { onFolderSelected(items[1]) }
                         )
                     }
                 }
-            }
-        } else {
-            item {
-                Text(text = stringResource(R.string.no_folders_found))
+
+                if (size > 4) {
+                    items(items = items.subList(2, size - (2 - size % 2))) { item ->
+                        FolderButton(
+                            folder = item.model,
+                            onClick = { onFolderSelected(item) }
+                        )
+                    }
+                }
+
+                if (size > 2) {
+                    if (size % 2 == 0) {
+                        item {
+                            NotLastFolderButton(
+                                folder = items[size - 2].model,
+                                onClick = { onFolderSelected(items[size - 2]) }
+                            )
+                        }
+
+                        item {
+                            LastFolderButton(
+                                folder = items[size - 1].model,
+                                onClick = { onFolderSelected(items[size - 1]) }
+                            )
+                        }
+
+                        item {
+                            VerticalSpacer(4)
+                        }
+                    } else {
+                        item {
+                            NotLastFolderButton(
+                                folder = items[size - 1].model,
+                                onClick = { onFolderSelected(items[size - 1]) }
+                            )
+                        }
+                    }
+                }
+            } else {
+                item {
+                    Text(text = stringResource(R.string.no_folders_found))
+                }
             }
         }
     }

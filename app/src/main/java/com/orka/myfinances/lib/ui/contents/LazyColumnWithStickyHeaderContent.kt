@@ -3,9 +3,11 @@ package com.orka.myfinances.lib.ui.contents
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
@@ -38,13 +40,20 @@ fun <T> LazyColumnWithStickyHeaderContent(
 
         is State.Success -> {
             val groupedItems = state.value
-            LazyColumnWithStickHeader(
+
+            PullToRefreshBox(
                 modifier = modifier,
-                contentPadding = contentPadding,
-                map = groupedItems,
-                arrangementSpace = arrangementSpace,
-                item = item
-            )
+                isRefreshing = false,
+                onRefresh = refresh
+            ) {
+                LazyColumnWithStickHeader(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = contentPadding,
+                    map = groupedItems,
+                    arrangementSpace = arrangementSpace,
+                    item = item
+                )
+            }
         }
 
         is State.Failure -> FailureScreen(
@@ -66,41 +75,47 @@ fun <T> LazyColumnWithStickyHeaderContent(
     threshold: Int = 5,
     item: @Composable (item: T) -> Unit
 ) {
-    if (state.value != null) {
-        val listState = rememberLazyListState()
+    val listState = rememberLazyListState()
 
-        LaunchedEffect(listState, state) {
-            snapshotFlow {
-                val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
-                val totalItems = listState.layoutInfo.totalItemsCount
-                lastVisible to totalItems
-            }.collect { (lastVisible, totalItems) ->
-                if (lastVisible != null && totalItems - lastVisible <= threshold && state is State.Success) {
-                    if (state.value.nextPageIndex != null) {
-                        loadMore()
+    if (state.value != null) {
+        PullToRefreshBox(
+            modifier = modifier,
+            isRefreshing = state is State.Loading,
+            onRefresh = refresh
+        ) {
+            LaunchedEffect(listState, state) {
+                snapshotFlow {
+                    val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+                    val totalItems = listState.layoutInfo.totalItemsCount
+                    lastVisible to totalItems
+                }.collect { (lastVisible, totalItems) ->
+                    if (lastVisible != null && totalItems - lastVisible <= threshold && state is State.Success) {
+                        if (state.value.nextPageIndex != null) {
+                            loadMore()
+                        }
                     }
                 }
             }
-        }
 
-        LazyColumnWithStickHeader(
-            modifier = modifier,
-            contentPadding = contentPadding,
-            map = state.value!!.content,
-            arrangementSpace = arrangementSpace,
-            listState = listState,
-            footer = {
-                if (state.value!!.nextPageIndex != null && state is State.Loading) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        CircularProgressIndicator()
+            LazyColumnWithStickHeader(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = contentPadding,
+                map = state.value!!.content,
+                arrangementSpace = arrangementSpace,
+                listState = listState,
+                footer = {
+                    if (state.value!!.nextPageIndex != null && state is State.Loading) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
                     }
-                }
-            },
-            item = item
-        )
+                },
+                item = item
+            )
+        }
     } else {
         if (state is State.Loading) {
             LoadingScreen(

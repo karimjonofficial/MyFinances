@@ -15,6 +15,7 @@ fun CatalogContent(
         modifier = modifier,
         items = model.folders,
         contentPadding = PaddingValues(horizontal = 16.dp),
-        onFolderSelected = { interactor.select(it) }
+        onFolderSelected = interactor::select,
+        refresh = interactor::refresh
     )
 }

@@ -1,6 +1,8 @@
 package com.orka.myfinances.lib.ui.contents
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
@@ -28,13 +30,20 @@ fun <T> LazyColumnContent(
 
         is State.Success -> {
             val items = state.value
-            LazyColumn(
+
+            PullToRefreshBox(
                 modifier = modifier,
-                contentPadding = contentPadding,
-                arrangementSpace = arrangementSpace,
-                items = items,
-                item = item
-            )
+                isRefreshing = false,
+                onRefresh = refresh
+            ) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = contentPadding,
+                    arrangementSpace = arrangementSpace,
+                    items = items,
+                    item = item
+                )
+            }
         }
 
         is State.Failure -> FailureScreen(

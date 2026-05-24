@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -39,29 +40,35 @@ fun BasketContent(
     ) { modifier, model ->
         if (model.items.isNotEmpty()) {
             Column(modifier = modifier) {
-                LazyColumn(
+                PullToRefreshBox(
                     modifier = Modifier.weight(1f),
-                    contentPadding = PaddingValues(horizontal = 12.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    isRefreshing = false,
+                    onRefresh = interactor::refresh
                 ) {
-                    item {
-                        Text(
-                            text = stringResource(R.string.items),
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(horizontal = 12.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        item {
+                            Text(
+                                text = stringResource(R.string.items),
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
 
-                    items(items = model.items) { item ->
-                        BasketItemCard(
-                            item = item.model,
-                            increase = { interactor.increase(item) },
-                            decrease = { interactor.decrease(item) },
-                            remove = { interactor.remove(item) }
-                        )
-                    }
+                        items(items = model.items) { item ->
+                            BasketItemCard(
+                                item = item.model,
+                                increase = { interactor.increase(item) },
+                                decrease = { interactor.decrease(item) },
+                                remove = { interactor.remove(item) }
+                            )
+                        }
 
-                    item {
-                        FooterSpacer()
+                        item {
+                            FooterSpacer()
+                        }
                     }
                 }
 

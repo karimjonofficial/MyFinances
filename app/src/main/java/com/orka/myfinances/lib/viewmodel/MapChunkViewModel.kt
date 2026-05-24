@@ -42,7 +42,7 @@ abstract class MapChunkViewModel<TApi, TUi>(
                 val oldState = state.value
                 resetPagination()
                 if(!(oldState is State.Loading && oldState.value != null)) {
-                    setState(State.Loading(loading))
+                    setState(State.Loading(loading, oldState.value))
                 }
                 val chunk = get.getChunk(size, index)
                 if (chunk != null) {

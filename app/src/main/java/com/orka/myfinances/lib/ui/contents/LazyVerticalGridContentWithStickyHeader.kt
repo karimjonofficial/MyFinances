@@ -3,10 +3,12 @@ package com.orka.myfinances.lib.ui.contents
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -33,27 +35,33 @@ fun <T> LazyVerticalGridContentWithStickyHeader(
     item: @Composable (item: T) -> Unit
 ) {
     if (state.value != null) {
-        LazyVerticalGridWithStickHeader(
+        PullToRefreshBox(
             modifier = modifier,
-            contentPadding = contentPadding,
-            columns = columns,
-            reverseLayout = reverseLayout,
-            verticalArrangement = verticalArrangement,
-            horizontalArrangement = horizontalArrangement,
-            map = state.value!!.content,
-            footer = {
-                if (state.value!!.nextPageIndex != null)
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Button(onClick = loadMore) {
-                            Text(text = stringResource(R.string.load_more))
+            isRefreshing = state is State.Loading,
+            onRefresh = refresh
+        ) {
+            LazyVerticalGridWithStickHeader(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = contentPadding,
+                columns = columns,
+                reverseLayout = reverseLayout,
+                verticalArrangement = verticalArrangement,
+                horizontalArrangement = horizontalArrangement,
+                map = state.value!!.content,
+                footer = {
+                    if (state.value!!.nextPageIndex != null)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Button(onClick = loadMore) {
+                                Text(text = stringResource(R.string.load_more))
+                            }
                         }
-                    }
-            },
-            item = item
-        )
+                },
+                item = item
+            )
+        }
     } else {
         if (state is State.Loading) {
             LoadingScreen(
