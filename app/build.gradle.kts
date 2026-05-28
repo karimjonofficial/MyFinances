@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.androidx.room)
 }
 
 android {
@@ -37,6 +38,10 @@ android {
 
     buildFeatures {
         compose = true
+    }
+
+    room {
+        schemaDirectory("$projectDir/schemas")
     }
 }
 
@@ -74,7 +79,6 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation (libs.ktor.client.auth)
 
-    implementation(libs.escpos.printer)
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
 
     // Room
