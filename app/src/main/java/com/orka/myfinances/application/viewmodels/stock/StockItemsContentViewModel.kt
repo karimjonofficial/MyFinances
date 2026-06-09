@@ -1,16 +1,16 @@
 package com.orka.myfinances.application.viewmodels.stock
 
 import androidx.lifecycle.viewModelScope
-import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.stock.StockApi
-import com.orka.myfinances.data.api.stock.models.StockItemApiModel
 import com.orka.myfinances.data.api.stock.getByCategory
+import com.orka.myfinances.data.api.stock.models.StockItemApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.stock.StockEvent
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkMapState
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -37,7 +37,7 @@ class StockItemsContentViewModel(
     failure = failure,
     get = { size, page -> stockApi.getByCategory(size, page, categoryId) },
     map = { chunk ->
-        val counts = basketRepository.getCounts()
+        val basketItems = basketRepository.get()
         val content = chunk.results
             .sortedBy { it.product.title.name }
             .groupBy { it.product.title.name.stickyHeaderKey() }
@@ -46,7 +46,7 @@ class StockItemsContentViewModel(
                     it.toUiModel(
                         formatPrice = formatPrice,
                         formatDecimal = formatDecimal,
-                        basketAmount = counts[Id(it.product.id)]
+                        basketAmount = basketItems.find { basketItem -> basketItem.id == Id(it.product.id) }?.amount
                     )
                 }
             }
@@ -73,17 +73,21 @@ class StockItemsContentViewModel(
         basketRepository.events.onEach { //TODO it can get optimization for increase and decrease
             tryTransition { oldState ->
                 if (oldState is State.Success) {
-                    val counts = basketRepository.getCounts()
+                    val basketItems = basketRepository.get()
                     val newContent = oldState.value.content.mapValues { (_, items) ->
                         items.map { item ->
-                            val count = counts[item.id]
-                            val amountStr = if (count != null && count > 0) {
-                                formatDecimal.formatDecimal(count.toDouble())
-                            } else null
+                            val basketItem = basketItems.find { it.id == item.id }
+                            val amountStr = if (basketItem != null && basketItem.amount > 0) {
+                                logger.log("StockItemsContentViewModel", "BasketItem found: ${basketItem.id}")
+                                formatDecimal.formatDecimal(basketItem.amount.toDouble())
+                            } else {
+                                logger.log("StockItemsContentViewModel", "BasketItem not found: ${item.id}")
+                                null
+                            }
                             item.copy(
                                 model = item.model.copy(
                                     basketAmount = amountStr,
-                                    increaseEnabled = if (count != null) item.amount > count else false
+                                    increaseEnabled = if (basketItem != null) item.amount > basketItem.amount else false
                                 )
                             )
                         }
@@ -95,7 +99,10 @@ class StockItemsContentViewModel(
     }
 
     override fun addToBasket(id: Id) {
-        launch { basketRepository.add(id, 1) }
+        launch {
+            logger.log("StockItemsContentViewModel", "Add to basket")
+            basketRepository.add(id, 1)
+        }
     }
 
     override fun removeFromBasket(id: Id) {

@@ -63,7 +63,6 @@ fun PropertiesCard(
                 fields = fields,
                 initialProperties = initialProperties,
                 onSuccess = { model ->//TODO put it inside view model
-                    Log.d("Properties(fields: ${fields.size})", "Size: ${properties.size}")
                     val index = properties.indexOfFirst { it?.fieldId == model.fieldId }
                     if (index == -1) {
                         Log.d("Properties", "Add a new model($model)")

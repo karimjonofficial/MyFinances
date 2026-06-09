@@ -96,7 +96,7 @@ class Factory(
     private val officeApi = OfficeApi(session.companyId, httpClient)
     private val userApi = UserApi(httpClient)
     private val stockApi = StockApi(session.officeId, httpClient)
-    private val basketRepository = BasketRepository(httpClient)
+    private val basketRepository = BasketRepository()
 
     fun foldersViewModel(): FoldersContentViewModel {
         return FoldersContentViewModel(
@@ -194,6 +194,7 @@ class Factory(
     fun basketViewModel(): BasketContentViewModel {
         return BasketContentViewModel(
             repository = basketRepository,
+            stockApi = stockApi,
             navigator = navigator,
             formatPrice = formatter,
             formatDecimal = formatter,
@@ -231,9 +232,10 @@ class Factory(
             saleApi = saleApi,
             events = saleFlow,
             navigator = navigator,
-            priceFormatter = formatter,
+            formatPrice = formatter,
             formatLocalDate = formatter,
             formatTime = formatter,
+            formatDecimal = formatter,
             logger = logger,
         )
     }
@@ -270,6 +272,7 @@ class Factory(
 
     fun checkoutViewModel(): CheckoutScreenViewModel {
         return CheckoutScreenViewModel(
+            stockApi = stockApi,
             saleApi = saleApi,
             orderApi = orderApi,
             clientApi = clientApi,

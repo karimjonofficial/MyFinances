@@ -12,7 +12,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.application.MyFinancesApplication
-import com.orka.myfinances.application.manager.UiManager
 import com.orka.myfinances.ui.screens.host.HostScreen
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
@@ -39,15 +38,17 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            val manager: UiManager = viewModel {
-                (application as MyFinancesApplication).manager(this@MainActivity)
+            val app = application as MyFinancesApplication
+            val manager = viewModel {
+                app.manager(this@MainActivity)
             }
             val uiState = manager.uiState.collectAsState()
 
             MyFinancesTheme {
                 HostScreen(
                     modifier = Modifier.fillMaxSize(),
-                    state = uiState.value
+                    state = uiState.value,
+                    interactor = manager
                 )
             }
         }

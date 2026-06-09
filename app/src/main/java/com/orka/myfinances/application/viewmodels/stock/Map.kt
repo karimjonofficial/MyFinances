@@ -22,7 +22,7 @@ fun StockItemApiModel.toCardModel(
     return StockItemCardModel(
         title = product.title.name,
         price = formatPrice.formatPrice(price.toDouble()),
-        amount = "${formatDecimal.formatDecimal(amount.toDouble())} left",
+        amount = formatDecimal.formatDecimal(amount.toDouble()),
         properties = UiText.Str(properties),
         description = if(!product.title.description.isNullOrBlank()) UiText.Str(product.title.description) else UiText.Res(R.string.no_description_provided),
         basketAmount = if(basketAmount != null) formatDecimal.formatDecimal(basketAmount.toDouble()) else null,

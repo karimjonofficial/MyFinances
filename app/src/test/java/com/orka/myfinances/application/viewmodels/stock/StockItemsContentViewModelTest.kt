@@ -9,6 +9,7 @@ import com.orka.myfinances.data.api.stock.models.StockItemApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.basket.BasketEvent
 import com.orka.myfinances.data.repositories.basket.BasketRepository
+import com.orka.myfinances.data.repositories.basket.MinBasketItem
 import com.orka.myfinances.data.repositories.stock.StockEvent
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
@@ -24,7 +25,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.Collections.emptyMap
 
 class StockItemsContentViewModelTest : MainDispatcherContext() {
     private val stockApi = mockk<StockApi>()
@@ -45,7 +45,7 @@ class StockItemsContentViewModelTest : MainDispatcherContext() {
         every { Log.d(any(), any()) } returns 0
         mockkStatic("com.orka.myfinances.data.api.stock.GetByCategoryKt")
         every { basketRepository.events } returns basketEvents
-        every { basketRepository.getCounts() } returns emptyMap()
+        coEvery { basketRepository.get() } returns emptyList()
         every { formatPrice.formatPrice(any()) } returns "Price"
         every { formatDecimal.formatDecimal(any()) } returns "1.0"
     }
@@ -65,7 +65,7 @@ class StockItemsContentViewModelTest : MainDispatcherContext() {
         )
 
         coEvery { stockApi.getByCategory(any(), any(), any()) } returns chunk
-        every { basketRepository.getCounts() } returns mapOf(Id(101) to 5)
+        coEvery { basketRepository.get() } returns listOf(MinBasketItem(Id(101), 5))
 
         val viewModel = StockItemsContentViewModel(
             categoryId = categoryId,
@@ -103,7 +103,7 @@ class StockItemsContentViewModelTest : MainDispatcherContext() {
         )
 
         coEvery { stockApi.getByCategory(any(), any(), any()) } returns chunk
-        every { basketRepository.getCounts() } returns emptyMap()
+        coEvery { basketRepository.get() } returns emptyList()
 
         val viewModel = StockItemsContentViewModel(
             categoryId = categoryId,
@@ -127,8 +127,8 @@ class StockItemsContentViewModelTest : MainDispatcherContext() {
             assertEquals(null, item.model.basketAmount)
 
             // Update basket
-            every { basketRepository.getCounts() } returns mapOf(Id(101) to 3)
-            basketEvents.emit(BasketEvent)
+            coEvery { basketRepository.get() } returns listOf(MinBasketItem(Id(101), 3))
+            basketEvents.emit(BasketEvent.FullRefresh)
 
             state = awaitItem()
             while (state !is State.Success || (state.value.content.values.flatten().first().model.basketAmount == null)) {

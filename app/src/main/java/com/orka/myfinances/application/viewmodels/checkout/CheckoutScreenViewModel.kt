@@ -8,9 +8,11 @@ import com.orka.myfinances.data.api.order.toApiRequest
 import com.orka.myfinances.data.api.sale.SaleApi
 import com.orka.myfinances.data.api.sale.models.response.SaleApiModel
 import com.orka.myfinances.data.api.sale.toApiRequest
+import com.orka.myfinances.data.api.stock.StockApi
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.Basket
 import com.orka.myfinances.data.repositories.basket.BasketRepository
+import com.orka.myfinances.data.repositories.basket.getBasketItems
 import com.orka.myfinances.data.repositories.client.AddClientRequest
 import com.orka.myfinances.data.repositories.client.ClientEvent
 import com.orka.myfinances.data.repositories.order.AddOrderRequest
@@ -41,6 +43,7 @@ class CheckoutScreenViewModel(
     private val saleApi: SaleApi,
     private val orderApi: OrderApi,
     private val clientApi: ClientApi,
+    private val stockApi: StockApi,
     private val orderFlow: MutableSharedFlow<OrderEvent>,
     private val saleFlow: MutableSharedFlow<SaleEvent>,
     private val clientFlow: MutableSharedFlow<ClientEvent>,
@@ -56,7 +59,9 @@ class CheckoutScreenViewModel(
     loading = loading,
     failure = failure,
     produceSuccess = {
-        val items = basketRepository.get()
+        val minItems = basketRepository.get()
+        val items = getBasketItems(minItems, stockApi)
+
         State.Success(
             value = CheckoutScreenModel(
                 items = items.map { it.toModel(formatPrice, formatDecimal) },
@@ -73,34 +78,11 @@ class CheckoutScreenViewModel(
         initialize()
     }
 
-    override fun sell(
-        clientId: Id,
-        price: Int?,
-        description: String?,
-        print: Boolean
-    ) {
-        launch {
-            try {
-                if (price != null) {
-                    setState(State.Loading(loading))
-                    val items = basketRepository.get()
-                    val basket = Basket(price, description, items)
-                    val response: SaleApiModel? = saleApi.add(
-                        request = basket.toSaleRequest(clientId),
-                        map = AddSaleRequest::toApiRequest
-                    )
-                    if (response != null) {
-                        if (print) printer.print(response)
-                        clearBasket()
-                        saleFlow.emit(SaleEvent)
-                        navigator.back()
-                    } else setState(State.Failure(failure))
-                } else setState(State.Failure(failure))
-            } catch (e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString())))
-            }
+    override fun sell(clientId: Id, price: Int?, description: String?, print: Boolean) =
+        tryTransition { state ->
+            if (performSell(clientId, price, description, print)) state
+            else State.Failure(failure, state.value)
         }
-    }
 
     override fun sell(
         firstName: String,
@@ -111,47 +93,17 @@ class CheckoutScreenViewModel(
         price: Int?,
         description: String?,
         print: Boolean
-    ) {
-        launch {
-            try {
-                setState(State.Loading(loading))
-                val clientResponse: ClientApiModel? = clientApi.add(
-                    request = AddClientRequest(firstName, lastName, patronymic, phone, address),
-                    map = AddClientRequest::toApiRequest
-                )
-                if (clientResponse != null) {
-                    clientFlow.emit(ClientEvent)
-                    sell(Id(clientResponse.id), price, description, print)
-                } else {
-                    setState(State.Failure(failure))
-                }
-            } catch (e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString())))
-            }
-        }
+    ) = tryTransition { state ->
+        val id = createClient(firstName, lastName, patronymic, phone, address)
+        if (id != null && performSell(id, price, description, print)) state
+        else State.Failure(failure, state.value)
     }
 
-    override fun order(clientId: Id, price: Int?, description: String?) {
-        launch {
-            if (price != null) {
-                val items = basketRepository.get()
-                val basket = Basket(price, description, items)
-                try {
-                    val created = orderApi.insert(
-                        request = basket.toOrderRequest(clientId),
-                        map = AddOrderRequest::toApiRequest,
-                    )
-                    if (created) {
-                        clearBasket()
-                        orderFlow.emit(OrderEvent)
-                        navigator.back()
-                    }
-                } catch (e: Exception) {
-                    setState(State.Failure(UiText.Str(e.message.toString())))
-                }
-            }
+    override fun order(clientId: Id, price: Int?, description: String?) =
+        tryTransition { state ->
+            if (performOrder(clientId, price, description)) state
+            else State.Failure(failure, state.value)
         }
-    }
 
     override fun order(
         firstName: String,
@@ -161,24 +113,72 @@ class CheckoutScreenViewModel(
         address: String?,
         price: Int?,
         description: String?
-    ) {
-        launch {
-            try {
-                setState(State.Loading(loading))
-                val clientResponse: ClientApiModel? = clientApi.add(
-                    request = AddClientRequest(firstName, lastName, patronymic, phone, address),
-                    map = AddClientRequest::toApiRequest
-                )
-                if (clientResponse != null) {
-                    clientFlow.emit(ClientEvent)
-                    order(Id(clientResponse.id), price, description)
-                } else {
-                    setState(State.Failure(failure))
-                }
-            } catch (e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString())))
-            }
+    ) = tryTransition { state ->
+        val id = createClient(firstName, lastName, patronymic, phone, address)
+        if (id != null && performOrder(id, price, description)) state
+        else State.Failure(failure, state.value)
+    }
+
+    private suspend fun createClient(
+        firstName: String,
+        lastName: String?,
+        patronymic: String?,
+        phone: String?,
+        address: String?
+    ): Id? {
+        val response: ClientApiModel? = clientApi.add(
+            request = AddClientRequest(firstName, lastName, patronymic, phone, address),
+            map = AddClientRequest::toApiRequest
+        )
+        if (response != null) {
+            clientFlow.emit(ClientEvent)
+            return Id(response.id)
         }
+        return null
+    }
+
+    private suspend fun performSell(
+        clientId: Id,
+        price: Int?,
+        description: String?,
+        print: Boolean
+    ): Boolean {
+        if (price == null) return false
+        val items = getBasketItems(basketRepository.get(), stockApi)
+        val basket = Basket(price, description, items)
+        val response: SaleApiModel? = saleApi.add(
+            request = basket.toSaleRequest(clientId),
+            map = AddSaleRequest::toApiRequest
+        )
+        if (response != null) {
+            if (print) printer.print(response)
+            clearBasket()
+            saleFlow.emit(SaleEvent)
+            navigator.back()
+            return true
+        }
+        return false
+    }
+
+    private suspend fun performOrder(
+        clientId: Id,
+        price: Int?,
+        description: String?
+    ): Boolean {
+        if (price == null) return false
+        val items = getBasketItems(basketRepository.get(), stockApi)
+        val basket = Basket(price, description, items)
+        val created = orderApi.insert(
+            request = basket.toOrderRequest(clientId),
+            map = AddOrderRequest::toApiRequest,
+        )
+        if (created) {
+            clearBasket()
+            orderFlow.emit(OrderEvent)
+            navigator.back()
+            return true
+        }
+        return false
     }
 
     private suspend fun clearBasket() {

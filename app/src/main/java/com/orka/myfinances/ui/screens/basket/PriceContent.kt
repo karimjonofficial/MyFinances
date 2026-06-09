@@ -50,7 +50,10 @@ fun PriceContent(
             )
         }
 
-        Button(onClick = { interactor.checkout() }) {
+        Button(
+            onClick = interactor::checkout,
+            enabled = model.sellable
+        ) {
             Text(text = stringResource(R.string.checkout))
         }
     }

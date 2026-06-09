@@ -11,7 +11,7 @@ abstract class MapChunkViewModel<TApi, TUi>(
     protected val loading: UiText,
     protected val failure: UiText,
     private val get: GetChunk<TApi>,
-    private val map: (Chunk<TApi>) -> ChunkMapState<TUi>,
+    private val map: suspend (Chunk<TApi>) -> ChunkMapState<TUi>,
     logger: Logger
 ) : StateFulViewModel<State<ChunkMapState<TUi>>>(
     initialState = State.Loading(loading),

@@ -99,7 +99,8 @@ private fun BasketContentPreview() {
                             FormatDecimalImpl()
                         )
                     },
-                    price = "100000.00 UZS"
+                    price = "100000.00 UZS",
+                    sellable = true
                 )
             ),
             interactor = BasketInteractor.dummy

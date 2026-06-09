@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.checkout
 
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -10,6 +11,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CheckoutScreenTopBar(
     modifier: Modifier = Modifier,

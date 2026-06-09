@@ -8,13 +8,15 @@ import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.ui.navigation.MainScreen
+import com.orka.myfinances.ui.screens.host.viewmodel.HostScreenInteractor
 import com.orka.myfinances.ui.screens.host.viewmodel.UiState
 import com.orka.myfinances.ui.screens.login.LoginScreen
 
 @Composable
 fun HostScreen(
     modifier: Modifier = Modifier,
-    state: UiState
+    state: UiState,
+    interactor: HostScreenInteractor
 ) {
     when (state) {
         is UiState.Initial -> SplashScreen(modifier)
@@ -49,6 +51,7 @@ fun HostScreen(
         is UiState.Failure -> {
             FailureScreen(
                 modifier = modifier,
+                retry = interactor::initialize,
                 message = state.message.str()
             )
         }

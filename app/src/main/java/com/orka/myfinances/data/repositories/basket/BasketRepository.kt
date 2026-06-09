@@ -1,85 +1,69 @@
 package com.orka.myfinances.data.repositories.basket
 
-import android.util.Log
-import com.orka.myfinances.data.api.product.ProductApiModel
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.data.models.basket.BasketItem
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.request.get
-import io.ktor.http.HttpStatusCode
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-class BasketRepository(private val client: HttpClient) {
+class BasketRepository {
     private val mutex = Mutex()
-    private val items = mutableMapOf<Id, Int>()
+    private val items = mutableListOf<MinBasketItem>()
 
     private val _events = MutableSharedFlow<BasketEvent>()
     val events = _events.asSharedFlow()
 
-    suspend fun get(): List<BasketItem> = mutex.withLock {
-        coroutineScope {
-            items.map { (id, amount) ->
-                async {
-                    try {
-                        val response = client.get("products/${id.value}/")
-                        if (response.status == HttpStatusCode.OK) {
-                            val product = response.body<ProductApiModel>()
-                            val stockItem = client.getStockItem(product.id)
-                            if(stockItem != null)
-                                BasketItem(
-                                    product = product,
-                                    amount = amount,
-                                    available = stockItem.amount,
-                                    increaseEnabled = stockItem.amount > amount,
-                                    decreaseEnabled = amount > 1
-                                )
-                            else null
-                        } else null
-                    } catch (e: Exception) {
-                        Log.d("BasketRepository", "${e.message}")
-                        null
-                    }
-                }
-            }.awaitAll().filterNotNull()
-        }
+    suspend fun get(): List<MinBasketItem> = mutex.withLock {
+        return items
     }
-
-    fun getCounts(): Map<Id, Int> = items.toMap()
 
     suspend fun add(id: Id, amount: Int) {
         mutex.withLock {
-            items[id] = (items[id] ?: 0) + amount
-            emit()
+            val index = indexOf(id)
+            if(index != null) {
+                val item = items[index]
+                val newAmount = item.amount + amount
+                items[index] = item.copy(amount = newAmount)
+                _events.emit(BasketEvent.AmountChanged(id, newAmount))
+            } else {
+                items.add(MinBasketItem(id, amount))
+                _events.emit(BasketEvent.FullRefresh)
+            }
         }
     }
 
     suspend fun remove(id: Id, amount: Int) {
         mutex.withLock {
-            val currentAmount = items[id] ?: 0
-            if (currentAmount > amount) {
-                items[id] = currentAmount - amount
-            } else {
-                items.remove(id)
+            val index = indexOf(id)
+            if (index != null) {
+                val item = items[index]
+                val currentAmount = item.amount
+
+                if (currentAmount > amount) {
+                    val newAmount = currentAmount - amount
+                    items[index] = item.copy(amount = newAmount)
+                    _events.emit(BasketEvent.AmountChanged(id, newAmount))
+                } else {
+                    items.removeAt(index)
+                    _events.emit(BasketEvent.ItemRemoved(id))
+                }
             }
-            emit()
         }
     }
 
     suspend fun clear() {
         mutex.withLock {
             items.clear()
-            emit()
+            _events.emit(BasketEvent.Clear)
         }
     }
 
-    private suspend fun emit() {
-        _events.emit(BasketEvent)
+    private fun find(id: Id): MinBasketItem? {
+        return items.find { it.id == id }
+    }
+
+    private fun indexOf(id: Id): Int? {
+        val item = find(id)
+        return if(item != null) items.indexOf(item) else null
     }
 }

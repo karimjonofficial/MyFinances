@@ -5,6 +5,7 @@ import com.orka.myfinances.data.api.sale.SaleApi
 import com.orka.myfinances.data.api.sale.models.response.SaleApiModel
 import com.orka.myfinances.data.repositories.sale.SaleEvent
 import com.orka.myfinances.lib.data.api.getChunk
+import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
@@ -27,7 +28,8 @@ class SaleContentViewModel(
     events: Flow<SaleEvent>,
     loading: UiText,
     failure: UiText,
-    priceFormatter: FormatPrice,
+    formatPrice: FormatPrice,
+    formatDecimal: FormatDecimal,
     formatLocalDate: FormatLocalDate,
     formatTime: FormatTime,
     private val navigator: Navigator,
@@ -41,7 +43,7 @@ class SaleContentViewModel(
         val map = chunk.results.groupBy { sale -> sale.dateTime.toLocalDateTime(timeZone).date }
             .mapKeys { entry -> formatLocalDate.formatLocalDate(entry.key) }
             .mapValues { entry ->
-                entry.value.map { sale -> sale.map(priceFormatter, formatTime) }
+                entry.value.map { sale -> sale.map(formatPrice, formatDecimal, formatTime) }
             }
 
         ChunkMapState(

@@ -6,8 +6,8 @@ import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.ui.screens.basket.components.BasketItemCardModel
 import com.orka.myfinances.ui.screens.basket.BasketItemUiModel
+import com.orka.myfinances.ui.screens.basket.components.BasketItemCardModel
 
 fun BasketItem.toModel(
     formatPrice: FormatPrice,
@@ -23,9 +23,10 @@ fun BasketItem.toModel(
         price = formatPrice.formatPrice(product.exposedPrice.toDouble()),
         amount = formatDecimal.formatDecimal(amount.toDouble()),
         imageRes = R.drawable.furniture1,
-        available = "Available: ${formatDecimal.formatDecimal(available.toDouble())}",
+        availableAmount = "Available: ${formatDecimal.formatDecimal(availableAmount.toDouble())}",
         increaseEnabled = increaseEnabled,
-        decreaseEnabled = decreaseEnabled
+        decreaseEnabled = decreaseEnabled,
+        unavailable = amount > availableAmount
     )
 }
 

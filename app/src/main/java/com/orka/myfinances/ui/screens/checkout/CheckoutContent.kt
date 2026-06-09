@@ -14,6 +14,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
@@ -44,7 +45,7 @@ import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
 import java.text.NumberFormat
 import java.util.Locale
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun CheckoutContent(
     modifier: Modifier = Modifier,
@@ -75,6 +76,7 @@ fun CheckoutContent(
             .verticalScroll(scrollState)
             .padding(horizontal = 12.dp)
     ) {
+        VerticalSpacer(8)
         DividedList(
             modifier = Modifier.fillMaxWidth(),
             title = stringResource(R.string.items_purchased),

@@ -1,5 +1,6 @@
 package com.orka.myfinances.application.manager
 
+import com.orka.myfinances.application.Logger
 import com.orka.myfinances.application.factories.Formatter
 import com.orka.myfinances.application.factories.factory
 import com.orka.myfinances.application.factories.httpClient
@@ -11,7 +12,6 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.storages.LocalSessionStorage
 import com.orka.myfinances.lib.extensions.models.toModel
-import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.printer.Printer
@@ -20,6 +20,7 @@ import com.orka.myfinances.ui.screens.host.SelectOfficeScreenViewModelFactory
 import com.orka.myfinances.ui.screens.host.viewmodel.HostScreenInteractor
 import com.orka.myfinances.ui.screens.host.viewmodel.UiState
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class UiManager(
     private val storage: LocalSessionStorage,
@@ -41,7 +42,7 @@ class UiManager(
         initialize()
     }
 
-    private fun initialize() {
+    override fun initialize() {
         launch {
             try {
                 val sessionModel = storage.get()

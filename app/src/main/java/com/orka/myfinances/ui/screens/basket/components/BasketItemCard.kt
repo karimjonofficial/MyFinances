@@ -112,6 +112,13 @@ fun BasketItemCard(
                                 overflow = TextOverflow.Ellipsis,
                                 modifier = Modifier.padding(top = 4.dp)
                             )
+
+                            VerticalSpacer(4)
+                            Text(
+                                text = item.availableAmount,
+                                fontWeight = FontWeight.Bold,
+                                color = if(item.unavailable) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+                            )
                         }
                     }
 
@@ -130,8 +137,6 @@ fun BasketItemCard(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.End
                         ) {
-                            Text(text = item.available)
-
                             HorizontalSpacer(8)
                             IconButton(
                                 onClick = decrease,
@@ -149,9 +154,10 @@ fun BasketItemCard(
                             }
 
                             Text(
+                                modifier = Modifier.padding(horizontal = 8.dp),
                                 text = item.amount,
                                 style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.padding(horizontal = 8.dp)
+                                color = if(item.unavailable) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
                             )
 
                             IconButton(

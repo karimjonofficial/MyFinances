@@ -4,18 +4,8 @@ import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.testFixtures.resources.amount
 import com.orka.myfinances.testFixtures.resources.models.id1
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.mock.MockEngine
-import io.ktor.client.engine.mock.respond
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.request.HttpRequestData
-import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.headersOf
-import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -24,47 +14,22 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class BasketRepositoryTest : MainDispatcherContext() {
-    private val mockEngine = MockEngine { request: HttpRequestData ->
-        val id = request.url.encodedPath.split("/").last { it.isNotEmpty() }.toInt()
-        respond(
-            content = """
-                {
-                    "id": $id,
-                    "product_title": {
-                        "id": 1,
-                        "category": 1,
-                        "name": "Product $id",
-                        "properties": [],
-                        "default_price": 100,
-                        "default_sale_price": 110,
-                        "default_exposed_price": 120,
-                        "created_at": "2024-01-01T12:00:00Z",
-                        "modified_at": "2024-01-01T12:00:00Z"
-                    },
-                    "price": 100,
-                    "sale_price": 110,
-                    "exposed_price": 120,
-                    "created_at": "2024-01-01T12:00:00Z",
-                    "modified_at": "2024-01-01T12:00:00Z"
-                }
-            """.trimIndent(),
-            status = HttpStatusCode.OK,
-            headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
-        )
-    }
-
-    private val httpClient = HttpClient(mockEngine) {
-        install(ContentNegotiation) {
-            json(Json { ignoreUnknownKeys = true })
-        }
-    }
-
-    private val repository = BasketRepository(httpClient)
+    private val repository = BasketRepository()
 
     @Test
     fun `Returns an empty list`() = runTest {
         val items = repository.get()
         assertTrue(items.isEmpty())
+    }
+
+    @Test
+    fun `Add new item emits FullRefresh`() = runTest {
+        val job = launch {
+            val event = repository.events.first()
+            assertEquals(BasketEvent.FullRefresh, event)
+        }
+        repository.add(id1, amount)
+        job.join()
     }
 
     @Nested
@@ -80,7 +45,7 @@ class BasketRepositoryTest : MainDispatcherContext() {
         fun `Add items adds items`() = runTest {
             advanceUntilIdle()
             val items = repository.get()
-            assertNotNull(items.find { it.product.id == id1.value })
+            assertNotNull(items.find { it.id == id1 })
             assertEquals(1, items.size)
         }
 
@@ -88,7 +53,7 @@ class BasketRepositoryTest : MainDispatcherContext() {
         fun `Nothing happens when item does not exist`() = runTest {
             advanceUntilIdle()
             val id2 = Id(999)
-            val old = repository.get()
+            val old = repository.get().toList()
             repository.remove(id2, amount)
             val new = repository.get()
             assertEquals(old, new)
@@ -108,11 +73,23 @@ class BasketRepositoryTest : MainDispatcherContext() {
             fun `Add increases when item already exists`() = runTest {
                 advanceUntilIdle()
                 val items = repository.get()
-                assertTrue(
-                    items.find { it.product.id == id1.value } != null
-                            && items.size == 1
-                            && items[0].amount == 2 * amount
-                )
+                val item = items.find { it.id == id1 }
+                assertNotNull(item)
+                assertEquals(1, items.size)
+                assertEquals(2 * amount, item?.amount)
+            }
+
+            @Test
+            fun `Add existing item emits AmountChanged`() = runTest {
+                advanceUntilIdle()
+                val job = launch {
+                    val event = repository.events.first()
+                    assertTrue(event is BasketEvent.AmountChanged)
+                    assertEquals(id1, (event as BasketEvent.AmountChanged).id)
+                    assertEquals(3 * amount, event.newAmount)
+                }
+                repository.add(id1, amount)
+                job.join()
             }
 
             @Test
@@ -120,11 +97,10 @@ class BasketRepositoryTest : MainDispatcherContext() {
                 advanceUntilIdle()
                 repository.remove(id1, amount)
                 val items = repository.get()
-                assertTrue(
-                    items.find { it.product.id == id1.value } != null
-                            && items.size == 1
-                            && items[0].amount == amount
-                )
+                val item = items.find { it.id == id1 }
+                assertNotNull(item)
+                assertEquals(1, items.size)
+                assertEquals(amount, item?.amount)
             }
         }
 
@@ -133,7 +109,19 @@ class BasketRepositoryTest : MainDispatcherContext() {
             advanceUntilIdle()
             repository.remove(id1, amount)
             val items = repository.get()
-            assertTrue(items.find { it.product.id == id1.value } == null)
+            assertTrue(items.find { it.id == id1 } == null)
+        }
+
+        @Test
+        fun `Remove existing item emits ItemRemoved when amount reaches zero`() = runTest {
+            advanceUntilIdle()
+            val job = launch {
+                val event = repository.events.first()
+                assertTrue(event is BasketEvent.ItemRemoved)
+                assertEquals(id1, (event as BasketEvent.ItemRemoved).id)
+            }
+            repository.remove(id1, amount)
+            job.join()
         }
     }
 }

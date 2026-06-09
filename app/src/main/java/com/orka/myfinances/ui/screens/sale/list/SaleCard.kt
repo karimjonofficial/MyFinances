@@ -25,7 +25,7 @@ fun SaleCard(
         modifier = modifier,
         painter = painterResource(R.drawable.shopping_bag_outlined),
         headlineText = sale.title,
-        supportingText = sale.size,
+        supportingText = stringResource(R.string.items_f, sale.size),
         price = sale.price,
         dateTime = sale.dateTime,
         onClick = onClick
