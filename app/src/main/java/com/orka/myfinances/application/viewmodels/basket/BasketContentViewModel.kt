@@ -67,7 +67,9 @@ class BasketContentViewModel(
 
         state.subscriptionCount.onEach { count ->
             if (count > 0 && isStale) {
-                refresh()
+                if(state.value is State.Loading && state.value.value == null)
+                    initialize()
+                else refresh()
                 isStale = false
             }
         }.launchIn(viewModelScope)

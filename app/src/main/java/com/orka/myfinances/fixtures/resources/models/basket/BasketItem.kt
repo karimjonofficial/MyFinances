@@ -6,6 +6,18 @@ import com.orka.myfinances.fixtures.resources.models.product.product1
 import com.orka.myfinances.fixtures.resources.models.product.product2
 import com.orka.myfinances.ui.screens.checkout.map
 
-val basketItem1 = BasketItem(product1.map(), amount, amount, true, true)
-val basketItem2 = BasketItem(product2.map(), amount, amount, true, true)
+val basketItem1 = BasketItem(
+    product = product1.map(),
+    availableAmount = amount,
+    amount = amount,
+    increaseEnabled = true,
+    decreaseEnabled = true
+)
+val basketItem2 = BasketItem(
+    product = product2.map(),
+    availableAmount = amount,
+    amount = amount,
+    increaseEnabled = true,
+    decreaseEnabled = true
+)
 val basketItems = listOf(basketItem1, basketItem2)

@@ -150,14 +150,13 @@ class CheckoutScreenViewModel(
             request = basket.toSaleRequest(clientId),
             map = AddSaleRequest::toApiRequest
         )
-        if (response != null) {
+        return if (response != null) {
             if (print) printer.print(response)
             clearBasket()
             saleFlow.emit(SaleEvent)
             navigator.back()
-            return true
-        }
-        return false
+            true
+        } else false
     }
 
     private suspend fun performOrder(
