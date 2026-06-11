@@ -11,7 +11,7 @@ import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.logger.Logger
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
@@ -51,7 +51,7 @@ class StockItemsContentViewModel(
                 }
             }
 
-        ChunkMapState(
+        ChunkUiModel(
             count = chunk.count,
             pageIndex = chunk.pageIndex,
             nextPageIndex = chunk.nextPageIndex,

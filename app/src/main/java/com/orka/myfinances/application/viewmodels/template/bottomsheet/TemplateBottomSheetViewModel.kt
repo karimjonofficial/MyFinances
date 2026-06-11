@@ -6,7 +6,7 @@ import com.orka.myfinances.data.api.template.TemplateApi
 import com.orka.myfinances.data.api.template.models.response.TemplateApiModel
 import com.orka.myfinances.lib.data.api.scoped.office.getChunk
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.screens.folder.models.TemplateItemModel
@@ -27,7 +27,7 @@ class TemplateBottomSheetViewModel(
             .groupBy { it.name.stickyHeaderKey() }
             .mapValues { it.value.map { item -> item.toItemModel() } }
 
-        ChunkMapState(
+        ChunkUiModel(
             count = chunk.count,
             pageIndex = chunk.pageIndex,
             nextPageIndex = chunk.nextPageIndex,

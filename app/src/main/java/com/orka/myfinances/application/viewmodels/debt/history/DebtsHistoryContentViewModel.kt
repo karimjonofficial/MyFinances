@@ -10,7 +10,7 @@ import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
 import com.orka.myfinances.lib.logger.Logger
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.navigation.Navigator
@@ -46,7 +46,7 @@ class DebtsHistoryContentViewModel(
                 entry.value.map { model -> model.toUiModel(formatPrice, formatTime) }
             }
 
-        ChunkMapState(
+        ChunkUiModel(
             count = chunk.count,
             pageIndex = chunk.pageIndex,
             nextPageIndex = chunk.nextPageIndex,

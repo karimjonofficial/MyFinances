@@ -5,7 +5,7 @@ import com.orka.myfinances.data.api.stock.models.StockItemApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.stock.StockItemCardModel
@@ -55,10 +55,10 @@ fun StockItemUiModel.toHidden(): StockItemUiModel {
     return copy(model = model.copy(price = exposedPrice))
 }
 
-fun State.Success<ChunkMapState<StockItemUiModel>>.toExposed(): State<ChunkMapState<StockItemUiModel>> {
+fun State.Success<ChunkUiModel<StockItemUiModel>>.toExposed(): State<ChunkUiModel<StockItemUiModel>> {
     return State.Success(value.copy(content = value.content.mapValues { it.value.map { model -> model.toExposed() } }))
 }
 
-fun State.Success<ChunkMapState<StockItemUiModel>>.toHidden(): State<ChunkMapState<StockItemUiModel>> {
+fun State.Success<ChunkUiModel<StockItemUiModel>>.toHidden(): State<ChunkUiModel<StockItemUiModel>> {
     return State.Success(value.copy(content = value.content.mapValues { it.value.map { model -> model.toHidden() } }))
 }

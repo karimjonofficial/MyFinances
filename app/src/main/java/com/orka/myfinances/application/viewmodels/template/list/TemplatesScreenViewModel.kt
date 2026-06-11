@@ -7,7 +7,8 @@ import com.orka.myfinances.data.api.template.models.response.TemplateApiModel
 import com.orka.myfinances.data.repositories.template.TemplateEvent
 import com.orka.myfinances.lib.data.api.scoped.office.getChunk
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.format.FormatDecimal
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.navigation.Navigator
@@ -20,8 +21,9 @@ import kotlinx.coroutines.flow.onEach
 
 class TemplatesScreenViewModel(
     private val templateApi: TemplateApi,
-    private val events: Flow<TemplateEvent>,
+    events: Flow<TemplateEvent>,
     private val navigator: Navigator,
+    formatDecimal: FormatDecimal,
     loading: UiText,
     failure: UiText,
     logger: Logger
@@ -33,9 +35,9 @@ class TemplatesScreenViewModel(
         val map = chunk.results
             .sortedBy { it.name }
             .groupBy { it.name.stickyHeaderKey() }
-            .mapValues { it.value.map { template -> template.toUiModel() } }
+            .mapValues { it.value.map { template -> template.toUiModel(formatDecimal) } }
 
-        ChunkMapState(
+        ChunkUiModel(
             count = chunk.count,
             pageIndex = chunk.pageIndex,
             nextPageIndex = chunk.nextPageIndex,
@@ -49,11 +51,7 @@ class TemplatesScreenViewModel(
 
     init {
         initialize()
-        launch {
-            events.onEach {
-                refresh()
-            }.launchIn(viewModelScope)
-        }
+        events.onEach { refresh() }.launchIn(viewModelScope)
     }
 
     override fun addTemplate() {

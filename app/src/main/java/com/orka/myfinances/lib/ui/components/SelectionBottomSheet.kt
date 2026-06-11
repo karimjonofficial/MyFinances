@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.BottomSheetItemModel
 import com.orka.myfinances.lib.ui.viewmodel.State
 
@@ -33,7 +33,7 @@ fun <T: BottomSheetItemModel> SelectionBottomSheet(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
     sheetState: SheetState,
-    state: State<ChunkMapState<T>>,
+    state: State<ChunkUiModel<T>>,
     selectedItem: T?,
     onSelected: (T) -> Unit,
     onLoadMore: () -> Unit

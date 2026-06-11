@@ -6,7 +6,7 @@ import com.orka.myfinances.data.api.title.models.response.ProductTitleApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.logger.Logger
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.screens.receive.add.ProductTitleItemModel
@@ -28,7 +28,7 @@ class ProductTitleBottomSheetViewModel(
             .groupBy { it.name.stickyHeaderKey() }
             .mapValues { (_, titles) -> titles.map(ProductTitleApiModel::toItemModel) }
 
-        ChunkMapState(
+        ChunkUiModel(
             count = chunk.count,
             pageIndex = chunk.pageIndex,
             nextPageIndex = chunk.nextPageIndex,

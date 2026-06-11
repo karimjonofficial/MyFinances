@@ -10,7 +10,7 @@ import com.orka.myfinances.fixtures.format.FormatTimeImpl
 import com.orka.myfinances.fixtures.resources.models.receive.receives
 import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.receive.list.components.ReceiveCard
@@ -20,7 +20,7 @@ import com.orka.myfinances.ui.screens.receive.list.viewmodel.ReceiveUiModel
 @Composable
 fun ReceiveContent(
     modifier: Modifier = Modifier,
-    state: State<ChunkMapState<ReceiveUiModel>>,
+    state: State<ChunkUiModel<ReceiveUiModel>>,
     interactor: ReceiveContentInteractor
 ) {
     LazyColumnWithStickyHeaderContent(

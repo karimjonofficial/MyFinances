@@ -2,7 +2,7 @@ package com.orka.myfinances.lib.viewmodel
 
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.data.repositories.GetChunk
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,9 +11,9 @@ abstract class MapChunkViewModel<TApi, TUi>(
     protected val loading: UiText,
     protected val failure: UiText,
     private val get: GetChunk<TApi>,
-    private val map: suspend (Chunk<TApi>) -> ChunkMapState<TUi>,
+    private val map: suspend (Chunk<TApi>) -> ChunkUiModel<TUi>,
     logger: Logger
-) : StateFulViewModel<State<ChunkMapState<TUi>>>(
+) : StateFulViewModel<State<ChunkUiModel<TUi>>>(
     initialState = State.Loading(loading),
     logger = logger
 ) {
@@ -82,7 +82,7 @@ abstract class MapChunkViewModel<TApi, TUi>(
         }
     }
 
-    protected fun tryTransition(produceState: suspend (State<ChunkMapState<TUi>>) -> State<ChunkMapState<TUi>>) {
+    protected fun tryTransition(produceState: suspend (State<ChunkUiModel<TUi>>) -> State<ChunkUiModel<TUi>>) {
         launch {
             val oldState = state.value
             if (oldState !is State.Loading) {

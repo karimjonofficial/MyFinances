@@ -116,6 +116,7 @@ class Factory(
             loading = loading,
             failure = failure,
             logger = logger,
+            formatDecimal = formatter,
             events = templateFlow
         )
     }
@@ -123,6 +124,7 @@ class Factory(
     fun addTemplateViewModel(): AddTemplateScreenViewModel {
         return AddTemplateScreenViewModel(
             templateApi = templateApi,
+            flow = templateFlow,
             navigator = navigator
         )
     }
@@ -305,7 +307,8 @@ class Factory(
             folderApi = folderApi,
             receiveApi = receiveApi,
             navigator = navigator,
-            flow = stockFlow,
+            stockFlow = stockFlow,
+            receiveFlow = receiveFlow,
             loading = loading,
             failure = failure,
             logger = logger

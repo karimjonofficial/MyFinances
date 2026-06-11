@@ -28,7 +28,7 @@ fun TemplateCard(
                     contentDescription = stringResource(R.string.template)
                 )
 
-                Text(text = template.size)
+                Text(text = stringResource(R.string.fields_f, template.size))
             }
         },
         trailingContent = {

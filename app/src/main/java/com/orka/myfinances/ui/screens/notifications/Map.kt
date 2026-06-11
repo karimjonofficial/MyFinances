@@ -1,10 +1,10 @@
 package com.orka.myfinances.ui.screens.notifications
 
 import com.orka.myfinances.data.models.Notification
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 
-fun List<Notification>.toChunkMapState(): ChunkMapState<NotificationUiModel> {
-    return ChunkMapState(
+fun List<Notification>.toChunkMapState(): ChunkUiModel<NotificationUiModel> {
+    return ChunkUiModel(
         count = size,
         pageIndex = 0,
         nextPageIndex = 1,

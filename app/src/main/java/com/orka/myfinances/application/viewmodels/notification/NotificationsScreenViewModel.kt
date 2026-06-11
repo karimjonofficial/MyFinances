@@ -7,7 +7,7 @@ import com.orka.myfinances.lib.data.api.getChunk
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatTime
 import com.orka.myfinances.lib.logger.Logger
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
@@ -35,7 +35,7 @@ class NotificationsScreenViewModel(
             .mapKeys { formatLocalDate.formatLocalDate(it.key) }
             .mapValues { it.value.map { model -> model.toUiModel(formatTime) } }
 
-        ChunkMapState(
+        ChunkUiModel(
             count = chunk.count,
             pageIndex = chunk.pageIndex,
             nextPageIndex = chunk.nextPageIndex,

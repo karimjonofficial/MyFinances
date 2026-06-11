@@ -6,7 +6,7 @@ import com.orka.myfinances.data.api.client.models.response.ClientApiModel
 import com.orka.myfinances.lib.data.api.scoped.company.getChunk
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.logger.Logger
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
@@ -27,7 +27,7 @@ class ClientBottomSheetViewModel(
             .groupBy { it.firstName.stickyHeaderKey() }
             .mapValues { it.value.map { client -> client.toItemModel() } }
 
-        ChunkMapState(
+        ChunkUiModel(
             count = chunk.count,
             pageIndex = chunk.pageIndex,
             nextPageIndex = chunk.nextPageIndex,

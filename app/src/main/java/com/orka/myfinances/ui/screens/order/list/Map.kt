@@ -4,7 +4,7 @@ import com.orka.myfinances.data.models.order.Order
 import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import kotlin.time.Clock
 
@@ -44,8 +44,8 @@ fun List<Order>.toChunkMapState(
     formatPrice: FormatPrice,
     formatDecimal: FormatDecimal,
     formatDate: FormatDate
-): ChunkMapState<OrderUiModel> {
-    return ChunkMapState(
+): ChunkUiModel<OrderUiModel> {
+    return ChunkUiModel(
         count = 1,
         pageIndex = 1,
         nextPageIndex = 1,

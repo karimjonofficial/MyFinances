@@ -62,9 +62,7 @@ class BasketContentViewModel(
                     is BasketEvent.FullRefresh -> refresh()
                 }
                 isStale = false
-            } else {
-                isStale = true
-            }
+            } else isStale = true
         }.launchIn(viewModelScope)
 
         state.subscriptionCount.onEach { count ->

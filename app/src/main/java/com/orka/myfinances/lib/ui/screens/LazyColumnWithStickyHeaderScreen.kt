@@ -10,7 +10,7 @@ import com.orka.myfinances.lib.ui.components.LazyColumnWithStickHeader
 import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.TopAppBar
 import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.viewmodel.State
 
 @Composable
@@ -40,9 +40,9 @@ fun <T> LazyColumnWithStickyHeaderScreen(
 @Composable
 fun <T> LazyColumnWithStickyHeaderScreen(
     modifier: Modifier = Modifier,
-    topBar: @Composable (State<ChunkMapState<T>>) -> Unit = {},
+    topBar: @Composable (State<ChunkUiModel<T>>) -> Unit = {},
     arrangementSpace: Dp = 0.dp,
-    state: State<ChunkMapState<T>>,
+    state: State<ChunkUiModel<T>>,
     refresh: () -> Unit,
     loadMore: () -> Unit,
     item: @Composable (T) -> Unit,
@@ -66,9 +66,9 @@ fun <T> LazyColumnWithStickyHeaderScreen(
 @Composable
 fun <T> LazyColumnWithStickyHeaderScreen(
     modifier: Modifier = Modifier,
-    topBar: @Composable (State<ChunkMapState<T>>) -> Unit = {},
+    topBar: @Composable (State<ChunkUiModel<T>>) -> Unit = {},
     arrangementSpace: Dp = 0.dp,
-    state: State<ChunkMapState<T>>,
+    state: State<ChunkUiModel<T>>,
     refresh: () -> Unit,
     loadMore: () -> Unit,
     dialogVisible: Boolean,
@@ -99,7 +99,7 @@ fun <T> LazyColumnWithStickyHeaderScreen(
     title: String,
     arrangementSpace: Dp = 0.dp,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    state: State<ChunkMapState<T>>,
+    state: State<ChunkUiModel<T>>,
     refresh: () -> Unit,
     loadMore: () -> Unit,
     item: @Composable (T) -> Unit,

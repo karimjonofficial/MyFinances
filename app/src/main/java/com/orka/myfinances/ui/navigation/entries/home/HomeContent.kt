@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun HomeScreenContent(
+fun HomeContent(
     modifier: Modifier,
     index: Int,
     officeId: String,

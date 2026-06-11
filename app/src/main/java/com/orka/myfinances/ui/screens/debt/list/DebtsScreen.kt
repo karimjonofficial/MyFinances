@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.debt.list.interactor.DebtsScreenInteractor
@@ -19,7 +19,7 @@ import com.orka.myfinances.ui.screens.debt.list.interactor.DebtsScreenInteractor
 @Composable
 fun DebtsScreen(
     modifier: Modifier,
-    state: State<ChunkMapState<DebtUiModel>>,
+    state: State<ChunkUiModel<DebtUiModel>>,
     dialogVisible: Boolean,
     interactor: DebtsScreenInteractor,
     onAddDebt: () -> Unit,

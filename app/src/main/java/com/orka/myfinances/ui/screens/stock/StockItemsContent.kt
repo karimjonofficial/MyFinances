@@ -14,7 +14,7 @@ import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.stockItems
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.contents.LazyVerticalGridContentWithStickyHeader
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.viewmodel.State
 
@@ -23,7 +23,7 @@ fun StockItemsContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     interactor: StockContentInteractor,
-    state: State<ChunkMapState<StockItemUiModel>>
+    state: State<ChunkUiModel<StockItemUiModel>>
 ) {
     LazyVerticalGridContentWithStickyHeader(
         modifier = modifier,
@@ -55,7 +55,7 @@ private fun StockItemsContentPreview() {
             contentPadding = PaddingValues(horizontal = 16.dp),
             interactor = StockContentInteractor.dummy,
             state = State.Success(
-                value = ChunkMapState(
+                value = ChunkUiModel(
                     count = 0,
                     pageIndex = 1,
                     nextPageIndex = null,

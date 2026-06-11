@@ -13,7 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.components.ClientCard
@@ -24,7 +24,7 @@ import com.orka.myfinances.ui.screens.client.list.viewmodel.ClientsScreenInterac
 @Composable
 fun ClientsScreen(
     modifier: Modifier,
-    state: State<ChunkMapState<ClientUiModel>>,
+    state: State<ChunkUiModel<ClientUiModel>>,
     interactor: ClientsScreenInteractor
 ) {
     val dialogVisible = rememberSaveable { mutableStateOf(false) }

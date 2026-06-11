@@ -12,7 +12,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.template.templates
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.ui.components.TopAppBar
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.theme.MyFinancesTheme
@@ -20,7 +20,7 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 @Composable
 fun TemplatesScreen(
     modifier: Modifier = Modifier,
-    state: State<ChunkMapState<TemplateUiModel>>,
+    state: State<ChunkUiModel<TemplateUiModel>>,
     interactor: TemplatesScreenInteractor
 ) {
     LazyColumnWithStickyHeaderScreen(
@@ -57,7 +57,7 @@ private fun TemplatesScreenPreview() {
         TemplatesScreen(
             modifier = Modifier.fillMaxSize(),
             state = State.Success(
-                value = ChunkMapState(
+                value = ChunkUiModel(
                     count = 10,
                     pageIndex = 1,
                     nextPageIndex = 2,

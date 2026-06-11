@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.debt.list.DebtCard
 import com.orka.myfinances.ui.screens.debt.list.DebtUiModel
@@ -14,7 +14,7 @@ import com.orka.myfinances.ui.screens.debt.list.DebtUiModel
 fun DebtsHistoryContent(
     modifier: Modifier = Modifier,
     interactor: DebtsHistoryContentInteractor,
-    state: State<ChunkMapState<DebtUiModel>>
+    state: State<ChunkUiModel<DebtUiModel>>
 ) {
     LazyColumnWithStickyHeaderContent(
         modifier = modifier,

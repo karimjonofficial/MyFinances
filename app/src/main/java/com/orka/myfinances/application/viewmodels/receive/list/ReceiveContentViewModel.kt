@@ -10,7 +10,7 @@ import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.navigation.Navigator
@@ -49,7 +49,7 @@ class ReceiveContentViewModel(
                     }
                 }
 
-        ChunkMapState(
+        ChunkUiModel(
             count = chunk.count,
             pageIndex = chunk.pageIndex,
             nextPageIndex = chunk.nextPageIndex,
@@ -63,9 +63,7 @@ class ReceiveContentViewModel(
 
     init {
         initialize()
-        events.onEach {
-            refresh()
-        }.launchIn(viewModelScope)
+        events.onEach { refresh() }.launchIn(viewModelScope)
     }
 
     override fun select(receive: ReceiveUiModel) {

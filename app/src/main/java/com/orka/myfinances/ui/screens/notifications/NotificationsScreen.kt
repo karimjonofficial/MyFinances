@@ -9,7 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.notifications
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.theme.MyFinancesTheme
@@ -17,7 +17,7 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 @Composable
 fun NotificationsScreen(
     modifier: Modifier,
-    state: State<ChunkMapState<NotificationUiModel>>,
+    state: State<ChunkUiModel<NotificationUiModel>>,
     interactor: NotificationsScreenInteractor
 ) {
     LazyColumnWithStickyHeaderScreen(

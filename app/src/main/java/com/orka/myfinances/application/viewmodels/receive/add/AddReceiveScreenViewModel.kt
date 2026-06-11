@@ -7,6 +7,7 @@ import com.orka.myfinances.data.api.receive.toApiRequest
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequestItem
+import com.orka.myfinances.data.repositories.receive.ReceiveEvent
 import com.orka.myfinances.data.repositories.stock.StockEvent
 import com.orka.myfinances.lib.data.api.scoped.office.insert
 import com.orka.myfinances.lib.logger.Logger
@@ -25,7 +26,8 @@ class AddReceiveScreenViewModel(
     private val folderApi: FolderApi,
     private val receiveApi: ReceiveApi,
     private val navigator: Navigator,
-    private val flow: MutableSharedFlow<StockEvent>,
+    private val stockFlow: MutableSharedFlow<StockEvent>,
+    private val receiveFlow: MutableSharedFlow<ReceiveEvent>,
     loading: UiText,
     failure: UiText,
     logger: Logger
@@ -80,7 +82,8 @@ class AddReceiveScreenViewModel(
                     map = AddReceiveRequest::toApiRequest
                 )
                 if (created) {
-                    flow.emit(StockEvent(categoryId))
+                    stockFlow.emit(StockEvent(categoryId))
+                    receiveFlow.emit(ReceiveEvent)
                     navigator.back()
                 } else setState(State.Failure(failure, oldState.value))
             }

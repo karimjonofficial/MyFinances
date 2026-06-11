@@ -5,7 +5,7 @@ import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.orka.myfinances.lib.ui.components.SelectionBottomSheet
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
 
@@ -13,7 +13,7 @@ import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
 @Composable
 fun SelectClientBottomSheet(
     modifier: Modifier = Modifier,
-    state: State<ChunkMapState<ClientItemModel>>,
+    state: State<ChunkUiModel<ClientItemModel>>,
     selectedClient: ClientItemModel?,
     onDismissRequest: () -> Unit,
     sheetState: SheetState,

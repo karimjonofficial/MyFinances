@@ -4,14 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.viewmodel.State
 
 @Composable
 fun SaleContent(
     modifier: Modifier = Modifier,
     interactor: SaleContentInteractor,
-    state: State<ChunkMapState<SaleUiModel>>
+    state: State<ChunkUiModel<SaleUiModel>>
 ) {
     LazyColumnWithStickyHeaderContent(
         modifier = modifier,

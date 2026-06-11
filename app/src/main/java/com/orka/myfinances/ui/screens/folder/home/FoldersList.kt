@@ -10,9 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
+import com.orka.myfinances.lib.ui.components.SectionTitle
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.screens.folder.components.FirstFolderButton
 import com.orka.myfinances.ui.screens.folder.components.FolderButton
@@ -32,10 +32,7 @@ fun FoldersList(
         modifier = modifier.padding(contentPadding),
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
-        Text(
-            text = stringResource(R.string.categories),
-            fontWeight = FontWeight.Bold
-        )
+        SectionTitle(text = stringResource(R.string.categories))
         VerticalSpacer(4)
 
         val size = items.size

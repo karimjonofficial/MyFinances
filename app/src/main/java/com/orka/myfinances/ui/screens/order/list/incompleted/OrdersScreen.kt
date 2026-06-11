@@ -18,7 +18,7 @@ import com.orka.myfinances.fixtures.format.FormatDateImpl
 import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.order.orders
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.order.list.OrderCard
@@ -31,7 +31,7 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 @Composable
 fun OrdersScreen(
     modifier: Modifier = Modifier,
-    state: State<ChunkMapState<OrderUiModel>>,
+    state: State<ChunkUiModel<OrderUiModel>>,
     interactor: OrdersScreenInteractor
 ) {
     LazyColumnWithStickyHeaderScreen(

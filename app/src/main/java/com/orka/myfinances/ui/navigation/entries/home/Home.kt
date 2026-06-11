@@ -45,7 +45,7 @@ fun homeEntry(
             )
         },
         content = { contentModifier, index ->
-            HomeScreenContent(
+            HomeContent(
                 modifier = contentModifier,
                 index = index,
                 officeId = officeId,

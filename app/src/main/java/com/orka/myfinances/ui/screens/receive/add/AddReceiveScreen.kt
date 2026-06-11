@@ -26,7 +26,7 @@ import com.orka.myfinances.application.viewmodels.receive.bottomsheet.ProductTit
 import com.orka.myfinances.lib.ui.components.CommentTextField
 import com.orka.myfinances.lib.ui.components.IntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.theme.MyFinancesTheme
@@ -38,7 +38,7 @@ fun AddReceiveScreen(
     modifier: Modifier = Modifier,
     state: State<AddReceiveScreenModel>,
     interactor: AddReceiveScreenInteractor,
-    productTitleSheetState: State<ChunkMapState<ProductTitleItemModel>>,
+    productTitleSheetState: State<ChunkUiModel<ProductTitleItemModel>>,
     productTitleSheetInteractor: ProductTitleBottomSheetInteractor
 ) {
     val title = retain { mutableStateOf<ProductTitleItemModel?>(null) }
@@ -206,7 +206,7 @@ private fun AddReceiveScreenPreview() {
             state = State.Success(AddReceiveScreenModel("Category 1")),
             interactor = AddReceiveScreenInteractor.dummy,
             productTitleSheetState = State.Success(
-                ChunkMapState(
+                ChunkUiModel(
                     count = 0,
                     pageIndex = 1,
                     nextPageIndex = null,

@@ -11,6 +11,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
@@ -18,6 +19,7 @@ import com.orka.myfinances.fixtures.resources.models.folder.folders
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.components.FooterSpacer
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.SectionTitle
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.contents.StateFulContent
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
@@ -59,7 +61,7 @@ fun FoldersContent(
                     ) {
                         OptionButton(
                             modifier = Modifier.weight(1f),
-                            text = "Add order",
+                            text = stringResource(R.string.add_order),
                             painter = painterResource(R.drawable.add),
                             onClick = {}//TODO
                         )
@@ -67,7 +69,7 @@ fun FoldersContent(
                         HorizontalSpacer(8)
                         OptionButton(
                             modifier = Modifier.weight(1f),
-                            text = "Add product",
+                            text = stringResource(R.string.add_product),
                             painter = painterResource(R.drawable.add),
                             onClick = {}//TODO
                         )
@@ -81,9 +83,51 @@ fun FoldersContent(
                         items = folder,
                         onFolderSelected = { interactor.select(it) }
                     )
-
-                    FooterSpacer()
                 }
+
+                item {
+                    VerticalSpacer(24)
+                    SectionTitle(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        text = stringResource(R.string.popular_products)
+                    )
+
+                    //TODO
+                }
+
+                item {
+                    VerticalSpacer(24)
+                    SectionTitle(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        text = stringResource(R.string.latest_products)
+                    )
+
+                    //TODO
+                }
+
+                item {
+                    VerticalSpacer(24)
+                    SectionTitle(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        text = stringResource(R.string.recommended_products)
+                    )
+
+                    //TODO
+                }
+
+                item {
+                    VerticalSpacer(24)
+                    OptionButton(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp),
+                        text = stringResource(R.string.go_to_pictures),
+                        painter = painterResource(R.drawable.photo),
+                        onClick = {}//TODO
+                    )
+                }
+
+                item { FooterSpacer() }
             }
         }
     }

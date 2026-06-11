@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.LazyVerticalGridWithStickHeader
-import com.orka.myfinances.lib.ui.models.ChunkMapState
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -29,7 +29,7 @@ fun <T> LazyVerticalGridContentWithStickyHeader(
     verticalArrangement: Arrangement.Vertical = if (!reverseLayout) Arrangement.Top else Arrangement.Bottom,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
     contentPadding: PaddingValues = PaddingValues(horizontal = 4.dp),
-    state: State<ChunkMapState<T>>,
+    state: State<ChunkUiModel<T>>,
     refresh: () -> Unit,
     loadMore: () -> Unit,
     item: @Composable (item: T) -> Unit
