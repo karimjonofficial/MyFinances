@@ -17,7 +17,7 @@ import com.orka.myfinances.lib.viewmodel.MapSingleViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenInteractor
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenModel
-import com.orka.myfinances.ui.screens.receive.add.ProductTitleItemModel
+import com.orka.myfinances.ui.models.ProductTitleItemModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 

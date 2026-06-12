@@ -7,13 +7,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.retain.retain
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,35 +19,48 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.application.viewmodels.receive.bottomsheet.ProductTitleBottomSheetInteractor
+import com.orka.myfinances.fixtures.resources.models.id1
+import com.orka.myfinances.fixtures.resources.name
+import com.orka.myfinances.fixtures.resources.price
 import com.orka.myfinances.lib.ui.components.CommentTextField
 import com.orka.myfinances.lib.ui.components.IntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.ui.models.ProductTitleItemModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
-import kotlinx.coroutines.launch
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun AddReceiveScreen(
     modifier: Modifier = Modifier,
+    product: ProductTitleItemModel?,
     state: State<AddReceiveScreenModel>,
     interactor: AddReceiveScreenInteractor,
-    productTitleSheetState: State<ChunkUiModel<ProductTitleItemModel>>,
-    productTitleSheetInteractor: ProductTitleBottomSheetInteractor
+    onSelectProductClick: () -> Unit
 ) {
-    val title = retain { mutableStateOf<ProductTitleItemModel?>(null) }
     val amount = rememberSaveable { mutableStateOf<Int?>(null) }
     val price = rememberSaveable { mutableStateOf<Int?>(null) }
     val salePrice = rememberSaveable { mutableStateOf<Int?>(null) }
     val exposedPrice = rememberSaveable { mutableStateOf<Int?>(null) }
     val totalPrice = rememberSaveable { mutableStateOf<Int?>(null) }
     val description = rememberSaveable { mutableStateOf<String?>(null) }
-    val sheetVisible = rememberSaveable { mutableStateOf(false) }
-    val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
-    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(product) {
+        if (product != null) {
+            price.value = product.defaultPrice
+            salePrice.value = product.defaultSalePrice
+            exposedPrice.value = product.defaultExposedPrice
+        } else {
+            price.value = null
+            salePrice.value = null
+            exposedPrice.value = null
+        }
+
+        amount.value = null
+        totalPrice.value = null
+        description.value = null
+    }
 
     fun refreshTotalPrice(amount: Int?, price: Int?) {
         if (amount != null && price != null) {
@@ -65,7 +75,7 @@ fun AddReceiveScreen(
         bottomBar = {
             AddReceiveScreenBottomBar(
                 interactor = interactor,
-                productTitle = title.value,
+                productTitle = product,
                 price = price.value,
                 salePrice = salePrice.value,
                 exposedPrice = exposedPrice.value,
@@ -79,23 +89,17 @@ fun AddReceiveScreen(
             modifier = modifier.padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val productsLoaded = productTitleSheetState.value?.content?.isNotEmpty() == true
-
-            if (title.value == null) {
+            if (product == null) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = productTitleSheetState !is State.Loading || productsLoaded,
-                    onClick = {
-                        productTitleSheetInteractor.refresh()
-                        sheetVisible.value = true
-                    }
+                    onClick = onSelectProductClick
                 ) {
                     Text(text = stringResource(R.string.products))
                 }
             } else {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = title.value!!.title,
+                    text = product.title,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -103,11 +107,7 @@ fun AddReceiveScreen(
                 VerticalSpacer(8)
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = productTitleSheetState !is State.Loading || productsLoaded,
-                    onClick = {
-                        productTitleSheetInteractor.refresh()
-                        sheetVisible.value = true
-                    }
+                    onClick = onSelectProductClick
                 ) {
                     Text(text = stringResource(R.string.products))
                 }
@@ -168,57 +168,27 @@ fun AddReceiveScreen(
         }
     }
 
-    if (sheetVisible.value) {
-        SelectProductTitleBottomSheet(
-            state = productTitleSheetState,
-            selectedProductTitle = title.value,
-            sheetState = sheetState,
-            onDismissRequest = {
-                coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
-                    if (!sheetState.isVisible) {
-                        sheetVisible.value = false
-                    }
-                }
-            },
-            onSelected = {
-                title.value = it
-                price.value = it.defaultPrice
-                salePrice.value = it.defaultSalePrice
-                exposedPrice.value = it.defaultExposedPrice
-                refreshTotalPrice(amount.value, it.defaultPrice)
-                coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
-                    if (!sheetState.isVisible) {
-                        sheetVisible.value = false
-                    }
-                }
-            },
-            onLoadMore = productTitleSheetInteractor::loadMore
-        )
-    }
 }
 
 @Preview
 @Composable
 private fun AddReceiveScreenPreview() {
+    val title = ProductTitleItemModel(
+        id = id1,
+        title = name,
+        defaultPrice = price,
+        defaultSalePrice = price,
+        defaultExposedPrice = price
+    )
+    val state = State.Success(AddReceiveScreenModel("Category 1"))
+
     MyFinancesTheme {
         AddReceiveScreen(
             modifier = Modifier.fillMaxSize(),
-            state = State.Success(AddReceiveScreenModel("Category 1")),
+            product = title,
+            state = state,
             interactor = AddReceiveScreenInteractor.dummy,
-            productTitleSheetState = State.Success(
-                ChunkUiModel(
-                    count = 0,
-                    pageIndex = 1,
-                    nextPageIndex = null,
-                    previousPageIndex = null,
-                    content = emptyMap()
-                )
-            ),
-            productTitleSheetInteractor = object : ProductTitleBottomSheetInteractor {
-                override fun initialize() {}
-                override fun refresh() {}
-                override fun loadMore() {}
-            }
+            onSelectProductClick = {}
         )
     }
 }

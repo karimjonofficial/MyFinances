@@ -9,7 +9,7 @@ import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
-import com.orka.myfinances.ui.screens.receive.add.ProductTitleItemModel
+import com.orka.myfinances.ui.models.ProductTitleItemModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class ProductTitleBottomSheetViewModel(
