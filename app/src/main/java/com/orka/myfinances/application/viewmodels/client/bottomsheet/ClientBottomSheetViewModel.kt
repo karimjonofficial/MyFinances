@@ -9,7 +9,7 @@ import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
-import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
+import com.orka.myfinances.ui.models.ClientItemModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class ClientBottomSheetViewModel(

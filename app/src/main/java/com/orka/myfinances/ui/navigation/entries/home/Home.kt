@@ -20,18 +20,22 @@ fun homeEntry(
     val officeId = session.officeId.value.toString()
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
 
-    val foldersViewModel = viewModel(key = "folders_$officeId") {
-        factory.foldersViewModel()
-    }
-    val basketViewModel = viewModel(key = "basket_$officeId") {
-        factory.basketViewModel()
-    }
-    val profileViewModel = viewModel(key = "profile_$officeId") {
-        factory.profileViewModel()
-    }
-    val sheetViewModel = viewModel(key = "sheet_$officeId") {
-        factory.templateBottomSheetViewModel()
-    }
+    val foldersViewModel = viewModel(
+        key = "folders_$officeId",
+        initializer = { factory.foldersViewModel() }
+    )
+    val basketViewModel = viewModel(
+        key = "basket_$officeId",
+        initializer = { factory.basketViewModel() }
+    )
+    val profileViewModel = viewModel(
+        key = "profile_$officeId",
+        initializer = { factory.profileViewModel() }
+    )
+    val sheetViewModel = viewModel(
+        key = "sheet_$officeId",
+        initializer = { factory.templateBottomSheetViewModel() }
+    )
 
     HomeScreen(
         modifier = modifier,

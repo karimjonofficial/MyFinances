@@ -7,6 +7,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.retain.retain
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,15 +31,15 @@ fun addReceiveEntry(
     val coroutineScope = rememberCoroutineScope()
 
     val viewModel = viewModel(
-        key = "${destination.id}",
+        key = "${destination.id.value}",
         initializer = { factory.addReceiveViewModel(destination.id) }
     )
     val sheetViewModel = viewModel(
-        key = "product-title-sheet-${destination.id}",
+        key = "product-title-sheet-${destination.id.value}",
         initializer = { factory.productTitleBottomSheetViewModel(destination.id) }
     )
     val state = viewModel.uiState.collectAsState()
-    val title = rememberSaveable { mutableStateOf<ProductTitleItemModel?>(null) }
+    val title = retain { mutableStateOf<ProductTitleItemModel?>(null) }
 
     AddReceiveScreen(
         modifier = modifier,

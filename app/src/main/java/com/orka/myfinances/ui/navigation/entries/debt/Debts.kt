@@ -14,9 +14,9 @@ import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.navigation.Destination
-import com.orka.myfinances.ui.screens.checkout.SelectClientBottomSheet
+import com.orka.myfinances.ui.screens.client.sheet.SelectClientBottomSheet
 import com.orka.myfinances.ui.screens.debt.list.AddDebtDialog
-import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
+import com.orka.myfinances.ui.models.ClientItemModel
 import com.orka.myfinances.ui.screens.debt.list.DebtsScreen
 import kotlinx.coroutines.launch
 

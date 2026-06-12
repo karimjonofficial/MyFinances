@@ -14,11 +14,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
+import com.orka.myfinances.ui.models.TemplateItemModel
 import com.orka.myfinances.ui.navigation.Destination
-import com.orka.myfinances.ui.navigation.entries.home.SelectTemplateBottomSheet
 import com.orka.myfinances.ui.screens.folder.catalog.CatalogScreen
 import com.orka.myfinances.ui.screens.folder.components.AddFolderDialog
-import com.orka.myfinances.ui.screens.folder.models.TemplateItemModel
+import com.orka.myfinances.ui.screens.templates.sheet.SelectTemplateBottomSheet
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,9 +35,6 @@ fun catalogEntry(
         key = "sheet_${destination.id.value}",
         initializer = { factory.templateBottomSheetViewModel() }
     )
-    LaunchedEffect(Unit) {
-        sheetViewModel.initialize()
-    }
     val uiState = viewModel.uiState.collectAsState()
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
     val templatesState = sheetViewModel.uiState.collectAsState()
@@ -64,6 +61,10 @@ fun catalogEntry(
             )
         },
         bottomSheet = {
+            LaunchedEffect(Unit) {
+                sheetViewModel.initialize()
+            }
+
             SelectTemplateBottomSheet(
                 state = templatesState.value,
                 onDismissRequest = {

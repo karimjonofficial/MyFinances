@@ -41,7 +41,7 @@ import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.ui.screens.checkout.viewmodel.BasketItemCardModel
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
-import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
+import com.orka.myfinances.ui.models.ClientItemModel
 import java.text.NumberFormat
 import java.util.Locale
 

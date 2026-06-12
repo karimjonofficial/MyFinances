@@ -18,7 +18,7 @@ import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.screens.checkout.CheckoutContent
 import com.orka.myfinances.ui.screens.checkout.CheckoutScreen
 import com.orka.myfinances.ui.screens.checkout.CheckoutUIState
-import com.orka.myfinances.ui.screens.checkout.SelectClientBottomSheet
+import com.orka.myfinances.ui.screens.client.sheet.SelectClientBottomSheet
 import com.orka.myfinances.ui.screens.client.list.AddClientDialog
 import kotlinx.coroutines.launch
 

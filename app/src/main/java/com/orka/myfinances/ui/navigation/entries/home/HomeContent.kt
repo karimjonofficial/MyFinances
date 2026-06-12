@@ -19,8 +19,9 @@ import com.orka.myfinances.application.viewmodels.template.bottomsheet.TemplateB
 import com.orka.myfinances.ui.screens.basket.BasketContent
 import com.orka.myfinances.ui.screens.folder.components.AddFolderDialog
 import com.orka.myfinances.ui.screens.folder.home.FoldersContent
-import com.orka.myfinances.ui.screens.folder.models.TemplateItemModel
+import com.orka.myfinances.ui.models.TemplateItemModel
 import com.orka.myfinances.ui.screens.profile.ProfileContent
+import com.orka.myfinances.ui.screens.templates.sheet.SelectTemplateBottomSheet
 import kotlinx.coroutines.launch
 
 @Composable

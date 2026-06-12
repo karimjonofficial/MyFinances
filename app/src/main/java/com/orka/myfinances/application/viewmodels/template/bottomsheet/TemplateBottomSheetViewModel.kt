@@ -9,7 +9,7 @@ import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
-import com.orka.myfinances.ui.screens.folder.models.TemplateItemModel
+import com.orka.myfinances.ui.models.TemplateItemModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class TemplateBottomSheetViewModel(

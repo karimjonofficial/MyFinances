@@ -3,7 +3,7 @@ package com.orka.myfinances.ui.screens.checkout
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.orka.myfinances.ui.screens.debt.list.ClientItemModel
+import com.orka.myfinances.ui.models.ClientItemModel
 
 class CheckoutUIState {
     var exposed by mutableStateOf(false)

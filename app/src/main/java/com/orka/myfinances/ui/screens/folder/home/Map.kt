@@ -1,7 +1,7 @@
 package com.orka.myfinances.ui.screens.folder.home
 
 import com.orka.myfinances.data.models.template.Template
-import com.orka.myfinances.ui.screens.folder.models.TemplateItemModel
+import com.orka.myfinances.ui.models.TemplateItemModel
 
 fun Template.toItemModel(): TemplateItemModel {
     return TemplateItemModel(
