@@ -7,17 +7,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.retain.retain
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
-import com.orka.myfinances.ui.navigation.Destination
-import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreen
 import com.orka.myfinances.ui.models.ProductTitleItemModel
+import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.screens.product.sheet.SelectProductTitleBottomSheet
+import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreen
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +38,7 @@ fun addReceiveEntry(
         initializer = { factory.productTitleBottomSheetViewModel(destination.id) }
     )
     val state = viewModel.uiState.collectAsState()
-    val title = retain { mutableStateOf<ProductTitleItemModel?>(null) }
+    val title = rememberSaveable { mutableStateOf<ProductTitleItemModel?>(null) }
 
     AddReceiveScreen(
         modifier = modifier,
