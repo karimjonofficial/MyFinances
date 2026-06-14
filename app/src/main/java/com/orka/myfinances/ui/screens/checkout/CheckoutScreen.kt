@@ -1,6 +1,7 @@
 package com.orka.myfinances.ui.screens.checkout
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -23,6 +24,12 @@ fun CheckoutScreen(
     val price = rememberSaveable { mutableStateOf<Int?>(null) }
     val description = rememberSaveable { mutableStateOf<String?>(null) }
     val printReceipt = rememberSaveable { mutableStateOf(true) }
+
+    LaunchedEffect(state) {
+        if(state is State.Success) {
+            price.value = state.value.exposedPrice
+        }
+    }
 
     StatefulScreen(
         modifier = modifier,

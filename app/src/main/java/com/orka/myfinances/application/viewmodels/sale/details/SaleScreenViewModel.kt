@@ -4,9 +4,10 @@ import com.orka.myfinances.data.api.sale.SaleApi
 import com.orka.myfinances.data.api.sale.models.response.SaleApiModel
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.api.getById
-import com.orka.myfinances.lib.format.FormatDateTime
+import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.lib.format.FormatTime
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -22,7 +23,8 @@ class SaleScreenViewModel(
     private val printer: Printer,
     private val saleApi: SaleApi,
     private val formatPrice: FormatPrice,
-    private val formatDateTime: FormatDateTime,
+    private val formatDate: FormatDate,
+    private val formatTime: FormatTime,
     private val formatDecimal: FormatDecimal,
     private val navigator: Navigator,
     loading: UiText,
@@ -31,7 +33,7 @@ class SaleScreenViewModel(
 ) : MapSingleViewModel<SaleApiModel, SaleScreenModel>(
     id = id,
     get = { saleApi.getById(it) },
-    map = { it.toScreenModel(formatPrice, formatDateTime, formatDecimal) },
+    map = { it.toScreenModel(formatPrice, formatDate, formatTime, formatDecimal) },
     loading = loading,
     failure = failure,
     logger = logger

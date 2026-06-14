@@ -7,7 +7,8 @@ import com.orka.myfinances.ui.components.UserCardModel
 data class SaleScreenModel(
     val id: Id,
     val price: String,
-    val dateTime: String,
+    val date: String,
+    val time: String,
     val client: ClientCardModel,
     val user: UserCardModel,
     val clientId: Id,

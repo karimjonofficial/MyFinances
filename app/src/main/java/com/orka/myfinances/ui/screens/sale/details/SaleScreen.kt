@@ -1,7 +1,8 @@
 package com.orka.myfinances.ui.screens.sale.details
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,17 +18,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.fixtures.format.FormatDateTimeImpl
+import com.orka.myfinances.fixtures.format.FormatDateImpl
 import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
+import com.orka.myfinances.fixtures.format.FormatTimeImpl
 import com.orka.myfinances.fixtures.resources.models.sale.sale1
 import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.lib.ui.components.DividedList
+import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -77,10 +81,7 @@ fun SaleScreen(
         },
         state = state
     ) { modifier, model ->
-        LazyColumn(
-            modifier = modifier.padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
+        LazyColumn(modifier = modifier.padding(horizontal = 16.dp)) {
             item {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
@@ -107,16 +108,46 @@ fun SaleScreen(
                         )
 
                         VerticalSpacer(12)
-                        Text(
-                            text = model.dateTime,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                        Row(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(50))
+                                .background(MaterialTheme.colorScheme.surfaceVariant)
+                                .padding(vertical = 8.dp, horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.calendar_today),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+
+                            HorizontalSpacer(4)
+                            Text(
+                                text = model.date,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+
+                            HorizontalSpacer(8)
+                            Icon(
+                                painter = painterResource(R.drawable.schedule),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+
+                            HorizontalSpacer(4)
+                            Text(
+                                text = model.time,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
                     }
                 }
             }
 
             item {
+                VerticalSpacer(16)
                 ClientCard(
                     model = model.client,
                     onClick = { interactor.navigateToClient(model.clientId) }
@@ -124,6 +155,7 @@ fun SaleScreen(
             }
 
             item {
+                VerticalSpacer(4)
                 UserCard(
                     user = model.user,
                     onClick = {}
@@ -131,6 +163,7 @@ fun SaleScreen(
             }
 
             item {
+                VerticalSpacer(16)
                 DividedList(
                     title = stringResource(R.string.items_purchased),
                     items = model.items,
@@ -141,6 +174,7 @@ fun SaleScreen(
 
             if (!model.description.isNullOrBlank()) {
                 item {
+                    VerticalSpacer(8)
                     DescriptionCard(description = model.description)
                 }
             }
@@ -156,7 +190,8 @@ fun SaleScreenPreview() {
             state = State.Success(
                 value = sale1.toUiModel(
                     formatPrice = FormatPriceImpl(),
-                    formatDateTime = FormatDateTimeImpl(),
+                    formatDate = FormatDateImpl(),
+                    formatTime = FormatTimeImpl(),
                     formatDecimal = FormatDecimalImpl()
                 )
             ),
