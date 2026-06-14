@@ -52,6 +52,7 @@ fun ProfileContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
+            VerticalSpacer(8)
             UserIcon(Modifier.size(160.dp))
 
             VerticalSpacer(8)

@@ -83,6 +83,7 @@ fun SaleScreen(
     ) { modifier, model ->
         LazyColumn(modifier = modifier.padding(horizontal = 16.dp)) {
             item {
+                VerticalSpacer(8)
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
