@@ -1,9 +1,11 @@
 package com.orka.myfinances.application.viewmodels.client.list
 
+import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.api.client.ClientApi
 import com.orka.myfinances.data.api.client.models.response.ClientApiModel
 import com.orka.myfinances.data.api.client.toApiRequest
 import com.orka.myfinances.data.repositories.client.AddClientRequest
+import com.orka.myfinances.data.repositories.client.ClientEvent
 import com.orka.myfinances.lib.data.api.scoped.company.getChunk
 import com.orka.myfinances.lib.data.api.scoped.company.insert
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
@@ -14,10 +16,14 @@ import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.client.list.viewmodel.ClientUiModel
 import com.orka.myfinances.ui.screens.client.list.viewmodel.ClientsScreenInteractor
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class ClientsScreenViewModel(
     private val clientApi: ClientApi,
+    private val flow: MutableSharedFlow<ClientEvent>,
     loading: UiText,
     failure: UiText,
     private val navigator: Navigator,
@@ -46,6 +52,7 @@ class ClientsScreenViewModel(
 
     init {
         initialize()
+        flow.onEach { refresh() }.launchIn(viewModelScope)
     }
 
     override fun add(
@@ -67,7 +74,7 @@ class ClientsScreenViewModel(
                 request = request,
                 map = AddClientRequest::toApiRequest
             )
-            if (created) initialize()
+            if (created) flow.emit(ClientEvent)
         }
     }
 

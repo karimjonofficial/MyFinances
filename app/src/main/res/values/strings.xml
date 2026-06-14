@@ -160,12 +160,12 @@
     <string name="total">Total</string>
     <string name="quick_discounts">Quick discounts</string>
     <string name="no_properties_provided">No properties provided</string>
-    <string name="left_f">%1$s left</string>
-    <string name="items_f">%1$s item(s)</string>
     <string name="popular_products">Popular products</string>
     <string name="latest_products">Latest products</string>
     <string name="add_order">Add order</string>
     <string name="go_to_pictures">Go to pictures</string>
     <string name="recommended_products">Recommended products</string>
-    <string name="fields_f">%1$s fields</string>
+    <string name="left_f">%1$s left</string>
+    <string name="items_f">%1$s item(s)</string>
+    <string name="fields_f">%1$s field(s)</string>
 </resources>

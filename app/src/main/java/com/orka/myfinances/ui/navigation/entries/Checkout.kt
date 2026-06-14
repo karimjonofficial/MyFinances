@@ -14,12 +14,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
+import com.orka.myfinances.ui.models.ClientItemModel
 import com.orka.myfinances.ui.navigation.Destination
-import com.orka.myfinances.ui.screens.checkout.CheckoutContent
 import com.orka.myfinances.ui.screens.checkout.CheckoutScreen
-import com.orka.myfinances.ui.screens.checkout.CheckoutUIState
-import com.orka.myfinances.ui.screens.client.sheet.SelectClientBottomSheet
 import com.orka.myfinances.ui.screens.client.list.AddClientDialog
+import com.orka.myfinances.ui.screens.client.sheet.SelectClientBottomSheet
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,42 +32,31 @@ fun checkoutEntry(
         initializer = { factory.checkoutViewModel() }
     )
     val state = viewModel.uiState.collectAsState()
-    val uiState = retain { CheckoutUIState() }
 
     val sheetVisible = rememberSaveable { mutableStateOf(false) }
-    val addClientDialogVisible = rememberSaveable { mutableStateOf(false) }
+    val dialogVisible = rememberSaveable { mutableStateOf(false) }
     val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
+
+    val selectedClient = retain { mutableStateOf<ClientItemModel?>(null) }
 
     CheckoutScreen(
         modifier = modifier,
         state = state.value,
-        uiState = uiState,
-        interactor = viewModel
-    ) { modifier, model ->
-        CheckoutContent(
-            modifier = modifier,
-            items = model.items,
-            hiddenPrice = model.salePrice,
-            uiState = uiState,
-            onOpenClients = { sheetVisible.value = true },
-            onOpenAddClient = { addClientDialogVisible.value = true }
+        selectedClient = selectedClient.value,
+        interactor = viewModel,
+        onOpenClients = { sheetVisible.value = true },
+        onOpenAddClient = { dialogVisible.value = true }
+    )
+
+    if (dialogVisible.value) {
+        val dialogViewModel = viewModel(
+            key = "dialog_${destination.index}",
+            initializer = { factory.addClientViewModel() }
         )
-    }
-
-    if (addClientDialogVisible.value) {
         AddClientDialog(
-            dismissRequest = { addClientDialogVisible.value = false },
-            onSuccess = { firstName, lastName, patronymic, phone, address ->
-                uiState.newClientFirstName = firstName
-                uiState.newClientLastName = lastName
-                uiState.newClientPatronymic = patronymic
-                uiState.newClientPhone = phone
-                uiState.newClientAddress = address
-
-                uiState.selectedClient = null
-                addClientDialogVisible.value = false
-            }
+            dismissRequest = { dialogVisible.value = false },
+            onSuccess = dialogViewModel::add
         )
     }
 
@@ -90,16 +78,15 @@ fun checkoutEntry(
                     }
                 }
             },
-            selectedClient = uiState.selectedClient,
+            selectedClient = selectedClient.value,
             onSelected = {
-                uiState.selectClient(it)
+                selectedClient.value = it
 
                 coroutineScope.launch {
                     sheetState.hide()
                 }.invokeOnCompletion {
-                    if (!sheetState.isVisible) {
+                    if (!sheetState.isVisible)
                         sheetVisible.value = false
-                    }
                 }
             },
             onLoadMore = clientSheetViewModel::loadMore

@@ -54,9 +54,7 @@ fun catalogEntry(
                 template = template.value,
                 dismissRequest = { dialogVisible.value = false },
                 onUnfoldTemplates = { sheetVisible.value = true },
-                onSuccess = { name, type, templateId ->
-                    viewModel.addFolder(name, type, templateId)
-                },
+                onSuccess = viewModel::addFolder,
                 onCancel = { dialogVisible.value = false }
             )
         },

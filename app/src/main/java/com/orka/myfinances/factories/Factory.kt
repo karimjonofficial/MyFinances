@@ -3,6 +3,7 @@ package com.orka.myfinances.factories
 import com.orka.myfinances.application.factories.Formatter
 import com.orka.myfinances.application.viewmodels.basket.BasketContentViewModel
 import com.orka.myfinances.application.viewmodels.checkout.CheckoutScreenViewModel
+import com.orka.myfinances.application.viewmodels.client.add.AddClientViewModel
 import com.orka.myfinances.application.viewmodels.client.bottomsheet.ClientBottomSheetViewModel
 import com.orka.myfinances.application.viewmodels.client.details.ClientScreenViewModel
 import com.orka.myfinances.application.viewmodels.client.list.ClientsScreenViewModel
@@ -209,6 +210,7 @@ class Factory(
     fun clientsViewModel(): ClientsScreenViewModel {
         return ClientsScreenViewModel(
             clientApi = clientApi,
+            flow = clientFlow,
             loading = loading,
             failure = failure,
             navigator = navigator,
@@ -277,10 +279,8 @@ class Factory(
             stockApi = stockApi,
             saleApi = saleApi,
             orderApi = orderApi,
-            clientApi = clientApi,
             saleFlow = saleFlow,
             orderFlow = orderFlow,
-            clientFlow = clientFlow,
             basketRepository = basketRepository,
             logger = logger,
             navigator = navigator,
@@ -295,6 +295,7 @@ class Factory(
     fun clientBottomSheetViewModel(): ClientBottomSheetViewModel {
         return ClientBottomSheetViewModel(
             clientApi = clientApi,
+            events = clientFlow,
             loading = loading,
             failure = failure,
             logger = logger
@@ -493,6 +494,13 @@ class Factory(
             failure = failure,
             logger = logger,
             navigator = navigator
+        )
+    }
+
+    fun addClientViewModel(): AddClientViewModel {
+        return AddClientViewModel(
+            clientApi = clientApi,
+            flow = clientFlow
         )
     }
 }

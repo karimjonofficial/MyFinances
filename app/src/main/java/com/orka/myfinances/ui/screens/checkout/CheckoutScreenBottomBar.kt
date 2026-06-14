@@ -12,35 +12,29 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
+import com.orka.myfinances.ui.models.ClientItemModel
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
 
 @Composable
 fun CheckoutScreenBottomBar(
-    uiState: CheckoutUIState,
+    selectedClient: ClientItemModel?,
+    price: Int?,
+    description: String?,
+    printReceipt: Boolean,
     interactor: CheckoutScreenInteractor,
 ) {
     BottomAppBar(contentPadding = PaddingValues(horizontal = 16.dp)) {
-        val filled = (uiState.selectedClient != null || uiState.newClientFirstName != null) && uiState.price != null
+        val filled = selectedClient != null && price != null
 
         Spacer(modifier = Modifier.weight(1f))
         OutlinedButton(
             enabled = filled,
             onClick = {
-                if (uiState.selectedClient != null) {
+                if (selectedClient != null) {
                     interactor.order(
-                        price = uiState.price,
-                        description = uiState.description,
-                        clientId = uiState.selectedClient!!.id
-                    )
-                } else {
-                    interactor.order(
-                        firstName = uiState.newClientFirstName!!,
-                        lastName = uiState.newClientLastName,
-                        patronymic = uiState.newClientPatronymic,
-                        phone = uiState.newClientPhone,
-                        address = uiState.newClientAddress,
-                        price = uiState.price,
-                        description = uiState.description
+                        price = price,
+                        description = description,
+                        clientId = selectedClient.id
                     )
                 }
             }
@@ -52,23 +46,12 @@ fun CheckoutScreenBottomBar(
         Button(
             enabled = filled,
             onClick = {
-                if (uiState.selectedClient != null) {
+                if (selectedClient != null) {
                     interactor.sell(
-                        price = uiState.price,
-                        description = uiState.description,
-                        clientId = uiState.selectedClient!!.id,
-                        print = uiState.printReceipt
-                    )
-                } else {
-                    interactor.sell(
-                        firstName = uiState.newClientFirstName!!,
-                        lastName = uiState.newClientLastName,
-                        patronymic = uiState.newClientPatronymic,
-                        phone = uiState.newClientPhone,
-                        address = uiState.newClientAddress,
-                        price = uiState.price,
-                        description = uiState.description,
-                        print = uiState.printReceipt
+                        price = price,
+                        description = description,
+                        clientId = selectedClient.id,
+                        print = printReceipt
                     )
                 }
             }
