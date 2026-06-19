@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
@@ -132,7 +133,7 @@ private fun OrderCardContent(
 
                     HorizontalSpacer(4)
                     Text(
-                        text = order.size,
+                        text = stringResource(R.string.items_f, order.size),
                         color = when {
                             order.expired -> MaterialTheme.colorScheme.onError
                             else -> LocalContentColor.current

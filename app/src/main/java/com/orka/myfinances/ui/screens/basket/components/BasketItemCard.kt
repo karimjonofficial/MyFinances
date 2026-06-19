@@ -115,7 +115,7 @@ fun BasketItemCard(
 
                             VerticalSpacer(4)
                             Text(
-                                text = item.availableAmount,
+                                text = stringResource(R.string.available_f, item.availableAmount),
                                 fontWeight = FontWeight.Bold,
                                 color = if(item.unavailable) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
                             )

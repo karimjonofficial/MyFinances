@@ -13,15 +13,14 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.ui.models.ClientItemModel
-import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
 
 @Composable
 fun CheckoutScreenBottomBar(
     selectedClient: ClientItemModel?,
     price: Int?,
-    description: String?,
-    printReceipt: Boolean,
-    interactor: CheckoutScreenInteractor,
+    onOrderClick: () -> Unit,
+    onDebtClick: () -> Unit,
+    onSellClick: () -> Unit
 ) {
     BottomAppBar(contentPadding = PaddingValues(horizontal = 16.dp)) {
         val filled = selectedClient != null && price != null
@@ -29,32 +28,23 @@ fun CheckoutScreenBottomBar(
         Spacer(modifier = Modifier.weight(1f))
         OutlinedButton(
             enabled = filled,
-            onClick = {
-                if (selectedClient != null) {
-                    interactor.order(
-                        price = price,
-                        description = description,
-                        clientId = selectedClient.id
-                    )
-                }
-            }
+            onClick = onOrderClick
         ) {
             Text(text = stringResource(R.string.order))
         }
 
         HorizontalSpacer(8)
+        OutlinedButton(
+            enabled = filled,
+            onClick = onDebtClick
+        ) {
+            Text(text = stringResource(R.string.debts))
+        }
+
+        HorizontalSpacer(8)
         Button(
             enabled = filled,
-            onClick = {
-                if (selectedClient != null) {
-                    interactor.sell(
-                        price = price,
-                        description = description,
-                        clientId = selectedClient.id,
-                        print = printReceipt
-                    )
-                }
-            }
+            onClick = onSellClick
         ) {
             Text(text = stringResource(R.string.sell))
         }

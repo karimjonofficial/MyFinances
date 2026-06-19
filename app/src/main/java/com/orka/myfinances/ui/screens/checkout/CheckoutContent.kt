@@ -223,9 +223,9 @@ private fun CheckoutContentPreview() {
             CheckoutScreenBottomBar(
                 selectedClient = null,
                 price = 1000,
-                description = null,
-                printReceipt = true,
-                interactor = CheckoutScreenInteractor.dummy,
+                onOrderClick = {},
+                onDebtClick = {},
+                onSellClick = {}
             )
         },
         title = "Checkout"
@@ -264,9 +264,9 @@ private fun CheckoutContentWithExposedPricePreview() {
             CheckoutScreenBottomBar(
                 selectedClient = null,
                 price = 1000,
-                description = null,
-                printReceipt = true,
-                interactor = CheckoutScreenInteractor.dummy,
+                onOrderClick = {},
+                onDebtClick = {},
+                onSellClick = {}
             )
         },
         title = "Checkout"
@@ -309,9 +309,9 @@ private fun CheckoutContentWithSelectedClientPreview() {
             CheckoutScreenBottomBar(
                 selectedClient = client,
                 price = 1000,
-                description = null,
-                printReceipt = true,
-                interactor = CheckoutScreenInteractor.dummy,
+                onOrderClick = {},
+                onDebtClick = {},
+                onSellClick = {}
             )
         },
         title = "Checkout"

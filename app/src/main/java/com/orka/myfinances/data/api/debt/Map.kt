@@ -10,5 +10,6 @@ fun AddDebtRequest.toApiRequest(officeId: Id): AddDebtApiRequest {
         officeId = officeId.value,
         price = price,
         description = description,
+        endDateTime = endDateTime
     )
 }

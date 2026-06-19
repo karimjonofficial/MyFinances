@@ -6,6 +6,7 @@ import com.orka.myfinances.data.api.order.getChunk
 import com.orka.myfinances.data.api.order.models.response.OrderApiModel
 import com.orka.myfinances.data.repositories.order.OrderEvent
 import com.orka.myfinances.lib.format.FormatDate
+import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.logger.Logger
@@ -25,6 +26,7 @@ import kotlinx.datetime.toLocalDateTime
 class OrdersListScreenViewModel(
     orderApi: OrderApi,
     events: Flow<OrderEvent>,
+    formatDecimal: FormatDecimal,
     formatPrice: FormatPrice,
     formatDate: FormatDate,
     formatLocalDate: FormatLocalDate,
@@ -43,7 +45,7 @@ class OrdersListScreenViewModel(
                 .mapKeys { entry -> if(entry.key != null) formatLocalDate.formatLocalDate(entry.key!!) else "End date time is not provided" }
                 .mapValues { entry ->
                     entry.value.map { order ->
-                        order.toUiModel(formatPrice, formatDate)
+                        order.toUiModel(formatDecimal, formatPrice, formatDate)
                     }
                 }
 

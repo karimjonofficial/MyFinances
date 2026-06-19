@@ -5,6 +5,7 @@ import com.orka.myfinances.data.api.order.OrderApi
 import com.orka.myfinances.data.api.order.getChunk
 import com.orka.myfinances.data.api.order.models.response.OrderApiModel
 import com.orka.myfinances.data.repositories.order.OrderEvent
+import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
@@ -25,6 +26,7 @@ import kotlinx.datetime.toLocalDateTime
 class OrdersHistoryContentViewModel(
     orderApi: OrderApi,
     events: Flow<OrderEvent>,
+    formatDecimal: FormatDecimal,
     formatPrice: FormatPrice,
     formatTime: FormatTime,
     formatLocalDate: FormatLocalDate,
@@ -43,7 +45,7 @@ class OrdersHistoryContentViewModel(
                 .mapKeys { entry -> formatLocalDate.formatLocalDate(entry.key) }
                 .mapValues { entry ->
                     entry.value.map { order ->
-                        order.toUiModel(formatPrice, formatTime)
+                        order.toUiModel(formatDecimal, formatPrice, formatTime)
                     }
                 }
 

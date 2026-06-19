@@ -18,7 +18,7 @@ fun ReceiveApiModel.toUiModel(
         model = ReceiveCardModel(
             title = items.joinToString { it.product.title.name },
             price = formatPrice.formatPrice(price.toDouble()),
-            size = "${formatDecimal.formatDecimal(items.size.toDouble())} items",
+            size = formatDecimal.formatDecimal(items.size.toDouble()),
             dateTime = formatTime.formatTime(dateTime)
         ),
         instant = dateTime,

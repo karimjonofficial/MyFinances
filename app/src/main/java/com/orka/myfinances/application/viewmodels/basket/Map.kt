@@ -23,7 +23,7 @@ fun BasketItem.toModel(
         price = formatPrice.formatPrice(product.exposedPrice.toDouble()),
         amount = formatDecimal.formatDecimal(amount.toDouble()),
         imageRes = R.drawable.furniture1,
-        availableAmount = "Available: ${formatDecimal.formatDecimal(availableAmount.toDouble())}",
+        availableAmount = formatDecimal.formatDecimal(availableAmount.toDouble()),
         increaseEnabled = increaseEnabled,
         decreaseEnabled = decreaseEnabled,
         unavailable = amount > availableAmount

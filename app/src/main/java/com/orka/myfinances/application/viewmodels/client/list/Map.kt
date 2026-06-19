@@ -15,7 +15,7 @@ fun ClientApiModel.toUiModel(): ClientUiModel {
 fun ClientApiModel.map(): ClientCardModel {
     return ClientCardModel(
         shortName = "${firstName[0]}${lastName?.firstOrNull() ?: ""}",
-        fullName = "$firstName $lastName",
+        fullName = "$firstName ${lastName ?: ""}",
         phone = phone,
     )
 }

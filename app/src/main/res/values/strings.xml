@@ -168,4 +168,5 @@
     <string name="left_f">%1$s left</string>
     <string name="items_f">%1$s item(s)</string>
     <string name="fields_f">%1$s field(s)</string>
+    <string name="available_f">Available: %1$s</string>
 </resources>

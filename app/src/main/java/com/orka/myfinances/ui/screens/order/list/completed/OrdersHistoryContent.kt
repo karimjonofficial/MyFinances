@@ -3,6 +3,7 @@ package com.orka.myfinances.ui.screens.order.list.completed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.extensions.str
@@ -29,7 +30,7 @@ fun OrdersHistoryContent(
             ListItem(
                 painter = painter,
                 headlineText = item.model.title,
-                supportingText = item.model.count,
+                supportingText = stringResource(R.string.items_f, item.model.size),
                 price = item.model.price,
                 dateTime = item.model.dateTime.str(),
                 onClick = { interactor.select(item) }
