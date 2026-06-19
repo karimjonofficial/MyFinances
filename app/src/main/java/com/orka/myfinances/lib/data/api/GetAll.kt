@@ -2,9 +2,15 @@ package com.orka.myfinances.lib.data.api
 
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.http.HttpStatusCode
 
-suspend inline fun <reified T> Api<T>.getAll(): List<T>? {
-    val response = httpClient.get(baseUrl)
+suspend inline fun <reified T> Api<T>.getAll(search: String? = null): List<T>? {
+    val response = httpClient.get(
+        urlString = baseUrl,
+        block = {
+            if (search != null) parameter("search", search)
+        }
+    )
     return if (response.status == HttpStatusCode.OK) response.body() else null
 }

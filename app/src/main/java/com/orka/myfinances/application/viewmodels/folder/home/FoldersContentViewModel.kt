@@ -29,13 +29,14 @@ class FoldersContentViewModel(
 ) : FormatListViewModel<FolderApiModel, FolderUiModel>(
     loading = loading,
     failure = failure,
-    get = { folderApi.getTop() },
+    get = { search -> folderApi.getTop(search) },
     map = { folder -> folder.toUiModel() },
     logger = logger
 ), FoldersContentInteractor {
     val uiState = state.asStateFlow()
 
     init {
+        initialize()
         events.onEach { if(it.catalogId == null) initialize() }
             .launchIn(viewModelScope)
     }

@@ -18,25 +18,27 @@ class FolderApi(
     private val officeId: Id,
     private val flow: MutableSharedFlow<FolderEvent>
 ) {
-    suspend fun getTop(): List<FolderApiModel>? {
+    suspend fun getTop(search: String? = null): List<FolderApiModel>? {
         val response = client.get(
             urlString = "categories/",
             block = {
                 parameter("branch", officeId.value)
                 parameter("parent", "null")
                 parameter("ordering", "name")
+                if (search != null) parameter("search", search)
             }
         )
         return if (response.status == HttpStatusCode.OK) response.body() else null
     }
 
-    suspend fun getByParent(parentId: Int): List<FolderApiModel>? {
+    suspend fun getByParent(parentId: Int, search: String? = null): List<FolderApiModel>? {
         val response = client.get(
             urlString = "categories/",
             block = {
                 parameter("parent", parentId)
                 parameter("branch", officeId.value)
                 parameter("ordering", "name")
+                if (search != null) parameter("search", search)
             }
         )
         return if (response.status == HttpStatusCode.OK) response.body() else null

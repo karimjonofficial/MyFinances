@@ -17,6 +17,7 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 fun <T> LazyColumnWithStickyHeaderScreen(
     modifier: Modifier = Modifier,
     topBar: @Composable (State<Map<String, List<T>>>) -> Unit = {},
+    bottomBar: @Composable (State<Map<String, List<T>>>) -> Unit = {},
     arrangementSpace: Dp = 0.dp,
     state: State<Map<String, List<T>>>,
     refresh: () -> Unit,
@@ -25,6 +26,7 @@ fun <T> LazyColumnWithStickyHeaderScreen(
     StatefulScreen<Map<String, List<T>>>(
         modifier = modifier,
         topBar = topBar,
+        bottomBar = bottomBar,
         onRetry = refresh,
         state = state
     ) { modifier, map ->

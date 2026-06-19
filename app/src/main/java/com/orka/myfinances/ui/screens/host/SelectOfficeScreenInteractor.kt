@@ -5,4 +5,5 @@ import com.orka.myfinances.lib.ui.viewmodel.StateFul
 
 interface SelectOfficeScreenInteractor : StateFul {
     fun select(id: Id)
+    fun search(query: String)
 }
