@@ -4,7 +4,6 @@ import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import kotlinx.coroutines.Job
 
 abstract class FormatListViewModel<T, U>(
     protected val loading: UiText,
@@ -16,15 +15,28 @@ abstract class FormatListViewModel<T, U>(
     initialState = State.Loading(loading),
     logger = logger
 ) {
-    private var query: String? = null
-    private var fetchJob: Job? = null
+    protected var query: String? = null
 
     final override fun initialize() {
-        fetch(query)
+        launch {
+            try {
+                val response = get.getAll(null)
+                if (response != null) {
+                    setState(State.Success(response.map { map(it) }))
+                } else setState(State.Failure(failure))
+            } catch (e: Exception) {
+                setState(State.Failure(UiText.Str(e.message.toString())))
+            }
+        }
     }
 
     final override fun refresh() {
-        fetch(query)
+        tryTransition { oldState ->
+            val response = get.getAll(query)
+            if (response != null) {
+                State.Success(response.map { map(it) })
+            } else State.Failure(failure, oldState.value)
+        }
     }
 
     open fun search(query: String) {
@@ -32,22 +44,23 @@ abstract class FormatListViewModel<T, U>(
         refresh()
     }
 
-    private fun fetch(query: String?) {
-        fetchJob?.cancel()
-        fetchJob = launch {
-            try {
-                val oldState = state.value
-                if (!(oldState is State.Loading && oldState.value != null)) {
+    protected fun tryTransition(produceState: suspend (State<List<U>>) -> State<List<U>>) {
+        launch {
+            val oldState = state.value
+            if (oldState !is State.Loading) {
+                try {
                     setState(State.Loading(loading, oldState.value))
+                    val newState = produceState(oldState)
+                    setState(newState)
+                } catch (e: Exception) {
+                    setState(State.Failure(UiText.Str(e.message.toString()), oldState.value))
                 }
-
-                val response = get.getAll(query)
-                if (response != null) {
-                    setState(State.Success(response.map { map(it) }))
-                } else setState(State.Failure(failure))
-            } catch (e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString())))
-            }
+            } else setState(
+                State.Failure(
+                    error = UiText.Str("Action when state was Loading"),
+                    oldState.value
+                )
+            )
         }
     }
 }
