@@ -1,5 +1,6 @@
 package com.orka.myfinances.lib.ui.components
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -53,6 +54,16 @@ fun SearchTopAppBar(
     var searchMode by rememberSaveable { mutableStateOf(false) }
     var searchText by rememberSaveable { mutableStateOf("") }
 
+    val closeSearch = {
+        searchMode = false
+        searchText = ""
+        onSearch("")
+    }
+
+    if (searchMode) {
+        BackHandler(onBack = closeSearch)
+    }
+
     LaunchedEffect(searchMode) {
         if (searchMode) {
             snapshotFlow { searchText }
@@ -80,13 +91,7 @@ fun SearchTopAppBar(
                 )
             },
             navigationIcon = {
-                IconButton(
-                    onClick = {
-                        searchMode = false
-                        searchText = ""
-                        onSearch("")
-                    }
-                ) {
+                IconButton(onClick = closeSearch) {
                     Icon(
                         painter = painterResource(R.drawable.arrow_back),
                         contentDescription = null
