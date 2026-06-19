@@ -41,7 +41,6 @@ import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.ui.models.ClientItemModel
 import com.orka.myfinances.ui.screens.checkout.viewmodel.BasketItemCardModel
-import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
 import java.text.NumberFormat
 import java.util.Locale
 
