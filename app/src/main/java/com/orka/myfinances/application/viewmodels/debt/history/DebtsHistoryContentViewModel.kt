@@ -36,7 +36,7 @@ class DebtsHistoryContentViewModel(
 ) : MapChunkViewModel<DebtApiModel, DebtUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page -> debtApi.getChunk(size, page, true) },
+    get = { size, page, query -> debtApi.getChunk(size, page, true, search = query) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map = chunk.results

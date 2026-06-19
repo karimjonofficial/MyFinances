@@ -14,6 +14,7 @@ suspend fun OrderApi.getChunk(
     page: Int,
     completed: Boolean,
     orderBy: String? = null,
+    search: String? = null
 ): Chunk<OrderApiModel>? {
     val response = httpClient.get(
         urlString = baseUrl,
@@ -23,6 +24,7 @@ suspend fun OrderApi.getChunk(
             parameter("page", page)
             parameter("completed", completed)
             if(orderBy != null) parameter("ordering", orderBy)
+            if(search != null) parameter("search", search)
         }
     )
     return if (response.status == HttpStatusCode.OK) response.body<ChunkApiModel<OrderApiModel>>().map() else null

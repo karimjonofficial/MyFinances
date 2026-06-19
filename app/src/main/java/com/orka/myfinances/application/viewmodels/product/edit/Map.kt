@@ -17,6 +17,7 @@ fun ProductTitleApiModel.toEditorModel(categories: List<CategoryItemModel>): Add
         initialPrice = defaultPrice.toInt(),
         initialSalePrice = defaultSalePrice.toInt(),
         initialDescription = description,
+        initialExposedPrice = defaultExposedPrice.toInt(),
         initialProperties = properties.map(PropertyApiModel::toPropertyModel),
         isEditMode = true
     )

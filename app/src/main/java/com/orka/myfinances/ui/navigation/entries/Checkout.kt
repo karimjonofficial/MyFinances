@@ -89,7 +89,8 @@ fun checkoutEntry(
                         sheetVisible.value = false
                 }
             },
-            onLoadMore = clientSheetViewModel::loadMore
+            onLoadMore = clientSheetViewModel::loadMore,
+            onSearch = clientSheetViewModel::search
         )
     }
 }

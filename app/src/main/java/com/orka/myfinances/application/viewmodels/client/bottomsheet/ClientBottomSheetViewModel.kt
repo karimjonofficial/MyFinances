@@ -26,7 +26,7 @@ class ClientBottomSheetViewModel(
 ) : MapChunkViewModel<ClientApiModel, ClientItemModel>(
     loading = loading,
     failure = failure,
-    get = { size, page -> clientApi.getChunk(size, page, "first_name") },
+    get = { size, page, query -> clientApi.getChunk(size, page, "first_name", query) },
     map = { chunk ->
         val map = chunk.results
             .sortedBy { it.firstName }

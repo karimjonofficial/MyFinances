@@ -10,6 +10,7 @@ import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.product.list.ProductTitleUiModel
@@ -30,7 +31,7 @@ class ProductTitlesContentViewModel(
 ) : MapChunkViewModel<ProductTitleApiModel, ProductTitleUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page -> productTitleApi.getByCategory(size, page, categoryId) },
+    get = { size, page, query -> productTitleApi.getByCategory(size, page, categoryId, query) },
     map = { chunk ->
         val content = chunk.results
             .sortedBy(ProductTitleApiModel::name)
@@ -52,8 +53,14 @@ class ProductTitlesContentViewModel(
     init {
         initialize()
 
-        productTitleEvents.onEach {
-            if (it.categoryId == categoryId) refresh()
+        productTitleEvents.onEach { event ->
+            val s = state.value
+            if(s is State.Success) {
+                val c = s.value.content.values
+                c.forEach { collection ->
+                    if(collection.any { it.id == event.titleId }) refresh()
+                }
+            }
         }.launchIn(viewModelScope)
     }
 

@@ -3,13 +3,12 @@ package com.orka.myfinances.ui.screens.debt.list
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
+import com.orka.myfinances.lib.ui.components.SearchTopAppBar
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -28,8 +27,9 @@ fun DebtsScreen(
     LazyColumnWithStickyHeaderScreen(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(R.string.debts)) },
+            SearchTopAppBar(
+                title = stringResource(R.string.debts),
+                onSearch = interactor::search,
                 actions = {
                     IconButton(onClick = onAddDebt) {
                         Icon(

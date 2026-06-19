@@ -35,7 +35,7 @@ class OrdersListScreenViewModel(
 )  : MapChunkViewModel<OrderApiModel, OrderUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page -> orderApi.getChunk(size, page, false, "end_date_time") },
+    get = { size, page, query -> orderApi.getChunk(size, page, false, "end_date_time", query) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map =

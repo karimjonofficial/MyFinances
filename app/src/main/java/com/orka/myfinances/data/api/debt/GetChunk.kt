@@ -13,7 +13,8 @@ suspend fun DebtApi.getChunk(
     size: Int,
     page: Int,
     completed: Boolean,
-    orderBy: String? = null
+    orderBy: String? = null,
+    search: String? = null
 ): Chunk<DebtApiModel>? {
     val response = httpClient.get(
         urlString = baseUrl,
@@ -23,6 +24,7 @@ suspend fun DebtApi.getChunk(
             parameter("page_size", size)
             parameter("page", page)
             if(orderBy != null) parameter("ordering", orderBy)
+            if(search != null) parameter("search", search)
         }
     )
     return if (response.status == HttpStatusCode.OK) response.body<ChunkApiModel<DebtApiModel>>().map() else null

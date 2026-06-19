@@ -9,6 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.notifications
+import com.orka.myfinances.lib.ui.components.SearchTopAppBar
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -22,8 +23,12 @@ fun NotificationsScreen(
 ) {
     LazyColumnWithStickyHeaderScreen(
         modifier = modifier,
-        title = stringResource(R.string.notifications),
-        contentPadding = PaddingValues(horizontal = 4.dp),
+        topBar = {
+            SearchTopAppBar(
+                title = stringResource(R.string.notifications),
+                onSearch = interactor::search
+            )
+        },
         refresh = interactor::refresh,
         loadMore = interactor::loadMore,
         state = state,

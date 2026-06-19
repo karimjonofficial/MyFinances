@@ -11,10 +11,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,11 +28,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.BottomSheetItemModel
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.viewmodel.State
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.drop
+import kotlin.time.Duration.Companion.milliseconds
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, FlowPreview::class)
 @Composable
 fun <T: BottomSheetItemModel> SelectionBottomSheet(
     modifier: Modifier = Modifier,
@@ -36,7 +45,8 @@ fun <T: BottomSheetItemModel> SelectionBottomSheet(
     state: State<ChunkUiModel<T>>,
     selectedItem: T?,
     onSelected: (T) -> Unit,
-    onLoadMore: () -> Unit
+    onLoadMore: () -> Unit,
+    onSearch: (String) -> Unit
 ) {
     ModalBottomSheet(
         modifier = modifier,
@@ -44,6 +54,14 @@ fun <T: BottomSheetItemModel> SelectionBottomSheet(
         sheetState = sheetState
     ) {
         val lazyState = rememberLazyListState()
+        var searchText by rememberSaveable { mutableStateOf("") }
+
+        LaunchedEffect(Unit) {
+            snapshotFlow { searchText }
+                .drop(1)
+                .debounce(300.milliseconds)
+                .collect { onSearch(it) }
+        }
 
         LaunchedEffect(lazyState, state) {
             snapshotFlow { lazyState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
@@ -65,7 +83,26 @@ fun <T: BottomSheetItemModel> SelectionBottomSheet(
             ) {
                 val itemModifier = Modifier.fillMaxWidth()
 
+                item {
+                    VerticalSpacer(8)
+                    OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(R.drawable.search),
+                                contentDescription = null
+                            )
+                        },
+                        label = { Text(text = stringResource(R.string.search)) },
+                        value = searchText,
+                        onValueChange = { searchText = it }
+                    )
+                }
+
+                item { VerticalSpacer(16) }
+
                 if (selectedItem != null) {
+
                     item(key = "selected") {
                         StickyHeader(key = stringResource(R.string.selected_string))
                     }

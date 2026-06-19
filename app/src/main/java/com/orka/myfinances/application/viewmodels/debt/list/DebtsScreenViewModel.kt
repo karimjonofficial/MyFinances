@@ -41,7 +41,7 @@ class DebtsScreenViewModel(
 ) : MapChunkViewModel<DebtApiModel, DebtUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page -> debtApi.getChunk(size, page, false) },
+    get = { size, page, query -> debtApi.getChunk(size, page, false, search = query) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map = chunk.results

@@ -37,7 +37,9 @@ fun AddProductTitleScreenBottomBar(
             Button(
                 enabled = name.value.isNotEmpty() &&
                         price.value != null &&
-                        salePrice.value != null && propertiesValid &&
+                        salePrice.value != null &&
+                        exposedPrice.value != null &&
+                        propertiesValid &&
                         selectedCategory != null,
                 onClick = {
                     selectedCategory?.let { category ->

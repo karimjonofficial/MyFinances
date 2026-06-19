@@ -27,7 +27,7 @@ class NotificationsScreenViewModel(
 ) : MapChunkViewModel<NotificationApiModel, NotificationUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page -> api.getChunk(size, page) },
+    get = { size, page, query -> api.getChunk(size, page, search = query) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map = chunk.results

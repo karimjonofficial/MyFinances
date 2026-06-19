@@ -10,7 +10,8 @@ import io.ktor.http.HttpStatusCode
 suspend inline fun <reified T> Api<T>.getChunk(
     size: Int,
     page: Int,
-    orderBy: String? = null
+    orderBy: String? = null,
+    search: String? = null
 ): Chunk<T>? {
     val response = httpClient.get(
         urlString = baseUrl,
@@ -18,6 +19,7 @@ suspend inline fun <reified T> Api<T>.getChunk(
             parameter("page_size", size)
             parameter("page", page)
             if (orderBy != null) parameter("ordering", orderBy)
+            if (search != null) parameter("search", search)
         }
     )
     return if (response.status == HttpStatusCode.OK) response.body<ChunkApiModel<T>>().map() else null

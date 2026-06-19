@@ -14,6 +14,7 @@ interface TemplatesScreenInteractor : StateFul, ChunkViewModel {
             override fun initialize() {}
             override fun refresh() {}
             override fun loadMore() {}
+            override fun search(query: String) {}
         }
     }
 }

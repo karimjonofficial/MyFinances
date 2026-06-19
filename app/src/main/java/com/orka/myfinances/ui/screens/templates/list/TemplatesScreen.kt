@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.template.templates
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
-import com.orka.myfinances.lib.ui.components.TopAppBar
+import com.orka.myfinances.lib.ui.components.SearchTopAppBar
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -26,8 +26,9 @@ fun TemplatesScreen(
     LazyColumnWithStickyHeaderScreen(
         modifier = modifier,
         topBar = {
-            TopAppBar(
+            SearchTopAppBar(
                 title = stringResource(R.string.templates),
+                onSearch = interactor::search,
                 actions = {
                     IconButton(onClick = interactor::addTemplate) {
                         Icon(

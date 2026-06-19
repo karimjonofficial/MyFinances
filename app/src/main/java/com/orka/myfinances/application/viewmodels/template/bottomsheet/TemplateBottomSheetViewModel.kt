@@ -1,26 +1,32 @@
 package com.orka.myfinances.application.viewmodels.template.bottomsheet
 
+import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.application.viewmodels.folder.home.toItemModel
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.api.template.TemplateApi
 import com.orka.myfinances.data.api.template.models.response.TemplateApiModel
+import com.orka.myfinances.data.repositories.template.TemplateEvent
 import com.orka.myfinances.lib.data.api.scoped.office.getChunk
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.models.TemplateItemModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class TemplateBottomSheetViewModel(
     private val templateApi: TemplateApi,
+    flow: Flow<TemplateEvent>,
     loading: UiText,
     failure: UiText,
     logger: Logger
 ) : MapChunkViewModel<TemplateApiModel, TemplateItemModel>(
     loading = loading,
     failure = failure,
-    get = { size, page -> templateApi.getChunk(size, page) },
+    get = { size, page, query -> templateApi.getChunk(size, page, search = query) },
     map = { chunk ->
         val map = chunk.results
             .sortedBy { it.name }
@@ -38,4 +44,8 @@ class TemplateBottomSheetViewModel(
     logger = logger
 ), TemplateBottomSheetInteractor {
     val uiState = state.asStateFlow()
+
+    init {
+        flow.onEach { refresh() }.launchIn(viewModelScope)
+    }
 }

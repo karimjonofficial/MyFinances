@@ -37,7 +37,7 @@ class SaleContentViewModel(
 ) : MapChunkViewModel<SaleApiModel, SaleUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page -> saleApi.getChunk(size, page) },
+    get = { size, page, query -> saleApi.getChunk(size, page, search = query) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map = chunk.results.groupBy { sale -> sale.dateTime.toLocalDateTime(timeZone).date }

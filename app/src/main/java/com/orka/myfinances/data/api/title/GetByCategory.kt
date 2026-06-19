@@ -13,7 +13,8 @@ import io.ktor.http.HttpStatusCode
 suspend fun ProductTitleApi.getByCategory(
     size: Int,
     pageIndex: Int,
-    categoryId: Id
+    categoryId: Id,
+    search: String? = null
 ): Chunk<ProductTitleApiModel>? {
     val response = httpClient.get(
         urlString = "product-titles/",
@@ -22,6 +23,7 @@ suspend fun ProductTitleApi.getByCategory(
             parameter("page_size", size)
             parameter("page", pageIndex)
             parameter("ordering", "name")
+            if (search != null) parameter("search", search)
         }
     )
     return if (response.status == HttpStatusCode.OK) response.body<ChunkApiModel<ProductTitleApiModel>>().map() else null

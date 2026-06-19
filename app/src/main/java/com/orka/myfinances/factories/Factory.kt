@@ -321,6 +321,7 @@ class Factory(
         return ProductTitleBottomSheetViewModel(
             categoryId = id,
             productTitleApi = productTitleApi,
+            flow = productTitleFlow,
             loading = loading,
             failure = failure,
             logger = logger
@@ -478,6 +479,7 @@ class Factory(
     fun templateBottomSheetViewModel(): TemplateBottomSheetViewModel {
         return TemplateBottomSheetViewModel(
             templateApi = templateApi,
+            flow = templateFlow,
             loading = loading,
             failure = failure,
             logger = logger

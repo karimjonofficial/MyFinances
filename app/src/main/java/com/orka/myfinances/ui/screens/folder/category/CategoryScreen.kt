@@ -10,7 +10,7 @@ import com.orka.myfinances.lib.ui.screens.MultipleTabScreen
 @Composable
 fun CategoryScreen(
     modifier: Modifier = Modifier,
-    topBar: @Composable () -> Unit,
+    topBar: @Composable (selectedTabIndex: Int) -> Unit,
     tabContent: @Composable (index: Int) -> Unit
 ) {
     val tabs = listOf(

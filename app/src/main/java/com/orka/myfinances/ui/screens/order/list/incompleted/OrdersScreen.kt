@@ -3,13 +3,8 @@ package com.orka.myfinances.ui.screens.order.list.incompleted
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,6 +13,7 @@ import com.orka.myfinances.fixtures.format.FormatDateImpl
 import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.order.orders
+import com.orka.myfinances.lib.ui.components.SearchTopAppBar
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -37,16 +33,9 @@ fun OrdersScreen(
     LazyColumnWithStickyHeaderScreen(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(R.string.orders)) },
-                actions = {
-                    IconButton(onClick = { /* TODO */ }) {
-                        Icon(
-                            painter = painterResource(R.drawable.search),
-                            contentDescription = stringResource(R.string.search)
-                        )
-                    }
-                }
+            SearchTopAppBar(
+                title = stringResource(R.string.orders),
+                onSearch = interactor::search
             )
         },
         arrangementSpace = 8.dp,

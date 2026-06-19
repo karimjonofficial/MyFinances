@@ -35,7 +35,7 @@ class OrdersHistoryContentViewModel(
 ) : MapChunkViewModel<OrderApiModel, HistoryOrderUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page -> orderApi.getChunk(size, page, true) },
+    get = { size, page, query -> orderApi.getChunk(size, page, true, search = query) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map =

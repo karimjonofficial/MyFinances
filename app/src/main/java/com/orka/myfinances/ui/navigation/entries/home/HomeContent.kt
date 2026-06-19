@@ -89,7 +89,8 @@ fun HomeContent(
                         }
                     },
                     selectedItem = template.value,
-                    onLoadMore = sheetViewModel::loadMore
+                    onLoadMore = sheetViewModel::loadMore,
+                    onSearch = sheetViewModel::search
                 )
             }
 

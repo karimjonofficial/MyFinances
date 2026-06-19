@@ -3,46 +3,66 @@ package com.orka.myfinances.lib.ui.screens
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.components.Scaffold
+import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.models.Tab
 import kotlinx.coroutines.launch
 
 @Composable
 fun MultipleTabScreen(
     modifier: Modifier = Modifier,
-    topBar: @Composable () -> Unit = {},
+    topBar: @Composable (selectedTabIndex: Int) -> Unit = {},
     tabs: List<Tab>,
     tabContent: @Composable (index: Int) -> Unit
 ) {
-    Scaffold(
+    val selectedTab = rememberSaveable { mutableIntStateOf(0) }
+    val pagerState = rememberPagerState(pageCount = { tabs.size })
+
+    MultipleTabScreen(
         modifier = modifier,
         topBar = topBar,
+        tabs = tabs,
+        selectedTab = selectedTab,
+        pagerState = pagerState,
+        tabContent = tabContent
+    )
+}
+
+@Composable
+fun MultipleTabScreen(
+    modifier: Modifier = Modifier,
+    topBar: @Composable (selectedTabIndex: Int) -> Unit = {},
+    tabs: List<Tab>,
+    selectedTab: MutableIntState,
+    pagerState: PagerState,
+    tabContent: @Composable (index: Int) -> Unit
+) {
+    val coroutineScope = rememberCoroutineScope()
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.currentPage }
+            .collect { page ->
+                selectedTab.intValue = page
+            }
+    }
+
+    Scaffold(
+        modifier = modifier,
+        topBar = { topBar(selectedTab.intValue) },
     ) { paddingValues ->
         Column(modifier = Modifier.scaffoldPadding(paddingValues)) {
-            val selectedTab = rememberSaveable { mutableIntStateOf(0) }
-            val pagerState = rememberPagerState(pageCount = { tabs.size })
-            val coroutineScope = rememberCoroutineScope()
-            LaunchedEffect(pagerState) {
-                snapshotFlow { pagerState.currentPage }
-                    .collect { page ->
-                        selectedTab.intValue = page
-                    }
-            }
-
             PrimaryTabRow(selectedTabIndex = selectedTab.intValue) {
                 tabs.forEach {
                     Tab(
@@ -67,24 +87,4 @@ fun MultipleTabScreen(
             }
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MultipleTabScreen(
-    modifier: Modifier = Modifier,
-    title: String,
-    tabs: List<Tab>,
-    tabContent: @Composable (index: Int) -> Unit
-) {
-    MultipleTabScreen(
-        modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = { Text(text = title) }
-            )
-        },
-        tabs = tabs,
-        tabContent = tabContent
-    )
 }

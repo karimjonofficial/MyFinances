@@ -40,9 +40,15 @@ fun categoryEntry(
 
     CategoryScreen(
         modifier = modifier,
-        topBar = {
+        topBar = { index ->
             CategoryScreenTopBar(
                 state = categoryState,
+                onSearch = { query ->
+                    when (index) {
+                        0 -> stockViewModel.search(query)
+                        1 -> productViewModel.search(query)
+                    }
+                },
                 onAddProductClick = categoryViewModel::addProduct,
                 onAddReceive = categoryViewModel::receive,
                 onExposeClick = {

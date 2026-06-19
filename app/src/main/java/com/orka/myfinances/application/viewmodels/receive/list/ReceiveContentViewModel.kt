@@ -37,7 +37,7 @@ class ReceiveContentViewModel(
 ) : MapChunkViewModel<ReceiveApiModel, ReceiveUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page -> receiveApi.getChunk(size, page) },
+    get = { size, page, query -> receiveApi.getChunk(size, page, search = query) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map =

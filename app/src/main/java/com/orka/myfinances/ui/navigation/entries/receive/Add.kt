@@ -78,7 +78,8 @@ fun addReceiveEntry(
                     }
                 }
             },
-            onLoadMore = sheetViewModel::loadMore
+            onLoadMore = sheetViewModel::loadMore,
+            onSearch = sheetViewModel::search
         )
     }
 }

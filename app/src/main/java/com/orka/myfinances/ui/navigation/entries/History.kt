@@ -53,6 +53,14 @@ fun historyEntry(
     HistoryScreen(
         modifier = modifier,
         tabs = tabs,
+        onSearch = { index, query ->
+            when (index) {
+                0 -> saleViewModel.search(query)
+                1 -> receiveViewModel.search(query)
+                2 -> ordersViewModel.search(query)
+                3 -> debtsViewModel.search(query)
+            }
+        },
         tabContent = { index ->
             val contentModifier = Modifier.fillMaxSize()
 

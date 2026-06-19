@@ -4,7 +4,9 @@ import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.ui.viewmodel.ChunkViewModel
 import com.orka.myfinances.lib.ui.viewmodel.State
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 
 abstract class MapChunkViewModel<TApi, TUi>(
@@ -16,67 +18,55 @@ abstract class MapChunkViewModel<TApi, TUi>(
 ) : StateFulViewModel<State<ChunkUiModel<TUi>>>(
     initialState = State.Loading(loading),
     logger = logger
-) {
+), ChunkViewModel {
     protected val dataState = MutableStateFlow<List<TApi>?>(null)
     protected val size = 10
     protected var index = 1
+    protected var query: String? = null
+    private var fetchJob: Job? = null
 
     final override fun initialize() {
-        launch {
-            try {
-                val chunk = get.getChunk(size, 1)
-                if (chunk != null) {
-                    dataState.value = chunk.results
-                    val groupedData = map(chunk)
-                    setState(State.Success(groupedData))
-                } else setState(State.Failure(failure))
-            } catch(e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString())))
-            }
-        }
+        fetch(1, query)
     }
 
     final override fun refresh() {
-        launch {
-            try {
-                val oldState = state.value
-                resetPagination()
-                if(!(oldState is State.Loading && oldState.value != null)) {
-                    setState(State.Loading(loading, oldState.value))
-                }
-                val chunk = get.getChunk(size, index)
-                if (chunk != null) {
-                    dataState.value = chunk.results
-                    val groupedData = map(chunk)
-                    setState(State.Success(groupedData))
-                } else setState(State.Failure(failure))
-            } catch(e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString())))
-            }
-        }
+        resetPagination()
+        fetch(index, query)
     }
 
-    fun loadMore() {
-        launch {
+    override fun search(query: String) {
+        this.query = query.ifBlank { null }
+        refresh()
+    }
+
+    override fun loadMore() {
+        fetch(++index, query, append = true)
+    }
+
+    private fun fetch(page: Int, query: String?, append: Boolean = false) {
+        fetchJob?.cancel()
+        fetchJob = launch {
             try {
                 val oldState = state.value
-                setState(
-                    State.Loading(
-                        message = loading,
-                        value = if(oldState is State.Success) oldState.value else null
-                    )
-                )
-                val oldData = dataState.value
-                val chunk = get.getChunk(size, ++index)
-                if (chunk == null || oldState !is State.Success)
-                    setState(State.Failure(failure))
-                else {
-                    val newData = if (oldData != null) oldData + chunk.results else chunk.results
+                if (!append && !(oldState is State.Loading && oldState.value != null)) {
+                    setState(State.Loading(loading, oldState.value))
+                } else if (append) {
+                    setState(State.Loading(loading, if (oldState is State.Success) oldState.value else null))
+                }
+
+                val chunk = get.getChunk(size, page, query)
+                if (chunk != null) {
+                    val newData = if (append) {
+                        val oldData = dataState.value
+                        if (oldData != null) oldData + chunk.results else chunk.results
+                    } else {
+                        chunk.results
+                    }
                     dataState.value = newData
                     val groupedData = map(chunk.copy(results = newData))
                     setState(State.Success(groupedData))
-                }
-            } catch(e: Exception) {
+                } else setState(State.Failure(failure))
+            } catch (e: Exception) {
                 setState(State.Failure(UiText.Str(e.message.toString())))
             }
         }

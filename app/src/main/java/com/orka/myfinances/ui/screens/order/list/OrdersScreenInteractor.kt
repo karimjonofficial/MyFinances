@@ -11,6 +11,7 @@ interface OrdersScreenInteractor : StateFul, ChunkViewModel {
             override fun initialize() {}
             override fun refresh() {}
             override fun loadMore() {}
+            override fun search(query: String) {}
             override fun select(order: OrderUiModel) {}
         }
     }

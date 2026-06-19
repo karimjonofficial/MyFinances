@@ -14,6 +14,7 @@ interface StockContentInteractor : ChunkViewModel {
             override fun addToBasket(id: Id) {}
             override fun removeFromBasket(id: Id) {}
             override fun loadMore() {}
+            override fun search(query: String) {}
             override fun initialize() {}
             override fun refresh() {}
             override fun expose() {}

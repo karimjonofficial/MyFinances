@@ -35,7 +35,7 @@ class StockItemsContentViewModel(
 ) : MapChunkViewModel<StockItemApiModel, StockItemUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page -> stockApi.getByCategory(size, page, categoryId) },
+    get = { size, page, query -> stockApi.getByCategory(size, page, categoryId, query) },
     map = { chunk ->
         val basketItems = basketRepository.get()
         val content = chunk.results

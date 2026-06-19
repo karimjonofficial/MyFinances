@@ -82,7 +82,8 @@ fun catalogEntry(
                 },
                 sheetState = sheetState,
                 selectedItem = template.value,
-                onLoadMore = sheetViewModel::loadMore
+                onLoadMore = sheetViewModel::loadMore,
+                onSearch = sheetViewModel::search
             )
         },
         sheetVisible = sheetVisible.value

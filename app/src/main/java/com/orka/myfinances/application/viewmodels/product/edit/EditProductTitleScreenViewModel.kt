@@ -38,7 +38,6 @@ class EditProductTitleScreenViewModel(
         val productTitle = productTitleApi.getById(productId)
 
         if (categories != null && productTitle != null) {
-            flow.emit(ProductTitleEvent(Id(productTitle.category), productId))
             State.Success(productTitle.toEditorModel(categories))
         } else null
     },
@@ -90,7 +89,7 @@ class EditProductTitleScreenViewModel(
                         )
 
                         if (updated) {
-                            flow.emit(ProductTitleEvent(selectedCategory.id, productId))
+                            flow.emit(ProductTitleEvent(productId))
                             navigator.back()
                         } else setState(State.Failure(failure, oldState.value))
                     }

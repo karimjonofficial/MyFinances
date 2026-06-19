@@ -30,7 +30,7 @@ class TemplatesScreenViewModel(
 ) : MapChunkViewModel<TemplateApiModel, TemplateUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page -> templateApi.getChunk(size, page, "name") },
+    get = { size, page, query -> templateApi.getChunk(size, page, "name", query) },
     map = { chunk ->
         val map = chunk.results
             .sortedBy { it.name }

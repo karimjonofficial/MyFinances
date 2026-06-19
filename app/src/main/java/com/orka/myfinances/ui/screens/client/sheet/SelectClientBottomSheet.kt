@@ -18,7 +18,8 @@ fun SelectClientBottomSheet(
     onDismissRequest: () -> Unit,
     sheetState: SheetState,
     onSelected: (ClientItemModel) -> Unit,
-    onLoadMore: () -> Unit
+    onLoadMore: () -> Unit,
+    onSearch: (String) -> Unit
 ) {
     SelectionBottomSheet(
         modifier = modifier,
@@ -27,6 +28,7 @@ fun SelectClientBottomSheet(
         state = state,
         selectedItem = selectedClient,
         onSelected = onSelected,
-        onLoadMore = onLoadMore
+        onLoadMore = onLoadMore,
+        onSearch = onSearch
     )
 }

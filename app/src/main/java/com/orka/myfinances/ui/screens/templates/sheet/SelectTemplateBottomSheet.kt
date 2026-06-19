@@ -18,7 +18,8 @@ fun SelectTemplateBottomSheet(
     onDismissRequest: () -> Unit,
     sheetState: SheetState,
     onSelected: (TemplateItemModel) -> Unit,
-    onLoadMore: () -> Unit
+    onLoadMore: () -> Unit,
+    onSearch: (String) -> Unit
 ) {
     SelectionBottomSheet(
         modifier = modifier,
@@ -27,6 +28,7 @@ fun SelectTemplateBottomSheet(
         sheetState = sheetState,
         onSelected = onSelected,
         onLoadMore = onLoadMore,
-        selectedItem = selectedItem
+        selectedItem = selectedItem,
+        onSearch = onSearch
     )
 }

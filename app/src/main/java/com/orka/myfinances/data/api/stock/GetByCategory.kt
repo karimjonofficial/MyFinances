@@ -13,7 +13,8 @@ import io.ktor.http.HttpStatusCode
 suspend fun StockApi.getByCategory(
     size: Int,
     pageIndex: Int,
-    categoryId: Id
+    categoryId: Id,
+    search: String? = null
 ): Chunk<StockItemApiModel>? {
     val response = httpClient.get(
         urlString = "stock-items/",
@@ -22,6 +23,7 @@ suspend fun StockApi.getByCategory(
             parameter("category", categoryId.value)
             parameter("page_size", size)
             parameter("page", pageIndex)
+            if (search != null) parameter("search", search)
         }
     )
     return if (response.status == HttpStatusCode.OK) response.body<ChunkApiModel<StockItemApiModel>>().map() else null

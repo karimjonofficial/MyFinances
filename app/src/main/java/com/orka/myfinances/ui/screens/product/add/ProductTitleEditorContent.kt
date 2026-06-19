@@ -37,13 +37,13 @@ fun ProductTitleEditorContent(
     onSave: (List<PropertyModel<*>?>, String, Int?, Int?, Int?, String?, Id) -> Unit
 ) {
     val selectedCategory = retain { mutableStateOf<CategoryItemModel?>(null) }
-    val scrollState = rememberScrollState()
     val menuVisible = rememberSaveable { mutableStateOf(false) }
     val name = rememberSaveable(model.initialName) { mutableStateOf(model.initialName) }
     val price = rememberSaveable(model.initialPrice) { mutableStateOf(model.initialPrice) }
     val salePrice = rememberSaveable(model.initialSalePrice) { mutableStateOf(model.initialSalePrice) }
     val exposedPrice = rememberSaveable(model.initialExposedPrice) { mutableStateOf(model.initialExposedPrice) }
     val description = rememberSaveable(model.initialDescription) { mutableStateOf(model.initialDescription) }
+    val scrollState = rememberScrollState()
 
     LaunchedEffect(model.categories, model.categoryId) {
         if (selectedCategory.value == null || model.categories.none { it.id == selectedCategory.value?.id }) {

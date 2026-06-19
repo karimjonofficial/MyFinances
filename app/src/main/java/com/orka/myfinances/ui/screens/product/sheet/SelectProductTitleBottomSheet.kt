@@ -18,7 +18,8 @@ fun SelectProductTitleBottomSheet(
     onDismissRequest: () -> Unit,
     sheetState: SheetState,
     onSelected: (ProductTitleItemModel) -> Unit,
-    onLoadMore: () -> Unit
+    onLoadMore: () -> Unit,
+    onSearch: (String) -> Unit
 ) {
     SelectionBottomSheet(
         modifier = modifier,
@@ -27,6 +28,7 @@ fun SelectProductTitleBottomSheet(
         state = state,
         selectedItem = selectedProductTitle,
         onSelected = onSelected,
-        onLoadMore = onLoadMore
+        onLoadMore = onLoadMore,
+        onSearch = onSearch
     )
 }

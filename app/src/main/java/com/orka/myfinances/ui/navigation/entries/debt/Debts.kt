@@ -85,7 +85,8 @@ fun debtsEntry(
                     }
                 }
             },
-            onLoadMore = clientSheetViewModel::loadMore
+            onLoadMore = clientSheetViewModel::loadMore,
+            onSearch = clientSheetViewModel::search
         )
     }
 }
