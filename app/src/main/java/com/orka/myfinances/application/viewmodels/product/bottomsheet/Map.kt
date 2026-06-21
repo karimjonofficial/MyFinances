@@ -1,4 +1,4 @@
-package com.orka.myfinances.application.viewmodels.receive.bottomsheet
+package com.orka.myfinances.application.viewmodels.product.bottomsheet
 
 import com.orka.myfinances.data.api.title.models.response.ProductTitleApiModel
 import com.orka.myfinances.data.models.Id

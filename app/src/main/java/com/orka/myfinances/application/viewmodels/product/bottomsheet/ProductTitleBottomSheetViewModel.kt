@@ -1,4 +1,4 @@
-package com.orka.myfinances.application.viewmodels.receive.bottomsheet
+package com.orka.myfinances.application.viewmodels.product.bottomsheet
 
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.api.title.ProductTitleApi

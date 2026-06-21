@@ -23,7 +23,7 @@ import com.orka.myfinances.application.viewmodels.product.edit.EditProductTitleS
 import com.orka.myfinances.application.viewmodels.product.list.ProductTitlesContentViewModel
 import com.orka.myfinances.application.viewmodels.profile.ProfileContentViewModel
 import com.orka.myfinances.application.viewmodels.receive.add.AddReceiveScreenViewModel
-import com.orka.myfinances.application.viewmodels.receive.bottomsheet.ProductTitleBottomSheetViewModel
+import com.orka.myfinances.application.viewmodels.product.bottomsheet.ProductTitleBottomSheetViewModel
 import com.orka.myfinances.application.viewmodels.receive.details.ReceiveScreenViewModel
 import com.orka.myfinances.application.viewmodels.receive.list.ReceiveContentViewModel
 import com.orka.myfinances.application.viewmodels.sale.details.SaleScreenViewModel
