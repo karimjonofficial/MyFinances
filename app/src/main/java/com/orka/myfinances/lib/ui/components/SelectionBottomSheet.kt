@@ -16,10 +16,8 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,10 +52,10 @@ fun <T: BottomSheetItemModel> SelectionBottomSheet(
         sheetState = sheetState
     ) {
         val lazyState = rememberLazyListState()
-        var searchText by rememberSaveable { mutableStateOf("") }
+        val searchText = rememberSaveable { mutableStateOf("") }
 
         LaunchedEffect(Unit) {
-            snapshotFlow { searchText }
+            snapshotFlow { searchText.value }
                 .drop(1)
                 .debounce(300.milliseconds)
                 .collect { onSearch(it) }
@@ -94,8 +92,8 @@ fun <T: BottomSheetItemModel> SelectionBottomSheet(
                             )
                         },
                         label = { Text(text = stringResource(R.string.search)) },
-                        value = searchText,
-                        onValueChange = { searchText = it }
+                        value = searchText.value,
+                        onValueChange = { searchText.value = it }
                     )
                 }
 

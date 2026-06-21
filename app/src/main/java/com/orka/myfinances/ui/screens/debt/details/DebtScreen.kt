@@ -40,6 +40,7 @@ import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.debt1
 import com.orka.myfinances.fixtures.resources.models.debt2
 import com.orka.myfinances.lib.ui.components.DescriptionCard
+import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.components.ClientCard
@@ -98,10 +99,10 @@ fun DebtScreen(
 
         LazyColumn(
             modifier = modifier,
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            contentPadding = PaddingValues(16.dp)
         ) {
             item {
+                VerticalSpacer(8)
                 HeroSection(
                     modifier = Modifier.fillMaxSize(),
                     debt = model
@@ -109,6 +110,7 @@ fun DebtScreen(
             }
 
             item {
+                VerticalSpacer(16)
                 NotificationStatusCard(
                     notified = model.notified,
                     lastSent = stringResource(R.string.last_sent_today_9_41_am),
@@ -116,9 +118,13 @@ fun DebtScreen(
                 )
             }
 
-            item { TimelineAndStaffCard(debt = model) }
+            item {
+                VerticalSpacer(8)
+                TimelineAndStaffCard(debt = model)
+            }
 
             item {
+                VerticalSpacer(8)
                 ClientCard(
                     model = model.client,
                     onClick = { interactor.navigateToClient(model.clientId) }
@@ -126,6 +132,7 @@ fun DebtScreen(
             }
 
             item {
+                VerticalSpacer(4)
                 UserCard(
                     user = model.user,
                     onClick = {}
@@ -134,6 +141,7 @@ fun DebtScreen(
 
             if (!model.description.isNullOrBlank()) {
                 item {
+                    VerticalSpacer(8)
                     DescriptionCard(description = model.description)
                 }
             }

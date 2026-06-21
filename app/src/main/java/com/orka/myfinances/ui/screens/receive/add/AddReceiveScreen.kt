@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.receive.add
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -89,6 +90,7 @@ fun AddReceiveScreen(
             modifier = modifier.padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            VerticalSpacer(8)
             if (product == null) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
@@ -98,19 +100,13 @@ fun AddReceiveScreen(
                 }
             } else {
                 Text(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(onClick = onSelectProductClick),
                     text = product.title,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
                 )
-
-                VerticalSpacer(8)
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = onSelectProductClick
-                ) {
-                    Text(text = stringResource(R.string.products))
-                }
             }
 
             VerticalSpacer(8)
