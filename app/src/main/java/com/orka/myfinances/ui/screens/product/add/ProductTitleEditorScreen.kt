@@ -2,6 +2,7 @@ package com.orka.myfinances.ui.screens.product.add
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,11 +31,38 @@ fun ProductTitleEditorScreen(
     val salePrice = rememberSaveable { mutableStateOf<Int?>(null) }
     val exposedPrice = rememberSaveable { mutableStateOf<Int?>(null) }
     val description = rememberSaveable { mutableStateOf<String?>(null) }
-
     val properties = remember(selectedCategory.value?.id) {
         mutableStateListOf<PropertyModel<*>?>().apply {
             if (model != null && selectedCategory.value?.id == model.categoryId) {
                 addAll(model.initialProperties)
+            }
+        }
+    }
+    val canSave = remember(model, properties) {
+        derivedStateOf {
+            val category = selectedCategory.value
+            val fields = category?.template?.fields.orEmpty()
+            val propertiesValid = properties.all { it != null } && properties.size == fields.size
+
+            val basicValid = name.value.isNotEmpty() &&
+                    price.value != null &&
+                    salePrice.value != null &&
+                    exposedPrice.value != null &&
+                    propertiesValid &&
+                    category != null
+
+            if (model != null && model.isEditMode) {
+                val hasChanged = name.value != model.initialName ||
+                        price.value != model.initialPrice ||
+                        salePrice.value != model.initialSalePrice ||
+                        exposedPrice.value != model.initialExposedPrice ||
+                        description.value != model.initialDescription ||
+                        category?.id != model.categoryId ||
+                        properties.toList() != model.initialProperties
+
+                basicValid && hasChanged
+            } else {
+                basicValid
             }
         }
     }
@@ -54,24 +82,25 @@ fun ProductTitleEditorScreen(
         }
     }
 
-    val currentCategory = selectedCategory.value
-    val fields = currentCategory?.template?.fields.orEmpty()
-    val propertiesValid = properties.all { it != null } && properties.size == fields.size
-
     StatefulScreen(
         modifier = modifier,
         title = title,
         bottomBar = {
             AddProductTitleScreenBottomBar(
-                name = name,
-                price = price,
-                salePrice = salePrice,
-                exposedPrice = exposedPrice,
-                propertiesValid = propertiesValid,
-                selectedCategory = currentCategory,
-                properties = properties,
-                description = description,
-                onSave = onSave
+                enabled = canSave.value,
+                onSave = {
+                    selectedCategory.value?.let { category ->
+                        onSave(
+                            properties.toList(),
+                            name.value,
+                            price.value,
+                            salePrice.value,
+                            exposedPrice.value,
+                            description.value,
+                            category.id
+                        )
+                    }
+                }
             )
         },
         state = state,
