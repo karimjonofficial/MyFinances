@@ -1,15 +1,15 @@
 package com.orka.myfinances.application.viewmodels.receive.details
 
 import com.orka.myfinances.application.viewmodels.toCardModel
-import com.orka.myfinances.data.api.receive.models.response.ReceiveApiModel
-import com.orka.myfinances.data.api.receive.models.response.ReceiveItemApiModel
+import com.orka.myfinances.data.dtos.receive.ReceiveDto
+import com.orka.myfinances.data.dtos.receive.ReceiveItemDto
 import com.orka.myfinances.lib.format.FormatDateTime
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.ui.screens.receive.details.ReceiveItemModel
 import com.orka.myfinances.ui.screens.receive.details.ReceiveScreenModel
 
-fun ReceiveApiModel.toScreenModel(
+fun ReceiveDto.toScreenModel(
     formatPrice: FormatPrice,
     formatDateTime: FormatDateTime,
     formatDecimal: FormatDecimal
@@ -22,9 +22,9 @@ fun ReceiveApiModel.toScreenModel(
     )
 }
 
-fun ReceiveItemApiModel.toModel(formatDecimal: FormatDecimal): ReceiveItemModel {
+fun ReceiveItemDto.toModel(formatDecimal: FormatDecimal): ReceiveItemModel {
     return ReceiveItemModel(
-        name = product.title.name,
+        name = productName,
         amount = formatDecimal.formatDecimal(amount.toDouble())
     )
 }

@@ -1,14 +1,11 @@
 package com.orka.myfinances.application.viewmodels.debt.list
 
 import androidx.lifecycle.viewModelScope
-import com.orka.myfinances.data.api.debt.DebtApi
-import com.orka.myfinances.data.api.debt.getChunk
-import com.orka.myfinances.data.api.debt.models.response.DebtApiModel
-import com.orka.myfinances.data.api.debt.toApiRequest
+import com.orka.myfinances.data.dtos.debt.DebtDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.debt.AddDebtRequest
 import com.orka.myfinances.data.repositories.debt.DebtEvent
-import com.orka.myfinances.lib.data.api.scoped.office.insert
+import com.orka.myfinances.data.repositories.debt.DebtRepository
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
@@ -29,7 +26,7 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Instant
 
 class DebtsScreenViewModel(
-    private val debtApi: DebtApi,
+    private val repository: DebtRepository,
     events: Flow<DebtEvent>,
     private val formatPrice: FormatPrice,
     private val formatLocalDate: FormatLocalDate,
@@ -38,10 +35,10 @@ class DebtsScreenViewModel(
     failure: UiText,
     logger: Logger,
     private val navigator: Navigator
-) : MapChunkViewModel<DebtApiModel, DebtUiModel>(
+) : MapChunkViewModel<DebtDto, DebtUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page, query -> debtApi.getChunk(size, page, false, search = query) },
+    get = { size, page, query -> repository.getChunk(size, page, query) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map = chunk.results
@@ -69,20 +66,11 @@ class DebtsScreenViewModel(
     }
 
     override fun add(id: Id, price: Int, endDateTime: Instant?, description: String?) {
-        launch {
-            val oldState = state.value
-            try {
-                setState(State.Loading(loading, oldState.value))
-                val request = AddDebtRequest(id, price, description, endDateTime)
-                val created = debtApi.insert(
-                    request = request,
-                    map = AddDebtRequest::toApiRequest
-                )
-                if (created) refresh()
-                else setState(State.Failure(failure, oldState.value))
-            } catch (e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString()), oldState.value))
-            }
+        tryTransition { oldState ->
+            val request = AddDebtRequest(id, price, description, endDateTime)
+            val created = repository.insert(request)
+            if (created) oldState
+            else State.Failure(failure, oldState.value)
         }
     }
 

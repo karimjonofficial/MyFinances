@@ -2,14 +2,10 @@ package com.orka.myfinances.application.viewmodels.receive.add
 
 import com.orka.myfinances.data.api.folder.FolderApi
 import com.orka.myfinances.data.api.folder.models.response.FolderApiModel
-import com.orka.myfinances.data.api.receive.ReceiveApi
-import com.orka.myfinances.data.api.receive.toApiRequest
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequestItem
-import com.orka.myfinances.data.repositories.receive.ReceiveEvent
-import com.orka.myfinances.data.repositories.stock.StockEvent
-import com.orka.myfinances.lib.data.api.scoped.office.insert
+import com.orka.myfinances.data.repositories.receive.ReceiveRepository
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -18,16 +14,13 @@ import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenInteractor
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenModel
 import com.orka.myfinances.ui.models.ProductTitleItemModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class AddReceiveScreenViewModel(
     private val categoryId: Id,
     private val folderApi: FolderApi,
-    private val receiveApi: ReceiveApi,
+    private val repository: ReceiveRepository,
     private val navigator: Navigator,
-    private val stockFlow: MutableSharedFlow<StockEvent>,
-    private val receiveFlow: MutableSharedFlow<ReceiveEvent>,
     loading: UiText,
     failure: UiText,
     logger: Logger
@@ -65,6 +58,7 @@ class AddReceiveScreenViewModel(
             ) {
                 setState(State.Loading(loading, oldState.value))
                 val request = AddReceiveRequest(
+                    categoryId = categoryId,
                     items = listOf(
                         AddReceiveRequestItem(
                             productTitleId = title.id,
@@ -77,13 +71,8 @@ class AddReceiveScreenViewModel(
                     ),
                     price = totalPrice
                 )
-                val created = receiveApi.insert(
-                    request = request,
-                    map = AddReceiveRequest::toApiRequest
-                )
+                val created = repository.insert(request)
                 if (created) {
-                    stockFlow.emit(StockEvent(categoryId))
-                    receiveFlow.emit(ReceiveEvent)
                     navigator.back()
                 } else setState(State.Failure(failure, oldState.value))
             }

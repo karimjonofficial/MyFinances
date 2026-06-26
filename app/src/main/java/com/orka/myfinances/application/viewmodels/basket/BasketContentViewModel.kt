@@ -1,11 +1,11 @@
 package com.orka.myfinances.application.viewmodels.basket
 
 import androidx.lifecycle.viewModelScope
-import com.orka.myfinances.data.api.stock.StockApi
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.repositories.basket.BasketEvent
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.basket.getBasketItems
+import com.orka.myfinances.data.repositories.stock.GetStockItemByProduct
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.logger.Logger
@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.onEach
 
 class BasketContentViewModel(
     private val repository: BasketRepository,
-    private val stockApi: StockApi,
+    private val stockRepository: GetStockItemByProduct,
     private val navigator: Navigator,
     private val formatPrice: FormatPrice,
     private val formatDecimal: FormatDecimal,
@@ -33,7 +33,7 @@ class BasketContentViewModel(
     loading = loading,
     failure = failure,
     produceSuccess = {
-        val items = getBasketItems(repository.get(), stockApi)
+        val items = getBasketItems(repository.get(), stockRepository)
         val uiItems = items.map { item -> item.toUiModel(formatPrice, formatDecimal) }
         val sellable = uiItems.indexOfFirst { it.model.unavailable } == -1
         val price = items.sumOf { it.product.exposedPrice * it.amount }

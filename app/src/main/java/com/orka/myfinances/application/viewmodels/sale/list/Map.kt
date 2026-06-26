@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.sale.list
 
-import com.orka.myfinances.data.api.sale.models.response.SaleApiModel
+import com.orka.myfinances.data.dtos.sale.SaleDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
@@ -8,14 +8,14 @@ import com.orka.myfinances.lib.format.FormatTime
 import com.orka.myfinances.ui.screens.sale.list.SaleCardModel
 import com.orka.myfinances.ui.screens.sale.list.SaleUiModel
 
-fun SaleApiModel.map(
+fun SaleDto.map(
     formatPrice: FormatPrice,
     formatDecimal: FormatDecimal,
     formatTime: FormatTime
 ): SaleUiModel {
     return SaleUiModel(
         model = SaleCardModel(
-            title = items.joinToString { it.product.title.name },
+            title = items.joinToString { it.productName },
             price = formatPrice.formatPrice(price.toDouble()),
             size = formatDecimal.formatDecimal(items.size.toDouble()),
             dateTime = formatTime.formatTime(dateTime)

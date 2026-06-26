@@ -2,11 +2,11 @@ package com.orka.myfinances.application.viewmodels.folder.home
 
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.application.viewmodels.folder.toUiModel
-import com.orka.myfinances.data.api.folder.FolderApi
-import com.orka.myfinances.data.api.folder.models.response.FolderApiModel
+import com.orka.myfinances.data.dtos.folder.FolderDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.folder.AddFolderRequest
 import com.orka.myfinances.data.repositories.folder.FolderEvent
+import com.orka.myfinances.data.repositories.folder.FolderRepository
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -20,16 +20,16 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class FoldersContentViewModel(
-    private val folderApi: FolderApi,
+    private val repository: FolderRepository,
     private val navigator: Navigator,
     events: Flow<FolderEvent>,
     loading: UiText,
     failure: UiText,
     logger: Logger
-) : FormatListViewModel<FolderApiModel, FolderUiModel>(
+) : FormatListViewModel<FolderDto, FolderUiModel>(
     loading = loading,
     failure = failure,
-    get = { search -> folderApi.getTop(search) },
+    get = { search -> repository.getTop(search) },
     map = { folder -> folder.toUiModel() },
     logger = logger
 ), FoldersContentInteractor {
@@ -37,15 +37,16 @@ class FoldersContentViewModel(
 
     init {
         initialize()
-        events.onEach { if(it.catalogId == null) initialize() }
-            .launchIn(viewModelScope)
+        events.onEach {
+            if(it.catalogId == null) initialize()
+        }.launchIn(viewModelScope)
     }
 
     override fun addFolder(name: String, type: String, templateId: Id?) {
         launch {
             setState(State.Loading(loading))
             val request = AddFolderRequest(name, type, templateId, null)
-            folderApi.add(request)
+            repository.add(request)
         }
     }
 

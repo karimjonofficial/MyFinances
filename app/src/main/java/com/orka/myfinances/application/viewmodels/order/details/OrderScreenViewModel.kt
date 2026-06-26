@@ -1,12 +1,8 @@
 package com.orka.myfinances.application.viewmodels.order.details
 
-import com.orka.myfinances.data.api.order.OrderApi
-import com.orka.myfinances.data.api.order.models.response.OrderApiModel
-import com.orka.myfinances.data.api.order.complete
-import com.orka.myfinances.data.api.order.setEndDate
+import com.orka.myfinances.data.dtos.order.OrderDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.data.repositories.order.OrderEvent
-import com.orka.myfinances.lib.data.api.getById
+import com.orka.myfinances.data.repositories.order.OrderRepository
 import com.orka.myfinances.lib.format.FormatDateTime
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
@@ -17,13 +13,11 @@ import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.order.details.OrderScreenInteractor
 import com.orka.myfinances.ui.screens.order.details.OrderScreenModel
 import kotlin.time.Instant
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class OrderScreenViewModel(
     id: Id,
-    private val orderApi: OrderApi,
-    private val flow: MutableSharedFlow<OrderEvent>,
+    private val repository: OrderRepository,
     private val formatPrice: FormatPrice,
     private val formatDateTime: FormatDateTime,
     private val formatDecimal: FormatDecimal,
@@ -31,9 +25,9 @@ class OrderScreenViewModel(
     loading: UiText,
     failure: UiText,
     logger: Logger
-) : MapSingleViewModel<OrderApiModel, OrderScreenModel>(
+) : MapSingleViewModel<OrderDto, OrderScreenModel>(
     id = id,
-    get = { orderApi.getById(it) },
+    get = { repository.getById(it) },
     map = { it.toScreenModel(formatPrice, formatDateTime, formatDecimal) },
     loading = loading,
     failure = failure,
@@ -52,20 +46,20 @@ class OrderScreenViewModel(
     }
 
     override fun complete() {
-        launch {
-            if (orderApi.complete(id)) {
-                flow.emit(OrderEvent)
+        tryTransition { oldState ->
+            if (repository.complete(id)) {
                 refresh()
-            }
+                oldState
+            } else oldState
         }
     }
 
     override fun setEndDate(endDateTime: Instant) {
-        launch {
-            if (orderApi.setEndDate(id, endDateTime)) {
-                flow.emit(OrderEvent)
+        tryTransition { oldState ->
+            if (repository.setEndDate(id, endDateTime)) {
                 refresh()
-            }
+                oldState
+            } else oldState
         }
     }
 }

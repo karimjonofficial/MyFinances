@@ -1,13 +1,13 @@
 package com.orka.myfinances.application.viewmodels.debt.list
 
-import com.orka.myfinances.data.api.debt.models.response.DebtApiModel
+import com.orka.myfinances.data.dtos.debt.DebtDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
 import com.orka.myfinances.ui.screens.debt.list.DebtCardModel
 import com.orka.myfinances.ui.screens.debt.list.DebtUiModel
 
-fun DebtApiModel.toModel(
+fun DebtDto.toModel(
     formatPrice: FormatPrice,
     formatTime: FormatTime
 ): DebtCardModel {
@@ -19,7 +19,7 @@ fun DebtApiModel.toModel(
     )
 }
 
-fun DebtApiModel.toUiModel(
+fun DebtDto.toUiModel(
     formatPrice: FormatPrice,
     formatTime: FormatTime
 ): DebtUiModel {

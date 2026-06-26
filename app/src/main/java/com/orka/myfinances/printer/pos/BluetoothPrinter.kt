@@ -9,7 +9,7 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.orka.myfinances.data.api.sale.models.response.SaleApiModel
+import com.orka.myfinances.data.dtos.sale.SaleDto
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.printer.Printer
@@ -110,7 +110,7 @@ class BluetoothPrinter(
         }
     }
 
-    override fun print(sale: SaleApiModel) {
+    override fun print(sale: SaleDto) {
         scope.launch {
             if (curConnect == null) {
                 _status.value = PrinterStatus.Connecting
@@ -127,7 +127,7 @@ class BluetoothPrinter(
         }
     }
 
-    private fun executePrint(sale: SaleApiModel) {
+    private fun executePrint(sale: SaleDto) {
         val connection = curConnect ?: return
         try {
             val printer = POSPrinter(connection)
@@ -145,7 +145,7 @@ class BluetoothPrinter(
 
             sale.items.forEach { item ->
                 printer.printText(
-                    "${item.product.title.name} x ${formatDecimal.formatDecimal(item.amount.toDouble())}\n",
+                    "${item.productName} x ${formatDecimal.formatDecimal(item.amount.toDouble())}\n",
                     POSConst.ALIGNMENT_LEFT,
                     POSConst.FNT_DEFAULT,
                     POSConst.TXT_1WIDTH

@@ -1,9 +1,7 @@
 package com.orka.myfinances.application.viewmodels.notification
 
-import com.orka.myfinances.data.api.notification.NotificationApi
-import com.orka.myfinances.data.api.notification.NotificationApiModel
-import com.orka.myfinances.data.api.notification.read
-import com.orka.myfinances.lib.data.api.getChunk
+import com.orka.myfinances.data.dtos.notification.NotificationDto
+import com.orka.myfinances.data.repositories.notification.NotificationRepository
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatTime
 import com.orka.myfinances.lib.logger.Logger
@@ -18,16 +16,16 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 class NotificationsScreenViewModel(
-    private val api: NotificationApi,
+    private val repository: NotificationRepository,
     private val formatLocalDate: FormatLocalDate,
     private val formatTime: FormatTime,
     logger: Logger,
     loading: UiText,
     failure: UiText
-) : MapChunkViewModel<NotificationApiModel, NotificationUiModel>(
+) : MapChunkViewModel<NotificationDto, NotificationUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page, query -> api.getChunk(size, page, search = query) },
+    get = { size, page, query -> repository.getChunk(size, page, query) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map = chunk.results
@@ -52,14 +50,11 @@ class NotificationsScreenViewModel(
     }
 
     override fun read(notification: NotificationUiModel) {
-        launch {
-            try {
-                if (api.read(notification.id)) {
-                    refresh()
-                } else setState(State.Failure(failure))
-            } catch (e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString())))
-            }
+        tryTransition { oldState ->
+            if (repository.read(notification.id)) {
+                refresh()
+                oldState
+            } else State.Failure(failure, oldState.value)
         }
     }
 }

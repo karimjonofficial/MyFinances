@@ -1,9 +1,8 @@
 package com.orka.myfinances.application.viewmodels.sale.details
 
-import com.orka.myfinances.data.api.sale.SaleApi
-import com.orka.myfinances.data.api.sale.models.response.SaleApiModel
+import com.orka.myfinances.data.dtos.sale.SaleDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.lib.data.api.getById
+import com.orka.myfinances.data.repositories.sale.SaleRepository
 import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
@@ -21,7 +20,7 @@ import kotlinx.coroutines.flow.asStateFlow
 class SaleScreenViewModel(
     id: Id,
     private val printer: Printer,
-    private val saleApi: SaleApi,
+    private val repository: SaleRepository,
     private val formatPrice: FormatPrice,
     private val formatDate: FormatDate,
     private val formatTime: FormatTime,
@@ -30,9 +29,9 @@ class SaleScreenViewModel(
     loading: UiText,
     failure: UiText,
     logger: Logger
-) : MapSingleViewModel<SaleApiModel, SaleScreenModel>(
+) : MapSingleViewModel<SaleDto, SaleScreenModel>(
     id = id,
-    get = { saleApi.getById(it) },
+    get = repository,
     map = { it.toScreenModel(formatPrice, formatDate, formatTime, formatDecimal) },
     loading = loading,
     failure = failure,
@@ -46,7 +45,7 @@ class SaleScreenViewModel(
 
     override fun print() {
         tryTransition {
-            val response = get.getById(id)
+            val response = repository.getById(id)
             if(response != null) {
                 printer.print(response)
                 State.Success(map(response))

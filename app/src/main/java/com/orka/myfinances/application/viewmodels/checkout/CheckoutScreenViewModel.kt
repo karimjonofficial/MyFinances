@@ -1,27 +1,16 @@
 package com.orka.myfinances.application.viewmodels.checkout
 
-import com.orka.myfinances.data.api.debt.DebtApi
-import com.orka.myfinances.data.api.debt.toApiRequest
-import com.orka.myfinances.data.api.order.OrderApi
-import com.orka.myfinances.data.api.order.toApiRequest
-import com.orka.myfinances.data.api.sale.SaleApi
-import com.orka.myfinances.data.api.sale.models.response.SaleApiModel
-import com.orka.myfinances.data.api.sale.toApiRequest
-import com.orka.myfinances.data.api.stock.StockApi
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.Basket
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.basket.getBasketItems
 import com.orka.myfinances.data.repositories.debt.AddDebtRequest
-import com.orka.myfinances.data.repositories.debt.DebtEvent
-import com.orka.myfinances.data.repositories.order.AddOrderRequest
-import com.orka.myfinances.data.repositories.order.OrderEvent
+import com.orka.myfinances.data.repositories.debt.DebtRepository
+import com.orka.myfinances.data.repositories.order.OrderRepository
 import com.orka.myfinances.data.repositories.order.toOrderRequest
-import com.orka.myfinances.data.repositories.sale.AddSaleRequest
-import com.orka.myfinances.data.repositories.sale.SaleEvent
+import com.orka.myfinances.data.repositories.sale.SaleRepository
 import com.orka.myfinances.data.repositories.sale.toSaleRequest
-import com.orka.myfinances.lib.data.api.scoped.office.add
-import com.orka.myfinances.lib.data.api.scoped.office.insert
+import com.orka.myfinances.data.repositories.stock.GetStockItemByProduct
 import com.orka.myfinances.lib.extensions.models.getExposedPrice
 import com.orka.myfinances.lib.extensions.models.getSalePrice
 import com.orka.myfinances.lib.format.FormatDecimal
@@ -34,7 +23,6 @@ import com.orka.myfinances.printer.Printer
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -42,13 +30,10 @@ import kotlinx.datetime.atStartOfDayIn
 import kotlin.time.Instant
 
 class CheckoutScreenViewModel(
-    private val saleApi: SaleApi,
-    private val orderApi: OrderApi,
-    private val debtApi: DebtApi,
-    private val stockApi: StockApi,
-    private val orderFlow: MutableSharedFlow<OrderEvent>,
-    private val saleFlow: MutableSharedFlow<SaleEvent>,
-    private val debtFlow: MutableSharedFlow<DebtEvent>,
+    private val repository: SaleRepository,
+    private val orderRepository: OrderRepository,
+    private val debtRepository: DebtRepository,
+    private val stockRepository: GetStockItemByProduct,
     private val basketRepository: BasketRepository,
     private val navigator: Navigator,
     private val printer: Printer,
@@ -62,7 +47,7 @@ class CheckoutScreenViewModel(
     failure = failure,
     produceSuccess = {
         val minItems = basketRepository.get()
-        val items = getBasketItems(minItems, stockApi)
+        val items = getBasketItems(minItems, stockRepository)
 
         State.Success(
             value = CheckoutScreenModel(
@@ -88,17 +73,13 @@ class CheckoutScreenViewModel(
     ) {
         tryTransition { state ->
             if (price != null) {
-                val items = getBasketItems(basketRepository.get(), stockApi)
+                val items = getBasketItems(basketRepository.get(), stockRepository)
                 val basket = Basket(price, description, items)
-                val response: SaleApiModel? = saleApi.add(
-                    request = basket.toSaleRequest(clientId),
-                    map = AddSaleRequest::toApiRequest
-                )
+                val response = repository.add(basket.toSaleRequest(clientId))
 
                 if (response != null) {
                     if (print) printer.print(response)
                     basketRepository.clear()
-                    saleFlow.emit(SaleEvent)
                     navigator.back()
                     state
                 } else State.Failure(failure, state.value)
@@ -115,31 +96,23 @@ class CheckoutScreenViewModel(
     ) {
         tryTransition { state ->
             if (price != null) {
-                val items = getBasketItems(basketRepository.get(), stockApi)
+                val items = getBasketItems(basketRepository.get(), stockRepository)
                 val basket = Basket(price, description, items)
-                val response: SaleApiModel? = saleApi.add(
-                    request = basket.toSaleRequest(clientId),
-                    map = AddSaleRequest::toApiRequest
-                )
+                val response = repository.add(basket.toSaleRequest(clientId))
 
                 if (response != null) {
                     if (print) printer.print(response)
                     basketRepository.clear()
-                    saleFlow.emit(SaleEvent)
                     val debtRequest = AddDebtRequest(
                         clientId = clientId,
                         price = price,
-                        description = if(description != null) "$description\nSale id: ${response.id}" else "Sale id: ${response.id}",
+                        description = if (description != null) "$description\nSale id: ${response.id}" else "Sale id: ${response.id}",
                         endDateTime = Instant.fromEpochMilliseconds(
                             dueDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
                         )
                     )
-                    val created = debtApi.insert(
-                        request = debtRequest,
-                        map = AddDebtRequest::toApiRequest
-                    )
+                    val created = debtRepository.insert(debtRequest)
                     if (created) {
-                        debtFlow.emit(DebtEvent)
                         navigator.back()
                         state
                     } else State.Failure(failure, state.value)
@@ -156,19 +129,15 @@ class CheckoutScreenViewModel(
     ) {
         tryTransition { state ->
             if (price != null) {
-                val items = getBasketItems(basketRepository.get(), stockApi)
+                val items = getBasketItems(basketRepository.get(), stockRepository)
                 val basket = Basket(price, description, items)
-                val  date = Instant.fromEpochMilliseconds(
+                val date = Instant.fromEpochMilliseconds(
                     endDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
                 )
-                val created = orderApi.insert(
-                    request = basket.toOrderRequest(clientId,date),
-                    map = AddOrderRequest::toApiRequest,
-                )
+                val created = orderRepository.insert(basket.toOrderRequest(clientId, date))
 
                 if (created) {
                     basketRepository.clear()
-                    orderFlow.emit(OrderEvent)
                     navigator.back()
                     state
                 } else State.Failure(failure, state.value)

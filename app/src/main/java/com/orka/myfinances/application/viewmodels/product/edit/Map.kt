@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.product.edit
 
-import com.orka.myfinances.data.api.title.models.response.ProductTitleApiModel
-import com.orka.myfinances.data.api.title.models.response.PropertyApiModel
+import com.orka.myfinances.data.dtos.product.title.ProductTitleDto
+import com.orka.myfinances.data.dtos.product.title.PropertyDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.types.Range
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
@@ -9,7 +9,7 @@ import com.orka.myfinances.fixtures.resources.Types
 import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
 import com.orka.myfinances.ui.screens.product.add.interactor.CategoryItemModel
 
-fun ProductTitleApiModel.toEditorModel(categories: List<CategoryItemModel>): AddProductTitleScreenModel {
+fun ProductTitleDto.toEditorModel(categories: List<CategoryItemModel>): AddProductTitleScreenModel {
     return AddProductTitleScreenModel(
         categories = categories,
         categoryId = Id(category),
@@ -18,12 +18,12 @@ fun ProductTitleApiModel.toEditorModel(categories: List<CategoryItemModel>): Add
         initialSalePrice = defaultSalePrice.toInt(),
         initialDescription = description,
         initialExposedPrice = defaultExposedPrice.toInt(),
-        initialProperties = properties.map(PropertyApiModel::toPropertyModel),
+        initialProperties = properties.map(PropertyDto::toPropertyModel),
         isEditMode = true
     )
 }
 
-fun PropertyApiModel.toPropertyModel(): PropertyModel<*> {
+fun PropertyDto.toPropertyModel(): PropertyModel<*> {
     return PropertyModel(
         fieldId = Id(field.id),
         value = when (field.type) {

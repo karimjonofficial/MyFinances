@@ -1,9 +1,8 @@
 package com.orka.myfinances.application.viewmodels.template.details
 
-import com.orka.myfinances.data.api.template.TemplateApi
-import com.orka.myfinances.data.api.template.models.response.TemplateApiModel
+import com.orka.myfinances.data.dtos.template.TemplateDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.lib.data.api.getById
+import com.orka.myfinances.data.repositories.template.TemplateRepository
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapSingleViewModel
@@ -14,14 +13,14 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class TemplateScreenViewModel(
     id: Id,
-    private val templateApi: TemplateApi,
+    private val repository: TemplateRepository,
     private val navigator: Navigator,
     loading: UiText,
     failure: UiText,
     logger: Logger
-) : MapSingleViewModel<TemplateApiModel, TemplateScreenModel>(
+) : MapSingleViewModel<TemplateDto, TemplateScreenModel>(
     id = id,
-    get = { templateApi.getById(it) },
+    get = { repository.getById(it) },
     map = { it.toScreenModel() },
     loading = loading,
     failure = failure,

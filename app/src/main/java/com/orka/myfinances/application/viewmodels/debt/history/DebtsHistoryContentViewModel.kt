@@ -2,10 +2,9 @@ package com.orka.myfinances.application.viewmodels.debt.history
 
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.application.viewmodels.debt.list.toUiModel
-import com.orka.myfinances.data.api.debt.DebtApi
-import com.orka.myfinances.data.api.debt.getChunk
-import com.orka.myfinances.data.api.debt.models.response.DebtApiModel
+import com.orka.myfinances.data.dtos.debt.DebtDto
 import com.orka.myfinances.data.repositories.debt.DebtEvent
+import com.orka.myfinances.data.repositories.debt.DebtRepository
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
@@ -24,7 +23,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 class DebtsHistoryContentViewModel(
-    private val debtApi: DebtApi,
+    private val repository: DebtRepository,
     events: Flow<DebtEvent>,
     private val formatPrice: FormatPrice,
     private val formatLocalDate: FormatLocalDate,
@@ -33,10 +32,10 @@ class DebtsHistoryContentViewModel(
     failure: UiText,
     logger: Logger,
     private val navigator: Navigator
-) : MapChunkViewModel<DebtApiModel, DebtUiModel>(
+) : MapChunkViewModel<DebtDto, DebtUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page, query -> debtApi.getChunk(size, page, true, search = query) },
+    get = { size, page, query -> repository.getDebtsChunk(size, page, true, query) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map = chunk.results

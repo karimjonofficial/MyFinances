@@ -1,10 +1,9 @@
 package com.orka.myfinances.application.viewmodels.order.list.incompleted
 
 import androidx.lifecycle.viewModelScope
-import com.orka.myfinances.data.api.order.OrderApi
-import com.orka.myfinances.data.api.order.getChunk
-import com.orka.myfinances.data.api.order.models.response.OrderApiModel
+import com.orka.myfinances.data.dtos.order.OrderDto
 import com.orka.myfinances.data.repositories.order.OrderEvent
+import com.orka.myfinances.data.repositories.order.OrderRepository
 import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatLocalDate
@@ -24,7 +23,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 class OrdersListScreenViewModel(
-    orderApi: OrderApi,
+    private val repository: OrderRepository,
     events: Flow<OrderEvent>,
     formatDecimal: FormatDecimal,
     formatPrice: FormatPrice,
@@ -34,15 +33,17 @@ class OrdersListScreenViewModel(
     loading: UiText,
     failure: UiText,
     logger: Logger
-)  : MapChunkViewModel<OrderApiModel, OrderUiModel>(
+) : MapChunkViewModel<OrderDto, OrderUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page, query -> orderApi.getChunk(size, page, false, "end_date_time", query) },
+    get = { size, page, query -> repository.getOrdersChunk(size, page, false, query) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map =
             chunk.results.groupBy { orders -> orders.endDateTime?.toLocalDateTime(timeZone)?.date }
-                .mapKeys { entry -> if(entry.key != null) formatLocalDate.formatLocalDate(entry.key!!) else "End date time is not provided" }
+                .mapKeys { entry ->
+                    if (entry.key != null) formatLocalDate.formatLocalDate(entry.key!!) else "End date time is not provided"
+                }
                 .mapValues { entry ->
                     entry.value.map { order ->
                         order.toUiModel(formatDecimal, formatPrice, formatDate)

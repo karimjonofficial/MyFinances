@@ -1,8 +1,8 @@
 package com.orka.myfinances.application.viewmodels.folder.category
 
-import com.orka.myfinances.data.api.folder.FolderApi
-import com.orka.myfinances.data.api.folder.models.response.CategoryApiModel
+import com.orka.myfinances.data.dtos.folder.CategoryDto
 import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.data.repositories.folder.FolderRepository
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class CategoryScreenViewModel(
     private val categoryId: Id,
-    private val folderApi: FolderApi,
+    private val repository: FolderRepository,
     loading: UiText,
     failure: UiText,
     private val navigator: Navigator,
@@ -23,8 +23,8 @@ class CategoryScreenViewModel(
     loading = loading,
     failure = failure,
     produceSuccess = {
-        val category = folderApi.getById(categoryId.value)
-        if (category != null && category is CategoryApiModel) {
+        val category = repository.getById(categoryId)
+        if (category != null && category is CategoryDto) {
             val model = category.toScreenModel()
             State.Success(model)
         } else null
@@ -49,7 +49,7 @@ class CategoryScreenViewModel(
         tryTransition { oldState ->
             if(oldState is State.Success)
                 State.Success(oldState.value.copy(exposed = true))
-            else State.Failure(error = failure, oldState.value)//TODO change the error message
+            else State.Failure(failure, oldState.value)
         }
     }
 
@@ -57,7 +57,7 @@ class CategoryScreenViewModel(
         tryTransition { oldState ->
             if(oldState is State.Success)
                 State.Success(oldState.value.copy(exposed = false))
-            else State.Failure(error = failure, oldState.value)//TODO change the error message
+            else State.Failure(failure, oldState.value)
         }
     }
 }

@@ -3,6 +3,7 @@ package com.orka.myfinances.ui.screens.host
 import com.orka.myfinances.application.viewmodels.office.SelectOfficeScreenViewModel
 import com.orka.myfinances.data.api.office.OfficeApi
 import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.data.repositories.office.OfficeRepository
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.ui.managers.SessionManager
@@ -16,9 +17,10 @@ class SelectOfficeScreenViewModelFactory(
     private val logger: Logger
 ) {
     fun get(companyId: Id): SelectOfficeScreenViewModel {
-        val officeApi = OfficeApi(companyId, httpClient)
+        val officeApi = OfficeApi(httpClient)
+        val repository = OfficeRepository(companyId, officeApi)
         return SelectOfficeScreenViewModel(
-            officeApi = officeApi,
+            repository = repository,
             sessionManager = sessionManager,
             loading = loading,
             failure = failure,

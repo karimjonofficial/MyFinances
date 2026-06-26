@@ -2,11 +2,10 @@ package com.orka.myfinances.application.viewmodels.product.list
 
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.lib.logger.Logger
-import com.orka.myfinances.data.api.title.ProductTitleApi
-import com.orka.myfinances.data.api.title.getByCategory
-import com.orka.myfinances.data.api.title.models.response.ProductTitleApiModel
+import com.orka.myfinances.data.dtos.product.title.ProductTitleDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
+import com.orka.myfinances.data.repositories.product.title.ProductTitleRepository
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
@@ -22,21 +21,21 @@ import kotlinx.coroutines.flow.onEach
 
 class ProductTitlesContentViewModel(
     private val categoryId: Id,
-    private val productTitleApi: ProductTitleApi,
+    private val repository: ProductTitleRepository,
     productTitleEvents: Flow<ProductTitleEvent>,
     private val navigator: Navigator,
     loading: UiText,
     failure: UiText,
     logger: Logger
-) : MapChunkViewModel<ProductTitleApiModel, ProductTitleUiModel>(
+) : MapChunkViewModel<ProductTitleDto, ProductTitleUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page, query -> productTitleApi.getByCategory(size, page, categoryId, query) },
+    get = { size, page, query -> repository.getByCategory(size, page, categoryId, query) },
     map = { chunk ->
         val content = chunk.results
-            .sortedBy(ProductTitleApiModel::name)
+            .sortedBy(ProductTitleDto::name)
             .groupBy { it.name.stickyHeaderKey() }
-            .mapValues { (_, titles) -> titles.map(ProductTitleApiModel::toUiModel) }
+            .mapValues { (_, titles) -> titles.map(ProductTitleDto::toUiModel) }
 
         ChunkUiModel(
             count = chunk.count,

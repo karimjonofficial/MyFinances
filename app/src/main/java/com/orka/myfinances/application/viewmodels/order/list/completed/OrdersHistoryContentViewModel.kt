@@ -1,10 +1,9 @@
 package com.orka.myfinances.application.viewmodels.order.list.completed
 
 import androidx.lifecycle.viewModelScope
-import com.orka.myfinances.data.api.order.OrderApi
-import com.orka.myfinances.data.api.order.getChunk
-import com.orka.myfinances.data.api.order.models.response.OrderApiModel
+import com.orka.myfinances.data.dtos.order.OrderDto
 import com.orka.myfinances.data.repositories.order.OrderEvent
+import com.orka.myfinances.data.repositories.order.OrderRepository
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
@@ -24,7 +23,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 class OrdersHistoryContentViewModel(
-    orderApi: OrderApi,
+    private val repository: OrderRepository,
     events: Flow<OrderEvent>,
     formatDecimal: FormatDecimal,
     formatPrice: FormatPrice,
@@ -34,10 +33,10 @@ class OrdersHistoryContentViewModel(
     loading: UiText,
     failure: UiText,
     logger: Logger
-) : MapChunkViewModel<OrderApiModel, HistoryOrderUiModel>(
+) : MapChunkViewModel<OrderDto, HistoryOrderUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page, query -> orderApi.getChunk(size, page, true, search = query) },
+    get = { size, page, query -> repository.getOrdersChunk(size, page, true, query) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map =

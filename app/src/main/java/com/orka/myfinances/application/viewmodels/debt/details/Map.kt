@@ -2,14 +2,14 @@ package com.orka.myfinances.application.viewmodels.debt.details
 
 import com.orka.myfinances.application.viewmodels.client.list.map
 import com.orka.myfinances.application.viewmodels.toCardModel
-import com.orka.myfinances.data.api.debt.models.response.DebtApiModel
+import com.orka.myfinances.data.dtos.debt.DebtDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.now
 import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.ui.screens.debt.details.DebtScreenModel
 
-fun DebtApiModel.toScreenModel(
+fun DebtDto.toScreenModel(
     formatPrice: FormatPrice,
     formatDate: FormatDate
 ): DebtScreenModel {

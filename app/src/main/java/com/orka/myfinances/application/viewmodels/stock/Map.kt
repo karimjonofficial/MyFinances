@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.stock
 
 import com.orka.myfinances.R
-import com.orka.myfinances.data.api.stock.models.StockItemApiModel
+import com.orka.myfinances.data.dtos.stock.StockItemDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
@@ -11,8 +11,8 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.stock.StockItemCardModel
 import com.orka.myfinances.ui.screens.stock.StockItemUiModel
 
-fun StockItemApiModel.toCardModel(
-    price: Int,
+fun StockItemDto.toCardModel(
+    price: Long,
     formatDecimal: FormatDecimal,
     formatPrice: FormatPrice,
     basketAmount: Int? = null
@@ -30,7 +30,7 @@ fun StockItemApiModel.toCardModel(
     )
 }
 
-fun StockItemApiModel.toUiModel(
+fun StockItemDto.toUiModel(
     formatPrice: FormatPrice,
     formatDecimal: FormatDecimal,
     basketAmount: Int? = null
@@ -42,7 +42,7 @@ fun StockItemApiModel.toUiModel(
         id = Id(product.id),
         salePrice = price,
         exposedPrice = exposedPrice,
-        model = toCardModel(product.exposedPrice.toInt(), formatDecimal, formatPrice, basketAmount),
+        model = toCardModel(product.exposedPrice, formatDecimal, formatPrice, basketAmount),
         amount = amount
     )
 }

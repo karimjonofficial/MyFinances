@@ -1,10 +1,9 @@
 package com.orka.myfinances.application.viewmodels.profile
 
-import com.orka.myfinances.data.api.office.OfficeApi
-import com.orka.myfinances.data.api.office.OfficeApiModel
 import com.orka.myfinances.data.api.user.UserApi
+import com.orka.myfinances.data.dtos.office.OfficeDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.lib.data.api.scoped.company.getAll
+import com.orka.myfinances.data.repositories.office.OfficeRepository
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -18,7 +17,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class ProfileContentViewModel(
     private val officeId: Id,
-    private val officeApi: OfficeApi,
+    private val repository: OfficeRepository,
     private val userApi: UserApi,
     private val sessionManager: SessionManager,
     private val navigator: Navigator,
@@ -29,7 +28,7 @@ class ProfileContentViewModel(
     loading = loading,
     failure = failure,
     produceSuccess = {
-        val offices: List<OfficeApiModel>? = officeApi.getAll()
+        val offices: List<OfficeDto>? = repository.getAll(null)
         val user = userApi.getMe()
 
         if (offices != null && user != null)

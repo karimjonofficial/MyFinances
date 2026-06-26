@@ -1,31 +1,26 @@
 package com.orka.myfinances.application.viewmodels.product.edit
 
 import com.orka.myfinances.application.viewmodels.product.add.toItemModel
-import com.orka.myfinances.data.api.folder.FolderApi
-import com.orka.myfinances.data.api.folder.models.response.CategoryApiModel
-import com.orka.myfinances.data.api.title.ProductTitleApi
-import com.orka.myfinances.data.api.title.toApiRequest
+import com.orka.myfinances.data.dtos.folder.CategoryDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
+import com.orka.myfinances.data.repositories.folder.FolderRepository
+import com.orka.myfinances.data.repositories.product.title.ProductTitleRepository
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 import com.orka.myfinances.data.repositories.product.title.models.UpdateProductTitleRequest
-import com.orka.myfinances.lib.data.api.getById
-import com.orka.myfinances.lib.data.api.scoped.office.update
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.BaseViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
+import com.orka.myfinances.ui.screens.product.add.interactor.CategoryItemModel
 import com.orka.myfinances.ui.screens.product.edit.EditProductTitleScreenInteractor
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class EditProductTitleScreenViewModel(
     private val productId: Id,
-    private val folderApi: FolderApi,
-    private val productTitleApi: ProductTitleApi,
-    private val flow: MutableSharedFlow<ProductTitleEvent>,
+    private val repository: FolderRepository,
+    private val productTitleRepository: ProductTitleRepository,
     private val navigator: Navigator,
     loading: UiText,
     failure: UiText,
@@ -34,8 +29,10 @@ class EditProductTitleScreenViewModel(
     loading = loading,
     failure = failure,
     produceSuccess = {
-        val categories = folderApi.getTop()?.filterIsInstance<CategoryApiModel>()?.map { it.toItemModel() }
-        val productTitle = productTitleApi.getById(productId)
+        val categories = repository.getAll(null)
+            ?.filterIsInstance<CategoryDto>()
+            ?.map { it.toItemModel() }
+        val productTitle = productTitleRepository.getById(productId)
 
         if (categories != null && productTitle != null) {
             State.Success(productTitle.toEditorModel(categories))
@@ -58,45 +55,58 @@ class EditProductTitleScreenViewModel(
         description: String?,
         categoryId: Id
     ) {
-        launch {
-            val oldState = state.value
-            try {
-                if (oldState is State.Success) {
-                    val selectedCategory = oldState.value.categories.find { it.id == categoryId }
-                    val validProperties = properties.filterNotNull()
+        tryTransition { oldState ->
+            if (oldState !is State.Success)
+                return@tryTransition State.Failure(
+                    UiText.Str("Action executed from wrong state"),
+                    oldState.value
+                )
 
-                    if (
-                        selectedCategory != null && name.isNotBlank() &&
-                        price != null && salePrice != null && exposedPrice != null &&
-                        validProperties.size == selectedCategory.template.fields.size &&
-                        price > 0 && salePrice > 0 && salePrice > price &&
-                        categoryId.value > 0
-                    ) {
-                        setState(State.Loading(loading, oldState.value))
-                        val request = UpdateProductTitleRequest(
-                            categoryId = categoryId,
-                            name = name,
-                            price = price,
-                            salePrice = salePrice,
-                            exposedPrice = exposedPrice,
-                            properties = validProperties,
-                            description = description
-                        )
-                        val updated = productTitleApi.update(
-                            id = productId,
-                            request = request,
-                            map = UpdateProductTitleRequest::toApiRequest
-                        )
+            val selectedCategory = oldState.value.categories.find { it.id == categoryId }
+            val request = validate(
+                category = selectedCategory,
+                name = name,
+                price = price,
+                salePrice = salePrice,
+                exposedPrice = exposedPrice,
+                description = description,
+                properties = properties.filterNotNull()
+            ) ?: return@tryTransition oldState
 
-                        if (updated) {
-                            flow.emit(ProductTitleEvent(productId))
-                            navigator.back()
-                        } else setState(State.Failure(failure, oldState.value))
-                    }
-                } else setState(State.Failure(UiText.Str("Action executed from wrong state"), oldState.value))
-            } catch (e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString()), oldState.value))
-            }
+            val updated = productTitleRepository.update(productId, request)
+
+            if (updated) {
+                navigator.back()
+                oldState
+            } else State.Failure(failure, oldState.value)
         }
+    }
+
+    private fun validate(
+        category: CategoryItemModel?,
+        name: String,
+        price: Int?,
+        salePrice: Int?,
+        exposedPrice: Int?,
+        description: String?,
+        properties: List<PropertyModel<*>>
+    ): UpdateProductTitleRequest? {
+        val isValid = (category != null) && name.isNotBlank() &&
+                (price != null) && (salePrice != null) && (exposedPrice != null) &&
+                (properties.size == category.template.fields.size) &&
+                (price > 0) && (salePrice > 0) && (salePrice > price) &&
+                (category.id.value > 0)
+
+        return if (isValid) {
+            UpdateProductTitleRequest(
+                categoryId = category.id,
+                name = name,
+                price = price,
+                salePrice = salePrice,
+                exposedPrice = exposedPrice,
+                properties = properties,
+                description = description
+            )
+        } else null
     }
 }

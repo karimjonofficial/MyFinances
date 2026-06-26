@@ -1,12 +1,10 @@
 package com.orka.myfinances.application.viewmodels.stock
 
 import androidx.lifecycle.viewModelScope
-import com.orka.myfinances.data.api.stock.StockApi
-import com.orka.myfinances.data.api.stock.getByCategory
-import com.orka.myfinances.data.api.stock.models.StockItemApiModel
+import com.orka.myfinances.data.dtos.stock.StockItemDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.basket.BasketRepository
-import com.orka.myfinances.data.repositories.stock.StockEvent
+import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
@@ -17,25 +15,23 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.screens.stock.StockContentInteractor
 import com.orka.myfinances.ui.screens.stock.StockItemUiModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class StockItemsContentViewModel(
     private val categoryId: Id,
-    private val stockApi: StockApi,
+    private val repository: StockRepository,
     private val basketRepository: BasketRepository,
     private val formatPrice: FormatPrice,
     private val formatDecimal: FormatDecimal,
-    stockEvents: Flow<StockEvent>,
     loading: UiText,
     failure: UiText,
     logger: Logger
-) : MapChunkViewModel<StockItemApiModel, StockItemUiModel>(
+) : MapChunkViewModel<StockItemDto, StockItemUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page, query -> stockApi.getByCategory(size, page, categoryId, query) },
+    get = { size, page, query -> repository.getByCategory(size, page, categoryId, query) },
     map = { chunk ->
         val basketItems = basketRepository.get()
         val content = chunk.results
@@ -66,7 +62,7 @@ class StockItemsContentViewModel(
     init {
         initialize()
 
-        stockEvents.onEach {
+        repository.events.onEach {
             if (it.categoryId == categoryId) refresh()
         }.launchIn(viewModelScope)
 

@@ -1,60 +1,73 @@
 package com.orka.myfinances.data.api.folder
 
+import com.orka.myfinances.data.api.folder.models.request.AddFolderApiRequest
 import com.orka.myfinances.data.api.folder.models.response.FolderApiModel
-import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.data.repositories.folder.AddFolderRequest
-import com.orka.myfinances.data.repositories.folder.FolderEvent
+import com.orka.myfinances.lib.data.http.add
+import com.orka.myfinances.lib.data.http.getById
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
 import io.ktor.http.HttpStatusCode
-import kotlinx.coroutines.flow.MutableSharedFlow
 
 class FolderApi(
-    private val client: HttpClient,
-    private val officeId: Id,
-    private val flow: MutableSharedFlow<FolderEvent>
+    private val httpClient: HttpClient,
+    private val baseUrl: String = "categories/",
 ) {
-    suspend fun getTop(search: String? = null): List<FolderApiModel>? {
-        val response = client.get(
-            urlString = "categories/",
-            block = {
-                parameter("branch", officeId.value)
-                parameter("parent", "null")
-                parameter("ordering", "name")
-                if (search != null) parameter("search", search)
-            }
-        )
-        return if (response.status == HttpStatusCode.OK) response.body() else null
+    suspend fun get(
+        officeId: Int,
+        isCatalog: Boolean? = null,
+        name: String? = null,
+        ordering: String? = null,
+        parent: String? = null,
+        search: String? = null
+    ): List<FolderApiModel>? {
+        val response = httpClient.get(baseUrl) {
+            parameter("branch", officeId)
+            isCatalog?.let { parameter("is_catalog", it) }
+            name?.let { parameter("name", it) }
+            ordering?.let { parameter("ordering", it) }
+            parent?.let { parameter("parent", it) }
+            search?.let { parameter("search", it) }
+        }
+        return if (response.status == HttpStatusCode.OK)
+            response.body()
+        else null
     }
 
-    suspend fun getByParent(parentId: Int, search: String? = null): List<FolderApiModel>? {
-        val response = client.get(
-            urlString = "categories/",
-            block = {
-                parameter("parent", parentId)
-                parameter("branch", officeId.value)
-                parameter("ordering", "name")
-                if (search != null) parameter("search", search)
-            }
+    suspend fun getByParent(
+        officeId: Int,
+        parentId: Int,
+        search: String? = null
+    ): List<FolderApiModel>? {
+        return get(
+            officeId = officeId,
+            parent = parentId.toString(),
+            ordering = "name",
+            search = search
         )
-        return if (response.status == HttpStatusCode.OK) response.body() else null
+    }
+
+    suspend fun getTop(
+        officeId: Int,
+        search: String? = null
+    ): List<FolderApiModel>? {
+        return get(
+            officeId = officeId,
+            parent = "null",
+            ordering = "name",
+            search = search
+        )
     }
 
     suspend fun getById(id: Int): FolderApiModel? {
-        val response = client.get("categories/$id/")
-        return if (response.status == HttpStatusCode.OK) response.body() else null
+        return httpClient.getById(baseUrl, id)
     }
 
-    suspend fun add(request: AddFolderRequest) {
-        val response = client.post(
-            urlString = "categories/",
-            block = { setBody(request.toApiRequest(officeId.value)) }
+    suspend fun add(request: AddFolderApiRequest): FolderApiModel? {
+        return httpClient.add(
+            baseUrl = baseUrl,
+            request = request
         )
-        val created = response.status == HttpStatusCode.Created
-        if (created) flow.emit(FolderEvent(request.parentId))
     }
 }

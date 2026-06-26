@@ -1,6 +1,6 @@
 package com.orka.myfinances.ui.screens.templates.add
 
-import com.orka.myfinances.data.repositories.template.TemplateFieldModel
+import com.orka.myfinances.data.repositories.template.requests.TemplateFieldModel
 
 interface AddTemplateScreenInteractor {
     fun addTemplate(name: String, fields: List<TemplateFieldModel>)

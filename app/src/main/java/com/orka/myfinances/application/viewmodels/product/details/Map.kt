@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.product.details
 
-import com.orka.myfinances.data.api.title.models.response.ProductTitleApiModel
-import com.orka.myfinances.data.api.title.models.response.PropertyApiModel
+import com.orka.myfinances.data.dtos.product.title.ProductTitleDto
+import com.orka.myfinances.data.dtos.product.title.PropertyDto
 import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
@@ -9,7 +9,7 @@ import com.orka.myfinances.ui.screens.product.details.models.ProductTitleScreenM
 import com.orka.myfinances.ui.screens.product.details.models.PropertyModel
 import kotlin.time.Instant
 
-fun ProductTitleApiModel.toScreenModel(
+fun ProductTitleDto.toScreenModel(
     formatDecimal: FormatDecimal,
     formatDate: FormatDate,
     formatPrice: FormatPrice
@@ -24,7 +24,7 @@ fun ProductTitleApiModel.toScreenModel(
     )
 }
 
-fun PropertyApiModel.toModel(
+fun PropertyDto.toModel(
     formatDecimal: FormatDecimal,
     formatDate: FormatDate
 ): PropertyModel {

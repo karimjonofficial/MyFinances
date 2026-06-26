@@ -2,7 +2,7 @@ package com.orka.myfinances.application.viewmodels.sale.details
 
 import com.orka.myfinances.application.viewmodels.client.list.map
 import com.orka.myfinances.application.viewmodels.toCardModel
-import com.orka.myfinances.data.api.sale.models.response.SaleApiModel
+import com.orka.myfinances.data.dtos.sale.SaleDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatDecimal
@@ -11,7 +11,7 @@ import com.orka.myfinances.lib.format.FormatTime
 import com.orka.myfinances.ui.screens.sale.details.interactor.Item
 import com.orka.myfinances.ui.screens.sale.details.interactor.SaleScreenModel
 
-fun SaleApiModel.toScreenModel(
+fun SaleDto.toScreenModel(
     formatPrice: FormatPrice,
     formatDate: FormatDate,
     formatTime: FormatTime,
@@ -27,7 +27,7 @@ fun SaleApiModel.toScreenModel(
         clientId = Id(client.id),
         items = items.map {
             Item(
-                title = it.product.title.name,
+                title = it.productName,
                 supportingText = formatDecimal.formatDecimal(it.amount.toDouble())
             )
         },

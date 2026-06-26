@@ -2,10 +2,9 @@ package com.orka.myfinances.application.viewmodels.client.bottomsheet
 
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.application.viewmodels.client.details.toItemModel
-import com.orka.myfinances.data.api.client.ClientApi
-import com.orka.myfinances.data.api.client.models.response.ClientApiModel
+import com.orka.myfinances.data.dtos.client.ClientDto
 import com.orka.myfinances.data.repositories.client.ClientEvent
-import com.orka.myfinances.lib.data.api.scoped.company.getChunk
+import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
@@ -18,15 +17,15 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class ClientBottomSheetViewModel(
-    private val clientApi: ClientApi,
+    private val repository: ClientRepository,
     events: Flow<ClientEvent>,
     loading: UiText,
     failure: UiText,
     logger: Logger
-) : MapChunkViewModel<ClientApiModel, ClientItemModel>(
+) : MapChunkViewModel<ClientDto, ClientItemModel>(
     loading = loading,
     failure = failure,
-    get = { size, page, query -> clientApi.getChunk(size, page, "first_name", query) },
+    get = { size, page, query -> repository.getChunk(size, page, query) },
     map = { chunk ->
         val map = chunk.results
             .sortedBy { it.firstName }

@@ -1,9 +1,8 @@
 package com.orka.myfinances.application.viewmodels.client.details
 
-import com.orka.myfinances.data.api.client.ClientApi
-import com.orka.myfinances.data.api.client.models.response.ClientApiModel
+import com.orka.myfinances.data.dtos.client.ClientDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.lib.data.api.getById
+import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapSingleViewModel
@@ -14,14 +13,14 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class ClientScreenViewModel(
     id: Id,
-    private val clientApi: ClientApi,
+    private val repository: ClientRepository,
     private val navigator: Navigator,
     loading: UiText,
     failure: UiText,
     logger: Logger
-) : MapSingleViewModel<ClientApiModel, ClientScreenModel>(
+) : MapSingleViewModel<ClientDto, ClientScreenModel>(
     id = id,
-    get = { clientApi.getById(id) },
+    get = { repository.getById(id) },
     map = { it.toScreenModel() },
     loading = loading,
     failure = failure,
