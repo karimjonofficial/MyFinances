@@ -1,7 +1,6 @@
 package com.orka.myfinances.lib.data.http
 
 import io.ktor.client.HttpClient
-import io.ktor.client.request.patch
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.HttpStatusCode

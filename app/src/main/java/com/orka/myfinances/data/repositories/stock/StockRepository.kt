@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 class StockRepository(
     private val officeId: Id,
     private val api: StockApi,
-    private val flow: MutableSharedFlow<StockEvent>
+    flow: MutableSharedFlow<StockEvent>
 ) : GetStockItemsByCategory, GetStockItemByProduct {
     val events: Flow<StockEvent> = flow.asSharedFlow()
 
