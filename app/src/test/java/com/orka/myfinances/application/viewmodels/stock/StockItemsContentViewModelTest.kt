@@ -3,21 +3,20 @@ package com.orka.myfinances.application.viewmodels.stock
 import android.util.Log
 import app.cash.turbine.test
 import com.orka.myfinances.core.MainDispatcherContext
-import com.orka.myfinances.data.dtos.product.ProductDto
-import com.orka.myfinances.data.dtos.product.title.ProductTitleDto
 import com.orka.myfinances.data.dtos.stock.StockItemDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.basket.BasketEvent
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.basket.MinBasketItem
+import com.orka.myfinances.data.repositories.stock.GetStockItemsByCategory
 import com.orka.myfinances.data.repositories.stock.StockEvent
-import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.Chunk
+import com.orka.myfinances.testFixtures.resources.dtos.stockItemDto1
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -26,10 +25,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import kotlin.time.Instant
 
 class StockItemsContentViewModelTest : MainDispatcherContext() {
-    private val stockRepository = mockk<StockRepository>()
+    private val getStockByCategory = mockk<GetStockItemsByCategory>()
     private val basketRepository = mockk<BasketRepository>()
     private val formatPrice = mockk<FormatPrice>()
     private val formatDecimal = mockk<FormatDecimal>()
@@ -45,7 +43,6 @@ class StockItemsContentViewModelTest : MainDispatcherContext() {
     fun initTest() {
         mockkStatic(Log::class)
         every { Log.d(any(), any()) } returns 0
-        every { stockRepository.events } returns stockEvents
         every { basketRepository.events } returns basketEvents
         coEvery { basketRepository.get() } returns emptyList()
         every { formatPrice.formatPrice(any()) } returns "Price"
@@ -54,7 +51,7 @@ class StockItemsContentViewModelTest : MainDispatcherContext() {
 
     @Test
     fun `Initializes and shows basket amounts`() = runTest {
-        val stockItem = stockItem()
+        val stockItem = stockItemDto1
 
         val chunk = Chunk(
             count = 1,
@@ -64,12 +61,13 @@ class StockItemsContentViewModelTest : MainDispatcherContext() {
             results = listOf(stockItem)
         )
 
-        coEvery { stockRepository.getByCategory(any(), any(), any(), any()) } returns chunk
-        coEvery { basketRepository.get() } returns listOf(MinBasketItem(Id(101), 5))
+        coEvery { getStockByCategory.getByCategory(any(), any(), any(), any()) } returns chunk
+        coEvery { basketRepository.get() } returns listOf(MinBasketItem(Id(stockItem.product.id), 5))
 
         val viewModel = StockItemsContentViewModel(
             categoryId = categoryId,
-            repository = stockRepository,
+            getByCategory = getStockByCategory,
+            stockEvents = stockEvents,
             basketRepository = basketRepository,
             formatPrice = formatPrice,
             formatDecimal = formatDecimal,
@@ -89,7 +87,7 @@ class StockItemsContentViewModelTest : MainDispatcherContext() {
 
     @Test
     fun `Updates UI when basket changes`() = runTest {
-        val stockItem = stockItem()
+        val stockItem = stockItemDto1
 
         val chunk = Chunk(
             count = 1,
@@ -99,12 +97,13 @@ class StockItemsContentViewModelTest : MainDispatcherContext() {
             results = listOf(stockItem)
         )
 
-        coEvery { stockRepository.getByCategory(any(), any(), any(), any()) } returns chunk
+        coEvery { getStockByCategory.getByCategory(any(), any(), any(), any()) } returns chunk
         coEvery { basketRepository.get() } returns emptyList()
 
         val viewModel = StockItemsContentViewModel(
             categoryId = categoryId,
-            repository = stockRepository,
+            getByCategory = getStockByCategory,
+            stockEvents = stockEvents,
             basketRepository = basketRepository,
             formatPrice = formatPrice,
             formatDecimal = formatDecimal,
@@ -123,7 +122,7 @@ class StockItemsContentViewModelTest : MainDispatcherContext() {
             assertEquals(null, item.model.basketAmount)
 
             // Update basket
-            coEvery { basketRepository.get() } returns listOf(MinBasketItem(Id(101), 3))
+            coEvery { basketRepository.get() } returns listOf(MinBasketItem(Id(stockItem.product.id), 3))
             basketEvents.emit(BasketEvent.FullRefresh)
 
             state = awaitItem()
@@ -134,36 +133,5 @@ class StockItemsContentViewModelTest : MainDispatcherContext() {
             item = state.value.content.values.flatten().first()
             assertEquals("1.0", item.model.basketAmount)
         }
-    }
-
-    private fun stockItem(): StockItemDto {
-        val instant = Instant.fromEpochMilliseconds(0)
-        return StockItemDto(
-            id = 1,
-            product = ProductDto(
-                id = 101,
-                title = ProductTitleDto(
-                    id = 101,
-                    category = categoryId.value,
-                    name = "Product 101",
-                    properties = emptyList(),
-                    defaultPrice = 0,
-                    defaultSalePrice = 0,
-                    defaultExposedPrice = 0,
-                    createdAt = instant,
-                    modifiedAt = instant,
-                    description = null
-                ),
-                price = 100,
-                salePrice = 100,
-                exposedPrice = 100,
-                createdAt = instant,
-                modifiedAt = instant
-            ),
-            amount = 10,
-            dateTime = null,
-            createdAt = instant,
-            modifiedAt = instant
-        )
     }
 }

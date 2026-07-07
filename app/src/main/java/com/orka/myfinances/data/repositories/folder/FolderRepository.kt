@@ -9,28 +9,28 @@ import com.orka.myfinances.lib.data.repositories.GetById
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class FolderRepository(
-    private val officeId: Id,
+    private val branchId: Id,
     private val flow: MutableSharedFlow<FolderEvent>,
     private val api: FolderApi
-) : Get<FolderDto>, GetTop, Add<FolderDto, AddFolderRequest>, GetById<FolderDto> {
+) : Get<FolderDto>, GetTop, Add<FolderDto, AddFolderRequest>, GetById<FolderDto>, GetByParent {
 
     override suspend fun getTop(query: String?): List<FolderDto>? {
         return api.getTop(
-            officeId = officeId.value,
+            branchId = branchId.value,
             search = query
         )?.map { it.toDto() }
     }
 
     override suspend fun add(request: AddFolderRequest): FolderDto? {
-        val response = api.add(request.map(officeId))?.toDto()
+        val response = api.add(request.map(branchId))?.toDto()
         if(response != null)
             flow.emit(FolderEvent(request.parentId))
         return response
     }
 
-    suspend fun getByParent(parentId: Id): List<FolderDto>? {
+    override suspend fun getByParent(parentId: Id): List<FolderDto>? {
         return api.getByParent(
-            officeId = officeId.value,
+            branchId = branchId.value,
             parentId = parentId.value
         )?.map { it.toDto() }
     }
@@ -41,7 +41,7 @@ class FolderRepository(
 
     override suspend fun getAll(search: String?): List<FolderDto>? {
         return api.get(
-            officeId = officeId.value,
+            branchId = branchId.value,
             search = search
         )?.map { it.toDto() }
     }

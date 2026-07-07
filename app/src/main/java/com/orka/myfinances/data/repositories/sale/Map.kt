@@ -37,7 +37,7 @@ fun AddSaleRequest.toApiRequest(officeId: Id): AddSaleApiRequest {
         clientId = clientId.value,
         items = items,
         price = price,
-        officeId = officeId.value,
+        branchId = officeId.value,
         description = description
     )
 }

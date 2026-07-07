@@ -17,23 +17,23 @@ fun homeEntry(
     session: Session,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
-    val officeId = session.officeId.value.toString()
+    val branchId = session.branchId.value.toString()
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
 
     val foldersViewModel = viewModel(
-        key = "folders_$officeId",
+        key = "folders_$branchId",
         initializer = { factory.foldersViewModel() }
     )
     val basketViewModel = viewModel(
-        key = "basket_$officeId",
+        key = "basket_$branchId",
         initializer = { factory.basketViewModel() }
     )
     val profileViewModel = viewModel(
-        key = "profile_$officeId",
+        key = "profile_$branchId",
         initializer = { factory.profileViewModel() }
     )
     val sheetViewModel = viewModel(
-        key = "sheet_$officeId",
+        key = "sheet_$branchId",
         initializer = { factory.templateBottomSheetViewModel() }
     )
 
@@ -52,7 +52,7 @@ fun homeEntry(
             HomeContent(
                 modifier = contentModifier,
                 index = index,
-                officeId = officeId,
+                branchId = branchId,
                 foldersViewModel = foldersViewModel,
                 dialogVisible = dialogVisible,
                 basketViewModel = basketViewModel,

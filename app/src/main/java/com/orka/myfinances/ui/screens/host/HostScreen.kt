@@ -41,7 +41,7 @@ fun HostScreen(
             )
             val uiState = viewModel.uiState.collectAsState()
 
-            SelectOfficeScreen(
+            SelectBranchScreen(
                 modifier = modifier,
                 state = uiState.value,
                 interactor = viewModel

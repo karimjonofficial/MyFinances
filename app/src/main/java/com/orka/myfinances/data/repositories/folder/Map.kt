@@ -36,19 +36,19 @@ fun CategoryApiModel.toDto(): CategoryDto {
     )
 }
 
-fun AddFolderRequest.map(officeId: Id) = AddFolderApiRequest(
+fun AddFolderRequest.map(branchId: Id) = AddFolderApiRequest(
     name = name,
     parentId = parentId?.value,
-    officeId = officeId.value,
+    branchId = branchId.value,
     type = type,
     templateId = templateId?.value,
 )
 
-fun AddFolderRequest.toApiRequest(officeId: Id): AddFolderApiRequest {
+fun AddFolderRequest.toApiRequest(branchId: Id): AddFolderApiRequest {
     return AddFolderApiRequest(
         name = name,
         type = type,
-        officeId = officeId.value,
+        branchId = branchId.value,
         templateId = templateId?.value,
         parentId = parentId?.value
     )

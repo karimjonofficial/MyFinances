@@ -6,6 +6,7 @@ import com.orka.myfinances.testFixtures.resources.amount
 import com.orka.myfinances.testFixtures.resources.models.id1
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -14,7 +15,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class BasketRepositoryTest : MainDispatcherContext() {
-    private val repository = BasketRepository()
+    private val repository = BasketRepositoryImpl()
 
     @Test
     fun `Returns an empty list`() = runTest {
@@ -28,6 +29,7 @@ class BasketRepositoryTest : MainDispatcherContext() {
             val event = repository.events.first()
             assertEquals(BasketEvent.FullRefresh, event)
         }
+        yield()
         repository.add(id1, amount)
         job.join()
     }
@@ -88,6 +90,7 @@ class BasketRepositoryTest : MainDispatcherContext() {
                     assertEquals(id1, (event as BasketEvent.AmountChanged).id)
                     assertEquals(3 * amount, event.newAmount)
                 }
+                yield()
                 repository.add(id1, amount)
                 job.join()
             }
@@ -120,6 +123,7 @@ class BasketRepositoryTest : MainDispatcherContext() {
                 assertTrue(event is BasketEvent.ItemRemoved)
                 assertEquals(id1, (event as BasketEvent.ItemRemoved).id)
             }
+            yield()
             repository.remove(id1, amount)
             job.join()
         }

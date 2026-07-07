@@ -8,5 +8,5 @@ data class SessionEntity(
     @PrimaryKey val id: Int = 0,
     val access: String,
     val refresh: String,
-    val officeId: Int,
+    val branchId: Int,
 )

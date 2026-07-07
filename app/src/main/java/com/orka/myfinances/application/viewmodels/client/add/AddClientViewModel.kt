@@ -1,10 +1,13 @@
 package com.orka.myfinances.application.viewmodels.client.add
 
 import com.orka.myfinances.data.repositories.client.AddClientRequest
-import com.orka.myfinances.data.repositories.client.ClientRepository
+import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.lib.viewmodel.Manager
 
-class AddClientViewModel(private val repository: ClientRepository) : Manager() {
+class AddClientViewModel(
+    private val insert: Insert<AddClientRequest>
+) : Manager() {
+
     fun add(
         name: String,
         lastName: String?,
@@ -20,7 +23,7 @@ class AddClientViewModel(private val repository: ClientRepository) : Manager() {
                 phone = phone,
                 address = address
             )
-            repository.insert(request)
+            insert.insert(request)
         }
     }
 }

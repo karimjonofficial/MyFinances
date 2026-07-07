@@ -6,7 +6,8 @@ import com.orka.myfinances.data.dtos.folder.FolderDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.folder.AddFolderRequest
 import com.orka.myfinances.data.repositories.folder.FolderEvent
-import com.orka.myfinances.data.repositories.folder.FolderRepository
+import com.orka.myfinances.data.repositories.folder.GetTop
+import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -20,7 +21,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class FoldersContentViewModel(
-    private val repository: FolderRepository,
+    private val getTop: GetTop,
+    private val add: Add<FolderDto, AddFolderRequest>,
     private val navigator: Navigator,
     events: Flow<FolderEvent>,
     loading: UiText,
@@ -29,7 +31,7 @@ class FoldersContentViewModel(
 ) : FormatListViewModel<FolderDto, FolderUiModel>(
     loading = loading,
     failure = failure,
-    get = { search -> repository.getTop(search) },
+    get = { search -> getTop.getTop(search) },
     map = { folder -> folder.toUiModel() },
     logger = logger
 ), FoldersContentInteractor {
@@ -46,7 +48,7 @@ class FoldersContentViewModel(
         launch {
             setState(State.Loading(loading))
             val request = AddFolderRequest(name, type, templateId, null)
-            repository.add(request)
+            add.add(request)
         }
     }
 

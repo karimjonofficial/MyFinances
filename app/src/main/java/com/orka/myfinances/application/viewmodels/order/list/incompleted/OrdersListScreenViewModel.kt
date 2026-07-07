@@ -3,7 +3,7 @@ package com.orka.myfinances.application.viewmodels.order.list.incompleted
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.dtos.order.OrderDto
 import com.orka.myfinances.data.repositories.order.OrderEvent
-import com.orka.myfinances.data.repositories.order.OrderRepository
+import com.orka.myfinances.data.repositories.order.GetOrdersChunk
 import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatLocalDate
@@ -23,7 +23,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 class OrdersListScreenViewModel(
-    private val repository: OrderRepository,
+    private val getOrdersChunk: GetOrdersChunk,
     events: Flow<OrderEvent>,
     formatDecimal: FormatDecimal,
     formatPrice: FormatPrice,
@@ -36,7 +36,7 @@ class OrdersListScreenViewModel(
 ) : MapChunkViewModel<OrderDto, OrderUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page, query -> repository.getOrdersChunk(size, page, false, query) },
+    get = { size, page, query -> getOrdersChunk.getOrdersChunk(size, page, false, query) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map =

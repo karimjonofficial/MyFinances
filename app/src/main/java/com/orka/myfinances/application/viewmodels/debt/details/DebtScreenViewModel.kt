@@ -2,7 +2,9 @@ package com.orka.myfinances.application.viewmodels.debt.details
 
 import com.orka.myfinances.data.dtos.debt.DebtDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.data.repositories.debt.DebtRepository
+import com.orka.myfinances.data.repositories.debt.SetNotified
+import com.orka.myfinances.data.repositories.debt.SetPaid
+import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.logger.Logger
@@ -16,7 +18,9 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class DebtScreenViewModel(
     id: Id,
-    private val repository: DebtRepository,
+    private val getById: GetById<DebtDto>,
+    private val setPaid: SetPaid,
+    private val setNotified: SetNotified,
     private val formatPrice: FormatPrice,
     private val formatDate: FormatDate,
     private val navigator: Navigator,
@@ -25,7 +29,7 @@ class DebtScreenViewModel(
     logger: Logger
 ) : MapSingleViewModel<DebtDto, DebtScreenModel>(
     id = id,
-    get = { repository.getById(it) },
+    get = getById,
     map = { it.toScreenModel(formatPrice, formatDate) },
     loading = loading,
     failure = failure,
@@ -52,7 +56,7 @@ class DebtScreenViewModel(
     override fun setNotified(notified: Boolean) {
         tryTransition { oldState ->
             if (oldState is State.Success) {
-                val success = repository.setNotified(id, notified)
+                val success = setNotified.setNotified(id, notified)
                 if (success)
                     State.Success(oldState.value.copy(notified = notified))
                 else oldState
@@ -65,7 +69,7 @@ class DebtScreenViewModel(
     override fun setPaid() {
         tryTransition { oldState ->
             if (oldState is State.Success) {
-                val success = repository.setPaid(id)
+                val success = setPaid.setPaid(id)
                 if (success) {
                     State.Success(oldState.value.copy(completed = true))
                 } else oldState

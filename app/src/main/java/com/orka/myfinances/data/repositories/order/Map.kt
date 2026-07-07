@@ -1,11 +1,11 @@
 package com.orka.myfinances.data.repositories.order
 
-import com.orka.myfinances.data.api.office.OfficeApiModel
+import com.orka.myfinances.data.api.branch.BranchApiModel
 import com.orka.myfinances.data.api.order.models.request.AddOrderApiRequest
 import com.orka.myfinances.data.api.order.models.response.OrderApiModel
 import com.orka.myfinances.data.api.order.models.response.OrderItemApiModel
 import com.orka.myfinances.data.api.order.models.response.OrderProductApiModel
-import com.orka.myfinances.data.dtos.office.OfficeDto
+import com.orka.myfinances.data.dtos.branch.BranchDto
 import com.orka.myfinances.data.dtos.order.OrderDto
 import com.orka.myfinances.data.dtos.order.OrderItemDto
 import com.orka.myfinances.data.dtos.order.OrderProductDto
@@ -29,10 +29,10 @@ fun Basket.toOrderRequest(
     )
 }
 
-fun AddOrderRequest.toApiRequest(officeId: Id): AddOrderApiRequest {
+fun AddOrderRequest.toApiRequest(branchId: Id): AddOrderApiRequest {
     return AddOrderApiRequest(
         clientId = clientId.value,
-        branchId = officeId.value,
+        branchId = branchId.value,
         price = price,
         description = description,
         endDateTime = endDateTime,
@@ -73,8 +73,8 @@ fun OrderProductApiModel.toDto(): OrderProductDto {
     )
 }
 
-fun OfficeApiModel.toDto(): OfficeDto {
-    return OfficeDto(
+fun BranchApiModel.toDto(): BranchDto {
+    return BranchDto(
         id = id,
         companyId = companyId,
         name = name,

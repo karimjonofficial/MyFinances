@@ -2,10 +2,13 @@ package com.orka.myfinances.application.viewmodels.folder.catalog
 
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.dtos.folder.CatalogDto
+import com.orka.myfinances.data.dtos.folder.FolderDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.folder.AddFolderRequest
 import com.orka.myfinances.data.repositories.folder.FolderEvent
-import com.orka.myfinances.data.repositories.folder.FolderRepository
+import com.orka.myfinances.data.repositories.folder.GetByParent
+import com.orka.myfinances.lib.data.repositories.Add
+import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -21,7 +24,9 @@ import kotlinx.coroutines.flow.onEach
 
 class CatalogScreenViewModel(
     private val catalogId: Id,
-    private val repository: FolderRepository,
+    private val getByParent: GetByParent,
+    private val getById: GetById<FolderDto>,
+    private val add: Add<FolderDto, AddFolderRequest>,
     loading: UiText,
     failure: UiText,
     events: Flow<FolderEvent>,
@@ -31,8 +36,8 @@ class CatalogScreenViewModel(
     loading = loading,
     failure = failure,
     produceSuccess = {
-        val folders = repository.getByParent(catalogId)?.sortedBy { it.name }
-        val catalog = repository.getById(catalogId)
+        val folders = getByParent.getByParent(catalogId)?.sortedBy { it.name }
+        val catalog = getById.getById(catalogId)
 
         if (folders != null && catalog != null && catalog is CatalogDto) {
             State.Success(catalog.toScreenModel(folders))
@@ -58,7 +63,7 @@ class CatalogScreenViewModel(
             val request = validate(name, type, templateId)
                 ?: return@tryTransition oldState
 
-            val added = repository.add(request)
+            val added = add.add(request)
             if (added != null) {
                 oldState
             } else State.Failure(failure, oldState.value)

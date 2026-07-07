@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.dtos.receive.ReceiveDto
 import com.orka.myfinances.data.repositories.receive.ReceiveEvent
-import com.orka.myfinances.data.repositories.receive.ReceiveRepository
+import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
@@ -23,7 +23,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 class ReceiveContentViewModel(
-    private val repository: ReceiveRepository,
+    private val getChunk: GetChunk<ReceiveDto>,
     events: Flow<ReceiveEvent>,
     loading: UiText,
     failure: UiText,
@@ -36,7 +36,7 @@ class ReceiveContentViewModel(
 ) : MapChunkViewModel<ReceiveDto, ReceiveUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page, query -> repository.getChunk(size, page, query) },
+    get = getChunk,
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map =

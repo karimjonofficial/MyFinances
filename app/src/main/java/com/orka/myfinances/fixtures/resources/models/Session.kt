@@ -4,6 +4,6 @@ import com.orka.myfinances.data.models.Session
 
 val session = Session(
     credentials = credentials,
-    officeId = office1.id,
+    branchId = branch1.id,
     companyId = company1.id
 )

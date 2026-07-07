@@ -3,7 +3,7 @@ package com.orka.myfinances.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import com.orka.myfinances.application.manager.NavigationManager
+import com.orka.myfinances.application.manager.navigation.NavigationManager
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
 

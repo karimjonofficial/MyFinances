@@ -7,9 +7,9 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.title.models.AddProductTitleRequest
 import com.orka.myfinances.data.repositories.product.title.models.UpdateProductTitleRequest
 import com.orka.myfinances.lib.data.api.getById
-import com.orka.myfinances.lib.data.api.scoped.office.getChunk
-import com.orka.myfinances.lib.data.api.scoped.office.insert
-import com.orka.myfinances.lib.data.api.scoped.office.update
+import com.orka.myfinances.lib.data.api.scoped.branch.getChunk
+import com.orka.myfinances.lib.data.api.scoped.branch.insert
+import com.orka.myfinances.lib.data.api.scoped.branch.update
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.Insert
@@ -46,10 +46,14 @@ class ProductTitleRepository(
     }
 
     override suspend fun insert(request: AddProductTitleRequest): Boolean {
-        return api.insert(
+        val success = api.insert(
             request = request,
             map = { officeId -> toApiRequest(officeId) }
         )
+        if (success) {
+            flow.emit(ProductTitleEvent())
+        }
+        return success
     }
 
     override suspend fun update(id: Id, request: UpdateProductTitleRequest): Boolean {

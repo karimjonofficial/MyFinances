@@ -31,3 +31,5 @@ fun interface FormatDateTime {
 fun interface FormatLocalDate {
     fun formatLocalDate(date: LocalDate): String
 }
+
+interface Formatter : FormatNames, FormatDate, FormatTime, FormatPrice, FormatDecimal, FormatDateTime, FormatLocalDate

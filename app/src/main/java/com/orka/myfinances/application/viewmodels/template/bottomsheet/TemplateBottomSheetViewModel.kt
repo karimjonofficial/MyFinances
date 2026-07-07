@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.application.viewmodels.folder.home.toItemModel
 import com.orka.myfinances.data.dtos.template.TemplateDto
 import com.orka.myfinances.data.repositories.template.TemplateEvent
-import com.orka.myfinances.data.repositories.template.TemplateRepository
+import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class TemplateBottomSheetViewModel(
-    private val repository: TemplateRepository,
+    private val getChunk: GetChunk<TemplateDto>,
     flow: Flow<TemplateEvent>,
     loading: UiText,
     failure: UiText,
@@ -25,7 +25,7 @@ class TemplateBottomSheetViewModel(
 ) : MapChunkViewModel<TemplateDto, TemplateItemModel>(
     loading = loading,
     failure = failure,
-    get = { size, page, query -> repository.getChunk(size, page, query) },
+    get = getChunk,
     map = { chunk ->
         val map = chunk.results
             .sortedBy { it.name }

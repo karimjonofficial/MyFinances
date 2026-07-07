@@ -5,7 +5,8 @@ import com.orka.myfinances.data.dtos.debt.DebtDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.debt.AddDebtRequest
 import com.orka.myfinances.data.repositories.debt.DebtEvent
-import com.orka.myfinances.data.repositories.debt.DebtRepository
+import com.orka.myfinances.lib.data.repositories.GetChunk
+import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.format.FormatTime
@@ -26,7 +27,8 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Instant
 
 class DebtsScreenViewModel(
-    private val repository: DebtRepository,
+    private val getChunk: GetChunk<DebtDto>,
+    private val insert: Insert<AddDebtRequest>,
     events: Flow<DebtEvent>,
     private val formatPrice: FormatPrice,
     private val formatLocalDate: FormatLocalDate,
@@ -38,7 +40,7 @@ class DebtsScreenViewModel(
 ) : MapChunkViewModel<DebtDto, DebtUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page, query -> repository.getChunk(size, page, query) },
+    get = getChunk,
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map = chunk.results
@@ -68,7 +70,7 @@ class DebtsScreenViewModel(
     override fun add(id: Id, price: Int, endDateTime: Instant?, description: String?) {
         tryTransition { oldState ->
             val request = AddDebtRequest(id, price, description, endDateTime)
-            val created = repository.insert(request)
+            val created = insert.insert(request)
             if (created) oldState
             else State.Failure(failure, oldState.value)
         }

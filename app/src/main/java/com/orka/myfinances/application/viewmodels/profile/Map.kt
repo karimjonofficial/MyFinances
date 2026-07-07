@@ -1,11 +1,11 @@
 package com.orka.myfinances.application.viewmodels.profile
 
-import com.orka.myfinances.data.dtos.office.OfficeDto
+import com.orka.myfinances.data.dtos.branch.BranchDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.ui.screens.profile.models.OfficeItemModel
+import com.orka.myfinances.ui.screens.profile.models.BranchItemModel
 
-fun OfficeDto.toItemModel(): OfficeItemModel {
-    return OfficeItemModel(
+fun BranchDto.toItemModel(): BranchItemModel {
+    return BranchItemModel(
         id = Id(id),
         title = name
     )

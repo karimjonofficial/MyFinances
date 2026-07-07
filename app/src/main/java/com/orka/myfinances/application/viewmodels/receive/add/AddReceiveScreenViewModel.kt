@@ -1,11 +1,11 @@
 package com.orka.myfinances.application.viewmodels.receive.add
 
-import com.orka.myfinances.data.api.folder.FolderApi
-import com.orka.myfinances.data.api.folder.models.response.FolderApiModel
+import com.orka.myfinances.data.dtos.folder.FolderDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequestItem
-import com.orka.myfinances.data.repositories.receive.ReceiveRepository
+import com.orka.myfinances.lib.data.repositories.GetById
+import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -18,17 +18,17 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class AddReceiveScreenViewModel(
     private val categoryId: Id,
-    private val folderApi: FolderApi,
-    private val repository: ReceiveRepository,
+    private val getFolder: GetById<FolderDto>,
+    private val insertReceive: Insert<AddReceiveRequest>,
     private val navigator: Navigator,
     loading: UiText,
     failure: UiText,
     logger: Logger
-) : MapSingleViewModel<FolderApiModel, AddReceiveScreenModel>(
+) : MapSingleViewModel<FolderDto, AddReceiveScreenModel>(
     id = categoryId,
     loading = loading,
     failure = failure,
-    get = { folderApi.getById(it.value) },
+    get = getFolder,
     map = { it.toScreenModel() },
     logger = logger
 ), AddReceiveScreenInteractor {
@@ -71,7 +71,7 @@ class AddReceiveScreenViewModel(
                     ),
                     price = totalPrice
                 )
-                val created = repository.insert(request)
+                val created = insertReceive.insert(request)
                 if (created) {
                     navigator.back()
                 } else setState(State.Failure(failure, oldState.value))

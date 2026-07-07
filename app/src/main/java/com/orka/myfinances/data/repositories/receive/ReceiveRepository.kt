@@ -13,7 +13,7 @@ import com.orka.myfinances.lib.viewmodel.Chunk
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class ReceiveRepository(
-    private val officeId: Id,
+    private val branchId: Id,
     private val api: ReceiveApi,
     private val receiveFlow: MutableSharedFlow<ReceiveEvent>,
     private val stockFlow: MutableSharedFlow<StockEvent>
@@ -25,7 +25,7 @@ class ReceiveRepository(
         query: String?
     ): Chunk<ReceiveDto>? {
         return api.getChunk(
-            branchId = officeId.value,
+            branchId = branchId.value,
             page = page,
             pageSize = size,
             search = query
@@ -37,7 +37,7 @@ class ReceiveRepository(
     }
 
     override suspend fun insert(request: AddReceiveRequest): Boolean {
-        val success = api.insert(request.toApiRequest(officeId))
+        val success = api.insert(request.toApiRequest(branchId))
         if (success) {
             receiveFlow.emit(ReceiveEvent)
             stockFlow.emit(StockEvent(request.categoryId))

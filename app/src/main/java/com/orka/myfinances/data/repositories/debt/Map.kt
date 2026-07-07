@@ -8,10 +8,10 @@ import com.orka.myfinances.data.dtos.user.UserDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.client.toDto
 
-fun AddDebtRequest.toApiRequest(officeId: Id): AddDebtApiRequest {
+fun AddDebtRequest.toApiRequest(branchId: Id): AddDebtApiRequest {
     return AddDebtApiRequest(
         clientId = clientId.value,
-        officeId = officeId.value,
+        branchId = branchId.value,
         price = price,
         description = description,
         endDateTime = endDateTime

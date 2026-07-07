@@ -1,16 +1,18 @@
 package com.orka.myfinances.application.viewmodels.checkout
 
+import com.orka.myfinances.application.viewmodels.basket.basketItem
+import com.orka.myfinances.data.dtos.sale.SaleDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.Basket
 import com.orka.myfinances.data.repositories.basket.BasketRepository
-import com.orka.myfinances.data.repositories.basket.getBasketItems
 import com.orka.myfinances.data.repositories.debt.AddDebtRequest
-import com.orka.myfinances.data.repositories.debt.DebtRepository
-import com.orka.myfinances.data.repositories.order.OrderRepository
+import com.orka.myfinances.data.repositories.order.AddOrderRequest
 import com.orka.myfinances.data.repositories.order.toOrderRequest
-import com.orka.myfinances.data.repositories.sale.SaleRepository
+import com.orka.myfinances.data.repositories.sale.AddSaleRequest
 import com.orka.myfinances.data.repositories.sale.toSaleRequest
 import com.orka.myfinances.data.repositories.stock.GetStockItemByProduct
+import com.orka.myfinances.lib.data.repositories.Add
+import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.lib.extensions.models.getExposedPrice
 import com.orka.myfinances.lib.extensions.models.getSalePrice
 import com.orka.myfinances.lib.format.FormatDecimal
@@ -30,9 +32,9 @@ import kotlinx.datetime.atStartOfDayIn
 import kotlin.time.Instant
 
 class CheckoutScreenViewModel(
-    private val repository: SaleRepository,
-    private val orderRepository: OrderRepository,
-    private val debtRepository: DebtRepository,
+    private val addSale: Add<SaleDto, AddSaleRequest>,
+    private val insertOrder: Insert<AddOrderRequest>,
+    private val insertDebt: Insert<AddDebtRequest>,
     private val stockRepository: GetStockItemByProduct,
     private val basketRepository: BasketRepository,
     private val navigator: Navigator,
@@ -47,7 +49,12 @@ class CheckoutScreenViewModel(
     failure = failure,
     produceSuccess = {
         val minItems = basketRepository.get()
-        val items = getBasketItems(minItems, stockRepository)
+        val items = minItems.map { minItem ->
+        val stockItem = stockRepository.getByProduct(minItem.id)
+        if(stockItem != null)
+            basketItem(minItem, stockItem)
+        else throw Exception()
+    }
 
         State.Success(
             value = CheckoutScreenModel(
@@ -73,9 +80,15 @@ class CheckoutScreenViewModel(
     ) {
         tryTransition { state ->
             if (price != null) {
-                val items = getBasketItems(basketRepository.get(), stockRepository)
+                val minItems = basketRepository.get()
+                val items = minItems.map { minItem ->
+                    val stockItem = stockRepository.getByProduct(minItem.id)
+                    if(stockItem != null)
+                        basketItem(minItem, stockItem)
+                    else throw Exception()
+                }
                 val basket = Basket(price, description, items)
-                val response = repository.add(basket.toSaleRequest(clientId))
+                val response = addSale.add(basket.toSaleRequest(clientId))
 
                 if (response != null) {
                     if (print) printer.print(response)
@@ -96,9 +109,15 @@ class CheckoutScreenViewModel(
     ) {
         tryTransition { state ->
             if (price != null) {
-                val items = getBasketItems(basketRepository.get(), stockRepository)
+                val minItems = basketRepository.get()
+                val items = minItems.map { minItem ->
+                    val stockItem = stockRepository.getByProduct(minItem.id)
+                    if(stockItem != null)
+                        basketItem(minItem, stockItem)
+                    else throw Exception()
+                }
                 val basket = Basket(price, description, items)
-                val response = repository.add(basket.toSaleRequest(clientId))
+                val response = addSale.add(basket.toSaleRequest(clientId))
 
                 if (response != null) {
                     if (print) printer.print(response)
@@ -111,7 +130,7 @@ class CheckoutScreenViewModel(
                             dueDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
                         )
                     )
-                    val created = debtRepository.insert(debtRequest)
+                    val created = insertDebt.insert(debtRequest)
                     if (created) {
                         navigator.back()
                         state
@@ -129,12 +148,18 @@ class CheckoutScreenViewModel(
     ) {
         tryTransition { state ->
             if (price != null) {
-                val items = getBasketItems(basketRepository.get(), stockRepository)
+                val minItems = basketRepository.get()
+                val items = minItems.map { minItem ->
+                    val stockItem = stockRepository.getByProduct(minItem.id)
+                    if(stockItem != null)
+                        basketItem(minItem, stockItem)
+                    else throw Exception()
+                }
                 val basket = Basket(price, description, items)
                 val date = Instant.fromEpochMilliseconds(
                     endDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
                 )
-                val created = orderRepository.insert(basket.toOrderRequest(clientId, date))
+                val created = insertOrder.insert(basket.toOrderRequest(clientId, date))
 
                 if (created) {
                     basketRepository.clear()

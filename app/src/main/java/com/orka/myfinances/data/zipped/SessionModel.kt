@@ -4,5 +4,5 @@ import com.orka.myfinances.data.models.Credentials
 
 data class SessionModel(
     val credentials: Credentials,
-    val officeId: Int
+    val branchId: Int
 )

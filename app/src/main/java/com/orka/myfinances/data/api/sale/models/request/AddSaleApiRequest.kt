@@ -9,6 +9,6 @@ data class AddSaleApiRequest(
     @SerialName("client") val clientId: Int,
     val items: List<Item>,
     val price: Int,
-    @SerialName("branch") val officeId: Int,
+    @SerialName("branch") val branchId: Int,
     val description: String? = null
 )

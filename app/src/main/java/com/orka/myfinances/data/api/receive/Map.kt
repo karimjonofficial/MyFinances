@@ -6,10 +6,10 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequestItem
 
-fun AddReceiveRequest.toApiRequest(officeId: Id): AddReceiveApiRequest {
+fun AddReceiveRequest.toApiRequest(branchId: Id): AddReceiveApiRequest {
     return AddReceiveApiRequest(
         items = items.map { it.toApiRequest() },
-        officeId = officeId.value,
+        branchId = branchId.value,
         price = price,
     )
 }

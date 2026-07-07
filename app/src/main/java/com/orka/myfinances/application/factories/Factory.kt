@@ -2,6 +2,7 @@ package com.orka.myfinances.application.factories
 
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
+import com.orka.myfinances.lib.format.Formatter
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.printer.Printer

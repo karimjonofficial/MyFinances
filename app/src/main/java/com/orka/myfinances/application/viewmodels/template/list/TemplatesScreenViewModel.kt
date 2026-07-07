@@ -3,7 +3,7 @@ package com.orka.myfinances.application.viewmodels.template.list
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.dtos.template.TemplateDto
 import com.orka.myfinances.data.repositories.template.TemplateEvent
-import com.orka.myfinances.data.repositories.template.TemplateRepository
+import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.logger.Logger
@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class TemplatesScreenViewModel(
-    private val repository: TemplateRepository,
+    private val getChunk: GetChunk<TemplateDto>,
     events: Flow<TemplateEvent>,
     private val navigator: Navigator,
     formatDecimal: FormatDecimal,
@@ -29,7 +29,7 @@ class TemplatesScreenViewModel(
 ) : MapChunkViewModel<TemplateDto, TemplateUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page, query -> repository.getChunk(size, page, query) },
+    get = getChunk,
     map = { chunk ->
         val map = chunk.results
             .sortedBy { it.name }

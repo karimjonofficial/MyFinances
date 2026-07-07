@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.login
 
 import com.orka.myfinances.lib.logger.Logger
-import com.orka.myfinances.data.api.auth.AuthenticationApi
+import com.orka.myfinances.data.repositories.auth.Authenticator
 import com.orka.myfinances.data.models.Credentials
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -12,7 +12,7 @@ import com.orka.myfinances.ui.screens.login.LoginScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class LoginScreenViewModel(
-    private val authApi: AuthenticationApi,
+    private val authenticator: Authenticator,
     private val manager: SessionManager,
     private val loading: UiText,
     logger: Logger,
@@ -46,7 +46,7 @@ class LoginScreenViewModel(
         setState(State.Loading(loading))
 
         try {
-            val credential = authApi.get(username, password)
+            val credential = authenticator.authenticate(username, password)
             if (credential != null) {
                 onSuccess(credential)
             } else setState(

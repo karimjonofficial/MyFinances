@@ -13,7 +13,7 @@ import com.orka.myfinances.lib.viewmodel.Chunk
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class DebtRepository(
-    private val officeId: Id,
+    private val branchId: Id,
     private val api: DebtApi,
     private val flow: MutableSharedFlow<DebtEvent>
 ) : GetChunk<DebtDto>, GetDebtsChunk, GetById<DebtDto>, Insert<AddDebtRequest>, SetPaid, SetNotified {
@@ -33,7 +33,7 @@ class DebtRepository(
         query: String?
     ): Chunk<DebtDto>? {
         return api.getChunk(
-            officeId = officeId.value,
+            branchId = branchId.value,
             page = page,
             pageSize = size,
             search = query,
@@ -46,7 +46,7 @@ class DebtRepository(
     }
 
     override suspend fun insert(request: AddDebtRequest): Boolean {
-        val success = api.insert(request.toApiRequest(officeId))
+        val success = api.insert(request.toApiRequest(branchId))
         if (success) {
             flow.emit(DebtEvent)
         }

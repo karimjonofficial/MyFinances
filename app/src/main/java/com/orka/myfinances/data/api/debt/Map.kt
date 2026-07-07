@@ -7,7 +7,7 @@ import com.orka.myfinances.data.repositories.debt.AddDebtRequest
 fun AddDebtRequest.toApiRequest(officeId: Id): AddDebtApiRequest {
     return AddDebtApiRequest(
         clientId = clientId.value,
-        officeId = officeId.value,
+        branchId = officeId.value,
         price = price,
         description = description,
         endDateTime = endDateTime

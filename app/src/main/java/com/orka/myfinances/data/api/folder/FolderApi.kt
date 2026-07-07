@@ -15,7 +15,7 @@ class FolderApi(
     private val baseUrl: String = "categories/",
 ) {
     suspend fun get(
-        officeId: Int,
+        branchId: Int,
         isCatalog: Boolean? = null,
         name: String? = null,
         ordering: String? = null,
@@ -23,7 +23,7 @@ class FolderApi(
         search: String? = null
     ): List<FolderApiModel>? {
         val response = httpClient.get(baseUrl) {
-            parameter("branch", officeId)
+            parameter("branch", branchId)
             isCatalog?.let { parameter("is_catalog", it) }
             name?.let { parameter("name", it) }
             ordering?.let { parameter("ordering", it) }
@@ -36,12 +36,12 @@ class FolderApi(
     }
 
     suspend fun getByParent(
-        officeId: Int,
+        branchId: Int,
         parentId: Int,
         search: String? = null
     ): List<FolderApiModel>? {
         return get(
-            officeId = officeId,
+            branchId = branchId,
             parent = parentId.toString(),
             ordering = "name",
             search = search
@@ -49,11 +49,11 @@ class FolderApi(
     }
 
     suspend fun getTop(
-        officeId: Int,
+        branchId: Int,
         search: String? = null
     ): List<FolderApiModel>? {
         return get(
-            officeId = officeId,
+            branchId = branchId,
             parent = "null",
             ordering = "name",
             search = search

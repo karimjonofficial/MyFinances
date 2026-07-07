@@ -1,8 +1,9 @@
 package com.orka.myfinances.application.viewmodels.folder.category
 
 import com.orka.myfinances.data.dtos.folder.CategoryDto
+import com.orka.myfinances.data.dtos.folder.FolderDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.data.repositories.folder.FolderRepository
+import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -14,7 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class CategoryScreenViewModel(
     private val categoryId: Id,
-    private val repository: FolderRepository,
+    private val getById: GetById<FolderDto>,
     loading: UiText,
     failure: UiText,
     private val navigator: Navigator,
@@ -23,7 +24,7 @@ class CategoryScreenViewModel(
     loading = loading,
     failure = failure,
     produceSuccess = {
-        val category = repository.getById(categoryId)
+        val category = getById.getById(categoryId)
         if (category != null && category is CategoryDto) {
             val model = category.toScreenModel()
             State.Success(model)

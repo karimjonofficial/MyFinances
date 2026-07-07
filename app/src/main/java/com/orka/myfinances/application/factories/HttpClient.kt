@@ -56,7 +56,7 @@ fun httpClient(logger: Logger): HttpClient {
 fun httpClient(
     logger: Logger,
     credentials: Credentials,
-    onUnauthorized: (Credentials) -> Unit
+    onUnauthorized: () -> Unit
 ): HttpClient {
     return HttpClient(OkHttp) {
         install(ContentNegotiation) {
@@ -84,7 +84,7 @@ fun httpClient(
             validateResponse {
                 if (it.status == HttpStatusCode.Unauthorized) {
                     Log.d("HttpClient.Validate", "Unauthorized")
-                    onUnauthorized(credentials)
+                    onUnauthorized()
                 }
             }
         }

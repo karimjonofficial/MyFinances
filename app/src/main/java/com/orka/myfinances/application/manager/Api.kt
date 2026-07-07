@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.manager
 
 import com.orka.myfinances.application.models.CompanyApiModel
-import com.orka.myfinances.data.api.office.OfficeApiModel
+import com.orka.myfinances.data.api.branch.BranchApiModel
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -24,13 +24,13 @@ suspend fun getCompany(client: HttpClient, access: String): ApiResponse {
     }
 }
 
-suspend fun getOffice(
+suspend fun getBranch(
     client: HttpClient,
-    officeId: Int,
+    branchId: Int,
     access: String
-): OfficeApiModel? {
+): BranchApiModel? {
     val response = client.get(
-        urlString = "branches/$officeId/",
+        urlString = "branches/$branchId/",
         block = {
             headers {
                 append("Authorization", "Bearer $access")

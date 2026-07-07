@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.repositories.basket.BasketEvent
 import com.orka.myfinances.data.repositories.basket.BasketRepository
-import com.orka.myfinances.data.repositories.basket.getBasketItems
 import com.orka.myfinances.data.repositories.stock.GetStockItemByProduct
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
@@ -21,7 +20,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class BasketContentViewModel(
-    private val repository: BasketRepository,
+    private val basketRepository: BasketRepository,
     private val stockRepository: GetStockItemByProduct,
     private val navigator: Navigator,
     private val formatPrice: FormatPrice,
@@ -33,7 +32,13 @@ class BasketContentViewModel(
     loading = loading,
     failure = failure,
     produceSuccess = {
-        val items = getBasketItems(repository.get(), stockRepository)
+        val minItems = basketRepository.get()
+        val items = minItems.map { minItem ->
+            val stockItem = stockRepository.getByProduct(minItem.id)
+            if(stockItem != null)
+                basketItem(minItem, stockItem)
+            else throw Exception()
+        }
         val uiItems = items.map { item -> item.toUiModel(formatPrice, formatDecimal) }
         val sellable = uiItems.indexOfFirst { it.model.unavailable } == -1
         val price = items.sumOf { it.product.exposedPrice * it.amount }
@@ -53,7 +58,7 @@ class BasketContentViewModel(
     private var isStale = true
 
     init {
-        repository.events.onEach { event ->
+        basketRepository.events.onEach { event ->
             if (state.subscriptionCount.value > 0) {
                 when (event) {
                     is BasketEvent.AmountChanged -> updateAmountLocally(event)
@@ -73,6 +78,38 @@ class BasketContentViewModel(
                 isStale = false
             }
         }.launchIn(viewModelScope)
+    }
+
+    override fun increase(item: BasketItemUiModel) {
+        launch {
+            basketRepository.add(id = item.productId, amount = 1)
+        }
+    }
+
+    override fun decrease(item: BasketItemUiModel) {
+        launch {
+            basketRepository.remove(item.productId, 1)
+        }
+    }
+
+    override fun remove(item: BasketItemUiModel) {
+        launch {
+            basketRepository.remove(item.productId, item.amount)
+        }
+    }
+
+    override fun clear() {
+        launch {
+            basketRepository.clear()
+        }
+    }
+
+    override fun checkout() {
+        launch {
+            if ((state.value as? State.Success)?.value != null) {
+                navigator.navigateToCheckout()
+            }
+        }
     }
 
     private fun updateAmountLocally(event: BasketEvent.AmountChanged) {
@@ -121,37 +158,5 @@ class BasketContentViewModel(
                 sellable = sellable
             )
         )
-    }
-
-    override fun increase(item: BasketItemUiModel) {
-        launch {
-            repository.add(id = item.productTitleId, amount = 1)
-        }
-    }
-
-    override fun decrease(item: BasketItemUiModel) {
-        launch {
-            repository.remove(item.productTitleId, 1)
-        }
-    }
-
-    override fun remove(item: BasketItemUiModel) {
-        launch {
-            repository.remove(item.productTitleId, item.amount)
-        }
-    }
-
-    override fun clear() {
-        launch {
-            repository.clear()
-        }
-    }
-
-    override fun checkout() {
-        launch {
-            if ((state.value as? State.Success)?.value != null) {
-                navigator.navigateToCheckout()
-            }
-        }
     }
 }

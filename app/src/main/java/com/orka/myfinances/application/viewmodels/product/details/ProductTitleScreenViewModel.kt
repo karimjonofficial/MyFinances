@@ -4,10 +4,10 @@ import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.dtos.product.title.ProductTitleDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
-import com.orka.myfinances.data.repositories.product.title.ProductTitleRepository
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequestItem
-import com.orka.myfinances.data.repositories.receive.ReceiveRepository
+import com.orka.myfinances.lib.data.repositories.GetById
+import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.lib.format.FormatDate
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
@@ -25,8 +25,8 @@ import kotlinx.coroutines.flow.onEach
 
 class ProductTitleScreenViewModel(
     private val productId: Id,
-    private val repository: ReceiveRepository,
-    private val productTitleRepository: ProductTitleRepository,
+    private val getById: GetById<ProductTitleDto>,
+    private val insertReceive: Insert<AddReceiveRequest>,
     productTitleEvents: Flow<ProductTitleEvent>,
     private val formatDecimal: FormatDecimal,
     private val formatDate: FormatDate,
@@ -37,7 +37,7 @@ class ProductTitleScreenViewModel(
     logger: Logger
 ) : MapSingleViewModel<ProductTitleDto, ProductTitleScreenModel>(
     id = productId,
-    get = { productTitleRepository.getById(it) },
+    get = getById,
     map = { it.toScreenModel(formatDecimal, formatDate, formatPrice) },
     loading = loading,
     failure = failure,
@@ -63,7 +63,7 @@ class ProductTitleScreenViewModel(
             val oldState = state.value
             try {
                 setState(State.Loading(loading, oldState.value))
-                val title = productTitleRepository.getById(productId)
+                val title = getById.getById(productId)
                 if (title == null) {
                     setState(State.Failure(failure, oldState.value))
                     return@launch
@@ -87,7 +87,7 @@ class ProductTitleScreenViewModel(
                     price = totalPrice,
                     comment = comment
                 )
-                val created = repository.insert(request)
+                val created = insertReceive.insert(request)
                 if (created) {
                     setState(oldState)
                 } else setState(State.Failure(failure, oldState.value))

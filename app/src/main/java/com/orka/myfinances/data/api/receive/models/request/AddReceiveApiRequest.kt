@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class AddReceiveApiRequest(
     val items: List<AddReceiveApiRequestItem>,
-    @SerialName("branch") val officeId: Int,
+    @SerialName("branch") val branchId: Int,
     val price: Int,
     val comment: String? = null
 )

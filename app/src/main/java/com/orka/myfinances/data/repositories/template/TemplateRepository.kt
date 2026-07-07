@@ -12,7 +12,7 @@ import com.orka.myfinances.lib.viewmodel.Chunk
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class TemplateRepository(
-    private val officeId: Id,
+    private val branchId: Id,
     private val api: TemplateApi,
     private val flow: MutableSharedFlow<TemplateEvent>
 ) : GetChunk<TemplateDto>, GetById<TemplateDto>, Insert<AddTemplateRequest> {
@@ -34,7 +34,7 @@ class TemplateRepository(
     }
 
     override suspend fun insert(request: AddTemplateRequest): Boolean {
-        val success = api.insert(request.toApiRequest(officeId))
+        val success = api.insert(request.toApiRequest(branchId))
         if (success)
             flow.emit(TemplateEvent)
         return success

@@ -1,8 +1,10 @@
 package com.orka.myfinances.application.viewmodels.basket
 
 import com.orka.myfinances.R
+import com.orka.myfinances.data.dtos.stock.StockItemDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
+import com.orka.myfinances.data.repositories.basket.MinBasketItem
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
@@ -35,8 +37,19 @@ fun BasketItem.toUiModel(
     formatDecimal: FormatDecimal
 ): BasketItemUiModel {
     return BasketItemUiModel(
-        productTitleId = Id(product.id),
+        productId = Id(product.id),
         amount = amount,
         model = this.toModel(formatPrice, formatDecimal)
+    )
+}
+
+
+fun basketItem(minItem: MinBasketItem, stockItem: StockItemDto): BasketItem {
+    return BasketItem(
+        product = stockItem.product,
+        availableAmount = stockItem.amount,
+        amount = minItem.amount,
+        increaseEnabled = minItem.amount < stockItem.amount,
+        decreaseEnabled = true
     )
 }

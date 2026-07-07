@@ -1,7 +1,7 @@
 package com.orka.myfinances.ui.screens.profile
 
 import com.orka.myfinances.lib.ui.viewmodel.StateFul
-import com.orka.myfinances.ui.screens.profile.models.OfficeItemModel
+import com.orka.myfinances.ui.screens.profile.models.BranchItemModel
 
 interface ProfileInteractor : StateFul {
     fun debts()
@@ -10,7 +10,7 @@ interface ProfileInteractor : StateFul {
     fun templates()
     fun history()
     fun settings()
-    fun setOffice(office: OfficeItemModel)
+    fun setBranch(branch: BranchItemModel)
     fun logout()
 
     companion object {
@@ -23,7 +23,7 @@ interface ProfileInteractor : StateFul {
             override fun templates() {}
             override fun history() {}
             override fun settings() {}
-            override fun setOffice(office: OfficeItemModel) {}
+            override fun setBranch(branch: BranchItemModel) {}
             override fun logout() {}
         }
     }

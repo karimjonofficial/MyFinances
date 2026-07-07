@@ -2,7 +2,9 @@ package com.orka.myfinances.application.viewmodels.order.details
 
 import com.orka.myfinances.data.dtos.order.OrderDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.data.repositories.order.OrderRepository
+import com.orka.myfinances.data.repositories.order.CompleteOrder
+import com.orka.myfinances.data.repositories.order.SetEndDate
+import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.format.FormatDateTime
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
@@ -17,7 +19,9 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class OrderScreenViewModel(
     id: Id,
-    private val repository: OrderRepository,
+    private val getById: GetById<OrderDto>,
+    private val completeOrder: CompleteOrder,
+    private val setEndDate: SetEndDate,
     private val formatPrice: FormatPrice,
     private val formatDateTime: FormatDateTime,
     private val formatDecimal: FormatDecimal,
@@ -27,7 +31,7 @@ class OrderScreenViewModel(
     logger: Logger
 ) : MapSingleViewModel<OrderDto, OrderScreenModel>(
     id = id,
-    get = { repository.getById(it) },
+    get = getById,
     map = { it.toScreenModel(formatPrice, formatDateTime, formatDecimal) },
     loading = loading,
     failure = failure,
@@ -47,7 +51,7 @@ class OrderScreenViewModel(
 
     override fun complete() {
         tryTransition { oldState ->
-            if (repository.complete(id)) {
+            if (completeOrder.complete(id)) {
                 refresh()
                 oldState
             } else oldState
@@ -56,7 +60,7 @@ class OrderScreenViewModel(
 
     override fun setEndDate(endDateTime: Instant) {
         tryTransition { oldState ->
-            if (repository.setEndDate(id, endDateTime)) {
+            if (setEndDate.setEndDate(id, endDateTime)) {
                 refresh()
                 oldState
             } else oldState

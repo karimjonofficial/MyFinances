@@ -1,11 +1,12 @@
 package com.orka.myfinances.application.viewmodels.product.add
 
 import com.orka.myfinances.data.dtos.folder.CategoryDto
+import com.orka.myfinances.data.dtos.folder.FolderDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.data.repositories.folder.FolderRepository
-import com.orka.myfinances.data.repositories.product.title.ProductTitleRepository
 import com.orka.myfinances.data.repositories.product.title.models.AddProductTitleRequest
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
+import com.orka.myfinances.lib.data.repositories.Get
+import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -18,8 +19,8 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class AddProductTitleScreenViewModel(
     private val categoryId: Id,
-    private val repository: FolderRepository,
-    private val productTitleRepository: ProductTitleRepository,
+    private val getFolders: Get<FolderDto>,
+    private val insertTitle: Insert<AddProductTitleRequest>,
     private val navigator: Navigator,
     loading: UiText,
     failure: UiText,
@@ -28,7 +29,7 @@ class AddProductTitleScreenViewModel(
     loading = loading,
     failure = failure,
     produceSuccess = {
-        val categories = repository.getAll(null)
+        val categories = getFolders.getAll(null)
             ?.filterIsInstance<CategoryDto>()
             ?.map { it.toItemModel() }
         if (categories != null) {
@@ -70,7 +71,7 @@ class AddProductTitleScreenViewModel(
                 properties = properties.filterNotNull()
             ) ?: return@tryTransition oldState
 
-            val created = productTitleRepository.insert(request)
+            val created = insertTitle.insert(request)
             if (created) {
                 navigator.back()
                 oldState

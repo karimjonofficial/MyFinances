@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlin.time.Instant
 
 class OrderRepository(
-    private val officeId: Id,
+    private val branchId: Id,
     private val api: OrderApi,
     private val flow: MutableSharedFlow<OrderEvent>
 ) : GetChunk<OrderDto>, GetOrdersChunk, GetById<OrderDto>, Insert<AddOrderRequest>, CompleteOrder, SetEndDate {
@@ -33,7 +33,7 @@ class OrderRepository(
         query: String?
     ): Chunk<OrderDto>? {
         return api.getChunk(
-            branchId = officeId.value,
+            branchId = branchId.value,
             page = page,
             pageSize = size,
             search = query,
@@ -47,7 +47,7 @@ class OrderRepository(
     }
 
     override suspend fun insert(request: AddOrderRequest): Boolean {
-        val success = api.insert(request.toApiRequest(officeId))
+        val success = api.insert(request.toApiRequest(branchId))
         if (success) {
             flow.emit(OrderEvent)
         }

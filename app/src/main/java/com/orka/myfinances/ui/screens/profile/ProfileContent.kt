@@ -22,8 +22,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.fixtures.resources.models.office1
-import com.orka.myfinances.fixtures.resources.models.offices
+import com.orka.myfinances.fixtures.resources.models.branch1
+import com.orka.myfinances.fixtures.resources.models.branches
 import com.orka.myfinances.fixtures.resources.models.user1
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.extensions.str
@@ -61,7 +61,7 @@ fun ProfileContent(
 
             OutlinedExposedDropDownTextField(
                 text = when (state) {
-                    is State.Success -> state.value.officeName
+                    is State.Success -> state.value.branchName
                     is State.Failure -> state.error.str()
                     is State.Loading -> state.message.str()
                 },
@@ -70,12 +70,12 @@ fun ProfileContent(
                 onExpandChange = { exposed.value = it },
                 onDismissRequested = { exposed.value = false },
                 items = when (state) {
-                    is State.Success -> state.value.offices
+                    is State.Success -> state.value.branches
                     else -> emptyList()
                 },
                 itemText = { it.title },
                 onItemSelected = { office ->
-                    interactor.setOffice(office)
+                    interactor.setBranch(office)
                     exposed.value = false
                 }
             )
@@ -169,8 +169,8 @@ private fun ProfileContentPreview() {
                 modifier = Modifier.scaffoldPadding(paddingValues),
                 state = State.Success(
                     ProfileContentModel(
-                        offices = offices.map { it.toItemModel() },
-                        officeName = office1.name,
+                        branches = branches.map { it.toItemModel() },
+                        branchName = branch1.name,
                         name = "${user1.firstName} ${user1.lastName}",
                         phone = user1.phone
                     )

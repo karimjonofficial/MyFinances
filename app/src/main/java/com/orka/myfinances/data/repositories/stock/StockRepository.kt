@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
 class StockRepository(
-    private val officeId: Id,
+    private val branchId: Id,
     private val api: StockApi,
     flow: MutableSharedFlow<StockEvent>
 ) : GetStockItemsByCategory, GetStockItemByProduct {
@@ -23,7 +23,7 @@ class StockRepository(
         search: String?
     ): Chunk<StockItemDto>? {
         return api.getByCategory(
-            branchId = officeId.value,
+            branchId = branchId.value,
             categoryId = categoryId.value,
             page = pageIndex,
             pageSize = size,

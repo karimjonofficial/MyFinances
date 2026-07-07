@@ -7,7 +7,7 @@ import kotlin.time.Instant
 @Serializable
 data class AddDebtApiRequest(
     @SerialName("client") val clientId: Int,
-    @SerialName("branch") val officeId: Int,
+    @SerialName("branch") val branchId: Int,
     val price: Int,
     val description: String?,
     @SerialName("end_date_time") val endDateTime: Instant? = null

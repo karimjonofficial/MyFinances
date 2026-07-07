@@ -2,7 +2,7 @@ package com.orka.myfinances.data.api.auth
 
 import com.orka.myfinances.data.api.auth.models.request.AuthRequest
 import com.orka.myfinances.data.api.auth.models.request.RefreshRequest
-import com.orka.myfinances.data.api.auth.models.response.CredentialsModel
+import com.orka.myfinances.data.api.auth.models.response.CredentialsApiModel
 import com.orka.myfinances.data.models.Credentials
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -18,7 +18,7 @@ class AuthenticationApi(private val client: HttpClient) {
         )
 
         return if (response.status == HttpStatusCode.OK)
-            response.body<CredentialsModel>().map()
+            response.body<CredentialsApiModel>().map()
         else null
     }
 
@@ -29,7 +29,7 @@ class AuthenticationApi(private val client: HttpClient) {
         )
 
         return if (response.status == HttpStatusCode.OK)
-            response.body<CredentialsModel>().map()
+            response.body<CredentialsApiModel>().map()
         else null
     }
 }

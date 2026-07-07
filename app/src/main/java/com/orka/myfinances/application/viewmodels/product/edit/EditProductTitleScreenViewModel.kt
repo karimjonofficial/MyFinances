@@ -2,11 +2,14 @@ package com.orka.myfinances.application.viewmodels.product.edit
 
 import com.orka.myfinances.application.viewmodels.product.add.toItemModel
 import com.orka.myfinances.data.dtos.folder.CategoryDto
+import com.orka.myfinances.data.dtos.folder.FolderDto
+import com.orka.myfinances.data.dtos.product.title.ProductTitleDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.data.repositories.folder.FolderRepository
-import com.orka.myfinances.data.repositories.product.title.ProductTitleRepository
+import com.orka.myfinances.data.repositories.product.title.UpdateProductTitle
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 import com.orka.myfinances.data.repositories.product.title.models.UpdateProductTitleRequest
+import com.orka.myfinances.lib.data.repositories.Get
+import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -19,8 +22,9 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class EditProductTitleScreenViewModel(
     private val productId: Id,
-    private val repository: FolderRepository,
-    private val productTitleRepository: ProductTitleRepository,
+    private val getFolders: Get<FolderDto>,
+    private val productTitleRepository: GetById<ProductTitleDto>,
+    private val updateTitle: UpdateProductTitle,
     private val navigator: Navigator,
     loading: UiText,
     failure: UiText,
@@ -29,7 +33,7 @@ class EditProductTitleScreenViewModel(
     loading = loading,
     failure = failure,
     produceSuccess = {
-        val categories = repository.getAll(null)
+        val categories = getFolders.getAll(null)
             ?.filterIsInstance<CategoryDto>()
             ?.map { it.toItemModel() }
         val productTitle = productTitleRepository.getById(productId)
@@ -73,7 +77,7 @@ class EditProductTitleScreenViewModel(
                 properties = properties.filterNotNull()
             ) ?: return@tryTransition oldState
 
-            val updated = productTitleRepository.update(productId, request)
+            val updated = updateTitle.update(productId, request)
 
             if (updated) {
                 navigator.back()

@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 fun HomeContent(
     modifier: Modifier,
     index: Int,
-    officeId: String,
+    branchId: String,
     foldersViewModel: FoldersContentViewModel,
     dialogVisible: MutableState<Boolean>,
     basketViewModel: BasketContentViewModel,
@@ -39,7 +39,7 @@ fun HomeContent(
     val sheetVisible = rememberSaveable { mutableStateOf(false) }
     when (index) {
         0 -> {
-            LaunchedEffect(officeId) {
+            LaunchedEffect(branchId) {
                 foldersViewModel.initialize()
                 sheetViewModel.initialize()
             }
@@ -109,7 +109,7 @@ fun HomeContent(
         2 -> {
             val profileState = profileViewModel.uiState.collectAsState()
 
-            LaunchedEffect(officeId) {
+            LaunchedEffect(branchId) {
                 profileViewModel.initialize()
             }
 

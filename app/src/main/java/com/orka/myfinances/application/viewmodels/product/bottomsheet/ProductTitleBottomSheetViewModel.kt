@@ -3,8 +3,8 @@ package com.orka.myfinances.application.viewmodels.product.bottomsheet
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.dtos.product.title.ProductTitleDto
 import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.data.repositories.product.title.GetProductTitlesByCategory
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
-import com.orka.myfinances.data.repositories.product.title.ProductTitleRepository
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.onEach
 
 class ProductTitleBottomSheetViewModel(
     private val categoryId: Id,
-    private val repository: ProductTitleRepository,
+    private val getByCategory: GetProductTitlesByCategory,
     flow: Flow<ProductTitleEvent>,
     loading: UiText,
     failure: UiText,
@@ -26,7 +26,7 @@ class ProductTitleBottomSheetViewModel(
 ) : MapChunkViewModel<ProductTitleDto, ProductTitleItemModel>(
     loading = loading,
     failure = failure,
-    get = { size, page, query -> repository.getByCategory(size, page, categoryId, query) },
+    get = { size, page, query -> getByCategory.getByCategory(size, page, categoryId, query) },
     map = { chunk ->
         val content = chunk.results
             .sortedBy(ProductTitleDto::name)

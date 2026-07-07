@@ -27,10 +27,10 @@ fun TemplateApiModelField.toDto(): TemplateFieldDto {
     )
 }
 
-fun AddTemplateRequest.toApiRequest(officeId: Id): AddTemplateApiRequest {
+fun AddTemplateRequest.toApiRequest(branchId: Id): AddTemplateApiRequest {
     return AddTemplateApiRequest(
         name = name,
-        branch = officeId.value,
+        branch = branchId.value,
         fields = fields.map { it.toApiRequest() }
     )
 }

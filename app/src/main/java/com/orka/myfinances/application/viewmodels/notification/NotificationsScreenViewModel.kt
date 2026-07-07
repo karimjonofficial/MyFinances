@@ -1,7 +1,8 @@
 package com.orka.myfinances.application.viewmodels.notification
 
 import com.orka.myfinances.data.dtos.notification.NotificationDto
-import com.orka.myfinances.data.repositories.notification.NotificationRepository
+import com.orka.myfinances.data.repositories.notification.ReadNotification
+import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatTime
 import com.orka.myfinances.lib.logger.Logger
@@ -16,7 +17,8 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 class NotificationsScreenViewModel(
-    private val repository: NotificationRepository,
+    private val getChunk: GetChunk<NotificationDto>,
+    private val readNotification: ReadNotification,
     private val formatLocalDate: FormatLocalDate,
     private val formatTime: FormatTime,
     logger: Logger,
@@ -25,7 +27,7 @@ class NotificationsScreenViewModel(
 ) : MapChunkViewModel<NotificationDto, NotificationUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page, query -> repository.getChunk(size, page, query) },
+    get = getChunk,
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map = chunk.results
@@ -51,7 +53,7 @@ class NotificationsScreenViewModel(
 
     override fun read(notification: NotificationUiModel) {
         tryTransition { oldState ->
-            if (repository.read(notification.id)) {
+            if (readNotification.read(notification.id)) {
                 refresh()
                 oldState
             } else State.Failure(failure, oldState.value)

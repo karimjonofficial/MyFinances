@@ -1,10 +1,10 @@
 package com.orka.myfinances.ui.screens.profile
 
-import com.orka.myfinances.data.models.Office
-import com.orka.myfinances.ui.screens.profile.models.OfficeItemModel
+import com.orka.myfinances.data.models.Branch
+import com.orka.myfinances.ui.screens.profile.models.BranchItemModel
 
-fun Office.toItemModel(): OfficeItemModel {
-    return OfficeItemModel(
+fun Branch.toItemModel(): BranchItemModel {
+    return BranchItemModel(
         id = id,
         title = name
     )

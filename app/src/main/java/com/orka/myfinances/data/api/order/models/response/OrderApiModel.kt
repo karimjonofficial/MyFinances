@@ -1,7 +1,7 @@
 package com.orka.myfinances.data.api.order.models.response
 
 import com.orka.myfinances.data.api.client.models.response.ClientApiModel
-import com.orka.myfinances.data.api.office.OfficeApiModel
+import com.orka.myfinances.data.api.branch.BranchApiModel
 import com.orka.myfinances.data.api.user.UserApiModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -12,7 +12,7 @@ data class OrderApiModel(
     val id: Int,
     val user: UserApiModel,
     val client: ClientApiModel,
-    val branch: OfficeApiModel,
+    val branch: BranchApiModel,
     val price: Long,
     @SerialName("end_date_time") val endDateTime: Instant? = null,
     val completed: Boolean,

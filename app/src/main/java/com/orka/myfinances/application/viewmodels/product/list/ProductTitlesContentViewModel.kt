@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.data.dtos.product.title.ProductTitleDto
 import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.data.repositories.product.title.GetProductTitlesByCategory
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
-import com.orka.myfinances.data.repositories.product.title.ProductTitleRepository
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.onEach
 
 class ProductTitlesContentViewModel(
     private val categoryId: Id,
-    private val repository: ProductTitleRepository,
+    private val getByCategory: GetProductTitlesByCategory,
     productTitleEvents: Flow<ProductTitleEvent>,
     private val navigator: Navigator,
     loading: UiText,
@@ -30,7 +30,7 @@ class ProductTitlesContentViewModel(
 ) : MapChunkViewModel<ProductTitleDto, ProductTitleUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page, query -> repository.getByCategory(size, page, categoryId, query) },
+    get = { size, page, query -> getByCategory.getByCategory(size, page, categoryId, query) },
     map = { chunk ->
         val content = chunk.results
             .sortedBy(ProductTitleDto::name)
@@ -54,10 +54,13 @@ class ProductTitlesContentViewModel(
 
         productTitleEvents.onEach { event ->
             val s = state.value
-            if(s is State.Success) {
-                val c = s.value.content.values
-                c.forEach { collection ->
-                    if(collection.any { it.id == event.titleId }) refresh()
+            if (s is State.Success) {
+                if (event.titleId == null) refresh()
+                else {
+                    val c = s.value.content.values
+                    c.forEach { collection ->
+                        if (collection.any { it.id == event.titleId }) refresh()
+                    }
                 }
             }
         }.launchIn(viewModelScope)

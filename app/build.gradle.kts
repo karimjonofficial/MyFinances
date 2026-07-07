@@ -90,6 +90,7 @@ dependencies {
     testImplementation(libs.turbine)
     testImplementation(libs.mockk)
     testImplementation(libs.ktor.client.mock)
+    testImplementation(libs.slf4jSimple)
 
     testImplementation(libs.junit.jupiter)
     testImplementation(platform(libs.junit.bom))

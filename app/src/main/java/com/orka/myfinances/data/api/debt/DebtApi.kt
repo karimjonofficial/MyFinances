@@ -14,7 +14,7 @@ class DebtApi(
     val baseUrl: String = "debts/"
 ) {
     suspend fun getChunk(
-        officeId: Int,
+        branchId: Int,
         page: Int,
         pageSize: Int,
         search: String? = null,
@@ -34,7 +34,7 @@ class DebtApi(
             search = search,
             ordering = ordering,
             extraParameters = mapOf(
-                "branch" to officeId,
+                "branch" to branchId,
                 "client" to client,
                 "description" to description,
                 "end_date_time_from" to endDateTimeFrom,

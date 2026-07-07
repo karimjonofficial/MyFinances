@@ -3,7 +3,7 @@ package com.orka.myfinances.application.viewmodels.sale.list
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.dtos.sale.SaleDto
 import com.orka.myfinances.data.repositories.sale.SaleEvent
-import com.orka.myfinances.data.repositories.sale.SaleRepository
+import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatLocalDate
 import com.orka.myfinances.lib.format.FormatPrice
@@ -23,7 +23,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 class SaleContentViewModel(
-    private val repository: SaleRepository,
+    private val getChunk: GetChunk<SaleDto>,
     events: Flow<SaleEvent>,
     loading: UiText,
     failure: UiText,
@@ -36,7 +36,7 @@ class SaleContentViewModel(
 ) : MapChunkViewModel<SaleDto, SaleUiModel>(
     loading = loading,
     failure = failure,
-    get = { size, page, query -> repository.getChunk(size, page, query) },
+    get = getChunk,
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map = chunk.results.groupBy { sale -> sale.dateTime.toLocalDateTime(timeZone).date }

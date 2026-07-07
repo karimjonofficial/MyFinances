@@ -5,8 +5,9 @@ import com.orka.myfinances.data.dtos.sale.SaleDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.stock.StockEvent
 import com.orka.myfinances.lib.data.api.getById
-import com.orka.myfinances.lib.data.api.scoped.office.add
-import com.orka.myfinances.lib.data.api.scoped.office.getChunk
+import com.orka.myfinances.lib.data.api.scoped.branch.add
+import com.orka.myfinances.lib.data.api.scoped.branch.getChunk
+import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.Insert
@@ -17,7 +18,7 @@ class SaleRepository(
     private val api: SaleApi,
     private val saleFlow: MutableSharedFlow<SaleEvent>,
     private val stockFlow: MutableSharedFlow<StockEvent>,
-) : GetChunk<SaleDto>, GetById<SaleDto>, Insert<AddSaleRequest> {
+) : GetChunk<SaleDto>, GetById<SaleDto>, Insert<AddSaleRequest>, Add<SaleDto, AddSaleRequest> {
 
     override suspend fun getChunk(
         size: Int,
@@ -44,7 +45,7 @@ class SaleRepository(
         return api.getById(id)?.toDto()
     }
 
-    suspend fun add(request: AddSaleRequest): SaleDto? {
+    override suspend fun add(request: AddSaleRequest): SaleDto? {
         val response = api.add(
             request = request,
             map = { officeId -> toApiRequest(officeId) }

@@ -2,7 +2,7 @@ package com.orka.myfinances.application.viewmodels.receive.details
 
 import com.orka.myfinances.data.dtos.receive.ReceiveDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.data.repositories.receive.ReceiveRepository
+import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.format.FormatDateTime
 import com.orka.myfinances.lib.format.FormatDecimal
 import com.orka.myfinances.lib.format.FormatPrice
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class ReceiveScreenViewModel(
     id: Id,
-    private val repository: ReceiveRepository,
+    private val getById: GetById<ReceiveDto>,
     private val navigator: Navigator,
     private val formatPrice: FormatPrice,
     private val formatDateTime: FormatDateTime,
@@ -26,7 +26,7 @@ class ReceiveScreenViewModel(
     logger: Logger
 ) : MapSingleViewModel<ReceiveDto, ReceiveScreenModel>(
     id = id,
-    get = { repository.getById(it) },
+    get = getById,
     map = { it.toScreenModel(formatPrice, formatDateTime, formatDecimal) },
     loading = loading,
     failure = failure,

@@ -1,6 +1,5 @@
 package com.orka.myfinances.factories
 
-import com.orka.myfinances.application.factories.Formatter
 import com.orka.myfinances.application.viewmodels.basket.BasketContentViewModel
 import com.orka.myfinances.application.viewmodels.checkout.CheckoutScreenViewModel
 import com.orka.myfinances.application.viewmodels.client.add.AddClientViewModel
@@ -37,7 +36,7 @@ import com.orka.myfinances.data.api.client.ClientApi
 import com.orka.myfinances.data.api.debt.DebtApi
 import com.orka.myfinances.data.api.folder.FolderApi
 import com.orka.myfinances.data.api.notification.NotificationApi
-import com.orka.myfinances.data.api.office.OfficeApi
+import com.orka.myfinances.data.api.branch.BranchApi
 import com.orka.myfinances.data.api.order.OrderApi
 import com.orka.myfinances.data.api.receive.ReceiveApi
 import com.orka.myfinances.data.api.sale.SaleApi
@@ -47,7 +46,7 @@ import com.orka.myfinances.data.api.title.ProductTitleApi
 import com.orka.myfinances.data.api.user.UserApi
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Session
-import com.orka.myfinances.data.repositories.basket.BasketRepository
+import com.orka.myfinances.data.repositories.basket.BasketRepositoryImpl
 import com.orka.myfinances.data.repositories.client.ClientEvent
 import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.data.repositories.debt.DebtEvent
@@ -55,7 +54,7 @@ import com.orka.myfinances.data.repositories.debt.DebtRepository
 import com.orka.myfinances.data.repositories.folder.FolderEvent
 import com.orka.myfinances.data.repositories.folder.FolderRepository
 import com.orka.myfinances.data.repositories.notification.NotificationRepository
-import com.orka.myfinances.data.repositories.office.OfficeRepository
+import com.orka.myfinances.data.repositories.branch.BranchRepository
 import com.orka.myfinances.data.repositories.order.OrderEvent
 import com.orka.myfinances.data.repositories.order.OrderRepository
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
@@ -68,6 +67,8 @@ import com.orka.myfinances.data.repositories.stock.StockEvent
 import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.repositories.template.TemplateEvent
 import com.orka.myfinances.data.repositories.template.TemplateRepository
+import com.orka.myfinances.data.repositories.user.UserRepository
+import com.orka.myfinances.lib.format.Formatter
 import com.orka.myfinances.lib.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.printer.Printer
@@ -99,32 +100,34 @@ class Factory(
 
     private val clientApi = ClientApi(httpClient)
     private val folderApi = FolderApi(httpClient)
-    private val productTitleApi = ProductTitleApi(session.officeId, httpClient)
+    private val productTitleApi = ProductTitleApi(session.branchId, httpClient)
     private val templateApi = TemplateApi(httpClient)
     private val receiveApi = ReceiveApi(httpClient)
-    private val saleApi = SaleApi(session.officeId, httpClient)
+    private val saleApi = SaleApi(session.branchId, httpClient)
     private val orderApi = OrderApi(httpClient)
     private val debtApi = DebtApi(httpClient)
-    private val officeApi = OfficeApi(httpClient)
+    private val branchApi = BranchApi(httpClient)
     private val userApi = UserApi(httpClient)
     private val stockApi = StockApi(httpClient)
 
-    private val basketRepository = BasketRepository()
-    private val stockRepository = StockRepository(session.officeId, stockApi, stockFlow)
-    private val folderRepository = FolderRepository(session.officeId, folderFlow, folderApi)
-    private val templateRepository = TemplateRepository(session.officeId, templateApi, templateFlow)
+    private val basketRepository = BasketRepositoryImpl()
+    private val stockRepository = StockRepository(session.branchId, stockApi, stockFlow)
+    private val folderRepository = FolderRepository(session.branchId, folderFlow, folderApi)
+    private val templateRepository = TemplateRepository(session.branchId, templateApi, templateFlow)
     private val clientRepository = ClientRepository(session.companyId, clientApi, clientFlow)
-    private val debtRepository = DebtRepository(session.officeId, debtApi, debtFlow)
-    private val orderRepository = OrderRepository(session.officeId, orderApi, orderFlow)
+    private val debtRepository = DebtRepository(session.branchId, debtApi, debtFlow)
+    private val orderRepository = OrderRepository(session.branchId, orderApi, orderFlow)
     private val notificationRepository = NotificationRepository(NotificationApi(httpClient))
-    private val officeRepository = OfficeRepository(session.companyId, officeApi)
-    private val receiveRepository = ReceiveRepository(session.officeId, receiveApi, receiveFlow, stockFlow)
+    private val branchRepository = BranchRepository(session.companyId, branchApi)
+    private val userRepository = UserRepository(userApi)
+    private val receiveRepository = ReceiveRepository(session.branchId, receiveApi, receiveFlow, stockFlow)
     private val productTitleRepository = ProductTitleRepository(productTitleApi, productTitleFlow)
     private val saleRepository = SaleRepository(saleApi, saleFlow, stockFlow)
 
     fun foldersViewModel(): FoldersContentViewModel {
         return FoldersContentViewModel(
-            repository = folderRepository,
+            getTop = folderRepository,
+            add = folderRepository,
             navigator = navigator,
             events = folderFlow,
             loading = loading,
@@ -135,7 +138,7 @@ class Factory(
 
     fun templatesViewModel(): TemplatesScreenViewModel {
         return TemplatesScreenViewModel(
-            repository = templateRepository,
+            getChunk = templateRepository,
             navigator = navigator,
             loading = loading,
             failure = failure,
@@ -147,7 +150,7 @@ class Factory(
 
     fun addTemplateViewModel(): AddTemplateScreenViewModel {
         return AddTemplateScreenViewModel(
-            repository = templateRepository,
+            insert = templateRepository,
             navigator = navigator
         )
     }
@@ -155,8 +158,8 @@ class Factory(
     fun addProductViewModel(categoryId: Id): AddProductTitleScreenViewModel {
         return AddProductTitleScreenViewModel(
             categoryId = categoryId,
-            repository = folderRepository,
-            productTitleRepository = productTitleRepository,
+            getFolders = folderRepository,
+            insertTitle = productTitleRepository,
             navigator = navigator,
             loading = loading,
             failure = failure,
@@ -167,8 +170,9 @@ class Factory(
     fun editProductViewModel(id: Id): EditProductTitleScreenViewModel {
         return EditProductTitleScreenViewModel(
             productId = id,
-            repository = folderRepository,
+            getFolders = folderRepository,
             productTitleRepository = productTitleRepository,
+            updateTitle = productTitleRepository,
             navigator = navigator,
             loading = loading,
             failure = failure,
@@ -179,7 +183,8 @@ class Factory(
     fun stockItemsViewModel(id: Id): StockItemsContentViewModel {
         return StockItemsContentViewModel(
             categoryId = id,
-            repository = stockRepository,
+            getByCategory = stockRepository,
+            stockEvents = stockFlow,
             basketRepository = basketRepository,
             formatPrice = formatter,
             formatDecimal = formatter,
@@ -192,7 +197,7 @@ class Factory(
     fun productTitlesViewModel(id: Id): ProductTitlesContentViewModel {
         return ProductTitlesContentViewModel(
             categoryId = id,
-            repository = productTitleRepository,
+            getByCategory = productTitleRepository,
             productTitleEvents = productTitleFlow,
             navigator = navigator,
             loading = loading,
@@ -204,7 +209,9 @@ class Factory(
     fun catalogViewModel(id: Id): CatalogScreenViewModel {
         return CatalogScreenViewModel(
             catalogId = id,
-            repository = folderRepository,
+            getByParent = folderRepository,
+            getById = folderRepository,
+            add = folderRepository,
             events = folderFlow,
             navigator = navigator,
             loading = loading,
@@ -215,7 +222,7 @@ class Factory(
 
     fun basketViewModel(): BasketContentViewModel {
         return BasketContentViewModel(
-            repository = basketRepository,
+            basketRepository = basketRepository,
             stockRepository = stockRepository,
             navigator = navigator,
             formatPrice = formatter,
@@ -228,7 +235,8 @@ class Factory(
 
     fun clientsViewModel(): ClientsScreenViewModel {
         return ClientsScreenViewModel(
-            repository = clientRepository,
+            getChunk = clientRepository,
+            insert = clientRepository,
             events = clientFlow,
             loading = loading,
             failure = failure,
@@ -240,7 +248,7 @@ class Factory(
     fun clientViewModel(id: Id): ClientScreenViewModel {
         return ClientScreenViewModel(
             id = id,
-            repository = clientRepository,
+            getById = clientRepository,
             navigator = navigator,
             loading = loading,
             failure = failure,
@@ -252,7 +260,7 @@ class Factory(
         return SaleContentViewModel(
             loading = loading,
             failure = failure,
-            repository = saleRepository,
+            getChunk = saleRepository,
             events = saleFlow,
             navigator = navigator,
             formatPrice = formatter,
@@ -266,7 +274,7 @@ class Factory(
     fun saleViewModel(id: Id): SaleScreenViewModel {
         return SaleScreenViewModel(
             id = id,
-            repository = saleRepository,
+            getById = saleRepository,
             printer = printer,
             formatPrice = formatter,
             formatDate = formatter,
@@ -281,7 +289,7 @@ class Factory(
 
     fun receivesViewModel(): ReceiveContentViewModel {
         return ReceiveContentViewModel(
-            repository = receiveRepository,
+            getChunk = receiveRepository,
             events = receiveFlow,
             loading = loading,
             failure = failure,
@@ -296,10 +304,10 @@ class Factory(
 
     fun checkoutViewModel(): CheckoutScreenViewModel {
         return CheckoutScreenViewModel(
+            addSale = saleRepository,
+            insertOrder = orderRepository,
+            insertDebt = debtRepository,
             stockRepository = stockRepository,
-            repository = saleRepository,
-            orderRepository = orderRepository,
-            debtRepository = debtRepository,
             basketRepository = basketRepository,
             logger = logger,
             navigator = navigator,
@@ -313,7 +321,7 @@ class Factory(
 
     fun clientBottomSheetViewModel(): ClientBottomSheetViewModel {
         return ClientBottomSheetViewModel(
-            repository = clientRepository,
+            getChunk = clientRepository,
             events = clientFlow,
             loading = loading,
             failure = failure,
@@ -324,8 +332,8 @@ class Factory(
     fun addReceiveViewModel(id: Id): AddReceiveScreenViewModel {
         return AddReceiveScreenViewModel(
             categoryId = id,
-            folderApi = folderApi,
-            repository = receiveRepository,
+            getFolder = folderRepository,
+            insertReceive = receiveRepository,
             navigator = navigator,
             loading = loading,
             failure = failure,
@@ -336,7 +344,7 @@ class Factory(
     fun productTitleBottomSheetViewModel(id: Id): ProductTitleBottomSheetViewModel {
         return ProductTitleBottomSheetViewModel(
             categoryId = id,
-            repository = productTitleRepository,
+            getByCategory = productTitleRepository,
             flow = productTitleFlow,
             loading = loading,
             failure = failure,
@@ -346,7 +354,8 @@ class Factory(
 
     fun notificationsViewModel(): NotificationsScreenViewModel {
         return NotificationsScreenViewModel(
-            repository = notificationRepository,
+            getChunk = notificationRepository,
+            readNotification = notificationRepository,
             formatLocalDate = formatter,
             formatTime = formatter,
             logger = logger,
@@ -357,7 +366,7 @@ class Factory(
 
     fun ordersViewModel(): OrdersListScreenViewModel {
         return OrdersListScreenViewModel(
-            repository = orderRepository,
+            getOrdersChunk = orderRepository,
             events = orderFlow,
             loading = loading,
             failure = failure,
@@ -372,7 +381,7 @@ class Factory(
 
     fun ordersHistoryViewModel(): OrdersHistoryContentViewModel {
         return OrdersHistoryContentViewModel(
-            repository = orderRepository,
+            getOrdersChunk = orderRepository,
             events = orderFlow,
             loading = loading,
             failure = failure,
@@ -388,7 +397,9 @@ class Factory(
     fun orderViewModel(id: Id): OrderScreenViewModel {
         return OrderScreenViewModel(
             id = id,
-            repository = orderRepository,
+            getById = orderRepository,
+            completeOrder = orderRepository,
+            setEndDate = orderRepository,
             formatPrice = formatter,
             formatDateTime = formatter,
             formatDecimal = formatter,
@@ -401,7 +412,8 @@ class Factory(
 
     fun debtsViewModel(): DebtsScreenViewModel {
         return DebtsScreenViewModel(
-            repository = debtRepository,
+            getChunk = debtRepository,
+            insert = debtRepository,
             events = debtFlow,
             navigator = navigator,
             logger = logger,
@@ -416,7 +428,9 @@ class Factory(
     fun debtViewModel(id: Id): DebtScreenViewModel {
         return DebtScreenViewModel(
             id = id,
-            repository = debtRepository,
+            getById = debtRepository,
+            setPaid = debtRepository,
+            setNotified = debtRepository,
             formatPrice = formatter,
             formatDate = formatter,
             navigator = navigator,
@@ -428,9 +442,9 @@ class Factory(
 
     fun profileViewModel(): ProfileContentViewModel {
         return ProfileContentViewModel(
-            officeId = session.officeId,
-            repository = officeRepository,
-            userApi = userApi,
+            branchId = session.branchId,
+            getBranches = branchRepository,
+            getMe = userRepository,
             navigator = navigator,
             sessionManager = sessionManager,
             loading = loading,
@@ -442,8 +456,8 @@ class Factory(
     fun productTitleViewModel(id: Id): ProductTitleScreenViewModel {
         return ProductTitleScreenViewModel(
             productId = id,
-            repository = receiveRepository,
-            productTitleRepository = productTitleRepository,
+            getById = productTitleRepository,
+            insertReceive = receiveRepository,
             productTitleEvents = productTitleFlow,
             formatDecimal = formatter,
             formatDate = formatter,
@@ -458,7 +472,7 @@ class Factory(
     fun receiveViewModel(id: Id): ReceiveScreenViewModel {
         return ReceiveScreenViewModel(
             id = id,
-            repository = receiveRepository,
+            getById = receiveRepository,
             formatPrice = formatter,
             formatDateTime = formatter,
             formatDecimal = formatter,
@@ -472,7 +486,7 @@ class Factory(
     fun templateViewModel(id: Id): TemplateScreenViewModel {
         return TemplateScreenViewModel(
             id = id,
-            repository = templateRepository,
+            getById = templateRepository,
             failure = failure,
             navigator = navigator,
             loading = loading,
@@ -483,7 +497,7 @@ class Factory(
     fun categoryViewModel(id: Id): CategoryScreenViewModel {
         return CategoryScreenViewModel(
             categoryId = id,
-            repository = folderRepository,
+            getById = folderRepository,
             loading = loading,
             failure = failure,
             navigator = navigator,
@@ -493,7 +507,7 @@ class Factory(
 
     fun templateBottomSheetViewModel(): TemplateBottomSheetViewModel {
         return TemplateBottomSheetViewModel(
-            repository = templateRepository,
+            getChunk = templateRepository,
             flow = templateFlow,
             loading = loading,
             failure = failure,
@@ -503,7 +517,7 @@ class Factory(
 
     fun debtHistoryViewModel(): DebtsHistoryContentViewModel {
         return DebtsHistoryContentViewModel(
-            repository = debtRepository,
+            getDebtsChunk = debtRepository,
             events = debtFlow,
             formatPrice = formatter,
             formatLocalDate = formatter,
@@ -517,7 +531,7 @@ class Factory(
 
     fun addClientViewModel(): AddClientViewModel {
         return AddClientViewModel(
-            repository = clientRepository
+            insert = clientRepository
         )
     }
 }
