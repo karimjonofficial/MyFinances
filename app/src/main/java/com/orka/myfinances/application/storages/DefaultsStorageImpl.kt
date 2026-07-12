@@ -10,7 +10,9 @@ class DefaultsStorageImpl(private val dao: DefaultsDao) : DefaultsStorage {
     }
 
     override suspend fun setDefaultBranchId(id: Id) {
-        dao.setDefaultBranchId(id.value)
+        if (dao.getDefaultBranchId() != null)
+            dao.setDefaultBranchId(id.value)
+        dao.insertDefaultBranchId(id.value)
     }
 
     override suspend fun clear() {

@@ -159,6 +159,7 @@ class UiManagerTest : MainDispatcherContext() {
                 @BeforeEach
                 fun setup() {
                     coEvery { credentialsStorage.set(any()) } returns Unit
+                    coEvery { defaultsStorage.setDefaultBranchId(any()) } returns Unit
                 }
 
                 @Test
@@ -193,6 +194,18 @@ class UiManagerTest : MainDispatcherContext() {
                         manager.store(credentials1)
                         awaitItem()
                         coVerify { infoRepository.getCompanyId(any()) }
+                    }
+                }
+
+                @Test
+                fun `Calls setDefaultBranchId`() = runTest {
+                    manager.uiState.test {
+                        awaitItem()
+                        manager.initialize()
+                        awaitItem()
+                        manager.store(credentials1)
+                        awaitItem()
+                        coVerify { defaultsStorage.setDefaultBranchId(any()) }
                     }
                 }
 

@@ -10,7 +10,7 @@ class CredentialsStorageImpl(private val dao: CredentialsDao) : CredentialsStora
     }
 
     override suspend fun set(credentials: Credentials) {
-        if (dao.isEmpty())
+        if (dao.count() < 1)
             dao.insert(credentials.access, credentials.refresh)
         else dao.update(credentials.access, credentials.refresh)
     }

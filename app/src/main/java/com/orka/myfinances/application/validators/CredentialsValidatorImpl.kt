@@ -10,6 +10,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.http.HttpStatusCode
 
 class CredentialsValidatorImpl(
@@ -26,13 +27,14 @@ class CredentialsValidatorImpl(
 
         return if(response.status == HttpStatusCode.Unauthorized) {
             val r = httpClient.post(
-                urlString = "token/refresh/",
+                urlString = "auth/token/refresh/",
                 block = {
-                    header("Authorization", "Bearer ${credentials.refresh}")
+                    val request = RefreshApiRequest(refresh = credentials.refresh)
+                    setBody(request)
                 }
             ).body<CredentialsApiModel>().map()
             credentialsStorage.set(r)
             r
-        } else response.body<CredentialsApiModel>().map()
+        } else credentials
     }
 }

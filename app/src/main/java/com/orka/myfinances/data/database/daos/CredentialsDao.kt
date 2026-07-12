@@ -19,5 +19,5 @@ interface CredentialsDao {
     suspend fun insert(access: String, refresh: String)
 
     @Query("SELECT COUNT(*) FROM credentials")
-    suspend fun isEmpty(): Boolean
+    suspend fun count(): Int
 }
