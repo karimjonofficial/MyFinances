@@ -5,10 +5,10 @@ import com.orka.myfinances.application.viewmodels.debt.list.toUiModel
 import com.orka.myfinances.data.dtos.debt.DebtDto
 import com.orka.myfinances.data.repositories.debt.DebtEvent
 import com.orka.myfinances.data.repositories.debt.GetDebtsChunk
-import com.orka.myfinances.lib.format.FormatLocalDate
-import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.lib.format.FormatTime
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.format.FormatLocalDate
+import com.orka.myfinances.format.FormatPrice
+import com.orka.myfinances.format.FormatTime
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel

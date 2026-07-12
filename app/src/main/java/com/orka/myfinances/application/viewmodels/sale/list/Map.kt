@@ -2,9 +2,9 @@ package com.orka.myfinances.application.viewmodels.sale.list
 
 import com.orka.myfinances.data.dtos.sale.SaleDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.lib.format.FormatDecimal
-import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.lib.format.FormatTime
+import com.orka.myfinances.format.FormatDecimal
+import com.orka.myfinances.format.FormatPrice
+import com.orka.myfinances.format.FormatTime
 import com.orka.myfinances.ui.screens.sale.list.SaleCardModel
 import com.orka.myfinances.ui.screens.sale.list.SaleUiModel
 

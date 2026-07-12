@@ -9,11 +9,12 @@ import com.orka.myfinances.R
 import com.orka.myfinances.application.manager.runtime.GuestRuntimeInitializerImpl
 import com.orka.myfinances.application.manager.runtime.NewUserRuntimeInitializerImpl
 import com.orka.myfinances.application.manager.runtime.SignedInRuntimeInitializerImpl
-import com.orka.myfinances.application.manager.ui.FailureType
-import com.orka.myfinances.application.manager.ui.UiState
+import com.orka.myfinances.ui.screens.host.viewmodel.FailureType
+import com.orka.myfinances.ui.screens.host.viewmodel.UiState
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.ui.navigation.MainScreen
+import com.orka.myfinances.ui.screens.branch.SelectBranchScreen
 import com.orka.myfinances.ui.screens.host.viewmodel.HostScreenInteractor
 import com.orka.myfinances.ui.screens.login.LoginScreen
 

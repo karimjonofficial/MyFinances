@@ -6,13 +6,14 @@ import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.repositories.info.InfoRepository
 import com.orka.myfinances.data.storages.credentials.CredentialsStorage
 import com.orka.myfinances.data.storages.defaults.DefaultsStorage
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.runtime.GuestRuntimeInitializer
 import com.orka.myfinances.runtime.NewUserRuntimeInitializer
 import com.orka.myfinances.runtime.SignedInRuntimeInitializer
-import com.orka.myfinances.ui.managers.SessionManager
+import com.orka.myfinances.managers.SessionManager
 import com.orka.myfinances.ui.screens.host.viewmodel.HostScreenInteractor
+import com.orka.myfinances.ui.screens.host.viewmodel.UiState
 import com.orka.myfinances.validators.CredentialsValidator
 import kotlinx.coroutines.flow.asStateFlow
 

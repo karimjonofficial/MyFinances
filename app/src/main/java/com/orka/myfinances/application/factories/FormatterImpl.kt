@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.factories
 
 import com.orka.myfinances.data.models.product.ProductTitle
-import com.orka.myfinances.lib.format.Formatter
+import com.orka.myfinances.format.Formatter
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.number
 import java.text.DecimalFormat

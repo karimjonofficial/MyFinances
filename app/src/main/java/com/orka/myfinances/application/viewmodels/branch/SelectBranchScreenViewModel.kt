@@ -5,12 +5,12 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapListViewModel
-import com.orka.myfinances.ui.managers.SessionManager
-import com.orka.myfinances.ui.screens.host.SelectBranchScreenInteractor
-import com.orka.myfinances.ui.screens.host.components.BranchUiModel
+import com.orka.myfinances.managers.SessionManager
+import com.orka.myfinances.ui.screens.branch.SelectBranchScreenInteractor
+import com.orka.myfinances.ui.screens.branch.components.BranchUiModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class SelectBranchScreenViewModel(

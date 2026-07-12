@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.room.Room
 import com.orka.myfinances.MainActivity
 import com.orka.myfinances.application.factories.FormatterImpl
+import com.orka.myfinances.application.factories.HttpLogger
 import com.orka.myfinances.application.factories.httpClient
-import com.orka.myfinances.application.factories.httpLogger
 import com.orka.myfinances.application.manager.runtime.GuestRuntimeInitializerImpl
 import com.orka.myfinances.application.manager.runtime.NewUserRuntimeInitializerImpl
 import com.orka.myfinances.application.manager.runtime.SignedInRuntimeInitializerImpl
@@ -20,7 +20,7 @@ import net.posprinter.POSConnect
 
 class MyFinancesApplication : Application() {
     private val logger = Logger()
-    private val httpLogger = httpLogger(logger)
+    private val httpLogger = HttpLogger(logger)
     private val httpClient = httpClient(httpLogger)
     private val database by lazy {
         Room

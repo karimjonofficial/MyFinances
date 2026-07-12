@@ -3,9 +3,9 @@ package com.orka.myfinances.application.viewmodels.order.list.completed
 import com.orka.myfinances.R
 import com.orka.myfinances.data.dtos.order.OrderDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.lib.format.FormatDecimal
-import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.lib.format.FormatTime
+import com.orka.myfinances.format.FormatDecimal
+import com.orka.myfinances.format.FormatPrice
+import com.orka.myfinances.format.FormatTime
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.ui.screens.order.list.completed.HistoryOrderCardModel
 import com.orka.myfinances.ui.screens.order.list.completed.HistoryOrderUiModel

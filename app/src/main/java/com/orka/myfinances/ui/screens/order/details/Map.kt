@@ -2,9 +2,9 @@ package com.orka.myfinances.ui.screens.order.details
 
 import com.orka.myfinances.data.models.order.Order
 import com.orka.myfinances.data.models.order.OrderItem
-import com.orka.myfinances.lib.format.FormatDateTime
-import com.orka.myfinances.lib.format.FormatDecimal
-import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.format.FormatDateTime
+import com.orka.myfinances.format.FormatDecimal
+import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.ui.screens.client.list.toCardModel
 import com.orka.myfinances.ui.screens.toCardModel
 

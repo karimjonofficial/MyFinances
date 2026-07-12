@@ -2,8 +2,8 @@ package com.orka.myfinances.application.viewmodels.debt.list
 
 import com.orka.myfinances.data.dtos.debt.DebtDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.lib.format.FormatTime
+import com.orka.myfinances.format.FormatPrice
+import com.orka.myfinances.format.FormatTime
 import com.orka.myfinances.ui.screens.debt.list.DebtCardModel
 import com.orka.myfinances.ui.screens.debt.list.DebtUiModel
 

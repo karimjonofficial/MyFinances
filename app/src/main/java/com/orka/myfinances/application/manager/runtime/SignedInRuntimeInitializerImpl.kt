@@ -3,16 +3,16 @@ package com.orka.myfinances.application.manager.runtime
 import com.orka.myfinances.MainActivity
 import com.orka.myfinances.R
 import com.orka.myfinances.application.Logger
+import com.orka.myfinances.application.factories.HttpLogger
 import com.orka.myfinances.application.factories.httpClient
-import com.orka.myfinances.application.factories.httpLogger
 import com.orka.myfinances.application.manager.navigation.NavigationManager
+import com.orka.myfinances.application.printer.BluetoothPrinter
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
-import com.orka.myfinances.lib.format.Formatter
+import com.orka.myfinances.format.Formatter
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.application.printer.BluetoothPrinter
+import com.orka.myfinances.managers.SessionManager
 import com.orka.myfinances.runtime.SignedInRuntimeInitializer
-import com.orka.myfinances.ui.managers.SessionManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
@@ -25,7 +25,7 @@ class SignedInRuntimeInitializerImpl(
     private var navigator: NavigationManager? = null
 
     override fun initialize(session: Session, manager: SessionManager) {
-        val logger = httpLogger(this.logger)
+        val logger = HttpLogger(this.logger)
         val httpClient = httpClient(logger, session.credentials, manager::logout)
         val navigator = NavigationManager(this.logger).apply { navigator = this }
         val printer = BluetoothPrinter(

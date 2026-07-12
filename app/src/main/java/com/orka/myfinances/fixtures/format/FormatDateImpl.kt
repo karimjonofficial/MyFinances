@@ -1,6 +1,6 @@
 package com.orka.myfinances.fixtures.format
 
-import com.orka.myfinances.lib.format.FormatDate
+import com.orka.myfinances.format.FormatDate
 import kotlin.time.Instant
 
 class FormatDateImpl : FormatDate {

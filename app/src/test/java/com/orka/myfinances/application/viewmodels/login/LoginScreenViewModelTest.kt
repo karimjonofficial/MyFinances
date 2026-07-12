@@ -2,11 +2,11 @@ package com.orka.myfinances.application.viewmodels.login
 
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.repositories.auth.Authenticator
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.testFixtures.resources.models.credentials1
-import com.orka.myfinances.ui.managers.SessionManager
+import com.orka.myfinances.managers.SessionManager
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

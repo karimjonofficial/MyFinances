@@ -6,7 +6,7 @@ import com.orka.myfinances.data.repositories.client.AddClientRequest
 import com.orka.myfinances.data.repositories.client.ClientEvent
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.Insert
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.Chunk

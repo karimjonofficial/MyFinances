@@ -10,8 +10,8 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.orka.myfinances.data.dtos.sale.SaleDto
-import com.orka.myfinances.lib.format.FormatDecimal
-import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.format.FormatDecimal
+import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.printer.Printer
 import com.orka.myfinances.printer.PrinterStatus
 import kotlinx.coroutines.CoroutineScope

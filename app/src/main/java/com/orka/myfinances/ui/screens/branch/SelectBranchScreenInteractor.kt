@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.host
+package com.orka.myfinances.ui.screens.branch
 
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.ui.viewmodel.StateFul

@@ -1,4 +1,4 @@
-package com.orka.myfinances.lib.format
+package com.orka.myfinances.format
 
 import com.orka.myfinances.data.models.product.ProductTitle
 import kotlinx.datetime.LocalDate
@@ -31,5 +31,3 @@ fun interface FormatDateTime {
 fun interface FormatLocalDate {
     fun formatLocalDate(date: LocalDate): String
 }
-
-interface Formatter : FormatNames, FormatDate, FormatTime, FormatPrice, FormatDecimal, FormatDateTime, FormatLocalDate

@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.product.list
 
 import androidx.lifecycle.viewModelScope
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.data.dtos.product.title.ProductTitleDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.title.GetProductTitlesByCategory

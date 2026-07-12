@@ -1,8 +1,8 @@
 package com.orka.myfinances.ui.screens.receive.list
 
 import com.orka.myfinances.data.models.receive.Receive
-import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.lib.format.FormatTime
+import com.orka.myfinances.format.FormatPrice
+import com.orka.myfinances.format.FormatTime
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.ui.screens.receive.list.components.ReceiveCardModel
 import com.orka.myfinances.ui.screens.receive.list.viewmodel.ReceiveUiModel

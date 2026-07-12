@@ -1,7 +1,7 @@
 package com.orka.myfinances.fixtures.format
 
 import com.orka.myfinances.data.models.product.ProductTitle
-import com.orka.myfinances.lib.format.FormatNames
+import com.orka.myfinances.format.FormatNames
 
 class FormatNamesImpl : FormatNames {
     override fun formatNames(items: List<ProductTitle>): String {

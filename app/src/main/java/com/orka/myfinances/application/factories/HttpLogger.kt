@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.factories
 
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.logger.Logger
 
 typealias HLogger = io.ktor.client.plugins.logging.Logger
 

@@ -1,8 +1,8 @@
 package com.orka.myfinances.ui.screens.debt.list
 
 import com.orka.myfinances.data.models.Debt
-import com.orka.myfinances.lib.format.FormatDateTime
-import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.format.FormatDateTime
+import com.orka.myfinances.format.FormatPrice
 
 fun Debt.toUiModel(
     formatPrice: FormatPrice,

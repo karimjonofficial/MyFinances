@@ -2,10 +2,10 @@ package com.orka.myfinances.ui.screens.sale.details
 
 import com.orka.myfinances.data.models.sale.Sale
 import com.orka.myfinances.data.models.sale.SaleItem
-import com.orka.myfinances.lib.format.FormatDate
-import com.orka.myfinances.lib.format.FormatDecimal
-import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.lib.format.FormatTime
+import com.orka.myfinances.format.FormatDate
+import com.orka.myfinances.format.FormatDecimal
+import com.orka.myfinances.format.FormatPrice
+import com.orka.myfinances.format.FormatTime
 import com.orka.myfinances.ui.screens.client.list.toCardModel
 import com.orka.myfinances.ui.screens.sale.details.interactor.Item
 import com.orka.myfinances.ui.screens.sale.details.interactor.SaleScreenModel

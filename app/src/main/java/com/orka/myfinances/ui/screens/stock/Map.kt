@@ -2,8 +2,8 @@ package com.orka.myfinances.ui.screens.stock
 
 import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
-import com.orka.myfinances.lib.format.FormatDecimal
-import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.format.FormatDecimal
+import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
 
 fun List<StockItem>.toMap(

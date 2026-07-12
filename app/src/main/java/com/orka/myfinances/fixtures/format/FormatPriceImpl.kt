@@ -1,6 +1,6 @@
 package com.orka.myfinances.fixtures.format
 
-import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.format.FormatPrice
 
 class FormatPriceImpl : FormatPrice {
     override fun formatPrice(price: Double): String {

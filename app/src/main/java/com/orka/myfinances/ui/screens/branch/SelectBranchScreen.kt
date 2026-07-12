@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.host
+package com.orka.myfinances.ui.screens.branch
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -12,8 +12,8 @@ import com.orka.myfinances.lib.ui.components.SearchTopAppBar
 import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.ui.screens.host.components.BranchCard
-import com.orka.myfinances.ui.screens.host.components.BranchUiModel
+import com.orka.myfinances.ui.screens.branch.components.BranchCard
+import com.orka.myfinances.ui.screens.branch.components.BranchUiModel
 
 @Composable
 fun SelectBranchScreen(

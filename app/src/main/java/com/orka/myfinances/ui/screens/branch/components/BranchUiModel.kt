@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.host.components
+package com.orka.myfinances.ui.screens.branch.components
 
 import com.orka.myfinances.data.models.Id
 

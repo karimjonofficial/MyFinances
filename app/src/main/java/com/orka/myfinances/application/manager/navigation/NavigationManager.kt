@@ -2,7 +2,7 @@ package com.orka.myfinances.application.manager.navigation
 
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.fixtures.resources.Types
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.navigation.Navigator

@@ -68,11 +68,11 @@ import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.repositories.template.TemplateEvent
 import com.orka.myfinances.data.repositories.template.TemplateRepository
 import com.orka.myfinances.data.repositories.user.UserRepository
-import com.orka.myfinances.lib.format.Formatter
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.format.Formatter
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.printer.Printer
-import com.orka.myfinances.ui.managers.SessionManager
+import com.orka.myfinances.managers.SessionManager
 import com.orka.myfinances.ui.navigation.Navigator
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.flow.MutableSharedFlow

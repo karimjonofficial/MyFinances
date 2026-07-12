@@ -4,9 +4,9 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.dtos.order.OrderDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.now
-import com.orka.myfinances.lib.format.FormatDate
-import com.orka.myfinances.lib.format.FormatDecimal
-import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.format.FormatDate
+import com.orka.myfinances.format.FormatDecimal
+import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.ui.screens.order.list.OrderCardModel
 import com.orka.myfinances.ui.screens.order.list.OrderUiModel

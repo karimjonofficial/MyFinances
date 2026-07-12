@@ -4,10 +4,10 @@ import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.dtos.receive.ReceiveDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.repositories.GetById
-import com.orka.myfinances.lib.format.FormatDateTime
-import com.orka.myfinances.lib.format.FormatDecimal
-import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.format.FormatDateTime
+import com.orka.myfinances.format.FormatDecimal
+import com.orka.myfinances.format.FormatPrice
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.testFixtures.resources.dtos.receiveDto1

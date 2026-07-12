@@ -1,10 +1,10 @@
-package com.orka.myfinances.ui.screens.host
+package com.orka.myfinances.factories
 
 import com.orka.myfinances.application.viewmodels.login.LoginScreenViewModel
 import com.orka.myfinances.data.repositories.auth.Authenticator
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.ui.managers.SessionManager
+import com.orka.myfinances.managers.SessionManager
 
 class LoginScreenViewModelFactory(
     private val authenticator: Authenticator,

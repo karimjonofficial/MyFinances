@@ -5,8 +5,8 @@ import com.orka.myfinances.data.dtos.stock.StockItemDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.repositories.basket.MinBasketItem
-import com.orka.myfinances.lib.format.FormatDecimal
-import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.format.FormatDecimal
+import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.ui.screens.basket.BasketItemUiModel
 import com.orka.myfinances.ui.screens.basket.components.BasketItemCardModel

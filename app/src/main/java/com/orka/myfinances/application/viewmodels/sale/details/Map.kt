@@ -4,10 +4,10 @@ import com.orka.myfinances.application.viewmodels.client.list.map
 import com.orka.myfinances.application.viewmodels.toCardModel
 import com.orka.myfinances.data.dtos.sale.SaleDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.lib.format.FormatDate
-import com.orka.myfinances.lib.format.FormatDecimal
-import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.lib.format.FormatTime
+import com.orka.myfinances.format.FormatDate
+import com.orka.myfinances.format.FormatDecimal
+import com.orka.myfinances.format.FormatPrice
+import com.orka.myfinances.format.FormatTime
 import com.orka.myfinances.ui.screens.sale.details.interactor.Item
 import com.orka.myfinances.ui.screens.sale.details.interactor.SaleScreenModel
 

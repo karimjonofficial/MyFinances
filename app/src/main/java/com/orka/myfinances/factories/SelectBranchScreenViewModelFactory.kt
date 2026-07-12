@@ -1,12 +1,12 @@
-package com.orka.myfinances.ui.screens.host
+package com.orka.myfinances.factories
 
 import com.orka.myfinances.application.viewmodels.branch.SelectBranchScreenViewModel
 import com.orka.myfinances.data.api.branch.BranchApi
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.branch.BranchRepository
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.ui.managers.SessionManager
+import com.orka.myfinances.managers.SessionManager
 import io.ktor.client.HttpClient
 
 class SelectBranchScreenViewModelFactory(

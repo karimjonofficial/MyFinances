@@ -6,10 +6,10 @@ import com.orka.myfinances.data.repositories.debt.AddDebtRequest
 import com.orka.myfinances.data.repositories.debt.DebtEvent
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.Insert
-import com.orka.myfinances.lib.format.FormatLocalDate
-import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.lib.format.FormatTime
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.format.FormatLocalDate
+import com.orka.myfinances.format.FormatPrice
+import com.orka.myfinances.format.FormatTime
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.Chunk

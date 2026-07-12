@@ -11,6 +11,7 @@ import com.orka.myfinances.runtime.NewUserRuntimeInitializer
 import com.orka.myfinances.runtime.SignedInRuntimeInitializer
 import com.orka.myfinances.testFixtures.resources.models.credentials1
 import com.orka.myfinances.testFixtures.resources.models.id1
+import com.orka.myfinances.ui.screens.host.viewmodel.UiState
 import com.orka.myfinances.validators.CredentialsValidator
 import io.mockk.coEvery
 import io.mockk.coVerify

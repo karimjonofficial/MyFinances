@@ -2,9 +2,9 @@ package com.orka.myfinances.ui.screens.product.details
 
 import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.data.models.product.Property
-import com.orka.myfinances.lib.format.FormatDate
-import com.orka.myfinances.lib.format.FormatDecimal
-import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.format.FormatDate
+import com.orka.myfinances.format.FormatDecimal
+import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.ui.screens.product.details.models.ProductTitleScreenModel
 import com.orka.myfinances.ui.screens.product.details.models.PropertyModel
 import kotlin.time.Instant

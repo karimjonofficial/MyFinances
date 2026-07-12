@@ -9,7 +9,7 @@ import com.orka.myfinances.data.repositories.folder.FolderEvent
 import com.orka.myfinances.data.repositories.folder.GetByParent
 import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.GetById
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.BaseViewModel

@@ -1,6 +1,6 @@
 package com.orka.myfinances.fixtures.format
 
-import com.orka.myfinances.lib.format.FormatTime
+import com.orka.myfinances.format.FormatTime
 import kotlin.time.Instant
 
 class FormatTimeImpl : FormatTime {

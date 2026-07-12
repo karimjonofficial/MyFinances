@@ -7,7 +7,7 @@ import com.orka.myfinances.data.repositories.product.title.models.AddProductTitl
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.data.repositories.Insert
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.BaseViewModel

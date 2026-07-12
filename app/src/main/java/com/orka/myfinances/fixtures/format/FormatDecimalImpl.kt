@@ -1,6 +1,6 @@
 package com.orka.myfinances.fixtures.format
 
-import com.orka.myfinances.lib.format.FormatDecimal
+import com.orka.myfinances.format.FormatDecimal
 
 class FormatDecimalImpl : FormatDecimal {
     override fun formatDecimal(value: Double): String {

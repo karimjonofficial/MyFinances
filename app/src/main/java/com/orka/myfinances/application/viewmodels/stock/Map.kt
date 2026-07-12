@@ -3,8 +3,8 @@ package com.orka.myfinances.application.viewmodels.stock
 import com.orka.myfinances.R
 import com.orka.myfinances.data.dtos.stock.StockItemDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.lib.format.FormatDecimal
-import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.format.FormatDecimal
+import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State

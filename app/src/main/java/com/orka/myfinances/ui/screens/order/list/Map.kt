@@ -1,9 +1,9 @@
 package com.orka.myfinances.ui.screens.order.list
 
 import com.orka.myfinances.data.models.order.Order
-import com.orka.myfinances.lib.format.FormatDate
-import com.orka.myfinances.lib.format.FormatDecimal
-import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.format.FormatDate
+import com.orka.myfinances.format.FormatDecimal
+import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import kotlin.time.Clock

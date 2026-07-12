@@ -2,7 +2,7 @@ package com.orka.myfinances.application.viewmodels.template.list
 
 import com.orka.myfinances.data.dtos.template.TemplateDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.lib.format.FormatDecimal
+import com.orka.myfinances.format.FormatDecimal
 import com.orka.myfinances.ui.screens.templates.list.TemplateCardModel
 import com.orka.myfinances.ui.screens.templates.list.TemplateUiModel
 

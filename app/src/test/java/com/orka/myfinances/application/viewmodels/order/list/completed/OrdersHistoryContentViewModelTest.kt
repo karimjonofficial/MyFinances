@@ -3,11 +3,11 @@ package com.orka.myfinances.application.viewmodels.order.list.completed
 import com.orka.myfinances.core.MainDispatcherContext
 import com.orka.myfinances.data.repositories.order.GetOrdersChunk
 import com.orka.myfinances.data.repositories.order.OrderEvent
-import com.orka.myfinances.lib.format.FormatDecimal
-import com.orka.myfinances.lib.format.FormatLocalDate
-import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.lib.format.FormatTime
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.format.FormatDecimal
+import com.orka.myfinances.format.FormatLocalDate
+import com.orka.myfinances.format.FormatPrice
+import com.orka.myfinances.format.FormatTime
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.Chunk

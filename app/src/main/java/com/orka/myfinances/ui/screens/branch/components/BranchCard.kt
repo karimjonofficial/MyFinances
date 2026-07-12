@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.host.components
+package com.orka.myfinances.ui.screens.branch.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.Checkbox
@@ -27,7 +27,7 @@ fun BranchCard(
         overlineContent = null,
         supportingContent = null,
         colors = ListItemDefaults.colors(),
-        elevation = ListItemDefaults.elevation(ListItemDefaults.Elevation),
+        elevation = ListItemDefaults.elevation(),
         content = { Text(text = model.name) },
     )
 }

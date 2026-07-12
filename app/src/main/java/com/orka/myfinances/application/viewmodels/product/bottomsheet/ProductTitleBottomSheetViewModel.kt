@@ -6,7 +6,7 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.title.GetProductTitlesByCategory
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel

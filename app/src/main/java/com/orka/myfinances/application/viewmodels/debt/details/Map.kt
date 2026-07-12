@@ -5,8 +5,8 @@ import com.orka.myfinances.application.viewmodels.toCardModel
 import com.orka.myfinances.data.dtos.debt.DebtDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.now
-import com.orka.myfinances.lib.format.FormatDate
-import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.format.FormatDate
+import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.ui.screens.debt.details.DebtScreenModel
 
 fun DebtDto.toScreenModel(

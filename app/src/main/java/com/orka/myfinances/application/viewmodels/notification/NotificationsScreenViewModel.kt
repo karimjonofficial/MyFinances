@@ -3,9 +3,9 @@ package com.orka.myfinances.application.viewmodels.notification
 import com.orka.myfinances.data.dtos.notification.NotificationDto
 import com.orka.myfinances.data.repositories.notification.ReadNotification
 import com.orka.myfinances.lib.data.repositories.GetChunk
-import com.orka.myfinances.lib.format.FormatLocalDate
-import com.orka.myfinances.lib.format.FormatTime
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.format.FormatLocalDate
+import com.orka.myfinances.format.FormatTime
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State

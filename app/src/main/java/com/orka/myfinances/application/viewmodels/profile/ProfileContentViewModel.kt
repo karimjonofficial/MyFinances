@@ -4,11 +4,11 @@ import com.orka.myfinances.data.dtos.branch.BranchDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.user.GetMe
 import com.orka.myfinances.lib.data.repositories.Get
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.BaseViewModel
-import com.orka.myfinances.ui.managers.SessionManager
+import com.orka.myfinances.managers.SessionManager
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.profile.ProfileInteractor
 import com.orka.myfinances.ui.screens.profile.models.BranchItemModel

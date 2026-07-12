@@ -15,9 +15,9 @@ import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.lib.extensions.models.getExposedPrice
 import com.orka.myfinances.lib.extensions.models.getSalePrice
-import com.orka.myfinances.lib.format.FormatDecimal
-import com.orka.myfinances.lib.format.FormatPrice
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.format.FormatDecimal
+import com.orka.myfinances.format.FormatPrice
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.BaseViewModel

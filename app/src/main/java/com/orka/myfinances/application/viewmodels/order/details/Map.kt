@@ -5,9 +5,9 @@ import com.orka.myfinances.application.viewmodels.toCardModel
 import com.orka.myfinances.data.dtos.order.OrderDto
 import com.orka.myfinances.data.dtos.order.OrderItemDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.lib.format.FormatDateTime
-import com.orka.myfinances.lib.format.FormatDecimal
-import com.orka.myfinances.lib.format.FormatPrice
+import com.orka.myfinances.format.FormatDateTime
+import com.orka.myfinances.format.FormatDecimal
+import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.ui.screens.order.details.OrderScreenModel
 import com.orka.myfinances.ui.screens.order.details.OrderItemModel
 

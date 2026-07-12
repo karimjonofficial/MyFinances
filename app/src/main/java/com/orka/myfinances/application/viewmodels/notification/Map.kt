@@ -2,7 +2,7 @@ package com.orka.myfinances.application.viewmodels.notification
 
 import com.orka.myfinances.data.dtos.notification.NotificationDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.lib.format.FormatTime
+import com.orka.myfinances.format.FormatTime
 import com.orka.myfinances.ui.screens.notifications.NotificationCardModel
 import com.orka.myfinances.ui.screens.notifications.NotificationUiModel
 

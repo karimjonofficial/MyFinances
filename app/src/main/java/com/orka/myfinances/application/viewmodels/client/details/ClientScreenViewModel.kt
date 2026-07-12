@@ -3,7 +3,7 @@ package com.orka.myfinances.application.viewmodels.client.details
 import com.orka.myfinances.data.dtos.client.ClientDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.repositories.GetById
-import com.orka.myfinances.lib.logger.Logger
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapSingleViewModel
 import com.orka.myfinances.ui.navigation.Navigator

@@ -1,29 +1,14 @@
 package com.orka.myfinances.ui.screens.host.viewmodel
 
-import com.orka.myfinances.application.manager.navigation.NavigationManager
 import com.orka.myfinances.data.models.Credentials
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Session
-import com.orka.myfinances.factories.Factory
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.ui.screens.host.LoginScreenViewModelFactory
-import com.orka.myfinances.ui.screens.host.SelectBranchScreenViewModelFactory
 
 sealed interface UiState {
     data object Initial : UiState
-    data class Guest(val factory: LoginScreenViewModelFactory) : UiState
+    data object Guest : UiState
     data object Loading : UiState
-    data class Failure(val message: UiText) : UiState
-
-    data class NewUser(
-        val credentials: Credentials,
-        val companyId: Id,
-        val factory: SelectBranchScreenViewModelFactory
-    ) : UiState
-
-    data class SignedIn(
-        val session: Session,
-        val navigationManager: NavigationManager,
-        val factory: Factory
-    ) : UiState
+    data class Failure(val type: FailureType = FailureType.UnSpecified) : UiState
+    data class NewUser(val credentials: Credentials, val companyId: Id) : UiState
+    data class SignedIn(val session: Session) : UiState
 }
