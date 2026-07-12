@@ -17,7 +17,7 @@ class LoginScreenViewModel(
     private val loading: UiText,
     logger: Logger,
 ) : SingleStateViewModel<State<LoginScreenModel>>(
-    initialState = State.Success(LoginScreenModel(serverError = false, textFieldError = false)),
+    initialState = State.Success(LoginScreenModel()),
     logger = logger
 ), LoginScreenInteractor {
     val uiState = state.asStateFlow()
@@ -48,17 +48,18 @@ class LoginScreenViewModel(
         try {
             val credential = authenticator.authenticate(username, password)
             if (credential != null) {
+                setState(State.Success(LoginScreenModel()))
                 onSuccess(credential)
             } else setState(
                 State.Failure(
-                    value = LoginScreenModel(serverError = false, textFieldError = true),
+                    value = LoginScreenModel(textFieldError = true),
                     error = UiText.Str("User is not found")
                 )
             )//TODO extract string resource
         } catch (e: Exception) {
             setState(
                 State.Failure(
-                    value = LoginScreenModel(serverError = true, textFieldError = false),
+                    value = LoginScreenModel(serverError = true),
                     error = UiText.Str(e.message.toString())
                 )
             )

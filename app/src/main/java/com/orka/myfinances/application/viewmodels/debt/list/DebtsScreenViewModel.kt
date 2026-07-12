@@ -27,7 +27,7 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Instant
 
 class DebtsScreenViewModel(
-    private val getChunk: GetChunk<DebtDto>,
+    getChunk: GetChunk<DebtDto>,
     private val insert: Insert<AddDebtRequest>,
     events: Flow<DebtEvent>,
     private val formatPrice: FormatPrice,

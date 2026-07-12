@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class ClientScreenViewModel(
     id: Id,
-    private val getById: GetById<ClientDto>,
+    getById: GetById<ClientDto>,
     private val navigator: Navigator,
     loading: UiText,
     failure: UiText,

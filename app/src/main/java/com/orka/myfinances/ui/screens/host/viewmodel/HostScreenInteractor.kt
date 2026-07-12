@@ -4,4 +4,5 @@ import com.orka.myfinances.ui.managers.SessionManager
 
 interface HostScreenInteractor : SessionManager {
     fun initialize()
+    fun refresh()
 }

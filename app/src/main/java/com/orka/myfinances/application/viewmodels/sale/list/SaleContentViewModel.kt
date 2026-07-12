@@ -23,7 +23,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 class SaleContentViewModel(
-    private val getChunk: GetChunk<SaleDto>,
+    getChunk: GetChunk<SaleDto>,
     events: Flow<SaleEvent>,
     loading: UiText,
     failure: UiText,

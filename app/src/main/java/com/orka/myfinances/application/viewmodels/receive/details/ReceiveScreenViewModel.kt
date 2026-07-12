@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class ReceiveScreenViewModel(
     id: Id,
-    private val getById: GetById<ReceiveDto>,
+    getById: GetById<ReceiveDto>,
     private val navigator: Navigator,
     private val formatPrice: FormatPrice,
     private val formatDateTime: FormatDateTime,

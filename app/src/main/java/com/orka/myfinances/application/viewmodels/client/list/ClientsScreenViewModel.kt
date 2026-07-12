@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class ClientsScreenViewModel(
-    private val getChunk: GetChunk<ClientDto>,
+    getChunk: GetChunk<ClientDto>,
     private val insert: Insert<AddClientRequest>,
     events: Flow<ClientEvent>,
     loading: UiText,

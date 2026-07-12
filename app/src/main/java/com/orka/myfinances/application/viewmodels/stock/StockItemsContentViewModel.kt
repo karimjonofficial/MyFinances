@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.onEach
 class StockItemsContentViewModel(
     private val categoryId: Id,
     private val getByCategory: GetStockItemsByCategory,
-    private val stockEvents: Flow<StockEvent>,
+    stockEvents: Flow<StockEvent>,
     private val basketRepository: BasketRepository,
     private val formatPrice: FormatPrice,
     private val formatDecimal: FormatDecimal,

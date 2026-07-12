@@ -1,13 +1,13 @@
 package com.orka.myfinances.ui.screens.host.viewmodel
 
-import com.orka.myfinances.application.manager.NavigationManager
+import com.orka.myfinances.application.manager.navigation.NavigationManager
 import com.orka.myfinances.data.models.Credentials
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.ui.screens.host.LoginScreenViewModelFactory
-import com.orka.myfinances.ui.screens.host.SelectOfficeScreenViewModelFactory
+import com.orka.myfinances.ui.screens.host.SelectBranchScreenViewModelFactory
 
 sealed interface UiState {
     data object Initial : UiState
@@ -18,7 +18,7 @@ sealed interface UiState {
     data class NewUser(
         val credentials: Credentials,
         val companyId: Id,
-        val factory: SelectOfficeScreenViewModelFactory
+        val factory: SelectBranchScreenViewModelFactory
     ) : UiState
 
     data class SignedIn(

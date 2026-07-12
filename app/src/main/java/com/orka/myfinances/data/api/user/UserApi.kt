@@ -1,6 +1,6 @@
 package com.orka.myfinances.data.api.user
 
-import com.orka.myfinances.application.models.CompanyApiModel
+import com.orka.myfinances.data.api.company.CompanyApiModel
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

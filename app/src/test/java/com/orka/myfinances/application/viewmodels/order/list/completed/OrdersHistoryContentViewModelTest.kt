@@ -1,7 +1,6 @@
 package com.orka.myfinances.application.viewmodels.order.list.completed
 
 import com.orka.myfinances.core.MainDispatcherContext
-import com.orka.myfinances.data.dtos.order.OrderDto
 import com.orka.myfinances.data.repositories.order.GetOrdersChunk
 import com.orka.myfinances.data.repositories.order.OrderEvent
 import com.orka.myfinances.lib.format.FormatDecimal

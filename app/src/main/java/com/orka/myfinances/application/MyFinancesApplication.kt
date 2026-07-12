@@ -3,23 +3,25 @@ package com.orka.myfinances.application
 import android.app.Application
 import androidx.room.Room
 import com.orka.myfinances.MainActivity
-import com.orka.myfinances.R
 import com.orka.myfinances.application.factories.FormatterImpl
-import com.orka.myfinances.application.manager.UiManager
-import com.orka.myfinances.data.storages.room.AppDatabase
-import com.orka.myfinances.data.storages.room.LocalSessionStorage
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.printer.pos.BluetoothPrinter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.orka.myfinances.application.factories.httpClient
+import com.orka.myfinances.application.factories.httpLogger
+import com.orka.myfinances.application.manager.runtime.GuestRuntimeInitializerImpl
+import com.orka.myfinances.application.manager.runtime.NewUserRuntimeInitializerImpl
+import com.orka.myfinances.application.manager.runtime.SignedInRuntimeInitializerImpl
+import com.orka.myfinances.application.manager.ui.UiManager
+import com.orka.myfinances.application.repositories.InfoApi
+import com.orka.myfinances.application.repositories.InfoRepository
+import com.orka.myfinances.application.storages.DefaultsStorageImpl
+import com.orka.myfinances.application.storages.credentials.CredentialsStorageImpl
+import com.orka.myfinances.application.validators.CredentialsValidatorImpl
+import com.orka.myfinances.data.database.AppDatabase
 import net.posprinter.POSConnect
 
 class MyFinancesApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        POSConnect.init(this)
-    }
-
+    private val logger = Logger()
+    private val httpLogger = httpLogger(logger)
+    private val httpClient = httpClient(httpLogger)
     private val database by lazy {
         Room
             .databaseBuilder(
@@ -30,19 +32,40 @@ class MyFinancesApplication : Application() {
             .fallbackToDestructiveMigration(true)
             .build()
     }
+    lateinit var guestRuntimeInitializer: GuestRuntimeInitializerImpl
+    lateinit var newUserRuntimeInitializer: NewUserRuntimeInitializerImpl
+    lateinit var signedInRuntimeInitializer: SignedInRuntimeInitializerImpl
+    //TODO remove these ugly hacks
+
+
+    override fun onCreate() {
+        super.onCreate()
+        POSConnect.init(this)
+    }
 
     fun manager(mainActivity: MainActivity): UiManager {
         val formatter = FormatterImpl()
-        val printer = BluetoothPrinter(
-            mainActivity = mainActivity,
-            formatPrice = formatter,
-            formatDecimal = formatter,
-            scope = CoroutineScope(Dispatchers.Default)
+        val credentialsStorage = CredentialsStorageImpl(database.credentialsDao())
+        val defaultsStorage = DefaultsStorageImpl(database.defaultsDao())
+        val credentialsValidator = CredentialsValidatorImpl(httpClient, credentialsStorage)
+        val guestRuntimeInitializer = GuestRuntimeInitializerImpl(logger)
+        this.guestRuntimeInitializer = guestRuntimeInitializer
+        val newUserRuntimeInitializer = NewUserRuntimeInitializerImpl(logger)
+        this.newUserRuntimeInitializer = newUserRuntimeInitializer
+        val signedInRuntimeInitializer = SignedInRuntimeInitializerImpl(mainActivity, formatter, logger)
+        this.signedInRuntimeInitializer = signedInRuntimeInitializer
+        val infoRepository = InfoRepository(InfoApi(httpClient))
+        val manager =  UiManager(
+            credentialsStorage = credentialsStorage,
+            credentialsValidator = credentialsValidator,
+            defaultsStorage = defaultsStorage,
+            guestRuntimeInitializer = guestRuntimeInitializer,
+            newUserRuntimeInitializer = newUserRuntimeInitializer,
+            signedInRuntimeInitializer = signedInRuntimeInitializer,
+            infoRepository = infoRepository,
+            logger = logger
         )
-        val loading =  UiText.Res(R.string.loading)
-        val failure = UiText.Res(R.string.failure)
-        val logger = Logger()
-        val storage = LocalSessionStorage(database.sessionDao())
-        return UiManager(storage, printer, loading, failure, formatter, logger)
+        manager.initialize()
+        return manager
     }
 }

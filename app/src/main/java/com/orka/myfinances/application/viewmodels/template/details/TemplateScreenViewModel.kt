@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class TemplateScreenViewModel(
     id: Id,
-    private val getById: GetById<TemplateDto>,
+    getById: GetById<TemplateDto>,
     private val navigator: Navigator,
     loading: UiText,
     failure: UiText,

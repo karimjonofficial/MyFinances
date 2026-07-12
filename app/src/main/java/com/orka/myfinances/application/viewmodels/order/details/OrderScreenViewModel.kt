@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class OrderScreenViewModel(
     id: Id,
-    private val getById: GetById<OrderDto>,
+    getById: GetById<OrderDto>,
     private val completeOrder: CompleteOrder,
     private val setEndDate: SetEndDate,
     private val formatPrice: FormatPrice,

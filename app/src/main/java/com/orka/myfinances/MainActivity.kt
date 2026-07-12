@@ -48,6 +48,9 @@ class MainActivity : ComponentActivity() {
                 HostScreen(
                     modifier = Modifier.fillMaxSize(),
                     state = uiState.value,
+                    guestRuntimeInitializer = app.guestRuntimeInitializer,
+                    newUserRuntimeInitializer = app.newUserRuntimeInitializer,
+                    signedInRuntimeInitializer = app.signedInRuntimeInitializer,
                     interactor = manager
                 )
             }

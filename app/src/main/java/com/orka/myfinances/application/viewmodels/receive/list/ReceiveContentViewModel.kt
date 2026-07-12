@@ -23,7 +23,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 class ReceiveContentViewModel(
-    private val getChunk: GetChunk<ReceiveDto>,
+    getChunk: GetChunk<ReceiveDto>,
     events: Flow<ReceiveEvent>,
     loading: UiText,
     failure: UiText,

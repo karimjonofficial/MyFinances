@@ -6,7 +6,7 @@ import com.orka.myfinances.data.models.Id
 interface SessionManager {
     fun open(credentials: Credentials)
     fun store(credentials: Credentials)
-    fun setOffice(officeId: Id)
-    fun refreshCredentials(credentials: Credentials)
+    fun setBranch(id: Id)
+    fun refreshCredentials()
     fun logout()
 }

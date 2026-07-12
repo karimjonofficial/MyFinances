@@ -17,7 +17,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 class NotificationsScreenViewModel(
-    private val getChunk: GetChunk<NotificationDto>,
+    getChunk: GetChunk<NotificationDto>,
     private val readNotification: ReadNotification,
     private val formatLocalDate: FormatLocalDate,
     private val formatTime: FormatTime,

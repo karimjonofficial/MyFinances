@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class AddReceiveScreenViewModel(
     private val categoryId: Id,
-    private val getFolder: GetById<FolderDto>,
+    getFolder: GetById<FolderDto>,
     private val insertReceive: Insert<AddReceiveRequest>,
     private val navigator: Navigator,
     loading: UiText,

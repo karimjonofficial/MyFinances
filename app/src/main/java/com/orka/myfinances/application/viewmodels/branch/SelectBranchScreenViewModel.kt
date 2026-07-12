@@ -14,7 +14,7 @@ import com.orka.myfinances.ui.screens.host.components.BranchUiModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class SelectBranchScreenViewModel(
-    private val getBranches: Get<BranchDto>,
+    getBranches: Get<BranchDto>,
     private val getById: GetById<BranchDto>,
     private val sessionManager: SessionManager,
     loading: UiText,

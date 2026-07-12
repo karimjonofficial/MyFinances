@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class DebtScreenViewModel(
     id: Id,
-    private val getById: GetById<DebtDto>,
+    getById: GetById<DebtDto>,
     private val setPaid: SetPaid,
     private val setNotified: SetNotified,
     private val formatPrice: FormatPrice,

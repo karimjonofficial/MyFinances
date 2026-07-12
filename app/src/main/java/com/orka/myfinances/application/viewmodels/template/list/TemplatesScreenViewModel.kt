@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class TemplatesScreenViewModel(
-    private val getChunk: GetChunk<TemplateDto>,
+    getChunk: GetChunk<TemplateDto>,
     events: Flow<TemplateEvent>,
     private val navigator: Navigator,
     formatDecimal: FormatDecimal,

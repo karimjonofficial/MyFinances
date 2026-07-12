@@ -20,7 +20,7 @@ turbine = "1.2.1"
 ktor = "3.5.1"
 mockk = "1.14.11"
 room = "2.8.4"
-ksp = "2.3.8"
+ksp = "2.3.9"
 slf4j = "2.0.18"
 
 [libraries]
