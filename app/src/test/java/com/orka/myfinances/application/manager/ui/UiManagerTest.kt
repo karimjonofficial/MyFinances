@@ -198,18 +198,6 @@ class UiManagerTest : MainDispatcherContext() {
                 }
 
                 @Test
-                fun `Calls setDefaultBranchId`() = runTest {
-                    manager.uiState.test {
-                        awaitItem()
-                        manager.initialize()
-                        awaitItem()
-                        manager.store(credentials1)
-                        awaitItem()
-                        coVerify { defaultsStorage.setDefaultBranchId(any()) }
-                    }
-                }
-
-                @Test
                 fun `Initializes NewUserRuntimeInitializer when store called`() = runTest {
                     manager.uiState.test {
                         awaitItem()

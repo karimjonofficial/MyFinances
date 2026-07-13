@@ -5,9 +5,9 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
-import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapListViewModel
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.managers.SessionManager
 import com.orka.myfinances.ui.screens.branch.SelectBranchScreenInteractor
 import com.orka.myfinances.ui.screens.branch.components.BranchUiModel
@@ -38,11 +38,12 @@ class SelectBranchScreenViewModel(
     }
 
     override fun select(id: Id) {
-        launch {
-            val branch: BranchDto? = getById.getById(id)
+        tryTransition { oldState ->
+            val branch = getById.getById(id)
             if (branch != null) {
                 sessionManager.setBranch(Id(branch.id))
-            }
+                oldState
+            } else oldState
         }
     }
 }

@@ -26,7 +26,7 @@ class CatalogScreenViewModel(
     private val catalogId: Id,
     private val getByParent: GetByParent,
     private val getById: GetById<FolderDto>,
-    private val add: Add<FolderDto, AddFolderRequest>,
+    private val add: Add<Unit, AddFolderRequest>,
     loading: UiText,
     failure: UiText,
     events: Flow<FolderEvent>,

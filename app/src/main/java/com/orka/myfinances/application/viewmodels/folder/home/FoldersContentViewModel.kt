@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.onEach
 
 class FoldersContentViewModel(
     private val getTop: GetTop,
-    private val add: Add<FolderDto, AddFolderRequest>,
+    private val add: Add<Unit, AddFolderRequest>,
     private val navigator: Navigator,
     events: Flow<FolderEvent>,
     loading: UiText,

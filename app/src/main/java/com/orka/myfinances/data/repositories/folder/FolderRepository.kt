@@ -12,7 +12,7 @@ class FolderRepository(
     private val branchId: Id,
     private val flow: MutableSharedFlow<FolderEvent>,
     private val api: FolderApi
-) : Get<FolderDto>, GetTop, Add<FolderDto, AddFolderRequest>, GetById<FolderDto>, GetByParent {
+) : Get<FolderDto>, GetTop, Add<Unit, AddFolderRequest>, GetById<FolderDto>, GetByParent {
 
     override suspend fun getTop(query: String?): List<FolderDto>? {
         return api.getTop(
@@ -21,11 +21,10 @@ class FolderRepository(
         )?.map { it.toDto() }
     }
 
-    override suspend fun add(request: AddFolderRequest): FolderDto? {
-        val response = api.add(request.map(branchId))?.toDto()
+    override suspend fun add(request: AddFolderRequest) {
+        val response = api.add(request.map(branchId))
         if(response != null)
             flow.emit(FolderEvent(request.parentId))
-        return response
     }
 
     override suspend fun getByParent(parentId: Id): List<FolderDto>? {

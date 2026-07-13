@@ -33,9 +33,10 @@ fun SelectBranchScreen(
         },
         state = state,
         refresh = interactor::refresh,
-        bottomBar = {
+        bottomBar = { state ->
             SingleActionBottomBar(
                 buttonText = stringResource(R.string.save),
+                buttonEnabled = state !is State.Loading,
                 action = {
                     val id = officeId.value
                     if (id != null) interactor.select(id)

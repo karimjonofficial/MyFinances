@@ -23,7 +23,7 @@ class CatalogScreenViewModelTest : MainDispatcherContext() {
     private val catalogId = Id(2)
     private val getByParent = mockk<GetByParent>()
     private val getById = mockk<GetById<FolderDto>>()
-    private val add = mockk<Add<FolderDto, AddFolderRequest>>()
+    private val add = mockk<Add<Unit, AddFolderRequest>>()
     private val loading = UiText.Str("Loading")
     private val failure = UiText.Str("Failure")
     private val events = MutableSharedFlow<FolderEvent>()

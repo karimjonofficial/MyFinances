@@ -1,6 +1,7 @@
 package com.orka.myfinances.data.api.folder
 
 import com.orka.myfinances.data.api.folder.models.request.AddFolderApiRequest
+import com.orka.myfinances.data.api.folder.models.response.AddFolderApiResponse
 import com.orka.myfinances.data.api.folder.models.response.FolderApiModel
 import com.orka.myfinances.lib.data.http.add
 import com.orka.myfinances.lib.data.http.getById
@@ -64,7 +65,7 @@ class FolderApi(
         return httpClient.getById(baseUrl, id)
     }
 
-    suspend fun add(request: AddFolderApiRequest): FolderApiModel? {
+    suspend fun add(request: AddFolderApiRequest): AddFolderApiResponse? {
         return httpClient.add(
             baseUrl = baseUrl,
             request = request

@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 fun SingleActionBottomBar(
     modifier: Modifier = Modifier,
     buttonText: String,
+    buttonEnabled: Boolean = true,
     action: () -> Unit
 ) {
     BottomAppBar(
@@ -23,6 +24,7 @@ fun SingleActionBottomBar(
     ) {
         Button(
             modifier = Modifier.fillMaxWidth(),
+            enabled = buttonEnabled,
             onClick = action
         ) {
             Text(text = buttonText)

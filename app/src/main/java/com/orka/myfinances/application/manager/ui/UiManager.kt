@@ -56,7 +56,6 @@ class UiManager(
         launch {
             val companyId = infoRepository.getCompanyId(credentials.access)
             credentialsStorage.set(credentials)
-            defaultsStorage.setDefaultBranchId(companyId)
             setStateNewUser(credentials, companyId)
         }
     }
