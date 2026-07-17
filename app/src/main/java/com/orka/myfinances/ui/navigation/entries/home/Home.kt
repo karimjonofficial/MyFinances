@@ -1,16 +1,35 @@
 package com.orka.myfinances.ui.navigation.entries.home
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.retain.retain
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
+import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
+import com.orka.myfinances.ui.models.item.TemplateItemModel
 import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.ui.screens.basket.BasketContent
+import com.orka.myfinances.ui.screens.folder.components.AddFolderDialog
+import com.orka.myfinances.ui.screens.folder.home.FoldersContent
+import com.orka.myfinances.ui.screens.folder.home.parts.StockItemsRow
 import com.orka.myfinances.ui.screens.home.HomeScreen
+import com.orka.myfinances.ui.screens.profile.ProfileContent
+import com.orka.myfinances.ui.screens.templates.sheet.SelectTemplateBottomSheet
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 fun homeEntry(
     modifier: Modifier,
     destination: Destination.Home,
@@ -32,10 +51,6 @@ fun homeEntry(
         key = "profile_$branchId",
         initializer = { factory.profileViewModel() }
     )
-    val sheetViewModel = viewModel(
-        key = "sheet_$branchId",
-        initializer = { factory.templateBottomSheetViewModel() }
-    )
 
     HomeScreen(
         modifier = modifier,
@@ -49,16 +64,103 @@ fun homeEntry(
             )
         },
         content = { contentModifier, index ->
-            HomeContent(
-                modifier = contentModifier,
-                index = index,
-                branchId = branchId,
-                foldersViewModel = foldersViewModel,
-                dialogVisible = dialogVisible,
-                basketViewModel = basketViewModel,
-                profileViewModel = profileViewModel,
-                sheetViewModel = sheetViewModel
-            )
+            val sheetVisible = rememberSaveable { mutableStateOf(false) }
+
+            when (index) {
+                0 -> {
+                    val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
+                    val coroutineScope = rememberCoroutineScope()
+                    val foldersState = foldersViewModel.uiState.collectAsState()
+                    val template = retain { mutableStateOf<TemplateItemModel?>(null) }
+
+                    FoldersContent(
+                        modifier = contentModifier,
+                        state = foldersState.value,
+                        interactor = foldersViewModel
+                    ) { ids ->
+                        ids.forEach {
+                            item {
+                                val viewModel = viewModel(
+                                    key = "stock_${it.value}",
+                                    initializer = { factory.stockItemsViewModel(it) }
+                                )
+                                val state = viewModel.uiState.collectAsState()
+
+                                StockItemsRow(
+                                    title = stringResource(R.string.pinned_category),
+                                    state = state.value,
+                                    interactor = viewModel
+                                )
+                            }
+                        }
+                    }
+
+                    if (dialogVisible.value) {
+                        AddFolderDialog(
+                            dismissRequest = { dialogVisible.value = false },
+                            onUnfoldTemplates = { sheetVisible.value = true },
+                            onSuccess = { name, type, templateId ->
+                                foldersViewModel.addFolder(name, type, templateId)
+                                dialogVisible.value = false
+                            },
+                            template = template.value,
+                            onCancel = { dialogVisible.value = false }
+                        )
+                    }
+
+                    if (sheetVisible.value) {
+                        val sheetViewModel = viewModel(
+                            key = "sheet_$branchId",
+                            initializer = { factory.templateBottomSheetViewModel() }
+                        )
+                        val state = sheetViewModel.uiState.collectAsState()
+
+                        SelectTemplateBottomSheet(
+                            onDismissRequest = {
+                                coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
+                                    if (!sheetState.isVisible) {
+                                        sheetVisible.value = false
+                                    }
+                                }
+                            },
+                            sheetState = sheetState,
+                            state = state.value,
+                            onSelected = {
+                                template.value = it
+                                coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
+                                    if (!sheetState.isVisible) {
+                                        sheetVisible.value = false
+                                    }
+                                }
+                            },
+                            selectedItem = template.value,
+                            onLoadMore = sheetViewModel::loadMore,
+                            onSearch = sheetViewModel::search
+                        )
+                    }
+
+                }
+
+                1 -> {
+                    val basketState = basketViewModel.uiState.collectAsState()
+
+                    BasketContent(
+                        modifier = contentModifier,
+                        state = basketState.value,
+                        interactor = basketViewModel
+                    )
+                }
+
+                2 -> {
+                    val profileState = profileViewModel.uiState.collectAsState()
+
+                    ProfileContent(
+                        modifier = contentModifier,
+                        state = profileState.value,
+                        interactor = profileViewModel
+                    )
+                }
+            }
         }
     )
 }

@@ -1,9 +1,10 @@
 package com.orka.myfinances.application.viewmodels.folder.home
 
-import com.orka.myfinances.core.MainDispatcherContext
+import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.data.repositories.folder.AddFolderRequest
 import com.orka.myfinances.data.repositories.folder.FolderEvent
 import com.orka.myfinances.data.repositories.folder.GetTop
+import com.orka.myfinances.data.repositories.preferences.categories.PinnedCategoriesRepository
 import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.Test
 class FoldersContentViewModelTest : MainDispatcherContext() {
     private val getTop = mockk<GetTop>()
     private val add = mockk<Add<Unit, AddFolderRequest>>()
+    private val pinnedCategoriesRepository = mockk<PinnedCategoriesRepository>()
     private val navigator = mockk<Navigator>(relaxed = true)
     private val events = MutableSharedFlow<FolderEvent>()
     private val loading = UiText.Str("Loading")
@@ -28,9 +30,15 @@ class FoldersContentViewModelTest : MainDispatcherContext() {
     @Test
     fun `initialize success`() = runTest {
         coEvery { getTop.getTop(any()) } returns folderDtos
-
         val viewModel = FoldersContentViewModel(
-            getTop, add, navigator, events, loading, failure, logger
+            getTop = getTop,
+            add = add,
+            pinnedCategoriesRepository = pinnedCategoriesRepository,
+            navigator = navigator,
+            folderFlow = events,
+            loading = loading,
+            failure = failure,
+            logger = logger
         )
         
         advanceUntilIdle()

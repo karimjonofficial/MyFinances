@@ -9,7 +9,7 @@ import com.orka.myfinances.data.models.product.Product
 import com.orka.myfinances.data.models.product.ProductTitle
 import com.orka.myfinances.data.models.product.Property
 import com.orka.myfinances.data.models.template.TemplateField
-import com.orka.myfinances.ui.models.ClientItemModel
+import com.orka.myfinances.ui.models.item.ClientItemModel
 
 fun Product.map(): ProductApiModel {
     return ProductApiModel(

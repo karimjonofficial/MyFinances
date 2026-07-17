@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
@@ -15,31 +16,33 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.fixtures.resources.models.folder.folders
-import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.components.FooterSpacer
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.SectionTitle
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.contents.StateFulContent
+import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.folder.home.interactor.FoldersContentInteractor
+import com.orka.myfinances.ui.screens.folder.home.interactor.FoldersContentModel
 import com.orka.myfinances.ui.screens.folder.home.parts.FoldersContentCarousel
-import com.orka.myfinances.ui.screens.folder.models.FolderUiModel
 import com.orka.myfinances.ui.screens.folder.toUiModel
 
 @Composable
 fun FoldersContent(
     modifier: Modifier = Modifier,
-    state: State<List<FolderUiModel>>,
-    interactor: FoldersContentInteractor
+    state: State<FoldersContentModel>,
+    interactor: FoldersContentInteractor,
+    pinnedCategoriesContent: LazyListScope.(List<Id>) -> Unit = {}
 ) {
     StateFulContent(
         modifier = modifier,
         state = state,
         onRetry = interactor::refresh
-    ) { modifier, folder ->
+    ) { modifier, model ->
         PullToRefreshBox(
             modifier = modifier,
             isRefreshing = false,
@@ -80,9 +83,16 @@ fun FoldersContent(
                     VerticalSpacer(24)
                     FoldersList(
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        items = folder,
+                        items = model.folders,
                         onFolderSelected = { interactor.select(it) }
                     )
+                }
+
+                if(model.pinnedCategories != null) {
+                    item {
+                        VerticalSpacer(16)
+                    }
+                    pinnedCategoriesContent(model.pinnedCategories)
                 }
 
                 item {
@@ -142,7 +152,12 @@ private fun FoldersContentPreview() {
     ) { paddingValues ->
         FoldersContent(
             modifier = Modifier.scaffoldPadding(paddingValues),
-            state = State.Success(folders.map { it.toUiModel() }),
+            state = State.Success(
+                value = FoldersContentModel(
+                    folders = folders.map { it.toUiModel() },
+                    pinnedCategories = null
+                )
+            ),
             interactor = FoldersContentInteractor.dummy
         )
     }

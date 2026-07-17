@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.client.details
 
-import com.orka.myfinances.core.MainDispatcherContext
+import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.data.dtos.client.ClientDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.repositories.GetById

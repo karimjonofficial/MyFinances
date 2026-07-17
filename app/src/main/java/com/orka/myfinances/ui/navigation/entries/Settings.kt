@@ -1,19 +1,27 @@
 package com.orka.myfinances.ui.navigation.entries
 
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
-import com.orka.myfinances.R
+import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
-import com.orka.myfinances.lib.ui.screens.BlankScreen
 import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.ui.screens.settings.SettingsScreen
 
 fun settingsEntry(
     modifier: Modifier,
-    destination: Destination.Settings
+    destination: Destination.Settings,
+    factory: Factory
 ): NavEntry<Destination> = entry(destination) {
-    BlankScreen(
+    val viewModel = viewModel {
+        factory.settingsViewModel()
+    }
+    val state = viewModel.uiState.collectAsState()
+
+    SettingsScreen(
         modifier = modifier,
-        title = stringResource(R.string.settings),
+        state = state.value,
+        interactor = viewModel
     )
 }

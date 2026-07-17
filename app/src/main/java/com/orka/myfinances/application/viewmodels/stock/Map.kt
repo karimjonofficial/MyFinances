@@ -8,7 +8,7 @@ import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.ui.screens.stock.StockItemCardModel
+import com.orka.myfinances.ui.models.card.StockItemCardModel
 import com.orka.myfinances.ui.screens.stock.StockItemUiModel
 
 fun StockItemDto.toCardModel(

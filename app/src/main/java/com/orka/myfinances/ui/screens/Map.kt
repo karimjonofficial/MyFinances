@@ -1,7 +1,7 @@
 package com.orka.myfinances.ui.screens
 
 import com.orka.myfinances.data.models.User
-import com.orka.myfinances.ui.components.UserCardModel
+import com.orka.myfinances.ui.models.card.UserCardModel
 
 fun User.toCardModel(): UserCardModel {
     return UserCardModel(

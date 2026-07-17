@@ -27,4 +27,5 @@ interface Navigator {
     fun navigateToTemplate(id: Id)
     fun navigateToSale(id: Id)
     fun navigateToReceive(id: Id)
+    fun navigateToSelectDefaultCategory()
 }

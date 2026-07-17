@@ -33,7 +33,7 @@ import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.ui.components.UserCard
+import com.orka.myfinances.ui.components.cards.UserCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -5,7 +5,7 @@ import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
 
 abstract class BaseViewModel<T>(
-    private val produceSuccess: suspend () -> State.Success<T>?,
+    private val produceModel: suspend () -> T?,
     protected val loading: UiText,
     protected val failure: UiText,
     logger: Logger
@@ -16,9 +16,9 @@ abstract class BaseViewModel<T>(
     final override fun initialize() {
         launch {
             try {
-                val success = produceSuccess()
-                if (success != null) {
-                    setState(success)
+                val model = produceModel()
+                if (model != null) {
+                    setState(State.Success(model))
                 } else setState(State.Failure(failure))
             } catch (e: Exception) {
                 setState(State.Failure(UiText.Str(e.message.toString())))
@@ -28,8 +28,8 @@ abstract class BaseViewModel<T>(
 
     final override fun refresh() {
         tryTransition { oldState ->
-            val success = produceSuccess()
-            success ?: State.Failure(failure, oldState.value)
+            val model = produceModel()
+            if(model != null) State.Success(model) else State.Failure(failure, oldState.value)
         }
     }
 

@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.template.list
 
-import com.orka.myfinances.core.MainDispatcherContext
+import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.data.dtos.template.TemplateDto
 import com.orka.myfinances.data.repositories.template.TemplateEvent
 import com.orka.myfinances.lib.data.repositories.GetChunk

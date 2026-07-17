@@ -24,7 +24,7 @@ import com.orka.myfinances.lib.ui.components.Dialog
 import com.orka.myfinances.lib.ui.components.OutlinedCommentTextField
 import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.ui.models.ClientItemModel
+import com.orka.myfinances.ui.models.item.ClientItemModel
 import kotlin.time.Instant
 
 @Composable

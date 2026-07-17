@@ -116,14 +116,18 @@ fun ClientScreen(
                         contentDescription = model.phone
                     )
                 },
-                headlineContent = { Text(text = stringResource(R.string.phone_number)) },
-                supportingContent = { Text(text = model.phone ?: stringResource(R.string.no_phone_number)) },
                 trailingContent = {
                     Icon(
                         painter = painterResource(R.drawable.arrow_right),
                         contentDescription = stringResource(R.string.phone_number)
                     )
-                }
+                },
+                supportingContent = {
+                    Text(
+                        text = model.phone ?: stringResource(R.string.no_phone_number)
+                    )
+                },
+                content = { Text(text = stringResource(R.string.phone_number)) },
             )
 
             ListItem(
@@ -134,14 +138,18 @@ fun ClientScreen(
                         contentDescription = model.address
                     )
                 },
-                headlineContent = { Text(text = stringResource(R.string.address)) },
-                supportingContent = { Text(text = model.address ?: stringResource(R.string.no_address)) },
                 trailingContent = {
                     Icon(
                         painter = painterResource(R.drawable.arrow_right),
                         contentDescription = stringResource(R.string.address)
                     )
-                }
+                },
+                supportingContent = {
+                    Text(
+                        text = model.address ?: stringResource(R.string.no_address)
+                    )
+                },
+                content = { Text(text = stringResource(R.string.address)) },
             )
         }
     }

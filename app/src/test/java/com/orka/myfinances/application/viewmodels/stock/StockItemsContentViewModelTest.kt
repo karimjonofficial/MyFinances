@@ -2,7 +2,7 @@ package com.orka.myfinances.application.viewmodels.stock
 
 import android.util.Log
 import app.cash.turbine.test
-import com.orka.myfinances.core.MainDispatcherContext
+import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.basket.BasketEvent
 import com.orka.myfinances.data.repositories.basket.BasketRepository

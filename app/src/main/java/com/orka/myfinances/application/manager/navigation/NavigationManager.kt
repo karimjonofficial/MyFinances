@@ -121,4 +121,8 @@ class NavigationManager(
     override fun navigateToReceive(id: Id) {
         navigate(Destination.Receive(id))
     }
+
+    override fun navigateToSelectDefaultCategory() {
+        navigate(Destination.SelectDefaultCategory)
+    }
 }

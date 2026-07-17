@@ -4,10 +4,9 @@ import com.orka.myfinances.data.dtos.branch.BranchDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.user.GetMe
 import com.orka.myfinances.lib.data.repositories.Get
-import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.BaseViewModel
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.managers.SessionManager
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.profile.ProfileInteractor
@@ -27,24 +26,26 @@ class ProfileContentViewModel(
 ) : BaseViewModel<ProfileContentModel>(
     loading = loading,
     failure = failure,
-    produceSuccess = {
+    produceModel = {
         val branches: List<BranchDto>? = getBranches.getAll(null)
         val user = getMe.getMe()
 
         if (branches != null && user != null)
-            State.Success(
-                value = ProfileContentModel(
-                    branches = branches.map { it.toItemModel() },
-                    name = "${user.firstName} ${user.lastName}",
-                    phone = user.phone,
-                    branchName = branches.find { it.id == branchId.value }!!.name
-                )
+            ProfileContentModel(
+                branches = branches.map { it.toItemModel() },
+                name = "${user.firstName} ${user.lastName}",
+                phone = user.phone,
+                branchName = branches.find { it.id == branchId.value }!!.name
             )
         else null
     },
     logger = logger
 ), ProfileInteractor {
     val uiState = state.asStateFlow()
+
+    init {
+        initialize()
+    }
 
     override fun history() {
         launch { navigator.navigateToHistory() }

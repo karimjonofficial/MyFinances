@@ -1,8 +1,8 @@
 package com.orka.myfinances.ui.screens.debt.details
 
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.ui.components.ClientCardModel
-import com.orka.myfinances.ui.components.UserCardModel
+import com.orka.myfinances.ui.models.card.ClientCardModel
+import com.orka.myfinances.ui.models.card.UserCardModel
 
 data class DebtScreenModel(
     val completed: Boolean,

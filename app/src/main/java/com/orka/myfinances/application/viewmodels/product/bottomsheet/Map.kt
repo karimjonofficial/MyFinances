@@ -2,7 +2,7 @@ package com.orka.myfinances.application.viewmodels.product.bottomsheet
 
 import com.orka.myfinances.data.dtos.product.title.ProductTitleDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.ui.models.ProductTitleItemModel
+import com.orka.myfinances.ui.models.item.ProductTitleItemModel
 
 fun ProductTitleDto.toItemModel(): ProductTitleItemModel {
     return ProductTitleItemModel(

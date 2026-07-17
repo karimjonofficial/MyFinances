@@ -3,6 +3,8 @@ package com.orka.myfinances.ui.screens.stock
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -12,11 +14,12 @@ import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.stockItems
-import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.contents.LazyVerticalGridContentWithStickyHeader
+import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.ui.components.cards.StockItemCard
 
 @Composable
 fun StockItemsContent(
@@ -28,13 +31,15 @@ fun StockItemsContent(
     LazyVerticalGridContentWithStickyHeader(
         modifier = modifier,
         contentPadding = contentPadding,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        columns = GridCells.Adaptive(200.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
         state = state,
         refresh = interactor::refresh,
         loadMore = interactor::loadMore,
         item = { item ->
             StockItemCard(
+                modifier = Modifier.fillMaxSize().height(350.dp),
                 item = item.model,
                 onIncrease = { interactor.addToBasket(item.id) },
                 onDecrease = { interactor.removeFromBasket(item.id) }
@@ -43,7 +48,7 @@ fun StockItemsContent(
     )
 }
 
-@Preview
+@Preview(device = "id:pixel_10_pro_xl")
 @Composable
 private fun StockItemsContentPreview() {
     ScaffoldPreview(

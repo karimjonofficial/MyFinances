@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.sale.list
 
-import com.orka.myfinances.core.MainDispatcherContext
+import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.data.dtos.sale.SaleDto
 import com.orka.myfinances.data.repositories.sale.SaleEvent
 import com.orka.myfinances.lib.data.repositories.GetChunk

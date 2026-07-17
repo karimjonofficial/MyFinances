@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels
 
 import com.orka.myfinances.data.dtos.user.UserDto
-import com.orka.myfinances.ui.components.UserCardModel
+import com.orka.myfinances.ui.models.card.UserCardModel
 
 fun UserDto.toCardModel(): UserCardModel {
     val f = if (firstName.isEmpty()) "" else firstName[0]

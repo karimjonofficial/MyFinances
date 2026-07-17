@@ -3,7 +3,7 @@ package com.orka.myfinances.application.viewmodels.client.details
 import com.orka.myfinances.data.dtos.client.ClientDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.ui.screens.client.details.ClientScreenModel
-import com.orka.myfinances.ui.models.ClientItemModel
+import com.orka.myfinances.ui.models.item.ClientItemModel
 
 fun ClientDto.toItemModel(): ClientItemModel {
     return ClientItemModel(

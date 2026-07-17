@@ -20,7 +20,12 @@ fun TemplateCard(
 ) {
     ListItem(
         modifier = modifier.clickable { onClick() },
-        headlineContent = { Text(text = template.title) },
+        trailingContent = {
+            Icon(
+                painter = painterResource(R.drawable.arrow_right),
+                contentDescription = template.title
+            )
+        },
         supportingContent = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
@@ -31,11 +36,6 @@ fun TemplateCard(
                 Text(text = stringResource(R.string.fields_f, template.size))
             }
         },
-        trailingContent = {
-            Icon(
-                painter = painterResource(R.drawable.arrow_right),
-                contentDescription = template.title
-            )
-        }
+        content = { Text(text = template.title) },
     )
 }

@@ -11,6 +11,7 @@ import com.orka.myfinances.ui.navigation.entries.client.clientEntry
 import com.orka.myfinances.ui.navigation.entries.client.clientsEntry
 import com.orka.myfinances.ui.navigation.entries.debt.debtEntry
 import com.orka.myfinances.ui.navigation.entries.debt.debtsEntry
+import com.orka.myfinances.ui.navigation.entries.defaults.category.selectDefaultCategoryEntry
 import com.orka.myfinances.ui.navigation.entries.historyEntry
 import com.orka.myfinances.ui.navigation.entries.home.homeEntry
 import com.orka.myfinances.ui.navigation.entries.notificationsEntry
@@ -41,7 +42,7 @@ fun entryProvider(
         is Destination.Category -> categoryEntry(modifier, destination, factory)
         is Destination.Notifications -> notificationsEntry(modifier, destination, factory)
         is Destination.AddTemplate -> addTemplateEntry(modifier, destination, factory)
-        is Destination.Settings -> settingsEntry(modifier, destination)
+        is Destination.Settings -> settingsEntry(modifier, destination, factory)
         is Destination.Templates -> templatesEntry(modifier, destination, factory)
         is Destination.AddProduct -> addProductEntry(modifier, destination, factory)
         is Destination.EditProduct -> editProductEntry(modifier, destination, factory)
@@ -59,5 +60,6 @@ fun entryProvider(
         is Destination.Template -> templateEntry(modifier, destination, factory)
         is Destination.Sale -> saleEntry(modifier, destination, factory)
         is Destination.Receive -> receiveEntry(modifier, factory, destination)
+        is Destination.SelectDefaultCategory -> selectDefaultCategoryEntry(modifier, destination, factory)
     }
 }

@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.login
 
-import com.orka.myfinances.core.MainDispatcherContext
+import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.data.repositories.auth.Authenticator
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText

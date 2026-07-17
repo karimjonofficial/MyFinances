@@ -4,7 +4,7 @@ import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.core.MainDispatcherContext
+import com.orka.myfinances.testLib.MainDispatcherContext
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.flow.asStateFlow

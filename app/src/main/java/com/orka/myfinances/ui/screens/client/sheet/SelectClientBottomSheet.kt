@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import com.orka.myfinances.lib.ui.components.SelectionBottomSheet
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.ui.models.ClientItemModel
+import com.orka.myfinances.ui.models.item.ClientItemModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

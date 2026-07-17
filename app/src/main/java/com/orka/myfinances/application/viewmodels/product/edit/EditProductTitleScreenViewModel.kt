@@ -32,14 +32,14 @@ class EditProductTitleScreenViewModel(
 ) : BaseViewModel<AddProductTitleScreenModel>(
     loading = loading,
     failure = failure,
-    produceSuccess = {
+    produceModel = {
         val categories = getFolders.getAll(null)
             ?.filterIsInstance<CategoryDto>()
             ?.map { it.toItemModel() }
         val productTitle = productTitleRepository.getById(productId)
 
         if (categories != null && productTitle != null) {
-            State.Success(productTitle.toEditorModel(categories))
+            productTitle.toEditorModel(categories)
         } else null
     },
     logger = logger

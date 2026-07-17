@@ -23,12 +23,11 @@ class CategoryScreenViewModel(
 ) : BaseViewModel<CategoryScreenModel>(
     loading = loading,
     failure = failure,
-    produceSuccess = {
+    produceModel = {
         val category = getById.getById(categoryId)
-        if (category != null && category is CategoryDto) {
-            val model = category.toScreenModel()
-            State.Success(model)
-        } else null
+        if (category != null && category is CategoryDto)
+            category.toScreenModel()
+        else null
     },
     logger = logger
 ), CategoryScreenInteractor {

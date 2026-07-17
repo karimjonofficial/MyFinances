@@ -10,10 +10,10 @@ import com.orka.myfinances.application.manager.runtime.GuestRuntimeInitializerIm
 import com.orka.myfinances.application.manager.runtime.NewUserRuntimeInitializerImpl
 import com.orka.myfinances.application.manager.runtime.SignedInRuntimeInitializerImpl
 import com.orka.myfinances.application.manager.ui.UiManager
-import com.orka.myfinances.application.repositories.InfoApi
-import com.orka.myfinances.application.repositories.InfoRepository
-import com.orka.myfinances.application.storages.DefaultsStorageImpl
-import com.orka.myfinances.application.storages.credentials.CredentialsStorageImpl
+import com.orka.myfinances.application.data.api.InfoApi
+import com.orka.myfinances.application.data.repositories.InfoRepository
+import com.orka.myfinances.application.data.storages.DefaultsStorageImpl
+import com.orka.myfinances.application.data.storages.credentials.CredentialsStorageImpl
 import com.orka.myfinances.application.validators.CredentialsValidatorImpl
 import com.orka.myfinances.data.database.AppDatabase
 import net.posprinter.POSConnect
@@ -52,7 +52,7 @@ class MyFinancesApplication : Application() {
         this.guestRuntimeInitializer = guestRuntimeInitializer
         val newUserRuntimeInitializer = NewUserRuntimeInitializerImpl(logger)
         this.newUserRuntimeInitializer = newUserRuntimeInitializer
-        val signedInRuntimeInitializer = SignedInRuntimeInitializerImpl(mainActivity, formatter, logger)
+        val signedInRuntimeInitializer = SignedInRuntimeInitializerImpl(mainActivity, database, formatter, logger)
         this.signedInRuntimeInitializer = signedInRuntimeInitializer
         val infoRepository = InfoRepository(InfoApi(httpClient))
         val manager =  UiManager(

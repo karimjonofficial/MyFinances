@@ -1,14 +1,14 @@
 package com.orka.myfinances.application.manager.ui
 
 import app.cash.turbine.test
-import com.orka.myfinances.testFixtures.logger.DummyLogger
-import com.orka.myfinances.core.MainDispatcherContext
+import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.data.repositories.info.InfoRepository
 import com.orka.myfinances.data.storages.credentials.CredentialsStorage
 import com.orka.myfinances.data.storages.defaults.DefaultsStorage
 import com.orka.myfinances.runtime.GuestRuntimeInitializer
 import com.orka.myfinances.runtime.NewUserRuntimeInitializer
 import com.orka.myfinances.runtime.SignedInRuntimeInitializer
+import com.orka.myfinances.testFixtures.logger.DummyLogger
 import com.orka.myfinances.testFixtures.resources.models.credentials1
 import com.orka.myfinances.testFixtures.resources.models.id1
 import com.orka.myfinances.ui.screens.host.viewmodel.UiState
@@ -389,6 +389,20 @@ class UiManagerTest : MainDispatcherContext() {
                         awaitItem()
                         manager.initialize()
                         assertTrue(awaitItem() is UiState.SignedIn)
+                    }
+                }
+
+                @Test
+                fun `State is Loading when setBranch called in SignIn`() = runTest {
+                    coEvery { defaultsStorage.setDefaultBranchId(any()) } returns Unit
+
+                    manager.uiState.test {
+                        awaitItem()
+                        manager.initialize()
+                        awaitItem()
+                        manager.setBranch(id1)
+                        assertTrue(awaitItem() is UiState.Loading)
+                        awaitItem()
                     }
                 }
 

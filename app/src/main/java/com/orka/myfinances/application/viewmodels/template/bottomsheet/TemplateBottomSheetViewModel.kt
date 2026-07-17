@@ -10,7 +10,7 @@ import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
-import com.orka.myfinances.ui.models.TemplateItemModel
+import com.orka.myfinances.ui.models.item.TemplateItemModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -45,6 +45,7 @@ class TemplateBottomSheetViewModel(
     val uiState = state.asStateFlow()
 
     init {
+        initialize()
         flow.onEach { refresh() }.launchIn(viewModelScope)
     }
 }

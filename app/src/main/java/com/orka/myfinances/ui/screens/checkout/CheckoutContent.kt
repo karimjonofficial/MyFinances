@@ -39,7 +39,7 @@ import com.orka.myfinances.lib.ui.components.SectionTitle
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
-import com.orka.myfinances.ui.models.ClientItemModel
+import com.orka.myfinances.ui.models.item.ClientItemModel
 import com.orka.myfinances.ui.screens.checkout.viewmodel.BasketItemCardModel
 import java.text.NumberFormat
 import java.util.Locale

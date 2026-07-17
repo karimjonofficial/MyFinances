@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.receive.list
 
-import com.orka.myfinances.core.MainDispatcherContext
+import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.data.dtos.receive.ReceiveDto
 import com.orka.myfinances.data.repositories.receive.ReceiveEvent
 import com.orka.myfinances.lib.data.repositories.GetChunk

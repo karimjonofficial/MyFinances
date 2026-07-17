@@ -13,7 +13,7 @@ import com.orka.myfinances.lib.viewmodel.MapSingleViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenInteractor
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenModel
-import com.orka.myfinances.ui.models.ProductTitleItemModel
+import com.orka.myfinances.ui.models.item.ProductTitleItemModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class AddReceiveScreenViewModel(

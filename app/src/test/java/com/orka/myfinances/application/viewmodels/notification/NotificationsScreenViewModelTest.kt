@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.notification
 
-import com.orka.myfinances.core.MainDispatcherContext
+import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.data.dtos.notification.NotificationDto
 import com.orka.myfinances.data.repositories.notification.ReadNotification
 import com.orka.myfinances.lib.data.repositories.GetChunk

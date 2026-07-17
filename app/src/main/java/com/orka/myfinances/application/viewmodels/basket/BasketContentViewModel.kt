@@ -31,11 +31,11 @@ class BasketContentViewModel(
 ) : BaseViewModel<BasketScreenModel>(
     loading = loading,
     failure = failure,
-    produceSuccess = {
+    produceModel = {
         val minItems = basketRepository.get()
         val items = minItems.map { minItem ->
             val stockItem = stockRepository.getByProduct(minItem.id)
-            if(stockItem != null)
+            if (stockItem != null)
                 basketItem(minItem, stockItem)
             else throw Exception()
         }
@@ -43,13 +43,11 @@ class BasketContentViewModel(
         val sellable = uiItems.indexOfFirst { it.model.unavailable } == -1
         val price = items.sumOf { it.product.exposedPrice * it.amount }
 
-        State.Success(
-            value = BasketScreenModel(
-                items = uiItems,
-                price = formatPrice.formatPrice(price.toDouble()),
-                rawItems = items,
-                sellable = sellable,
-            )
+        BasketScreenModel(
+            items = uiItems,
+            price = formatPrice.formatPrice(price.toDouble()),
+            rawItems = items,
+            sellable = sellable,
         )
     },
     logger = logger
@@ -72,7 +70,7 @@ class BasketContentViewModel(
 
         state.subscriptionCount.onEach { count ->
             if (count > 0 && isStale) {
-                if(state.value is State.Loading && state.value.value == null)
+                if (state.value is State.Loading && state.value.value == null)
                     initialize()
                 else refresh()
                 isStale = false

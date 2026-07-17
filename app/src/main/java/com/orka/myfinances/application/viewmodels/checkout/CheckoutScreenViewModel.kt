@@ -47,21 +47,19 @@ class CheckoutScreenViewModel(
 ) : BaseViewModel<CheckoutScreenModel>(
     loading = loading,
     failure = failure,
-    produceSuccess = {
+    produceModel = {
         val minItems = basketRepository.get()
         val items = minItems.map { minItem ->
-        val stockItem = stockRepository.getByProduct(minItem.id)
-        if(stockItem != null)
-            basketItem(minItem, stockItem)
-        else throw Exception()
-    }
+            val stockItem = stockRepository.getByProduct(minItem.id)
+            if (stockItem != null)
+                basketItem(minItem, stockItem)
+            else throw Exception()
+        }
 
-        State.Success(
-            value = CheckoutScreenModel(
-                items = items.map { it.toModel(formatPrice, formatDecimal) },
-                exposedPrice = items.getExposedPrice().toInt(),
-                salePrice = formatPrice.formatPrice(items.getSalePrice().toDouble())
-            )
+        CheckoutScreenModel(
+            items = items.map { it.toModel(formatPrice, formatDecimal) },
+            exposedPrice = items.getExposedPrice().toInt(),
+            salePrice = formatPrice.formatPrice(items.getSalePrice().toDouble())
         )
     },
     logger = logger
@@ -83,7 +81,7 @@ class CheckoutScreenViewModel(
                 val minItems = basketRepository.get()
                 val items = minItems.map { minItem ->
                     val stockItem = stockRepository.getByProduct(minItem.id)
-                    if(stockItem != null)
+                    if (stockItem != null)
                         basketItem(minItem, stockItem)
                     else throw Exception()
                 }
@@ -112,7 +110,7 @@ class CheckoutScreenViewModel(
                 val minItems = basketRepository.get()
                 val items = minItems.map { minItem ->
                     val stockItem = stockRepository.getByProduct(minItem.id)
-                    if(stockItem != null)
+                    if (stockItem != null)
                         basketItem(minItem, stockItem)
                     else throw Exception()
                 }
@@ -127,7 +125,8 @@ class CheckoutScreenViewModel(
                         price = price,
                         description = if (description != null) "$description\nSale id: ${response.id}" else "Sale id: ${response.id}",
                         endDateTime = Instant.fromEpochMilliseconds(
-                            dueDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+                            dueDate.atStartOfDayIn(TimeZone.currentSystemDefault())
+                                .toEpochMilliseconds()
                         )
                     )
                     val created = insertDebt.insert(debtRequest)
@@ -151,7 +150,7 @@ class CheckoutScreenViewModel(
                 val minItems = basketRepository.get()
                 val items = minItems.map { minItem ->
                     val stockItem = stockRepository.getByProduct(minItem.id)
-                    if(stockItem != null)
+                    if (stockItem != null)
                         basketItem(minItem, stockItem)
                     else throw Exception()
                 }

@@ -5,6 +5,7 @@ import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.format.FormatDecimal
 import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.ui.models.card.StockItemCardModel
 
 fun List<StockItem>.toMap(
     formatPrice: FormatPrice,

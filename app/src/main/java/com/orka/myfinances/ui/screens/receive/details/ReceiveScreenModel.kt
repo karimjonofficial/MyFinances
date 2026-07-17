@@ -1,6 +1,6 @@
 package com.orka.myfinances.ui.screens.receive.details
 
-import com.orka.myfinances.ui.components.UserCardModel
+import com.orka.myfinances.ui.models.card.UserCardModel
 
 data class ReceiveScreenModel(
     val user: UserCardModel,

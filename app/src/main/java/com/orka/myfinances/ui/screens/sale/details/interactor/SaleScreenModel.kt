@@ -1,8 +1,8 @@
 package com.orka.myfinances.ui.screens.sale.details.interactor
 
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.ui.components.ClientCardModel
-import com.orka.myfinances.ui.components.UserCardModel
+import com.orka.myfinances.ui.models.card.ClientCardModel
+import com.orka.myfinances.ui.models.card.UserCardModel
 
 data class SaleScreenModel(
     val id: Id,

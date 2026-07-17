@@ -1,5 +1,7 @@
 package com.orka.myfinances.factories
 
+import com.orka.myfinances.application.data.repositories.DefaultsRepository
+import com.orka.myfinances.application.data.repositories.PinnedCategoriesRepository
 import com.orka.myfinances.application.viewmodels.basket.BasketContentViewModel
 import com.orka.myfinances.application.viewmodels.checkout.CheckoutScreenViewModel
 import com.orka.myfinances.application.viewmodels.client.add.AddClientViewModel
@@ -9,6 +11,7 @@ import com.orka.myfinances.application.viewmodels.client.list.ClientsScreenViewM
 import com.orka.myfinances.application.viewmodels.debt.details.DebtScreenViewModel
 import com.orka.myfinances.application.viewmodels.debt.history.DebtsHistoryContentViewModel
 import com.orka.myfinances.application.viewmodels.debt.list.DebtsScreenViewModel
+import com.orka.myfinances.application.viewmodels.defaults.category.SelectDefaultCategoryViewModel
 import com.orka.myfinances.application.viewmodels.folder.catalog.CatalogScreenViewModel
 import com.orka.myfinances.application.viewmodels.folder.category.CategoryScreenViewModel
 import com.orka.myfinances.application.viewmodels.folder.home.FoldersContentViewModel
@@ -27,16 +30,17 @@ import com.orka.myfinances.application.viewmodels.receive.details.ReceiveScreenV
 import com.orka.myfinances.application.viewmodels.receive.list.ReceiveContentViewModel
 import com.orka.myfinances.application.viewmodels.sale.details.SaleScreenViewModel
 import com.orka.myfinances.application.viewmodels.sale.list.SaleContentViewModel
+import com.orka.myfinances.application.viewmodels.settings.SettingsScreenViewModel
 import com.orka.myfinances.application.viewmodels.stock.StockItemsContentViewModel
 import com.orka.myfinances.application.viewmodels.template.add.AddTemplateScreenViewModel
 import com.orka.myfinances.application.viewmodels.template.bottomsheet.TemplateBottomSheetViewModel
 import com.orka.myfinances.application.viewmodels.template.details.TemplateScreenViewModel
 import com.orka.myfinances.application.viewmodels.template.list.TemplatesScreenViewModel
+import com.orka.myfinances.data.api.branch.BranchApi
 import com.orka.myfinances.data.api.client.ClientApi
 import com.orka.myfinances.data.api.debt.DebtApi
 import com.orka.myfinances.data.api.folder.FolderApi
 import com.orka.myfinances.data.api.notification.NotificationApi
-import com.orka.myfinances.data.api.branch.BranchApi
 import com.orka.myfinances.data.api.order.OrderApi
 import com.orka.myfinances.data.api.receive.ReceiveApi
 import com.orka.myfinances.data.api.sale.SaleApi
@@ -44,9 +48,11 @@ import com.orka.myfinances.data.api.stock.StockApi
 import com.orka.myfinances.data.api.template.TemplateApi
 import com.orka.myfinances.data.api.title.ProductTitleApi
 import com.orka.myfinances.data.api.user.UserApi
+import com.orka.myfinances.data.database.AppDatabase
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.repositories.basket.BasketRepositoryImpl
+import com.orka.myfinances.data.repositories.branch.BranchRepository
 import com.orka.myfinances.data.repositories.client.ClientEvent
 import com.orka.myfinances.data.repositories.client.ClientRepository
 import com.orka.myfinances.data.repositories.debt.DebtEvent
@@ -54,7 +60,6 @@ import com.orka.myfinances.data.repositories.debt.DebtRepository
 import com.orka.myfinances.data.repositories.folder.FolderEvent
 import com.orka.myfinances.data.repositories.folder.FolderRepository
 import com.orka.myfinances.data.repositories.notification.NotificationRepository
-import com.orka.myfinances.data.repositories.branch.BranchRepository
 import com.orka.myfinances.data.repositories.order.OrderEvent
 import com.orka.myfinances.data.repositories.order.OrderRepository
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
@@ -69,10 +74,10 @@ import com.orka.myfinances.data.repositories.template.TemplateEvent
 import com.orka.myfinances.data.repositories.template.TemplateRepository
 import com.orka.myfinances.data.repositories.user.UserRepository
 import com.orka.myfinances.format.Formatter
-import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.printer.Printer
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.managers.SessionManager
+import com.orka.myfinances.printer.Printer
 import com.orka.myfinances.ui.navigation.Navigator
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -85,6 +90,7 @@ class Factory(
     private val navigator: Navigator,
     private val formatter: Formatter,
     private val sessionManager: SessionManager,
+    database: AppDatabase,
     private val loading: UiText,
     private val failure: UiText
 ) {
@@ -110,7 +116,11 @@ class Factory(
     private val userApi = UserApi(httpClient)
     private val stockApi = StockApi(httpClient)
 
+    private val pinnedCategoriesDao = database.pinnedCategoriesDao()
+    private val defaultsDao = database.defaultsDao()
+
     private val basketRepository = BasketRepositoryImpl()
+    private val pinnedCategoriesRepository = PinnedCategoriesRepository(pinnedCategoriesDao)
     private val stockRepository = StockRepository(session.branchId, stockApi, stockFlow)
     private val folderRepository = FolderRepository(session.branchId, folderFlow, folderApi)
     private val templateRepository = TemplateRepository(session.branchId, templateApi, templateFlow)
@@ -123,13 +133,16 @@ class Factory(
     private val receiveRepository = ReceiveRepository(session.branchId, receiveApi, receiveFlow, stockFlow)
     private val productTitleRepository = ProductTitleRepository(productTitleApi, productTitleFlow)
     private val saleRepository = SaleRepository(saleApi, saleFlow, stockFlow)
+    private val defaultsRepository = DefaultsRepository(defaultsDao, pinnedCategoriesRepository)
 
     fun foldersViewModel(): FoldersContentViewModel {
         return FoldersContentViewModel(
             getTop = folderRepository,
             add = folderRepository,
+            pinnedCategoriesRepository = pinnedCategoriesRepository,
             navigator = navigator,
-            events = folderFlow,
+            folderFlow = folderFlow,
+            defaultsFlow = defaultsRepository.flow,
             loading = loading,
             failure = failure,
             logger = logger
@@ -532,6 +545,31 @@ class Factory(
     fun addClientViewModel(): AddClientViewModel {
         return AddClientViewModel(
             insert = clientRepository
+        )
+    }
+
+    fun settingsViewModel(): SettingsScreenViewModel {
+        return SettingsScreenViewModel(
+            defaultsRepository = defaultsRepository,
+            get = folderRepository,
+            flow = defaultsRepository.flow,
+            navigator = navigator,
+            loading = loading,
+            failure = failure,
+            logger = logger
+        )
+    }
+
+    fun selectDefaultCategoryViewModel(): SelectDefaultCategoryViewModel {
+        return SelectDefaultCategoryViewModel(
+            foldersRepository = folderRepository,
+            getDefaultCategory = defaultsRepository,
+            setDefaultCategory = defaultsRepository,
+            flow = defaultsRepository.flow,
+            navigator = navigator,
+            loading = loading,
+            failure = failure,
+            logger = logger
         )
     }
 }

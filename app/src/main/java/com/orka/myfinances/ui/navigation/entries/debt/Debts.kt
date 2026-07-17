@@ -16,7 +16,7 @@ import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.screens.client.sheet.SelectClientBottomSheet
 import com.orka.myfinances.ui.screens.debt.list.AddDebtDialog
-import com.orka.myfinances.ui.models.ClientItemModel
+import com.orka.myfinances.ui.models.item.ClientItemModel
 import com.orka.myfinances.ui.screens.debt.list.DebtsScreen
 import kotlinx.coroutines.launch
 

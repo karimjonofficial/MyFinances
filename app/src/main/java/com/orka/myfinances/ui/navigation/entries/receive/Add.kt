@@ -14,7 +14,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
-import com.orka.myfinances.ui.models.ProductTitleItemModel
+import com.orka.myfinances.ui.models.item.ProductTitleItemModel
 import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.screens.product.sheet.SelectProductTitleBottomSheet
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreen

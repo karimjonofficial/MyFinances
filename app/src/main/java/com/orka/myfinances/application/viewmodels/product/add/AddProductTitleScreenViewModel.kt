@@ -28,12 +28,12 @@ class AddProductTitleScreenViewModel(
 ) : BaseViewModel<AddProductTitleScreenModel>(
     loading = loading,
     failure = failure,
-    produceSuccess = {
+    produceModel = {
         val categories = getFolders.getAll(null)
             ?.filterIsInstance<CategoryDto>()
             ?.map { it.toItemModel() }
         if (categories != null) {
-            State.Success(AddProductTitleScreenModel(categories, categoryId))
+            AddProductTitleScreenModel(categories, categoryId)
         } else null
     },
     logger = logger

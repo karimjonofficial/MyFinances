@@ -63,13 +63,15 @@ class UiManager(
     override fun setBranch(id: Id) {
         launch {
             val state = state.value
-            if(state !is UiState.NewUser)
+            if(state !is UiState.NewUser && state !is UiState.SignedIn)
                 setState(UiState.Failure())
             else {
-                val companyId = infoRepository.getCompanyId(state.credentials.access)
+                if(state is UiState.SignedIn) setState(UiState.Loading)
+                val credentials = if(state is UiState.NewUser) state.credentials else (state as UiState.SignedIn).session.credentials
+                val companyId = infoRepository.getCompanyId(credentials.access)
                 defaultsStorage.setDefaultBranchId(id)
                 val session = Session(
-                    credentials = state.credentials,
+                    credentials = credentials,
                     branchId = id,
                     companyId = companyId
                 )

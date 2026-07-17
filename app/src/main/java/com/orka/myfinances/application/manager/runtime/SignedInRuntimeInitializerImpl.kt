@@ -7,6 +7,7 @@ import com.orka.myfinances.application.factories.HttpLogger
 import com.orka.myfinances.application.factories.httpClient
 import com.orka.myfinances.application.manager.navigation.NavigationManager
 import com.orka.myfinances.application.printer.BluetoothPrinter
+import com.orka.myfinances.data.database.AppDatabase
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.format.Formatter
@@ -18,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 
 class SignedInRuntimeInitializerImpl(
     private val mainActivity: MainActivity,
+    private val database: AppDatabase,
     private val formatter: Formatter,
     private val logger: Logger
 ) : SignedInRuntimeInitializer {
@@ -38,6 +40,7 @@ class SignedInRuntimeInitializerImpl(
         factory = Factory(
             session = session,
             httpClient = httpClient,
+            database = database,
             printer = printer,
             logger = this.logger,
             navigator = navigator,
