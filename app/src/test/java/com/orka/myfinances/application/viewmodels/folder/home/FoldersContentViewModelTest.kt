@@ -1,5 +1,6 @@
 package com.orka.myfinances.application.viewmodels.folder.home
 
+import com.orka.myfinances.data.repositories.defaults.DefaultsEvent
 import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.data.repositories.folder.AddFolderRequest
 import com.orka.myfinances.data.repositories.folder.FolderEvent
@@ -22,7 +23,8 @@ class FoldersContentViewModelTest : MainDispatcherContext() {
     private val add = mockk<Add<Unit, AddFolderRequest>>()
     private val pinnedCategoriesRepository = mockk<PinnedCategoriesRepository>()
     private val navigator = mockk<Navigator>(relaxed = true)
-    private val events = MutableSharedFlow<FolderEvent>()
+    private val folderEvents = MutableSharedFlow<FolderEvent>()
+    private val defaultsEvents = MutableSharedFlow<DefaultsEvent>()
     private val loading = UiText.Str("Loading")
     private val failure = UiText.Str("Failure")
     private val logger = mockk<Logger>(relaxed = true)
@@ -35,7 +37,8 @@ class FoldersContentViewModelTest : MainDispatcherContext() {
             add = add,
             pinnedCategoriesRepository = pinnedCategoriesRepository,
             navigator = navigator,
-            folderFlow = events,
+            folderFlow = folderEvents,
+            defaultsFlow = defaultsEvents,
             loading = loading,
             failure = failure,
             logger = logger
