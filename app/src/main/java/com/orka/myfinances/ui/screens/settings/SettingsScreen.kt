@@ -83,7 +83,7 @@ fun SettingsScreen(
     }
 }
 
-@Preview
+@Preview(device = "id:pixel_10_pro_xl")
 @Composable
 private fun SettingsScreenPreview() {
     MyFinancesTheme {
@@ -93,15 +93,5 @@ private fun SettingsScreenPreview() {
             ),
             interactor = SettingsScreenInteractor.dummy
         )
-    }
-}
-
-interface SettingsScreenInteractor {
-    fun toSelectDefaultCategory()
-
-    companion object {
-        val dummy = object : SettingsScreenInteractor {
-            override fun toSelectDefaultCategory() {}
-        }
     }
 }

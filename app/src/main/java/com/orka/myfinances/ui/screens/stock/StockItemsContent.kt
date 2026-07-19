@@ -31,7 +31,7 @@ fun StockItemsContent(
     LazyVerticalGridContentWithStickyHeader(
         modifier = modifier,
         contentPadding = contentPadding,
-        columns = GridCells.Adaptive(200.dp),
+        columns = GridCells.Fixed(2),
         verticalArrangement = Arrangement.spacedBy(24.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         state = state,
