@@ -6,7 +6,7 @@ data class StockItemCardModel(
     val title: String,
     val price: String,
     val amount: String,
-    val properties: UiText,
+    val properties: String?,
     val description: UiText,
     val basketAmount: String? = null,
     val increaseEnabled: Boolean

@@ -19,6 +19,7 @@ fun OptionButton(
     modifier: Modifier = Modifier,
     text: String,
     painter: Painter,
+    enabled: Boolean = true,
     onClick: () -> Unit
 ) {
     FilledTonalButton(
@@ -27,6 +28,7 @@ fun OptionButton(
             buttonHeight = ButtonDefaults.MediumContainerHeight,
             hasStartIcon = true
         ),
+        enabled = enabled,
         onClick = onClick
     ) {
         Icon(

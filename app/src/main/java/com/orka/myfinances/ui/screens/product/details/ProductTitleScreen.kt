@@ -118,7 +118,7 @@ fun ProductTitleScreen(
                         HorizontalDivider()
                     }
 
-                    if (productTitle.properties.isNotEmpty()) {
+                    if (productTitle.properties?.isNotEmpty() ?: false) {
                         item {
                             VerticalSpacer(16)
                             DividedList(

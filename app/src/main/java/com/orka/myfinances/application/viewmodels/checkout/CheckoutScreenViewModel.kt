@@ -47,7 +47,7 @@ class CheckoutScreenViewModel(
 ) : BaseViewModel<CheckoutScreenModel>(
     loading = loading,
     failure = failure,
-    produceModel = {
+    produceInitialState = {
         val minItems = basketRepository.get()
         val items = minItems.map { minItem ->
             val stockItem = stockRepository.getByProduct(minItem.id)
@@ -56,10 +56,12 @@ class CheckoutScreenViewModel(
             else throw Exception()
         }
 
-        CheckoutScreenModel(
-            items = items.map { it.toModel(formatPrice, formatDecimal) },
-            exposedPrice = items.getExposedPrice().toInt(),
-            salePrice = formatPrice.formatPrice(items.getSalePrice().toDouble())
+        State.Success(
+            CheckoutScreenModel(
+                items = items.map { it.toModel(formatPrice, formatDecimal) },
+                exposedPrice = items.getExposedPrice().toInt(),
+                salePrice = formatPrice.formatPrice(items.getSalePrice().toDouble())
+            )
         )
     },
     logger = logger

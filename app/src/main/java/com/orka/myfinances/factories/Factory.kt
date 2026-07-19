@@ -138,7 +138,10 @@ class Factory(
     fun foldersViewModel(): FoldersContentViewModel {
         return FoldersContentViewModel(
             getTop = folderRepository,
-            add = folderRepository,
+            getDefaultCategory = defaultsRepository,
+            addFolder = folderRepository,
+            addTitle = productTitleRepository,
+            addReceive = receiveRepository,
             pinnedCategoriesRepository = pinnedCategoriesRepository,
             navigator = navigator,
             folderFlow = folderFlow,

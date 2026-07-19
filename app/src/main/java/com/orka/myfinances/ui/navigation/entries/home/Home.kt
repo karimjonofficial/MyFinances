@@ -15,7 +15,9 @@ import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
+import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.entry.entry
+import com.orka.myfinances.ui.components.dialogs.AddProductDialog
 import com.orka.myfinances.ui.models.item.TemplateItemModel
 import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.screens.basket.BasketContent
@@ -35,7 +37,8 @@ fun homeEntry(
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val branchId = session.branchId.value.toString()
-    val dialogVisible = rememberSaveable { mutableStateOf(false) }
+    val addFolderDialogVisible = rememberSaveable { mutableStateOf(false) }
+    val addProductDialogVisible = rememberSaveable { mutableStateOf(false) }
 
     val foldersViewModel = viewModel(
         key = "folders_$branchId",
@@ -55,7 +58,7 @@ fun homeEntry(
         topBar = {
             HomeScreenTopBar(
                 index = it,
-                onAddFolder = { dialogVisible.value = true },
+                onAddFolder = { addFolderDialogVisible.value = true },
                 foldersViewModel = foldersViewModel,
                 basketViewModel = basketViewModel,
                 profileViewModel = profileViewModel
@@ -74,7 +77,8 @@ fun homeEntry(
                     FoldersContent(
                         modifier = contentModifier,
                         state = foldersState.value,
-                        interactor = foldersViewModel
+                        interactor = foldersViewModel,
+                        onAddProductClick = { addProductDialogVisible.value = true }
                     ) { ids ->
                         ids.forEach {
                             item {
@@ -84,6 +88,7 @@ fun homeEntry(
                                 )
                                 val state = viewModel.uiState.collectAsState()
 
+                                VerticalSpacer(16)
                                 StockItemsRow(
                                     title = stringResource(R.string.pinned_category),
                                     state = state.value,
@@ -93,16 +98,20 @@ fun homeEntry(
                         }
                     }
 
-                    if (dialogVisible.value) {
+                    if (addFolderDialogVisible.value) {
                         AddFolderDialog(
-                            dismissRequest = { dialogVisible.value = false },
+                            dismissRequest = { addProductDialogVisible.value = false },
                             onUnfoldTemplates = { sheetVisible.value = true },
-                            onSuccess = { name, type, templateId ->
-                                foldersViewModel.addFolder(name, type, templateId)
-                                dialogVisible.value = false
-                            },
+                            onSuccess = foldersViewModel::addFolder,
                             template = template.value,
-                            onCancel = { dialogVisible.value = false }
+                            onCancel = { addProductDialogVisible.value = false }
+                        )
+                    }
+
+                    if(addProductDialogVisible.value) {
+                        AddProductDialog(
+                            onDismissRequest = { addProductDialogVisible.value = false },
+                            onSuccess = foldersViewModel::addProduct
                         )
                     }
 

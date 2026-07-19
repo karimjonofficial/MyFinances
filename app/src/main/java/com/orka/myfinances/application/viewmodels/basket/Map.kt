@@ -16,7 +16,7 @@ fun BasketItem.toModel(
     formatDecimal: FormatDecimal
 ): BasketItemCardModel {
     val propertiesText = product.title.properties
-        .joinToString(" | ") { "${it.field.name}: ${it.value}" }
+        ?.joinToString(" | ") { "${it.field.name}: ${it.value}" }
 
     return BasketItemCardModel(
         title = product.title.name,

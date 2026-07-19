@@ -6,20 +6,20 @@ import com.orka.myfinances.data.repositories.preferences.categories.AddPinnedCat
 import com.orka.myfinances.data.repositories.preferences.categories.PinnedCategoriesRepository
 
 class PinnedCategoriesRepository(
-    private val pinnedCategoriesDao: PinnedCategoriesDao
+    private val dao: PinnedCategoriesDao
 ) : PinnedCategoriesRepository {
 
     override suspend fun getAll(search: String?): List<Id>? {
-        val categories = pinnedCategoriesDao.getAll()
+        val categories = dao.getAll()
         return if (categories.isEmpty()) null
         else categories.map { Id(it.id) }
     }
 
     override suspend fun add(request: AddPinnedCategoryRequest) {
-        if (getAll(null)?.none { it.value == request.id.value } ?: true)
-            pinnedCategoriesDao.insert(
+        if (dao.getAll().none { it.id == request.id.value })
+            dao.insert(
                 id = request.id.value,
-                index = request.index ?: ((pinnedCategoriesDao.getLastIndex() ?: -1) + 1)
+                index = request.index ?: ((dao.getLastIndex() ?: -1) + 1)
             )
     }
 }

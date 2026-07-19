@@ -33,7 +33,7 @@ fun ProductTitleEditorScreen(
     val description = rememberSaveable { mutableStateOf<String?>(null) }
     val properties = remember(selectedCategory.value?.id) {
         mutableStateListOf<PropertyModel<*>?>().apply {
-            if (model != null && selectedCategory.value?.id == model.categoryId) {
+            if (model != null && selectedCategory.value?.id == model.categoryId && model.initialProperties != null) {
                 addAll(model.initialProperties)
             }
         }

@@ -14,7 +14,7 @@ fun TemplateApiModel.toDto(): TemplateDto {
     return TemplateDto(
         id = id,
         name = name,
-        fields = fields.map { it.toDto() },
+        fields = fields?.map { it.toDto() },
         description = description,
     )
 }

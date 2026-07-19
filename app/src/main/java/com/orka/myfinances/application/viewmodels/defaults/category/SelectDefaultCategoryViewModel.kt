@@ -28,11 +28,11 @@ class SelectDefaultCategoryViewModel(
     failure: UiText,
     logger: Logger
 ) : BaseViewModel<SelectDefaultCategoryScreenModel>(
-    produceModel = {
+    produceInitialState = {
         val folders = foldersRepository.getAll(null)
         val defaultId = getDefaultCategory.getDefaultCategoryId()
         if (folders != null) {
-            SelectDefaultCategoryScreenModel(toItemModels(folders), defaultId)
+            State.Success(SelectDefaultCategoryScreenModel(toItemModels(folders), defaultId))
         } else null
     },
     loading = loading,

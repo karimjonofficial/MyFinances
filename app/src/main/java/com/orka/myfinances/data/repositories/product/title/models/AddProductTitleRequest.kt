@@ -8,6 +8,6 @@ data class AddProductTitleRequest(
     val price: Int,
     val salePrice: Int,
     val exposedPrice: Int,
-    val properties: List<PropertyModel<*>>,
+    val properties: List<PropertyModel<*>>?,
     val description: String? = null
 )

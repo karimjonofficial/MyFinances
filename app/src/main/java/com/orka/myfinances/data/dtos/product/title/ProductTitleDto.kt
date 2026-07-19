@@ -7,7 +7,7 @@ data class ProductTitleDto(
     val id: Int,
     val category: Int,
     val name: String,
-    val properties: List<PropertyDto>,
+    val properties: List<PropertyDto>?,
     val defaultPrice: Long,
     val defaultSalePrice: Long,
     val defaultExposedPrice: Long,

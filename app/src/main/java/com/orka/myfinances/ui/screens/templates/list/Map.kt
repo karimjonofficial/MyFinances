@@ -5,7 +5,7 @@ import com.orka.myfinances.data.models.template.Template
 fun Template.toModel(): TemplateCardModel {
     return TemplateCardModel(
         title = name,
-        size = "${fields.size}"
+        size = "${fields?.size}"
     )
 }
 

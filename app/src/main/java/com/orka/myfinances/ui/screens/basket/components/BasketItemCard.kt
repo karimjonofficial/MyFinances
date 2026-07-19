@@ -97,9 +97,9 @@ fun BasketItemCard(
                             )
 
                             Text(
-                                text = item.properties.ifEmpty {
+                                text = item.properties?.ifEmpty {
                                     stringResource(R.string.no_properties_provided)
-                                },
+                                } ?: stringResource(R.string.no_properties_provided),
                                 style = MaterialTheme.typography.bodySmall,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis

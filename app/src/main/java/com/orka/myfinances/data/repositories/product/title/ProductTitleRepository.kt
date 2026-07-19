@@ -7,9 +7,11 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.title.models.AddProductTitleRequest
 import com.orka.myfinances.data.repositories.product.title.models.UpdateProductTitleRequest
 import com.orka.myfinances.lib.data.api.getById
+import com.orka.myfinances.lib.data.api.scoped.branch.add
 import com.orka.myfinances.lib.data.api.scoped.branch.getChunk
 import com.orka.myfinances.lib.data.api.scoped.branch.insert
 import com.orka.myfinances.lib.data.api.scoped.branch.update
+import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.Insert
@@ -19,7 +21,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 class ProductTitleRepository(
     private val api: ProductTitleApi,
     private val flow: MutableSharedFlow<ProductTitleEvent>
-) : GetChunk<ProductTitleDto>, GetById<ProductTitleDto>, Insert<AddProductTitleRequest>, UpdateProductTitle, GetProductTitlesByCategory {
+) : GetChunk<ProductTitleDto>, GetById<ProductTitleDto>, Insert<AddProductTitleRequest>,
+    Add<Id, AddProductTitleRequest>, UpdateProductTitle, GetProductTitlesByCategory {
 
     override suspend fun getChunk(
         size: Int,
@@ -50,10 +53,22 @@ class ProductTitleRepository(
             request = request,
             map = { officeId -> toApiRequest(officeId) }
         )
-        if (success) {
+        if (success)
             flow.emit(ProductTitleEvent())
-        }
         return success
+    }
+
+    override suspend fun add(request: AddProductTitleRequest): Id? {
+        val response = api.add(
+            request = request,
+            map = { officeId -> toApiRequest(officeId) }
+        )
+        if (response != null) {
+            val id = Id(response.id)
+            flow.emit(ProductTitleEvent(id))
+            return id
+        }
+        else return null
     }
 
     override suspend fun update(id: Id, request: UpdateProductTitleRequest): Boolean {

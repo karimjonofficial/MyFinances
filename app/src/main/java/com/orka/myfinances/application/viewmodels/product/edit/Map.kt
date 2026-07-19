@@ -18,7 +18,7 @@ fun ProductTitleDto.toEditorModel(categories: List<CategoryItemModel>): AddProdu
         initialSalePrice = defaultSalePrice.toInt(),
         initialDescription = description,
         initialExposedPrice = defaultExposedPrice.toInt(),
-        initialProperties = properties.map(PropertyDto::toPropertyModel),
+        initialProperties = properties?.map(PropertyDto::toPropertyModel),
         isEditMode = true
     )
 }

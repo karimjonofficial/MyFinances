@@ -36,6 +36,7 @@ fun FoldersContent(
     modifier: Modifier = Modifier,
     state: State<FoldersContentModel>,
     interactor: FoldersContentInteractor,
+    onAddProductClick: () -> Unit,
     pinnedCategoriesContent: LazyListScope.(List<Id>) -> Unit = {}
 ) {
     StateFulContent(
@@ -74,7 +75,8 @@ fun FoldersContent(
                             modifier = Modifier.weight(1f),
                             text = stringResource(R.string.add_product),
                             painter = painterResource(R.drawable.add),
-                            onClick = {}//TODO
+                            onClick = onAddProductClick,
+                            enabled = model.isDefaultCategorySet
                         )
                     }
                 }
@@ -89,9 +91,6 @@ fun FoldersContent(
                 }
 
                 if(model.pinnedCategories != null) {
-                    item {
-                        VerticalSpacer(16)
-                    }
                     pinnedCategoriesContent(model.pinnedCategories)
                 }
 
@@ -100,9 +99,7 @@ fun FoldersContent(
                     SectionTitle(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         text = stringResource(R.string.popular_products)
-                    )
-
-                    //TODO
+                    ) //TODO
                 }
 
                 item {
@@ -110,9 +107,7 @@ fun FoldersContent(
                     SectionTitle(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         text = stringResource(R.string.latest_products)
-                    )
-
-                    //TODO
+                    ) //TODO
                 }
 
                 item {
@@ -120,9 +115,7 @@ fun FoldersContent(
                     SectionTitle(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         text = stringResource(R.string.recommended_products)
-                    )
-
-                    //TODO
+                    ) //TODO
                 }
 
                 item {
@@ -155,9 +148,11 @@ private fun FoldersContentPreview() {
             state = State.Success(
                 value = FoldersContentModel(
                     folders = folders.map { it.toUiModel() },
+                    isDefaultCategorySet = true,
                     pinnedCategories = null
                 )
             ),
+            onAddProductClick = {},
             interactor = FoldersContentInteractor.dummy
         )
     }

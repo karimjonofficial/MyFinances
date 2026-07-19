@@ -31,7 +31,7 @@ class BasketContentViewModel(
 ) : BaseViewModel<BasketScreenModel>(
     loading = loading,
     failure = failure,
-    produceModel = {
+    produceInitialState = {
         val minItems = basketRepository.get()
         val items = minItems.map { minItem ->
             val stockItem = stockRepository.getByProduct(minItem.id)
@@ -43,11 +43,13 @@ class BasketContentViewModel(
         val sellable = uiItems.indexOfFirst { it.model.unavailable } == -1
         val price = items.sumOf { it.product.exposedPrice * it.amount }
 
-        BasketScreenModel(
-            items = uiItems,
-            price = formatPrice.formatPrice(price.toDouble()),
-            rawItems = items,
-            sellable = sellable,
+        State.Success(
+            BasketScreenModel(
+                items = uiItems,
+                price = formatPrice.formatPrice(price.toDouble()),
+                rawItems = items,
+                sellable = sellable,
+            )
         )
     },
     logger = logger

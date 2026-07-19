@@ -9,7 +9,7 @@ import com.orka.myfinances.ui.screens.templates.list.TemplateUiModel
 fun TemplateDto.toModel(formatDecimal: FormatDecimal): TemplateCardModel {
     return TemplateCardModel(
         title = name,
-        size = formatDecimal.formatDecimal(fields.size.toDouble())
+        size = formatDecimal.formatDecimal(fields?.size?.toDouble() ?: 0.0)
     )
 }
 

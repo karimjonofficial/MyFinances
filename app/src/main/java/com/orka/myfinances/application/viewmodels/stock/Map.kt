@@ -17,13 +17,13 @@ fun StockItemDto.toCardModel(
     formatPrice: FormatPrice,
     basketAmount: Int? = null
 ): StockItemCardModel {
-    val properties = product.title.properties.joinToString { "${it.field.name}: ${it.value}" }
+    val properties = product.title.properties?.joinToString { "${it.field.name}: ${it.value}" }
 
     return StockItemCardModel(
         title = product.title.name,
         price = formatPrice.formatPrice(price.toDouble()),
         amount = formatDecimal.formatDecimal(amount.toDouble()),
-        properties = UiText.Str(properties),
+        properties = properties,
         description = if(!product.title.description.isNullOrBlank()) UiText.Str(product.title.description) else UiText.Res(R.string.no_description_provided),
         basketAmount = if(basketAmount != null) formatDecimal.formatDecimal(basketAmount.toDouble()) else null,
         increaseEnabled = if(basketAmount != null) basketAmount < amount else false

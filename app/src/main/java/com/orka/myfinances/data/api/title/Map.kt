@@ -12,7 +12,7 @@ fun AddProductTitleRequest.toApiRequest(officeId: Id): AddProductTitleApiRequest
     return AddProductTitleApiRequest(
         name = name,
         category = categoryId.value,
-        properties = properties.map { it.toApiRequest() },
+        properties = properties?.map { it.toApiRequest() },
         defaultPrice = price.toLong(),
         defaultSalePrice = salePrice.toLong(),
         defaultExposedPrice = exposedPrice.toLong(),

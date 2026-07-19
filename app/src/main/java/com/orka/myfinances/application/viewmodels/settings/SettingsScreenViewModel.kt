@@ -6,6 +6,7 @@ import com.orka.myfinances.data.repositories.defaults.DefaultsEvent
 import com.orka.myfinances.data.repositories.defaults.GetDefaultCategory
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.BaseViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
@@ -25,14 +26,14 @@ class SettingsScreenViewModel(
     failure: UiText,
     logger: Logger
 ) : BaseViewModel<SettingsScreenModel>(
-    produceModel = {
+    produceInitialState = {
         val id = defaultsRepository.getDefaultCategoryId()
         if(id != null) {
             val dto = get.getById(id)
             if (dto != null)
-                SettingsScreenModel(dto.name)
+                State.Success(SettingsScreenModel(dto.name))
             else null
-        } else SettingsScreenModel()
+        } else State.Success(SettingsScreenModel())
     },
     loading = loading,
     failure = failure,

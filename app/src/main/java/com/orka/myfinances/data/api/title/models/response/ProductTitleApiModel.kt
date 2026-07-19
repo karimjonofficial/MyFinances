@@ -9,7 +9,7 @@ data class ProductTitleApiModel(
     val id: Int,
     val category: Int,
     val name: String,
-    val properties: List<PropertyApiModel>,
+    val properties: List<PropertyApiModel>? = null,
     @SerialName("default_price") val defaultPrice: Long,
     @SerialName("default_sale_price") val defaultSalePrice: Long,
     @SerialName("default_exposed_price") val defaultExposedPrice: Long,

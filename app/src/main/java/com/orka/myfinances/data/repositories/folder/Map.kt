@@ -66,6 +66,6 @@ fun TemplateDto.toEntity(): Template {
     return Template(
         id = Id(id),
         name = name,
-        fields = fields.map { it.toEntity() }
+        fields = fields?.map { it.toEntity() }
     )
 }

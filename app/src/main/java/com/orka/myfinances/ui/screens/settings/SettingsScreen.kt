@@ -68,10 +68,9 @@ fun SettingsScreen(
                     )
 
                     val title = state.value?.defaultCategory
-                    val color = if(state !is State.Loading) {
-                        if(title == null) MaterialTheme.colorScheme.error
-                        else MaterialTheme.colorScheme.primary
-                    } else MaterialTheme.colorScheme.primary
+                    val color = if(state is State.Loading || title != null)
+                        MaterialTheme.colorScheme.primary
+                    else MaterialTheme.colorScheme.error
 
                     Text(
                         text = if (state is State.Loading) stringResource(R.string.loading)

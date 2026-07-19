@@ -6,7 +6,7 @@ import com.orka.myfinances.data.models.template.TemplateField
 fun Template.map(): TemplateScreenModel {
     return TemplateScreenModel(
         name = name,
-        fields = fields.map { it.map() },
+        fields = fields?.map { it.map() },
         description = description
     )
 }

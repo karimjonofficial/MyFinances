@@ -24,13 +24,15 @@ fun StockItem.toCardModel(
     formatPrice: FormatPrice,
     formatDecimal: FormatDecimal
 ): StockItemCardModel {
-    val properties = product.title.properties.joinToString { "${it.field.name}: ${it.value}" }
+    val properties = product.title.properties
+        .takeIf { it.isNotEmpty() }
+        ?.joinToString { "${it.field.name}: ${it.value}" }
 
     return StockItemCardModel(
         title = product.title.name,
         price = formatPrice.formatPrice(product.price.toDouble()),
         amount = formatDecimal.formatDecimal(amount.toDouble()),
-        properties = UiText.Str(properties),
+        properties = properties,
         description = UiText.Str(product.title.description ?: ""),
         increaseEnabled = true
     )

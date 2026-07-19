@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,8 +35,8 @@ import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.stockItem1
+import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
-import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.ui.models.card.StockItemCardModel
 import com.orka.myfinances.ui.screens.stock.toCardModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
@@ -59,7 +60,7 @@ fun StockItemCard(
             Image(
                 modifier = Modifier.fillMaxSize(),
                 painter = painterResource(R.drawable.furniture1),
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.FillHeight,
                 contentDescription = item.title,
             )
 
@@ -79,7 +80,9 @@ fun StockItemCard(
         }
 
         VerticalSpacer(4)
-        Column(modifier = Modifier.padding(horizontal = 8.dp)) {
+        Column(
+            modifier = Modifier.padding(horizontal = 8.dp)
+        ) {
             Text(
                 text = item.title,
                 style = MaterialTheme.typography.bodySmall,
@@ -87,24 +90,29 @@ fun StockItemCard(
                 maxLines = 1
             )
 
-            Text(
-                text = item.properties.str(),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 2
-            )
+            if (!item.properties.isNullOrBlank()) {
+                Text(
+                    text = item.properties,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 2
+                )
+            }
 
-            VerticalSpacer(2)
+            VerticalSpacer(4)
             Text(
+                modifier = Modifier.fillMaxWidth(),
                 text = item.price,
+                maxLines = 1,
                 style = MaterialTheme.typography.titleMedium
             )
         }
 
+        VerticalSpacer(4)
         if (item.basketAmount == null) {
             Button(
                 onClick = onIncrease,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().height(36.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
@@ -118,12 +126,12 @@ fun StockItemCard(
             }
         } else {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().height(36.dp).padding(horizontal = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.Center
             ) {
                 IconButton(
-                    modifier = Modifier.size(36.dp),
+                    modifier = Modifier.size(36.dp).weight(1f),
                     onClick = onDecrease,
                     colors = IconButtonDefaults.iconButtonColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -138,14 +146,16 @@ fun StockItemCard(
                     )
                 }
 
+                HorizontalSpacer(16)
                 Text(
                     text = item.basketAmount,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold
                 )
 
+                HorizontalSpacer(16)
                 IconButton(
-                    modifier = Modifier.size(36.dp),
+                    modifier = Modifier.size(36.dp).weight(1f),
                     onClick = onIncrease,
                     colors = IconButtonDefaults.iconButtonColors(
                         containerColor = MaterialTheme.colorScheme.primary,

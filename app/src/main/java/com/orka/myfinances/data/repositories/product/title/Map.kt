@@ -19,7 +19,7 @@ fun ProductTitleApiModel.toDto(): ProductTitleDto {
         id = id,
         category = category,
         name = name,
-        properties = properties.map { it.toDto() },
+        properties = properties?.map { it.toDto() },
         defaultPrice = defaultPrice,
         defaultSalePrice = defaultSalePrice,
         defaultExposedPrice = defaultExposedPrice,
@@ -49,7 +49,7 @@ fun AddProductTitleRequest.toApiRequest(officeId: Id): AddProductTitleApiRequest
     return AddProductTitleApiRequest(
         name = name,
         category = categoryId.value,
-        properties = properties.map { it.toApiRequest() },
+        properties = properties?.map { it.toApiRequest() },
         defaultPrice = price.toLong(),
         defaultSalePrice = salePrice.toLong(),
         defaultExposedPrice = exposedPrice.toLong(),

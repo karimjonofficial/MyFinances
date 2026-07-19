@@ -174,4 +174,5 @@
     <string name="defaults">Defaults</string>
     <string name="empty_category">Empty Category</string>
     <string name="default_category_is_not_set_yet">Default category is not set yet</string>
+    <string name="fill_the_lines_below_to_add_a_product">Fill the lines below to add a product</string>
 </resources>

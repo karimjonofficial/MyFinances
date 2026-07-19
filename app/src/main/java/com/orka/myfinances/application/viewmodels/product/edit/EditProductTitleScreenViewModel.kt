@@ -32,14 +32,14 @@ class EditProductTitleScreenViewModel(
 ) : BaseViewModel<AddProductTitleScreenModel>(
     loading = loading,
     failure = failure,
-    produceModel = {
+    produceInitialState = {
         val categories = getFolders.getAll(null)
             ?.filterIsInstance<CategoryDto>()
             ?.map { it.toItemModel() }
         val productTitle = productTitleRepository.getById(productId)
 
         if (categories != null && productTitle != null) {
-            productTitle.toEditorModel(categories)
+            State.Success(productTitle.toEditorModel(categories))
         } else null
     },
     logger = logger
@@ -97,7 +97,7 @@ class EditProductTitleScreenViewModel(
     ): UpdateProductTitleRequest? {
         val isValid = (category != null) && name.isNotBlank() &&
                 (price != null) && (salePrice != null) && (exposedPrice != null) &&
-                (properties.size == category.template.fields.size) &&
+                (properties.size == category.template.fields?.size) &&
                 (price > 0) && (salePrice > 0) && (salePrice > price) &&
                 (category.id.value > 0)
 

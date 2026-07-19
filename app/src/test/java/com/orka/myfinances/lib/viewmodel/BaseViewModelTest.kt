@@ -17,7 +17,7 @@ class BaseViewModelTest : MainDispatcherContext() {
     private val failure = UiText.Str("Failure")
 
     private class TestBaseViewModel(
-        produceSuccess: suspend () -> String?,
+        produceSuccess: suspend () -> State<String>?,
         loading: UiText,
         failure: UiText,
         logger: Logger
@@ -27,8 +27,8 @@ class BaseViewModelTest : MainDispatcherContext() {
 
     @Test
     fun `initialize success`() = runTest {
-        val produceSuccess = mockk<suspend () -> String?>()
-        coEvery { produceSuccess() } returns "Success Data"
+        val produceSuccess = mockk<suspend () -> State<String>?>()
+        coEvery { produceSuccess() } returns State.Success("Success Data")
 
         val viewModel = TestBaseViewModel(produceSuccess, loading, failure, logger)
         viewModel.initialize()
@@ -41,7 +41,7 @@ class BaseViewModelTest : MainDispatcherContext() {
 
     @Test
     fun `initialize returns null success results in failure`() = runTest {
-        val produceSuccess = mockk<suspend () -> String?>()
+        val produceSuccess = mockk<suspend () -> State<String>?>()
         coEvery { produceSuccess() } returns null
 
         val viewModel = TestBaseViewModel(produceSuccess, loading, failure, logger)
@@ -55,7 +55,7 @@ class BaseViewModelTest : MainDispatcherContext() {
 
     @Test
     fun `initialize exception results in failure`() = runTest {
-        val produceSuccess = mockk<suspend () -> String?>()
+        val produceSuccess = mockk<suspend () -> State<String>?>()
         coEvery { produceSuccess() } throws Exception("Error Message")
 
         val viewModel = TestBaseViewModel(produceSuccess, loading, failure, logger)
@@ -71,14 +71,14 @@ class BaseViewModelTest : MainDispatcherContext() {
 
     @Test
     fun `refresh success`() = runTest {
-        val produceSuccess = mockk<suspend () -> String?>()
-        coEvery { produceSuccess() } returns "Initial"
+        val produceSuccess = mockk<suspend () -> State<String>?>()
+        coEvery { produceSuccess() } returns State.Success("Initial")
 
         val viewModel = TestBaseViewModel(produceSuccess, loading, failure, logger)
         viewModel.initialize()
         advanceUntilIdle()
 
-        coEvery { produceSuccess() } returns "Refreshed"
+        coEvery { produceSuccess() } returns State.Success("Refreshed")
         viewModel.refresh()
         advanceUntilIdle()
 

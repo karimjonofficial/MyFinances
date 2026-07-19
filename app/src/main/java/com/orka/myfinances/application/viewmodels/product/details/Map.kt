@@ -18,7 +18,7 @@ fun ProductTitleDto.toScreenModel(
         title = name,
         dateTime = formatDate.formatDate(createdAt),
         price = formatPrice.formatPrice(defaultSalePrice.toDouble()),
-        properties = properties.map { it.toModel(formatDecimal, formatDate) },
+        properties = properties?.map { it.toModel(formatDecimal, formatDate) },
         description = description,
         salePrice = defaultPrice.toInt()
     )

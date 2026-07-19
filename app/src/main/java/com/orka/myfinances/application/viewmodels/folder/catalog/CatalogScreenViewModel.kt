@@ -35,12 +35,12 @@ class CatalogScreenViewModel(
 ) : BaseViewModel<CatalogScreenModel>(
     loading = loading,
     failure = failure,
-    produceModel = {
+    produceInitialState = {
         val folders = getByParent.getByParent(catalogId)?.sortedBy { it.name }
         val catalog = getById.getById(catalogId)
 
         if (folders != null && catalog != null && catalog is CatalogDto) {
-            catalog.toScreenModel(folders)
+            State.Success(catalog.toScreenModel(folders))
         } else null
     },
     logger = logger

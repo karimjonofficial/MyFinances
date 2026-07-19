@@ -74,13 +74,13 @@ fun ProductTitleEditorContent(
             }
         )
 
-        if (currentCategory != null) {
+        if (currentCategory != null && currentCategory.id == model.categoryId && model.initialProperties != null) {
             VerticalSpacer(8)
             PropertiesCard(
                 modifier = fullWidth,
                 fields = fields,
                 properties = properties,
-                initialProperties = if (currentCategory.id == model.categoryId) model.initialProperties else emptyList()
+                initialProperties = model.initialProperties
             )
         }
 

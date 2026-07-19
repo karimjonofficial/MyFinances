@@ -5,5 +5,6 @@ import com.orka.myfinances.ui.screens.folder.models.FolderUiModel
 
 data class FoldersContentModel(
     val folders: List<FolderUiModel>,
+    val isDefaultCategorySet: Boolean,
     val pinnedCategories: List<Id>?
 )

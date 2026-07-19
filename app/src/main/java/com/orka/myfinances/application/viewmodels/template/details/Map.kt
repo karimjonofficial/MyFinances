@@ -8,7 +8,7 @@ import com.orka.myfinances.ui.screens.templates.details.TemplateScreenModelField
 fun TemplateDto.toScreenModel(): TemplateScreenModel {
     return TemplateScreenModel(
         name = name,
-        fields = fields.map { it.toScreenModel() },
+        fields = fields?.map { it.toScreenModel() },
         description = description
     )
 }
