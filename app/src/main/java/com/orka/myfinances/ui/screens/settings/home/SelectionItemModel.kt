@@ -1,7 +1,7 @@
 package com.orka.myfinances.ui.screens.settings.home
 
 interface SelectionItemModel {
-    abstract val title: String
-    abstract val description: String?
-    abstract val leadingIconRes: Int?
+    val title: String
+    val description: String?
+    val leadingIconRes: Int?
 }
