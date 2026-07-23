@@ -11,8 +11,8 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.BaseViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.defaults.category.SelectDefaultCategoryInteractor
-import com.orka.myfinances.ui.screens.defaults.category.SelectDefaultCategoryScreenModel
+import com.orka.myfinances.ui.screens.settings.defaults.category.SelectDefaultCategoryInteractor
+import com.orka.myfinances.ui.screens.settings.defaults.category.SelectDefaultCategoryScreenModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn

@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.defaults.category
+package com.orka.myfinances.ui.screens.settings.defaults.category
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,7 +12,7 @@ import com.orka.myfinances.lib.ui.components.LazyColumnWithStickHeader
 import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.viewmodel.State
-import com.orka.myfinances.ui.components.items.DefaultCategoryItem
+import com.orka.myfinances.ui.components.items.CategoryItem
 
 @Composable
 fun SelectDefaultCategory(
@@ -47,7 +47,7 @@ fun SelectDefaultCategory(
             modifier = modifier,
             map = model.map,
             item = { item ->
-                DefaultCategoryItem(
+                CategoryItem(
                     model = item,
                     selected = localSelectedId.value == item.id.value,
                     onClick = { localSelectedId.value = item.id.value }

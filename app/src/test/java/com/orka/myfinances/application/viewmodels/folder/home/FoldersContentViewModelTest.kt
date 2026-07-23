@@ -46,7 +46,7 @@ class FoldersContentViewModelTest : MainDispatcherContext() {
             pinnedCategoriesRepository = pinnedCategoriesRepository,
             navigator = navigator,
             folderFlow = folderEvents,
-            defaultsFlow = defaultsEvents,
+            pinnedCategoriesFlow = defaultsEvents,
             loading = loading,
             failure = failure,
             logger = logger,

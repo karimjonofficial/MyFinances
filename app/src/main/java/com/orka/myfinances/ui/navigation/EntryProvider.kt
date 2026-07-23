@@ -29,7 +29,6 @@ import com.orka.myfinances.ui.navigation.entries.template.addTemplateEntry
 import com.orka.myfinances.ui.navigation.entries.template.templateEntry
 import com.orka.myfinances.ui.navigation.entries.template.templatesEntry
 
-
 fun entryProvider(
     modifier: Modifier = Modifier,
     session: Session,
@@ -61,5 +60,6 @@ fun entryProvider(
         is Destination.Sale -> saleEntry(modifier, destination, factory)
         is Destination.Receive -> receiveEntry(modifier, factory, destination)
         is Destination.SelectDefaultCategory -> selectDefaultCategoryEntry(modifier, destination, factory)
+        is Destination.PinnedCategories -> pinnedCategoriesEntry(modifier, destination, factory)
     }
 }

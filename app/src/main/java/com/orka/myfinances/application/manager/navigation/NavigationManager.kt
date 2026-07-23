@@ -125,4 +125,8 @@ class NavigationManager(
     override fun navigateToSelectDefaultCategory() {
         navigate(Destination.SelectDefaultCategory)
     }
+
+    override fun navigateToPinnedCategories() {
+        navigate(Destination.PinnedCategories)
+    }
 }

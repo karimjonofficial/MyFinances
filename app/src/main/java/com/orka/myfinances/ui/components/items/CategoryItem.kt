@@ -7,11 +7,11 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.orka.myfinances.ui.models.item.DefaultCategoryItemModel
+import com.orka.myfinances.ui.models.item.CategoryItemModel
 
 @Composable
-fun DefaultCategoryItem(
-    model: DefaultCategoryItemModel,
+fun CategoryItem(
+    model: CategoryItemModel,
     selected: Boolean,
     onClick: () -> Unit
 ) {

@@ -1,9 +1,9 @@
 package com.orka.myfinances.application.viewmodels.folder.home
 
 import androidx.lifecycle.viewModelScope
+import com.orka.myfinances.application.data.repositories.PinnedCategoriesEvent
 import com.orka.myfinances.application.viewmodels.folder.toUiModel
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.data.repositories.defaults.DefaultsEvent
 import com.orka.myfinances.data.repositories.defaults.GetDefaultCategory
 import com.orka.myfinances.data.repositories.folder.AddFolderRequest
 import com.orka.myfinances.data.repositories.folder.FolderEvent
@@ -36,7 +36,7 @@ class FoldersContentViewModel(
     private val getDefaultCategory: GetDefaultCategory,
     private val navigator: Navigator,
     folderFlow: Flow<FolderEvent>,
-    defaultsFlow: Flow<DefaultsEvent>,
+    pinnedCategoriesFlow: Flow<PinnedCategoriesEvent>,
     loading: UiText,
     failure: UiText,
     logger: Logger
@@ -69,9 +69,7 @@ class FoldersContentViewModel(
             if (it.catalogId == null) initialize()
         }.launchIn(viewModelScope)
 
-        defaultsFlow.onEach {
-            if (it is DefaultsEvent.Category) initialize()
-        }.launchIn(viewModelScope)
+        pinnedCategoriesFlow.onEach { initialize() }.launchIn(viewModelScope)
     }
 
     override fun addFolder(name: String, type: String, templateId: Id?) {

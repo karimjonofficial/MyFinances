@@ -14,4 +14,7 @@ interface PinnedCategoriesDao {
 
     @Query("INSERT INTO pinned_categories (id, `index`) VALUES (:id, :index)")
     suspend fun insert(id: Int, index: Int)
+
+    @Query("DELETE FROM pinned_categories WHERE id = :id")
+    suspend fun delete(id: Int)
 }

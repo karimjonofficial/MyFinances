@@ -30,6 +30,8 @@ import com.orka.myfinances.application.viewmodels.receive.details.ReceiveScreenV
 import com.orka.myfinances.application.viewmodels.receive.list.ReceiveContentViewModel
 import com.orka.myfinances.application.viewmodels.sale.details.SaleScreenViewModel
 import com.orka.myfinances.application.viewmodels.sale.list.SaleContentViewModel
+import com.orka.myfinances.application.viewmodels.select.CategoryItemsViewModel
+import com.orka.myfinances.application.viewmodels.select.SelectedCategoriesViewModel
 import com.orka.myfinances.application.viewmodels.settings.SettingsScreenViewModel
 import com.orka.myfinances.application.viewmodels.stock.StockItemsContentViewModel
 import com.orka.myfinances.application.viewmodels.template.add.AddTemplateScreenViewModel
@@ -133,7 +135,7 @@ class Factory(
     private val receiveRepository = ReceiveRepository(session.branchId, receiveApi, receiveFlow, stockFlow)
     private val productTitleRepository = ProductTitleRepository(productTitleApi, productTitleFlow)
     private val saleRepository = SaleRepository(saleApi, saleFlow, stockFlow)
-    private val defaultsRepository = DefaultsRepository(defaultsDao, pinnedCategoriesRepository)
+    private val defaultsRepository = DefaultsRepository(defaultsDao)
 
     fun foldersViewModel(): FoldersContentViewModel {
         return FoldersContentViewModel(
@@ -145,7 +147,7 @@ class Factory(
             pinnedCategoriesRepository = pinnedCategoriesRepository,
             navigator = navigator,
             folderFlow = folderFlow,
-            defaultsFlow = defaultsRepository.flow,
+            pinnedCategoriesFlow = pinnedCategoriesRepository.events,
             loading = loading,
             failure = failure,
             logger = logger
@@ -569,6 +571,26 @@ class Factory(
             getDefaultCategory = defaultsRepository,
             setDefaultCategory = defaultsRepository,
             flow = defaultsRepository.flow,
+            navigator = navigator,
+            loading = loading,
+            failure = failure,
+            logger = logger
+        )
+    }
+
+    fun categoryItemsViewModel(): CategoryItemsViewModel {
+        return CategoryItemsViewModel(
+            get = folderRepository,
+            loading = loading,
+            failure = failure,
+            logger = logger
+        )
+    }
+
+    fun selectedCategoriesViewModel(): SelectedCategoriesViewModel {
+        return SelectedCategoriesViewModel(
+            repository = pinnedCategoriesRepository,
+            events = pinnedCategoriesRepository.events,
             navigator = navigator,
             loading = loading,
             failure = failure,

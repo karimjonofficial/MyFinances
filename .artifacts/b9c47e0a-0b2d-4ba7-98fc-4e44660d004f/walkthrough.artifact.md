@@ -1,26 +1,22 @@
-# Walkthrough: SelectDefaultCategory with Local Selection
+# Walkthrough - PinnedCategoriesScreen Fixes
 
-I have updated the `SelectDefaultCategory` screen to support local selection with a confirmation button in the bottom bar.
+I have fixed the `PinnedCategoriesScreenPreview` and addressed several issues in the selection logic and UI rendering.
 
 ## Changes Made
 
 ### UI Layer
-- [NEW] [SelectDefaultCategoryScreenModel.kt](file:///D:/Dev/Mobile/Learn/MyFinances/app/src/main/java/com/orka/myfinances/ui/screens/defaults/category/SelectDefaultCategoryScreenModel.kt): New state model containing the category map and the initial `defaultId`.
-- [MODIFY] [SelectDefaultCategory.kt](file:///D:/Dev/Mobile/Learn/MyFinances/app/src/main/java/com/orka/myfinances/ui/screens/defaults/category/SelectDefaultCategory.kt):
-    - Switched to `StatefulScreen` for standardized loading/failure handling.
-    - Added local `selectedId` state using `rememberSaveable`.
-    - Implemented a `SingleActionBottomBar` with a "Save" button that is enabled only when a new category is selected.
-    - Added a `RadioButton` to each item to indicate the current local selection.
 
-### Application Layer
-- [MODIFY] [SelectDefaultCategoryViewModel.kt](file:///D:/Dev/Mobile/Learn/MyFinances/app/src/main/java/com/orka/myfinances/application/viewmodels/defaults/category/SelectDefaultCategoryViewModel.kt):
-    - Now inherits from `BaseViewModel<SelectDefaultCategoryScreenModel>`, which simplifies data production and state management.
-    - Correctly fetches both the categories (via `FolderRepository`) and the current default (via `GetDefaultCategory`).
-    - Implemented `select(id: Id)` to persist the choice, navigate back using `Navigator`, and update the success state with the new `defaultId`.
-- [MODIFY] [Factory.kt](file:///D:/Dev/Mobile/Learn/MyFinances/app/src/main/java/com/orka/myfinances/factories/Factory.kt): Updated to inject `GetDefaultCategory` and `Navigator` into the ViewModel.
+#### [MODIFY] [PinnedCategoriesScreen.kt](file:///D:/Dev/Mobile/Learn/MyFinances/app/src/main/java/com/orka/myfinances/ui/screens/settings/home/PinnedCategoriesScreen.kt)
+- **Fixed Preview**: Added required `state` and `refresh` parameters to `PinnedCategoriesScreenPreview` with dummy data to enable rendering.
+- **Fixed Selection Logic**: Corrected the `onSelect` logic. Previously, it was adding items when they were already selected and removing them when they were not. Now it correctly toggles the selection state.
+
+#### [MODIFY] [SelectionItem.kt](file:///D:/Dev/Mobile/Learn/MyFinances/app/src/main/java/com/orka/myfinances/ui/screens/settings/home/SelectionItem.kt)
+- **Fixed Readability**: Added `contentColor` logic to ensure text and icons are readable when an item is selected (switching to `onPrimary` on `primary` background).
+- **Improved Styling**: Added `labelSmall` style and adjusted opacity for the description text.
 
 ## Verification Results
 
-- Verified the build succeeds.
-- The UI correctly reflects the local selection and enables the "Save" button appropriately.
-- The grouping logic remains intact.
+### Manual Verification
+- **Preview Rendering**: Verified that `PinnedCategoriesScreenPreview` now renders correctly in Android Studio.
+- **Visual Check**: Confirmed that selected items have high-contrast text and icons.
+- **Logic Check**: Verified that the toggle logic in `PinnedCategoriesScreen` correctly manages the `selectedIds` list.

@@ -1,8 +1,6 @@
-# Task: Update SelectDefaultCategory with Local Selection
+# Task: Fix PinnedCategoriesScreenPreview and Logic
 
-- [x] Create `SelectDefaultCategoryScreenModel.kt`
-- [x] Update `SelectDefaultCategoryInteractor.kt` (No changes needed)
-- [x] Update `SelectDefaultCategoryViewModel.kt`
-- [x] Update `SelectDefaultCategory.kt` screen
-- [x] Update `SelectDefaultCategoryEntry.kt` (Verified no changes needed)
+- [x] Fix `PinnedCategoriesScreenPreview` in `PinnedCategoriesScreen.kt`
+- [x] Fix inverted selection logic in `PinnedCategoriesScreen.kt`
+- [x] Improve `SelectionItem` readability (text colors)
 - [x] Verify implementation

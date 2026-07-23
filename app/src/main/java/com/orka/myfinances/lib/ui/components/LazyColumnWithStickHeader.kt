@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -20,6 +21,7 @@ fun <T> LazyColumnWithStickHeader(
     contentPadding: PaddingValues = PaddingValues(0.dp),
     arrangementSpace: Dp = 0.dp,
     listState: LazyListState = rememberLazyListState(),
+    header: (LazyListScope.() -> Unit)? = null,
     footer: @Composable (() -> Unit)? = null,
     item: @Composable ((T) -> Unit)
 ) {
@@ -29,6 +31,8 @@ fun <T> LazyColumnWithStickHeader(
         contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(arrangementSpace)
     ) {
+        if(header != null) header()
+
         map.forEach { (key, items) ->
             stickyHeader {
                 StickyHeader(

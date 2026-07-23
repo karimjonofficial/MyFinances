@@ -27,4 +27,5 @@ sealed interface Destination {
     data class Sale(val id: Id) : Destination
     data class Receive(val id: Id) : Destination
     data object SelectDefaultCategory : Destination
+    data object PinnedCategories : Destination
 }

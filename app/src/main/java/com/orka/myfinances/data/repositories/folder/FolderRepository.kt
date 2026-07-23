@@ -1,6 +1,8 @@
 package com.orka.myfinances.data.repositories.folder
 
 import com.orka.myfinances.data.api.folder.FolderApi
+import com.orka.myfinances.data.api.folder.models.response.CategoryApiModel
+import com.orka.myfinances.data.dtos.folder.CategoryDto
 import com.orka.myfinances.data.dtos.folder.FolderDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.repositories.Add
@@ -12,7 +14,7 @@ class FolderRepository(
     private val branchId: Id,
     private val flow: MutableSharedFlow<FolderEvent>,
     private val api: FolderApi
-) : Get<FolderDto>, GetTop, Add<Unit, AddFolderRequest>, GetById<FolderDto>, GetByParent {
+) : Get<FolderDto>, GetTop, Add<Unit, AddFolderRequest>, GetById<FolderDto>, GetByParent, GetCategories {
 
     override suspend fun getTop(query: String?): List<FolderDto>? {
         return api.getTop(
@@ -43,5 +45,12 @@ class FolderRepository(
             branchId = branchId.value,
             search = search
         )?.map { it.toDto() }
+    }
+
+    override suspend fun getCategories(query: String?): List<CategoryDto>? {
+        return api.get(
+            branchId = branchId.value,
+            search = query
+        )?.filterIsInstance<CategoryApiModel>()?.map { it.toDto() }
     }
 }

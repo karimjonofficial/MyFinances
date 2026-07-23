@@ -10,8 +10,8 @@ import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.BaseViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.settings.SettingsScreenInteractor
-import com.orka.myfinances.ui.screens.settings.SettingsScreenModel
+import com.orka.myfinances.ui.screens.settings.main.SettingsScreenInteractor
+import com.orka.myfinances.ui.screens.settings.main.SettingsScreenModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -52,6 +52,12 @@ class SettingsScreenViewModel(
     override fun toSelectDefaultCategory() {
         launch {
             navigator.navigateToSelectDefaultCategory()
+        }
+    }
+
+    override fun toPinnedCategories() {
+        launch {
+            navigator.navigateToPinnedCategories()
         }
     }
 }

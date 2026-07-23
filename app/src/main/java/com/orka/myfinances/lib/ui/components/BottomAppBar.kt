@@ -8,12 +8,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.orka.myfinances.R
 
 @Composable
 fun SingleActionBottomBar(
     modifier: Modifier = Modifier,
-    buttonText: String,
+    buttonText: String = stringResource(R.string.save),
     buttonEnabled: Boolean = true,
     action: () -> Unit
 ) {

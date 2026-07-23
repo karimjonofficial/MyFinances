@@ -28,4 +28,5 @@ interface Navigator {
     fun navigateToSale(id: Id)
     fun navigateToReceive(id: Id)
     fun navigateToSelectDefaultCategory()
+    fun navigateToPinnedCategories()
 }
