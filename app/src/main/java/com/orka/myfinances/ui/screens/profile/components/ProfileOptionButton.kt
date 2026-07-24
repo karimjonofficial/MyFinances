@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 
 @Composable
-fun OptionButton(
+fun ProfileOptionButton(
     modifier: Modifier = Modifier,
     title: String,
     painter: Painter,

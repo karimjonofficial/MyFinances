@@ -33,7 +33,7 @@ import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
 import com.orka.myfinances.lib.ui.preview.DefaultPreview
 import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.ui.screens.profile.components.OptionButton
+import com.orka.myfinances.ui.screens.profile.components.ProfileOptionButton
 import com.orka.myfinances.ui.screens.profile.components.UserIcon
 import com.orka.myfinances.ui.screens.profile.models.ProfileContentModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
@@ -94,7 +94,7 @@ fun ProfileContent(
                 val profileOptions = options(interactor)
 
                 profileOptions.forEach { item ->
-                    OptionButton(
+                    ProfileOptionButton(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(item.titleRes),
                         painter = painterResource(item.iconRes),

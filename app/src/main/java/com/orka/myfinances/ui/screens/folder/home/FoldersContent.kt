@@ -20,7 +20,6 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.fixtures.resources.models.folder.folders
 import com.orka.myfinances.lib.ui.components.FooterSpacer
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
-import com.orka.myfinances.lib.ui.components.SectionTitle
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.contents.StateFulContent
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
@@ -67,6 +66,7 @@ fun FoldersContent(
                             modifier = Modifier.weight(1f),
                             text = stringResource(R.string.add_order),
                             painter = painterResource(R.drawable.add),
+                            enabled = false,
                             onClick = {}//TODO
                         )
 
@@ -96,36 +96,13 @@ fun FoldersContent(
 
                 item {
                     VerticalSpacer(24)
-                    SectionTitle(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        text = stringResource(R.string.popular_products)
-                    ) //TODO
-                }
-
-                item {
-                    VerticalSpacer(24)
-                    SectionTitle(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        text = stringResource(R.string.latest_products)
-                    ) //TODO
-                }
-
-                item {
-                    VerticalSpacer(24)
-                    SectionTitle(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        text = stringResource(R.string.recommended_products)
-                    ) //TODO
-                }
-
-                item {
-                    VerticalSpacer(24)
                     OptionButton(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 8.dp),
                         text = stringResource(R.string.go_to_pictures),
                         painter = painterResource(R.drawable.photo),
+                        enabled = false,
                         onClick = {}//TODO
                     )
                 }
