@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.settings.home
+package com.orka.myfinances.lib.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
@@ -7,13 +7,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.orka.myfinances.lib.data.models.SelectionItemModel
+import com.orka.myfinances.lib.ui.components.FooterSpacer
 import com.orka.myfinances.lib.ui.components.LazyColumnWithStickHeader
 import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.extensions.str
-import com.orka.myfinances.lib.ui.screens.FailureScreen
-import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.ui.components.items.SelectionItem
 
 @Composable
 fun <T: SelectionItemModel> SelectionScreen(
@@ -49,11 +50,12 @@ fun <T: SelectionItemModel> SelectionScreen(
                 LazyColumnWithStickHeader(
                     modifier = modifier.background(MaterialTheme.colorScheme.surfaceContainer),
                     map = state.value,
-                    arrangementSpace = 4.dp,
-                    contentPadding = PaddingValues(horizontal = 8.dp),
+                    arrangementSpace = 2.dp,
+                    contentPadding = PaddingValues(horizontal = 4.dp),
                     header = selectedContent,
                     item = {
                         val selected = isSelected(it)
+
                         SelectionItem(
                             model = it,
                             selected = selected,
@@ -61,7 +63,8 @@ fun <T: SelectionItemModel> SelectionScreen(
                                 onSelect(item, selected)
                             }
                         )
-                    }
+                    },
+                    footer = { FooterSpacer() }
                 )
             }
         }

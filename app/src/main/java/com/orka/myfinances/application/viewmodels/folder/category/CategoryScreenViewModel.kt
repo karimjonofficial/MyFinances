@@ -6,7 +6,7 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.BaseViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.folder.category.CategoryScreenInteractor

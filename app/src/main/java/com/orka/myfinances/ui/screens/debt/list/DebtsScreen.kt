@@ -11,7 +11,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.components.SearchTopAppBar
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.ui.screens.debt.list.interactor.DebtsScreenInteractor
 
 @OptIn(ExperimentalMaterial3Api::class)

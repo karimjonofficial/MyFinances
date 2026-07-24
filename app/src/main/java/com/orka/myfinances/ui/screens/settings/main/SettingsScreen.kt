@@ -15,7 +15,7 @@ import com.orka.myfinances.fixtures.resources.models.folder.category1
 import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.DefaultPreview
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable

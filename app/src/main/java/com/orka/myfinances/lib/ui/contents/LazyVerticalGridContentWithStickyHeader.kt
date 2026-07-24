@@ -19,7 +19,7 @@ import com.orka.myfinances.lib.ui.components.LazyVerticalGridWithStickHeader
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
 
 @Composable
 fun <T> LazyVerticalGridContentWithStickyHeader(

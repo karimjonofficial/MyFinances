@@ -10,7 +10,7 @@ import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.ListItem
 import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
 
 @Composable
 fun OrdersHistoryContent(

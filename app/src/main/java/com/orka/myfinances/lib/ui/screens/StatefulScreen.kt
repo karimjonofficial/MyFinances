@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.Scaffold
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
 
 @Composable
 fun <T> StatefulScreen(

@@ -5,7 +5,7 @@ import com.orka.myfinances.data.repositories.folder.GetCategories
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.viewmodel.MapListViewModel
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.ui.screens.settings.home.CategoryItemModel
+import com.orka.myfinances.ui.models.item.CategoryItemModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class CategoryItemsViewModel(

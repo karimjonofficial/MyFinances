@@ -32,7 +32,7 @@ import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
 import com.orka.myfinances.lib.ui.preview.DefaultPreview
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.ui.screens.profile.components.OptionButton
 import com.orka.myfinances.ui.screens.profile.components.UserIcon
 import com.orka.myfinances.ui.screens.profile.models.ProfileContentModel
@@ -71,6 +71,7 @@ fun ProfileContent(
                         is State.Failure -> state.error.str()
                         is State.Loading -> state.message.str()
                     },
+                    leadingIcon = painterResource(R.drawable.location_on),
                     label = "",
                     menuExpanded = exposed.value,
                     onExpandChange = { exposed.value = it },

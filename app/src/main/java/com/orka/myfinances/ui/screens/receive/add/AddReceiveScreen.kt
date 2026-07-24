@@ -27,7 +27,7 @@ import com.orka.myfinances.lib.ui.components.CommentTextField
 import com.orka.myfinances.lib.ui.components.IntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.ui.models.item.ProductTitleItemModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 

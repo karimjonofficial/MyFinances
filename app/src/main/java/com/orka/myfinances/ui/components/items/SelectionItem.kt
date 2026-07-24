@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.settings.home
+package com.orka.myfinances.ui.components.items
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
+import com.orka.myfinances.lib.data.models.SelectionItemModel
 import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 
 @Composable
@@ -27,7 +28,7 @@ fun <T : SelectionItemModel> SelectionItem(
 ) {
     Row(
         modifier = modifier
-            .clip(RoundedCornerShape(25))
+            .clip(RoundedCornerShape(8.dp))
             .background(if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface)
             .clickable { onClick(model, selected) }
             .padding(start = 16.dp, top = 16.dp, bottom = 16.dp, end = 8.dp),

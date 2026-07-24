@@ -10,7 +10,7 @@ import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.format.FormatTime
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.Chunk
 import com.orka.myfinances.testFixtures.resources.dtos.receiveDto1
 import com.orka.myfinances.ui.navigation.Navigator

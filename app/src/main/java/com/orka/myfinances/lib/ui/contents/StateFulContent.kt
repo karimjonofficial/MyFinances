@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
 
 @Composable
 fun <T> StateFulContent(

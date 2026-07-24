@@ -4,7 +4,7 @@ import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.data.repositories.auth.Authenticator
 import com.orka.myfinances.data.models.Credentials
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
 import com.orka.myfinances.managers.SessionManager
 import com.orka.myfinances.ui.screens.login.LoginScreenInteractor

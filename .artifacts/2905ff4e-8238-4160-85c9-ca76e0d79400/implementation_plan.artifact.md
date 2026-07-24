@@ -1,23 +1,46 @@
-# Improve Profile Header Visual Separation
+# Refactor SelectDefaultCategory to reuse SelectionScreen and separate ViewModels
 
-Replace the `HorizontalDivider` in the profile screen with a distinct background color for the top user data section to create a cleaner and more modern visual separation.
+Following the pattern used in `PinnedCategoriesScreen`, I will refactor `SelectDefaultCategory` to use the shared `SelectionScreen` component and split its data fetching and selection management into two separate ViewModels.
 
 ## Proposed Changes
 
-### UI Components
+### [Component Name]
 
-#### [MODIFY] [ProfileContent.kt](file:///D:/Dev/Mobile/Learn/MyFinances/app/src/main/java/com/orka/myfinances/ui/screens/profile/ProfileContent.kt)
+#### [NEW] [DefaultCategoryViewModel.kt](file:///D:/Dev/Mobile/Learn/MyFinances/app/src/main/java/com/orka/myfinances/application/viewmodels/defaults/category/DefaultCategoryViewModel.kt)
+- Create a new ViewModel to manage the default category selection state (`Id?`).
+- It will implement `SelectDefaultCategoryInteractor` to handle selection persistence.
+- It will use `BaseViewModel<Id?>` and listen for `DefaultsEvent.Category` to stay in sync.
 
-- Wrap the user data section (Icon, Name, Phone, Branch dropdown) in a `Column` with a background color.
-- Use `MaterialTheme.colorScheme.surfaceContainer` for the header background.
-- Remove the `HorizontalDivider`.
-- Add appropriate padding to the header to ensure content is well-spaced within the new background.
-- Apply `RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp)` to the header background for a smoother transition to the options list.
+#### [MODIFY] [SelectDefaultCategory.kt](file:///D:/Dev/Mobile/Learn/MyFinances/app/src/main/java/com/orka/myfinances/ui/screens/settings/defaults/category/SelectDefaultCategory.kt)
+- Update the signature to accept two separate states: one for the category list (`Map<String, List<CategoryItemModel>>`) and one for the current default ID (`Id?`).
+- Replace `StatefulScreen` and `LazyColumnWithStickHeader` with the shared `SelectionScreen`.
+- Use `localSelectedId` to manage the single selection state within the screen.
+
+#### [MODIFY] [SelectDefaultCategoryEntry.kt](file:///D:/Dev/Mobile/Learn/MyFinances/app/src/main/java/com/orka/myfinances/ui/navigation/entries/defaults/category/SelectDefaultCategoryEntry.kt)
+- Inject both `CategoryItemsViewModel` (for the list) and `DefaultCategoryViewModel` (for the selection).
+- Connect their states and the interactor to the `SelectDefaultCategory` composable.
+
+#### [MODIFY] [Factory.kt](file:///D:/Dev/Mobile/Learn/MyFinances/app/src/main/java/com/orka/myfinances/factories/Factory.kt)
+- Add a provider method for the new `DefaultCategoryViewModel`.
+- Remove the provider for the old `SelectDefaultCategoryViewModel`.
+
+#### [DELETE] [SelectDefaultCategoryViewModel.kt](file:///D:/Dev/Mobile/Learn/MyFinances/app/src/main/java/com/orka/myfinances/application/viewmodels/defaults/category/SelectDefaultCategoryViewModel.kt)
+- Replaced by the split ViewModel approach.
+
+#### [DELETE] [SelectDefaultCategoryScreenModel.kt](file:///D:/Dev/Mobile/Learn/MyFinances/app/src/main/java/com/orka/myfinances/ui/screens/settings/defaults/category/SelectDefaultCategoryScreenModel.kt)
+- No longer needed as we use separate states for the list and selection.
+
+#### [DELETE] [Map.kt (defaults)](file:///D:/Dev/Mobile/Learn/MyFinances/app/src/main/java/com/orka/myfinances/application/viewmodels/defaults/category/Map.kt)
+- No longer needed as mapping is handled by `CategoryItemsViewModel`.
 
 ## Verification Plan
 
+### Automated Tests
+- Build the project to verify that all dependencies and imports are correctly updated.
+
 ### Manual Verification
-- Deploy the app and navigate to the Profile screen.
-- Verify that the top section has a distinct background color that ends where the options list begins.
-- Check that the transition between the header and the list looks natural and "prettier" than the divider.
-- Ensure the dropdown menu still works correctly within the new layout.
+- Navigate to the **Select Default Category** screen.
+- Verify that the list of categories is displayed correctly (grouped by first letter).
+- Verify that selecting a category highlights it and shows a checkmark.
+- Verify that clicking "Save" updates the default category and navigates back.
+- Ensure `PinnedCategoriesScreen` still works correctly after these changes.

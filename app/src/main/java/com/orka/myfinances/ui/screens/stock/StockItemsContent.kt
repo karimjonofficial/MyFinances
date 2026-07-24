@@ -18,7 +18,7 @@ import com.orka.myfinances.lib.ui.contents.LazyVerticalGridContentWithStickyHead
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.ui.components.cards.StockItemCard
 
 @Composable

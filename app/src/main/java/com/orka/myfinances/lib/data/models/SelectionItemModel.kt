@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens.settings.home
+package com.orka.myfinances.lib.data.models
 
 interface SelectionItemModel {
     val title: String

@@ -10,7 +10,7 @@ import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.testFixtures.resources.dtos.catalogDto1
 import com.orka.myfinances.ui.navigation.Navigator
 import io.mockk.coEvery

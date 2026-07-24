@@ -12,7 +12,7 @@ import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.testFixtures.resources.dtos.folderDtos
 import com.orka.myfinances.testLib.MainDispatcherContext

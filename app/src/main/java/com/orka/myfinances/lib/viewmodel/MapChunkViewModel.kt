@@ -5,7 +5,6 @@ import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.viewmodel.ChunkViewModel
-import com.orka.myfinances.lib.ui.viewmodel.State
 import kotlinx.coroutines.flow.MutableStateFlow
 
 abstract class MapChunkViewModel<TApi, TUi>(

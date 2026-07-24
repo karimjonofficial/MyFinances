@@ -6,7 +6,7 @@ import com.orka.myfinances.application.data.repositories.PinnedCategoriesReposit
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.preferences.categories.AddPinnedCategoryRequest
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.FormatListViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator

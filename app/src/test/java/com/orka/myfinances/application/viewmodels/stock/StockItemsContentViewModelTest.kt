@@ -13,7 +13,7 @@ import com.orka.myfinances.format.FormatDecimal
 import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.Chunk
 import com.orka.myfinances.testFixtures.resources.dtos.stockItemDto1
 import io.mockk.coEvery

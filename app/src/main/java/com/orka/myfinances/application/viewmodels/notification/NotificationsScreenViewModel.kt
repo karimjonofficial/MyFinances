@@ -8,7 +8,7 @@ import com.orka.myfinances.format.FormatTime
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
 import com.orka.myfinances.ui.screens.notifications.NotificationUiModel
 import com.orka.myfinances.ui.screens.notifications.NotificationsScreenInteractor

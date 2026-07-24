@@ -3,7 +3,6 @@ package com.orka.myfinances.lib.viewmodel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.ui.viewmodel.State
 
 abstract class FormatListViewModel<T, U>(
     protected val loading: UiText,

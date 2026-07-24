@@ -42,7 +42,7 @@ import com.orka.myfinances.fixtures.resources.models.debt2
 import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.ui.components.cards.ClientCard
 import com.orka.myfinances.ui.components.cards.UserCard
 import com.orka.myfinances.ui.screens.debt.details.interactor.DebtScreenInteractor

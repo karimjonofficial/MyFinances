@@ -11,7 +11,7 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.ui.components.SearchTopAppBar
 import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
-import com.orka.myfinances.lib.ui.viewmodel.State
+import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.ui.screens.branch.components.BranchCard
 import com.orka.myfinances.ui.screens.branch.components.BranchUiModel
 

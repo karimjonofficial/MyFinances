@@ -33,7 +33,7 @@ fun OptionButton(
             contentColor = MaterialTheme.colorScheme.onSurface,
         ),
         shape = RectangleShape,
-        contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
+        contentPadding = PaddingValues(16.dp)
     ) {
         Icon(
             painter = painter,
