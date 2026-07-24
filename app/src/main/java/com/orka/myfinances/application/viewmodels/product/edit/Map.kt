@@ -7,9 +7,9 @@ import com.orka.myfinances.data.models.types.Range
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 import com.orka.myfinances.fixtures.resources.Types
 import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
-import com.orka.myfinances.ui.screens.product.add.interactor.CategoryItemModel
+import com.orka.myfinances.ui.screens.product.add.interactor.CategoryBottomSheetItemModel
 
-fun ProductTitleDto.toEditorModel(categories: List<CategoryItemModel>): AddProductTitleScreenModel {
+fun ProductTitleDto.toEditorModel(categories: List<CategoryBottomSheetItemModel>): AddProductTitleScreenModel {
     return AddProductTitleScreenModel(
         categories = categories,
         categoryId = Id(category),

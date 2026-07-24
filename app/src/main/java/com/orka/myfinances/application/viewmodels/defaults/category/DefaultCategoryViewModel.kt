@@ -43,7 +43,7 @@ class DefaultCategoryViewModel(
     }
 
     override fun select(id: Id) {
-        tryTransition { oldState ->
+        tryTransition { _ ->
             setDefaultCategory.setDefaultCategoryId(id)
             navigator.back()
             State.Success(id)

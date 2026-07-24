@@ -14,7 +14,7 @@ import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
-import com.orka.myfinances.ui.screens.product.add.interactor.CategoryItemModel
+import com.orka.myfinances.ui.screens.product.add.interactor.CategoryBottomSheetItemModel
 
 @Composable
 fun ProductTitleEditorScreen(
@@ -25,7 +25,7 @@ fun ProductTitleEditorScreen(
     onSave: (List<PropertyModel<*>?>, String, Int?, Int?, Int?, String?, Id) -> Unit
 ) {
     val model = state.value
-    val selectedCategory = retain { mutableStateOf<CategoryItemModel?>(null) }
+    val selectedCategory = retain { mutableStateOf<CategoryBottomSheetItemModel?>(null) }
     val name = rememberSaveable { mutableStateOf("") }
     val price = rememberSaveable { mutableStateOf<Int?>(null) }
     val salePrice = rememberSaveable { mutableStateOf<Int?>(null) }

@@ -4,7 +4,7 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 
 data class AddProductTitleScreenModel(
-    val categories: List<CategoryItemModel>,
+    val categories: List<CategoryBottomSheetItemModel>,
     val categoryId: Id,
     val initialName: String = "",
     val initialPrice: Int? = null,

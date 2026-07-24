@@ -16,7 +16,7 @@ import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.lib.viewmodel.BaseViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
-import com.orka.myfinances.ui.screens.product.add.interactor.CategoryItemModel
+import com.orka.myfinances.ui.screens.product.add.interactor.CategoryBottomSheetItemModel
 import com.orka.myfinances.ui.screens.product.edit.EditProductTitleScreenInteractor
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -87,7 +87,7 @@ class EditProductTitleScreenViewModel(
     }
 
     private fun validate(
-        category: CategoryItemModel?,
+        category: CategoryBottomSheetItemModel?,
         name: String,
         price: Int?,
         salePrice: Int?,

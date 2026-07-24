@@ -23,13 +23,13 @@ import com.orka.myfinances.lib.ui.components.FooterSpacer
 import com.orka.myfinances.lib.ui.components.IntegerTextField
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
 import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
-import com.orka.myfinances.ui.screens.product.add.interactor.CategoryItemModel
+import com.orka.myfinances.ui.screens.product.add.interactor.CategoryBottomSheetItemModel
 
 @Composable
 fun ProductTitleEditorContent(
     modifier: Modifier = Modifier,
     model: AddProductTitleScreenModel,
-    selectedCategory: MutableState<CategoryItemModel?>,
+    selectedCategory: MutableState<CategoryBottomSheetItemModel?>,
     name: MutableState<String>,
     price: MutableState<Int?>,
     salePrice: MutableState<Int?>,

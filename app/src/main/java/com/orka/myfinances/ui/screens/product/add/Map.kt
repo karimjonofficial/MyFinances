@@ -1,10 +1,10 @@
 package com.orka.myfinances.ui.screens.product.add
 
 import com.orka.myfinances.data.models.folder.Category
-import com.orka.myfinances.ui.screens.product.add.interactor.CategoryItemModel
+import com.orka.myfinances.ui.screens.product.add.interactor.CategoryBottomSheetItemModel
 
-fun Category.toItemModel(): CategoryItemModel {
-    return CategoryItemModel(
+fun Category.toItemModel(): CategoryBottomSheetItemModel {
+    return CategoryBottomSheetItemModel(
         id = id,
         title = name,
         template = template
