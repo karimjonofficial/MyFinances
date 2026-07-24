@@ -1,4 +1,6 @@
-- [x] Wrap profile header in a `Column` with `surfaceContainer` background
-- [x] Apply rounded bottom corners to the header
-- [x] Remove `HorizontalDivider`
-- [x] Verify build and visual consistency
+- [x] Create `DefaultCategoryViewModel.kt`
+- [x] Update `SelectDefaultCategory.kt` to use `SelectionScreen`
+- [x] Update `SelectDefaultCategoryEntry.kt` to inject both ViewModels
+- [x] Update `Factory.kt` with `DefaultCategoryViewModel`
+- [x] Cleanup: Delete old ViewModel, ScreenModel, and mapper
+- [x] Verify build and functionality

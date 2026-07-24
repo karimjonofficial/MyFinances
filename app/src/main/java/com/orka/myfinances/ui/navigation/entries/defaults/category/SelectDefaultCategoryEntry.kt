@@ -14,12 +14,26 @@ fun selectDefaultCategoryEntry(
     destination: Destination.SelectDefaultCategory,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
-    val viewModel = viewModel { factory.selectDefaultCategoryViewModel() }
-    val state = viewModel.uiState.collectAsState()
+    val categoryItemsViewModel = viewModel(
+        key = "categoryItemsViewModel",
+        initializer = { factory.categoryItemsViewModel() }
+    )
+    val defaultCategoryViewModel = viewModel(
+        key = "defaultCategoryViewModel",
+        initializer = { factory.selectDefaultCategoryViewModel() }
+    )
+
+    val categoriesState = categoryItemsViewModel.uiState.collectAsState()
+    val selectedState = defaultCategoryViewModel.uiState.collectAsState()
 
     SelectDefaultCategory(
         modifier = modifier,
-        state = state.value,
-        interactor = viewModel
+        state = categoriesState.value,
+        selectedState = selectedState.value,
+        interactor = defaultCategoryViewModel,
+        refresh = {
+            categoryItemsViewModel.refresh()
+            defaultCategoryViewModel.refresh()
+        }
     )
 }

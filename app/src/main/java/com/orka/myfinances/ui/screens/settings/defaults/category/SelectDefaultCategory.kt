@@ -8,51 +8,43 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.lib.ui.components.LazyColumnWithStickHeader
 import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
-import com.orka.myfinances.lib.ui.screens.StatefulScreen
+import com.orka.myfinances.lib.ui.screens.SelectionScreen
 import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.ui.components.items.CategoryItem
+import com.orka.myfinances.ui.models.item.CategoryItemModel
 
 @Composable
 fun SelectDefaultCategory(
     modifier: Modifier = Modifier,
-    state: State<SelectDefaultCategoryScreenModel>,
-    interactor: SelectDefaultCategoryInteractor
+    state: State<Map<String, List<CategoryItemModel>>>,
+    selectedState: State<Id?>,
+    interactor: SelectDefaultCategoryInteractor,
+    refresh: () -> Unit
 ) {
-    val localSelectedId = rememberSaveable { mutableStateOf(state.value?.defaultId?.value) }
+    val localSelectedId = rememberSaveable { mutableStateOf(selectedState.value?.value) }
 
-    LaunchedEffect(state.value?.defaultId) {
-        state.value?.defaultId?.let {
-            localSelectedId.value = it.value
+    LaunchedEffect(selectedState) {
+        if (selectedState is State.Success) {
+            localSelectedId.value = selectedState.value?.value
         }
     }
 
-    StatefulScreen(
+    SelectionScreen(
         modifier = modifier,
+        title = stringResource(R.string.default_category),
         state = state,
-        onRetry = interactor::refresh,
-        bottomBar = {
-            val model = state.value
-            if (model != null) {
-                SingleActionBottomBar(
-                    buttonText = stringResource(R.string.save),
-                    buttonEnabled = localSelectedId.value != null && localSelectedId.value != model.defaultId?.value,
-                    action = { localSelectedId.value?.let { interactor.select(Id(it)) } }
-                )
-            }
-        }
-    ) { modifier, model ->
-        LazyColumnWithStickHeader(
-            modifier = modifier,
-            map = model.map,
-            item = { item ->
-                CategoryItem(
-                    model = item,
-                    selected = localSelectedId.value == item.id.value,
-                    onClick = { localSelectedId.value = item.id.value }
-                )
-            }
-        )
-    }
+        bottomBar = { listState ->
+            val selectedId = localSelectedId.value
+            SingleActionBottomBar(
+                buttonText = stringResource(R.string.save),
+                buttonEnabled = listState is State.Success && selectedId != null && selectedId != selectedState.value?.value,
+                action = { selectedId?.let { interactor.select(Id(it)) } }
+            )
+        },
+        isSelected = { it.id.value == localSelectedId.value },
+        onSelect = { item, _ ->
+            localSelectedId.value = item.id.value
+        },
+        retry = refresh
+    )
 }

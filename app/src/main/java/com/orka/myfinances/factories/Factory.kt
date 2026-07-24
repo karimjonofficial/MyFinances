@@ -11,7 +11,7 @@ import com.orka.myfinances.application.viewmodels.client.list.ClientsScreenViewM
 import com.orka.myfinances.application.viewmodels.debt.details.DebtScreenViewModel
 import com.orka.myfinances.application.viewmodels.debt.history.DebtsHistoryContentViewModel
 import com.orka.myfinances.application.viewmodels.debt.list.DebtsScreenViewModel
-import com.orka.myfinances.application.viewmodels.defaults.category.SelectDefaultCategoryViewModel
+import com.orka.myfinances.application.viewmodels.defaults.category.DefaultCategoryViewModel
 import com.orka.myfinances.application.viewmodels.folder.catalog.CatalogScreenViewModel
 import com.orka.myfinances.application.viewmodels.folder.category.CategoryScreenViewModel
 import com.orka.myfinances.application.viewmodels.folder.home.FoldersContentViewModel
@@ -565,9 +565,8 @@ class Factory(
         )
     }
 
-    fun selectDefaultCategoryViewModel(): SelectDefaultCategoryViewModel {
-        return SelectDefaultCategoryViewModel(
-            foldersRepository = folderRepository,
+    fun selectDefaultCategoryViewModel(): DefaultCategoryViewModel {
+        return DefaultCategoryViewModel(
             getDefaultCategory = defaultsRepository,
             setDefaultCategory = defaultsRepository,
             flow = defaultsRepository.flow,
