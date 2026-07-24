@@ -24,7 +24,7 @@ fun LazyListScope.DefaultsGroup(
         VerticalSpacer(4)
         SettingsButton(
             modifier = Modifier.fillMaxWidth(),
-            title = stringResource(R.string.empty_category),
+            title = stringResource(R.string.default_category),
             topClipped = true,
             bottomClipped = true,
             value = if (state is State.Loading) stringResource(R.string.loading)
@@ -32,6 +32,7 @@ fun LazyListScope.DefaultsGroup(
             leadingIcon = painterResource(R.drawable.category),
             valueColor = color,
             hasDivider = false,
+            enabled = state is State.Success,
             onClick = interactor::toSelectDefaultCategory,
         )
     }

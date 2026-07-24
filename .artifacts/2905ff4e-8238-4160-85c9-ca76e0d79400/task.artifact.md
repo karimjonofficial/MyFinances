@@ -1,0 +1,4 @@
+- [x] Wrap profile header in a `Column` with `surfaceContainer` background
+- [x] Apply rounded bottom corners to the header
+- [x] Remove `HorizontalDivider`
+- [x] Verify build and visual consistency

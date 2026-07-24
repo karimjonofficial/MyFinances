@@ -13,10 +13,9 @@ class PinnedCategoriesRepository(private val dao: PinnedCategoriesDao) : PinnedC
     private val flow = MutableSharedFlow<PinnedCategoriesEvent>()
     val events = flow.asFlow()
 
-    override suspend fun getAll(search: String?): List<Id>? {
+    override suspend fun getAll(search: String?): List<Id> {
         val categories = dao.getAll()
-        return if (categories.isEmpty()) null
-        else categories.map { Id(it.id) }
+        return  categories.map { Id(it.id) }
     }
 
     override suspend fun add(request: AddPinnedCategoryRequest) {

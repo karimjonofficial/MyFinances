@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.profile
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,8 +8,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
@@ -16,23 +17,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.branch1
 import com.orka.myfinances.fixtures.resources.models.branches
 import com.orka.myfinances.fixtures.resources.models.user1
-import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
-import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.FooterSpacer
 import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
+import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
+import com.orka.myfinances.lib.ui.preview.DefaultPreview
 import com.orka.myfinances.lib.ui.viewmodel.State
 import com.orka.myfinances.ui.screens.profile.components.OptionButton
 import com.orka.myfinances.ui.screens.profile.components.UserIcon
@@ -52,55 +52,53 @@ fun ProfileContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
-            VerticalSpacer(8)
-            UserIcon(Modifier.size(160.dp))
-
-            VerticalSpacer(8)
-            NameText(state = state)
-            PhoneText(state = state)
-
-            OutlinedExposedDropDownTextField(
-                text = when (state) {
-                    is State.Success -> state.value.branchName
-                    is State.Failure -> state.error.str()
-                    is State.Loading -> state.message.str()
-                },
-                label = "",
-                menuExpanded = exposed.value,
-                onExpandChange = { exposed.value = it },
-                onDismissRequested = { exposed.value = false },
-                items = when (state) {
-                    is State.Success -> state.value.branches
-                    else -> emptyList()
-                },
-                itemText = { it.title },
-                onItemSelected = { office ->
-                    interactor.setBranch(office)
-                    exposed.value = false
-                }
-            )
-
-            VerticalSpacer(16)
-            HorizontalDivider(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            )
+                    .background(color = MaterialTheme.colorScheme.surfaceContainer)
+                    .padding(bottom = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                VerticalSpacer(16)
+                UserIcon(Modifier.size(160.dp))
+
+                VerticalSpacer(8)
+                NameText(state = state)
+                PhoneText(state = state)
+
+                OutlinedExposedDropDownTextField(
+                    text = when (state) {
+                        is State.Success -> state.value.branchName
+                        is State.Failure -> state.error.str()
+                        is State.Loading -> state.message.str()
+                    },
+                    label = "",
+                    menuExpanded = exposed.value,
+                    onExpandChange = { exposed.value = it },
+                    onDismissRequested = { exposed.value = false },
+                    items = when (state) {
+                        is State.Success -> state.value.branches
+                        else -> emptyList()
+                    },
+                    itemText = { it.title },
+                    onItemSelected = { office ->
+                        interactor.setBranch(office)
+                        exposed.value = false
+                    }
+                )
+            }
         }
 
         item {
-            VerticalSpacer(16)
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .clip(RoundedCornerShape(16.dp))
-            ) {
-                options(interactor).forEach {
+            Column {
+                val profileOptions = options(interactor)
+
+                profileOptions.forEach { item ->
                     OptionButton(
                         modifier = Modifier.fillMaxWidth(),
-                        title = stringResource(it.titleRes),
-                        painter = painterResource(it.iconRes),
-                        action = it.action
+                        title = stringResource(item.titleRes),
+                        painter = painterResource(item.iconRes),
+                        action = item.action
                     )
                 }
             }
@@ -110,10 +108,7 @@ fun ProfileContent(
     }
 }
 
-@Preview(
-    showBackground = true,
-    showSystemUi = true
-)
+@DefaultPreview
 @Composable
 private fun ProfileContentPreview() {
     val navItems = listOf(

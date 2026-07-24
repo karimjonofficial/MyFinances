@@ -22,7 +22,6 @@ fun LazyListScope.HomeContentGroup(
             leadingIcon = painterResource(R.drawable.keep),
             trailingIcon = painterResource(R.drawable.arrow_right),
             hasDivider = false,
-            enabled = state is State.Success,
             onClick = interactor::toPinnedCategories,
         )
     }

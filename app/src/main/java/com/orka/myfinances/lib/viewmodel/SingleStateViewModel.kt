@@ -17,6 +17,10 @@ abstract class SingleStateViewModel<T>(
             tag = this.javaClass.name,
             message = "State transition from ${old?.javaClass?.name} to ${value?.javaClass?.name}"
         )
+        logger.log(
+            tag = this.javaClass.name,
+            message = "New state: $value"
+        )
     }
 
     protected fun updateState(callback: (T) -> T) {

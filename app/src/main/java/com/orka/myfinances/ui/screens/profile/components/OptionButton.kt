@@ -1,20 +1,22 @@
 package com.orka.myfinances.ui.screens.profile.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.orka.myfinances.R
+import com.orka.myfinances.lib.ui.components.HorizontalSpacer
 
 @Composable
 fun OptionButton(
@@ -23,32 +25,33 @@ fun OptionButton(
     painter: Painter,
     action: () -> Unit
 ) {
-    Row(
-        modifier = modifier
-            .clickable { action() }
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(horizontal = 12.dp, vertical = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    FilledTonalButton(
+        onClick = action,
+        modifier = modifier.fillMaxWidth(),
+        colors = ButtonDefaults.filledTonalButtonColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface,
+        ),
+        shape = RectangleShape,
+        contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
     ) {
         Icon(
             painter = painter,
-            contentDescription = title
+            contentDescription = title,
+            tint = MaterialTheme.colorScheme.primary
         )
 
-        Text(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 8.dp),
-            text = title,
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            maxLines = 1,
-            fontWeight = FontWeight.Bold
-        )
-
-        Icon(
-            painter = painterResource(R.drawable.arrow_right),
-            contentDescription = null
-        )
+        HorizontalSpacer(16)
+        Column(modifier = Modifier.weight(1f)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = title,
+                    style = MaterialTheme.typography.titleSmall,
+                    maxLines = 1,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+        }
     }
 }

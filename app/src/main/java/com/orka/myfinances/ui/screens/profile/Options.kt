@@ -40,36 +40,6 @@ fun options(interactor: ProfileInteractor): List<ProfileOption> {
             titleRes = R.string.debts,
             iconRes = R.drawable.money,
             action = interactor::debts
-        ),
-        ProfileOption(
-            index = 6,
-            titleRes = R.string.option,
-            iconRes = R.drawable.check,
-            action = {}
-        ),
-        ProfileOption(
-            index = 7,
-            titleRes = R.string.option,
-            iconRes = R.drawable.check,
-            action = {}
-        ),
-        ProfileOption(
-            index = 8,
-            titleRes = R.string.option,
-            iconRes = R.drawable.check,
-            action = {}
-        ),
-        ProfileOption(
-            index = 9,
-            titleRes = R.string.option,
-            iconRes = R.drawable.check,
-            action = {}
-        ),
-        ProfileOption(
-            index = 10,
-            titleRes = R.string.option,
-            iconRes = R.drawable.check,
-            action = {}
         )
     )
 }
