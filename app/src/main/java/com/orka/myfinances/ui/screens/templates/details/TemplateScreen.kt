@@ -46,7 +46,7 @@ fun TemplateScreen(
                         .scaffoldPadding(paddingValues)
                         .padding(horizontal = 16.dp)
                 ) {
-                    if(template.fields != null) {
+                    if(template.fields?.isNotEmpty() ?: false) {
                         VerticalSpacer(16)
                         DividedList(
                             title = stringResource(R.string.properties_of_template),
