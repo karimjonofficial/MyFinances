@@ -2,8 +2,8 @@ package com.orka.myfinances.ui.screens.stock
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -38,7 +38,9 @@ fun StockItemsContent(
         loadMore = interactor::loadMore,
         item = { item ->
             StockItemCard(
-                modifier = Modifier.fillMaxSize().height(350.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .aspectRatio(0.6f),
                 item = item.model,
                 onIncrease = { interactor.addToBasket(item.id) },
                 onDecrease = { interactor.removeFromBasket(item.id) }
