@@ -10,7 +10,7 @@ import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.extensions.valueOrNull
 import com.orka.myfinances.lib.ui.components.Dialog
-import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 
 @Composable
 fun AddClientDialog(

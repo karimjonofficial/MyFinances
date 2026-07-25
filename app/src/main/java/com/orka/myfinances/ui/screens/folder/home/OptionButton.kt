@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import com.orka.myfinances.lib.ui.components.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable

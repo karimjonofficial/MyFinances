@@ -18,7 +18,7 @@ import com.orka.myfinances.application.viewmodels.basket.toUiModel
 import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.basket.basketItems
-import com.orka.myfinances.lib.ui.components.FooterSpacer
+import com.orka.myfinances.lib.ui.components.spacer.FooterSpacer
 import com.orka.myfinances.lib.ui.components.SectionTitle
 import com.orka.myfinances.lib.ui.contents.StateFulContent
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding

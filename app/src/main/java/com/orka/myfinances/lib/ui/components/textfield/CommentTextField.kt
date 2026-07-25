@@ -1,4 +1,4 @@
-package com.orka.myfinances.lib.ui.components
+package com.orka.myfinances.lib.ui.components.textfield
 
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text

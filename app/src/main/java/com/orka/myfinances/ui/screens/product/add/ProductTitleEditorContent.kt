@@ -17,11 +17,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
-import com.orka.myfinances.lib.ui.components.CommentTextField
-import com.orka.myfinances.lib.ui.components.ExposedDropDownTextField
-import com.orka.myfinances.lib.ui.components.FooterSpacer
-import com.orka.myfinances.lib.ui.components.IntegerTextField
-import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.components.textfield.CommentTextField
+import com.orka.myfinances.lib.ui.components.textfield.ExposedDropDownTextField
+import com.orka.myfinances.lib.ui.components.spacer.FooterSpacer
+import com.orka.myfinances.lib.ui.components.textfield.IntegerTextField
+import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
 import com.orka.myfinances.ui.screens.product.add.interactor.CategoryBottomSheetItemModel
 

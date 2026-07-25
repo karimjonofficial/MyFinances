@@ -9,7 +9,7 @@ import com.orka.myfinances.format.FormatTime
 import com.orka.myfinances.ui.screens.client.list.toCardModel
 import com.orka.myfinances.ui.screens.sale.details.interactor.Item
 import com.orka.myfinances.ui.screens.sale.details.interactor.SaleScreenModel
-import com.orka.myfinances.ui.screens.toCardModel
+import com.orka.myfinances.ui.map.toCardModel
 
 fun Sale.toUiModel(
     formatPrice: FormatPrice,

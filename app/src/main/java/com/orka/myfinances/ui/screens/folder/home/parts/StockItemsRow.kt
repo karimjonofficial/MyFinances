@@ -14,9 +14,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.orka.myfinances.lib.ui.components.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.SectionTitle
-import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.ui.components.cards.StockItemCard

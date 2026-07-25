@@ -29,8 +29,8 @@ import com.orka.myfinances.fixtures.resources.models.client1
 import com.orka.myfinances.lib.ui.extensions.phone
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.components.Scaffold
-import com.orka.myfinances.lib.ui.components.HorizontalSpacer
-import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.ui.models.card.UserCardModel
 import com.orka.myfinances.ui.screens.client.list.toCardModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme

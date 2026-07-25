@@ -15,7 +15,7 @@ import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
-import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.components.dialogs.AddProductDialog
 import com.orka.myfinances.ui.models.item.TemplateItemModel
@@ -102,9 +102,11 @@ fun homeEntry(
                         AddFolderDialog(
                             dismissRequest = { addProductDialogVisible.value = false },
                             onUnfoldTemplates = { sheetVisible.value = true },
-                            onSuccess = foldersViewModel::addFolder,
-                            template = template.value,
-                            onCancel = { addProductDialogVisible.value = false }
+                            onSuccess = { name, type, templateId ->
+                                foldersViewModel.addFolder(name, type, templateId)
+                                addFolderDialogVisible.value = false
+                            },
+                            template = template.value
                         )
                     }
 

@@ -21,9 +21,9 @@ import androidx.compose.ui.text.font.FontWeight
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.ui.components.Dialog
-import com.orka.myfinances.lib.ui.components.OutlinedCommentTextField
-import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
-import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.components.textfield.OutlinedCommentTextField
+import com.orka.myfinances.lib.ui.components.textfield.OutlinedIntegerTextField
+import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.ui.models.item.ClientItemModel
 import kotlin.time.Instant
 

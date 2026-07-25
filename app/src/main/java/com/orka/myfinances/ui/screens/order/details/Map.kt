@@ -6,7 +6,7 @@ import com.orka.myfinances.format.FormatDateTime
 import com.orka.myfinances.format.FormatDecimal
 import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.ui.screens.client.list.toCardModel
-import com.orka.myfinances.ui.screens.toCardModel
+import com.orka.myfinances.ui.map.toCardModel
 
 fun Order.map(
     formatDateTime: FormatDateTime,

@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.components.Dialog
-import com.orka.myfinances.lib.ui.components.OutlinedExposedDropDownTextField
-import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.components.textfield.OutlinedExposedDropDownTextField
+import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 
 @Composable
 fun AddTemplateFieldDialog(

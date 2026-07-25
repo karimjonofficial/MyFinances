@@ -11,3 +11,5 @@ val id6 = Id(6)
 val id7 = Id(7)
 val id8 = Id(8)
 val id9 = Id(9)
+
+val ids = listOf(id1, id2, id3, id4, id5, id6, id7, id8, id9)

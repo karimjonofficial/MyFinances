@@ -23,9 +23,9 @@ import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.name
 import com.orka.myfinances.fixtures.resources.price
-import com.orka.myfinances.lib.ui.components.CommentTextField
-import com.orka.myfinances.lib.ui.components.IntegerTextField
-import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.components.textfield.CommentTextField
+import com.orka.myfinances.lib.ui.components.textfield.IntegerTextField
+import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.ui.models.item.ProductTitleItemModel

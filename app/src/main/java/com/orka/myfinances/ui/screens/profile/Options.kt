@@ -20,13 +20,13 @@ fun options(interactor: ProfileInteractor): List<ProfileOption> {
         ProfileOption(
             index = 2,
             titleRes = R.string.templates,
-            iconRes = R.drawable.docs,
+            iconRes = R.drawable.space_dashboard_2,
             action = interactor::templates
         ),
         ProfileOption(
             index = 3,
             titleRes = R.string.clients,
-            iconRes = R.drawable.person,
+            iconRes = R.drawable.groups,
             action = interactor::clients
         ),
         ProfileOption(
@@ -38,7 +38,7 @@ fun options(interactor: ProfileInteractor): List<ProfileOption> {
         ProfileOption(
             index = 5,
             titleRes = R.string.debts,
-            iconRes = R.drawable.money,
+            iconRes = R.drawable.account_balance,
             action = interactor::debts
         )
     )

@@ -7,9 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.components.Dialog
-import com.orka.myfinances.lib.ui.components.OutlinedCommentTextField
-import com.orka.myfinances.lib.ui.components.OutlinedIntegerTextField
-import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.components.textfield.OutlinedCommentTextField
+import com.orka.myfinances.lib.ui.components.textfield.OutlinedIntegerTextField
+import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 
 @Composable
 fun ReceiveDialog(

@@ -1,4 +1,4 @@
-package com.orka.myfinances.lib.ui.components
+package com.orka.myfinances.lib.ui.components.textfield
 
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api

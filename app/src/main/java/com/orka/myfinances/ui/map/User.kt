@@ -1,4 +1,4 @@
-package com.orka.myfinances.ui.screens
+package com.orka.myfinances.ui.map
 
 import com.orka.myfinances.data.models.User
 import com.orka.myfinances.ui.models.card.UserCardModel

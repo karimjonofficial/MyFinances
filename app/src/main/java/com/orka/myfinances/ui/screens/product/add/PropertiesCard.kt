@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.template.TemplateField
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
-import com.orka.myfinances.lib.ui.components.HorizontalSpacer
-import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 
 @Composable
 fun PropertiesCard(

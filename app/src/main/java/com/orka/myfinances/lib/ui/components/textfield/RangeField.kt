@@ -1,4 +1,4 @@
-package com.orka.myfinances.lib.ui.components
+package com.orka.myfinances.lib.ui.components.textfield
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
+import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
 
 @Composable
 fun RangeField(

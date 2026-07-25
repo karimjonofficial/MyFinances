@@ -11,8 +11,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.fixtures.format.FormatDecimalImpl
-import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.stockItems
 import com.orka.myfinances.lib.ui.contents.LazyVerticalGridContentWithStickyHeader
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
@@ -20,6 +18,7 @@ import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.ui.components.cards.StockItemCard
+import com.orka.myfinances.ui.map.toMap
 
 @Composable
 fun StockItemsContent(
@@ -65,7 +64,7 @@ private fun StockItemsContentPreview() {
                     pageIndex = 1,
                     nextPageIndex = null,
                     previousPageIndex = null,
-                    content = stockItems.toMap(FormatPriceImpl(), FormatDecimalImpl())
+                    content = stockItems.toMap()
                 )
             )
         )

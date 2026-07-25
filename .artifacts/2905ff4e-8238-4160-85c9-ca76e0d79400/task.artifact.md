@@ -1,6 +1,2 @@
-- [x] Create `DefaultCategoryViewModel.kt`
-- [x] Update `SelectDefaultCategory.kt` to use `SelectionScreen`
-- [x] Update `SelectDefaultCategoryEntry.kt` to inject both ViewModels
-- [x] Update `Factory.kt` with `DefaultCategoryViewModel`
-- [x] Cleanup: Delete old ViewModel, ScreenModel, and mapper
-- [x] Verify build and functionality
+- [x] Replace manual `Row` with `FilledTonalButton` in `ProfileContent.kt`
+- [x] Verify build and UI consistency

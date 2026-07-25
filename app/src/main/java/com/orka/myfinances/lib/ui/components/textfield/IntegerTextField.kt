@@ -1,14 +1,13 @@
-package com.orka.myfinances.lib.ui.components
+package com.orka.myfinances.lib.ui.components.textfield
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,84 +30,126 @@ import java.text.NumberFormat
 import java.util.Locale
 
 @Composable
-fun DecimalTextField(
-    value: Double?,
-    onValueChange: (Double?) -> Unit,
+fun IntegerTextField(
     modifier: Modifier = Modifier,
-    label: @Composable (() -> Unit)? = null,
-    decimalPlaces: Int = 2
+    value: Int?,
+    onValueChange: (Int?) -> Unit,
+    label: (@Composable () -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null
 ) {
-    DecimalTextFieldImpl(
+    IntegerTextFieldImpl(
+        modifier = modifier,
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier,
         label = label,
-        decimalPlaces = decimalPlaces,
+        leadingIcon = leadingIcon,
         outlined = false
     )
 }
 
 @Composable
-fun OutlinedDecimalTextField(
-    value: Double?,
-    onValueChange: (Double?) -> Unit,
+fun IntegerTextField(
+    modifier: Modifier = Modifier,
+    value: Int?,
+    onValueChange: (Int?) -> Unit,
+    label: String,
+    leadingIcon: @Composable (() -> Unit)? = null
+) {
+    IntegerTextFieldImpl(
+        modifier = modifier,
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(text = label) },
+        leadingIcon = leadingIcon,
+        outlined = false
+    )
+}
+
+@Composable
+fun OutlinedIntegerTextField(
+    value: Int?,
+    onValueChange: (Int?) -> Unit,
     modifier: Modifier = Modifier,
     label: @Composable (() -> Unit)? = null,
-    decimalPlaces: Int = 2
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
 ) {
-    DecimalTextFieldImpl(
+    IntegerTextFieldImpl(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
         label = label,
-        decimalPlaces = decimalPlaces,
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
         outlined = true
     )
 }
 
 @Composable
-private fun DecimalTextFieldImpl(
-    value: Double?,
-    onValueChange: (Double?) -> Unit,
-    modifier: Modifier,
-    label: @Composable (() -> Unit)?,
-    decimalPlaces: Int,
+fun OutlinedIntegerTextField(
+    value: Int?,
+    onValueChange: (Int?) -> Unit,
+    modifier: Modifier = Modifier,
+    label: String,
+    leadingIcon: @Composable (() -> Unit)? = null
+) {
+    IntegerTextFieldImpl(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier,
+        label = { Text(text = label) },
+        leadingIcon = leadingIcon,
+        outlined = true
+    )
+}
+
+@Composable
+private fun IntegerTextFieldImpl(
+    modifier: Modifier = Modifier,
+    value: Int?,
+    onValueChange: (Int?) -> Unit,
+    label: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
     outlined: Boolean
 ) {
     var rawText by remember {
-        mutableStateOf(value?.toPlainString(decimalPlaces) ?: "")
+        mutableStateOf(value?.toString() ?: "")
     }
 
     LaunchedEffect(value) {
-        if (rawText.toDoubleOrNull() != value) {
-            rawText = value?.toPlainString(decimalPlaces) ?: ""
+        if (rawText.toIntOrNull() != value) {
+            rawText = value?.toString() ?: ""
         }
     }
 
-    val formatter = remember(decimalPlaces) {
-        NumberFormat.getNumberInstance(Locale.US).apply {
-            minimumFractionDigits = decimalPlaces
-            maximumFractionDigits = decimalPlaces
+    val formatter = remember {
+        NumberFormat.getIntegerInstance(Locale.US).apply {
             isGroupingUsed = true
         }
     }
 
     val visualTransformation = remember(formatter) {
-        DecimalVisualTransformation(formatter)
+        IntVisualTransformation(formatter)
     }
 
     val onValueChangeInternal: (String) -> Unit = { input ->
         val sanitized = input
             .replace(",", "")
-            .filter { it.isDigit() || it == '.' }
+            .filter { it.isDigit() }
 
-        if (sanitized == "0" && value == null) {
+        if (sanitized.isEmpty()) {
+            rawText = ""
+            onValueChange(null)
+        } else if (sanitized == "0" && value == null) {
             rawText = ""
             onValueChange(null)
         } else {
-            rawText = sanitized
-            val parsed = sanitized.toDoubleOrNull()
-            onValueChange(parsed)
+            val parsedLong = sanitized.toLongOrNull()
+            if (parsedLong != null && parsedLong <= Int.MAX_VALUE) {
+                rawText = sanitized
+                onValueChange(parsedLong.toInt())
+            }
         }
     }
 
@@ -118,7 +159,9 @@ private fun DecimalTextFieldImpl(
             value = rawText,
             onValueChange = onValueChangeInternal,
             label = label,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             visualTransformation = visualTransformation,
             singleLine = true
         )
@@ -128,26 +171,28 @@ private fun DecimalTextFieldImpl(
             value = rawText,
             onValueChange = onValueChangeInternal,
             label = label,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             visualTransformation = visualTransformation,
             singleLine = true
         )
     }
 }
 
-private class DecimalVisualTransformation(
+private class IntVisualTransformation(
     private val formatter: NumberFormat
 ) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val raw = text.text
         if (raw.isEmpty()) return TransformedText(AnnotatedString(""), OffsetMapping.Identity)
-        val number = raw.toDoubleOrNull() ?: return TransformedText(AnnotatedString(raw), OffsetMapping.Identity)
+        val number = raw.toLongOrNull() ?: return TransformedText(AnnotatedString(raw), OffsetMapping.Identity)
         val formatted = formatter.format(number)
-        return TransformedText(AnnotatedString(formatted), DecimalOffsetMapping(raw, formatted))
+        return TransformedText(AnnotatedString(formatted), IntegerOffsetMapping(raw, formatted))
     }
 }
 
-private class DecimalOffsetMapping(
+private class IntegerOffsetMapping(
     private val originalText: String,
     private val transformedText: String
 ) : OffsetMapping {
@@ -171,36 +216,32 @@ private class DecimalOffsetMapping(
     }
 }
 
-private fun Double.toPlainString(decimals: Int): String =
-    "%.${decimals}f".format(Locale.US, this)
-
 @Preview
 @Composable
-private fun DecimalTextFieldPreview() {
-    ScaffoldPreview(title = "Decimal TextFields") { paddingValues ->
+private fun IntegerTextFieldPreview() {
+    ScaffoldPreview(title = "Integer TextFields") { paddingValues ->
         Column(
             modifier = Modifier
                 .scaffoldPadding(paddingValues)
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val decimalValue = remember { mutableStateOf<Double?>(null) }
+            val intValue = remember { mutableStateOf<Int?>(null) }
 
-            DecimalTextField(
-                value = decimalValue.value,
-                onValueChange = { decimalValue.value = it },
+            IntegerTextField(
+                value = intValue.value,
+                onValueChange = { intValue.value = it },
                 modifier = Modifier.fillMaxWidth(),
-                label = { androidx.compose.material3.Text("Decimal") }
+                label = { Text("Integer") }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedDecimalTextField(
-                value = decimalValue.value,
-                onValueChange = { decimalValue.value = it },
+            OutlinedIntegerTextField(
+                value = intValue.value,
+                onValueChange = { intValue.value = it },
                 modifier = Modifier.fillMaxWidth(),
-                label = { androidx.compose.material3.Text("Outlined Decimal") }
+                label = { Text("Outlined Integer") }
             )
         }
     }

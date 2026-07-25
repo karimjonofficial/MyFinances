@@ -13,22 +13,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.fixtures.resources.models.folder.folders
-import com.orka.myfinances.lib.ui.components.FooterSpacer
-import com.orka.myfinances.lib.ui.components.HorizontalSpacer
-import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.fixtures.resources.models.id1
+import com.orka.myfinances.fixtures.resources.models.id2
+import com.orka.myfinances.lib.ui.components.spacer.FooterSpacer
+import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.contents.StateFulContent
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
+import com.orka.myfinances.lib.ui.preview.DefaultPreview
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.ui.resources.stockItemsState
 import com.orka.myfinances.ui.screens.folder.home.interactor.FoldersContentInteractor
 import com.orka.myfinances.ui.screens.folder.home.interactor.FoldersContentModel
 import com.orka.myfinances.ui.screens.folder.home.parts.FoldersContentCarousel
+import com.orka.myfinances.ui.screens.folder.home.parts.StockItemsRow
 import com.orka.myfinances.ui.screens.folder.toUiModel
+import com.orka.myfinances.ui.screens.stock.StockContentInteractor
 
 @Composable
 fun FoldersContent(
@@ -55,7 +60,7 @@ fun FoldersContent(
                 }
 
                 item {
-                    VerticalSpacer(8)
+                    VerticalSpacer(16)
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -113,7 +118,7 @@ fun FoldersContent(
     }
 }
 
-@Preview
+@DefaultPreview
 @Composable
 private fun FoldersContentPreview() {
     ScaffoldPreview(
@@ -126,11 +131,29 @@ private fun FoldersContentPreview() {
                 value = FoldersContentModel(
                     folders = folders.map { it.toUiModel() },
                     isDefaultCategorySet = true,
-                    pinnedCategories = null
+                    pinnedCategories = listOf(id1, id2)
                 )
             ),
             onAddProductClick = {},
             interactor = FoldersContentInteractor.dummy
-        )
+        ) {
+            item {
+                VerticalSpacer(16)
+                StockItemsRow(
+                    title = "Pinned Category",
+                    state = stockItemsState,
+                    interactor = StockContentInteractor.dummy
+                )
+            }
+
+            item {
+                VerticalSpacer(16)
+                StockItemsRow(
+                    title = "Pinned Category",
+                    state = stockItemsState,
+                    interactor = StockContentInteractor.dummy
+                )
+            }
+        }
     }
 }

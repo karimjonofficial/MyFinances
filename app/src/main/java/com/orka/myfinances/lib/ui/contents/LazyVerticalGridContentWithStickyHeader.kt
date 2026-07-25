@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.extensions.str
-import com.orka.myfinances.lib.ui.components.LazyVerticalGridWithStickHeader
+import com.orka.myfinances.lib.ui.components.lazy.LazyVerticalGridWithStickHeader
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen

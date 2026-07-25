@@ -31,8 +31,8 @@ import com.orka.myfinances.fixtures.format.FormatTimeImpl
 import com.orka.myfinances.fixtures.resources.models.sale.sale1
 import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.lib.ui.components.DividedList
-import com.orka.myfinances.lib.ui.components.HorizontalSpacer
-import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.ui.components.cards.ClientCard

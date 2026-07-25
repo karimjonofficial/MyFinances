@@ -5,14 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.ui.components.SearchTopAppBar
 import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
-import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
+import com.orka.myfinances.lib.ui.screens.SelectionScreen
 import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.ui.screens.branch.components.BranchCard
 import com.orka.myfinances.ui.screens.branch.components.BranchUiModel
 
 @Composable
@@ -23,7 +21,7 @@ fun SelectBranchScreen(
 ) {
     val officeId = retain { mutableStateOf<Id?>(null) }
 
-    LazyColumnWithStickyHeaderScreen(
+    SelectionScreen(
         modifier = modifier,
         topBar = {
             SearchTopAppBar(
@@ -32,7 +30,7 @@ fun SelectBranchScreen(
             )
         },
         state = state,
-        refresh = interactor::refresh,
+        retry = interactor::refresh,
         bottomBar = { state ->
             SingleActionBottomBar(
                 buttonText = stringResource(R.string.save),
@@ -43,13 +41,7 @@ fun SelectBranchScreen(
                 }
             )
         },
-        arrangementSpace = 4.dp,
-        item = { model ->
-            BranchCard(
-                model = model,
-                checked = officeId.value == model.branchId,
-                onChecked = { officeId.value = it.branchId }
-            )
-        }
+        isSelected = { officeId.value == it.branchId },
+        onSelect = { model, _ -> officeId.value = model.branchId }
     )
 }

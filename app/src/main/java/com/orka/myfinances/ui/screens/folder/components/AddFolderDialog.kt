@@ -24,9 +24,9 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.fixtures.resources.models.template.template1
 import com.orka.myfinances.lib.ui.components.Dialog
-import com.orka.myfinances.lib.ui.components.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.RadioButton
-import com.orka.myfinances.lib.ui.components.VerticalSpacer
+import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.ui.models.item.TemplateItemModel
 import com.orka.myfinances.ui.screens.folder.home.toItemModel
@@ -38,7 +38,7 @@ fun AddFolderDialog(
     dismissRequest: () -> Unit,
     onUnfoldTemplates: () -> Unit,
     onSuccess: (String, String, Id?) -> Unit,
-    onCancel: () -> Unit
+    onCancel: (() -> Unit)? = null
 ) {
     val name = rememberSaveable { mutableStateOf("") }
     val folderType = rememberSaveable { mutableIntStateOf(0) }

@@ -16,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 
 @Composable
 fun <T> DividedList(

@@ -5,7 +5,7 @@ import com.orka.myfinances.lib.data.now
 import com.orka.myfinances.format.FormatDate
 import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.ui.screens.client.list.toCardModel
-import com.orka.myfinances.ui.screens.toCardModel
+import com.orka.myfinances.ui.map.toCardModel
 
 fun Debt.toScreenModel(
     formatPrice: FormatPrice,

@@ -6,7 +6,7 @@ import com.orka.myfinances.ui.screens.branch.components.BranchUiModel
 
 fun BranchDto.toUiModel(): BranchUiModel {
     return BranchUiModel(
-        name = name,
+        title = name,
         branchId = Id(id)
     )
 }

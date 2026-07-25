@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.orka.myfinances.lib.ui.components.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
 
 @Composable
 fun ProfileOptionButton(

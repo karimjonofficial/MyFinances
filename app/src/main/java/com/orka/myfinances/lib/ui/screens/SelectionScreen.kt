@@ -8,13 +8,56 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.data.models.SelectionItemModel
-import com.orka.myfinances.lib.ui.components.FooterSpacer
-import com.orka.myfinances.lib.ui.components.LazyColumnWithStickHeader
+import com.orka.myfinances.lib.ui.components.spacer.LazyFooterSpacer
 import com.orka.myfinances.lib.ui.components.Scaffold
+import com.orka.myfinances.lib.ui.components.TopAppBar
+import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
-import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.ui.components.items.SelectionItem
+
+@Composable
+fun <T: SelectionItemModel> SelectionScreen(
+    modifier: Modifier = Modifier,
+    topBar: @Composable () -> Unit,
+    bottomBar: @Composable (State<Map<String, List<T>>>) -> Unit = {},
+    selectedContent: LazyListScope.() -> Unit = {},
+    state: State<Map<String, List<T>>>,
+    isSelected: (T) -> Boolean,
+    onSelect: (T, selected: Boolean) -> Unit,
+    retry: () -> Unit
+) {
+    Scaffold(
+        modifier = modifier,
+        topBar = topBar,
+        bottomBar = { bottomBar(state) }
+    ) { paddingValues ->
+        val modifier = Modifier
+            .scaffoldPadding(paddingValues)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
+
+        LazyColumnWithStickyHeaderContent(
+            modifier = modifier,
+            arrangementSpace = 2.dp,
+            contentPadding = PaddingValues(horizontal = 4.dp),
+            state = state,
+            refresh = retry,
+            header = selectedContent,
+            item = {
+                val selected = isSelected(it)
+
+                SelectionItem(
+                    model = it,
+                    selected = selected,
+                    onClick = { item, selected ->
+                        onSelect(item, selected)
+                    }
+                )
+            },
+            footer = LazyListScope::LazyFooterSpacer
+        )
+    }
+}
 
 @Composable
 fun <T: SelectionItemModel> SelectionScreen(
@@ -27,46 +70,14 @@ fun <T: SelectionItemModel> SelectionScreen(
     onSelect: (T, selected: Boolean) -> Unit,
     retry: () -> Unit
 ) {
-    Scaffold(
+    SelectionScreen(
         modifier = modifier,
-        title = title,
-        bottomBar = { bottomBar(state) }
-    ) { paddingValues ->
-        val modifier = Modifier.scaffoldPadding(paddingValues)
-
-        when (state) {
-            is State.Loading -> LoadingScreen(
-                modifier = modifier,
-                message = state.message.str()
-            )
-
-            is State.Failure -> FailureScreen(
-                modifier = modifier,
-                message = state.error.str(),
-                retry = retry
-            )
-
-            is State.Success -> {
-                LazyColumnWithStickHeader(
-                    modifier = modifier.background(MaterialTheme.colorScheme.surfaceContainer),
-                    map = state.value,
-                    arrangementSpace = 2.dp,
-                    contentPadding = PaddingValues(horizontal = 4.dp),
-                    header = selectedContent,
-                    item = {
-                        val selected = isSelected(it)
-
-                        SelectionItem(
-                            model = it,
-                            selected = selected,
-                            onClick = { item, selected ->
-                                onSelect(item, selected)
-                            }
-                        )
-                    },
-                    footer = { FooterSpacer() }
-                )
-            }
-        }
-    }
+        topBar = { TopAppBar(title = title) },
+        bottomBar = bottomBar,
+        selectedContent = selectedContent,
+        state = state,
+        isSelected = isSelected,
+        onSelect = onSelect,
+        retry = retry
+    )
 }

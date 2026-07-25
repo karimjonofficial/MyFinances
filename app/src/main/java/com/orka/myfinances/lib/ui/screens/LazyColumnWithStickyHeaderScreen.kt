@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.orka.myfinances.lib.ui.components.LazyColumnWithStickHeader
+import com.orka.myfinances.lib.ui.components.lazy.column.LazyColumnWithStickyHeader
 import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.TopAppBar
 import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
@@ -30,7 +30,7 @@ fun <T> LazyColumnWithStickyHeaderScreen(
         onRetry = refresh,
         state = state
     ) { modifier, map ->
-        LazyColumnWithStickHeader(
+        LazyColumnWithStickyHeader(
             modifier = modifier,
             map = map,
             arrangementSpace = arrangementSpace,
@@ -140,7 +140,7 @@ fun <T> LazyColumnWithStickyHeaderScreen(
         state = state
     ) { modifier, map ->
 
-        LazyColumnWithStickHeader(
+        LazyColumnWithStickyHeader(
             modifier = modifier,
             map = map,
             arrangementSpace = arrangementSpace,

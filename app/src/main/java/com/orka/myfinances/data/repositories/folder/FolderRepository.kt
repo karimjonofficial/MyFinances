@@ -1,7 +1,6 @@
 package com.orka.myfinances.data.repositories.folder
 
 import com.orka.myfinances.data.api.folder.FolderApi
-import com.orka.myfinances.data.api.folder.models.response.CategoryApiModel
 import com.orka.myfinances.data.dtos.folder.CategoryDto
 import com.orka.myfinances.data.dtos.folder.FolderDto
 import com.orka.myfinances.data.models.Id
@@ -24,7 +23,7 @@ class FolderRepository(
     }
 
     override suspend fun add(request: AddFolderRequest) {
-        val response = api.add(request.map(branchId))
+        val response = api.add(request.toApiRequest(branchId))
         if(response != null)
             flow.emit(FolderEvent(request.parentId))
     }
@@ -51,6 +50,6 @@ class FolderRepository(
         return api.get(
             branchId = branchId.value,
             search = query
-        )?.filterIsInstance<CategoryApiModel>()?.map { it.toDto() }
+        )?.filter { !it.isCatalog }?.map { it.toDto() as CategoryDto }
     }
 }

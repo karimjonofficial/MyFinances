@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -16,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.ui.components.LazyColumnWithStickHeader
+import com.orka.myfinances.lib.ui.components.lazy.column.LazyColumnWithStickyHeader
 import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.FailureScreen
@@ -28,6 +29,8 @@ fun <T> LazyColumnWithStickyHeaderContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(horizontal = 4.dp),
     arrangementSpace: Dp = 0.dp,
+    header: (LazyListScope.() -> Unit)? = null,
+    footer: (LazyListScope.() -> Unit)? = null,
     state: State<Map<String, List<T>>>,
     refresh: () -> Unit,
     item: @Composable (item: T) -> Unit
@@ -46,11 +49,13 @@ fun <T> LazyColumnWithStickyHeaderContent(
                 isRefreshing = false,
                 onRefresh = refresh
             ) {
-                LazyColumnWithStickHeader(
+                LazyColumnWithStickyHeader(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = contentPadding,
                     map = groupedItems,
                     arrangementSpace = arrangementSpace,
+                    header = header,
+                    footer = footer,
                     item = item
                 )
             }
@@ -97,7 +102,7 @@ fun <T> LazyColumnWithStickyHeaderContent(
                 }
             }
 
-            LazyColumnWithStickHeader(
+            LazyColumnWithStickyHeader(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = contentPadding,
                 map = state.value!!.content,
@@ -105,11 +110,13 @@ fun <T> LazyColumnWithStickyHeaderContent(
                 listState = listState,
                 footer = {
                     if (state.value!!.nextPageIndex != null && state is State.Loading) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            CircularProgressIndicator()
+                        item {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                CircularProgressIndicator()
+                            }
                         }
                     }
                 },

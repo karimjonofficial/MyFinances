@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.orka.myfinances.lib.ui.components.LazyColumn
+import com.orka.myfinances.lib.ui.components.lazy.column.LazyColumn
 import com.orka.myfinances.lib.viewmodel.State
 
 typealias DialogState = androidx.compose.runtime.State<Boolean>

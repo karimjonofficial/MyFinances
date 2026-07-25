@@ -17,7 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.data.models.SelectionItemModel
-import com.orka.myfinances.lib.ui.components.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
 
 @Composable
 fun <T : SelectionItemModel> SelectionItem(
@@ -29,14 +29,14 @@ fun <T : SelectionItemModel> SelectionItem(
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
-            .background(if (selected) MaterialTheme.colorScheme.primaryFixed else MaterialTheme.colorScheme.surface)
+            .background(if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface)
             .clickable { onClick(model, selected) }
             .padding(start = 16.dp, top = 16.dp, bottom = 16.dp, end = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         val leadingIconRes = model.leadingIconRes
         val description = model.description
-        val contentColor = if (selected) MaterialTheme.colorScheme.onPrimaryFixed else MaterialTheme.colorScheme.onSurface
+        val contentColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
 
         if (leadingIconRes != null) {
             Icon(

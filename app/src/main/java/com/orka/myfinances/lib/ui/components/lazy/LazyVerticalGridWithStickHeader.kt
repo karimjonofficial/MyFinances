@@ -1,4 +1,4 @@
-package com.orka.myfinances.lib.ui.components
+package com.orka.myfinances.lib.ui.components.lazy
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.orka.myfinances.lib.ui.components.StickyHeader
 
 @Composable
 fun <T> LazyVerticalGridWithStickHeader(
