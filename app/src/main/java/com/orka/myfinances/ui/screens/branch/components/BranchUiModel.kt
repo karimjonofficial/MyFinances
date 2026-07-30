@@ -1,7 +1,7 @@
 package com.orka.myfinances.ui.screens.branch.components
 
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.lib.data.models.SelectionItemModel
+import com.orka.myfinances.lib.ui.models.SelectionItemModel
 
 data class BranchUiModel(
     override val title: String,

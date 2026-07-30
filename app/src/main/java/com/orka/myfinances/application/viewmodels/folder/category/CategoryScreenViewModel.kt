@@ -4,31 +4,24 @@ import com.orka.myfinances.data.dtos.folder.CategoryDto
 import com.orka.myfinances.data.dtos.folder.FolderDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.repositories.GetById
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.ExecutedFromFailure
+import com.orka.myfinances.lib.viewmodel.sourceful.single.MapSingleByIdViewModel
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.BaseViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.folder.category.CategoryScreenInteractor
 import com.orka.myfinances.ui.screens.folder.category.CategoryScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class CategoryScreenViewModel(
-    private val categoryId: Id,
-    private val getById: GetById<FolderDto>,
-    loading: UiText,
-    failure: UiText,
+    categoryId: Id,
+    getById: GetById<FolderDto>,
     private val navigator: Navigator,
     logger: Logger
-) : BaseViewModel<CategoryScreenModel>(
-    loading = loading,
-    failure = failure,
-    produceInitialState = {
-        val category = getById.getById(categoryId)
-        if (category != null && category is CategoryDto)
-            State.Success(category.toScreenModel())
-        else null
-    },
+) : MapSingleByIdViewModel<CategoryDto, CategoryScreenModel>(
+    id = categoryId,
+    get = { getById.getById(categoryId) as CategoryDto? },
+    map = { it.toScreenModel() },
     logger = logger
 ), CategoryScreenInteractor {
     val uiState = state.asStateFlow()
@@ -38,18 +31,18 @@ class CategoryScreenViewModel(
     }
 
     override fun addProduct() {
-        launch { navigator.navigateToAddProduct(categoryId) }
+        launch { navigator.navigateToAddProduct(id) }
     }
 
     override fun receive() {
-        launch { navigator.navigateToAddReceive(categoryId) }
+        launch { navigator.navigateToAddReceive(id) }
     }
 
     fun expose() {
         tryTransition { oldState ->
             if(oldState is State.Success)
                 State.Success(oldState.value.copy(exposed = true))
-            else State.Failure(failure, oldState.value)
+            else State.Failure(ExecutedFromFailure, oldState.value)
         }
     }
 
@@ -57,7 +50,7 @@ class CategoryScreenViewModel(
         tryTransition { oldState ->
             if(oldState is State.Success)
                 State.Success(oldState.value.copy(exposed = false))
-            else State.Failure(failure, oldState.value)
+            else State.Failure(ExecutedFromFailure, oldState.value)
         }
     }
 }

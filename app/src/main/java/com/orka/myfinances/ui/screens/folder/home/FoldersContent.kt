@@ -26,7 +26,7 @@ import com.orka.myfinances.lib.ui.contents.StateFulContent
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.preview.DefaultPreview
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.resources.stockItemsState
 import com.orka.myfinances.ui.screens.folder.home.interactor.FoldersContentInteractor
 import com.orka.myfinances.ui.screens.folder.home.interactor.FoldersContentModel

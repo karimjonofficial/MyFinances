@@ -3,6 +3,8 @@ package com.orka.myfinances.lib.viewmodel
 import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.viewmodel.base.BaseViewModel
+import com.orka.myfinances.lib.ui.state.State
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.flow.asStateFlow

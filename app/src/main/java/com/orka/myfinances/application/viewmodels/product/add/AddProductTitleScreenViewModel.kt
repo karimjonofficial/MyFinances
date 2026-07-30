@@ -7,10 +7,10 @@ import com.orka.myfinances.data.repositories.product.title.models.AddProductTitl
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.data.repositories.Insert
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.base.refreshable.RefreshableBaseViewModel
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.ExecutedFromFailure
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.BaseViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenInteractor
 import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
@@ -22,19 +22,15 @@ class AddProductTitleScreenViewModel(
     private val getFolders: Get<FolderDto>,
     private val insertTitle: Insert<AddProductTitleRequest>,
     private val navigator: Navigator,
-    loading: UiText,
-    failure: UiText,
     logger: Logger
-) : BaseViewModel<AddProductTitleScreenModel>(
-    loading = loading,
-    failure = failure,
+) : RefreshableBaseViewModel<AddProductTitleScreenModel>(
     produceInitialState = {
-        val categories = getFolders.getAll(null)
+        val categories = getFolders.getAll()
             ?.filterIsInstance<CategoryDto>()
             ?.map { it.toItemModel() }
-        if (categories != null) {
+        if (categories != null)
             State.Success(AddProductTitleScreenModel(categories, categoryId))
-        } else null
+        else State.Failure(CategoriesEmpty)
     },
     logger = logger
 ), AddProductTitleScreenInteractor {
@@ -56,8 +52,8 @@ class AddProductTitleScreenViewModel(
         tryTransition { oldState ->
             if (oldState !is State.Success)
                 return@tryTransition State.Failure(
-                    UiText.Str("Action executed from wrong state"),
-                    oldState.value
+                    type = ExecutedFromFailure,
+                    value = oldState.value
                 )
 
             val category = oldState.value.categories.find { it.id == categoryId }
@@ -75,7 +71,7 @@ class AddProductTitleScreenViewModel(
             if (created) {
                 navigator.back()
                 oldState
-            } else State.Failure(failure, oldState.value)
+            } else State.Failure(CouldNotInsert, oldState.value)
         }
     }
 

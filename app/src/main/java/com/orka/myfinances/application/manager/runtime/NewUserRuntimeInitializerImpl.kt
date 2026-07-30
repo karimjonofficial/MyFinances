@@ -1,12 +1,10 @@
 package com.orka.myfinances.application.manager.runtime
 
-import com.orka.myfinances.R
 import com.orka.myfinances.application.Logger
 import com.orka.myfinances.application.factories.HttpLogger
 import com.orka.myfinances.application.factories.httpClient
 import com.orka.myfinances.data.models.Credentials
 import com.orka.myfinances.factories.SelectBranchScreenViewModelFactory
-import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.managers.SessionManager
 import com.orka.myfinances.runtime.NewUserRuntimeInitializer
 
@@ -20,8 +18,6 @@ class NewUserRuntimeInitializerImpl(private val logger: Logger) : NewUserRuntime
         factory = SelectBranchScreenViewModelFactory(
             httpClient = httpClient,
             sessionManager = manager,
-            loading = UiText.Res(R.string.loading),
-            failure = UiText.Res(R.string.failure),
             logger = this.logger
         )
     }

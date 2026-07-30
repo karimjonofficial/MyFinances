@@ -5,9 +5,8 @@ import com.orka.myfinances.data.dtos.folder.FolderDto
 import com.orka.myfinances.data.repositories.defaults.DefaultsEvent
 import com.orka.myfinances.data.repositories.defaults.GetDefaultCategory
 import com.orka.myfinances.lib.data.repositories.GetById
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.BaseViewModel
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.base.BaseViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.settings.main.SettingsScreenInteractor
@@ -22,8 +21,6 @@ class SettingsScreenViewModel(
     flow: Flow<DefaultsEvent>,
     private val get: GetById<FolderDto>,
     private val navigator: Navigator,
-    loading: UiText,
-    failure: UiText,
     logger: Logger
 ) : BaseViewModel<SettingsScreenModel>(
     produceInitialState = {
@@ -35,8 +32,6 @@ class SettingsScreenViewModel(
             else null
         } else State.Success(SettingsScreenModel())
     },
-    loading = loading,
-    failure = failure,
     logger = logger
 ), SettingsScreenInteractor {
     val uiState = state.asStateFlow()

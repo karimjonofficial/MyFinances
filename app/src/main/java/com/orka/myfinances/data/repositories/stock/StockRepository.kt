@@ -4,7 +4,7 @@ import com.orka.myfinances.data.api.stock.StockApi
 import com.orka.myfinances.data.dtos.stock.StockItemDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.models.toChunk
-import com.orka.myfinances.lib.viewmodel.Chunk
+import com.orka.myfinances.data.repositories.Chunk
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow

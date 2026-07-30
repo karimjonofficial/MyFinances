@@ -1,9 +1,9 @@
 package com.orka.myfinances.ui.screens.receive.add
 
-import com.orka.myfinances.lib.ui.viewmodel.StateFul
+import com.orka.myfinances.lib.ui.viewmodel.Refreshable
 import com.orka.myfinances.ui.models.item.ProductTitleItemModel
 
-interface AddReceiveScreenInteractor : StateFul {
+interface AddReceiveScreenInteractor : Refreshable {
     fun add(
         title: ProductTitleItemModel?,
         amount: Int?,

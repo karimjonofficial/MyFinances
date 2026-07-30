@@ -35,7 +35,7 @@ fun List<Receive>.toChunkMapState(
     formatTime: FormatTime
 ): ChunkUiModel<ReceiveUiModel> {
     return ChunkUiModel(
-        count = 1,
+        size = 1,
         pageIndex = 1,
         nextPageIndex = 1,
         previousPageIndex = 1,

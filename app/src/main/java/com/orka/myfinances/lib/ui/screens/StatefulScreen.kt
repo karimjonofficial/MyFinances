@@ -6,9 +6,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
-import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.Scaffold
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 
 @Composable
 fun <T> StatefulScreen(
@@ -28,13 +27,11 @@ fun <T> StatefulScreen(
 
         when (state) {
             is State.Loading -> LoadingScreen(
-                modifier = modifier,
-                message = state.message.str()
+                modifier = modifier
             )
 
             is State.Failure -> FailureScreen(
                 modifier = modifier,
-                message = state.error.str(),
                 retry = onRetry
             )
 

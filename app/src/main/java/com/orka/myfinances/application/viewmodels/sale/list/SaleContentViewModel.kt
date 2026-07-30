@@ -3,15 +3,14 @@ package com.orka.myfinances.application.viewmodels.sale.list
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.dtos.sale.SaleDto
 import com.orka.myfinances.data.repositories.sale.SaleEvent
-import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.format.FormatDecimal
 import com.orka.myfinances.format.FormatLocalDate
 import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.format.FormatTime
-import com.orka.myfinances.logger.Logger
+import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.MapChunkViewModel
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.sale.list.SaleContentInteractor
 import com.orka.myfinances.ui.screens.sale.list.SaleUiModel
@@ -25,8 +24,6 @@ import kotlinx.datetime.toLocalDateTime
 class SaleContentViewModel(
     getChunk: GetChunk<SaleDto>,
     events: Flow<SaleEvent>,
-    loading: UiText,
-    failure: UiText,
     formatPrice: FormatPrice,
     formatDecimal: FormatDecimal,
     formatLocalDate: FormatLocalDate,
@@ -34,8 +31,6 @@ class SaleContentViewModel(
     private val navigator: Navigator,
     logger: Logger
 ) : MapChunkViewModel<SaleDto, SaleUiModel>(
-    loading = loading,
-    failure = failure,
     get = getChunk,
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
@@ -46,7 +41,7 @@ class SaleContentViewModel(
             }
 
         ChunkUiModel(
-            count = chunk.count,
+            size = chunk.count,
             pageIndex = chunk.pageIndex,
             nextPageIndex = chunk.nextPageIndex,
             previousPageIndex = chunk.previousPageIndex,

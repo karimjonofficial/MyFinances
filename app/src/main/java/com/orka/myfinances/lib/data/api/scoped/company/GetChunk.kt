@@ -2,7 +2,7 @@ package com.orka.myfinances.lib.data.api.scoped.company
 
 import com.orka.myfinances.lib.data.api.map
 import com.orka.myfinances.lib.data.models.ChunkApiModel
-import com.orka.myfinances.lib.viewmodel.Chunk
+import com.orka.myfinances.data.repositories.Chunk
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter

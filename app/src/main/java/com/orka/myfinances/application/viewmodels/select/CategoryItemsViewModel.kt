@@ -2,25 +2,18 @@ package com.orka.myfinances.application.viewmodels.select
 
 import com.orka.myfinances.data.dtos.folder.CategoryDto
 import com.orka.myfinances.data.repositories.folder.GetCategories
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.MapListViewModel
+import com.orka.myfinances.lib.viewmodel.sourceful.list.map.MapListViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.models.item.CategoryItemModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class CategoryItemsViewModel(
     private val get: GetCategories,
-    loading: UiText,
-    failure: UiText,
     logger: Logger
 ) : MapListViewModel<CategoryDto, CategoryItemModel>(
-    get = { get.getCategories(it) },
-    map = { list ->
-        list.map { it.toItemModel() }
-            .groupBy { it.title.take(1).uppercase() }
-    },
-    loading = loading,
-    failure = failure,
+    get = { get.getCategories() },
+    map = { it.toItemModel() },
+    groupBy = { it.name.take(1).uppercase() },
     logger = logger
 ) {
     val uiState = state.asStateFlow()

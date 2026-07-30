@@ -1,8 +1,8 @@
 package com.orka.myfinances.ui.screens.basket
 
-import com.orka.myfinances.lib.ui.viewmodel.StateFul
+import com.orka.myfinances.lib.ui.viewmodel.Refreshable
 
-interface BasketInteractor : StateFul {
+interface BasketInteractor : Refreshable {
     fun increase(item: BasketItemUiModel)
     fun decrease(item: BasketItemUiModel)
     fun remove(item: BasketItemUiModel)

@@ -35,10 +35,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
-import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
@@ -67,7 +66,7 @@ fun LoginScreen(
 
                     HorizontalSpacer(16)
                     Text(
-                        text = state.error.str(),
+                        text = stringResource(R.string.failure),
                         maxLines = 2,
                         color = MaterialTheme.colorScheme.onErrorContainer
                     )

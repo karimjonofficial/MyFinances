@@ -25,7 +25,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.models.BottomSheetItemModel
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.drop

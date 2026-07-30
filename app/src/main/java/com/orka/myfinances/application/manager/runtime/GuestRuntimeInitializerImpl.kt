@@ -1,15 +1,13 @@
 package com.orka.myfinances.application.manager.runtime
 
-import com.orka.myfinances.R
 import com.orka.myfinances.application.Logger
 import com.orka.myfinances.application.factories.HttpLogger
 import com.orka.myfinances.application.factories.httpClient
 import com.orka.myfinances.data.api.auth.AuthenticationApi
 import com.orka.myfinances.data.repositories.auth.AuthenticationRepository
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.runtime.GuestRuntimeInitializer
-import com.orka.myfinances.managers.SessionManager
 import com.orka.myfinances.factories.LoginScreenViewModelFactory
+import com.orka.myfinances.managers.SessionManager
+import com.orka.myfinances.runtime.GuestRuntimeInitializer
 
 class GuestRuntimeInitializerImpl(private val logger: Logger) : GuestRuntimeInitializer {
     private var factory: LoginScreenViewModelFactory? = null
@@ -21,7 +19,6 @@ class GuestRuntimeInitializerImpl(private val logger: Logger) : GuestRuntimeInit
         factory = LoginScreenViewModelFactory(
             authenticator = authenticator,
             sessionManager = manager,
-            loading = UiText.Res(R.string.loading),
             logger = this.logger
         )
     }

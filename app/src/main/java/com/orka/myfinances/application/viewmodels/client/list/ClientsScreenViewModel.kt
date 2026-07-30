@@ -7,10 +7,9 @@ import com.orka.myfinances.data.repositories.client.ClientEvent
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
-import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.MapChunkViewModel
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.client.list.viewmodel.ClientUiModel
 import com.orka.myfinances.ui.screens.client.list.viewmodel.ClientsScreenInteractor
@@ -23,13 +22,9 @@ class ClientsScreenViewModel(
     getChunk: GetChunk<ClientDto>,
     private val insert: Insert<AddClientRequest>,
     events: Flow<ClientEvent>,
-    loading: UiText,
-    failure: UiText,
     private val navigator: Navigator,
     logger: Logger
 ) : MapChunkViewModel<ClientDto, ClientUiModel>(
-    loading = loading,
-    failure = failure,
     get = getChunk,
     map = { chunk ->
         val map = chunk.results
@@ -38,7 +33,7 @@ class ClientsScreenViewModel(
             .mapValues { it.value.map { client -> client.toUiModel() } }
 
         ChunkUiModel(
-            count = chunk.count,
+            size = chunk.count,
             pageIndex = chunk.pageIndex,
             nextPageIndex = chunk.nextPageIndex,
             previousPageIndex = chunk.previousPageIndex,

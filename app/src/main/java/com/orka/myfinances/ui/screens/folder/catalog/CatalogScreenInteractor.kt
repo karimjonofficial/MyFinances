@@ -1,10 +1,10 @@
 package com.orka.myfinances.ui.screens.folder.catalog
 
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.lib.ui.viewmodel.StateFul
+import com.orka.myfinances.lib.ui.viewmodel.Refreshable
 import com.orka.myfinances.ui.screens.folder.models.FolderUiModel
 
-interface CatalogScreenInteractor : StateFul {
+interface CatalogScreenInteractor : Refreshable {
     fun select(folder: FolderUiModel)
     fun addFolder(name: String, type: String, templateId: Id?)
     fun navigateToAddTemplate()

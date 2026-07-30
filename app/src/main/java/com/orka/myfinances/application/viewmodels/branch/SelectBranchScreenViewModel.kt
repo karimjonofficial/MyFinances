@@ -5,8 +5,7 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.MapListViewModel
+import com.orka.myfinances.lib.viewmodel.sourceful.list.map.MapListViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.managers.SessionManager
 import com.orka.myfinances.ui.screens.branch.SelectBranchScreenInteractor
@@ -17,18 +16,11 @@ class SelectBranchScreenViewModel(
     getBranches: Get<BranchDto>,
     private val getById: GetById<BranchDto>,
     private val sessionManager: SessionManager,
-    loading: UiText,
-    failure: UiText,
     logger: Logger
 ) : MapListViewModel<BranchDto, BranchUiModel>(
-    loading = loading,
-    failure = failure,
     get = getBranches,
-    map = { branches ->
-        branches.sortedBy { it.name }
-            .groupBy { it.name.stickyHeaderKey() }
-            .mapValues { (_, list) -> list.map { it.toUiModel() } }
-    },
+    map = BranchDto::toUiModel,
+    groupBy = { it.name.stickyHeaderKey() },
     logger = logger
 ), SelectBranchScreenInteractor {
     val uiState = state.asStateFlow()
@@ -40,10 +32,9 @@ class SelectBranchScreenViewModel(
     override fun select(id: Id) {
         tryTransition { oldState ->
             val branch = getById.getById(id)
-            if (branch != null) {
+            if (branch != null)
                 sessionManager.setBranch(Id(branch.id))
-                oldState
-            } else oldState
+            oldState
         }
     }
 }

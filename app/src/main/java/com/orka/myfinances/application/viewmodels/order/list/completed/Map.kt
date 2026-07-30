@@ -1,12 +1,10 @@
 package com.orka.myfinances.application.viewmodels.order.list.completed
 
-import com.orka.myfinances.R
 import com.orka.myfinances.data.dtos.order.OrderDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.format.FormatDecimal
 import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.format.FormatTime
-import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.ui.screens.order.list.completed.HistoryOrderCardModel
 import com.orka.myfinances.ui.screens.order.list.completed.HistoryOrderUiModel
 
@@ -30,8 +28,6 @@ fun OrderDto.toCardModel(
         title = items.joinToString { it.product.name },
         size = formatDecimal.formatDecimal(items.size.toDouble()),
         price = formatPrice.formatPrice(price.toDouble()),
-        dateTime = if (completedDateTime != null) UiText.Str(formatTime.formatTime(completedDateTime)) else UiText.Res(
-            R.string.completed_date_time_is_not_provided
-        )
+        dateTime = formatTime.formatTime(createdAt)
     )
 }

@@ -1,13 +1,11 @@
 package com.orka.myfinances.ui.models.card
 
-import com.orka.myfinances.lib.ui.models.UiText
-
 data class StockItemCardModel(
     val title: String,
     val price: String,
     val amount: String,
     val properties: String?,
-    val description: UiText,
+    val description: String?,
     val basketAmount: String? = null,
     val increaseEnabled: Boolean
 )

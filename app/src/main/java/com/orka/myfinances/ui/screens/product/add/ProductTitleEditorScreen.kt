@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
 import com.orka.myfinances.ui.screens.product.add.interactor.CategoryBottomSheetItemModel
 

@@ -18,15 +18,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.fixtures.resources.models.template.template1
 import com.orka.myfinances.lib.ui.components.Dialog
-import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.RadioButton
+import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
+import com.orka.myfinances.lib.ui.preview.DefaultPreview
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.ui.models.item.TemplateItemModel
 import com.orka.myfinances.ui.screens.folder.home.toItemModel
@@ -116,23 +116,9 @@ fun AddFolderDialog(
     }
 }
 
-@Preview
+@DefaultPreview
 @Composable
-private fun AddFolderDialogPreview1() {
-    ScaffoldPreview(title = "Home") {
-        AddFolderDialog(
-            template = template1.toItemModel(),
-            dismissRequest = {},
-            onUnfoldTemplates = {},
-            onSuccess = { _, _, _ -> },
-            onCancel = {}
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun AddFolderDialogPreview2() {
+private fun AddFolderDialogPreview() {
     ScaffoldPreview(title = "Home") {
         AddFolderDialog(
             template = template1.toItemModel(),

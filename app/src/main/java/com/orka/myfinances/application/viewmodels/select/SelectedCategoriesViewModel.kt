@@ -5,9 +5,8 @@ import com.orka.myfinances.application.data.repositories.PinnedCategoriesEvent
 import com.orka.myfinances.application.data.repositories.PinnedCategoriesRepository
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.preferences.categories.AddPinnedCategoryRequest
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.FormatListViewModel
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.sourceful.list.format.FormatListViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.settings.home.PinnedCategoriesScreenInteractor
@@ -20,14 +19,10 @@ class SelectedCategoriesViewModel(
     private val repository: PinnedCategoriesRepository,
     events: Flow<PinnedCategoriesEvent>,
     private val navigator: Navigator,
-    loading: UiText,
-    failure: UiText,
     logger: Logger
 ) : FormatListViewModel<Id, Int>(
     get = repository,
     map = { it.value },
-    loading = loading,
-    failure = failure,
     logger = logger
 ), PinnedCategoriesScreenInteractor {
     val uiState = state.asStateFlow()

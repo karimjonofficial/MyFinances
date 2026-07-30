@@ -18,11 +18,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.components.lazy.column.LazyColumnWithStickyHeader
-import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 
 @Composable
 fun <T> LazyColumnWithStickyHeaderContent(
@@ -38,7 +37,6 @@ fun <T> LazyColumnWithStickyHeaderContent(
     when (state) {
         is State.Loading -> LoadingScreen(
             modifier = modifier,
-            message = state.message.str(),
         )
 
         is State.Success -> {
@@ -63,7 +61,6 @@ fun <T> LazyColumnWithStickyHeaderContent(
 
         is State.Failure -> FailureScreen(
             modifier = modifier,
-            message = state.error.str(),
             retry = refresh
         )
     }
@@ -126,13 +123,12 @@ fun <T> LazyColumnWithStickyHeaderContent(
     } else {
         if (state is State.Loading) {
             LoadingScreen(
-                modifier = modifier,
-                message = state.message.str()
+                modifier = modifier
             )
         } else {
             FailureScreen(
                 modifier = modifier,
-                message = if (state is State.Failure) state.error.str() else stringResource(R.string.unresolved_error),
+                message = stringResource(R.string.unresolved_error),
                 retry = if (state is State.Failure) refresh else null
             )
         }

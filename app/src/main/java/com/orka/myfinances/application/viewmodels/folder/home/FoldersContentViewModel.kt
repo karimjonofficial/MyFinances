@@ -14,9 +14,8 @@ import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequestItem
 import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.Insert
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.BaseViewModel
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.base.refreshable.RefreshableBaseViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.folder.home.interactor.FoldersContentInteractor
@@ -37,27 +36,21 @@ class FoldersContentViewModel(
     private val navigator: Navigator,
     folderFlow: Flow<FolderEvent>,
     pinnedCategoriesFlow: Flow<PinnedCategoriesEvent>,
-    loading: UiText,
-    failure: UiText,
     logger: Logger
-) : BaseViewModel<FoldersContentModel>(
-    loading = loading,
-    failure = failure,
+) : RefreshableBaseViewModel<FoldersContentModel>(
     produceInitialState = {
-        val folders = getTop.getTop(null)
-        val categories = pinnedCategoriesRepository.getAll(null)
+        val folders = getTop.getTop()
+        val categories = pinnedCategoriesRepository.getAll()
 
         if (folders != null) {
-            val isDefaultSet = getDefaultCategory.getDefaultCategoryId()
-
-            State.Success(
-                FoldersContentModel(
-                    folders = folders.map { it.toUiModel() },
-                    isDefaultCategorySet = isDefaultSet != null,
-                    pinnedCategories = categories
-                )
+            val isDefaultSet = getDefaultCategory.getDefaultCategoryId() != null
+            val model = FoldersContentModel(
+                folders = folders.map { it.toUiModel() },
+                isDefaultCategorySet = isDefaultSet,
+                pinnedCategories = categories
             )
-        } else null
+            State.Success(model)
+        } else State.Failure()
     },
     logger = logger
 ), FoldersContentInteractor {
@@ -73,10 +66,11 @@ class FoldersContentViewModel(
     }
 
     override fun addFolder(name: String, type: String, templateId: Id?) {
-        launch {
-            setState(State.Loading(loading))
+        tryTransition { oldState ->
             val request = AddFolderRequest(name, type, templateId, null)
-            addFolder.add(request)
+            val response = addFolder.add(request)
+            if(response != null) oldState
+            else State.Failure(FolderNotAdded, oldState.value)
         }
     }
 
@@ -121,24 +115,23 @@ class FoldersContentViewModel(
                 )
                 val r1 = addTitle.add(titleRequest)
                 if(r1 != null) {
+                    val item = AddReceiveRequestItem(
+                        productTitleId = r1,
+                        price = price,
+                        salePrice = salePrice,
+                        exposedPrice = exposedPrice,
+                        amount = amount
+                    )
                     val receiveRequest = AddReceiveRequest(
                         categoryId = id,
-                        items = listOf(
-                            AddReceiveRequestItem(
-                                r1,
-                                price,
-                                salePrice,
-                                exposedPrice,
-                                amount
-                            )
-                        ),
+                        items = listOf(item),
                         price = price * amount
                     )
                     val r2 = addReceive.insert(receiveRequest)
                     if(r2) oldState
-                    else State.Failure(failure, oldState.value)
-                } else State.Failure(failure, oldState.value)
-            } else State.Failure(UiText.Str("Default empty category is not set yet"), oldState.value)
+                    else State.Failure(ReceiveNotAdded, oldState.value)
+                } else State.Failure(ProductTitleNotAdded, oldState.value)
+            } else State.Failure(DefaultCategoryNotFound, oldState.value)
         }
     }
 }

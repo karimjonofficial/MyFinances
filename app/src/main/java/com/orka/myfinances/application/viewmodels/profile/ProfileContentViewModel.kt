@@ -4,9 +4,8 @@ import com.orka.myfinances.data.dtos.branch.BranchDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.user.GetMe
 import com.orka.myfinances.lib.data.repositories.Get
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.BaseViewModel
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.base.BaseViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.managers.SessionManager
 import com.orka.myfinances.ui.navigation.Navigator
@@ -21,14 +20,10 @@ class ProfileContentViewModel(
     private val getMe: GetMe,
     private val sessionManager: SessionManager,
     private val navigator: Navigator,
-    loading: UiText,
-    failure: UiText,
     logger: Logger
 ) : BaseViewModel<ProfileContentModel>(
-    loading = loading,
-    failure = failure,
     produceInitialState = {
-        val branches: List<BranchDto>? = getBranches.getAll(null)
+        val branches: List<BranchDto>? = getBranches.getAll()
         val user = getMe.getMe()
 
         if (branches != null && user != null)

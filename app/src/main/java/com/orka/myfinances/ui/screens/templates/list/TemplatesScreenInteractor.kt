@@ -1,9 +1,9 @@
 package com.orka.myfinances.ui.screens.templates.list
 
 import com.orka.myfinances.lib.ui.viewmodel.ChunkViewModel
-import com.orka.myfinances.lib.ui.viewmodel.StateFul
+import com.orka.myfinances.lib.ui.viewmodel.Refreshable
 
-interface TemplatesScreenInteractor : StateFul, ChunkViewModel {
+interface TemplatesScreenInteractor : Refreshable, ChunkViewModel {
     fun addTemplate()
     fun select(template: TemplateUiModel)
 

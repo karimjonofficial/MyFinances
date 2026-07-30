@@ -9,7 +9,7 @@ import com.orka.myfinances.lib.data.models.toChunk
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.Insert
-import com.orka.myfinances.lib.viewmodel.Chunk
+import com.orka.myfinances.data.repositories.Chunk
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class ReceiveRepository(

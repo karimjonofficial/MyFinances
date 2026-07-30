@@ -16,7 +16,7 @@ import com.orka.myfinances.lib.ui.contents.LazyVerticalGridContentWithStickyHead
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.components.cards.StockItemCard
 import com.orka.myfinances.ui.map.toMap
 
@@ -62,7 +62,7 @@ private fun StockItemsContentPreview() {
             interactor = StockContentInteractor.dummy,
             state = State.Success(
                 value = ChunkUiModel(
-                    count = 0,
+                    size = 0,
                     pageIndex = 1,
                     nextPageIndex = null,
                     previousPageIndex = null,

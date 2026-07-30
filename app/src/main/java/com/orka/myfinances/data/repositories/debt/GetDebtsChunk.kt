@@ -1,13 +1,12 @@
 package com.orka.myfinances.data.repositories.debt
 
 import com.orka.myfinances.data.dtos.debt.DebtDto
-import com.orka.myfinances.lib.viewmodel.Chunk
+import com.orka.myfinances.data.repositories.Chunk
 
 fun interface GetDebtsChunk {
     suspend fun getDebtsChunk(
         size: Int,
         page: Int,
-        isCompleted: Boolean,
-        query: String?
+        isCompleted: Boolean
     ): Chunk<DebtDto>?
 }

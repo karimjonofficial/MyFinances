@@ -1,9 +1,9 @@
 package com.orka.myfinances.ui.screens.notifications
 
 import com.orka.myfinances.lib.ui.viewmodel.ChunkViewModel
-import com.orka.myfinances.lib.ui.viewmodel.StateFul
+import com.orka.myfinances.lib.ui.viewmodel.Refreshable
 
-interface NotificationsScreenInteractor : StateFul, ChunkViewModel {
+interface NotificationsScreenInteractor : Refreshable, ChunkViewModel {
     fun read(notification: NotificationUiModel)
 
     companion object {

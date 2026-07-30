@@ -10,7 +10,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
 import com.orka.myfinances.lib.ui.screens.SelectionScreen
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.models.item.CategoryItemModel
 
 @Composable

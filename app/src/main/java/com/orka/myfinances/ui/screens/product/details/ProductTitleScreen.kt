@@ -32,16 +32,16 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.product.productTitle1
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
-import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
+import com.orka.myfinances.lib.ui.components.spacer.LazyFooterSpacer
 import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.screens.product.details.models.ProductTitleScreenModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
@@ -86,20 +86,18 @@ fun ProductTitleScreen(
 
         when (state) {
             is State.Loading -> LoadingScreen(
-                modifier = m,
-                message = state.message.str()
+                modifier = m
             )
 
             is State.Failure -> FailureScreen(
-                modifier = m,
-                message = state.error.str()
+                modifier = m
             )
 
             is State.Success<*> -> {
                 val productTitle = state.value as ProductTitleScreenModel
                 LazyColumn(
                     modifier = m,
-                    contentPadding = PaddingValues(bottom = 16.dp, start = 16.dp, end = 16.dp)
+                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
                 ) {
                     item { HeroImage() }
 
@@ -135,6 +133,8 @@ fun ProductTitleScreen(
                             }
                         }
                     }
+
+                    LazyFooterSpacer()
                 }
 
                 if (dialogVisible.value) {
@@ -164,7 +164,7 @@ private fun HeroImage(modifier: Modifier = Modifier) {
         contentDescription = null,
         modifier = modifier
             .fillMaxWidth()
-            .aspectRatio(16 / 9f)
+            .aspectRatio(16 / 12f)
             .clip(RoundedCornerShape(16.dp)),
         contentScale = ContentScale.Crop
     )
@@ -182,6 +182,7 @@ private fun TitleSection(
             fontWeight = FontWeight.Bold
         )
 
+        VerticalSpacer(8)
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 painter = painterResource(R.drawable.schedule),

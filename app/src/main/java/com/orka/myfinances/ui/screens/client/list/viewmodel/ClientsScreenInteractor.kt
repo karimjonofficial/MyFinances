@@ -1,9 +1,9 @@
 package com.orka.myfinances.ui.screens.client.list.viewmodel
 
 import com.orka.myfinances.lib.ui.viewmodel.ChunkViewModel
-import com.orka.myfinances.lib.ui.viewmodel.StateFul
+import com.orka.myfinances.lib.ui.viewmodel.Refreshable
 
-interface ClientsScreenInteractor : StateFul, ChunkViewModel {
+interface ClientsScreenInteractor : Refreshable, ChunkViewModel {
     fun add(name: String, lastName: String?, patronymic: String?,phone: String?, address: String?)
     fun select(client: ClientUiModel)
 

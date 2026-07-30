@@ -3,10 +3,9 @@ package com.orka.myfinances.ui.map
 import com.orka.myfinances.data.models.StockItem
 import com.orka.myfinances.fixtures.format.FormatDecimalImpl
 import com.orka.myfinances.fixtures.format.FormatPriceImpl
-import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.format.FormatDecimal
 import com.orka.myfinances.format.FormatPrice
-import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.ui.models.card.StockItemCardModel
 import com.orka.myfinances.ui.screens.stock.StockItemUiModel
 
@@ -33,7 +32,7 @@ fun StockItem.toCardModel(
         price = formatPrice.formatPrice(product.price.toDouble()),
         amount = formatDecimal.formatDecimal(amount.toDouble()),
         properties = properties,
-        description = UiText.Str(product.title.description ?: ""),
+        description = description,
         increaseEnabled = true
     )
 }

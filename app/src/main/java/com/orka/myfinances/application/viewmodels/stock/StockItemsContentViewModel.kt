@@ -6,14 +6,13 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.stock.GetStockItemsByCategory
 import com.orka.myfinances.data.repositories.stock.StockEvent
-import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.format.FormatDecimal
 import com.orka.myfinances.format.FormatPrice
-import com.orka.myfinances.logger.Logger
+import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.MapChunkViewModel
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.screens.stock.StockContentInteractor
 import com.orka.myfinances.ui.screens.stock.StockItemUiModel
 import kotlinx.coroutines.flow.Flow
@@ -28,13 +27,9 @@ class StockItemsContentViewModel(
     private val basketRepository: BasketRepository,
     private val formatPrice: FormatPrice,
     private val formatDecimal: FormatDecimal,
-    loading: UiText,
-    failure: UiText,
     logger: Logger
 ) : MapChunkViewModel<StockItemDto, StockItemUiModel>(
-    loading = loading,
-    failure = failure,
-    get = { size, page, query -> getByCategory.getByCategory(size, page, categoryId, query) },
+    get = { size, page -> getByCategory.getByCategory(size, page, categoryId) },
     map = { chunk ->
         val basketItems = basketRepository.get()
         val content = chunk.results
@@ -51,7 +46,7 @@ class StockItemsContentViewModel(
             }
 
         ChunkUiModel(
-            count = chunk.count,
+            size = chunk.count,
             pageIndex = chunk.pageIndex,
             nextPageIndex = chunk.nextPageIndex,
             previousPageIndex = chunk.previousPageIndex,

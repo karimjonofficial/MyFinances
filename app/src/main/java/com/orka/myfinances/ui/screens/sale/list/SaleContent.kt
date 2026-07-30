@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 
 @Composable
 fun SaleContent(

@@ -6,7 +6,8 @@ import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.repositories.info.InfoRepository
 import com.orka.myfinances.data.storages.credentials.CredentialsStorage
 import com.orka.myfinances.data.storages.defaults.DefaultsStorage
-import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
+import com.orka.myfinances.lib.ui.state.FailureType
+import com.orka.myfinances.lib.viewmodel.single.SingleStateViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.managers.SessionManager
 import com.orka.myfinances.runtime.GuestRuntimeInitializer
@@ -82,7 +83,7 @@ class UiManager(
 
     override fun refreshCredentials() {
         launch {
-            setStateGuest()//TODO improve
+            setStateGuest()//TODO complete it
         }
     }
 
@@ -130,7 +131,7 @@ class UiManager(
                 }
             }
         } catch (e: Exception) {
-            setState(UiState.Failure())
+            setState(UiState.Failure(FailureType.Exception(e.message.toString())))
         }
     }
 }

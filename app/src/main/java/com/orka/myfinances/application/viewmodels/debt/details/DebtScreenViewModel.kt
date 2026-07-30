@@ -4,13 +4,13 @@ import com.orka.myfinances.data.dtos.debt.DebtDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.debt.SetNotified
 import com.orka.myfinances.data.repositories.debt.SetPaid
-import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.format.FormatDate
 import com.orka.myfinances.format.FormatPrice
+import com.orka.myfinances.lib.data.repositories.GetById
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.ExecutedFromFailure
+import com.orka.myfinances.lib.viewmodel.sourceful.single.MapSingleByIdViewModel
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.MapSingleViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.debt.details.DebtScreenModel
 import com.orka.myfinances.ui.screens.debt.details.interactor.DebtScreenInteractor
@@ -24,15 +24,11 @@ class DebtScreenViewModel(
     private val formatPrice: FormatPrice,
     private val formatDate: FormatDate,
     private val navigator: Navigator,
-    loading: UiText,
-    failure: UiText,
     logger: Logger
-) : MapSingleViewModel<DebtDto, DebtScreenModel>(
+) : MapSingleByIdViewModel<DebtDto, DebtScreenModel>(
     id = id,
     get = getById,
     map = { it.toScreenModel(formatPrice, formatDate) },
-    loading = loading,
-    failure = failure,
     logger = logger
 ), DebtScreenInteractor {
     val uiState = state.asStateFlow()
@@ -60,9 +56,7 @@ class DebtScreenViewModel(
                 if (success)
                     State.Success(oldState.value.copy(notified = notified))
                 else oldState
-            } else {
-                State.Failure(UiText.Str("Action executed in wrong state"), oldState.value)
-            }
+            } else State.Failure(ExecutedFromFailure, oldState.value)
         }
     }
 
@@ -70,12 +64,10 @@ class DebtScreenViewModel(
         tryTransition { oldState ->
             if (oldState is State.Success) {
                 val success = setPaid.setPaid(id)
-                if (success) {
+                if (success)
                     State.Success(oldState.value.copy(completed = true))
-                } else oldState
-            } else {
-                State.Failure(UiText.Str("Action executed in wrong state"), oldState.value)
-            }
+                else oldState
+            } else State.Failure(ExecutedFromFailure, oldState.value)
         }
     }
 }

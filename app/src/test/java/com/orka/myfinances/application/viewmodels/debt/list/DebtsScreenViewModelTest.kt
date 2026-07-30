@@ -1,19 +1,18 @@
 package com.orka.myfinances.application.viewmodels.debt.list
 
-import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.data.dtos.debt.DebtDto
+import com.orka.myfinances.data.repositories.Chunk
 import com.orka.myfinances.data.repositories.debt.AddDebtRequest
 import com.orka.myfinances.data.repositories.debt.DebtEvent
-import com.orka.myfinances.lib.data.repositories.GetChunk
-import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.format.FormatLocalDate
 import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.format.FormatTime
+import com.orka.myfinances.lib.data.repositories.GetChunk
+import com.orka.myfinances.lib.data.repositories.Insert
+import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.Chunk
 import com.orka.myfinances.testFixtures.resources.dtos.debtDto1
+import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.ui.navigation.Navigator
 import io.mockk.coEvery
 import io.mockk.every
@@ -31,8 +30,6 @@ class DebtsScreenViewModelTest : MainDispatcherContext() {
     private val formatTime = mockk<FormatTime>()
     private val logger = mockk<Logger>(relaxed = true)
     private val navigator = mockk<Navigator>(relaxed = true)
-    private val loading = UiText.Str("Loading")
-    private val failure = UiText.Str("Failure")
 
     @Test
     fun `initialize success`() = runTest {
@@ -49,7 +46,7 @@ class DebtsScreenViewModelTest : MainDispatcherContext() {
         every { formatTime.formatTime(any()) } returns "12:00"
 
         val viewModel = DebtsScreenViewModel(
-            getChunk, insert, events, formatPrice, formatLocalDate, formatTime, loading, failure, logger, navigator
+            getChunk, insert, events, formatPrice, formatLocalDate, formatTime, logger, navigator
         )
         
         advanceUntilIdle()

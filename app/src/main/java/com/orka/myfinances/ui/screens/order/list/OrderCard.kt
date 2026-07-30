@@ -31,7 +31,6 @@ import com.orka.myfinances.fixtures.resources.models.order.order1
 import com.orka.myfinances.fixtures.resources.models.order.order2
 import com.orka.myfinances.fixtures.resources.models.order.order3
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
-import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
@@ -102,7 +101,7 @@ private fun OrderCardContent(
 
                 HorizontalSpacer(4)
                 Text(
-                    text = order.dateTime.str(),
+                    text = order.dateTime,
                     style = MaterialTheme.typography.labelMedium
                 )
             }

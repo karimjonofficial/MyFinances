@@ -15,11 +15,8 @@ class FolderRepository(
     private val api: FolderApi
 ) : Get<FolderDto>, GetTop, Add<Unit, AddFolderRequest>, GetById<FolderDto>, GetByParent, GetCategories {
 
-    override suspend fun getTop(query: String?): List<FolderDto>? {
-        return api.getTop(
-            branchId = branchId.value,
-            search = query
-        )?.map { it.toDto() }
+    override suspend fun getTop(): List<FolderDto>? {
+        return api.getTop(branchId.value)?.map { it.toDto() }
     }
 
     override suspend fun add(request: AddFolderRequest) {
@@ -39,17 +36,11 @@ class FolderRepository(
         return api.getById(id.value)?.toDto()
     }
 
-    override suspend fun getAll(search: String?): List<FolderDto>? {
-        return api.get(
-            branchId = branchId.value,
-            search = search
-        )?.map { it.toDto() }
+    override suspend fun getAll(): List<FolderDto>? {
+        return api.get(branchId.value)?.map { it.toDto() }
     }
 
-    override suspend fun getCategories(query: String?): List<CategoryDto>? {
-        return api.get(
-            branchId = branchId.value,
-            search = query
-        )?.filter { !it.isCatalog }?.map { it.toDto() as CategoryDto }
+    override suspend fun getCategories(): List<CategoryDto>? {
+        return api.get(branchId.value)?.filter { !it.isCatalog }?.map { it.toDto() as CategoryDto }
     }
 }

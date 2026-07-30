@@ -7,7 +7,7 @@ import com.orka.myfinances.lib.data.models.toChunk
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.data.repositories.GetChunk
-import com.orka.myfinances.lib.viewmodel.Chunk
+import com.orka.myfinances.data.repositories.Chunk
 
 class BranchRepository(
     private val companyId: Id,

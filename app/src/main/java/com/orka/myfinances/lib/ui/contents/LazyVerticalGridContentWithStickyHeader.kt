@@ -14,12 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.lazy.LazyVerticalGridWithStickHeader
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 
 @Composable
 fun <T> LazyVerticalGridContentWithStickyHeader(
@@ -65,13 +64,12 @@ fun <T> LazyVerticalGridContentWithStickyHeader(
     } else {
         if (state is State.Loading) {
             LoadingScreen(
-                modifier = modifier,
-                message = state.message.str()
+                modifier = modifier
             )
         } else {
             FailureScreen(
                 modifier = modifier,
-                message = if (state is State.Failure) state.error.str() else stringResource(R.string.unresolved_error),
+                message = stringResource(R.string.unresolved_error),
                 retry = if (state is State.Failure) refresh else null
             )
         }

@@ -2,11 +2,11 @@ package com.orka.myfinances.ui.screens.debt.list.interactor
 
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.ui.viewmodel.ChunkViewModel
-import com.orka.myfinances.lib.ui.viewmodel.StateFul
+import com.orka.myfinances.lib.ui.viewmodel.Refreshable
 import com.orka.myfinances.ui.screens.debt.list.DebtUiModel
 import kotlin.time.Instant
 
-interface DebtsScreenInteractor : StateFul, ChunkViewModel {
+interface DebtsScreenInteractor : Refreshable, ChunkViewModel {
     fun add(id: Id, price: Int, endDateTime: Instant?, description: String?)
     fun select(debt: DebtUiModel)
 

@@ -6,15 +6,14 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequestItem
-import com.orka.myfinances.lib.data.repositories.GetById
-import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.format.FormatDate
 import com.orka.myfinances.format.FormatDecimal
 import com.orka.myfinances.format.FormatPrice
+import com.orka.myfinances.lib.data.repositories.GetById
+import com.orka.myfinances.lib.data.repositories.Insert
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.sourceful.single.MapSingleByIdViewModel
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.MapSingleViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.product.details.ProductTitleScreenInteractor
 import com.orka.myfinances.ui.screens.product.details.models.ProductTitleScreenModel
@@ -32,15 +31,11 @@ class ProductTitleScreenViewModel(
     private val formatDate: FormatDate,
     private val formatPrice: FormatPrice,
     private val navigator: Navigator,
-    loading: UiText,
-    failure: UiText,
     logger: Logger
-) : MapSingleViewModel<ProductTitleDto, ProductTitleScreenModel>(
+) : MapSingleByIdViewModel<ProductTitleDto, ProductTitleScreenModel>(
     id = productId,
     get = getById,
     map = { it.toScreenModel(formatDecimal, formatDate, formatPrice) },
-    loading = loading,
-    failure = failure,
     logger = logger
 ), ProductTitleScreenInteractor {
     val uiState = state.asStateFlow()
@@ -59,41 +54,32 @@ class ProductTitleScreenViewModel(
     }
 
     override fun receive(amount: Int, totalPrice: Int, comment: String?) {
-        launch {
-            val oldState = state.value
-            try {
-                setState(State.Loading(loading, oldState.value))
+        tryTransition { oldState ->
                 val title = getById.getById(productId)
-                if (title == null) {
-                    setState(State.Failure(failure, oldState.value))
-                    return@launch
+                if (title == null)
+                    State.Failure(ProductTitleNotFound, oldState.value)
+                else {
+                    categoryId = Id(title.category)
+                    val price = title.defaultPrice.toInt()
+                    val salePrice = title.defaultSalePrice.toInt()
+                    val exposedPrice = title.defaultExposedPrice.toInt()
+                    val item = AddReceiveRequestItem(
+                        productTitleId = productId,
+                        price = price,
+                        salePrice = salePrice,
+                        exposedPrice = exposedPrice,
+                        amount = amount
+                    )
+                    val request = AddReceiveRequest(
+                        categoryId = categoryId,
+                        items = listOf(item),
+                        price = totalPrice,
+                        comment = comment
+                    )
+                    val created = insertReceive.insert(request)
+                    if (created) oldState
+                    else State.Failure(NotInserted, oldState.value)
                 }
-
-                categoryId = Id(title.category)
-                val price = title.defaultPrice.toInt()
-                val salePrice = title.defaultSalePrice.toInt()
-                val exposedPrice = title.defaultExposedPrice.toInt()
-                val request = AddReceiveRequest(
-                    categoryId = categoryId,
-                    items = listOf(
-                        AddReceiveRequestItem(
-                            productTitleId = productId,
-                            price = price,
-                            salePrice = salePrice,
-                            exposedPrice = exposedPrice,
-                            amount = amount
-                        )
-                    ),
-                    price = totalPrice,
-                    comment = comment
-                )
-                val created = insertReceive.insert(request)
-                if (created) {
-                    setState(oldState)
-                } else setState(State.Failure(failure, oldState.value))
-            } catch(e: Exception) {
-                setState(State.Failure(UiText.Str(e.message.toString())))
-            }
         }
     }
 }

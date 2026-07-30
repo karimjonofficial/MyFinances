@@ -5,7 +5,6 @@ import com.orka.myfinances.format.FormatDate
 import com.orka.myfinances.format.FormatDecimal
 import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.ui.models.UiText
 import kotlin.time.Clock
 
 fun Order.toCardModel(
@@ -18,7 +17,7 @@ fun Order.toCardModel(
     return OrderCardModel(
         title = items.joinToString { it.product.title.name },
         price = formatPrice.formatPrice(price.toDouble()),
-        dateTime = UiText.Str(if (endDateTime != null) formatDate.formatDate(endDateTime) else "Date is not provided"),
+        dateTime = ,
         size = formatDecimal.formatDecimal(items.size.toDouble()),
         completed = completed,
         expired = expired
@@ -46,7 +45,7 @@ fun List<Order>.toChunkMapState(
     formatDate: FormatDate
 ): ChunkUiModel<OrderUiModel> {
     return ChunkUiModel(
-        count = 1,
+        size = 1,
         pageIndex = 1,
         nextPageIndex = 1,
         previousPageIndex = 1,

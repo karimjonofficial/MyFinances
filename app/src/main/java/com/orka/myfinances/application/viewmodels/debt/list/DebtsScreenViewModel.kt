@@ -5,16 +5,15 @@ import com.orka.myfinances.data.dtos.debt.DebtDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.debt.AddDebtRequest
 import com.orka.myfinances.data.repositories.debt.DebtEvent
-import com.orka.myfinances.lib.data.repositories.GetChunk
-import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.format.FormatLocalDate
 import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.format.FormatTime
-import com.orka.myfinances.logger.Logger
+import com.orka.myfinances.lib.data.repositories.GetChunk
+import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.MapChunkViewModel
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.debt.list.DebtUiModel
 import com.orka.myfinances.ui.screens.debt.list.interactor.DebtsScreenInteractor
@@ -33,13 +32,9 @@ class DebtsScreenViewModel(
     private val formatPrice: FormatPrice,
     private val formatLocalDate: FormatLocalDate,
     private val formatTime: FormatTime,
-    loading: UiText,
-    failure: UiText,
     logger: Logger,
     private val navigator: Navigator
 ) : MapChunkViewModel<DebtDto, DebtUiModel>(
-    loading = loading,
-    failure = failure,
     get = getChunk,
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
@@ -51,7 +46,7 @@ class DebtsScreenViewModel(
             }
 
         ChunkUiModel(
-            count = chunk.count,
+            size = chunk.count,
             pageIndex = chunk.pageIndex,
             nextPageIndex = chunk.nextPageIndex,
             previousPageIndex = chunk.previousPageIndex,

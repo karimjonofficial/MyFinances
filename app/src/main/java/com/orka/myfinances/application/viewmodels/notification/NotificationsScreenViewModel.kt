@@ -2,14 +2,13 @@ package com.orka.myfinances.application.viewmodels.notification
 
 import com.orka.myfinances.data.dtos.notification.NotificationDto
 import com.orka.myfinances.data.repositories.notification.ReadNotification
-import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.format.FormatLocalDate
 import com.orka.myfinances.format.FormatTime
-import com.orka.myfinances.logger.Logger
+import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.MapChunkViewModel
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.screens.notifications.NotificationUiModel
 import com.orka.myfinances.ui.screens.notifications.NotificationsScreenInteractor
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,11 +21,7 @@ class NotificationsScreenViewModel(
     private val formatLocalDate: FormatLocalDate,
     private val formatTime: FormatTime,
     logger: Logger,
-    loading: UiText,
-    failure: UiText
 ) : MapChunkViewModel<NotificationDto, NotificationUiModel>(
-    loading = loading,
-    failure = failure,
     get = getChunk,
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
@@ -36,7 +31,7 @@ class NotificationsScreenViewModel(
             .mapValues { it.value.map { model -> model.toUiModel(formatTime) } }
 
         ChunkUiModel(
-            count = chunk.count,
+            size = chunk.count,
             pageIndex = chunk.pageIndex,
             nextPageIndex = chunk.nextPageIndex,
             previousPageIndex = chunk.previousPageIndex,
@@ -56,7 +51,7 @@ class NotificationsScreenViewModel(
             if (readNotification.read(notification.id)) {
                 refresh()
                 oldState
-            } else State.Failure(failure, oldState.value)
+            } else State.Failure(CouldNotRead, oldState.value)
         }
     }
 }

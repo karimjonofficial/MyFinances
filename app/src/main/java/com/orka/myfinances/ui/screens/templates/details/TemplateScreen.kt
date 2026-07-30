@@ -11,14 +11,13 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.template.template1
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
-import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
@@ -34,8 +33,7 @@ fun TemplateScreen(
             is State.Loading -> LoadingScreen(modifier)
 
             is State.Failure -> FailureScreen(
-                modifier = modifier,
-                message = state.error.str()
+                modifier = modifier
             )
 
             is State.Success -> {

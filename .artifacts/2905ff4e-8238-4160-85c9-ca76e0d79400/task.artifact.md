@@ -1,2 +1,5 @@
-- [x] Replace manual `Row` with `FilledTonalButton` in `ProfileContent.kt`
-- [x] Verify build and UI consistency
+- [ ] Fix broken properties in `HistoryOrderCardModel.kt` and `Map.kt`
+- [ ] Clean up `.str()` calls in UI components
+- [ ] Remove `UiText.kt` and redundant imports
+- [ ] Update all unit tests to use raw strings
+- [ ] Verify build and run tests

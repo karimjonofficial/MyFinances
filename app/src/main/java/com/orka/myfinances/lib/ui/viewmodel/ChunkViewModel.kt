@@ -1,6 +1,5 @@
 package com.orka.myfinances.lib.ui.viewmodel
 
-interface ChunkViewModel : StateFul {
+interface ChunkViewModel : Refreshable {
     fun loadMore()
-    fun search(query: String)
 }

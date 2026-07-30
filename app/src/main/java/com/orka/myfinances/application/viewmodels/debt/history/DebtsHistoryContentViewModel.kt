@@ -8,10 +8,9 @@ import com.orka.myfinances.data.repositories.debt.GetDebtsChunk
 import com.orka.myfinances.format.FormatLocalDate
 import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.format.FormatTime
-import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.MapChunkViewModel
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.debt.history.DebtsHistoryContentInteractor
 import com.orka.myfinances.ui.screens.debt.list.DebtUiModel
@@ -28,14 +27,10 @@ class DebtsHistoryContentViewModel(
     private val formatPrice: FormatPrice,
     private val formatLocalDate: FormatLocalDate,
     private val formatTime: FormatTime,
-    loading: UiText,
-    failure: UiText,
     logger: Logger,
     private val navigator: Navigator
 ) : MapChunkViewModel<DebtDto, DebtUiModel>(
-    loading = loading,
-    failure = failure,
-    get = { size, page, query -> getDebtsChunk.getDebtsChunk(size, page, true, query) },
+    get = { size, page -> getDebtsChunk.getDebtsChunk(size, page, true) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map = chunk.results
@@ -46,7 +41,7 @@ class DebtsHistoryContentViewModel(
             }
 
         ChunkUiModel(
-            count = chunk.count,
+            size = chunk.count,
             pageIndex = chunk.pageIndex,
             nextPageIndex = chunk.nextPageIndex,
             previousPageIndex = chunk.previousPageIndex,

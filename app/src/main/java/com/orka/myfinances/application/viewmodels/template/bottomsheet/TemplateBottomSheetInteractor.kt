@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.template.bottomsheet
 
 import com.orka.myfinances.lib.ui.viewmodel.ChunkViewModel
-import com.orka.myfinances.lib.ui.viewmodel.StateFul
+import com.orka.myfinances.lib.ui.viewmodel.Refreshable
 
-interface TemplateBottomSheetInteractor : StateFul, ChunkViewModel
+interface TemplateBottomSheetInteractor : Refreshable, ChunkViewModel

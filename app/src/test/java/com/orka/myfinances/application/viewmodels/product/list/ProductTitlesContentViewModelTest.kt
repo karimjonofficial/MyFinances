@@ -6,8 +6,8 @@ import com.orka.myfinances.data.repositories.product.title.GetProductTitlesByCat
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.Chunk
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.data.repositories.Chunk
 import com.orka.myfinances.testFixtures.resources.dtos.productTitleDto1
 import com.orka.myfinances.ui.navigation.Navigator
 import io.mockk.coEvery

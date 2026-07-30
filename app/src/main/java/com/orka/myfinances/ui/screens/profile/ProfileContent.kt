@@ -37,11 +37,10 @@ import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
-import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
 import com.orka.myfinances.lib.ui.preview.DefaultPreview
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.screens.profile.components.ProfileOptionButton
 import com.orka.myfinances.ui.screens.profile.components.UserIcon
 import com.orka.myfinances.ui.screens.profile.models.ProfileContentModel
@@ -90,8 +89,8 @@ fun ProfileContent(
             ) {
                 val branchTitle = when(state) {
                     is State.Success -> state.value.branchName
-                    is State.Failure -> state.error.str()
-                    is State.Loading -> state.message.str()
+                    is State.Failure -> stringResource(R.string.failure)
+                    is State.Loading -> stringResource(R.string.loading)
                 }
 
                 VerticalSpacer(16)

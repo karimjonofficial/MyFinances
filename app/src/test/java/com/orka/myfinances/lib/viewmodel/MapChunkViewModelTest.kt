@@ -1,10 +1,13 @@
 package com.orka.myfinances.lib.viewmodel
 
+import com.orka.myfinances.data.repositories.Chunk
 import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.MapChunkViewModel
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
@@ -30,7 +33,7 @@ class MapChunkViewModelTest : MainDispatcherContext() {
         get = get,
         map = { chunk ->
             ChunkUiModel(
-                count = chunk.count,
+                size = chunk.count,
                 pageIndex = chunk.pageIndex,
                 nextPageIndex = chunk.nextPageIndex,
                 previousPageIndex = chunk.previousPageIndex,

@@ -1,13 +1,11 @@
 package com.orka.myfinances.application.viewmodels.stock
 
-import com.orka.myfinances.R
 import com.orka.myfinances.data.dtos.stock.StockItemDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.format.FormatDecimal
 import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.models.card.StockItemCardModel
 import com.orka.myfinances.ui.screens.stock.StockItemUiModel
 
@@ -24,7 +22,7 @@ fun StockItemDto.toCardModel(
         price = formatPrice.formatPrice(price.toDouble()),
         amount = formatDecimal.formatDecimal(amount.toDouble()),
         properties = properties,
-        description = if(!product.title.description.isNullOrBlank()) UiText.Str(product.title.description) else UiText.Res(R.string.no_description_provided),
+        description = description,
         basketAmount = if(basketAmount != null) formatDecimal.formatDecimal(basketAmount.toDouble()) else null,
         increaseEnabled = if(basketAmount != null) basketAmount < amount else false
     )

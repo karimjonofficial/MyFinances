@@ -8,9 +8,8 @@ import com.orka.myfinances.data.repositories.stock.GetStockItemByProduct
 import com.orka.myfinances.format.FormatDecimal
 import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.BaseViewModel
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.base.BaseViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.basket.BasketInteractor
 import com.orka.myfinances.ui.screens.basket.BasketItemUiModel
@@ -25,12 +24,8 @@ class BasketContentViewModel(
     private val navigator: Navigator,
     private val formatPrice: FormatPrice,
     private val formatDecimal: FormatDecimal,
-    loading: UiText,
-    failure: UiText,
     logger: Logger
 ) : BaseViewModel<BasketScreenModel>(
-    loading = loading,
-    failure = failure,
     produceInitialState = {
         val minItems = basketRepository.get()
         val items = minItems.map { minItem ->

@@ -1,7 +1,7 @@
 package com.orka.myfinances.lib.data.repositories
 
-import com.orka.myfinances.lib.viewmodel.Chunk
+import com.orka.myfinances.data.repositories.Chunk
 
 fun interface GetChunk<T> {
-    suspend fun getChunk(size: Int, page: Int, query: String?): Chunk<T>?
+    suspend fun getChunk(size: Int, page: Int): Chunk<T>?
 }

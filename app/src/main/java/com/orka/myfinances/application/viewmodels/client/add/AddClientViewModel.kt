@@ -2,11 +2,13 @@ package com.orka.myfinances.application.viewmodels.client.add
 
 import com.orka.myfinances.data.repositories.client.AddClientRequest
 import com.orka.myfinances.lib.data.repositories.Insert
-import com.orka.myfinances.lib.viewmodel.Manager
+import com.orka.myfinances.lib.viewmodel.manager.Manager
+import com.orka.myfinances.logger.Logger
 
 class AddClientViewModel(
-    private val insert: Insert<AddClientRequest>
-) : Manager() {
+    private val insert: Insert<AddClientRequest>,
+    logger: Logger
+) : Manager(logger) {
 
     fun add(
         name: String,

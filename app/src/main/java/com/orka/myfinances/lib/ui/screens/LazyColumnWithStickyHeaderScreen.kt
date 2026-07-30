@@ -11,7 +11,7 @@ import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.TopAppBar
 import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 
 @Composable
 fun <T> LazyColumnWithStickyHeaderScreen(

@@ -1,7 +1,7 @@
 package com.orka.myfinances.lib.data.api
 
 import com.orka.myfinances.lib.data.models.ChunkApiModel
-import com.orka.myfinances.lib.viewmodel.Chunk
+import com.orka.myfinances.data.repositories.Chunk
 
 fun <T> ChunkApiModel<T>.map(): Chunk<T> {
     return Chunk(

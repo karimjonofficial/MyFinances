@@ -10,10 +10,9 @@ import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 import com.orka.myfinances.data.repositories.product.title.models.UpdateProductTitleRequest
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.data.repositories.GetById
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.base.BaseViewModel
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.BaseViewModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
 import com.orka.myfinances.ui.screens.product.add.interactor.CategoryBottomSheetItemModel
@@ -26,14 +25,10 @@ class EditProductTitleScreenViewModel(
     private val productTitleRepository: GetById<ProductTitleDto>,
     private val updateTitle: UpdateProductTitle,
     private val navigator: Navigator,
-    loading: UiText,
-    failure: UiText,
     logger: Logger
 ) : BaseViewModel<AddProductTitleScreenModel>(
-    loading = loading,
-    failure = failure,
     produceInitialState = {
-        val categories = getFolders.getAll(null)
+        val categories = getFolders.getAll()
             ?.filterIsInstance<CategoryDto>()
             ?.map { it.toItemModel() }
         val productTitle = productTitleRepository.getById(productId)
@@ -61,8 +56,7 @@ class EditProductTitleScreenViewModel(
     ) {
         tryTransition { oldState ->
             if (oldState !is State.Success)
-                return@tryTransition State.Failure(
-                    UiText.Str("Action executed from wrong state"),
+                return@tryTransition State.Failure(,
                     oldState.value
                 )
 

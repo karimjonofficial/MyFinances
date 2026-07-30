@@ -7,7 +7,6 @@ import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.repositories.basket.MinBasketItem
 import com.orka.myfinances.format.FormatDecimal
 import com.orka.myfinances.format.FormatPrice
-import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.ui.screens.basket.BasketItemUiModel
 import com.orka.myfinances.ui.screens.basket.components.BasketItemCardModel
 
@@ -21,7 +20,7 @@ fun BasketItem.toModel(
     return BasketItemCardModel(
         title = product.title.name,
         properties = propertiesText,
-        description = if (product.title.description != null) UiText.Str(product.title.description) else UiText.Res(R.string.no_description_provided),
+        description = description,
         price = formatPrice.formatPrice(product.exposedPrice.toDouble()),
         amount = formatDecimal.formatDecimal(amount.toDouble()),
         imageRes = R.drawable.furniture1,

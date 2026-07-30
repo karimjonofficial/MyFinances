@@ -1,9 +1,9 @@
 package com.orka.myfinances.ui.screens.receive.list.viewmodel
 
 import com.orka.myfinances.lib.ui.viewmodel.ChunkViewModel
-import com.orka.myfinances.lib.ui.viewmodel.StateFul
+import com.orka.myfinances.lib.ui.viewmodel.Refreshable
 
-interface ReceiveContentInteractor : StateFul, ChunkViewModel {
+interface ReceiveContentInteractor : Refreshable, ChunkViewModel {
     fun select(receive: ReceiveUiModel)
 
     companion object {

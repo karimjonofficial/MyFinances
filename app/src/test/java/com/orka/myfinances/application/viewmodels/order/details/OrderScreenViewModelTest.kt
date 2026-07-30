@@ -1,18 +1,17 @@
 package com.orka.myfinances.application.viewmodels.order.details
 
-import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.data.dtos.order.OrderDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.order.CompleteOrder
 import com.orka.myfinances.data.repositories.order.SetEndDate
-import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.format.FormatDateTime
 import com.orka.myfinances.format.FormatDecimal
 import com.orka.myfinances.format.FormatPrice
+import com.orka.myfinances.lib.data.repositories.GetById
+import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.testFixtures.resources.dtos.orderDto1
+import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.ui.navigation.Navigator
 import io.mockk.coEvery
 import io.mockk.every
@@ -29,8 +28,6 @@ class OrderScreenViewModelTest : MainDispatcherContext() {
     private val formatDateTime = mockk<FormatDateTime>()
     private val formatDecimal = mockk<FormatDecimal>()
     private val navigator = mockk<Navigator>(relaxed = true)
-    private val loading = UiText.Str("Loading")
-    private val failure = UiText.Str("Failure")
     private val logger = mockk<Logger>(relaxed = true)
 
     @Test
@@ -41,7 +38,7 @@ class OrderScreenViewModelTest : MainDispatcherContext() {
         every { formatDecimal.formatDecimal(any()) } returns "10.0"
 
         val viewModel = OrderScreenViewModel(
-            id, getById, completeOrder, setEndDate, formatPrice, formatDateTime, formatDecimal, navigator, loading, failure, logger
+            id, getById, completeOrder, setEndDate, formatPrice, formatDateTime, formatDecimal, navigator, logger
         )
         advanceUntilIdle()
 

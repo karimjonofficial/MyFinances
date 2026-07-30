@@ -2,7 +2,7 @@ package com.orka.myfinances.data.repositories.stock
 
 import com.orka.myfinances.data.dtos.stock.StockItemDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.lib.viewmodel.Chunk
+import com.orka.myfinances.data.repositories.Chunk
 
 interface GetStockItemsByCategory {
     suspend fun getByCategory(

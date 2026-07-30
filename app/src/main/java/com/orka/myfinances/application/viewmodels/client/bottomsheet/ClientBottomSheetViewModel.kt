@@ -6,10 +6,9 @@ import com.orka.myfinances.data.dtos.client.ClientDto
 import com.orka.myfinances.data.repositories.client.ClientEvent
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
-import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.MapChunkViewModel
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.models.item.ClientItemModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,12 +18,8 @@ import kotlinx.coroutines.flow.onEach
 class ClientBottomSheetViewModel(
     getChunk: GetChunk<ClientDto>,
     events: Flow<ClientEvent>,
-    loading: UiText,
-    failure: UiText,
     logger: Logger
 ) : MapChunkViewModel<ClientDto, ClientItemModel>(
-    loading = loading,
-    failure = failure,
     get = getChunk,
     map = { chunk ->
         val map = chunk.results
@@ -33,7 +28,7 @@ class ClientBottomSheetViewModel(
             .mapValues { it.value.map { client -> client.toItemModel() } }
 
         ChunkUiModel(
-            count = chunk.count,
+            size = chunk.count,
             pageIndex = chunk.pageIndex,
             nextPageIndex = chunk.nextPageIndex,
             previousPageIndex = chunk.previousPageIndex,

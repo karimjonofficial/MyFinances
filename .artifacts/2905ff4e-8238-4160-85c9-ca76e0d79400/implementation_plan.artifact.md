@@ -1,22 +1,49 @@
-# Refactor Branch Selection UI to use Button
+# Remove UiText Usages
 
-Refactor the branch selection UI in the `ProfileContent` screen to use a Material 3 `Button` component instead of a manually styled `Row`. This improves interaction handling and aligns with modern Material design patterns.
+This plan removes all remaining usages of the `UiText` abstraction from the project and fixes code that was left in a broken state during the transition.
+
+## User Review Required
+
+> [!IMPORTANT]
+> `UiText` will be completely removed from the project. All properties previously using `UiText` (like `dateTime` in `HistoryOrderCardModel`) will be converted to `String`.
 
 ## Proposed Changes
 
-### UI Screens
+### UI Models Fixes
 
-#### [MODIFY] [ProfileContent.kt](file:///D:/Dev/Mobile/Learn/MyFinances/app/src/main/java/com/orka/myfinances/ui/screens/profile/ProfileContent.kt)
+#### [MODIFY] [HistoryOrderCardModel.kt](file:///D:/Dev/Mobile/Learn/MyFinances/app/src/main/java/com/orka/myfinances/ui/screens/order/list/completed/HistoryOrderCardModel.kt)
+- Fix the broken `dateTime` property by setting its type to `String`.
 
-- Replace the manual `Row` with `FilledTonalButton`.
-- Use `ButtonDefaults.filledTonalButtonColors` to preserve the `secondary` color scheme.
-- Apply a `RoundedCornerShape(50)` to maintain the "pill" visual style.
-- Set appropriate `contentPadding` to ensure the layout remains compact.
+#### [MODIFY] [Map.kt (orders history)](file:///D:/Dev/Mobile/Learn/MyFinances/app/src/main/java/com/orka/myfinances/application/viewmodels/order/list/completed/Map.kt)
+- Update `toUiModel` and `toCardModel` to accept `FormatTime`.
+- Fix the broken `dateTime` assignment to use `formatTime.formatTime(createdAt)`.
+
+### Library Cleanup
+
+#### [DELETE] [UiText.kt](file:///D:/Dev/Mobile/Learn/MyFinances/app/src/main/java/com/orka/myfinances/lib/ui/models/UiText.kt)
+- Remove the `UiText` interface and its subclasses.
+
+#### [DELETE] [str.kt](file:///D:/Dev/Mobile/Learn/MyFinances/app/src/main/java/com/orka/myfinances/lib/ui/extensions/str.kt) (if found during execution)
+- If this file exists (it is imported but I couldn't locate it via `ls`), it will be removed.
+- All calls to `.str()` in the project will be removed, as they will no longer be necessary for `String` or other types.
+
+### Test Updates
+
+#### [MODIFY] ALL Test Files
+- Update all ViewModels tests that were passing `UiText.Str` or `UiText.Res` to pass raw `String` or appropriate values.
+- Files identified:
+    - `BaseViewModelTest.kt`
+    - `OrdersHistoryContentViewModelTest.kt`
+    - `OrdersListScreenViewModelTest.kt`
+    - `AddProductTitleScreenViewModelTest.kt`
+    - ... and others using `UiText`.
 
 ## Verification Plan
 
+### Automated Tests
+- Build the project to ensure all compilation errors are resolved.
+- Run all unit tests to verify that ViewModels still function correctly with raw strings.
+
 ### Manual Verification
-- Deploy the app and navigate to the Profile screen.
-- Verify that the branch selection "pill" looks correct and functions as a button.
-- Ensure the ripple effect and interaction states (press/focus) are handled correctly.
-- Verify that clicking the button still opens the branch selection bottom sheet.
+- Verify the **Orders History** screen to ensure date and time are displayed correctly.
+- Check other screens where `UiText` was used (like Profile name/phone) to ensure they still look right.

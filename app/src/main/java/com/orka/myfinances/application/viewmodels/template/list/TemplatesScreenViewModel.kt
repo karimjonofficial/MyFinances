@@ -3,13 +3,12 @@ package com.orka.myfinances.application.viewmodels.template.list
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.dtos.template.TemplateDto
 import com.orka.myfinances.data.repositories.template.TemplateEvent
+import com.orka.myfinances.format.FormatDecimal
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.MapChunkViewModel
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.templates.list.TemplateUiModel
 import com.orka.myfinances.ui.screens.templates.list.TemplatesScreenInteractor
@@ -23,12 +22,8 @@ class TemplatesScreenViewModel(
     events: Flow<TemplateEvent>,
     private val navigator: Navigator,
     formatDecimal: FormatDecimal,
-    loading: UiText,
-    failure: UiText,
     logger: Logger
 ) : MapChunkViewModel<TemplateDto, TemplateUiModel>(
-    loading = loading,
-    failure = failure,
     get = getChunk,
     map = { chunk ->
         val map = chunk.results
@@ -37,7 +32,7 @@ class TemplatesScreenViewModel(
             .mapValues { it.value.map { template -> template.toUiModel(formatDecimal) } }
 
         ChunkUiModel(
-            count = chunk.count,
+            size = chunk.count,
             pageIndex = chunk.pageIndex,
             nextPageIndex = chunk.nextPageIndex,
             previousPageIndex = chunk.previousPageIndex,

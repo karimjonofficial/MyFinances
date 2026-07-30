@@ -6,14 +6,13 @@ import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequestItem
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.data.repositories.Insert
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.sourceful.single.MapSingleByIdViewModel
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.MapSingleViewModel
+import com.orka.myfinances.ui.models.item.ProductTitleItemModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenInteractor
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenModel
-import com.orka.myfinances.ui.models.item.ProductTitleItemModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class AddReceiveScreenViewModel(
@@ -21,13 +20,9 @@ class AddReceiveScreenViewModel(
     getFolder: GetById<FolderDto>,
     private val insertReceive: Insert<AddReceiveRequest>,
     private val navigator: Navigator,
-    loading: UiText,
-    failure: UiText,
     logger: Logger
-) : MapSingleViewModel<FolderDto, AddReceiveScreenModel>(
+) : MapSingleByIdViewModel<FolderDto, AddReceiveScreenModel>(
     id = categoryId,
-    loading = loading,
-    failure = failure,
     get = getFolder,
     map = { it.toScreenModel() },
     logger = logger

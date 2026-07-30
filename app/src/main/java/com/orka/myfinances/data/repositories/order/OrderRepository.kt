@@ -9,7 +9,7 @@ import com.orka.myfinances.lib.data.models.toChunk
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.Insert
-import com.orka.myfinances.lib.viewmodel.Chunk
+import com.orka.myfinances.data.repositories.Chunk
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlin.time.Instant
 
@@ -20,10 +20,9 @@ class OrderRepository(
 ) : GetChunk<OrderDto>, GetOrdersChunk, GetById<OrderDto>, Insert<AddOrderRequest>, CompleteOrder, SetEndDate {
     override suspend fun getChunk(
         size: Int,
-        page: Int,
-        query: String?
+        page: Int
     ): Chunk<OrderDto>? {
-        return getOrdersChunk(size, page, false, query)
+        return getOrdersChunk(size, page, false, null)
     }
 
     override suspend fun getOrdersChunk(

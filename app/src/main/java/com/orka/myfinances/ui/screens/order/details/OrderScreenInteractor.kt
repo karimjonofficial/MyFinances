@@ -1,10 +1,10 @@
 package com.orka.myfinances.ui.screens.order.details
 
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.lib.ui.viewmodel.StateFul
+import com.orka.myfinances.lib.ui.viewmodel.Refreshable
 import kotlin.time.Instant
 
-interface OrderScreenInteractor : StateFul {
+interface OrderScreenInteractor : Refreshable {
     fun navigateToClient(clientId: Id)
     fun complete()
     fun setEndDate(endDateTime: Instant)

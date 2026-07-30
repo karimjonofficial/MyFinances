@@ -1,8 +1,8 @@
 package com.orka.myfinances.ui.screens.product.details
 
-import com.orka.myfinances.lib.ui.viewmodel.StateFul
+import com.orka.myfinances.lib.ui.viewmodel.Refreshable
 
-interface ProductTitleScreenInteractor : StateFul {
+interface ProductTitleScreenInteractor : Refreshable {
     fun edit()
     fun receive(amount: Int, totalPrice: Int, comment: String?)
 

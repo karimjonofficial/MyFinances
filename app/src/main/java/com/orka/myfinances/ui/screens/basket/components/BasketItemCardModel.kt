@@ -1,12 +1,10 @@
 package com.orka.myfinances.ui.screens.basket.components
 
-import com.orka.myfinances.lib.ui.models.UiText
-
 data class BasketItemCardModel(
     val title: String,
     val properties: String?,
     val availableAmount: String,
-    val description: UiText,
+    val description: String?,
     val price: String,
     val amount: String,
     val imageRes: Int,

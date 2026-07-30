@@ -5,7 +5,7 @@ import com.orka.myfinances.lib.ui.models.ChunkUiModel
 
 fun List<Notification>.toChunkMapState(): ChunkUiModel<NotificationUiModel> {
     return ChunkUiModel(
-        count = size,
+        size = size,
         pageIndex = 0,
         nextPageIndex = 1,
         previousPageIndex = 0,

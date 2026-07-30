@@ -1,9 +1,9 @@
 package com.orka.myfinances.ui.screens.order.list.completed
 
 import com.orka.myfinances.lib.ui.viewmodel.ChunkViewModel
-import com.orka.myfinances.lib.ui.viewmodel.StateFul
+import com.orka.myfinances.lib.ui.viewmodel.Refreshable
 
-interface OrdersHistoryInteractor : StateFul, ChunkViewModel {
+interface OrdersHistoryInteractor : Refreshable, ChunkViewModel {
     fun select(order: HistoryOrderUiModel)
 
     companion object {

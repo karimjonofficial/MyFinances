@@ -1,10 +1,10 @@
 package com.orka.myfinances.ui.screens.order.list.completed
 
-import com.orka.myfinances.lib.ui.models.UiText
+import kotlin.time.Instant
 
 data class HistoryOrderCardModel(
     val title: String,
     val size: String,
     val price: String,
-    val dateTime: UiText
+    val dateTime: Instant
 )

@@ -1,9 +1,9 @@
 package com.orka.myfinances.ui.screens.profile
 
-import com.orka.myfinances.lib.ui.viewmodel.StateFul
+import com.orka.myfinances.lib.ui.viewmodel.Refreshable
 import com.orka.myfinances.ui.screens.profile.models.BranchItemModel
 
-interface ProfileInteractor : StateFul {
+interface ProfileInteractor : Refreshable {
     fun debts()
     fun orders()
     fun clients()

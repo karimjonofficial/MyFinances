@@ -37,7 +37,6 @@ import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.basket.basketItem1
 import com.orka.myfinances.fixtures.resources.models.basket.basketItem2
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
-import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.application.viewmodels.basket.toModel
@@ -106,7 +105,7 @@ fun BasketItemCard(
                             )
 
                             Text(
-                                text = item.description.str(),
+                                text = item.description ?: "",
                                 style = MaterialTheme.typography.bodySmall,
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis,

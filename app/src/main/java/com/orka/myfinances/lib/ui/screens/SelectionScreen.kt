@@ -7,14 +7,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.orka.myfinances.lib.data.models.SelectionItemModel
+import com.orka.myfinances.lib.ui.models.SelectionItemModel
 import com.orka.myfinances.lib.ui.components.spacer.LazyFooterSpacer
 import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.TopAppBar
 import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.ui.components.items.SelectionItem
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.ui.components.SelectionItem
 
 @Composable
 fun <T: SelectionItemModel> SelectionScreen(

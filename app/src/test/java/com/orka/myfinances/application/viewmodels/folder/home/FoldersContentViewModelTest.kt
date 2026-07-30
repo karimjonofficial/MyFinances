@@ -11,8 +11,7 @@ import com.orka.myfinances.data.repositories.product.title.models.AddProductTitl
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.Insert
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.testFixtures.resources.dtos.folderDtos
 import com.orka.myfinances.testLib.MainDispatcherContext
@@ -33,8 +32,6 @@ class FoldersContentViewModelTest : MainDispatcherContext() {
     private val addTitle = mockk<Add<Id, AddProductTitleRequest>>()
     private val addReceive = mockk<Insert<AddReceiveRequest>>()
     private val getDefaultCategory = mockk<GetDefaultCategory>()
-    private val loading = UiText.Str("Loading")
-    private val failure = UiText.Str("Failure")
     private val logger = mockk<Logger>(relaxed = true)
 
     @Test
@@ -47,8 +44,6 @@ class FoldersContentViewModelTest : MainDispatcherContext() {
             navigator = navigator,
             folderFlow = folderEvents,
             pinnedCategoriesFlow = events,
-            loading = loading,
-            failure = failure,
             logger = logger,
             addTitle = addTitle,
             addReceive = addReceive,

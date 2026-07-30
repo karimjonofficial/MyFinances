@@ -1,16 +1,15 @@
 package com.orka.myfinances.application.viewmodels.client.list
 
-import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.data.dtos.client.ClientDto
+import com.orka.myfinances.data.repositories.Chunk
 import com.orka.myfinances.data.repositories.client.AddClientRequest
 import com.orka.myfinances.data.repositories.client.ClientEvent
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.Insert
+import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.Chunk
 import com.orka.myfinances.testFixtures.resources.dtos.clientDto1
+import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.ui.navigation.Navigator
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -24,9 +23,6 @@ class ClientsScreenViewModelTest : MainDispatcherContext() {
     private val events = MutableSharedFlow<ClientEvent>()
     private val navigator = mockk<Navigator>(relaxed = true)
     private val logger = mockk<Logger>(relaxed = true)
-    private val loading = UiText.Str("Loading")
-    private val failure = UiText.Str("Failure")
-
     @Test
     fun `initialize success`() = runTest {
         val chunk = Chunk(
@@ -39,7 +35,7 @@ class ClientsScreenViewModelTest : MainDispatcherContext() {
         coEvery { getChunk.getChunk(any(), any(), any()) } returns chunk
 
         val viewModel = ClientsScreenViewModel(
-            getChunk, insert, events, loading, failure, navigator, logger
+            getChunk, insert, events, navigator, logger
         )
         
         advanceUntilIdle()

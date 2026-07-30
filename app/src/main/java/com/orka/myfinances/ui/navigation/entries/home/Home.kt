@@ -100,12 +100,9 @@ fun homeEntry(
 
                     if (addFolderDialogVisible.value) {
                         AddFolderDialog(
-                            dismissRequest = { addProductDialogVisible.value = false },
+                            dismissRequest = { addFolderDialogVisible.value = false },
                             onUnfoldTemplates = { sheetVisible.value = true },
-                            onSuccess = { name, type, templateId ->
-                                foldersViewModel.addFolder(name, type, templateId)
-                                addFolderDialogVisible.value = false
-                            },
+                            onSuccess = foldersViewModel::addFolder,
                             template = template.value
                         )
                     }

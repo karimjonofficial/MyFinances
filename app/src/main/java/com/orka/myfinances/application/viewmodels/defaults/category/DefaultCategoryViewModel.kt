@@ -5,9 +5,8 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.defaults.DefaultsEvent
 import com.orka.myfinances.data.repositories.defaults.GetDefaultCategory
 import com.orka.myfinances.data.repositories.defaults.SetDefaultCategory
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.BaseViewModel
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.sourceful.single.MapSingleViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.settings.defaults.category.SelectDefaultCategoryInteractor
@@ -21,15 +20,10 @@ class DefaultCategoryViewModel(
     private val setDefaultCategory: SetDefaultCategory,
     flow: Flow<DefaultsEvent>,
     private val navigator: Navigator,
-    loading: UiText,
-    failure: UiText,
     logger: Logger
-) : BaseViewModel<Id?>(
-    produceInitialState = {
-        State.Success(getDefaultCategory.getDefaultCategoryId())
-    },
-    loading = loading,
-    failure = failure,
+) : MapSingleViewModel<Id?, Id?>(
+    get = { getDefaultCategory.getDefaultCategoryId() },
+    map = { it },
     logger = logger
 ), SelectDefaultCategoryInteractor {
     val uiState = state.asStateFlow()

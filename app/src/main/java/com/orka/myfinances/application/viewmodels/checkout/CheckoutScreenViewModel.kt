@@ -11,16 +11,15 @@ import com.orka.myfinances.data.repositories.order.toOrderRequest
 import com.orka.myfinances.data.repositories.sale.AddSaleRequest
 import com.orka.myfinances.data.repositories.sale.toSaleRequest
 import com.orka.myfinances.data.repositories.stock.GetStockItemByProduct
+import com.orka.myfinances.format.FormatDecimal
+import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.lib.extensions.models.getExposedPrice
 import com.orka.myfinances.lib.extensions.models.getSalePrice
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatPrice
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.base.refreshable.RefreshableBaseViewModel
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.BaseViewModel
 import com.orka.myfinances.printer.Printer
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
@@ -41,12 +40,8 @@ class CheckoutScreenViewModel(
     private val printer: Printer,
     private val formatDecimal: FormatDecimal,
     private val formatPrice: FormatPrice,
-    loading: UiText,
-    failure: UiText,
     logger: Logger
-) : BaseViewModel<CheckoutScreenModel>(
-    loading = loading,
-    failure = failure,
+) : RefreshableBaseViewModel<CheckoutScreenModel>(
     produceInitialState = {
         val minItems = basketRepository.get()
         val items = minItems.map { minItem ->

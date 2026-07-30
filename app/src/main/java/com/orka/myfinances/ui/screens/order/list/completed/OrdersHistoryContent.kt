@@ -6,11 +6,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.lib.ui.extensions.str
 import com.orka.myfinances.lib.ui.components.ListItem
 import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 
 @Composable
 fun OrdersHistoryContent(
@@ -32,7 +31,7 @@ fun OrdersHistoryContent(
                 headlineText = item.model.title,
                 supportingText = stringResource(R.string.items_f, item.model.size),
                 price = item.model.price,
-                dateTime = item.model.dateTime.str(),
+                dateTime = item.model.dateTime,
                 onClick = { interactor.select(item) }
             )
         }

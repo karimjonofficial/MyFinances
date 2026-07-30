@@ -1,6 +1,5 @@
 package com.orka.myfinances.application.viewmodels.basket
 
-import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.basket.BasketEvent
 import com.orka.myfinances.data.repositories.basket.BasketRepository
@@ -8,11 +7,11 @@ import com.orka.myfinances.data.repositories.basket.MinBasketItem
 import com.orka.myfinances.data.repositories.stock.GetStockItemByProduct
 import com.orka.myfinances.format.FormatDecimal
 import com.orka.myfinances.format.FormatPrice
+import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.testFixtures.resources.dtos.productDto1
 import com.orka.myfinances.testFixtures.resources.dtos.stockItemDto1
+import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.basket.BasketItemUiModel
 import io.mockk.coEvery
@@ -31,8 +30,6 @@ class BasketContentViewModelTest : MainDispatcherContext() {
     private val formatPrice = mockk<FormatPrice>()
     private val formatDecimal = mockk<FormatDecimal>()
     private val logger = mockk<Logger>(relaxed = true)
-    private val loading = UiText.Str("Loading")
-    private val failure = UiText.Str("Failure")
     private val events = MutableSharedFlow<BasketEvent>()
 
     @Test

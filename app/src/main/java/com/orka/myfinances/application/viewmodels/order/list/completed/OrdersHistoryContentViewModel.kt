@@ -2,16 +2,15 @@ package com.orka.myfinances.application.viewmodels.order.list.completed
 
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.dtos.order.OrderDto
-import com.orka.myfinances.data.repositories.order.OrderEvent
 import com.orka.myfinances.data.repositories.order.GetOrdersChunk
+import com.orka.myfinances.data.repositories.order.OrderEvent
 import com.orka.myfinances.format.FormatDecimal
 import com.orka.myfinances.format.FormatLocalDate
 import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.format.FormatTime
-import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.MapChunkViewModel
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.MapChunkViewModel
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.order.list.completed.HistoryOrderUiModel
 import com.orka.myfinances.ui.screens.order.list.completed.OrdersHistoryInteractor
@@ -30,13 +29,9 @@ class OrdersHistoryContentViewModel(
     formatTime: FormatTime,
     formatLocalDate: FormatLocalDate,
     private val navigator: Navigator,
-    loading: UiText,
-    failure: UiText,
     logger: Logger
 ) : MapChunkViewModel<OrderDto, HistoryOrderUiModel>(
-    loading = loading,
-    failure = failure,
-    get = { size, page, query -> getOrdersChunk.getOrdersChunk(size, page, true, query) },
+    get = { size, page -> getOrdersChunk.getOrdersChunk(size, page, true, null) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map =
@@ -49,7 +44,7 @@ class OrdersHistoryContentViewModel(
                 }
 
         ChunkUiModel(
-            count = chunk.count,
+            size = chunk.count,
             pageIndex = chunk.pageIndex,
             nextPageIndex = chunk.nextPageIndex,
             previousPageIndex = chunk.previousPageIndex,

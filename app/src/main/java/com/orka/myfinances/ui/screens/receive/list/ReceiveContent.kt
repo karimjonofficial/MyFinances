@@ -12,7 +12,7 @@ import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.screens.receive.list.components.ReceiveCard
 import com.orka.myfinances.ui.screens.receive.list.viewmodel.ReceiveContentInteractor
 import com.orka.myfinances.ui.screens.receive.list.viewmodel.ReceiveUiModel

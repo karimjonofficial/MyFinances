@@ -20,10 +20,10 @@ import com.orka.myfinances.application.viewmodels.order.details.OrderScreenViewM
 import com.orka.myfinances.application.viewmodels.order.list.completed.OrdersHistoryContentViewModel
 import com.orka.myfinances.application.viewmodels.order.list.incompleted.OrdersListScreenViewModel
 import com.orka.myfinances.application.viewmodels.product.add.AddProductTitleScreenViewModel
-import com.orka.myfinances.application.viewmodels.product.bottomsheet.ProductTitleBottomSheetViewModel
 import com.orka.myfinances.application.viewmodels.product.details.ProductTitleScreenViewModel
 import com.orka.myfinances.application.viewmodels.product.edit.EditProductTitleScreenViewModel
 import com.orka.myfinances.application.viewmodels.product.list.ProductTitlesContentViewModel
+import com.orka.myfinances.application.viewmodels.product.sheet.ProductTitleBottomSheetViewModel
 import com.orka.myfinances.application.viewmodels.profile.ProfileContentViewModel
 import com.orka.myfinances.application.viewmodels.receive.add.AddReceiveScreenViewModel
 import com.orka.myfinances.application.viewmodels.receive.details.ReceiveScreenViewModel
@@ -76,7 +76,6 @@ import com.orka.myfinances.data.repositories.template.TemplateEvent
 import com.orka.myfinances.data.repositories.template.TemplateRepository
 import com.orka.myfinances.data.repositories.user.UserRepository
 import com.orka.myfinances.format.Formatter
-import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.managers.SessionManager
 import com.orka.myfinances.printer.Printer
@@ -92,9 +91,7 @@ class Factory(
     private val navigator: Navigator,
     private val formatter: Formatter,
     private val sessionManager: SessionManager,
-    database: AppDatabase,
-    private val loading: UiText,
-    private val failure: UiText
+    database: AppDatabase
 ) {
     private val stockFlow = MutableSharedFlow<StockEvent>()
     private val templateFlow = MutableSharedFlow<TemplateEvent>()
@@ -148,8 +145,6 @@ class Factory(
             navigator = navigator,
             folderFlow = folderFlow,
             pinnedCategoriesFlow = pinnedCategoriesRepository.events,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }
@@ -158,8 +153,6 @@ class Factory(
         return TemplatesScreenViewModel(
             getChunk = templateRepository,
             navigator = navigator,
-            loading = loading,
-            failure = failure,
             logger = logger,
             formatDecimal = formatter,
             events = templateFlow
@@ -169,7 +162,8 @@ class Factory(
     fun addTemplateViewModel(): AddTemplateScreenViewModel {
         return AddTemplateScreenViewModel(
             insert = templateRepository,
-            navigator = navigator
+            navigator = navigator,
+            logger = logger
         )
     }
 
@@ -179,8 +173,6 @@ class Factory(
             getFolders = folderRepository,
             insertTitle = productTitleRepository,
             navigator = navigator,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }
@@ -192,8 +184,6 @@ class Factory(
             productTitleRepository = productTitleRepository,
             updateTitle = productTitleRepository,
             navigator = navigator,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }
@@ -206,8 +196,6 @@ class Factory(
             basketRepository = basketRepository,
             formatPrice = formatter,
             formatDecimal = formatter,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }
@@ -218,8 +206,6 @@ class Factory(
             getByCategory = productTitleRepository,
             productTitleEvents = productTitleFlow,
             navigator = navigator,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }
@@ -232,8 +218,6 @@ class Factory(
             add = folderRepository,
             events = folderFlow,
             navigator = navigator,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }
@@ -245,8 +229,6 @@ class Factory(
             navigator = navigator,
             formatPrice = formatter,
             formatDecimal = formatter,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }
@@ -256,8 +238,6 @@ class Factory(
             getChunk = clientRepository,
             insert = clientRepository,
             events = clientFlow,
-            loading = loading,
-            failure = failure,
             navigator = navigator,
             logger = logger
         )
@@ -268,16 +248,12 @@ class Factory(
             id = id,
             getById = clientRepository,
             navigator = navigator,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }
 
     fun salesViewModel(): SaleContentViewModel {
         return SaleContentViewModel(
-            loading = loading,
-            failure = failure,
             getChunk = saleRepository,
             events = saleFlow,
             navigator = navigator,
@@ -297,8 +273,6 @@ class Factory(
             formatPrice = formatter,
             formatDate = formatter,
             formatTime = formatter,
-            loading = loading,
-            failure = failure,
             formatDecimal = formatter,
             navigator = navigator,
             logger = logger
@@ -309,8 +283,6 @@ class Factory(
         return ReceiveContentViewModel(
             getChunk = receiveRepository,
             events = receiveFlow,
-            loading = loading,
-            failure = failure,
             navigator = navigator,
             formatPrice = formatter,
             formatLocalDate = formatter,
@@ -332,8 +304,6 @@ class Factory(
             formatPrice = formatter,
             formatDecimal = formatter,
             printer = printer,
-            loading = loading,
-            failure = failure
         )
     }
 
@@ -341,8 +311,6 @@ class Factory(
         return ClientBottomSheetViewModel(
             getChunk = clientRepository,
             events = clientFlow,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }
@@ -353,8 +321,6 @@ class Factory(
             getFolder = folderRepository,
             insertReceive = receiveRepository,
             navigator = navigator,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }
@@ -364,8 +330,6 @@ class Factory(
             categoryId = id,
             getByCategory = productTitleRepository,
             flow = productTitleFlow,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }
@@ -377,8 +341,6 @@ class Factory(
             formatLocalDate = formatter,
             formatTime = formatter,
             logger = logger,
-            loading = loading,
-            failure = failure
         )
     }
 
@@ -386,8 +348,6 @@ class Factory(
         return OrdersListScreenViewModel(
             getOrdersChunk = orderRepository,
             events = orderFlow,
-            loading = loading,
-            failure = failure,
             navigator = navigator,
             formatDecimal = formatter,
             formatPrice = formatter,
@@ -401,8 +361,6 @@ class Factory(
         return OrdersHistoryContentViewModel(
             getOrdersChunk = orderRepository,
             events = orderFlow,
-            loading = loading,
-            failure = failure,
             navigator = navigator,
             formatDecimal = formatter,
             formatPrice = formatter,
@@ -422,8 +380,6 @@ class Factory(
             formatDateTime = formatter,
             formatDecimal = formatter,
             navigator = navigator,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }
@@ -435,11 +391,9 @@ class Factory(
             events = debtFlow,
             navigator = navigator,
             logger = logger,
-            loading = loading,
             formatPrice = formatter,
             formatLocalDate = formatter,
-            formatTime = formatter,
-            failure = failure,
+            formatTime = formatter
         )
     }
 
@@ -452,8 +406,6 @@ class Factory(
             formatPrice = formatter,
             formatDate = formatter,
             navigator = navigator,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }
@@ -465,8 +417,6 @@ class Factory(
             getMe = userRepository,
             navigator = navigator,
             sessionManager = sessionManager,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }
@@ -481,8 +431,6 @@ class Factory(
             formatDate = formatter,
             formatPrice = formatter,
             navigator = navigator,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }
@@ -494,9 +442,7 @@ class Factory(
             formatPrice = formatter,
             formatDateTime = formatter,
             formatDecimal = formatter,
-            loading = loading,
             navigator = navigator,
-            failure = failure,
             logger = logger
         )
     }
@@ -505,9 +451,7 @@ class Factory(
         return TemplateScreenViewModel(
             id = id,
             getById = templateRepository,
-            failure = failure,
             navigator = navigator,
-            loading = loading,
             logger = logger
         )
     }
@@ -516,8 +460,6 @@ class Factory(
         return CategoryScreenViewModel(
             categoryId = id,
             getById = folderRepository,
-            loading = loading,
-            failure = failure,
             navigator = navigator,
             logger = logger
         )
@@ -527,8 +469,6 @@ class Factory(
         return TemplateBottomSheetViewModel(
             getChunk = templateRepository,
             flow = templateFlow,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }
@@ -540,8 +480,6 @@ class Factory(
             formatPrice = formatter,
             formatLocalDate = formatter,
             formatTime = formatter,
-            loading = loading,
-            failure = failure,
             logger = logger,
             navigator = navigator
         )
@@ -549,7 +487,8 @@ class Factory(
 
     fun addClientViewModel(): AddClientViewModel {
         return AddClientViewModel(
-            insert = clientRepository
+            insert = clientRepository,
+            logger = logger
         )
     }
 
@@ -559,8 +498,6 @@ class Factory(
             get = folderRepository,
             flow = defaultsRepository.flow,
             navigator = navigator,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }
@@ -571,8 +508,6 @@ class Factory(
             setDefaultCategory = defaultsRepository,
             flow = defaultsRepository.flow,
             navigator = navigator,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }
@@ -580,8 +515,6 @@ class Factory(
     fun categoryItemsViewModel(): CategoryItemsViewModel {
         return CategoryItemsViewModel(
             get = folderRepository,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }
@@ -591,8 +524,6 @@ class Factory(
             repository = pinnedCategoriesRepository,
             events = pinnedCategoriesRepository.events,
             navigator = navigator,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
     }

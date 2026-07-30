@@ -2,9 +2,9 @@ package com.orka.myfinances.ui.screens.product.edit
 
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
-import com.orka.myfinances.lib.ui.viewmodel.StateFul
+import com.orka.myfinances.lib.ui.viewmodel.Refreshable
 
-interface EditProductTitleScreenInteractor : StateFul {
+interface EditProductTitleScreenInteractor : Refreshable {
     fun updateProductTitle(
         properties: List<PropertyModel<*>?>,
         name: String,

@@ -9,9 +9,8 @@ import com.orka.myfinances.data.repositories.folder.FolderEvent
 import com.orka.myfinances.data.repositories.folder.GetByParent
 import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.GetById
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.BaseViewModel
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.base.refreshable.RefreshableBaseViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.folder.catalog.CatalogScreenInteractor
@@ -27,21 +26,17 @@ class CatalogScreenViewModel(
     private val getByParent: GetByParent,
     private val getById: GetById<FolderDto>,
     private val add: Add<Unit, AddFolderRequest>,
-    loading: UiText,
-    failure: UiText,
     events: Flow<FolderEvent>,
     private val navigator: Navigator,
     logger: Logger
-) : BaseViewModel<CatalogScreenModel>(
-    loading = loading,
-    failure = failure,
+) : RefreshableBaseViewModel<CatalogScreenModel>(
     produceInitialState = {
         val folders = getByParent.getByParent(catalogId)?.sortedBy { it.name }
         val catalog = getById.getById(catalogId)
 
         if (folders != null && catalog != null && catalog is CatalogDto) {
             State.Success(catalog.toScreenModel(folders))
-        } else null
+        } else State.Failure()
     },
     logger = logger
 ), CatalogScreenInteractor {
@@ -61,12 +56,28 @@ class CatalogScreenViewModel(
     ) {
         tryTransition { oldState ->
             val request = validate(name, type, templateId)
-                ?: return@tryTransition oldState
 
-            val added = add.add(request)
-            if (added != null) {
-                oldState
-            } else State.Failure(failure, oldState.value)
+            if(request != null) {
+                val added = add.add(request)
+                if (added != null)
+                    oldState
+                else State.Failure(CouldNotAdd, oldState.value)
+            } else State.Failure(IncorrectInput(emptyList()), oldState.value)
+        }
+    }
+
+    override fun select(folder: FolderUiModel) {
+        launch {
+            when (folder.isCatalog) {
+                true -> navigator.navigateToCatalog(folder.id)
+                false -> navigator.navigateToCategory(folder.id)
+            }
+        }
+    }
+
+    override fun navigateToAddTemplate() {
+        launch {
+            navigator.navigateToAddTemplate()
         }
     }
 
@@ -85,20 +96,5 @@ class CatalogScreenViewModel(
                 parentId = catalogId
             )
         } else null
-    }
-
-    override fun select(folder: FolderUiModel) {
-        launch {
-            when (folder.isCatalog) {
-                true -> navigator.navigateToCatalog(folder.id)
-                false -> navigator.navigateToCategory(folder.id)
-            }
-        }
-    }
-
-    override fun navigateToAddTemplate() {
-        launch {
-            navigator.navigateToAddTemplate()
-        }
     }
 }

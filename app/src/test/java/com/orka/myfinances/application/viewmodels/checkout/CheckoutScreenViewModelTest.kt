@@ -1,20 +1,19 @@
 package com.orka.myfinances.application.viewmodels.checkout
 
-import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.data.dtos.sale.SaleDto
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.debt.AddDebtRequest
 import com.orka.myfinances.data.repositories.order.AddOrderRequest
 import com.orka.myfinances.data.repositories.sale.AddSaleRequest
 import com.orka.myfinances.data.repositories.stock.GetStockItemByProduct
-import com.orka.myfinances.lib.data.repositories.Add
-import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.format.FormatDecimal
 import com.orka.myfinances.format.FormatPrice
+import com.orka.myfinances.lib.data.repositories.Add
+import com.orka.myfinances.lib.data.repositories.Insert
+import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
 import com.orka.myfinances.printer.Printer
+import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.ui.navigation.Navigator
 import io.mockk.coEvery
 import io.mockk.every
@@ -33,8 +32,6 @@ class CheckoutScreenViewModelTest : MainDispatcherContext() {
     private val formatPrice = mockk<FormatPrice>()
     private val formatDecimal = mockk<FormatDecimal>()
     private val logger = mockk<Logger>(relaxed = true)
-    private val loading = UiText.Str("Loading")
-    private val failure = UiText.Str("Failure")
     private val viewModel = CheckoutScreenViewModel(
         addSale = addSale,
         insertOrder = insertOrder,
@@ -45,8 +42,6 @@ class CheckoutScreenViewModelTest : MainDispatcherContext() {
         printer = printer,
         formatDecimal = formatDecimal,
         formatPrice = formatPrice,
-        loading = loading,
-        failure = failure,
         logger = logger
     )
 

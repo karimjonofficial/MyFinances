@@ -3,9 +3,8 @@ package com.orka.myfinances.application.viewmodels.login
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.data.repositories.auth.Authenticator
 import com.orka.myfinances.data.models.Credentials
-import com.orka.myfinances.lib.ui.models.UiText
-import com.orka.myfinances.lib.viewmodel.State
-import com.orka.myfinances.lib.viewmodel.SingleStateViewModel
+import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.base.BaseViewModel
 import com.orka.myfinances.managers.SessionManager
 import com.orka.myfinances.ui.screens.login.LoginScreenInteractor
 import com.orka.myfinances.ui.screens.login.LoginScreenModel
@@ -14,25 +13,24 @@ import kotlinx.coroutines.flow.asStateFlow
 class LoginScreenViewModel(
     private val authenticator: Authenticator,
     private val manager: SessionManager,
-    private val loading: UiText,
     logger: Logger,
-) : SingleStateViewModel<State<LoginScreenModel>>(
-    initialState = State.Success(LoginScreenModel()),
+) : BaseViewModel<LoginScreenModel>(
+    produceInitialState = { State.Success(LoginScreenModel()) },
     logger = logger
 ), LoginScreenInteractor {
     val uiState = state.asStateFlow()
 
     override fun authorize(username: String, password: String) {
-        launch {
-            authorize(username, password) {
+        tryTransition { oldState ->
+            authorize(username, password, oldState) {
                 manager.open(it)
             }
         }
     }
 
     override fun authorizeAndRemember(username: String, password: String) {
-        launch {
-            authorize(username, password) {
+        tryTransition { oldState ->
+            authorize(username, password, oldState) {
                 manager.store(it)
             }
         }
@@ -41,28 +39,17 @@ class LoginScreenViewModel(
     private suspend fun authorize(
         username: String,
         password: String,
+        oldState: State<LoginScreenModel>,
         onSuccess: suspend (Credentials) -> Unit
-    ) {
-        setState(State.Loading(loading))
-
-        try {
-            val credential = authenticator.authenticate(username, password)
-            if (credential != null) {
-                setState(State.Success(LoginScreenModel()))
-                onSuccess(credential)
-            } else setState(
-                State.Failure(
-                    value = LoginScreenModel(textFieldError = true),
-                    error = UiText.Str("User is not found")
-                )
-            )//TODO extract string resource
-        } catch (e: Exception) {
-            setState(
-                State.Failure(
-                    value = LoginScreenModel(serverError = true),
-                    error = UiText.Str(e.message.toString())
-                )
-            )
-        }
+    ): State<LoginScreenModel> {
+        val credential = authenticator.authenticate(username, password)
+        return if (credential != null) {
+            setState(State.Success(LoginScreenModel()))
+            onSuccess(credential)
+            oldState
+        } else State.Failure(
+            value = LoginScreenModel(textFieldError = true),
+            type = UserNotFound
+        )
     }
 }

@@ -1,7 +1,6 @@
 package com.orka.myfinances.application.manager.runtime
 
 import com.orka.myfinances.MainActivity
-import com.orka.myfinances.R
 import com.orka.myfinances.application.Logger
 import com.orka.myfinances.application.factories.HttpLogger
 import com.orka.myfinances.application.factories.httpClient
@@ -11,7 +10,6 @@ import com.orka.myfinances.data.database.AppDatabase
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.format.Formatter
-import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.managers.SessionManager
 import com.orka.myfinances.runtime.SignedInRuntimeInitializer
 import kotlinx.coroutines.CoroutineScope
@@ -45,9 +43,7 @@ class SignedInRuntimeInitializerImpl(
             logger = this.logger,
             navigator = navigator,
             formatter = formatter,
-            sessionManager = manager,
-            loading = UiText.Res(R.string.loading),
-            failure = UiText.Res(R.string.failure),
+            sessionManager = manager
         )
     }
 

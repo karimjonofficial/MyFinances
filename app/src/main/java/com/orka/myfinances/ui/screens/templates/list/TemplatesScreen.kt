@@ -14,7 +14,7 @@ import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.ui.components.SearchTopAppBar
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable
@@ -59,7 +59,7 @@ private fun TemplatesScreenPreview() {
             modifier = Modifier.fillMaxSize(),
             state = State.Success(
                 value = ChunkUiModel(
-                    count = 10,
+                    size = 10,
                     pageIndex = 1,
                     nextPageIndex = 2,
                     previousPageIndex = null,

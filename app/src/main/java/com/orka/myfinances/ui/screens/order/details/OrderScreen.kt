@@ -50,7 +50,7 @@ import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
 import com.orka.myfinances.lib.ui.components.TopAppBar
 import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
-import com.orka.myfinances.lib.viewmodel.State
+import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.components.cards.ClientCard
 import com.orka.myfinances.ui.components.cards.UserCard
 import com.orka.myfinances.ui.theme.MyFinancesTheme
