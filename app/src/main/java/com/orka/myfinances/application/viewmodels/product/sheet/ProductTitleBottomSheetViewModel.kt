@@ -7,7 +7,7 @@ import com.orka.myfinances.data.repositories.product.title.GetProductTitlesByCat
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.viewmodel.sourceful.chunk.MapChunkViewModel
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.SearchableMapChunkViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.models.item.ProductTitleItemModel
 import kotlinx.coroutines.flow.Flow
@@ -20,8 +20,9 @@ class ProductTitleBottomSheetViewModel(
     private val getByCategory: GetProductTitlesByCategory,
     flow: Flow<ProductTitleEvent>,
     logger: Logger
-) : MapChunkViewModel<ProductTitleDto, ProductTitleItemModel>(
+) : SearchableMapChunkViewModel<ProductTitleDto, ProductTitleItemModel>(
     get = { size, page -> getByCategory.getByCategory(size, page, categoryId, null) },
+    searchRepository = { size, page, q -> getByCategory.getByCategory(size, page, categoryId, q) },
     map = { chunk ->
         val content = chunk.results
             .sortedBy(ProductTitleDto::name)

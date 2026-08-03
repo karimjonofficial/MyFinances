@@ -5,6 +5,7 @@ import com.orka.myfinances.data.dtos.template.TemplateDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.template.requests.AddTemplateRequest
 import com.orka.myfinances.lib.data.models.toChunk
+import com.orka.myfinances.lib.data.repositories.SearchChunk
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.Insert
@@ -15,8 +16,15 @@ class TemplateRepository(
     private val branchId: Id,
     private val api: TemplateApi,
     private val flow: MutableSharedFlow<TemplateEvent>
-) : GetChunk<TemplateDto>, GetById<TemplateDto>, Insert<AddTemplateRequest> {
+) : GetChunk<TemplateDto>, SearchChunk<TemplateDto>, GetById<TemplateDto>, Insert<AddTemplateRequest> {
     override suspend fun getChunk(
+        size: Int,
+        page: Int
+    ): Chunk<TemplateDto>? {
+        return searchChunk(size, page, null)
+    }
+
+    override suspend fun searchChunk(
         size: Int,
         page: Int,
         query: String?

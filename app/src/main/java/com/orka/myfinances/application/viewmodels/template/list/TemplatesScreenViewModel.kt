@@ -3,14 +3,14 @@ package com.orka.myfinances.application.viewmodels.template.list
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.dtos.template.TemplateDto
 import com.orka.myfinances.data.repositories.template.TemplateEvent
-import com.orka.myfinances.format.FormatDecimal
 import com.orka.myfinances.lib.data.repositories.GetChunk
+import com.orka.myfinances.lib.data.repositories.SearchChunk
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.viewmodel.sourceful.chunk.MapChunkViewModel
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.SearchableMapChunkViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.templates.list.TemplateUiModel
+import com.orka.myfinances.ui.models.ui.TemplateUiModel
 import com.orka.myfinances.ui.screens.templates.list.TemplatesScreenInteractor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,17 +19,18 @@ import kotlinx.coroutines.flow.onEach
 
 class TemplatesScreenViewModel(
     getChunk: GetChunk<TemplateDto>,
+    searchChunk: SearchChunk<TemplateDto>,
     events: Flow<TemplateEvent>,
     private val navigator: Navigator,
-    formatDecimal: FormatDecimal,
     logger: Logger
-) : MapChunkViewModel<TemplateDto, TemplateUiModel>(
+) : SearchableMapChunkViewModel<TemplateDto, TemplateUiModel>(
     get = getChunk,
+    searchRepository = searchChunk,
     map = { chunk ->
         val map = chunk.results
             .sortedBy { it.name }
             .groupBy { it.name.stickyHeaderKey() }
-            .mapValues { it.value.map { template -> template.toUiModel(formatDecimal) } }
+            .mapValues { it.value.map { template -> template.toUiModel() } }
 
         ChunkUiModel(
             size = chunk.count,

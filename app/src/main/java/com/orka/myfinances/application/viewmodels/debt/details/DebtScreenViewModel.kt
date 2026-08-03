@@ -4,16 +4,14 @@ import com.orka.myfinances.data.dtos.debt.DebtDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.debt.SetNotified
 import com.orka.myfinances.data.repositories.debt.SetPaid
-import com.orka.myfinances.format.FormatDate
-import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.ui.state.State
-import com.orka.myfinances.lib.viewmodel.sourceful.chunk.ExecutedFromFailure
+import com.orka.myfinances.ui.statuses.failure.ExecutedFromFailure
 import com.orka.myfinances.lib.viewmodel.sourceful.single.MapSingleByIdViewModel
 import com.orka.myfinances.logger.Logger
+import com.orka.myfinances.ui.models.screen.DebtScreenModel
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.debt.details.DebtScreenModel
-import com.orka.myfinances.ui.screens.debt.details.interactor.DebtScreenInteractor
+import com.orka.myfinances.ui.screens.debt.details.DebtScreenInteractor
 import kotlinx.coroutines.flow.asStateFlow
 
 class DebtScreenViewModel(
@@ -21,14 +19,12 @@ class DebtScreenViewModel(
     getById: GetById<DebtDto>,
     private val setPaid: SetPaid,
     private val setNotified: SetNotified,
-    private val formatPrice: FormatPrice,
-    private val formatDate: FormatDate,
     private val navigator: Navigator,
     logger: Logger
 ) : MapSingleByIdViewModel<DebtDto, DebtScreenModel>(
     id = id,
     get = getById,
-    map = { it.toScreenModel(formatPrice, formatDate) },
+    map = { it.toScreenModel() },
     logger = logger
 ), DebtScreenInteractor {
     val uiState = state.asStateFlow()

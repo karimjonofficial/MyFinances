@@ -10,8 +10,9 @@ import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.managers.SessionManager
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.profile.ProfileInteractor
-import com.orka.myfinances.ui.screens.profile.models.BranchItemModel
-import com.orka.myfinances.ui.screens.profile.models.ProfileContentModel
+import com.orka.myfinances.ui.models.sheet.BranchItemModel
+import com.orka.myfinances.ui.models.content.ProfileContentModel
+import com.orka.myfinances.ui.statuses.failure.failure
 import kotlinx.coroutines.flow.asStateFlow
 
 class ProfileContentViewModel(
@@ -35,7 +36,7 @@ class ProfileContentViewModel(
                     branchName = branches.find { it.id == branchId.value }!!.name
                 )
             )
-        else null
+        else State.Failure(failure)
     },
     logger = logger
 ), ProfileInteractor {
@@ -57,6 +58,10 @@ class ProfileContentViewModel(
         launch {
             sessionManager.setBranch(branch.id)
         }
+    }
+
+    override fun refresh() {
+        initialize()
     }
 
     override fun logout() {

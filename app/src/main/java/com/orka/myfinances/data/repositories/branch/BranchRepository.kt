@@ -15,17 +15,16 @@ class BranchRepository(
 ) : GetChunk<BranchDto>, GetById<BranchDto>, Get<BranchDto> {
     override suspend fun getChunk(
         size: Int,
-        page: Int,
-        query: String?
+        page: Int
     ): Chunk<BranchDto>? {
-        return api.getChunk(companyId.value, page, size, query)?.toChunk { it.toDto() }
+        return api.getChunk(companyId.value, page, size)?.toChunk { it.toDto() }
     }
 
     override suspend fun getById(id: Id): BranchDto? {
         return api.getById(id.value)?.toDto()
     }
 
-    override suspend fun getAll(search: String?): List<BranchDto>? {
-        return api.get(companyId.value, search)?.map { it.toDto() }
+    override suspend fun getAll(): List<BranchDto>? {
+        return api.get(companyId.value)?.map { it.toDto() }
     }
 }

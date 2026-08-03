@@ -16,8 +16,7 @@ import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.components.cards.ClientCard
-import com.orka.myfinances.ui.screens.client.list.viewmodel.ClientUiModel
-import com.orka.myfinances.ui.screens.client.list.viewmodel.ClientsScreenInteractor
+import com.orka.myfinances.ui.models.ui.ClientUiModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,15 +26,24 @@ fun ClientsScreen(
     interactor: ClientsScreenInteractor
 ) {
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
+    val searchMode = rememberSaveable { mutableStateOf(false) }
+    val searchText = rememberSaveable { mutableStateOf("") }
 
     LazyColumnWithStickyHeaderScreen(
         modifier = modifier,
         refresh = interactor::refresh,
-        loadMore = interactor::loadMore,
+        loadMore = {
+            if (searchMode.value) interactor.searchMore()
+            else interactor.loadMore()
+        },
         topBar = {
             SearchTopAppBar(
                 title = stringResource(R.string.clients),
                 onSearch = interactor::search,
+                searchMode = searchMode.value,
+                onSearchModeChange = { searchMode.value = it },
+                searchText = searchText.value,
+                onSearchTextChange = { searchText.value = it },
                 actions = {
                     IconButton(onClick = { dialogVisible.value = true }) {
                         Icon(

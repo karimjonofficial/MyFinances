@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyFinances</string>
+    <string name="app_name">Finances</string>
     <string name="enter_to_account">Enter to account</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -155,6 +155,7 @@
     <string name="name_left_blank">Name left blank</string>
     <string name="exit">Exit</string>
     <string name="uzs">UZS</string>
+    <string name="uzs_f">%1$s UZS</string>"
     <string name="exposed_price">Exposed price</string>
     <string name="completed_date_time_is_not_provided">Completed date_time is not provided</string>
     <string name="total">Total</string>
@@ -176,4 +177,41 @@
     <string name="default_category_is_not_set_yet">Default category is not set yet</string>
     <string name="fill_the_lines_below_to_add_a_product">Fill the lines below to add a product</string>
     <string name="pinned_categories">Pinned Categories</string>
+    <string name="could_not_add">Could not add</string>
+    <string name="incorrect_input">Incorrect input: %1$s</string>
+    <string name="default_category_not_found">Default category not found</string>
+    <string name="folder_not_added">Folder not added</string>
+    <string name="product_title_not_added">Product title not added</string>
+    <string name="receive_not_added">Receive not added</string>
+    <string name="could_not_read">Could not read</string>
+    <string name="categories_empty">Categories are empty</string>
+    <string name="could_not_insert">Could not insert</string>
+    <string name="not_inserted">Not inserted</string>
+    <string name="product_title_not_found">Product title not found</string>
+    <string name="executed_from_loading">Executed from loading</string>
+    <string name="coroutine_cancellation">Operation cancelled</string>
+    <string name="database_constraint">Database constraint violated</string>
+    <string name="database_cant_open">Could not open database</string>
+    <string name="database_locked">Database is locked</string>
+    <string name="database_full">Storage is full</string>
+    <string name="database_read_only">Database is read-only</string>
+    <string name="database_disk_io">Disk I/O error</string>
+    <string name="database_unknown">Unknown database error</string>
+    <string name="no_internet">No internet connection</string>
+    <string name="connect_timeout">Connection timeout</string>
+    <string name="socket_timeout">Socket timeout</string>
+    <string name="request_timeout">Request timeout</string>
+    <string name="http_error">HTTP error: %1$d</string>
+    <string name="executed_from_failure">Executed from failure</string>
+    <string name="loaded_absent_page">Loaded absent page</string>
+    <string name="empty_data">No data found</string>
+    <string name="refreshing">Refreshing…</string>
+    <string name="searching">Searching…</string>
+    <string name="resetting_search">Resetting search…</string>
+    <string name="called_search_more_with_null_query">Cannot load more without a search query</string>
+    <string name="default_printer_is_not_set_yet">Default Printer is not set yet</string>
+    <string name="paired_printer">Paired Printer</string>
+    <string name="printer_is_not_paired">Printer is not paired</string>
+    <string name="printers">Printers</string>
+    <string name="connect">Connect</string>
 </resources>

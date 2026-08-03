@@ -1,7 +1,7 @@
 package com.orka.myfinances.fixtures.resources.models.template
 
 import com.orka.myfinances.data.models.template.TemplateField
-import com.orka.myfinances.fixtures.resources.Types
+import com.orka.myfinances.ui.screens.templates.add.Types
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.models.id2
 import com.orka.myfinances.fixtures.resources.models.id3

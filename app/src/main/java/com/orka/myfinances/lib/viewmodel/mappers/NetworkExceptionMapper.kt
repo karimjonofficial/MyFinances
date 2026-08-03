@@ -1,10 +1,10 @@
 package com.orka.myfinances.lib.viewmodel.mappers
 
-import com.orka.myfinances.lib.ui.state.FailureType
+import com.orka.myfinances.lib.ui.state.FailureStatus
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.lib.viewmodel.base.ExceptionMapper
-import com.orka.myfinances.lib.viewmodel.failure.CoroutineCancellationFailure
-import com.orka.myfinances.lib.viewmodel.failure.NetworkFailure
+import com.orka.myfinances.ui.statuses.failure.CoroutineCancellationFailure
+import com.orka.myfinances.ui.statuses.failure.NetworkFailure
 import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.plugins.ClientRequestException
@@ -28,11 +28,11 @@ class NetworkExceptionMapper<T> : ExceptionMapper<T> {
             is ClientRequestException -> NetworkFailure.Http(e.response.status.value)
             is ServerResponseException -> NetworkFailure.Http(e.response.status.value)
             is RedirectResponseException -> NetworkFailure.Http(e.response.status.value)
-            else -> FailureType.Exception(e.message.orEmpty())
+            else -> FailureStatus.Exception(e.message.orEmpty())
         }
 
         return State.Failure(
-            type = failure,
+            status = failure,
             value = oldState?.value
         )
     }

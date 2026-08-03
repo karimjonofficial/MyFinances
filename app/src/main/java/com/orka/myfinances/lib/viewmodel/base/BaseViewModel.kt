@@ -1,7 +1,8 @@
 package com.orka.myfinances.lib.viewmodel.base
 
-import com.orka.myfinances.lib.ui.state.LoadingType
+import com.orka.myfinances.lib.ui.state.LoadingStatus
 import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.ui.statuses.failure.ExecutedFromLoading
 import com.orka.myfinances.lib.viewmodel.single.SingleStateViewModel
 import com.orka.myfinances.logger.Logger
 
@@ -10,22 +11,26 @@ abstract class BaseViewModel<T>(
     protected val exceptionMapper: ExceptionMapper<T> = ExceptionMapper.Default(),
     logger: Logger
 ) : SingleStateViewModel<State<T>>(
-    initialState = State.Loading(LoadingType.Initial),
+    initialState = State.Loading(LoadingStatus.Initial),
     logger = logger
 ) {
     protected fun initialize() {
         launch {
-            try {
-                val state = produceInitialState()
-                setState(state)
-            } catch (e: Exception) {
-                setState(exceptionMapper.map(null, e))
-            }
+            tryToInitialize()
+        }
+    }
+
+    protected suspend fun tryToInitialize() {
+        try {
+            val state = produceInitialState()
+            setState(state)
+        } catch (e: Exception) {
+            setState(exceptionMapper.map(null, e))
         }
     }
 
     protected fun tryTransition(
-        loadingState: State.Loading<T> = State.Loading(value = state.value.value),
+        loadingState: (State<T>) -> State.Loading<T> = { State.Loading(value = state.value.value) },
         exceptionMapper: ExceptionMapper<T> = this.exceptionMapper,
         produceState: suspend (State<T>) -> State<T>
     ) {
@@ -33,7 +38,7 @@ abstract class BaseViewModel<T>(
             val oldState = state.value
             if (oldState !is State.Loading) {
                 try {
-                    setState(loadingState)
+                    setState(loadingState(oldState))
                     val newState = produceState(oldState)
                     setState(newState)
                 } catch (e: Exception) {
@@ -41,7 +46,7 @@ abstract class BaseViewModel<T>(
                 }
             } else setState(
                 State.Failure(
-                    type = ExecutedFromLoading,
+                    status = ExecutedFromLoading,
                     value = oldState.value
                 )
             )

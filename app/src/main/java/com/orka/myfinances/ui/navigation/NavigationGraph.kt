@@ -18,6 +18,7 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
+import com.orka.myfinances.ui.navigation.destination.Destination
 
 @Composable
 fun NavigationGraph(

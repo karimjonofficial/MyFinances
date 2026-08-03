@@ -1,50 +1,36 @@
 package com.orka.myfinances.ui.screens.receive.list
 
 import com.orka.myfinances.data.models.receive.Receive
-import com.orka.myfinances.format.FormatPrice
-import com.orka.myfinances.format.FormatTime
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.ui.screens.receive.list.components.ReceiveCardModel
-import com.orka.myfinances.ui.screens.receive.list.viewmodel.ReceiveUiModel
+import com.orka.myfinances.ui.models.card.ReceiveCardModel
+import com.orka.myfinances.ui.models.ui.ReceiveUiModel
 
-fun Receive.toCardModel(
-    formatPrice: FormatPrice,
-    formatTime: FormatTime
-): ReceiveCardModel {
+fun Receive.toCardModel(): ReceiveCardModel {
     return ReceiveCardModel(
         title = items.joinToString { it.product.title.name },
-        price = formatPrice.formatPrice(price.toDouble()),
-        size = "${items.size} items",
-        dateTime = formatTime.formatTime(dateTime)
+        price = price,
+        size = items.size,
+        dateTime = dateTime
     )
 }
 
-fun Receive.toUiModel(
-    formatPrice: FormatPrice,
-    formatTime: FormatTime
-): ReceiveUiModel {
+fun Receive.toUiModel(): ReceiveUiModel {
     return ReceiveUiModel(
         id = this.id,
-        model = this.toCardModel(formatPrice, formatTime),
-        instant = dateTime
+        model = this.toCardModel(),
+        dateTime = dateTime
     )
 }
 
-fun List<Receive>.toChunkMapState(
-    formatPrice: FormatPrice,
-    formatTime: FormatTime
-): ChunkUiModel<ReceiveUiModel> {
+fun List<Receive>.toChunkMapState(): ChunkUiModel<ReceiveUiModel> {
     return ChunkUiModel(
-        size = 1,
+        size = size,
         pageIndex = 1,
-        nextPageIndex = 1,
-        previousPageIndex = 1,
+        nextPageIndex = null,
+        previousPageIndex = null,
         content = groupBy { it.dateTime }.mapKeys { it.key.toString() }.mapValues { entry ->
             entry.value.map {
-                it.toUiModel(
-                    formatPrice,
-                    formatTime
-                )
+                it.toUiModel()
             }
         }
     )

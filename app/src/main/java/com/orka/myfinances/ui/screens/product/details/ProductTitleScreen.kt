@@ -31,18 +31,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.product.productTitle1
-import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
-import com.orka.myfinances.lib.ui.components.Scaffold
+import com.orka.myfinances.format.LocalFormatter
 import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.lib.ui.components.DividedList
-import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
+import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.spacer.LazyFooterSpacer
 import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
+import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.state.State
-import com.orka.myfinances.ui.screens.product.details.models.ProductTitleScreenModel
+import com.orka.myfinances.ui.models.screen.ProductTitleScreenModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -138,7 +139,7 @@ fun ProductTitleScreen(
                 }
 
                 if (dialogVisible.value) {
-                    val price = state.value.salePrice
+                    val price = productTitle.salePrice
                     ReceiveDialog(
                         dismissRequest = { dialogVisible.value = false },
                         price = price,
@@ -175,6 +176,7 @@ private fun TitleSection(
     modifier: Modifier = Modifier,
     productTitle: ProductTitleScreenModel
 ) {
+    val formatter = LocalFormatter.current
     Column(modifier = modifier) {
         Text(
             text = productTitle.title,
@@ -193,7 +195,7 @@ private fun TitleSection(
 
             HorizontalSpacer(6)
             Text(
-                text = productTitle.dateTime,
+                text = formatter.formatDateTime(productTitle.dateTime),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -206,12 +208,13 @@ private fun PricingSection(
     modifier: Modifier = Modifier,
     productTitle: ProductTitleScreenModel
 ) {
+    val formatter = LocalFormatter.current
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.Bottom
     ) {
         Text(
-            text = productTitle.price,
+            text = stringResource(R.string.uzs_f, formatter.formatNumber(productTitle.price)),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Black,
             color = MaterialTheme.colorScheme.primary
@@ -224,17 +227,8 @@ private fun PricingSection(
 private fun ProductTitleScreenPreview() {
     MyFinancesTheme {
         ProductTitleScreen(
-            state = State.Success(
-                productTitle1.toModel(
-                    formatDecimal = { "100.00" },
-                    formatDate = { "12.01.2024" },
-                    formatPrice = { "1000.00 UZS" }
-                )),
+            state = State.Success(productTitle1.toModel()),
             interactor = ProductTitleScreenInteractor.dummy
         )
     }
 }
-
-
-
-

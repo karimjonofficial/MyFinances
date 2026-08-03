@@ -10,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.components.SearchTopAppBar
 import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.ui.models.screen.CategoryScreenModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -17,6 +18,10 @@ fun CategoryScreenTopBar(
     modifier: Modifier = Modifier,
     state: State<CategoryScreenModel>,
     onSearch: (String) -> Unit,
+    searchMode: Boolean,
+    onSearchModeChange: (Boolean) -> Unit,
+    searchText: String,
+    onSearchTextChange: (String) -> Unit,
     onAddProductClick: () -> Unit,
     onAddReceive: () -> Unit,
     onExposeClick: () -> Unit,
@@ -26,6 +31,10 @@ fun CategoryScreenTopBar(
         modifier = modifier,
         title = if (state is State.Success) state.value.title else stringResource(R.string.loading),
         onSearch = onSearch,
+        searchMode = searchMode,
+        onSearchModeChange = onSearchModeChange,
+        searchText = searchText,
+        onSearchTextChange = onSearchTextChange,
         actions = {
             IconButton(onClick = if(state.value?.exposed ?: false) onUnExposeClick else onExposeClick) {
                 Icon(

@@ -13,9 +13,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
-import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.ui.navigation.destination.DebtDestinations
+import com.orka.myfinances.ui.navigation.destination.Destination
 import com.orka.myfinances.ui.screens.client.sheet.SelectClientBottomSheet
-import com.orka.myfinances.ui.screens.debt.list.AddDebtDialog
+import com.orka.myfinances.ui.components.dialogs.AddDebtDialog
 import com.orka.myfinances.ui.models.item.ClientItemModel
 import com.orka.myfinances.ui.screens.debt.list.DebtsScreen
 import kotlinx.coroutines.launch
@@ -23,7 +24,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 fun debtsEntry(
     modifier: Modifier,
-    destination: Destination.Debts,
+    destination: DebtDestinations.List,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val viewModel = viewModel { factory.debtsViewModel() }
@@ -46,7 +47,6 @@ fun debtsEntry(
         AddDebtDialog(
             selectedClient = selectedClient.value,
             onOpenClients = {
-                clientSheetViewModel.initialize()
                 clientSheetVisible.value = true
             },
             dismissRequest = {

@@ -6,11 +6,11 @@ import android.database.sqlite.SQLiteDatabaseLockedException
 import android.database.sqlite.SQLiteDiskIOException
 import android.database.sqlite.SQLiteException
 import androidx.sqlite.SQLiteException as AndroidXSQLiteException
-import com.orka.myfinances.lib.ui.state.FailureType
+import com.orka.myfinances.lib.ui.state.FailureStatus
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.lib.viewmodel.base.ExceptionMapper
-import com.orka.myfinances.lib.viewmodel.failure.CoroutineCancellationFailure
-import com.orka.myfinances.lib.viewmodel.failure.DatabaseFailure
+import com.orka.myfinances.ui.statuses.failure.CoroutineCancellationFailure
+import com.orka.myfinances.ui.statuses.failure.DatabaseFailure
 import kotlin.coroutines.cancellation.CancellationException
 
 class DatabaseExceptionMapper<T> : ExceptionMapper<T> {
@@ -28,11 +28,11 @@ class DatabaseExceptionMapper<T> : ExceptionMapper<T> {
             is SQLiteDiskIOException -> DatabaseFailure.DiskIO
             is SQLiteException -> DatabaseFailure.Unknown
             is AndroidXSQLiteException -> DatabaseFailure.Unknown
-            else -> FailureType.Exception(e.message.orEmpty())
+            else -> FailureStatus.Exception(e.message.orEmpty())
         }
 
         return State.Failure(
-            type = failure,
+            status = failure,
             value = oldState?.value
         )
     }

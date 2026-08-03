@@ -7,13 +7,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
-import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.ui.navigation.destination.Destination
+import com.orka.myfinances.ui.navigation.destination.ProductTitleDestinations
 import com.orka.myfinances.ui.screens.product.details.ProductTitleScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun productTitleEntry(
     modifier: Modifier,
-    destination: Destination.ProductTitle,
+    destination: ProductTitleDestinations.List,
     factory: Factory,
 ): NavEntry<Destination> = entry(destination) {
     val viewModel = viewModel(key = destination.id.value.toString()) {

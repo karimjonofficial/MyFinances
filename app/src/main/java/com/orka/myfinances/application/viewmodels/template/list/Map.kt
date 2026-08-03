@@ -2,20 +2,19 @@ package com.orka.myfinances.application.viewmodels.template.list
 
 import com.orka.myfinances.data.dtos.template.TemplateDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.ui.screens.templates.list.TemplateCardModel
-import com.orka.myfinances.ui.screens.templates.list.TemplateUiModel
+import com.orka.myfinances.ui.models.card.TemplateCardModel
+import com.orka.myfinances.ui.models.ui.TemplateUiModel
 
-fun TemplateDto.toModel(formatDecimal: FormatDecimal): TemplateCardModel {
+fun TemplateDto.toModel(): TemplateCardModel {
     return TemplateCardModel(
         title = name,
-        size = formatDecimal.formatDecimal(fields?.size?.toDouble() ?: 0.0)
+        size = fields?.size ?: 0
     )
 }
 
-fun TemplateDto.toUiModel(formatDecimal: FormatDecimal): TemplateUiModel {
+fun TemplateDto.toUiModel(): TemplateUiModel {
     return TemplateUiModel(
-        model = toModel(formatDecimal),
+        model = toModel(),
         id = Id(id)
     )
 }

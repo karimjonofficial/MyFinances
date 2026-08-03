@@ -22,8 +22,9 @@ import com.orka.myfinances.lib.ui.components.textfield.ExposedDropDownTextField
 import com.orka.myfinances.lib.ui.components.spacer.FooterSpacer
 import com.orka.myfinances.lib.ui.components.textfield.IntegerTextField
 import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
-import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
-import com.orka.myfinances.ui.screens.product.add.interactor.CategoryBottomSheetItemModel
+import com.orka.myfinances.ui.components.cards.PropertiesCard
+import com.orka.myfinances.ui.models.screen.AddProductTitleScreenModel
+import com.orka.myfinances.ui.models.sheet.CategoryBottomSheetItemModel
 
 @Composable
 fun ProductTitleEditorContent(

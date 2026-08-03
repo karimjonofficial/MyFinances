@@ -6,6 +6,7 @@ import com.orka.myfinances.data.dtos.receive.ReceiveDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.stock.StockEvent
 import com.orka.myfinances.lib.data.models.toChunk
+import com.orka.myfinances.lib.data.repositories.SearchChunk
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.Insert
@@ -17,9 +18,16 @@ class ReceiveRepository(
     private val api: ReceiveApi,
     private val receiveFlow: MutableSharedFlow<ReceiveEvent>,
     private val stockFlow: MutableSharedFlow<StockEvent>
-) : GetChunk<ReceiveDto>, GetById<ReceiveDto>, Insert<AddReceiveRequest> {
+) : GetChunk<ReceiveDto>, SearchChunk<ReceiveDto>, GetById<ReceiveDto>, Insert<AddReceiveRequest> {
 
     override suspend fun getChunk(
+        size: Int,
+        page: Int
+    ): Chunk<ReceiveDto>? {
+        return searchChunk(size, page, null)
+    }
+
+    override suspend fun searchChunk(
         size: Int,
         page: Int,
         query: String?

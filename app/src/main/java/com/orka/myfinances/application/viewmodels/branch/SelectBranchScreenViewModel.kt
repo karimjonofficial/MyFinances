@@ -5,11 +5,11 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
-import com.orka.myfinances.lib.viewmodel.sourceful.list.map.MapListViewModel
+import com.orka.myfinances.lib.viewmodel.sourceful.list.map.SearchableMapListViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.managers.SessionManager
 import com.orka.myfinances.ui.screens.branch.SelectBranchScreenInteractor
-import com.orka.myfinances.ui.screens.branch.components.BranchUiModel
+import com.orka.myfinances.ui.models.ui.BranchUiModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class SelectBranchScreenViewModel(
@@ -17,10 +17,11 @@ class SelectBranchScreenViewModel(
     private val getById: GetById<BranchDto>,
     private val sessionManager: SessionManager,
     logger: Logger
-) : MapListViewModel<BranchDto, BranchUiModel>(
+) : SearchableMapListViewModel<BranchDto, BranchUiModel>(
     get = getBranches,
     map = BranchDto::toUiModel,
     groupBy = { it.name.stickyHeaderKey() },
+    match = { query, item -> item.title.contains(query, ignoreCase = true) },
     logger = logger
 ), SelectBranchScreenInteractor {
     val uiState = state.asStateFlow()

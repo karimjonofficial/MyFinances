@@ -24,11 +24,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.fixtures.format.FormatDateImpl
-import com.orka.myfinances.fixtures.format.FormatDecimalImpl
-import com.orka.myfinances.fixtures.format.FormatPriceImpl
-import com.orka.myfinances.fixtures.format.FormatTimeImpl
 import com.orka.myfinances.fixtures.resources.models.sale.sale1
+import com.orka.myfinances.format.LocalFormatter
 import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
@@ -37,8 +34,7 @@ import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.components.cards.ClientCard
 import com.orka.myfinances.ui.components.cards.UserCard
-import com.orka.myfinances.ui.screens.sale.details.interactor.SaleScreenInteractor
-import com.orka.myfinances.ui.screens.sale.details.interactor.SaleScreenModel
+import com.orka.myfinances.ui.models.screen.SaleScreenModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,6 +44,7 @@ fun SaleScreen(
     state: State<SaleScreenModel>,
     interactor: SaleScreenInteractor
 ) {
+    val formatter = LocalFormatter.current
     StatefulScreen(
         modifier = modifier,
         topBar = {
@@ -104,7 +101,7 @@ fun SaleScreen(
                         )
 
                         Text(
-                            text = model.price,
+                            text = stringResource(R.string.uzs_f, formatter.formatNumber(model.price)),
                             style = MaterialTheme.typography.displaySmall
                         )
 
@@ -124,7 +121,7 @@ fun SaleScreen(
 
                             HorizontalSpacer(4)
                             Text(
-                                text = model.date,
+                                text = formatter.formatDate(model.dateTime),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
@@ -138,7 +135,7 @@ fun SaleScreen(
 
                             HorizontalSpacer(4)
                             Text(
-                                text = model.time,
+                                text = formatter.formatTime(model.dateTime),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
@@ -189,12 +186,7 @@ fun SaleScreenPreview() {
     MyFinancesTheme {
         SaleScreen(
             state = State.Success(
-                value = sale1.toUiModel(
-                    formatPrice = FormatPriceImpl(),
-                    formatDate = FormatDateImpl(),
-                    formatTime = FormatTimeImpl(),
-                    formatDecimal = FormatDecimalImpl()
-                )
+                value = sale1.toUiModel()
             ),
             interactor = SaleScreenInteractor.dummy
         )

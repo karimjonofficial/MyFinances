@@ -3,28 +3,21 @@ package com.orka.myfinances.application.viewmodels.receive.details
 import com.orka.myfinances.application.viewmodels.toCardModel
 import com.orka.myfinances.data.dtos.receive.ReceiveDto
 import com.orka.myfinances.data.dtos.receive.ReceiveItemDto
-import com.orka.myfinances.format.FormatDateTime
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatPrice
-import com.orka.myfinances.ui.screens.receive.details.ReceiveItemModel
-import com.orka.myfinances.ui.screens.receive.details.ReceiveScreenModel
+import com.orka.myfinances.ui.models.item.ReceiveItemModel
+import com.orka.myfinances.ui.models.screen.ReceiveScreenModel
 
-fun ReceiveDto.toScreenModel(
-    formatPrice: FormatPrice,
-    formatDateTime: FormatDateTime,
-    formatDecimal: FormatDecimal
-): ReceiveScreenModel {
+fun ReceiveDto.toScreenModel(): ReceiveScreenModel {
     return ReceiveScreenModel(
         user = user.toCardModel(),
-        price = formatPrice.formatPrice(price.toDouble()),
-        dateTime = formatDateTime.formatDateTime(dateTime),
-        items = items.map { it.toModel(formatDecimal) }
+        price = price.toInt(),
+        dateTime = dateTime,
+        items = items.map { it.toModel() }
     )
 }
 
-fun ReceiveItemDto.toModel(formatDecimal: FormatDecimal): ReceiveItemModel {
+fun ReceiveItemDto.toModel(): ReceiveItemModel {
     return ReceiveItemModel(
         name = productName,
-        amount = formatDecimal.formatDecimal(amount.toDouble())
+        amount = amount.toInt()
     )
 }

@@ -7,6 +7,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.orka.myfinances.fixtures.resources.models.folder.catalog1
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.ui.models.screen.CatalogScreenModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @Composable

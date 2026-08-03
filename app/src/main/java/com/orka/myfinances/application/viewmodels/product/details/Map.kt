@@ -2,38 +2,27 @@ package com.orka.myfinances.application.viewmodels.product.details
 
 import com.orka.myfinances.data.dtos.product.title.ProductTitleDto
 import com.orka.myfinances.data.dtos.product.title.PropertyDto
-import com.orka.myfinances.format.FormatDate
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatPrice
-import com.orka.myfinances.ui.screens.product.details.models.ProductTitleScreenModel
-import com.orka.myfinances.ui.screens.product.details.models.PropertyModel
-import kotlin.time.Instant
+import com.orka.myfinances.ui.models.screen.ProductTitleScreenModel
+import com.orka.myfinances.ui.models.item.PropertyModel
 
-fun ProductTitleDto.toScreenModel(
-    formatDecimal: FormatDecimal,
-    formatDate: FormatDate,
-    formatPrice: FormatPrice
-): ProductTitleScreenModel {
+fun ProductTitleDto.toScreenModel(): ProductTitleScreenModel {
     return ProductTitleScreenModel(
         title = name,
-        dateTime = formatDate.formatDate(createdAt),
-        price = formatPrice.formatPrice(defaultSalePrice.toDouble()),
-        properties = properties?.map { it.toModel(formatDecimal, formatDate) },
+        dateTime = createdAt,
+        price = defaultSalePrice.toInt(),
+        properties = properties?.map { it.toModel() },
         description = description,
         salePrice = defaultPrice.toInt()
     )
 }
 
-fun PropertyDto.toModel(
-    formatDecimal: FormatDecimal,
-    formatDate: FormatDate
-): PropertyModel {
+fun PropertyDto.toModel(): PropertyModel {
     return PropertyModel(
         name = field.name,
         value = when (field.type) {
             "text" -> value
-            "number" -> formatDecimal.formatDecimal((value.toDouble()))
-            "date" -> formatDate.formatDate(Instant.parse(value))
+            "number" -> value
+            "date" -> value
             "boolean" -> if (value.toBoolean()) "Yes" else "No"
             else -> "Unknown type"
         }

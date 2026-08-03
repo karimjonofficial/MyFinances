@@ -9,6 +9,7 @@ import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.components.TopAppBar
 import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.ui.models.screen.CatalogScreenModel
 
 @Composable
 fun CatalogScreenTopBar(

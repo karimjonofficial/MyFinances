@@ -32,9 +32,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.fixtures.format.FormatDecimalImpl
-import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.stockItem1
+import com.orka.myfinances.format.LocalFormatter
 import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.preview.DefaultPreview
@@ -49,6 +48,8 @@ fun StockItemCard(
     onIncrease: () -> Unit,
     onDecrease: () -> Unit
 ) {
+    val formatter = LocalFormatter.current
+
     Column(modifier = modifier.background(Color.Transparent)) {
         Box(
             modifier = Modifier
@@ -73,7 +74,7 @@ fun StockItemCard(
                     .padding(horizontal = 12.dp, vertical = 6.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.left_f, item.amount),
+                    text = stringResource(R.string.left_f, formatter.formatNumber(item.amount)),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.surfaceVariant
                 )
@@ -103,7 +104,7 @@ fun StockItemCard(
             VerticalSpacer(4)
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = item.price,
+                text = stringResource(R.string.uzs_f, formatter.formatNumber(item.price)),
                 maxLines = 1,
                 style = MaterialTheme.typography.titleMedium
             )
@@ -149,7 +150,7 @@ fun StockItemCard(
 
                 HorizontalSpacer(16)
                 Text(
-                    text = item.basketAmount,
+                    text = formatter.formatNumber(item.basketAmount),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -187,10 +188,7 @@ private fun ProductCardPreview() {
             ) {
                 StockItemCard(
                     modifier = Modifier.size(150.dp, 300.dp),
-                    item = stockItem1.toCardModel(
-                        formatPrice = FormatPriceImpl(),
-                        formatDecimal = FormatDecimalImpl()
-                    ),
+                    item = stockItem1.toCardModel(),
                     onIncrease = {},
                     onDecrease = {}
                 )

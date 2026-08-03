@@ -5,18 +5,17 @@ import com.orka.myfinances.data.dtos.debt.DebtDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.debt.AddDebtRequest
 import com.orka.myfinances.data.repositories.debt.DebtEvent
-import com.orka.myfinances.format.FormatLocalDate
-import com.orka.myfinances.format.FormatPrice
-import com.orka.myfinances.format.FormatTime
 import com.orka.myfinances.lib.data.repositories.GetChunk
+import com.orka.myfinances.lib.data.repositories.SearchChunk
 import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.state.State
-import com.orka.myfinances.lib.viewmodel.sourceful.chunk.MapChunkViewModel
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.SearchableMapChunkViewModel
 import com.orka.myfinances.logger.Logger
+import com.orka.myfinances.ui.models.ui.DebtUiModel
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.debt.list.DebtUiModel
-import com.orka.myfinances.ui.screens.debt.list.interactor.DebtsScreenInteractor
+import com.orka.myfinances.ui.statuses.failure.failure
+import com.orka.myfinances.ui.screens.debt.list.DebtsScreenInteractor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -27,22 +26,21 @@ import kotlin.time.Instant
 
 class DebtsScreenViewModel(
     getChunk: GetChunk<DebtDto>,
+    searchChunk: SearchChunk<DebtDto>,
     private val insert: Insert<AddDebtRequest>,
     events: Flow<DebtEvent>,
-    private val formatPrice: FormatPrice,
-    private val formatLocalDate: FormatLocalDate,
-    private val formatTime: FormatTime,
     logger: Logger,
     private val navigator: Navigator
-) : MapChunkViewModel<DebtDto, DebtUiModel>(
+) : SearchableMapChunkViewModel<DebtDto, DebtUiModel>(
     get = getChunk,
+    searchRepository = searchChunk,
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map = chunk.results
             .groupBy { it.dateTime.toLocalDateTime(timeZone).date }
-            .mapKeys { formatLocalDate.formatLocalDate(it.key) }
+            .mapKeys { it.key.toString() }
             .mapValues { entry ->
-                entry.value.map { model -> model.toUiModel(formatPrice, formatTime) }
+                entry.value.map { model -> model.toUiModel() }
             }
 
         ChunkUiModel(

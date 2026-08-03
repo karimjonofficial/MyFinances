@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation3.runtime.NavEntry
-import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.ui.navigation.destination.Destination
 
 fun <T : Any> entry(
     destination: T,

@@ -1,7 +1,7 @@
 package com.orka.myfinances.ui.screens.profile
 
 import com.orka.myfinances.lib.ui.viewmodel.Refreshable
-import com.orka.myfinances.ui.screens.profile.models.BranchItemModel
+import com.orka.myfinances.ui.models.sheet.BranchItemModel
 
 interface ProfileInteractor : Refreshable {
     fun debts()
@@ -15,7 +15,6 @@ interface ProfileInteractor : Refreshable {
 
     companion object {
         val dummy = object : ProfileInteractor {
-            override fun initialize() {}
             override fun refresh() {}
             override fun debts() {}
             override fun orders() {}

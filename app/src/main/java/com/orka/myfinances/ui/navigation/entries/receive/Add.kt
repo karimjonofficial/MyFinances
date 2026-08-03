@@ -3,7 +3,6 @@ package com.orka.myfinances.ui.navigation.entries.receive
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetState
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -15,7 +14,7 @@ import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.models.item.ProductTitleItemModel
-import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.ui.navigation.destination.Destination
 import com.orka.myfinances.ui.screens.product.sheet.SelectProductTitleBottomSheet
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreen
 import kotlinx.coroutines.launch
@@ -54,10 +53,6 @@ fun addReceiveEntry(
 
     if (sheetVisible.value) {
         val productState = sheetViewModel.uiState.collectAsState()
-
-        LaunchedEffect(destination.id) {
-            sheetViewModel.initialize()
-        }
 
         SelectProductTitleBottomSheet(
             state = productState.value,

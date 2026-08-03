@@ -1,0 +1,17 @@
+package com.orka.myfinances.ui.models.screen
+
+import com.orka.myfinances.data.models.Id
+import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
+import com.orka.myfinances.ui.models.sheet.CategoryBottomSheetItemModel
+
+data class AddProductTitleScreenModel(
+    val categories: List<CategoryBottomSheetItemModel>,
+    val categoryId: Id,
+    val initialName: String = "",
+    val initialPrice: Int? = null,
+    val initialSalePrice: Int? = null,
+    val initialExposedPrice: Int? = null,
+    val initialDescription: String? = null,
+    val initialProperties: List<PropertyModel<*>>? = null,
+    val isEditMode: Boolean = false
+)

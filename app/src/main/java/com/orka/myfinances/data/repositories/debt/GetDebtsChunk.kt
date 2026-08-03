@@ -7,6 +7,7 @@ fun interface GetDebtsChunk {
     suspend fun getDebtsChunk(
         size: Int,
         page: Int,
-        isCompleted: Boolean
+        isCompleted: Boolean,
+        query: String?
     ): Chunk<DebtDto>?
 }

@@ -3,17 +3,14 @@ package com.orka.myfinances.application.viewmodels.sale.list
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.dtos.sale.SaleDto
 import com.orka.myfinances.data.repositories.sale.SaleEvent
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatLocalDate
-import com.orka.myfinances.format.FormatPrice
-import com.orka.myfinances.format.FormatTime
 import com.orka.myfinances.lib.data.repositories.GetChunk
+import com.orka.myfinances.lib.data.repositories.SearchChunk
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.viewmodel.sourceful.chunk.MapChunkViewModel
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.SearchableMapChunkViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.sale.list.SaleContentInteractor
-import com.orka.myfinances.ui.screens.sale.list.SaleUiModel
+import com.orka.myfinances.ui.models.ui.SaleUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -23,21 +20,19 @@ import kotlinx.datetime.toLocalDateTime
 
 class SaleContentViewModel(
     getChunk: GetChunk<SaleDto>,
+    searchChunk: SearchChunk<SaleDto>,
     events: Flow<SaleEvent>,
-    formatPrice: FormatPrice,
-    formatDecimal: FormatDecimal,
-    formatLocalDate: FormatLocalDate,
-    formatTime: FormatTime,
     private val navigator: Navigator,
     logger: Logger
-) : MapChunkViewModel<SaleDto, SaleUiModel>(
+) : SearchableMapChunkViewModel<SaleDto, SaleUiModel>(
     get = getChunk,
+    searchRepository = searchChunk,
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map = chunk.results.groupBy { sale -> sale.dateTime.toLocalDateTime(timeZone).date }
-            .mapKeys { entry -> formatLocalDate.formatLocalDate(entry.key) }
+            .mapKeys { entry -> entry.key.toString() }
             .mapValues { entry ->
-                entry.value.map { sale -> sale.map(formatPrice, formatDecimal, formatTime) }
+                entry.value.map { sale -> sale.map() }
             }
 
         ChunkUiModel(

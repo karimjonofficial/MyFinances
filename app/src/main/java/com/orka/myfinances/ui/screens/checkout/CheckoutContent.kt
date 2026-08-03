@@ -31,18 +31,19 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.id1
 import com.orka.myfinances.fixtures.resources.name
+import com.orka.myfinances.format.LocalFormatter
 import com.orka.myfinances.lib.ui.components.DividedList
+import com.orka.myfinances.lib.ui.components.SectionTitle
+import com.orka.myfinances.lib.ui.components.spacer.FooterSpacer
 import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.components.textfield.OutlinedCommentTextField
 import com.orka.myfinances.lib.ui.components.textfield.OutlinedIntegerTextField
-import com.orka.myfinances.lib.ui.components.SectionTitle
-import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
+import com.orka.myfinances.printer.PrinterStatus
+import com.orka.myfinances.ui.models.item.CheckoutItemModel
 import com.orka.myfinances.ui.models.item.ClientItemModel
-import com.orka.myfinances.ui.screens.checkout.viewmodel.BasketItemCardModel
-import java.text.NumberFormat
-import java.util.Locale
 
 @OptIn(
     ExperimentalLayoutApi::class,
@@ -51,7 +52,8 @@ import java.util.Locale
 @Composable
 fun CheckoutContent(
     modifier: Modifier = Modifier,
-    items: List<BasketItemCardModel>,
+    printerStatus: PrinterStatus,
+    items: List<CheckoutItemModel>,
     selectedClient: ClientItemModel?,
     hiddenPrice: String,
     price: Int?,
@@ -65,11 +67,7 @@ fun CheckoutContent(
     onOpenAddClient: () -> Unit
 ) {
     val scrollState = rememberScrollState()
-    val formatter = remember {
-        NumberFormat.getIntegerInstance(Locale.US).apply {
-            isGroupingUsed = true
-        }
-    }
+    val formatter = LocalFormatter.current
 
     val remainders = remember(price) {
         listOf(10, 100, 1000, 10000, 100000)
@@ -90,7 +88,7 @@ fun CheckoutContent(
             title = stringResource(R.string.items_purchased),
             items = items,
             itemTitle = { it.title },
-            itemSupportingText = { it.price }
+            itemSupportingText = { stringResource(R.string.uzs_f, formatter.formatNumber(it.price)) }
         )
 
         VerticalSpacer(16)
@@ -174,7 +172,7 @@ fun CheckoutContent(
                     SuggestionChip(
                         onClick = { onPriceChange(price?.minus(remainder)) },
                         label = {
-                            Text(text = "-${formatter.format(remainder)} ${stringResource(R.string.uzs)}")
+                            Text(text = "-${formatter.formatNumber(remainder)} ${stringResource(R.string.uzs)}")
                         }
                     )
                 }
@@ -188,23 +186,25 @@ fun CheckoutContent(
             onValueChange = { onDescriptionChange(it) }
         )
 
-        VerticalSpacer(8)
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(onClick = onPrintReceiptChange),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Checkbox(
-                checked = printReceipt,
-                onCheckedChange = null
-            )
+        if(printerStatus is PrinterStatus.Connected) {
+            VerticalSpacer(8)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = onPrintReceiptChange),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = printReceipt,
+                    onCheckedChange = null
+                )
 
-            HorizontalSpacer(4)
-            Text(text = stringResource(R.string.print_receipt))
+                HorizontalSpacer(4)
+                Text(text = stringResource(R.string.print_receipt) + "(${printerStatus.printer.name})")
+            }
         }
 
-        VerticalSpacer(8)
+        FooterSpacer()
     }
 }
 
@@ -212,9 +212,10 @@ fun CheckoutContent(
 @Composable
 private fun CheckoutContentPreview() {
     val items = listOf(
-        BasketItemCardModel("Product1", "10,000.00 UZS x 10 = 100,000.00 UZS"),
-        BasketItemCardModel("Product2", "10,000.00 UZS x 10 = 100,000.00 UZS")
+        CheckoutItemModel("Product1", 100000),
+        CheckoutItemModel("Product2", 100000)
     )
+    val status = PrinterStatus.Disconnected
 
     ScaffoldPreview(
         modifier = Modifier.fillMaxSize(),
@@ -233,6 +234,7 @@ private fun CheckoutContentPreview() {
             modifier = Modifier
                 .scaffoldPadding(paddingValues)
                 .padding(horizontal = 8.dp),
+            printerStatus = status,
             items = items,
             hiddenPrice = "",
             selectedClient = null,
@@ -253,9 +255,10 @@ private fun CheckoutContentPreview() {
 @Composable
 private fun CheckoutContentWithExposedPricePreview() {
     val items = listOf(
-        BasketItemCardModel("Product1", "10,000.00 UZS x 10 = 100,000.00 UZS"),
-        BasketItemCardModel("Product2", "10,000.00 UZS x 10 = 100,000.00 UZS")
+        CheckoutItemModel("Product1", 100000),
+        CheckoutItemModel("Product2", 100000)
     )
+    val status = PrinterStatus.Disconnected
 
     ScaffoldPreview(
         modifier = Modifier.fillMaxSize(),
@@ -277,6 +280,7 @@ private fun CheckoutContentWithExposedPricePreview() {
             items = items,
             hiddenPrice = "10, 000 UZS",
             selectedClient = null,
+            printerStatus = status,
             price = 1000,
             description = null,
             printReceipt = true,
@@ -294,9 +298,10 @@ private fun CheckoutContentWithExposedPricePreview() {
 @Composable
 private fun CheckoutContentWithSelectedClientPreview() {
     val items = listOf(
-        BasketItemCardModel("Product1", "10,000.00 UZS x 10 = 100,000.00 UZS"),
-        BasketItemCardModel("Product2", "10,000.00 UZS x 10 = 100,000.00 UZS")
+        CheckoutItemModel("Product1", 100000),
+        CheckoutItemModel("Product2", 100000)
     )
+    val status = PrinterStatus.Disconnected
     val client = ClientItemModel(
         id = id1,
         title = name
@@ -323,6 +328,7 @@ private fun CheckoutContentWithSelectedClientPreview() {
             hiddenPrice = "",
             selectedClient = client,
             price = 1000,
+            printerStatus = status,
             description = null,
             printReceipt = true,
             exposed = false,

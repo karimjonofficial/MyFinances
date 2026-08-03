@@ -24,10 +24,9 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.orka.myfinances.format.LocalFormatter
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
-import java.text.NumberFormat
-import java.util.Locale
 
 @Composable
 fun IntegerTextField(
@@ -113,6 +112,7 @@ private fun IntegerTextFieldImpl(
     trailingIcon: @Composable (() -> Unit)? = null,
     outlined: Boolean
 ) {
+    val formatter = LocalFormatter.current
     var rawText by remember {
         mutableStateOf(value?.toString() ?: "")
     }
@@ -123,19 +123,14 @@ private fun IntegerTextFieldImpl(
         }
     }
 
-    val formatter = remember {
-        NumberFormat.getIntegerInstance(Locale.US).apply {
-            isGroupingUsed = true
-        }
-    }
-
     val visualTransformation = remember(formatter) {
-        IntVisualTransformation(formatter)
+        IntVisualTransformation { formatter.formatDecimal(it.toDouble()) }
     }
 
     val onValueChangeInternal: (String) -> Unit = { input ->
         val sanitized = input
             .replace(",", "")
+            .replace(".", "") // FormatDecimal might use dots or commas as separators
             .filter { it.isDigit() }
 
         if (sanitized.isEmpty()) {
@@ -181,13 +176,13 @@ private fun IntegerTextFieldImpl(
 }
 
 private class IntVisualTransformation(
-    private val formatter: NumberFormat
+    private val format: (Long) -> String
 ) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val raw = text.text
         if (raw.isEmpty()) return TransformedText(AnnotatedString(""), OffsetMapping.Identity)
         val number = raw.toLongOrNull() ?: return TransformedText(AnnotatedString(raw), OffsetMapping.Identity)
-        val formatted = formatter.format(number)
+        val formatted = format(number)
         return TransformedText(AnnotatedString(formatted), IntegerOffsetMapping(raw, formatted))
     }
 }

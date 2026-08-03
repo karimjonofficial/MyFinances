@@ -1,7 +1,9 @@
 package com.orka.myfinances.factories
 
+import com.orka.myfinances.application.adapters.PrintersDataSource
 import com.orka.myfinances.application.data.repositories.DefaultsRepository
-import com.orka.myfinances.application.data.repositories.PinnedCategoriesRepository
+import com.orka.myfinances.application.data.repositories.PinnedCategoriesRepositoryImpl
+import com.orka.myfinances.application.printer.PrinterManager
 import com.orka.myfinances.application.viewmodels.basket.BasketContentViewModel
 import com.orka.myfinances.application.viewmodels.checkout.CheckoutScreenViewModel
 import com.orka.myfinances.application.viewmodels.client.add.AddClientViewModel
@@ -19,6 +21,7 @@ import com.orka.myfinances.application.viewmodels.notification.NotificationsScre
 import com.orka.myfinances.application.viewmodels.order.details.OrderScreenViewModel
 import com.orka.myfinances.application.viewmodels.order.list.completed.OrdersHistoryContentViewModel
 import com.orka.myfinances.application.viewmodels.order.list.incompleted.OrdersListScreenViewModel
+import com.orka.myfinances.application.viewmodels.printers.PrintersViewModel
 import com.orka.myfinances.application.viewmodels.product.add.AddProductTitleScreenViewModel
 import com.orka.myfinances.application.viewmodels.product.details.ProductTitleScreenViewModel
 import com.orka.myfinances.application.viewmodels.product.edit.EditProductTitleScreenViewModel
@@ -75,10 +78,8 @@ import com.orka.myfinances.data.repositories.stock.StockRepository
 import com.orka.myfinances.data.repositories.template.TemplateEvent
 import com.orka.myfinances.data.repositories.template.TemplateRepository
 import com.orka.myfinances.data.repositories.user.UserRepository
-import com.orka.myfinances.format.Formatter
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.managers.SessionManager
-import com.orka.myfinances.printer.Printer
 import com.orka.myfinances.ui.navigation.Navigator
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -86,11 +87,11 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 class Factory(
     private val session: Session,
     httpClient: HttpClient,
-    private val printer: Printer,
+    private val printer: PrinterManager,
     private val logger: Logger,
     private val navigator: Navigator,
-    private val formatter: Formatter,
     private val sessionManager: SessionManager,
+    private val printersDataSource: PrintersDataSource,
     database: AppDatabase
 ) {
     private val stockFlow = MutableSharedFlow<StockEvent>()
@@ -119,7 +120,7 @@ class Factory(
     private val defaultsDao = database.defaultsDao()
 
     private val basketRepository = BasketRepositoryImpl()
-    private val pinnedCategoriesRepository = PinnedCategoriesRepository(pinnedCategoriesDao)
+    private val pinnedCategoriesRepository = PinnedCategoriesRepositoryImpl(pinnedCategoriesDao)
     private val stockRepository = StockRepository(session.branchId, stockApi, stockFlow)
     private val folderRepository = FolderRepository(session.branchId, folderFlow, folderApi)
     private val templateRepository = TemplateRepository(session.branchId, templateApi, templateFlow)
@@ -152,9 +153,9 @@ class Factory(
     fun templatesViewModel(): TemplatesScreenViewModel {
         return TemplatesScreenViewModel(
             getChunk = templateRepository,
+            searchChunk = templateRepository,
             navigator = navigator,
             logger = logger,
-            formatDecimal = formatter,
             events = templateFlow
         )
     }
@@ -194,8 +195,6 @@ class Factory(
             getByCategory = stockRepository,
             stockEvents = stockFlow,
             basketRepository = basketRepository,
-            formatPrice = formatter,
-            formatDecimal = formatter,
             logger = logger
         )
     }
@@ -227,8 +226,6 @@ class Factory(
             basketRepository = basketRepository,
             stockRepository = stockRepository,
             navigator = navigator,
-            formatPrice = formatter,
-            formatDecimal = formatter,
             logger = logger
         )
     }
@@ -236,6 +233,7 @@ class Factory(
     fun clientsViewModel(): ClientsScreenViewModel {
         return ClientsScreenViewModel(
             getChunk = clientRepository,
+            searchChunk = clientRepository,
             insert = clientRepository,
             events = clientFlow,
             navigator = navigator,
@@ -255,12 +253,9 @@ class Factory(
     fun salesViewModel(): SaleContentViewModel {
         return SaleContentViewModel(
             getChunk = saleRepository,
+            searchChunk = saleRepository,
             events = saleFlow,
             navigator = navigator,
-            formatPrice = formatter,
-            formatLocalDate = formatter,
-            formatTime = formatter,
-            formatDecimal = formatter,
             logger = logger,
         )
     }
@@ -270,10 +265,6 @@ class Factory(
             id = id,
             getById = saleRepository,
             printer = printer,
-            formatPrice = formatter,
-            formatDate = formatter,
-            formatTime = formatter,
-            formatDecimal = formatter,
             navigator = navigator,
             logger = logger
         )
@@ -282,12 +273,9 @@ class Factory(
     fun receivesViewModel(): ReceiveContentViewModel {
         return ReceiveContentViewModel(
             getChunk = receiveRepository,
+            searchChunk = receiveRepository,
             events = receiveFlow,
             navigator = navigator,
-            formatPrice = formatter,
-            formatLocalDate = formatter,
-            formatTime = formatter,
-            formatDecimal = formatter,
             logger = logger
         )
     }
@@ -301,8 +289,6 @@ class Factory(
             basketRepository = basketRepository,
             logger = logger,
             navigator = navigator,
-            formatPrice = formatter,
-            formatDecimal = formatter,
             printer = printer,
         )
     }
@@ -310,6 +296,7 @@ class Factory(
     fun clientBottomSheetViewModel(): ClientBottomSheetViewModel {
         return ClientBottomSheetViewModel(
             getChunk = clientRepository,
+            searchChunk = clientRepository,
             events = clientFlow,
             logger = logger
         )
@@ -337,9 +324,8 @@ class Factory(
     fun notificationsViewModel(): NotificationsScreenViewModel {
         return NotificationsScreenViewModel(
             getChunk = notificationRepository,
+            searchChunk = notificationRepository,
             readNotification = notificationRepository,
-            formatLocalDate = formatter,
-            formatTime = formatter,
             logger = logger,
         )
     }
@@ -349,10 +335,6 @@ class Factory(
             getOrdersChunk = orderRepository,
             events = orderFlow,
             navigator = navigator,
-            formatDecimal = formatter,
-            formatPrice = formatter,
-            formatDate = formatter,
-            formatLocalDate = formatter,
             logger = logger
         )
     }
@@ -362,10 +344,6 @@ class Factory(
             getOrdersChunk = orderRepository,
             events = orderFlow,
             navigator = navigator,
-            formatDecimal = formatter,
-            formatPrice = formatter,
-            formatTime = formatter,
-            formatLocalDate = formatter,
             logger = logger
         )
     }
@@ -376,9 +354,6 @@ class Factory(
             getById = orderRepository,
             completeOrder = orderRepository,
             setEndDate = orderRepository,
-            formatPrice = formatter,
-            formatDateTime = formatter,
-            formatDecimal = formatter,
             navigator = navigator,
             logger = logger
         )
@@ -387,13 +362,11 @@ class Factory(
     fun debtsViewModel(): DebtsScreenViewModel {
         return DebtsScreenViewModel(
             getChunk = debtRepository,
+            searchChunk = debtRepository,
             insert = debtRepository,
             events = debtFlow,
             navigator = navigator,
-            logger = logger,
-            formatPrice = formatter,
-            formatLocalDate = formatter,
-            formatTime = formatter
+            logger = logger
         )
     }
 
@@ -403,8 +376,6 @@ class Factory(
             getById = debtRepository,
             setPaid = debtRepository,
             setNotified = debtRepository,
-            formatPrice = formatter,
-            formatDate = formatter,
             navigator = navigator,
             logger = logger
         )
@@ -427,9 +398,6 @@ class Factory(
             getById = productTitleRepository,
             insertReceive = receiveRepository,
             productTitleEvents = productTitleFlow,
-            formatDecimal = formatter,
-            formatDate = formatter,
-            formatPrice = formatter,
             navigator = navigator,
             logger = logger
         )
@@ -439,9 +407,6 @@ class Factory(
         return ReceiveScreenViewModel(
             id = id,
             getById = receiveRepository,
-            formatPrice = formatter,
-            formatDateTime = formatter,
-            formatDecimal = formatter,
             navigator = navigator,
             logger = logger
         )
@@ -468,6 +433,7 @@ class Factory(
     fun templateBottomSheetViewModel(): TemplateBottomSheetViewModel {
         return TemplateBottomSheetViewModel(
             getChunk = templateRepository,
+            searchChunk = templateRepository,
             flow = templateFlow,
             logger = logger
         )
@@ -477,9 +443,6 @@ class Factory(
         return DebtsHistoryContentViewModel(
             getDebtsChunk = debtRepository,
             events = debtFlow,
-            formatPrice = formatter,
-            formatLocalDate = formatter,
-            formatTime = formatter,
             logger = logger,
             navigator = navigator
         )
@@ -496,8 +459,9 @@ class Factory(
         return SettingsScreenViewModel(
             defaultsRepository = defaultsRepository,
             get = folderRepository,
-            flow = defaultsRepository.flow,
+            defaultsFlow = defaultsRepository.flow,
             navigator = navigator,
+            printerStatus = printer.status,
             logger = logger
         )
     }
@@ -526,5 +490,18 @@ class Factory(
             navigator = navigator,
             logger = logger
         )
+    }
+
+    fun printersViewModel(): PrintersViewModel {
+        return PrintersViewModel(
+            get = printersDataSource,
+            printer = printer,
+            flow = printer.status,
+            logger = logger
+        )
+    }
+
+    fun printer(): PrinterManager {
+        return printer
     }
 }

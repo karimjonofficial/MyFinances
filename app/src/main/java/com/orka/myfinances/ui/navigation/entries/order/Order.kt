@@ -6,15 +6,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
-import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.ui.navigation.destination.Destination
+import com.orka.myfinances.ui.navigation.destination.OrderDestinations
 import com.orka.myfinances.ui.screens.order.details.OrderScreen
 
 fun orderEntry(
     modifier: Modifier = Modifier,
-    destination: Destination.Order,
+    destination: OrderDestinations.Details,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
-    val viewModel = viewModel(key = destination.id.toString()) {
+    val viewModel = viewModel(key = destination.id.value.toString()) {
         factory.orderViewModel(destination.id)
     }
     val state = viewModel.uiState.collectAsState()

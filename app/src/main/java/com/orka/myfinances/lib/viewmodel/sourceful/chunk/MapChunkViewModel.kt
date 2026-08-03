@@ -4,15 +4,18 @@ import com.orka.myfinances.data.repositories.Chunk
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.state.State
-import com.orka.myfinances.lib.ui.viewmodel.ChunkViewModel
+import com.orka.myfinances.lib.ui.viewmodel.Paginated
 import com.orka.myfinances.lib.viewmodel.base.ExceptionMapper
 import com.orka.myfinances.lib.viewmodel.mappers.NetworkExceptionMapper
 import com.orka.myfinances.lib.viewmodel.sourceful.SourceFulViewModel
+import com.orka.myfinances.ui.statuses.failure.ExecutedFromFailure
+import com.orka.myfinances.ui.statuses.failure.LoadedAbsentPage
 import com.orka.myfinances.logger.Logger
+import com.orka.myfinances.ui.statuses.loading.LoadMore
 
 abstract class MapChunkViewModel<TData, TUi>(
     private val get: GetChunk<TData>,
-    private val map: suspend (Chunk<TData>) -> ChunkUiModel<TUi>,
+    protected val map: suspend (Chunk<TData>) -> ChunkUiModel<TUi>,
     exceptionMapper: ExceptionMapper<ChunkUiModel<TUi>> = NetworkExceptionMapper(),
     logger: Logger
 ) : SourceFulViewModel<Chunk<TData>, ChunkUiModel<TUi>>(
@@ -20,9 +23,9 @@ abstract class MapChunkViewModel<TData, TUi>(
     map = map,
     exceptionMapper = exceptionMapper,
     logger = logger
-), ChunkViewModel {
-    override fun loadMore() {
-        tryTransition { oldState ->
+), Paginated {
+    final override fun loadMore() {
+        tryTransition(loadingState = { oldState -> State.Loading(status = LoadMore, value = oldState.value) }) { oldState ->
             if(oldState is State.Success) {
                 val index = oldState.value.pageIndex
                 val size = oldState.value.size
@@ -40,8 +43,8 @@ abstract class MapChunkViewModel<TData, TUi>(
                             content = newContent
                         )
                     )
-                } else State.Failure(type = LoadedAbsentPage, value = oldState.value)
-            } else State.Failure(type = ExecutedFromFailure, value = oldState.value)
+                } else State.Failure(status = LoadedAbsentPage, value = oldState.value)
+            } else State.Failure(status = ExecutedFromFailure, value = oldState.value)
         }
     }
 }

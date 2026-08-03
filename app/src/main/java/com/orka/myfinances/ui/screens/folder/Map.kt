@@ -4,8 +4,8 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.models.folder.Catalog
 import com.orka.myfinances.data.models.folder.Category
 import com.orka.myfinances.data.models.folder.Folder
-import com.orka.myfinances.ui.screens.folder.components.FolderButtonModel
-import com.orka.myfinances.ui.screens.folder.models.FolderUiModel
+import com.orka.myfinances.ui.models.button.FolderButtonModel
+import com.orka.myfinances.ui.models.ui.FolderUiModel
 
 fun Folder.toButtonModel(): FolderButtonModel = FolderButtonModel(
     name = name,

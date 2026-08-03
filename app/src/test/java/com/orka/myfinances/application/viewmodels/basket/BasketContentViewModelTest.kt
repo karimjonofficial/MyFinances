@@ -5,15 +5,13 @@ import com.orka.myfinances.data.repositories.basket.BasketEvent
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.basket.MinBasketItem
 import com.orka.myfinances.data.repositories.stock.GetStockItemByProduct
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.testFixtures.resources.dtos.productDto1
 import com.orka.myfinances.testFixtures.resources.dtos.stockItemDto1
 import com.orka.myfinances.testLib.MainDispatcherContext
+import com.orka.myfinances.ui.models.ui.BasketItemUiModel
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.basket.BasketItemUiModel
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -27,8 +25,6 @@ class BasketContentViewModelTest : MainDispatcherContext() {
     private val basketRepository = mockk<BasketRepository>()
     private val stockRepository = mockk<GetStockItemByProduct>()
     private val navigator = mockk<Navigator>(relaxed = true)
-    private val formatPrice = mockk<FormatPrice>()
-    private val formatDecimal = mockk<FormatDecimal>()
     private val logger = mockk<Logger>(relaxed = true)
     private val events = MutableSharedFlow<BasketEvent>()
 
@@ -36,10 +32,8 @@ class BasketContentViewModelTest : MainDispatcherContext() {
     fun `initialize success`() = runTest {
         every { basketRepository.events } returns events
         coEvery { basketRepository.get() } returns emptyList()
-        every { formatPrice.formatPrice(any()) } returns "0.0"
 
         val viewModel = createViewModel()
-        viewModel.initialize()
         advanceUntilIdle()
 
         assertTrue(viewModel.uiState.value is State.Success)
@@ -108,10 +102,8 @@ class BasketContentViewModelTest : MainDispatcherContext() {
     fun `checkout navigates to checkout`() = runTest {
         every { basketRepository.events } returns events
         coEvery { basketRepository.get() } returns emptyList()
-        every { formatPrice.formatPrice(any()) } returns "0.0"
 
         val viewModel = createViewModel()
-        viewModel.initialize()
         advanceUntilIdle()
 
         viewModel.checkout()
@@ -125,14 +117,11 @@ class BasketContentViewModelTest : MainDispatcherContext() {
         every { basketRepository.events } returns events
         coEvery { basketRepository.get() } returns listOf(MinBasketItem(Id(productDto1.id), 1))
         coEvery { stockRepository.getByProduct(Id(productDto1.id)) } returns stockItemDto1
-        every { formatPrice.formatPrice(any()) } returns "100.0"
-        every { formatDecimal.formatDecimal(any()) } returns "1.0"
 
         val viewModel = createViewModel()
         // Collect uiState to increment subscriptionCount
         val job = launch { viewModel.uiState.collect {} }
-        
-        viewModel.initialize()
+
         advanceUntilIdle()
 
         // Verify initial state
@@ -140,7 +129,6 @@ class BasketContentViewModelTest : MainDispatcherContext() {
         assertEquals("1.0", state.value.items[0].model.amount)
 
         // Emit AmountChanged
-        every { formatDecimal.formatDecimal(2.0) } returns "2.0"
         events.emit(BasketEvent.AmountChanged(Id(productDto1.id), 2))
         advanceUntilIdle()
 
@@ -154,13 +142,10 @@ class BasketContentViewModelTest : MainDispatcherContext() {
         every { basketRepository.events } returns events
         coEvery { basketRepository.get() } returns listOf(MinBasketItem(Id(productDto1.id), 1))
         coEvery { stockRepository.getByProduct(Id(productDto1.id)) } returns stockItemDto1
-        every { formatPrice.formatPrice(any()) } returns "100.0"
-        every { formatDecimal.formatDecimal(any()) } returns "1.0"
 
         val viewModel = createViewModel()
         val job = launch { viewModel.uiState.collect {} }
 
-        viewModel.initialize()
         advanceUntilIdle()
 
         // Verify initial state
@@ -181,8 +166,6 @@ class BasketContentViewModelTest : MainDispatcherContext() {
         every { basketRepository.events } returns events
         coEvery { basketRepository.get() } returns listOf(MinBasketItem(Id(productDto1.id), 1))
         coEvery { stockRepository.getByProduct(Id(productDto1.id)) } returns stockItemDto1
-        every { formatPrice.formatPrice(any()) } returns "100.0"
-        every { formatDecimal.formatDecimal(any()) } returns "1.0"
 
         val viewModel = createViewModel()
         val job = launch { viewModel.uiState.collect {} }
@@ -203,10 +186,6 @@ class BasketContentViewModelTest : MainDispatcherContext() {
         basketRepository = basketRepository,
         stockRepository = stockRepository,
         navigator = navigator,
-        formatPrice = formatPrice,
-        formatDecimal = formatDecimal,
-        loading = loading,
-        failure = failure,
         logger = logger
     )
 }

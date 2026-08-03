@@ -6,19 +6,25 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.ui.components.cards.SaleCard
+import com.orka.myfinances.ui.models.ui.SaleUiModel
 
 @Composable
 fun SaleContent(
     modifier: Modifier = Modifier,
     interactor: SaleContentInteractor,
-    state: State<ChunkUiModel<SaleUiModel>>
+    state: State<ChunkUiModel<SaleUiModel>>,
+    searchActive: Boolean = false
 ) {
     LazyColumnWithStickyHeaderContent(
         modifier = modifier,
         arrangementSpace = 0.dp,
         state = state,
         refresh = interactor::refresh,
-        loadMore = interactor::loadMore,
+        loadMore = {
+            if (searchActive) interactor.searchMore()
+            else interactor.loadMore()
+        },
         item = { sale ->
             SaleCard(
                 sale = sale.model,

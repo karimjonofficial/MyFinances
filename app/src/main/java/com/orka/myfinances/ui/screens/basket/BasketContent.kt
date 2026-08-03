@@ -15,16 +15,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.application.viewmodels.basket.toUiModel
-import com.orka.myfinances.fixtures.format.FormatDecimalImpl
-import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.basket.basketItems
-import com.orka.myfinances.lib.ui.components.spacer.FooterSpacer
 import com.orka.myfinances.lib.ui.components.SectionTitle
+import com.orka.myfinances.lib.ui.components.spacer.FooterSpacer
 import com.orka.myfinances.lib.ui.contents.StateFulContent
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.state.State
-import com.orka.myfinances.ui.screens.basket.components.BasketItemCard
+import com.orka.myfinances.ui.components.cards.BasketItemCard
+import com.orka.myfinances.ui.models.screen.BasketScreenModel
 
 @Composable
 fun BasketContent(
@@ -90,12 +89,9 @@ private fun BasketContentPreview() {
             state = State.Success(
                 BasketScreenModel(
                     items = basketItems.map {
-                        it.toUiModel(
-                            FormatPriceImpl(),
-                            FormatDecimalImpl()
-                        )
+                        it.toUiModel()
                     },
-                    price = "100000.00 UZS",
+                    price = 100000,
                     sellable = true
                 )
             ),

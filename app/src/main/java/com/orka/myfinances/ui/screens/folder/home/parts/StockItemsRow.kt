@@ -21,7 +21,7 @@ import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.components.cards.StockItemCard
 import com.orka.myfinances.ui.screens.stock.StockContentInteractor
-import com.orka.myfinances.ui.screens.stock.StockItemUiModel
+import com.orka.myfinances.ui.models.ui.StockItemUiModel
 
 @Composable
 fun StockItemsRow(

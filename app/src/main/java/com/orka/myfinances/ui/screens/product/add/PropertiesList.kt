@@ -18,7 +18,7 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.template.TemplateField
 import com.orka.myfinances.data.models.types.Range
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
-import com.orka.myfinances.fixtures.resources.Types
+import com.orka.myfinances.ui.screens.templates.add.Types
 import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.textfield.OutlinedIntegerTextField
 import com.orka.myfinances.lib.ui.components.textfield.RangeField

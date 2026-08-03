@@ -3,7 +3,7 @@ package com.orka.myfinances.lib.viewmodel.sourceful
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.lib.viewmodel.base.ExceptionMapper
 import com.orka.myfinances.lib.viewmodel.base.refreshable.RefreshableBaseViewModel
-import com.orka.myfinances.lib.viewmodel.failure.EmptyDataFailure
+import com.orka.myfinances.ui.statuses.failure.EmptyDataFailure
 import com.orka.myfinances.lib.viewmodel.mappers.NetworkExceptionMapper
 import com.orka.myfinances.logger.Logger
 

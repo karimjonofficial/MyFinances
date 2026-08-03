@@ -17,6 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
+import com.orka.myfinances.format.LocalFormatter
+import com.orka.myfinances.ui.models.screen.BasketScreenModel
 
 @Composable
 fun PriceContent(
@@ -24,6 +26,8 @@ fun PriceContent(
     model: BasketScreenModel,
     interactor: BasketInteractor
 ) {
+    val formatter = LocalFormatter.current
+
     Row(
         modifier = modifier
             .background(MaterialTheme.colorScheme.surfaceContainer)
@@ -43,7 +47,7 @@ fun PriceContent(
             )
 
             Text(
-                text = model.price,
+                text = "${formatter.formatNumber(model.price)} ${stringResource(R.string.uzs)}",
                 color = MaterialTheme.colorScheme.secondary,
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold

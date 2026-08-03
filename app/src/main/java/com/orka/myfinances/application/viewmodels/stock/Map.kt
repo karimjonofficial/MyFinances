@@ -2,45 +2,36 @@ package com.orka.myfinances.application.viewmodels.stock
 
 import com.orka.myfinances.data.dtos.stock.StockItemDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.models.card.StockItemCardModel
-import com.orka.myfinances.ui.screens.stock.StockItemUiModel
+import com.orka.myfinances.ui.models.ui.StockItemUiModel
 
 fun StockItemDto.toCardModel(
     price: Long,
-    formatDecimal: FormatDecimal,
-    formatPrice: FormatPrice,
     basketAmount: Int? = null
 ): StockItemCardModel {
     val properties = product.title.properties?.joinToString { "${it.field.name}: ${it.value}" }
 
     return StockItemCardModel(
         title = product.title.name,
-        price = formatPrice.formatPrice(price.toDouble()),
-        amount = formatDecimal.formatDecimal(amount.toDouble()),
+        price = price.toInt(),
+        amount = amount,
         properties = properties,
-        description = description,
-        basketAmount = if(basketAmount != null) formatDecimal.formatDecimal(basketAmount.toDouble()) else null,
+        description = product.title.description,
+        basketAmount = basketAmount,
         increaseEnabled = if(basketAmount != null) basketAmount < amount else false
     )
 }
 
 fun StockItemDto.toUiModel(
-    formatPrice: FormatPrice,
-    formatDecimal: FormatDecimal,
     basketAmount: Int? = null
 ): StockItemUiModel {
-    val price = formatPrice.formatPrice(product.salePrice.toDouble())
-    val exposedPrice = formatPrice.formatPrice(product.exposedPrice.toDouble())
-
     return StockItemUiModel(
         id = Id(product.id),
-        salePrice = price,
-        exposedPrice = exposedPrice,
-        model = toCardModel(product.exposedPrice, formatDecimal, formatPrice, basketAmount),
+        salePrice = product.salePrice.toInt(),
+        exposedPrice = product.exposedPrice.toInt(),
+        model = toCardModel(product.exposedPrice, basketAmount),
         amount = amount
     )
 }

@@ -4,13 +4,15 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
-import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.ui.navigation.destination.Destination
 import com.orka.myfinances.ui.screens.folder.category.CategoryScreen
 import com.orka.myfinances.ui.screens.folder.category.CategoryScreenTopBar
 import com.orka.myfinances.ui.screens.product.list.ProductTitlesContent
@@ -38,6 +40,9 @@ fun categoryEntry(
     val stockState by stockViewModel.uiState.collectAsState()
     val productState by productViewModel.uiState.collectAsState()
 
+    val searchMode = rememberSaveable { mutableStateOf(false) }
+    val searchText = rememberSaveable { mutableStateOf("") }
+
     CategoryScreen(
         modifier = modifier,
         topBar = { index ->
@@ -49,6 +54,10 @@ fun categoryEntry(
                         1 -> productViewModel.search(query)
                     }
                 },
+                searchMode = searchMode.value,
+                onSearchModeChange = { searchMode.value = it },
+                searchText = searchText.value,
+                onSearchTextChange = { searchText.value = it },
                 onAddProductClick = categoryViewModel::addProduct,
                 onAddReceive = categoryViewModel::receive,
                 onExposeClick = {
@@ -68,13 +77,15 @@ fun categoryEntry(
                     modifier = fillMaxSizeModifier,
                     interactor = stockViewModel,
                     state = stockState,
-                    contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
+                    contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
+                    searchActive = searchMode.value
                 )
 
                 1 -> ProductTitlesContent(
                     modifier = fillMaxSizeModifier,
                     state = productState,
-                    interactor = productViewModel
+                    interactor = productViewModel,
+                    searchActive = searchMode.value
                 )
             }
         }

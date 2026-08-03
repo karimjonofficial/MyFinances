@@ -1,33 +1,7 @@
 package com.orka.myfinances.format
 
-import com.orka.myfinances.data.models.product.ProductTitle
-import kotlinx.datetime.LocalDate
-import kotlin.time.Instant
+import androidx.compose.runtime.staticCompositionLocalOf
 
-fun interface FormatNames {
-    fun formatNames(items: List<ProductTitle>): String
-}
-
-fun interface FormatDate {
-    fun formatDate(instant: Instant): String
-}
-
-fun interface FormatTime {
-    fun formatTime(instant: Instant): String
-}
-
-fun interface FormatPrice {
-    fun formatPrice(price: Double): String
-}
-
-fun interface FormatDecimal {
-    fun formatDecimal(value: Double): String
-}
-
-fun interface FormatDateTime {
-    fun formatDateTime(instant: Instant): String
-}
-
-fun interface FormatLocalDate {
-    fun formatLocalDate(date: LocalDate): String
+val LocalFormatter = staticCompositionLocalOf<Formatter> {
+    error("No Formatter provided")
 }

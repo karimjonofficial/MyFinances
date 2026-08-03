@@ -29,14 +29,13 @@ import com.orka.myfinances.R
 import com.orka.myfinances.data.repositories.template.requests.TemplateFieldModel
 import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
-import com.orka.myfinances.ui.screens.templates.add.components.TemplateFieldCard
+import com.orka.myfinances.ui.components.cards.TemplateFieldCard
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddTemplateScreen(
     modifier: Modifier = Modifier,
-    types: List<String>,
     interactor: AddTemplateScreenInteractor
 ) {
     val name = rememberSaveable { mutableStateOf("") }
@@ -57,7 +56,7 @@ fun AddTemplateScreen(
 
         if (showDialog.value) {
             AddTemplateFieldDialog(
-                types = types,
+                types = Types.all,
                 dismissRequest = { showDialog.value = false },
                 onSuccess = { name, type ->
                     fields.add(TemplateFieldModel(name, type))
@@ -127,12 +126,9 @@ fun AddTemplateScreen(
 @Preview
 @Composable
 private fun TemplateScreenPreview() {
-    val types = listOf("text", "number", "range")
-
     MyFinancesTheme {
         AddTemplateScreen(
             modifier = Modifier.fillMaxSize(),
-            types = types,
             interactor = AddTemplateScreenInteractor.dummy
         )
     }

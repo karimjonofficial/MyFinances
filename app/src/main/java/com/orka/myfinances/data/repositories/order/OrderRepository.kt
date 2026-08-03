@@ -8,6 +8,7 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.models.toChunk
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.data.repositories.GetChunk
+import com.orka.myfinances.lib.data.repositories.SearchChunk
 import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.data.repositories.Chunk
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,12 +18,20 @@ class OrderRepository(
     private val branchId: Id,
     private val api: OrderApi,
     private val flow: MutableSharedFlow<OrderEvent>
-) : GetChunk<OrderDto>, GetOrdersChunk, GetById<OrderDto>, Insert<AddOrderRequest>, CompleteOrder, SetEndDate {
+) : GetChunk<OrderDto>, SearchChunk<OrderDto>, GetOrdersChunk, GetById<OrderDto>, Insert<AddOrderRequest>, CompleteOrder, SetEndDate {
     override suspend fun getChunk(
         size: Int,
         page: Int
     ): Chunk<OrderDto>? {
-        return getOrdersChunk(size, page, false, null)
+        return searchChunk(size, page, null)
+    }
+
+    override suspend fun searchChunk(
+        size: Int,
+        page: Int,
+        query: String?
+    ): Chunk<OrderDto>? {
+        return getOrdersChunk(size, page, false, query)
     }
 
     override suspend fun getOrdersChunk(

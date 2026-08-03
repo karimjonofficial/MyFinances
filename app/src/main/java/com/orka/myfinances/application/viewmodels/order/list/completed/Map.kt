@@ -2,32 +2,21 @@ package com.orka.myfinances.application.viewmodels.order.list.completed
 
 import com.orka.myfinances.data.dtos.order.OrderDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatPrice
-import com.orka.myfinances.format.FormatTime
-import com.orka.myfinances.ui.screens.order.list.completed.HistoryOrderCardModel
-import com.orka.myfinances.ui.screens.order.list.completed.HistoryOrderUiModel
+import com.orka.myfinances.ui.models.card.HistoryOrderCardModel
+import com.orka.myfinances.ui.models.ui.HistoryOrderUiModel
 
-fun OrderDto.toUiModel(
-    formatDecimal: FormatDecimal,
-    formatPrice: FormatPrice,
-    formatTime: FormatTime
-): HistoryOrderUiModel {
+fun OrderDto.toUiModel(): HistoryOrderUiModel {
     return HistoryOrderUiModel(
         id = Id(id),
-        model = toCardModel(formatDecimal, formatPrice, formatTime)
+        model = toCardModel()
     )
 }
 
-fun OrderDto.toCardModel(
-    formatDecimal: FormatDecimal,
-    formatPrice: FormatPrice,
-    formatTime: FormatTime
-): HistoryOrderCardModel {
+fun OrderDto.toCardModel(): HistoryOrderCardModel {
     return HistoryOrderCardModel(
         title = items.joinToString { it.product.name },
-        size = formatDecimal.formatDecimal(items.size.toDouble()),
-        price = formatPrice.formatPrice(price.toDouble()),
-        dateTime = formatTime.formatTime(createdAt)
+        size = items.size,
+        price = price.toInt(),
+        dateTime = createdAt
     )
 }

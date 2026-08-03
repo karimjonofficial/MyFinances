@@ -5,18 +5,13 @@ import com.orka.myfinances.application.viewmodels.toCardModel
 import com.orka.myfinances.data.dtos.debt.DebtDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.now
-import com.orka.myfinances.format.FormatDate
-import com.orka.myfinances.format.FormatPrice
-import com.orka.myfinances.ui.screens.debt.details.DebtScreenModel
+import com.orka.myfinances.ui.models.screen.DebtScreenModel
 
-fun DebtDto.toScreenModel(
-    formatPrice: FormatPrice,
-    formatDate: FormatDate
-): DebtScreenModel {
+fun DebtDto.toScreenModel(): DebtScreenModel {
     return DebtScreenModel(
-        price = formatPrice.formatPrice(price.toDouble()),
-        startDate = formatDate.formatDate(dateTime),
-        endDateTime = if (endDateTime != null) formatDate.formatDate(endDateTime) else null,
+        price = price.toInt(),
+        startDate = dateTime,
+        endDateTime = endDateTime,
         notified = notified,
         client = client.map(),
         isOverdue = endDateTime != null && endDateTime < now(),

@@ -5,8 +5,8 @@ import com.orka.myfinances.data.dtos.folder.CatalogDto
 import com.orka.myfinances.data.dtos.folder.CategoryDto
 import com.orka.myfinances.data.dtos.folder.FolderDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.ui.screens.folder.components.FolderButtonModel
-import com.orka.myfinances.ui.screens.folder.models.FolderUiModel
+import com.orka.myfinances.ui.models.button.FolderButtonModel
+import com.orka.myfinances.ui.models.ui.FolderUiModel
 
 fun FolderDto.toButtonModel(): FolderButtonModel = FolderButtonModel(
     name = name,

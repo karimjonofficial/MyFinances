@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
+import com.orka.myfinances.format.LocalFormatter
 import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
@@ -34,6 +35,7 @@ import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.components.cards.UserCard
+import com.orka.myfinances.ui.models.screen.ReceiveScreenModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,6 +44,7 @@ fun ReceiveScreen(
     interactor: ReceiveScreenInteractor,
     state: State<ReceiveScreenModel>
 ) {
+    val formatter = LocalFormatter.current
     StatefulScreen(
         modifier = modifier,
         topBar = {
@@ -65,7 +68,8 @@ fun ReceiveScreen(
                 }
             )
         },
-        state = state
+        state = state,
+        onRetry = interactor::refresh
     ) { modifier, uiModel ->
         LazyColumn(
             modifier = modifier.padding(16.dp),
@@ -85,7 +89,7 @@ fun ReceiveScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
-                            text = uiModel.price,
+                            text = stringResource(R.string.uzs_f, formatter.formatNumber(uiModel.price)),
                             style = MaterialTheme.typography.headlineMedium
                         )
 
@@ -106,7 +110,7 @@ fun ReceiveScreen(
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 Text(
-                                    text = uiModel.dateTime,
+                                    text = formatter.formatDateTime(uiModel.dateTime),
                                     style = MaterialTheme.typography.bodyMedium
                                 )
                             }
@@ -128,7 +132,7 @@ fun ReceiveScreen(
                     title = stringResource(R.string.items),
                     items = uiModel.items,
                     itemTitle = { item -> item.name },
-                    itemSupportingText = { item -> item.amount }
+                    itemSupportingText = { item -> formatter.formatNumber(item.amount) }
                 )
             }
 

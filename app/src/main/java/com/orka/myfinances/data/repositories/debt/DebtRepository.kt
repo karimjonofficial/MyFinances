@@ -6,6 +6,7 @@ import com.orka.myfinances.data.api.debt.models.request.SetPaidApiRequest
 import com.orka.myfinances.data.dtos.debt.DebtDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.models.toChunk
+import com.orka.myfinances.lib.data.repositories.SearchChunk
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.Insert
@@ -16,14 +17,27 @@ class DebtRepository(
     private val branchId: Id,
     private val api: DebtApi,
     private val flow: MutableSharedFlow<DebtEvent>
-) : GetChunk<DebtDto>, GetDebtsChunk, GetById<DebtDto>, Insert<AddDebtRequest>, SetPaid, SetNotified {
+) : GetChunk<DebtDto>, SearchChunk<DebtDto>, GetDebtsChunk, GetById<DebtDto>, Insert<AddDebtRequest>, SetPaid, SetNotified {
 
     override suspend fun getChunk(
+        size: Int,
+        page: Int
+    ): Chunk<DebtDto>? {
+        return searchChunk(size, page, null)
+    }
+
+    override suspend fun searchChunk(
         size: Int,
         page: Int,
         query: String?
     ): Chunk<DebtDto>? {
-        return getDebtsChunk(size, page, false, query)
+        return api.getChunk(
+            branchId = branchId.value,
+            page = page,
+            pageSize = size,
+            search = query,
+            isCompleted = false
+        )?.toChunk { it.toDto() }
     }
 
     override suspend fun getDebtsChunk(

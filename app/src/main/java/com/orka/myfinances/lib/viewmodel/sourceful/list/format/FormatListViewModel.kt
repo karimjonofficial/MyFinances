@@ -6,12 +6,12 @@ import com.orka.myfinances.lib.viewmodel.mappers.NetworkExceptionMapper
 import com.orka.myfinances.lib.viewmodel.sourceful.SourceFulViewModel
 import com.orka.myfinances.logger.Logger
 
-abstract class FormatListViewModel<T, U>(
-    private val get: Get<T>,
-    private val map: (T) -> U,
-    exceptionMapper: ExceptionMapper<List<U>> = NetworkExceptionMapper(),
+abstract class FormatListViewModel<TData, TUi>(
+    private val get: Get<TData>,
+    private val map: (TData) -> TUi,
+    exceptionMapper: ExceptionMapper<List<TUi>> = NetworkExceptionMapper(),
     logger: Logger
-) : SourceFulViewModel<List<T>, List<U>>(
+) : SourceFulViewModel<List<TData>, List<TUi>>(
     loadData = { get.getAll() },
     map = { list -> list.map(map) },
     exceptionMapper = exceptionMapper,

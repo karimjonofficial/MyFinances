@@ -2,23 +2,18 @@ package com.orka.myfinances.ui.screens.order.details
 
 import com.orka.myfinances.data.models.order.Order
 import com.orka.myfinances.data.models.order.OrderItem
-import com.orka.myfinances.format.FormatDateTime
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.ui.screens.client.list.toCardModel
 import com.orka.myfinances.ui.map.toCardModel
+import com.orka.myfinances.ui.models.item.OrderItemModel
+import com.orka.myfinances.ui.models.screen.OrderScreenModel
 
-fun Order.map(
-    formatDateTime: FormatDateTime,
-    formatPrice: FormatPrice,
-    formatDecimal: FormatDecimal
-): OrderScreenModel {
+fun Order.map(): OrderScreenModel {
     return OrderScreenModel(
-        price = formatPrice.formatPrice(price.toDouble()),
+        price = price,
         completed = completed,
-        startDate = formatDateTime.formatDateTime(dateTime),
-        endDate = if(endDateTime != null) formatDateTime.formatDateTime(endDateTime) else null,
-        items = items.map { it.map(formatDecimal) },
+        startDate = dateTime,
+        endDate = endDateTime,
+        items = items.map { it.map() },
         client = client.toCardModel(),
         clientId = client.id,
         user = user.toCardModel(),
@@ -27,9 +22,9 @@ fun Order.map(
     )
 }
 
-fun OrderItem.map(formatDecimal: FormatDecimal): OrderItemModel {
+fun OrderItem.map(): OrderItemModel {
     return OrderItemModel(
         name = product.title.name,
-        amount = formatDecimal.formatDecimal(amount.toDouble())
+        amount = amount
     )
 }

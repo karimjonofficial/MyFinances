@@ -11,6 +11,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.ui.models.screen.BasketScreenModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -24,9 +24,11 @@ fun <T> DividedList(
     modifier: Modifier = Modifier,
     title: String,
     items: List<T>,
-    itemTitle: (T) -> String,
-    itemSupportingText: (T) -> String
+    itemTitle: @Composable (T) -> String,
+    itemSupportingText: @Composable (T) -> String
 ) {
+    if (items.isEmpty()) return
+
     Column(
         modifier = modifier
     ) {
@@ -37,7 +39,7 @@ fun <T> DividedList(
         )
 
         VerticalSpacer(8)
-        DividedList(
+        DividedListImpl(
             items = items,
             title = itemTitle,
             supportingText = itemSupportingText
@@ -46,25 +48,22 @@ fun <T> DividedList(
 }
 
 @Composable
-private fun <T> DividedList(
+private fun <T> DividedListImpl(
     modifier: Modifier = Modifier,
     items: List<T>,
-    title: (T) -> String,
-    supportingText: (T) -> String
+    title: @Composable (T) -> String,
+    supportingText: @Composable (T) -> String
 ) {
     Card(modifier = modifier) {
-        items.dropLast(1).forEach { item ->
+        for (i in items.indices) {
             ListItem(
-                title = title(item),
-                description = supportingText(item)
+                title = title(items[i]),
+                description = supportingText(items[i])
             )
-            HorizontalDivider()
+            if (i < items.size - 1) {
+                HorizontalDivider()
+            }
         }
-
-        ListItem(
-            title = title(items.last()),
-            description = supportingText(items.last())
-        )
     }
 }
 

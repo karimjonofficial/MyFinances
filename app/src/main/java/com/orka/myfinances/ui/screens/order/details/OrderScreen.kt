@@ -36,12 +36,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.fixtures.format.FormatDateTimeImpl
-import com.orka.myfinances.fixtures.format.FormatDecimalImpl
-import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.order.order1
 import com.orka.myfinances.fixtures.resources.models.order.order2
 import com.orka.myfinances.fixtures.resources.models.order.order3
+import com.orka.myfinances.format.LocalFormatter
 import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.lib.ui.components.Dialog
 import com.orka.myfinances.lib.ui.components.DividedList
@@ -53,6 +51,7 @@ import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.components.cards.ClientCard
 import com.orka.myfinances.ui.components.cards.UserCard
+import com.orka.myfinances.ui.models.screen.OrderScreenModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 import kotlin.time.Instant
 
@@ -65,6 +64,7 @@ fun OrderScreen(
 ) {
     val showCompleteDialog = rememberSaveable { mutableStateOf(false) }
     val showDatePicker = rememberSaveable { mutableStateOf(false) }
+    val formatter = LocalFormatter.current
 
     StatefulScreen(
         modifier = modifier,
@@ -92,7 +92,8 @@ fun OrderScreen(
                     action = { showCompleteDialog.value = true }
                 )
             }
-        }
+        },
+        onRetry = interactor::refresh
     ) { modifier, order ->
         Column(
             modifier = modifier
@@ -111,7 +112,7 @@ fun OrderScreen(
                     Text(text = stringResource(R.string.total_price))
 
                     Text(
-                        text = order.price,
+                        text = stringResource(R.string.uzs_f, formatter.formatNumber(order.price)),
                         style = MaterialTheme.typography.headlineLarge,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.primary
@@ -128,7 +129,7 @@ fun OrderScreen(
                         LabeledDate(
                             modifier = Modifier.weight(1f),
                             label = stringResource(R.string.registered_at),
-                            date = order.startDate
+                            date = formatter.formatDateTime(order.startDate)
                         )
 
                         HorizontalSpacer(16)
@@ -143,7 +144,7 @@ fun OrderScreen(
                             label = if (order.completed) stringResource(R.string.completed_at) else stringResource(
                                 R.string.completion_date
                             ),
-                            date = order.endDate
+                            date = order.endDate?.let { formatter.formatDateTime(it) }
                                 ?: stringResource(R.string.end_date_is_not_provided)
                         )
                     }
@@ -155,7 +156,7 @@ fun OrderScreen(
                 title = stringResource(R.string.order_details),
                 items = order.items,
                 itemTitle = { item -> item.name },
-                itemSupportingText = { item -> item.amount }
+                itemSupportingText = { item -> formatter.formatNumber(item.amount) }
             )
 
             VerticalSpacer(16)
@@ -253,13 +254,7 @@ private fun NewOrderScreenPreview() {
     MyFinancesTheme {
         OrderScreen(
             modifier = Modifier.fillMaxSize(),
-            state = State.Success(
-                order3.map(
-                    formatPrice = FormatPriceImpl(),
-                    formatDateTime = FormatDateTimeImpl(),
-                    formatDecimal = FormatDecimalImpl()
-                )
-            ),
+            state = State.Success(order3.map()),
             interactor = OrderScreenInteractor.dummy
         )
     }
@@ -271,13 +266,7 @@ private fun UnCompletedOrderScreenPreview() {
     MyFinancesTheme {
         OrderScreen(
             modifier = Modifier.fillMaxSize(),
-            state = State.Success(
-                order1.map(
-                    formatPrice = FormatPriceImpl(),
-                    formatDateTime = FormatDateTimeImpl(),
-                    formatDecimal = FormatDecimalImpl()
-                )
-            ),
+            state = State.Success(order1.map()),
             interactor = OrderScreenInteractor.dummy
         )
     }
@@ -289,13 +278,7 @@ private fun CompletedOrderScreenPreview() {
     MyFinancesTheme {
         OrderScreen(
             modifier = Modifier.fillMaxSize(),
-            state = State.Success(
-                value = order2.map(
-                    formatPrice = FormatPriceImpl(),
-                    formatDateTime = FormatDateTimeImpl(),
-                    formatDecimal = FormatDecimalImpl()
-                )
-            ),
+            state = State.Success(order2.map()),
             interactor = OrderScreenInteractor.dummy
         )
     }

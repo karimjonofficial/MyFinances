@@ -1,6 +1,7 @@
 package com.orka.myfinances.ui.screens.basket
 
 import com.orka.myfinances.lib.ui.viewmodel.Refreshable
+import com.orka.myfinances.ui.models.ui.BasketItemUiModel
 
 interface BasketInteractor : Refreshable {
     fun increase(item: BasketItemUiModel)
@@ -16,7 +17,6 @@ interface BasketInteractor : Refreshable {
             override fun remove(item: BasketItemUiModel) {}
             override fun clear() {}
             override fun checkout() {}
-            override fun initialize() {}
             override fun refresh() {}
         }
     }

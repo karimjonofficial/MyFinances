@@ -14,12 +14,12 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.components.SectionTitle
 import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
-import com.orka.myfinances.ui.screens.folder.components.FirstFolderButton
-import com.orka.myfinances.ui.screens.folder.components.FolderButton
-import com.orka.myfinances.ui.screens.folder.components.LastFolderButton
-import com.orka.myfinances.ui.screens.folder.components.NotLastFolderButton
-import com.orka.myfinances.ui.screens.folder.components.SecondFolderButton
-import com.orka.myfinances.ui.screens.folder.models.FolderUiModel
+import com.orka.myfinances.ui.components.buttons.FirstFolderButton
+import com.orka.myfinances.ui.components.buttons.FolderButton
+import com.orka.myfinances.ui.components.buttons.LastFolderButton
+import com.orka.myfinances.ui.components.buttons.NotLastFolderButton
+import com.orka.myfinances.ui.components.buttons.SecondFolderButton
+import com.orka.myfinances.ui.models.ui.FolderUiModel
 
 @Composable
 fun FoldersList(

@@ -19,9 +19,9 @@ import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.components.dialogs.AddProductDialog
 import com.orka.myfinances.ui.models.item.TemplateItemModel
-import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.ui.navigation.destination.Destination
 import com.orka.myfinances.ui.screens.basket.BasketContent
-import com.orka.myfinances.ui.screens.folder.components.AddFolderDialog
+import com.orka.myfinances.ui.components.dialogs.AddFolderDialog
 import com.orka.myfinances.ui.screens.folder.home.FoldersContent
 import com.orka.myfinances.ui.screens.folder.home.parts.StockItemsRow
 import com.orka.myfinances.ui.screens.home.HomeScreen

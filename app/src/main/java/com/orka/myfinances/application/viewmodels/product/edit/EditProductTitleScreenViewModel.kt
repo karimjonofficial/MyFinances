@@ -14,8 +14,9 @@ import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.lib.viewmodel.base.BaseViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
-import com.orka.myfinances.ui.screens.product.add.interactor.CategoryBottomSheetItemModel
+import com.orka.myfinances.ui.statuses.failure.failure
+import com.orka.myfinances.ui.models.screen.AddProductTitleScreenModel
+import com.orka.myfinances.ui.models.sheet.CategoryBottomSheetItemModel
 import com.orka.myfinances.ui.screens.product.edit.EditProductTitleScreenInteractor
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -35,13 +36,17 @@ class EditProductTitleScreenViewModel(
 
         if (categories != null && productTitle != null) {
             State.Success(productTitle.toEditorModel(categories))
-        } else null
+        } else State.Failure(failure)
     },
     logger = logger
 ), EditProductTitleScreenInteractor {
     val uiState = state.asStateFlow()
 
     init {
+        initialize()
+    }
+
+    override fun refresh() {
         initialize()
     }
 
@@ -56,8 +61,9 @@ class EditProductTitleScreenViewModel(
     ) {
         tryTransition { oldState ->
             if (oldState !is State.Success)
-                return@tryTransition State.Failure(,
-                    oldState.value
+                return@tryTransition State.Failure(
+                    status = com.orka.myfinances.ui.statuses.failure.ExecutedFromFailure,
+                    value = oldState.value
                 )
 
             val selectedCategory = oldState.value.categories.find { it.id == categoryId }

@@ -7,20 +7,24 @@ import androidx.compose.ui.unit.dp
 import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.state.State
-import com.orka.myfinances.ui.screens.debt.list.DebtCard
-import com.orka.myfinances.ui.screens.debt.list.DebtUiModel
+import com.orka.myfinances.ui.components.cards.DebtCard
+import com.orka.myfinances.ui.models.ui.DebtUiModel
 
 @Composable
 fun DebtsHistoryContent(
     modifier: Modifier = Modifier,
     interactor: DebtsHistoryContentInteractor,
-    state: State<ChunkUiModel<DebtUiModel>>
+    state: State<ChunkUiModel<DebtUiModel>>,
+    searchActive: Boolean = false
 ) {
     LazyColumnWithStickyHeaderContent(
         modifier = modifier,
         state = state,
         refresh = interactor::refresh,
-        loadMore = interactor::loadMore,
+        loadMore = {
+            if (searchActive) interactor.searchMore()
+            else interactor.loadMore()
+        },
         item = { item ->
             DebtCard(
                 modifier = Modifier.padding(horizontal = 8.dp),

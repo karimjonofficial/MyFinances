@@ -8,6 +8,7 @@ import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.components.buttons.SettingsButton
+import com.orka.myfinances.ui.models.screen.SettingsScreenModel
 
 fun LazyListScope.HomeContentGroup(
     interactor: SettingsScreenInteractor,
@@ -21,7 +22,7 @@ fun LazyListScope.HomeContentGroup(
             bottomClipped = true,
             leadingIcon = painterResource(R.drawable.keep),
             trailingIcon = painterResource(R.drawable.arrow_right),
-            hasDivider = false,
+            error = false,
             onClick = interactor::toPinnedCategories,
         )
     }

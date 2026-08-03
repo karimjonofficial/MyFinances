@@ -11,8 +11,6 @@ import com.orka.myfinances.data.repositories.order.toOrderRequest
 import com.orka.myfinances.data.repositories.sale.AddSaleRequest
 import com.orka.myfinances.data.repositories.sale.toSaleRequest
 import com.orka.myfinances.data.repositories.stock.GetStockItemByProduct
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.lib.extensions.models.getExposedPrice
@@ -21,9 +19,10 @@ import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.lib.viewmodel.base.refreshable.RefreshableBaseViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.printer.Printer
+import com.orka.myfinances.ui.models.screen.CheckoutScreenModel
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
-import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenModel
+import com.orka.myfinances.ui.statuses.failure.failure
+import com.orka.myfinances.ui.screens.checkout.CheckoutScreenInteractor
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -38,8 +37,6 @@ class CheckoutScreenViewModel(
     private val basketRepository: BasketRepository,
     private val navigator: Navigator,
     private val printer: Printer,
-    private val formatDecimal: FormatDecimal,
-    private val formatPrice: FormatPrice,
     logger: Logger
 ) : RefreshableBaseViewModel<CheckoutScreenModel>(
     produceInitialState = {
@@ -53,9 +50,9 @@ class CheckoutScreenViewModel(
 
         State.Success(
             CheckoutScreenModel(
-                items = items.map { it.toModel(formatPrice, formatDecimal) },
+                items = items.map { it.toModel() },
                 exposedPrice = items.getExposedPrice().toInt(),
-                salePrice = formatPrice.formatPrice(items.getSalePrice().toDouble())
+                salePrice = items.getSalePrice().toInt()
             )
         )
     },
@@ -86,7 +83,7 @@ class CheckoutScreenViewModel(
                 val response = addSale.add(basket.toSaleRequest(clientId))
 
                 if (response != null) {
-                    if (print) printer.print(response)
+                    if (print) printer.printSaleReceipt(response)
                     basketRepository.clear()
                     navigator.back()
                     state
@@ -115,7 +112,7 @@ class CheckoutScreenViewModel(
                 val response = addSale.add(basket.toSaleRequest(clientId))
 
                 if (response != null) {
-                    if (print) printer.print(response)
+                    if (print) printer.printSaleReceipt(response)
                     basketRepository.clear()
                     val debtRequest = AddDebtRequest(
                         clientId = clientId,

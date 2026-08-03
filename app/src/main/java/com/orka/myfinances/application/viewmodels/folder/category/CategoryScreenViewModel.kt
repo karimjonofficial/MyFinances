@@ -5,12 +5,12 @@ import com.orka.myfinances.data.dtos.folder.FolderDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.ui.state.State
-import com.orka.myfinances.lib.viewmodel.sourceful.chunk.ExecutedFromFailure
+import com.orka.myfinances.ui.statuses.failure.ExecutedFromFailure
 import com.orka.myfinances.lib.viewmodel.sourceful.single.MapSingleByIdViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.folder.category.CategoryScreenInteractor
-import com.orka.myfinances.ui.screens.folder.category.CategoryScreenModel
+import com.orka.myfinances.ui.models.screen.CategoryScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class CategoryScreenViewModel(

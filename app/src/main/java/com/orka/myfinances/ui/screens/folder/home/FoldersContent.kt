@@ -27,9 +27,9 @@ import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.preview.DefaultPreview
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.ui.components.buttons.OptionButton
 import com.orka.myfinances.ui.resources.stockItemsState
-import com.orka.myfinances.ui.screens.folder.home.interactor.FoldersContentInteractor
-import com.orka.myfinances.ui.screens.folder.home.interactor.FoldersContentModel
+import com.orka.myfinances.ui.models.content.FoldersContentModel
 import com.orka.myfinances.ui.screens.folder.home.parts.FoldersContentCarousel
 import com.orka.myfinances.ui.screens.folder.home.parts.StockItemsRow
 import com.orka.myfinances.ui.screens.folder.toUiModel

@@ -8,7 +8,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.state.State
-import com.orka.myfinances.ui.screens.profile.models.ProfileContentModel
+import com.orka.myfinances.ui.models.content.ProfileContentModel
 
 @Composable
 fun NameText(

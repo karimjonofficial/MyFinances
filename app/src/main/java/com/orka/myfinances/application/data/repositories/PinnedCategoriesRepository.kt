@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asFlow
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class PinnedCategoriesRepository(private val dao: PinnedCategoriesDao) : PinnedCategoriesRepository {
+class PinnedCategoriesRepositoryImpl(private val dao: PinnedCategoriesDao) : PinnedCategoriesRepository {
     private val flow = MutableSharedFlow<PinnedCategoriesEvent>()
     val events = flow.asFlow()
 
-    override suspend fun getAll(search: String?): List<Id> {
+    override suspend fun getAll(): List<Id> {
         val categories = dao.getAll()
         return  categories.map { Id(it.id) }
     }

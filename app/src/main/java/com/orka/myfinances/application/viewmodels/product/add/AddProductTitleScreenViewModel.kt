@@ -9,12 +9,14 @@ import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.lib.viewmodel.base.refreshable.RefreshableBaseViewModel
-import com.orka.myfinances.lib.viewmodel.sourceful.chunk.ExecutedFromFailure
+import com.orka.myfinances.ui.statuses.failure.ExecutedFromFailure
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenInteractor
-import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
-import com.orka.myfinances.ui.screens.product.add.interactor.CategoryBottomSheetItemModel
+import com.orka.myfinances.ui.statuses.failure.CategoriesEmpty
+import com.orka.myfinances.ui.statuses.failure.CouldNotInsert
+import com.orka.myfinances.ui.screens.product.add.AddProductTitleScreenInteractor
+import com.orka.myfinances.ui.models.screen.AddProductTitleScreenModel
+import com.orka.myfinances.ui.models.sheet.CategoryBottomSheetItemModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class AddProductTitleScreenViewModel(
@@ -51,27 +53,29 @@ class AddProductTitleScreenViewModel(
     ) {
         tryTransition { oldState ->
             if (oldState !is State.Success)
-                return@tryTransition State.Failure(
-                    type = ExecutedFromFailure,
+                State.Failure(
+                    status = ExecutedFromFailure,
                     value = oldState.value
                 )
-
-            val category = oldState.value.categories.find { it.id == categoryId }
-            val request = validate(
-                category = category,
-                name = name,
-                price = price,
-                salePrice = salePrice,
-                exposedPrice = exposedPrice,
-                description = description,
-                properties = properties.filterNotNull()
-            ) ?: return@tryTransition oldState
-
-            val created = insertTitle.insert(request)
-            if (created) {
-                navigator.back()
-                oldState
-            } else State.Failure(CouldNotInsert, oldState.value)
+            else {
+                val category = oldState.value.categories.find { it.id == categoryId }
+                val request = validate(
+                    category = category,
+                    name = name,
+                    price = price,
+                    salePrice = salePrice,
+                    exposedPrice = exposedPrice,
+                    description = description,
+                    properties = properties.filterNotNull()
+                )
+                if (request != null) {
+                    val created = insertTitle.insert(request)
+                    if (created) {
+                        navigator.back()
+                        oldState
+                    } else State.Failure(CouldNotInsert, oldState.value)
+                } else oldState
+            }
         }
     }
 
@@ -90,8 +94,7 @@ class AddProductTitleScreenViewModel(
                 (price > 0) && (salePrice > 0) && (salePrice > price) &&
                 (category.id.value > 0)
 
-        return if (isValid) {
-            AddProductTitleRequest(
+        return if (isValid) AddProductTitleRequest(
                 categoryId = category.id,
                 name = name,
                 price = price,
@@ -100,6 +103,6 @@ class AddProductTitleScreenViewModel(
                 properties = properties,
                 description = description
             )
-        } else null
+        else null
     }
 }

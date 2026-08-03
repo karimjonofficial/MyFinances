@@ -8,14 +8,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -27,15 +25,20 @@ fun SettingsButton(
     modifier: Modifier = Modifier,
     topClipped: Boolean = false,
     bottomClipped: Boolean = false,
-    hasDivider: Boolean,
     leadingIcon: Painter,
     trailingIcon: Painter? = null,
     title: String,
     value: String? = null,
     enabled: Boolean = true,
-    valueColor: Color = MaterialTheme.colorScheme.primary,
+    error: Boolean,
     onClick: () -> Unit
 ) {
+    val valueColor = if(enabled) {
+        if(!error) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
+    } else {
+        ButtonDefaults.filledTonalButtonColors().disabledContentColor
+    }
+
     val shape = when {
         topClipped && bottomClipped -> RoundedCornerShape(50)
         topClipped -> RoundedCornerShape(topStartPercent = 50, topEndPercent = 50)
@@ -59,7 +62,7 @@ fun SettingsButton(
                 .padding(8.dp),
             painter = leadingIcon,
             contentDescription = null,
-            tint = if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+            tint = valueColor
         )
 
         HorizontalSpacer(16)
@@ -77,7 +80,7 @@ fun SettingsButton(
                         Text(
                             modifier = Modifier.weight(1f),
                             text = value,
-                            color = if (enabled) valueColor else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
+                            color = valueColor,
                             maxLines = 1,
                             textAlign = TextAlign.End
                         )
@@ -91,10 +94,6 @@ fun SettingsButton(
                         contentDescription = null
                     )
                 }
-            }
-
-            if (hasDivider) {
-                HorizontalDivider()
             }
         }
     }

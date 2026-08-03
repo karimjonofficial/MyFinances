@@ -1,8 +1,15 @@
 package com.orka.myfinances.application
 
 import android.app.Application
+import android.bluetooth.BluetoothManager
+import androidx.core.content.getSystemService
 import androidx.room.Room
 import com.orka.myfinances.MainActivity
+import com.orka.myfinances.application.adapters.PrintersDataSource
+import com.orka.myfinances.application.data.api.InfoApi
+import com.orka.myfinances.application.data.repositories.InfoRepository
+import com.orka.myfinances.application.data.storages.DefaultsStorageImpl
+import com.orka.myfinances.application.data.storages.credentials.CredentialsStorageImpl
 import com.orka.myfinances.application.factories.FormatterImpl
 import com.orka.myfinances.application.factories.HttpLogger
 import com.orka.myfinances.application.factories.httpClient
@@ -10,10 +17,6 @@ import com.orka.myfinances.application.manager.runtime.GuestRuntimeInitializerIm
 import com.orka.myfinances.application.manager.runtime.NewUserRuntimeInitializerImpl
 import com.orka.myfinances.application.manager.runtime.SignedInRuntimeInitializerImpl
 import com.orka.myfinances.application.manager.ui.UiManager
-import com.orka.myfinances.application.data.api.InfoApi
-import com.orka.myfinances.application.data.repositories.InfoRepository
-import com.orka.myfinances.application.data.storages.DefaultsStorageImpl
-import com.orka.myfinances.application.data.storages.credentials.CredentialsStorageImpl
 import com.orka.myfinances.application.validators.CredentialsValidatorImpl
 import com.orka.myfinances.data.database.AppDatabase
 import net.posprinter.POSConnect
@@ -44,7 +47,10 @@ class MyFinancesApplication : Application() {
     }
 
     fun manager(mainActivity: MainActivity): UiManager {
-        val formatter = FormatterImpl()
+        val bluetoothManager = getSystemService<BluetoothManager>()
+        val adapter = bluetoothManager?.adapter
+        val printersDataSource = PrintersDataSource(adapter!!)//TODO
+        val formatter = FormatterImpl(mainActivity.resources.configuration.locales[0])
         val credentialsStorage = CredentialsStorageImpl(database.credentialsDao())
         val defaultsStorage = DefaultsStorageImpl(database.defaultsDao())
         val credentialsValidator = CredentialsValidatorImpl(httpClient, credentialsStorage)
@@ -52,7 +58,7 @@ class MyFinancesApplication : Application() {
         this.guestRuntimeInitializer = guestRuntimeInitializer
         val newUserRuntimeInitializer = NewUserRuntimeInitializerImpl(logger)
         this.newUserRuntimeInitializer = newUserRuntimeInitializer
-        val signedInRuntimeInitializer = SignedInRuntimeInitializerImpl(mainActivity, database, formatter, logger)
+        val signedInRuntimeInitializer = SignedInRuntimeInitializerImpl(database, printersDataSource, formatter, logger)
         this.signedInRuntimeInitializer = signedInRuntimeInitializer
         val infoRepository = InfoRepository(InfoApi(httpClient))
         val manager =  UiManager(

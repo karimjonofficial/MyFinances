@@ -6,7 +6,7 @@ import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.screens.product.add.ProductTitleEditorScreen
-import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
+import com.orka.myfinances.ui.models.screen.AddProductTitleScreenModel
 
 @Composable
 fun EditProductTitleScreen(

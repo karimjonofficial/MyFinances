@@ -7,7 +7,7 @@ import com.orka.myfinances.lib.viewmodel.sourceful.single.MapSingleByIdViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.client.details.ClientInteractor
-import com.orka.myfinances.ui.screens.client.details.ClientScreenModel
+import com.orka.myfinances.ui.models.screen.ClientScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class ClientScreenViewModel(

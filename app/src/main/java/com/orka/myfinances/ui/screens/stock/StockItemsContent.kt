@@ -19,13 +19,15 @@ import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.components.cards.StockItemCard
 import com.orka.myfinances.ui.map.toMap
+import com.orka.myfinances.ui.models.ui.StockItemUiModel
 
 @Composable
 fun StockItemsContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     interactor: StockContentInteractor,
-    state: State<ChunkUiModel<StockItemUiModel>>
+    state: State<ChunkUiModel<StockItemUiModel>>,
+    searchActive: Boolean = false
 ) {
     LazyVerticalGridContentWithStickyHeader(
         modifier = modifier,
@@ -35,7 +37,10 @@ fun StockItemsContent(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         state = state,
         refresh = interactor::refresh,
-        loadMore = interactor::loadMore,
+        loadMore = {
+            if (searchActive) interactor.searchMore()
+            else interactor.loadMore()
+        },
         item = { item ->
             StockItemCard(
                 modifier = Modifier

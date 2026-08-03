@@ -1,61 +1,40 @@
 package com.orka.myfinances.ui.screens.order.list
 
 import com.orka.myfinances.data.models.order.Order
-import com.orka.myfinances.format.FormatDate
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
+import com.orka.myfinances.ui.models.card.OrderCardModel
+import com.orka.myfinances.ui.models.ui.OrderUiModel
 import kotlin.time.Clock
 
-fun Order.toCardModel(
-    formatPrice: FormatPrice,
-    formatDecimal: FormatDecimal,
-    formatDate: FormatDate
-): OrderCardModel {
+fun Order.toCardModel(): OrderCardModel {
     val expired = endDateTime?.let { it < Clock.System.now() } ?: false && !completed
 
     return OrderCardModel(
         title = items.joinToString { it.product.title.name },
-        price = formatPrice.formatPrice(price.toDouble()),
-        dateTime = ,
-        size = formatDecimal.formatDecimal(items.size.toDouble()),
+        price = price,
+        dateTime = dateTime,
+        size = items.size,
         completed = completed,
         expired = expired
     )
 }
 
-fun Order.toUiModel(
-    formatPrice: FormatPrice,
-    formatDecimal: FormatDecimal,
-    formatDate: FormatDate
-): OrderUiModel {
+fun Order.toUiModel(): OrderUiModel {
     return OrderUiModel(
         id = this.id,
-        model = this.toCardModel(
-            formatPrice = formatPrice,
-            formatDecimal = formatDecimal,
-            formatDate = formatDate
-        )
+        model = this.toCardModel()
     )
 }
 
-fun List<Order>.toChunkMapState(
-    formatPrice: FormatPrice,
-    formatDecimal: FormatDecimal,
-    formatDate: FormatDate
-): ChunkUiModel<OrderUiModel> {
+fun List<Order>.toChunkMapState(): ChunkUiModel<OrderUiModel> {
     return ChunkUiModel(
-        size = 1,
+        size = size,
         pageIndex = 1,
-        nextPageIndex = 1,
-        previousPageIndex = 1,
+        nextPageIndex = null,
+        previousPageIndex = null,
         content = groupBy { it.dateTime }.mapKeys { it.key.toString() }.mapValues { entry ->
             entry.value.map {
-                it.toUiModel(
-                    formatPrice,
-                    formatDecimal,
-                    formatDate
-                )
+                it.toUiModel()
             }
         }
     )

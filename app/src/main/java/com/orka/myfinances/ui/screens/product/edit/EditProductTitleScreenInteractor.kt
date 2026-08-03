@@ -27,7 +27,6 @@ interface EditProductTitleScreenInteractor : Refreshable {
                 categoryId: Id
             ) {}
 
-            override fun initialize() {}
             override fun refresh() {}
         }
     }

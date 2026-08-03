@@ -10,7 +10,7 @@ import com.orka.myfinances.R
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.lib.ui.models.Tab
-import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.ui.navigation.destination.Destination
 import com.orka.myfinances.ui.screens.debt.history.DebtsHistoryContent
 import com.orka.myfinances.ui.screens.history.HistoryScreen
 import com.orka.myfinances.ui.screens.order.list.completed.OrdersHistoryContent
@@ -61,7 +61,7 @@ fun historyEntry(
                 3 -> debtsViewModel.search(query)
             }
         },
-        tabContent = { index ->
+        tabContent = { index, searchActive ->
             val contentModifier = Modifier.fillMaxSize()
 
             when (index) {
@@ -69,7 +69,8 @@ fun historyEntry(
                     SaleContent(
                         modifier = contentModifier,
                         state = saleState.value,
-                        interactor = saleViewModel
+                        interactor = saleViewModel,
+                        searchActive = searchActive
                     )
                 }
 
@@ -77,7 +78,8 @@ fun historyEntry(
                     ReceiveContent(
                         modifier = contentModifier,
                         state = receiveState.value,
-                        interactor = receiveViewModel
+                        interactor = receiveViewModel,
+                        searchActive = searchActive
                     )
                 }
 
@@ -85,7 +87,8 @@ fun historyEntry(
                     OrdersHistoryContent(
                         modifier = contentModifier,
                         state = ordersState.value,
-                        interactor = ordersViewModel
+                        interactor = ordersViewModel,
+                        searchActive = searchActive
                     )
                 }
 
@@ -93,7 +96,8 @@ fun historyEntry(
                     DebtsHistoryContent(
                         modifier = contentModifier,
                         interactor = debtsViewModel,
-                        state = debtsState.value
+                        state = debtsState.value,
+                        searchActive = searchActive
                     )
                 }
             }

@@ -16,11 +16,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.orka.myfinances.R
+import com.orka.myfinances.format.LocalFormatter
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.printer.PrinterStatus
 import com.orka.myfinances.ui.models.item.ClientItemModel
-import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenInteractor
-import com.orka.myfinances.ui.screens.checkout.viewmodel.CheckoutScreenModel
+import com.orka.myfinances.ui.models.screen.CheckoutScreenModel
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Instant
@@ -36,6 +37,7 @@ fun CheckoutScreen(
     interactor: CheckoutScreenInteractor,
     selectedClient: ClientItemModel?,
     state: State<CheckoutScreenModel>,
+    printerStatus: PrinterStatus,
     onOpenClients: () -> Unit,
     onOpenAddClient: () -> Unit
 ) {
@@ -43,6 +45,7 @@ fun CheckoutScreen(
     val price = rememberSaveable { mutableStateOf<Int?>(null) }
     val description = rememberSaveable { mutableStateOf<String?>(null) }
     val printReceipt = rememberSaveable { mutableStateOf(true) }
+    val formatter = LocalFormatter.current
 
     var pendingAction by remember { mutableStateOf<CheckoutAction?>(null) }
     val datePickerState = rememberDatePickerState()
@@ -132,8 +135,9 @@ fun CheckoutScreen(
     ) { modifier, model ->
         CheckoutContent(
             modifier = modifier,
+            printerStatus = printerStatus,
             items = model.items,
-            hiddenPrice = model.salePrice,
+            hiddenPrice = stringResource(R.string.uzs_f, formatter.formatNumber(model.salePrice)),
             selectedClient = selectedClient,
             exposed = exposed.value,
             price = price.value,

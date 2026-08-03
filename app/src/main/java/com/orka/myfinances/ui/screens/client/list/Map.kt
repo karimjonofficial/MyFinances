@@ -2,7 +2,7 @@ package com.orka.myfinances.ui.screens.client.list
 
 import com.orka.myfinances.data.models.Client
 import com.orka.myfinances.ui.models.card.ClientCardModel
-import com.orka.myfinances.ui.screens.client.list.viewmodel.ClientUiModel
+import com.orka.myfinances.ui.models.ui.ClientUiModel
 
 fun Client.toCardModel(): ClientCardModel {
     return ClientCardModel(

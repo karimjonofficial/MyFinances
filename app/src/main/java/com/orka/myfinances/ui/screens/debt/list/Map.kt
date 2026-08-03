@@ -1,27 +1,21 @@
 package com.orka.myfinances.ui.screens.debt.list
 
 import com.orka.myfinances.data.models.Debt
-import com.orka.myfinances.format.FormatDateTime
-import com.orka.myfinances.format.FormatPrice
+import com.orka.myfinances.ui.models.card.DebtCardModel
+import com.orka.myfinances.ui.models.ui.DebtUiModel
 
-fun Debt.toUiModel(
-    formatPrice: FormatPrice,
-    formatDateTime: FormatDateTime
-): DebtUiModel {
+fun Debt.toUiModel(): DebtUiModel {
     return DebtUiModel(
-        model = toCardModel(formatPrice, formatDateTime),
+        model = toCardModel(),
         id = id
     )
 }
 
-fun Debt.toCardModel(
-    formatPrice: FormatPrice,
-    formatDateTime: FormatDateTime
-): DebtCardModel {
+fun Debt.toCardModel(): DebtCardModel {
     return DebtCardModel(
         name = "${client.firstName} ${client.lastName ?: ""}",
         description = description,
-        price = formatPrice.formatPrice(price.toDouble()),
-        dateTime = formatDateTime.formatDateTime(dateTime)
+        price = price,
+        dateTime = dateTime
     )
 }

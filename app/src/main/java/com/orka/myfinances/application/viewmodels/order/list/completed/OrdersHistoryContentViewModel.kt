@@ -4,15 +4,11 @@ import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.dtos.order.OrderDto
 import com.orka.myfinances.data.repositories.order.GetOrdersChunk
 import com.orka.myfinances.data.repositories.order.OrderEvent
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatLocalDate
-import com.orka.myfinances.format.FormatPrice
-import com.orka.myfinances.format.FormatTime
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.viewmodel.sourceful.chunk.MapChunkViewModel
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.SearchableMapChunkViewModel
 import com.orka.myfinances.logger.Logger
+import com.orka.myfinances.ui.models.ui.HistoryOrderUiModel
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.order.list.completed.HistoryOrderUiModel
 import com.orka.myfinances.ui.screens.order.list.completed.OrdersHistoryInteractor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,22 +20,19 @@ import kotlinx.datetime.toLocalDateTime
 class OrdersHistoryContentViewModel(
     private val getOrdersChunk: GetOrdersChunk,
     events: Flow<OrderEvent>,
-    formatDecimal: FormatDecimal,
-    formatPrice: FormatPrice,
-    formatTime: FormatTime,
-    formatLocalDate: FormatLocalDate,
     private val navigator: Navigator,
     logger: Logger
-) : MapChunkViewModel<OrderDto, HistoryOrderUiModel>(
+) : SearchableMapChunkViewModel<OrderDto, HistoryOrderUiModel>(
     get = { size, page -> getOrdersChunk.getOrdersChunk(size, page, true, null) },
+    searchRepository = { size, page, query -> getOrdersChunk.getOrdersChunk(size, page, true, query) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map =
             chunk.results.groupBy { orders -> orders.createdAt.toLocalDateTime(timeZone).date }
-                .mapKeys { entry -> formatLocalDate.formatLocalDate(entry.key) }
+                .mapKeys { entry -> entry.key.toString() }
                 .mapValues { entry ->
                     entry.value.map { order ->
-                        order.toUiModel(formatDecimal, formatPrice, formatTime)
+                        order.toUiModel()
                     }
                 }
 

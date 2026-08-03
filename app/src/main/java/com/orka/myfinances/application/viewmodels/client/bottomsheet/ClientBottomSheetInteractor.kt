@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.client.bottomsheet
 
-import com.orka.myfinances.lib.ui.viewmodel.ChunkViewModel
+import com.orka.myfinances.lib.ui.viewmodel.PaginatedSearchable
 import com.orka.myfinances.lib.ui.viewmodel.Refreshable
 
-interface ClientBottomSheetInteractor : Refreshable, ChunkViewModel
+interface ClientBottomSheetInteractor : Refreshable, PaginatedSearchable

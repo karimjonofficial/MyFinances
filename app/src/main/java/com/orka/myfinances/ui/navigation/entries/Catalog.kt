@@ -15,9 +15,9 @@ import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.models.item.TemplateItemModel
-import com.orka.myfinances.ui.navigation.Destination
 import com.orka.myfinances.ui.screens.folder.catalog.CatalogScreen
-import com.orka.myfinances.ui.screens.folder.components.AddFolderDialog
+import com.orka.myfinances.ui.components.dialogs.AddFolderDialog
+import com.orka.myfinances.ui.navigation.destination.Destination
 import com.orka.myfinances.ui.screens.templates.sheet.SelectTemplateBottomSheet
 import kotlinx.coroutines.launch
 
@@ -59,10 +59,6 @@ fun catalogEntry(
             )
         },
         bottomSheet = {
-            LaunchedEffect(Unit) {
-                sheetViewModel.initialize()
-            }
-
             SelectTemplateBottomSheet(
                 state = templatesState.value,
                 onDismissRequest = {

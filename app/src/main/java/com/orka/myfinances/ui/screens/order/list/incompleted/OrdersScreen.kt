@@ -4,21 +4,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.fixtures.format.FormatDateImpl
-import com.orka.myfinances.fixtures.format.FormatDecimalImpl
-import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.order.orders
 import com.orka.myfinances.lib.ui.components.SearchTopAppBar
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.LazyColumnWithStickyHeaderScreen
 import com.orka.myfinances.lib.ui.state.State
-import com.orka.myfinances.ui.screens.order.list.OrderCard
-import com.orka.myfinances.ui.screens.order.list.OrderUiModel
+import com.orka.myfinances.ui.components.cards.OrderCard
+import com.orka.myfinances.ui.models.ui.OrderUiModel
 import com.orka.myfinances.ui.screens.order.list.OrdersScreenInteractor
 import com.orka.myfinances.ui.screens.order.list.toChunkMapState
 import com.orka.myfinances.ui.theme.MyFinancesTheme
@@ -30,18 +29,28 @@ fun OrdersScreen(
     state: State<ChunkUiModel<OrderUiModel>>,
     interactor: OrdersScreenInteractor
 ) {
+    val searchMode = rememberSaveable { mutableStateOf(false) }
+    val searchText = rememberSaveable { mutableStateOf("") }
+
     LazyColumnWithStickyHeaderScreen(
         modifier = modifier,
         topBar = {
             SearchTopAppBar(
                 title = stringResource(R.string.orders),
-                onSearch = interactor::search
+                onSearch = interactor::search,
+                searchMode = searchMode.value,
+                onSearchModeChange = { searchMode.value = it },
+                searchText = searchText.value,
+                onSearchTextChange = { searchText.value = it }
             )
         },
         arrangementSpace = 8.dp,
         state = state,
         refresh = interactor::refresh,
-        loadMore = interactor::loadMore,
+        loadMore = {
+            if (searchMode.value) interactor.searchMore()
+            else interactor.loadMore()
+        },
         item = { item ->
             OrderCard(
                 modifier = Modifier.padding(horizontal = 8.dp),
@@ -58,13 +67,7 @@ private fun OrdersScreenPreview() {
     MyFinancesTheme {
         OrdersScreen(
             modifier = Modifier.fillMaxSize(),
-            state = State.Success(
-                value = orders.toChunkMapState(
-                    FormatPriceImpl(),
-                    FormatDecimalImpl(),
-                    FormatDateImpl()
-                )
-            ),
+            state = State.Success(value = orders.toChunkMapState()),
             interactor = OrdersScreenInteractor.dummy
         )
     }

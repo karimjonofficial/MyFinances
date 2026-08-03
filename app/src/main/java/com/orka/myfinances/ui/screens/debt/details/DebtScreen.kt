@@ -35,17 +35,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
-import com.orka.myfinances.fixtures.format.FormatDateImpl
-import com.orka.myfinances.fixtures.format.FormatPriceImpl
 import com.orka.myfinances.fixtures.resources.models.debt1
 import com.orka.myfinances.fixtures.resources.models.debt2
+import com.orka.myfinances.format.LocalFormatter
 import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.components.cards.ClientCard
 import com.orka.myfinances.ui.components.cards.UserCard
-import com.orka.myfinances.ui.screens.debt.details.interactor.DebtScreenInteractor
+import com.orka.myfinances.ui.models.screen.DebtScreenModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -94,7 +93,8 @@ fun DebtScreen(
                 }
             }
         },
-        state = state
+        state = state,
+        onRetry = interactor::refresh
     ) { modifier, model ->
 
         LazyColumn(
@@ -154,6 +154,7 @@ fun HeroSection(
     modifier: Modifier = Modifier,
     debt: DebtScreenModel
 ) {
+    val formatter = LocalFormatter.current
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -188,7 +189,7 @@ fun HeroSection(
     }
 
     Text(
-        text = debt.price,
+        text = stringResource(R.string.uzs_f, formatter.formatNumber(debt.price)),
         style = MaterialTheme.typography.displaySmall,
         color = MaterialTheme.colorScheme.onSurface
     )
@@ -205,6 +206,7 @@ fun TimelineAndStaffCard(
     modifier: Modifier = Modifier,
     debt: DebtScreenModel
 ) {
+    val formatter = LocalFormatter.current
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(24.dp),
@@ -223,7 +225,7 @@ fun TimelineAndStaffCard(
                 DateCard(
                     modifier = Modifier.weight(1f),
                     label = stringResource(R.string.start_date),
-                    date = debt.startDate,
+                    date = formatter.formatDate(debt.startDate),
                     painter = painterResource(R.drawable.calendar_today),
                     contentDescription = stringResource(R.string.created_at)
                 )
@@ -233,7 +235,7 @@ fun TimelineAndStaffCard(
                         EmphasizedDateCard(
                             modifier = Modifier.weight(1f),
                             label = stringResource(R.string.due_date),
-                            date = debt.endDateTime,
+                            date = formatter.formatDate(debt.endDateTime),
                             painter = painterResource(R.drawable.error),
                             contentDescription = stringResource(R.string.error)
                         )
@@ -241,7 +243,7 @@ fun TimelineAndStaffCard(
                         DateCard(
                             modifier = Modifier.weight(1f),
                             label = stringResource(R.string.due_date),
-                            date = debt.endDateTime,
+                            date = formatter.formatDate(debt.endDateTime),
                             painter = painterResource(R.drawable.calendar_today),
                             contentDescription = stringResource(R.string.created_at)
                         )
@@ -269,7 +271,7 @@ fun TimelineAndStaffCard(
 private fun InCompletedDebtScreenPreview() {
     MyFinancesTheme {
         DebtScreen(
-            state = State.Success(debt1.toScreenModel(FormatPriceImpl(), FormatDateImpl())),
+            state = State.Success(debt1.toScreenModel()),
             interactor = DebtScreenInteractor.dummy
         )
     }
@@ -283,7 +285,7 @@ private fun InCompletedDebtScreenPreview() {
 private fun CompletedDebtScreenPreview() {
     MyFinancesTheme {
         DebtScreen(
-            state = State.Success(debt2.toScreenModel(FormatPriceImpl(), FormatDateImpl())),
+            state = State.Success(debt2.toScreenModel()),
             interactor = DebtScreenInteractor.dummy
         )
     }

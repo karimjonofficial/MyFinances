@@ -5,6 +5,8 @@ import androidx.compose.ui.Modifier
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.ui.statuses.failure.str
+import com.orka.myfinances.ui.statuses.loading.str
 
 @Composable
 fun <T> StateFulContent(
@@ -15,12 +17,14 @@ fun <T> StateFulContent(
 ) {
     when (state) {
         is State.Loading -> LoadingScreen(
-            modifier = modifier
+            modifier = modifier,
+            message = state.status.str()
         )
 
         is State.Failure -> FailureScreen(
             modifier = modifier,
-            retry = onRetry
+            retry = onRetry,
+            message = state.status.str()
         )
 
         is State.Success -> {

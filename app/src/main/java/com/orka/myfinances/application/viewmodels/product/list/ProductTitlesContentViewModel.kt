@@ -8,10 +8,10 @@ import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.state.State
-import com.orka.myfinances.lib.viewmodel.sourceful.chunk.MapChunkViewModel
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.SearchableMapChunkViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.product.list.ProductTitleUiModel
+import com.orka.myfinances.ui.models.ui.ProductTitleUiModel
 import com.orka.myfinances.ui.screens.product.list.ProductTitlesContentInteractor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,8 +24,9 @@ class ProductTitlesContentViewModel(
     productTitleEvents: Flow<ProductTitleEvent>,
     private val navigator: Navigator,
     logger: Logger
-) : MapChunkViewModel<ProductTitleDto, ProductTitleUiModel>(
-    get = { size, page -> getByCategory.getByCategory(size, page, categoryId) },
+) : SearchableMapChunkViewModel<ProductTitleDto, ProductTitleUiModel>(
+    get = { size, page -> getByCategory.getByCategory(size, page, categoryId, null) },
+    searchRepository = { size, page, q -> getByCategory.getByCategory(size, page, categoryId, q) },
     map = { chunk ->
         val content = chunk.results
             .sortedBy(ProductTitleDto::name)

@@ -4,15 +4,12 @@ import com.orka.myfinances.data.dtos.order.OrderDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.order.CompleteOrder
 import com.orka.myfinances.data.repositories.order.SetEndDate
-import com.orka.myfinances.format.FormatDateTime
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.viewmodel.sourceful.single.MapSingleByIdViewModel
 import com.orka.myfinances.logger.Logger
+import com.orka.myfinances.ui.models.screen.OrderScreenModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.order.details.OrderScreenInteractor
-import com.orka.myfinances.ui.screens.order.details.OrderScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 import kotlin.time.Instant
 
@@ -21,15 +18,12 @@ class OrderScreenViewModel(
     getById: GetById<OrderDto>,
     private val completeOrder: CompleteOrder,
     private val setEndDate: SetEndDate,
-    private val formatPrice: FormatPrice,
-    private val formatDateTime: FormatDateTime,
-    private val formatDecimal: FormatDecimal,
     private val navigator: Navigator,
     logger: Logger
 ) : MapSingleByIdViewModel<OrderDto, OrderScreenModel>(
     id = id,
     get = getById,
-    map = { it.toScreenModel(formatPrice, formatDateTime, formatDecimal) },
+    map = { it.toScreenModel() },
     logger = logger
 ), OrderScreenInteractor {
     val uiState = state.asStateFlow()

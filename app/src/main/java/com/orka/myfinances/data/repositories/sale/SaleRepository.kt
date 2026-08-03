@@ -7,6 +7,7 @@ import com.orka.myfinances.data.repositories.stock.StockEvent
 import com.orka.myfinances.lib.data.api.getById
 import com.orka.myfinances.lib.data.api.scoped.branch.add
 import com.orka.myfinances.lib.data.api.scoped.branch.getChunk
+import com.orka.myfinances.lib.data.repositories.SearchChunk
 import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.data.repositories.GetChunk
@@ -18,9 +19,16 @@ class SaleRepository(
     private val api: SaleApi,
     private val saleFlow: MutableSharedFlow<SaleEvent>,
     private val stockFlow: MutableSharedFlow<StockEvent>,
-) : GetChunk<SaleDto>, GetById<SaleDto>, Insert<AddSaleRequest>, Add<SaleDto, AddSaleRequest> {
+) : GetChunk<SaleDto>, SearchChunk<SaleDto>, GetById<SaleDto>, Insert<AddSaleRequest>, Add<SaleDto, AddSaleRequest> {
 
     override suspend fun getChunk(
+        size: Int,
+        page: Int
+    ): Chunk<SaleDto>? {
+        return searchChunk(size, page, null)
+    }
+
+    override suspend fun searchChunk(
         size: Int,
         page: Int,
         query: String?

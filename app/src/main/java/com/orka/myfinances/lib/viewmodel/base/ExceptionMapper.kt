@@ -1,6 +1,6 @@
 package com.orka.myfinances.lib.viewmodel.base
 
-import com.orka.myfinances.lib.ui.state.FailureType
+import com.orka.myfinances.lib.ui.state.FailureStatus
 import com.orka.myfinances.lib.ui.state.State
 
 fun interface ExceptionMapper<T> {
@@ -8,7 +8,7 @@ fun interface ExceptionMapper<T> {
 
     class Default<T> : ExceptionMapper<T> {
         override suspend fun map(oldState: State<T>?, e: Exception): State<T> {
-            return State.Failure(value = oldState?.value, type = FailureType.Exception(e.message.toString()))
+            return State.Failure(value = oldState?.value, status = FailureStatus.Exception(e.message.toString()))
         }
     }
 }

@@ -14,7 +14,6 @@ interface OrderScreenInteractor : Refreshable {
             override fun navigateToClient(clientId: Id) {}
             override fun complete() {}
             override fun setEndDate(endDateTime: Instant) {}
-            override fun initialize() {}
             override fun refresh() {}
         }
     }

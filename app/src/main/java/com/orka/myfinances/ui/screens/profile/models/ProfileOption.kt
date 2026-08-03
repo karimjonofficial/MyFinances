@@ -1,8 +1,0 @@
-package com.orka.myfinances.ui.screens.profile.models
-
-data class ProfileOption(
-    val index: Int,
-    val titleRes: Int,
-    val iconRes: Int,
-    val action: () -> Unit
-)

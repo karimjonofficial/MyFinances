@@ -1,11 +1,18 @@
 package com.orka.myfinances.application.manager.navigation
 
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.fixtures.resources.Types
-import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.viewmodel.single.SingleStateViewModel
-import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
+import com.orka.myfinances.ui.navigation.destination.ClientDestinations
+import com.orka.myfinances.ui.navigation.destination.DebtDestinations
+import com.orka.myfinances.ui.navigation.destination.DefaultsSettings
+import com.orka.myfinances.ui.navigation.destination.Destination
+import com.orka.myfinances.ui.navigation.destination.HomeSettings
+import com.orka.myfinances.ui.navigation.destination.OrderDestinations
+import com.orka.myfinances.ui.navigation.destination.ProductTitleDestinations
+import com.orka.myfinances.ui.navigation.destination.SettingsDestinations
+import com.orka.myfinances.ui.navigation.destination.TemplateDestinations
 import kotlinx.coroutines.flow.asStateFlow
 
 class NavigationManager(
@@ -47,35 +54,35 @@ class NavigationManager(
     }
 
     override fun navigateToAddTemplate() {
-        navigate(Destination.AddTemplate(Types.all))
+        navigate(TemplateDestinations.Add)
     }
 
     override fun navigateToAddProduct(id: Id) {
-        navigate(Destination.AddProduct(id))
+        navigate(ProductTitleDestinations.Add(id))
     }
 
     override fun navigateToEditProduct(id: Id) {
-        navigate(Destination.EditProduct(id))
+        navigate(ProductTitleDestinations.Edit(id))
     }
 
     override fun navigateToSettings() {
-        navigate(Destination.Settings)
+        navigate(SettingsDestinations.Main)
     }
 
     override fun navigateToTemplates() {
-        navigate(Destination.Templates)
+        navigate(TemplateDestinations.List)
     }
 
     override fun navigateToProductTitle(id: Id) {
-        navigate(Destination.ProductTitle(id))
+        navigate(ProductTitleDestinations.List(id))
     }
 
     override fun navigateToClients() {
-        navigate(Destination.Clients)
+        navigate(ClientDestinations.List)
     }
 
     override fun navigateToClient(id: Id) {
-        navigate(Destination.Client(id))
+        navigate(ClientDestinations.Details(id))
     }
 
     override fun navigateToCheckout() {
@@ -91,19 +98,19 @@ class NavigationManager(
     }
 
     override fun navigateToOrders() {
-        navigate(Destination.Orders)
+        navigate(OrderDestinations.List)
     }
 
     override fun navigateToOrder(id: Id) {
-        navigate(Destination.Order(id))
+        navigate(OrderDestinations.Details(id))
     }
 
     override fun navigateToDebts() {
-        navigate(Destination.Debts)
+        navigate(DebtDestinations.List)
     }
 
     override fun navigateToDebt(id: Id) {
-        navigate(Destination.Debt(id))
+        navigate(DebtDestinations.Details(id))
     }
 
     override fun navigateToSearch() {
@@ -111,7 +118,7 @@ class NavigationManager(
     }
 
     override fun navigateToTemplate(id: Id) {
-        navigate(Destination.Template(id))
+        navigate(TemplateDestinations.Details(id))
     }
 
     override fun navigateToSale(id: Id) {
@@ -123,10 +130,14 @@ class NavigationManager(
     }
 
     override fun navigateToSelectDefaultCategory() {
-        navigate(Destination.SelectDefaultCategory)
+        navigate(DefaultsSettings.Category)
     }
 
     override fun navigateToPinnedCategories() {
-        navigate(Destination.PinnedCategories)
+        navigate(HomeSettings.PinnedCategories)
+    }
+
+    override fun navigateToPrinters() {
+        navigate(SettingsDestinations.Printer)
     }
 }

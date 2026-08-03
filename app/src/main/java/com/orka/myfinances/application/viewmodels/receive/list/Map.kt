@@ -2,25 +2,18 @@ package com.orka.myfinances.application.viewmodels.receive.list
 
 import com.orka.myfinances.data.dtos.receive.ReceiveDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatPrice
-import com.orka.myfinances.format.FormatTime
-import com.orka.myfinances.ui.screens.receive.list.components.ReceiveCardModel
-import com.orka.myfinances.ui.screens.receive.list.viewmodel.ReceiveUiModel
+import com.orka.myfinances.ui.models.card.ReceiveCardModel
+import com.orka.myfinances.ui.models.ui.ReceiveUiModel
 
-fun ReceiveDto.toUiModel(
-    formatPrice: FormatPrice,
-    formatDecimal: FormatDecimal,
-    formatTime: FormatTime
-): ReceiveUiModel {
+fun ReceiveDto.toUiModel(): ReceiveUiModel {
     return ReceiveUiModel(
         id = Id(id),
         model = ReceiveCardModel(
             title = items.joinToString { it.productName },
-            price = formatPrice.formatPrice(price.toDouble()),
-            size = formatDecimal.formatDecimal(items.size.toDouble()),
-            dateTime = formatTime.formatTime(dateTime)
+            price = price.toInt(),
+            size = items.size,
+            dateTime = dateTime
         ),
-        instant = dateTime,
+        dateTime = dateTime,
     )
 }

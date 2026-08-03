@@ -2,10 +2,10 @@ package com.orka.myfinances.ui.models.card
 
 data class StockItemCardModel(
     val title: String,
-    val price: String,
-    val amount: String,
+    val price: Int,
+    val amount: Int,
     val properties: String?,
     val description: String?,
-    val basketAmount: String? = null,
+    val basketAmount: Int? = null,
     val increaseEnabled: Boolean
 )

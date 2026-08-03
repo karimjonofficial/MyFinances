@@ -9,6 +9,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.navigation3.scene.Scene
 import androidx.navigationevent.NavigationEvent
+import com.orka.myfinances.ui.navigation.destination.Destination
 
 private const val NavigationAnimationDurationMillis = 500//280
 private const val NavigationFadeDurationMillis = 380//220

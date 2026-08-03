@@ -11,6 +11,7 @@ import com.orka.myfinances.lib.data.api.scoped.branch.add
 import com.orka.myfinances.lib.data.api.scoped.branch.getChunk
 import com.orka.myfinances.lib.data.api.scoped.branch.insert
 import com.orka.myfinances.lib.data.api.scoped.branch.update
+import com.orka.myfinances.lib.data.repositories.SearchChunk
 import com.orka.myfinances.lib.data.repositories.Add
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.data.repositories.GetChunk
@@ -21,10 +22,17 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 class ProductTitleRepository(
     private val api: ProductTitleApi,
     private val flow: MutableSharedFlow<ProductTitleEvent>
-) : GetChunk<ProductTitleDto>, GetById<ProductTitleDto>, Insert<AddProductTitleRequest>,
+) : GetChunk<ProductTitleDto>, SearchChunk<ProductTitleDto>, GetById<ProductTitleDto>, Insert<AddProductTitleRequest>,
     Add<Id, AddProductTitleRequest>, UpdateProductTitle, GetProductTitlesByCategory {
 
     override suspend fun getChunk(
+        size: Int,
+        page: Int
+    ): Chunk<ProductTitleDto>? {
+        return searchChunk(size, page, null)
+    }
+
+    override suspend fun searchChunk(
         size: Int,
         page: Int,
         query: String?

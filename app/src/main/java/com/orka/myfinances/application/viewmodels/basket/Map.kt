@@ -5,40 +5,32 @@ import com.orka.myfinances.data.dtos.stock.StockItemDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.repositories.basket.MinBasketItem
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatPrice
-import com.orka.myfinances.ui.screens.basket.BasketItemUiModel
-import com.orka.myfinances.ui.screens.basket.components.BasketItemCardModel
+import com.orka.myfinances.ui.models.ui.BasketItemUiModel
+import com.orka.myfinances.ui.models.card.BasketItemCardModel
 
-fun BasketItem.toModel(
-    formatPrice: FormatPrice,
-    formatDecimal: FormatDecimal
-): BasketItemCardModel {
+fun BasketItem.toModel(): BasketItemCardModel {
     val propertiesText = product.title.properties
         ?.joinToString(" | ") { "${it.field.name}: ${it.value}" }
 
     return BasketItemCardModel(
         title = product.title.name,
         properties = propertiesText,
-        description = description,
-        price = formatPrice.formatPrice(product.exposedPrice.toDouble()),
-        amount = formatDecimal.formatDecimal(amount.toDouble()),
+        description = product.title.description,
+        price = product.exposedPrice.toInt(),
+        amount = amount,
         imageRes = R.drawable.furniture1,
-        availableAmount = formatDecimal.formatDecimal(availableAmount.toDouble()),
+        availableAmount = availableAmount,
         increaseEnabled = increaseEnabled,
         decreaseEnabled = decreaseEnabled,
         unavailable = amount > availableAmount
     )
 }
 
-fun BasketItem.toUiModel(
-    formatPrice: FormatPrice,
-    formatDecimal: FormatDecimal
-): BasketItemUiModel {
+fun BasketItem.toUiModel(): BasketItemUiModel {
     return BasketItemUiModel(
         productId = Id(product.id),
         amount = amount,
-        model = this.toModel(formatPrice, formatDecimal)
+        model = this.toModel()
     )
 }
 

@@ -11,8 +11,10 @@ import com.orka.myfinances.lib.viewmodel.sourceful.single.MapSingleByIdViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.models.item.ProductTitleItemModel
 import com.orka.myfinances.ui.navigation.Navigator
+import com.orka.myfinances.ui.statuses.failure.failure
+import com.orka.myfinances.ui.statuses.loading.loading
 import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenInteractor
-import com.orka.myfinances.ui.screens.receive.add.AddReceiveScreenModel
+import com.orka.myfinances.ui.models.screen.AddReceiveScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class AddReceiveScreenViewModel(

@@ -5,23 +5,16 @@ import com.orka.myfinances.application.viewmodels.toCardModel
 import com.orka.myfinances.data.dtos.order.OrderDto
 import com.orka.myfinances.data.dtos.order.OrderItemDto
 import com.orka.myfinances.data.models.Id
-import com.orka.myfinances.format.FormatDateTime
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatPrice
-import com.orka.myfinances.ui.screens.order.details.OrderScreenModel
-import com.orka.myfinances.ui.screens.order.details.OrderItemModel
+import com.orka.myfinances.ui.models.screen.OrderScreenModel
+import com.orka.myfinances.ui.models.item.OrderItemModel
 
-fun OrderDto.toScreenModel(
-    formatPrice: FormatPrice,
-    formatDateTime: FormatDateTime,
-    formatDecimal: FormatDecimal
-): OrderScreenModel {
+fun OrderDto.toScreenModel(): OrderScreenModel {
     return OrderScreenModel(
-        price = formatPrice.formatPrice(price.toDouble()),
+        price = price.toInt(),
         completed = completed,
-        startDate = formatDateTime.formatDateTime(createdAt),
-        endDate = if (endDateTime != null) formatDateTime.formatDateTime(endDateTime) else null,
-        items = items.map { it.toItemModel(formatDecimal) },
+        startDate = createdAt,
+        endDate = endDateTime,
+        items = items.map { it.toItemModel() },
         client = client.map(),
         clientId = Id(client.id),
         user = user.toCardModel(),
@@ -30,9 +23,9 @@ fun OrderDto.toScreenModel(
     )
 }
 
-fun OrderItemDto.toItemModel(formatDecimal: FormatDecimal): OrderItemModel {
+fun OrderItemDto.toItemModel(): OrderItemModel {
     return OrderItemModel(
         name = product.name,
-        amount = formatDecimal.formatDecimal(amount.toDouble())
+        amount = amount.toInt()
     )
 }

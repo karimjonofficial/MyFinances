@@ -16,7 +16,6 @@ interface AddReceiveScreenInteractor : Refreshable {
 
     companion object {
         val dummy = object : AddReceiveScreenInteractor {
-            override fun initialize() {}
             override fun refresh() {}
             override fun add(
                 title: ProductTitleItemModel?,

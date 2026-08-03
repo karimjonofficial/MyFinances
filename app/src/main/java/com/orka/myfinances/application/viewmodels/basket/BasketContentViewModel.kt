@@ -5,15 +5,13 @@ import com.orka.myfinances.data.models.basket.BasketItem
 import com.orka.myfinances.data.repositories.basket.BasketEvent
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.stock.GetStockItemByProduct
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatPrice
-import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.lib.ui.state.State
-import com.orka.myfinances.lib.viewmodel.base.BaseViewModel
+import com.orka.myfinances.lib.viewmodel.base.refreshable.RefreshableBaseViewModel
+import com.orka.myfinances.logger.Logger
+import com.orka.myfinances.ui.models.screen.BasketScreenModel
+import com.orka.myfinances.ui.models.ui.BasketItemUiModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.basket.BasketInteractor
-import com.orka.myfinances.ui.screens.basket.BasketItemUiModel
-import com.orka.myfinances.ui.screens.basket.BasketScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -22,10 +20,8 @@ class BasketContentViewModel(
     private val basketRepository: BasketRepository,
     private val stockRepository: GetStockItemByProduct,
     private val navigator: Navigator,
-    private val formatPrice: FormatPrice,
-    private val formatDecimal: FormatDecimal,
     logger: Logger
-) : BaseViewModel<BasketScreenModel>(
+) : RefreshableBaseViewModel<BasketScreenModel>(
     produceInitialState = {
         val minItems = basketRepository.get()
         val items = minItems.map { minItem ->
@@ -34,14 +30,14 @@ class BasketContentViewModel(
                 basketItem(minItem, stockItem)
             else throw Exception()
         }
-        val uiItems = items.map { item -> item.toUiModel(formatPrice, formatDecimal) }
+        val uiItems = items.map { item -> item.toUiModel() }
         val sellable = uiItems.indexOfFirst { it.model.unavailable } == -1
-        val price = items.sumOf { it.product.exposedPrice * it.amount }
+        val price = items.sumOf { it.product.exposedPrice * it.amount }.toInt()
 
         State.Success(
             BasketScreenModel(
                 items = uiItems,
-                price = formatPrice.formatPrice(price.toDouble()),
+                price = price,
                 rawItems = items,
                 sellable = sellable,
             )
@@ -142,13 +138,13 @@ class BasketContentViewModel(
     }
 
     private fun createSuccessState(rawItems: List<BasketItem>): State.Success<BasketScreenModel> {
-        val uiItems = rawItems.map { item -> item.toUiModel(formatPrice, formatDecimal) }
+        val uiItems = rawItems.map { item -> item.toUiModel() }
         val sellable = uiItems.indexOfFirst { it.model.unavailable } == -1
-        val price = rawItems.sumOf { it.product.exposedPrice * it.amount }
+        val price = rawItems.sumOf { it.product.exposedPrice * it.amount }.toInt()
         return State.Success(
             value = BasketScreenModel(
                 items = uiItems,
-                price = formatPrice.formatPrice(price.toDouble()),
+                price = price,
                 rawItems = rawItems,
                 sellable = sellable
             )

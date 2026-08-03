@@ -6,15 +6,14 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.stock.GetStockItemsByCategory
 import com.orka.myfinances.data.repositories.stock.StockEvent
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.state.State
-import com.orka.myfinances.lib.viewmodel.sourceful.chunk.MapChunkViewModel
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.SearchableMapChunkViewModel
 import com.orka.myfinances.logger.Logger
+import com.orka.myfinances.ui.models.ui.StockItemUiModel
 import com.orka.myfinances.ui.screens.stock.StockContentInteractor
-import com.orka.myfinances.ui.screens.stock.StockItemUiModel
+import com.orka.myfinances.ui.statuses.failure.ExecutedFromFailure
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -25,11 +24,10 @@ class StockItemsContentViewModel(
     private val getByCategory: GetStockItemsByCategory,
     stockEvents: Flow<StockEvent>,
     private val basketRepository: BasketRepository,
-    private val formatPrice: FormatPrice,
-    private val formatDecimal: FormatDecimal,
     logger: Logger
-) : MapChunkViewModel<StockItemDto, StockItemUiModel>(
-    get = { size, page -> getByCategory.getByCategory(size, page, categoryId) },
+) : SearchableMapChunkViewModel<StockItemDto, StockItemUiModel>(
+    get = { size, page -> getByCategory.getByCategory(size, page, categoryId, null) },
+    searchRepository = { size, page, q -> getByCategory.getByCategory(size, page, categoryId, q) },
     map = { chunk ->
         val basketItems = basketRepository.get()
         val content = chunk.results
@@ -38,8 +36,6 @@ class StockItemsContentViewModel(
             .mapValues { (_, stockItems) ->
                 stockItems.map {
                     it.toUiModel(
-                        formatPrice = formatPrice,
-                        formatDecimal = formatDecimal,
                         basketAmount = basketItems.find { basketItem -> basketItem.id == Id(it.product.id) }?.amount
                     )
                 }
@@ -71,16 +67,16 @@ class StockItemsContentViewModel(
                     val newContent = oldState.value.content.mapValues { (_, items) ->
                         items.map { item ->
                             val basketItem = basketItems.find { it.id == item.id }
-                            val amountStr = if (basketItem != null && basketItem.amount > 0) {
+                            val amount = if (basketItem != null && basketItem.amount > 0) {
                                 logger.log("StockItemsContentViewModel", "BasketItem found: ${basketItem.id}")
-                                formatDecimal.formatDecimal(basketItem.amount.toDouble())
+                                basketItem.amount
                             } else {
                                 logger.log("StockItemsContentViewModel", "BasketItem not found: ${item.id}")
                                 null
                             }
                             item.copy(
                                 model = item.model.copy(
-                                    basketAmount = amountStr,
+                                    basketAmount = amount,
                                     increaseEnabled = if (basketItem != null) item.amount > basketItem.amount else false
                                 )
                             )
@@ -107,7 +103,7 @@ class StockItemsContentViewModel(
         tryTransition { oldState ->
             if(oldState is State.Success) {
                 oldState.toExposed()
-            } else State.Failure(failure, oldState.value)//TODO change error message
+            } else State.Failure(ExecutedFromFailure, oldState.value)
         }
     }
 
@@ -115,7 +111,7 @@ class StockItemsContentViewModel(
         tryTransition { oldState ->
             if(oldState is State.Success) {
                 oldState.toHidden()
-            } else State.Failure(failure, oldState.value)//TODO change error message
+            } else State.Failure(ExecutedFromFailure, oldState.value)
         }
     }
 }

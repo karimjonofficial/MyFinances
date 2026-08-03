@@ -13,9 +13,12 @@ import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.lib.viewmodel.base.refreshable.RefreshableBaseViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
+import com.orka.myfinances.ui.statuses.failure.CouldNotAdd
+import com.orka.myfinances.ui.statuses.failure.IncorrectInput
 import com.orka.myfinances.ui.screens.folder.catalog.CatalogScreenInteractor
-import com.orka.myfinances.ui.screens.folder.catalog.CatalogScreenModel
-import com.orka.myfinances.ui.screens.folder.models.FolderUiModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import com.orka.myfinances.ui.models.screen.CatalogScreenModel
+import com.orka.myfinances.ui.models.ui.FolderUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -41,6 +44,7 @@ class CatalogScreenViewModel(
     logger = logger
 ), CatalogScreenInteractor {
     val uiState = state.asStateFlow()
+    private val cachedState = MutableStateFlow<CatalogScreenModel?>(null)
 
     init {
         initialize()
@@ -78,6 +82,34 @@ class CatalogScreenViewModel(
     override fun navigateToAddTemplate() {
         launch {
             navigator.navigateToAddTemplate()
+        }
+    }
+
+    override fun search(query: String) {
+        tryTransition { oldState ->
+            if (oldState is State.Success<CatalogScreenModel>) {
+                if (query.isNotBlank()) {
+                    if (cachedState.value == null) cachedState.value = oldState.value
+                    val result = cachedState.value!!.folders.filter {
+                        it.model.name.contains(query, ignoreCase = true)
+                    }
+                    State.Success(oldState.value.copy(folders = result))
+                } else {
+                    val cached = cachedState.value
+                    cachedState.value = null
+                    if (cached != null) State.Success(cached) else oldState
+                }
+            } else oldState
+        }
+    }
+
+    override fun resetSearch() {
+        tryTransition { oldState ->
+            val cached = cachedState.value
+            cachedState.value = null
+            if (cached != null && oldState is State.Success<CatalogScreenModel>) {
+                State.Success(cached)
+            } else oldState
         }
     }
 

@@ -6,17 +6,16 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.data.repositories.receive.AddReceiveRequestItem
-import com.orka.myfinances.format.FormatDate
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.lib.viewmodel.sourceful.single.MapSingleByIdViewModel
 import com.orka.myfinances.logger.Logger
+import com.orka.myfinances.ui.models.screen.ProductTitleScreenModel
 import com.orka.myfinances.ui.navigation.Navigator
+import com.orka.myfinances.ui.statuses.failure.NotInserted
+import com.orka.myfinances.ui.statuses.failure.ProductTitleNotFound
 import com.orka.myfinances.ui.screens.product.details.ProductTitleScreenInteractor
-import com.orka.myfinances.ui.screens.product.details.models.ProductTitleScreenModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -27,15 +26,12 @@ class ProductTitleScreenViewModel(
     private val getById: GetById<ProductTitleDto>,
     private val insertReceive: Insert<AddReceiveRequest>,
     productTitleEvents: Flow<ProductTitleEvent>,
-    private val formatDecimal: FormatDecimal,
-    private val formatDate: FormatDate,
-    private val formatPrice: FormatPrice,
     private val navigator: Navigator,
     logger: Logger
 ) : MapSingleByIdViewModel<ProductTitleDto, ProductTitleScreenModel>(
     id = productId,
     get = getById,
-    map = { it.toScreenModel(formatDecimal, formatDate, formatPrice) },
+    map = { it.toScreenModel() },
     logger = logger
 ), ProductTitleScreenInteractor {
     val uiState = state.asStateFlow()

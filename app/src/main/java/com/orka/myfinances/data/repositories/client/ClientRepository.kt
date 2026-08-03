@@ -4,6 +4,7 @@ import com.orka.myfinances.data.api.client.ClientApi
 import com.orka.myfinances.data.dtos.client.ClientDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.models.toChunk
+import com.orka.myfinances.lib.data.repositories.SearchChunk
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.Insert
@@ -14,9 +15,16 @@ class ClientRepository(
     private val companyId: Id,
     private val api: ClientApi,
     private val flow: MutableSharedFlow<ClientEvent>
-) : GetChunk<ClientDto>, GetById<ClientDto>, Insert<AddClientRequest> {
+) : GetChunk<ClientDto>, SearchChunk<ClientDto>, GetById<ClientDto>, Insert<AddClientRequest> {
 
     override suspend fun getChunk(
+        size: Int,
+        page: Int
+    ): Chunk<ClientDto>? {
+        return searchChunk(size, page, null)
+    }
+
+    override suspend fun searchChunk(
         size: Int,
         page: Int,
         query: String?

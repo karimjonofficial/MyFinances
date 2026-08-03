@@ -31,37 +31,38 @@ fun SearchTopAppBar(
     modifier: Modifier = Modifier,
     title: String,
     onSearch: (String) -> Unit,
+    searchMode: Boolean,
+    onSearchModeChange: (Boolean) -> Unit,
+    searchText: String,
+    onSearchTextChange: (String) -> Unit,
     actions: @Composable RowScope.() -> Unit = {}
 ) {
-    val searchMode = rememberSaveable { mutableStateOf(false) }
-    val searchText = rememberSaveable { mutableStateOf("") }
-
     val closeSearch = {
-        searchMode.value = false
-        searchText.value = ""
+        onSearchModeChange(false)
+        onSearchTextChange("")
         onSearch("")
     }
 
-    if (searchMode.value) {
+    if (searchMode) {
         BackHandler(onBack = closeSearch)
     }
 
-    LaunchedEffect(searchMode.value) {
-        if (searchMode.value) {
-            snapshotFlow { searchText.value }
+    LaunchedEffect(searchMode) {
+        if (searchMode) {
+            snapshotFlow { searchText }
                 .drop(1)
                 .debounce(300.milliseconds)
                 .collect { onSearch(it) }
         }
     }
 
-    if (searchMode.value) {
+    if (searchMode) {
         TopAppBar(
             modifier = modifier,
             title = {
                 TextField(
-                    value = searchText.value,
-                    onValueChange = { searchText.value = it },
+                    value = searchText,
+                    onValueChange = onSearchTextChange,
                     leadingIcon = {
                         Icon(
                             painter = painterResource(R.drawable.search),
@@ -92,7 +93,7 @@ fun SearchTopAppBar(
             modifier = modifier,
             title = { Text(text = title) },
             actions = {
-                IconButton(onClick = { searchMode.value = true }) {
+                IconButton(onClick = { onSearchModeChange(true) }) {
                     Icon(
                         painter = painterResource(R.drawable.search),
                         contentDescription = null

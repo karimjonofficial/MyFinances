@@ -6,7 +6,7 @@ import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.data.repositories.info.InfoRepository
 import com.orka.myfinances.data.storages.credentials.CredentialsStorage
 import com.orka.myfinances.data.storages.defaults.DefaultsStorage
-import com.orka.myfinances.lib.ui.state.FailureType
+import com.orka.myfinances.lib.ui.state.FailureStatus
 import com.orka.myfinances.lib.viewmodel.single.SingleStateViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.managers.SessionManager
@@ -131,7 +131,7 @@ class UiManager(
                 }
             }
         } catch (e: Exception) {
-            setState(UiState.Failure(FailureType.Exception(e.message.toString())))
+            setState(UiState.Failure(FailureStatus.Exception(e.message.toString())))
         }
     }
 }

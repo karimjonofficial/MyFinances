@@ -41,9 +41,8 @@ import com.orka.myfinances.lib.ui.models.IconRes
 import com.orka.myfinances.lib.ui.models.NavItem
 import com.orka.myfinances.lib.ui.preview.DefaultPreview
 import com.orka.myfinances.lib.ui.state.State
-import com.orka.myfinances.ui.screens.profile.components.ProfileOptionButton
-import com.orka.myfinances.ui.screens.profile.components.UserIcon
-import com.orka.myfinances.ui.screens.profile.models.ProfileContentModel
+import com.orka.myfinances.ui.components.buttons.ProfileOptionButton
+import com.orka.myfinances.ui.models.content.ProfileContentModel
 import com.orka.myfinances.ui.theme.MyFinancesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)

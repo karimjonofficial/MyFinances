@@ -3,17 +3,14 @@ package com.orka.myfinances.application.viewmodels.receive.list
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.dtos.receive.ReceiveDto
 import com.orka.myfinances.data.repositories.receive.ReceiveEvent
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatLocalDate
-import com.orka.myfinances.format.FormatPrice
-import com.orka.myfinances.format.FormatTime
 import com.orka.myfinances.lib.data.repositories.GetChunk
+import com.orka.myfinances.lib.data.repositories.SearchChunk
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
-import com.orka.myfinances.lib.viewmodel.sourceful.chunk.MapChunkViewModel
+import com.orka.myfinances.lib.viewmodel.sourceful.chunk.SearchableMapChunkViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
-import com.orka.myfinances.ui.screens.receive.list.viewmodel.ReceiveContentInteractor
-import com.orka.myfinances.ui.screens.receive.list.viewmodel.ReceiveUiModel
+import com.orka.myfinances.ui.screens.receive.list.ReceiveContentInteractor
+import com.orka.myfinances.ui.models.ui.ReceiveUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -23,23 +20,21 @@ import kotlinx.datetime.toLocalDateTime
 
 class ReceiveContentViewModel(
     getChunk: GetChunk<ReceiveDto>,
+    searchChunk: SearchChunk<ReceiveDto>,
     events: Flow<ReceiveEvent>,
-    formatPrice: FormatPrice,
-    formatLocalDate: FormatLocalDate,
-    formatTime: FormatTime,
-    formatDecimal: FormatDecimal,
     private val navigator: Navigator,
     logger: Logger
-) : MapChunkViewModel<ReceiveDto, ReceiveUiModel>(
+) : SearchableMapChunkViewModel<ReceiveDto, ReceiveUiModel>(
     get = getChunk,
+    searchRepository = searchChunk,
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map =
             chunk.results.groupBy { receive -> receive.dateTime.toLocalDateTime(timeZone).date }
-                .mapKeys { entry -> formatLocalDate.formatLocalDate(entry.key) }
+                .mapKeys { entry -> entry.key.toString() }
                 .mapValues { entry ->
                     entry.value.map { receive ->
-                        receive.toUiModel(formatPrice, formatDecimal, formatTime)
+                        receive.toUiModel()
                     }
                 }
 

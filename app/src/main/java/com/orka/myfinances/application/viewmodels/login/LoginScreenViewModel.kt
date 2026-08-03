@@ -6,8 +6,9 @@ import com.orka.myfinances.data.models.Credentials
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.lib.viewmodel.base.BaseViewModel
 import com.orka.myfinances.managers.SessionManager
+import com.orka.myfinances.ui.statuses.failure.UserNotFound
 import com.orka.myfinances.ui.screens.login.LoginScreenInteractor
-import com.orka.myfinances.ui.screens.login.LoginScreenModel
+import com.orka.myfinances.ui.models.screen.LoginScreenModel
 import kotlinx.coroutines.flow.asStateFlow
 
 class LoginScreenViewModel(
@@ -19,6 +20,10 @@ class LoginScreenViewModel(
     logger = logger
 ), LoginScreenInteractor {
     val uiState = state.asStateFlow()
+
+    init {
+        initialize()
+    }
 
     override fun authorize(username: String, password: String) {
         tryTransition { oldState ->
@@ -49,7 +54,7 @@ class LoginScreenViewModel(
             oldState
         } else State.Failure(
             value = LoginScreenModel(textFieldError = true),
-            type = UserNotFound
+            status = UserNotFound
         )
     }
 }

@@ -6,12 +6,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
-import com.orka.myfinances.ui.navigation.Destination
+import com.orka.myfinances.ui.navigation.destination.Destination
+import com.orka.myfinances.ui.navigation.destination.ProductTitleDestinations
 import com.orka.myfinances.ui.screens.product.add.AddProductTitleScreen
 
 fun addProductEntry(
     modifier: Modifier = Modifier,
-    destination: Destination.AddProduct,
+    destination: ProductTitleDestinations.Add,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val viewModel = viewModel(

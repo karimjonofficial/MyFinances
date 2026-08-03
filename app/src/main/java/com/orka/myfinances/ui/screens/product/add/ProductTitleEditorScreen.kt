@@ -13,8 +13,8 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.title.models.PropertyModel
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.state.State
-import com.orka.myfinances.ui.screens.product.add.interactor.AddProductTitleScreenModel
-import com.orka.myfinances.ui.screens.product.add.interactor.CategoryBottomSheetItemModel
+import com.orka.myfinances.ui.models.screen.AddProductTitleScreenModel
+import com.orka.myfinances.ui.models.sheet.CategoryBottomSheetItemModel
 
 @Composable
 fun ProductTitleEditorScreen(

@@ -29,4 +29,5 @@ interface Navigator {
     fun navigateToReceive(id: Id)
     fun navigateToSelectDefaultCategory()
     fun navigateToPinnedCategories()
+    fun navigateToPrinters()
 }

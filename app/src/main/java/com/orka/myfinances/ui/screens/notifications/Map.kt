@@ -2,6 +2,8 @@ package com.orka.myfinances.ui.screens.notifications
 
 import com.orka.myfinances.data.models.Notification
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
+import com.orka.myfinances.ui.models.card.NotificationCardModel
+import com.orka.myfinances.ui.models.ui.NotificationUiModel
 
 fun List<Notification>.toChunkMapState(): ChunkUiModel<NotificationUiModel> {
     return ChunkUiModel(
@@ -27,6 +29,6 @@ fun Notification.toCardModel(): NotificationCardModel {
         title = title,
         message = message,
         read = read,
-        time = dateTime.toString()
+        dateTime = dateTime
     )
 }
