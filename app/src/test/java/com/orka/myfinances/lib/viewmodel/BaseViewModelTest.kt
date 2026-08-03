@@ -2,9 +2,10 @@ package com.orka.myfinances.lib.viewmodel
 
 import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
+import com.orka.myfinances.lib.ui.state.FailureStatus
 import com.orka.myfinances.lib.viewmodel.base.BaseViewModel
 import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.lib.viewmodel.base.ExceptionMapper
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,25 +15,25 @@ import org.junit.jupiter.api.Test
 
 class BaseViewModelTest : MainDispatcherContext() {
     private val logger = mockk<Logger>(relaxed = true)
-    private val loading = UiText.Str("Loading")
-    private val failure = UiText.Str("Failure")
 
     private class TestBaseViewModel(
-        produceSuccess: suspend () -> State<String>?,
-        loading: UiText,
-        failure: UiText,
+        produceSuccess: suspend () -> State<String>,
         logger: Logger
-    ) : BaseViewModel<String>(produceSuccess, loading, failure, logger) {
+    ) : BaseViewModel<String>(produceSuccess, ExceptionMapper.Default(), logger) {
         val uiState = state.asStateFlow()
+        
+        fun start() {
+            initialize()
+        }
     }
 
     @Test
     fun `initialize success`() = runTest {
-        val produceSuccess = mockk<suspend () -> State<String>?>()
+        val produceSuccess = mockk<suspend () -> State<String>>()
         coEvery { produceSuccess() } returns State.Success("Success Data")
 
-        val viewModel = TestBaseViewModel(produceSuccess, loading, failure, logger)
-        viewModel.initialize()
+        val viewModel = TestBaseViewModel(produceSuccess, logger)
+        viewModel.start()
         advanceUntilIdle()
 
         val state = viewModel.uiState.value
@@ -41,50 +42,18 @@ class BaseViewModelTest : MainDispatcherContext() {
     }
 
     @Test
-    fun `initialize returns null success results in failure`() = runTest {
-        val produceSuccess = mockk<suspend () -> State<String>?>()
-        coEvery { produceSuccess() } returns null
-
-        val viewModel = TestBaseViewModel(produceSuccess, loading, failure, logger)
-        viewModel.initialize()
-        advanceUntilIdle()
-
-        val state = viewModel.uiState.value
-        assertTrue(state is State.Failure)
-        assertEquals(failure, (state as State.Failure).error)
-    }
-
-    @Test
     fun `initialize exception results in failure`() = runTest {
-        val produceSuccess = mockk<suspend () -> State<String>?>()
+        val produceSuccess = mockk<suspend () -> State<String>>()
         coEvery { produceSuccess() } throws Exception("Error Message")
 
-        val viewModel = TestBaseViewModel(produceSuccess, loading, failure, logger)
-        viewModel.initialize()
+        val viewModel = TestBaseViewModel(produceSuccess, logger)
+        viewModel.start()
         advanceUntilIdle()
 
         val state = viewModel.uiState.value
         assertTrue(state is State.Failure)
-        val error = (state as State.Failure).error
-        assertTrue(error is UiText.Str)
-        assertEquals("Error Message",  (error as UiText.Str).value)
-    }
-
-    @Test
-    fun `refresh success`() = runTest {
-        val produceSuccess = mockk<suspend () -> State<String>?>()
-        coEvery { produceSuccess() } returns State.Success("Initial")
-
-        val viewModel = TestBaseViewModel(produceSuccess, loading, failure, logger)
-        viewModel.initialize()
-        advanceUntilIdle()
-
-        coEvery { produceSuccess() } returns State.Success("Refreshed")
-        viewModel.refresh()
-        advanceUntilIdle()
-
-        val state = viewModel.uiState.value
-        assertTrue(state is State.Success)
-        assertEquals("Refreshed", (state as State.Success).value)
+        val status = (state as State.Failure).status
+        assertTrue(status is FailureStatus.Exception)
+        assertEquals("Error Message",  (status as FailureStatus.Exception).message)
     }
 }

@@ -3,9 +3,9 @@ package com.orka.myfinances.lib.viewmodel
 import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.lib.viewmodel.sourceful.list.format.FormatListViewModel
+import com.orka.myfinances.lib.viewmodel.mappers.NetworkExceptionMapper
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,30 +16,29 @@ import org.junit.jupiter.api.Test
 class FormatListViewModelTest : MainDispatcherContext() {
     private val logger = mockk<Logger>(relaxed = true)
     private val get = mockk<Get<Int>>()
-    private val loading = UiText.Str("Loading")
-    private val failure = UiText.Str("Failure")
 
     private class TestFormatListViewModel(
-        loading: UiText,
-        failure: UiText,
         get: Get<Int>,
         logger: Logger
     ) : FormatListViewModel<Int, String>(
-        loading = loading,
-        failure = failure,
         get = get,
         map = { it.toString() },
+        exceptionMapper = NetworkExceptionMapper(),
         logger = logger
     ) {
         val uiState = state.asStateFlow()
+        
+        fun start() {
+            initialize()
+        }
     }
 
     @Test
     fun `initialize success`() = runTest {
-        coEvery { get.getAll(null) } returns listOf(1, 2, 3)
+        coEvery { get.getAll() } returns listOf(1, 2, 3)
 
-        val viewModel = TestFormatListViewModel(loading, failure, get, logger)
-        viewModel.initialize()
+        val viewModel = TestFormatListViewModel(get, logger)
+        viewModel.start()
         advanceUntilIdle()
 
         val state = viewModel.uiState.value
@@ -49,26 +48,25 @@ class FormatListViewModelTest : MainDispatcherContext() {
 
     @Test
     fun `initialize failure`() = runTest {
-        coEvery { get.getAll(null) } returns null
+        coEvery { get.getAll() } returns null
 
-        val viewModel = TestFormatListViewModel(loading, failure, get, logger)
-        viewModel.initialize()
+        val viewModel = TestFormatListViewModel(get, logger)
+        viewModel.start()
         advanceUntilIdle()
 
         val state = viewModel.uiState.value
         assertTrue(state is State.Failure)
-        assertEquals(failure, (state as State.Failure).error)
     }
 
     @Test
-    fun `search triggers refresh with query`() = runTest {
-        coEvery { get.getAll(null) } returns listOf(1)
-        val viewModel = TestFormatListViewModel(loading, failure, get, logger)
-        viewModel.initialize()
+    fun `refresh success`() = runTest {
+        coEvery { get.getAll() } returns listOf(1)
+        val viewModel = TestFormatListViewModel(get, logger)
+        viewModel.start()
         advanceUntilIdle()
 
-        coEvery { get.getAll("query") } returns listOf(4, 5)
-        viewModel.search("query")
+        coEvery { get.getAll() } returns listOf(4, 5)
+        viewModel.refresh()
         advanceUntilIdle()
 
         val state = viewModel.uiState.value

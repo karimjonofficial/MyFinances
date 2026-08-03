@@ -6,7 +6,6 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.user.GetMe
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.testFixtures.resources.dtos.branchDto1
 import com.orka.myfinances.testFixtures.resources.dtos.userDto1
@@ -23,19 +22,16 @@ class ProfileContentViewModelTest : MainDispatcherContext() {
     private val getMe = mockk<GetMe>()
     private val sessionManager = mockk<SessionManager>(relaxed = true)
     private val navigator = mockk<Navigator>(relaxed = true)
-    private val loading = UiText.Str("Loading")
-    private val failure = UiText.Str("Failure")
     private val logger = mockk<Logger>(relaxed = true)
 
     @Test
     fun `initialize success`() = runTest {
-        coEvery { getBranches.getAll(any()) } returns listOf(branchDto1)
+        coEvery { getBranches.getAll() } returns listOf(branchDto1)
         coEvery { getMe.getMe() } returns userDto1
 
         val viewModel = ProfileContentViewModel(
-            branchId, getBranches, getMe, sessionManager, navigator, loading, failure, logger
+            branchId, getBranches, getMe, sessionManager, navigator, logger
         )
-        viewModel.initialize()
         
         advanceUntilIdle()
 

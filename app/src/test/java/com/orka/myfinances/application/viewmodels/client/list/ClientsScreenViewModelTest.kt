@@ -5,6 +5,7 @@ import com.orka.myfinances.data.repositories.Chunk
 import com.orka.myfinances.data.repositories.client.AddClientRequest
 import com.orka.myfinances.data.repositories.client.ClientEvent
 import com.orka.myfinances.lib.data.repositories.GetChunk
+import com.orka.myfinances.lib.data.repositories.SearchChunk
 import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.logger.Logger
@@ -19,10 +20,12 @@ import org.junit.jupiter.api.Test
 
 class ClientsScreenViewModelTest : MainDispatcherContext() {
     private val getChunk = mockk<GetChunk<ClientDto>>()
+    private val searchChunk = mockk<SearchChunk<ClientDto>>()
     private val insert = mockk<Insert<AddClientRequest>>()
     private val events = MutableSharedFlow<ClientEvent>()
     private val navigator = mockk<Navigator>(relaxed = true)
     private val logger = mockk<Logger>(relaxed = true)
+
     @Test
     fun `initialize success`() = runTest {
         val chunk = Chunk(
@@ -32,10 +35,10 @@ class ClientsScreenViewModelTest : MainDispatcherContext() {
             previousPageIndex = null,
             results = listOf(clientDto1)
         )
-        coEvery { getChunk.getChunk(any(), any(), any()) } returns chunk
+        coEvery { getChunk.getChunk(any(), any()) } returns chunk
 
         val viewModel = ClientsScreenViewModel(
-            getChunk, insert, events, navigator, logger
+            getChunk, searchChunk, insert, events, navigator, logger
         )
         
         advanceUntilIdle()

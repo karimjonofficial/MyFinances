@@ -3,7 +3,6 @@ package com.orka.myfinances.ui.navigation.entries
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetState
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -14,10 +13,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
-import com.orka.myfinances.ui.models.item.TemplateItemModel
-import com.orka.myfinances.ui.screens.folder.catalog.CatalogScreen
 import com.orka.myfinances.ui.components.dialogs.AddFolderDialog
+import com.orka.myfinances.ui.models.item.TemplateItemModel
 import com.orka.myfinances.ui.navigation.destination.Destination
+import com.orka.myfinances.ui.screens.folder.catalog.CatalogScreen
 import com.orka.myfinances.ui.screens.templates.sheet.SelectTemplateBottomSheet
 import kotlinx.coroutines.launch
 

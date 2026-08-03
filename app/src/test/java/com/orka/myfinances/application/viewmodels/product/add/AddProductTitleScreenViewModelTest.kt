@@ -7,7 +7,6 @@ import com.orka.myfinances.data.repositories.product.title.models.AddProductTitl
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.testFixtures.resources.dtos.categoryDto1
 import com.orka.myfinances.ui.navigation.Navigator
@@ -21,16 +20,14 @@ class AddProductTitleScreenViewModelTest : MainDispatcherContext() {
     private val insertTitle = mockk<Insert<AddProductTitleRequest>>()
     private val navigator = mockk<Navigator>(relaxed = true)
     private val logger = mockk<Logger>(relaxed = true)
-    private val loading = UiText.Str("Loading")
-    private val failure = UiText.Str("Failure")
     private val categoryId = Id(1)
 
     @Test
     fun `initialize success`() = runTest {
-        coEvery { getFolders.getAll(any()) } returns listOf(categoryDto1)
+        coEvery { getFolders.getAll() } returns listOf(categoryDto1)
 
         val viewModel = AddProductTitleScreenViewModel(
-            categoryId, getFolders, insertTitle, navigator, loading, failure, logger
+            categoryId, getFolders, insertTitle, navigator, logger
         )
         
         advanceUntilIdle()

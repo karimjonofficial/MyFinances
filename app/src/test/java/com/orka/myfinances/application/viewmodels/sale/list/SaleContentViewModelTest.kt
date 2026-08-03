@@ -4,18 +4,13 @@ import com.orka.myfinances.testLib.MainDispatcherContext
 import com.orka.myfinances.data.dtos.sale.SaleDto
 import com.orka.myfinances.data.repositories.sale.SaleEvent
 import com.orka.myfinances.lib.data.repositories.GetChunk
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatLocalDate
-import com.orka.myfinances.format.FormatPrice
-import com.orka.myfinances.format.FormatTime
+import com.orka.myfinances.lib.data.repositories.SearchChunk
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.data.repositories.Chunk
 import com.orka.myfinances.testFixtures.resources.dtos.saleDto1
 import com.orka.myfinances.ui.navigation.Navigator
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableSharedFlow
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -23,15 +18,10 @@ import org.junit.jupiter.api.Test
 
 class SaleContentViewModelTest : MainDispatcherContext() {
     private val getChunk = mockk<GetChunk<SaleDto>>()
+    private val searchChunk = mockk<SearchChunk<SaleDto>>()
     private val events = MutableSharedFlow<SaleEvent>()
-    private val formatPrice = mockk<FormatPrice>()
-    private val formatDecimal = mockk<FormatDecimal>()
-    private val formatLocalDate = mockk<FormatLocalDate>()
-    private val formatTime = mockk<FormatTime>()
     private val navigator = mockk<Navigator>(relaxed = true)
     private val logger = mockk<Logger>(relaxed = true)
-    private val loading = UiText.Str("Loading")
-    private val failure = UiText.Str("Failure")
 
     @Test
     fun `initialize success`() = runTest {
@@ -42,14 +32,10 @@ class SaleContentViewModelTest : MainDispatcherContext() {
             previousPageIndex = null,
             results = listOf(saleDto1)
         )
-        coEvery { getChunk.getChunk(any(), any(), any()) } returns chunk
-        every { formatLocalDate.formatLocalDate(any()) } returns "2024-01-01"
-        every { formatPrice.formatPrice(any()) } returns "2,000"
-        every { formatTime.formatTime(any()) } returns "12:00"
-        every { formatDecimal.formatDecimal(any()) } returns "2.0"
+        coEvery { getChunk.getChunk(any(), any()) } returns chunk
 
         val viewModel = SaleContentViewModel(
-            getChunk, events, loading, failure, formatPrice, formatDecimal, formatLocalDate, formatTime, navigator, logger
+            getChunk, searchChunk, events, navigator, logger
         )
         
         advanceUntilIdle()

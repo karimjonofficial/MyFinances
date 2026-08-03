@@ -9,10 +9,7 @@ import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.basket.MinBasketItem
 import com.orka.myfinances.data.repositories.stock.GetStockItemsByCategory
 import com.orka.myfinances.data.repositories.stock.StockEvent
-import com.orka.myfinances.format.FormatDecimal
-import com.orka.myfinances.format.FormatPrice
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.data.repositories.Chunk
 import com.orka.myfinances.testFixtures.resources.dtos.stockItemDto1
@@ -28,15 +25,11 @@ import org.junit.jupiter.api.Test
 class StockItemsContentViewModelTest : MainDispatcherContext() {
     private val getStockByCategory = mockk<GetStockItemsByCategory>()
     private val basketRepository = mockk<BasketRepository>()
-    private val formatPrice = mockk<FormatPrice>()
-    private val formatDecimal = mockk<FormatDecimal>()
     private val stockEvents = MutableSharedFlow<StockEvent>()
     private val basketEvents = MutableSharedFlow<BasketEvent>()
     private val logger = mockk<Logger>(relaxed = true)
 
     private val categoryId = Id(1)
-    private val loading = UiText.Str("Loading")
-    private val failure = UiText.Str("Failure")
 
     @BeforeEach
     fun initTest() {
@@ -44,8 +37,6 @@ class StockItemsContentViewModelTest : MainDispatcherContext() {
         every { Log.d(any(), any()) } returns 0
         every { basketRepository.events } returns basketEvents
         coEvery { basketRepository.get() } returns emptyList()
-        every { formatPrice.formatPrice(any()) } returns "Price"
-        every { formatDecimal.formatDecimal(any()) } returns "1.0"
     }
 
     @Test
@@ -68,10 +59,6 @@ class StockItemsContentViewModelTest : MainDispatcherContext() {
             getByCategory = getStockByCategory,
             stockEvents = stockEvents,
             basketRepository = basketRepository,
-            formatPrice = formatPrice,
-            formatDecimal = formatDecimal,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
 
@@ -79,7 +66,7 @@ class StockItemsContentViewModelTest : MainDispatcherContext() {
             val state = expectMostRecentItem()
             if (state is State.Success) {
                 val item = state.value.content.values.flatten().first()
-                assertEquals("1.0", item.model.basketAmount)
+                assertEquals(5, item.model.basketAmount)
             }
         }
     }
@@ -104,10 +91,6 @@ class StockItemsContentViewModelTest : MainDispatcherContext() {
             getByCategory = getStockByCategory,
             stockEvents = stockEvents,
             basketRepository = basketRepository,
-            formatPrice = formatPrice,
-            formatDecimal = formatDecimal,
-            loading = loading,
-            failure = failure,
             logger = logger
         )
 
@@ -130,7 +113,7 @@ class StockItemsContentViewModelTest : MainDispatcherContext() {
             }
 
             item = state.value.content.values.flatten().first()
-            assertEquals("1.0", item.model.basketAmount)
+            assertEquals(3, item.model.basketAmount)
         }
     }
 }

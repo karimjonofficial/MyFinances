@@ -5,7 +5,6 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.title.GetProductTitlesByCategory
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.data.repositories.Chunk
 import com.orka.myfinances.testFixtures.resources.dtos.productTitleDto1
@@ -22,8 +21,6 @@ class ProductTitlesContentViewModelTest : MainDispatcherContext() {
     private val navigator = mockk<Navigator>(relaxed = true)
     private val logger = mockk<Logger>(relaxed = true)
     private val categoryId = Id(1)
-    private val loading = UiText.Str("Loading")
-    private val failure = UiText.Str("Failure")
 
     @Test
     fun `initialize success`() = runTest {
@@ -37,7 +34,7 @@ class ProductTitlesContentViewModelTest : MainDispatcherContext() {
         coEvery { getByCategory.getByCategory(any(), any(), any(), any()) } returns chunk
 
         val viewModel = ProductTitlesContentViewModel(
-            categoryId, getByCategory, productTitleEvents, navigator, loading, failure, logger
+            categoryId, getByCategory, productTitleEvents, navigator, logger
         )
         
         advanceUntilIdle()

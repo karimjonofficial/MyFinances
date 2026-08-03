@@ -23,7 +23,7 @@ class SelectBranchScreenViewModelTest : MainDispatcherContext() {
 
     @Test
     fun `initialize success`() = runTest {
-        coEvery { getBranches.getAll(any()) } returns listOf(branchDto1)
+        coEvery { getBranches.getAll() } returns listOf(branchDto1)
 
         val viewModel = SelectBranchScreenViewModel(
             getBranches, getById, sessionManager, logger
@@ -36,7 +36,7 @@ class SelectBranchScreenViewModelTest : MainDispatcherContext() {
 
     @Test
     fun `select branch`() = runTest {
-        coEvery { getBranches.getAll(any()) } returns listOf(branchDto1)
+        coEvery { getBranches.getAll() } returns listOf(branchDto1)
         coEvery { getById.getById(any()) } returns branchDto1
 
         val viewModel = SelectBranchScreenViewModel(

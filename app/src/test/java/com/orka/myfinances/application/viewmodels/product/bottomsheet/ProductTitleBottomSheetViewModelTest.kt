@@ -6,7 +6,6 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.title.GetProductTitlesByCategory
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.data.repositories.Chunk
 import com.orka.myfinances.testFixtures.resources.dtos.productTitleDto1
@@ -20,8 +19,6 @@ class ProductTitleBottomSheetViewModelTest : MainDispatcherContext() {
     private val getByCategory = mockk<GetProductTitlesByCategory>()
     private val flow = MutableSharedFlow<ProductTitleEvent>()
     private val categoryId = Id(1)
-    private val loading = UiText.Str("Loading")
-    private val failure = UiText.Str("Failure")
     private val logger = mockk<Logger>(relaxed = true)
 
     @Test
@@ -33,14 +30,6 @@ class ProductTitleBottomSheetViewModelTest : MainDispatcherContext() {
             previousPageIndex = null,
             results = listOf(productTitleDto1)
         )
-        val viewModel = ProductTitleBottomSheetViewModel(
-            categoryId = categoryId,
-            getByCategory = getByCategory,
-            flow = flow,
-            loading = loading,
-            failure = failure,
-            logger = logger
-        )
         coEvery {
             getByCategory.getByCategory(
                 size = any(),
@@ -50,7 +39,14 @@ class ProductTitleBottomSheetViewModelTest : MainDispatcherContext() {
             )
         } returns chunk
 
-        viewModel.initialize()
+        val viewModel = ProductTitleBottomSheetViewModel(
+            categoryId = categoryId,
+            getByCategory = getByCategory,
+            flow = flow,
+            logger = logger
+        )
+        // initialize() is called in init
+        
         advanceUntilIdle()
 
         assertTrue(viewModel.uiState.value is State.Success)

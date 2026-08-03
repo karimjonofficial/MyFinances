@@ -7,7 +7,6 @@ import com.orka.myfinances.data.repositories.receive.AddReceiveRequest
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.testFixtures.resources.dtos.categoryDto1
 import com.orka.myfinances.ui.navigation.Navigator
@@ -21,8 +20,6 @@ class AddReceiveScreenViewModelTest : MainDispatcherContext() {
     private val insertReceive = mockk<Insert<AddReceiveRequest>>()
     private val navigator = mockk<Navigator>(relaxed = true)
     private val logger = mockk<Logger>(relaxed = true)
-    private val loading = UiText.Str("Loading")
-    private val failure = UiText.Str("Failure")
     private val categoryId = Id(1)
 
     @Test
@@ -30,7 +27,7 @@ class AddReceiveScreenViewModelTest : MainDispatcherContext() {
         coEvery { getFolder.getById(categoryId) } returns categoryDto1
 
         val viewModel = AddReceiveScreenViewModel(
-            categoryId, getFolder, insertReceive, navigator, loading, failure, logger
+            categoryId, getFolder, insertReceive, navigator, logger
         )
         
         advanceUntilIdle()

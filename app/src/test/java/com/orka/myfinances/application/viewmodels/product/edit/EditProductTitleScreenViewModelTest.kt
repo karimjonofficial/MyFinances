@@ -8,7 +8,6 @@ import com.orka.myfinances.data.repositories.product.title.UpdateProductTitle
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.testFixtures.resources.dtos.categoryDto1
 import com.orka.myfinances.testFixtures.resources.dtos.productTitleDto1
@@ -24,17 +23,15 @@ class EditProductTitleScreenViewModelTest : MainDispatcherContext() {
     private val updateTitle = mockk<UpdateProductTitle>()
     private val navigator = mockk<Navigator>(relaxed = true)
     private val logger = mockk<Logger>(relaxed = true)
-    private val loading = UiText.Str("Loading")
-    private val failure = UiText.Str("Failure")
     private val productId = Id(1)
 
     @Test
     fun `initialize success`() = runTest {
-        coEvery { getFolders.getAll(any()) } returns listOf(categoryDto1)
+        coEvery { getFolders.getAll() } returns listOf(categoryDto1)
         coEvery { productTitleRepository.getById(productId) } returns productTitleDto1
 
         val viewModel = EditProductTitleScreenViewModel(
-            productId, getFolders, productTitleRepository, updateTitle, navigator, loading, failure, logger
+            productId, getFolders, productTitleRepository, updateTitle, navigator, logger
         )
         
         advanceUntilIdle()

@@ -2,9 +2,9 @@ package com.orka.myfinances.lib.viewmodel
 
 import com.orka.myfinances.lib.data.repositories.Get
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.lib.viewmodel.sourceful.list.map.MapListViewModel
+import com.orka.myfinances.lib.viewmodel.mappers.NetworkExceptionMapper
 import com.orka.myfinances.testLib.MainDispatcherContext
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -16,30 +16,30 @@ import org.junit.jupiter.api.Test
 class MapListViewModelTest : MainDispatcherContext() {
     private val logger = mockk<Logger>(relaxed = true)
     private val get = mockk<Get<String>>()
-    private val loading = UiText.Str("Loading")
-    private val failure = UiText.Str("Failure")
 
     private class TestMapListViewModel(
-        loading: UiText,
-        failure: UiText,
         get: Get<String>,
         logger: Logger
     ) : MapListViewModel<String, String>(
-        loading = loading,
-        failure = failure,
         get = get,
-        map = { list -> mapOf("Group" to list) },
+        map = { it },
+        groupBy = { "Group" },
+        exceptionMapper = NetworkExceptionMapper(),
         logger = logger
     ) {
         val uiState = state.asStateFlow()
+        
+        fun start() {
+            initialize()
+        }
     }
 
     @Test
     fun `initialize success`() = runTest {
-        coEvery { get.getAll(null) } returns listOf("A", "B")
+        coEvery { get.getAll() } returns listOf("A", "B")
 
-        val viewModel = TestMapListViewModel(loading, failure, get, logger)
-        viewModel.initialize()
+        val viewModel = TestMapListViewModel(get, logger)
+        viewModel.start()
         advanceUntilIdle()
 
         val state = viewModel.uiState.value
@@ -48,14 +48,14 @@ class MapListViewModelTest : MainDispatcherContext() {
     }
 
     @Test
-    fun `search triggers refresh`() = runTest {
-        coEvery { get.getAll(null) } returns listOf("A")
-        val viewModel = TestMapListViewModel(loading, failure, get, logger)
-        viewModel.initialize()
+    fun `refresh success`() = runTest {
+        coEvery { get.getAll() } returns listOf("A")
+        val viewModel = TestMapListViewModel(get, logger)
+        viewModel.start()
         advanceUntilIdle()
 
-        coEvery { get.getAll("query") } returns listOf("B")
-        viewModel.search("query")
+        coEvery { get.getAll() } returns listOf("B")
+        viewModel.refresh()
         advanceUntilIdle()
 
         val state = viewModel.uiState.value

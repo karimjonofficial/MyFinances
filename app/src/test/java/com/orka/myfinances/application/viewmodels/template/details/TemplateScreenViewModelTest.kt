@@ -5,7 +5,6 @@ import com.orka.myfinances.data.dtos.template.TemplateDto
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.logger.Logger
-import com.orka.myfinances.lib.ui.models.UiText
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.testFixtures.resources.dtos.templateDto1
 import com.orka.myfinances.ui.navigation.Navigator
@@ -18,8 +17,6 @@ class TemplateScreenViewModelTest : MainDispatcherContext() {
     private val id = Id(1)
     private val getById = mockk<GetById<TemplateDto>>()
     private val navigator = mockk<Navigator>(relaxed = true)
-    private val loading = UiText.Str("Loading")
-    private val failure = UiText.Str("Failure")
     private val logger = mockk<Logger>(relaxed = true)
 
     @Test
@@ -27,7 +24,7 @@ class TemplateScreenViewModelTest : MainDispatcherContext() {
         coEvery { getById.getById(id) } returns templateDto1
 
         val viewModel = TemplateScreenViewModel(
-            id, getById, navigator, loading, failure, logger
+            id, getById, navigator, logger
         )
         
         advanceUntilIdle()

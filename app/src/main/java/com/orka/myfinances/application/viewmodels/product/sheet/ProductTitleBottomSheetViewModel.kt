@@ -42,6 +42,7 @@ class ProductTitleBottomSheetViewModel(
     val uiState = state.asStateFlow()
 
     init {
+        initialize()
         flow.onEach { refresh() }.launchIn(viewModelScope)
     }
 }

@@ -126,14 +126,14 @@ class BasketContentViewModelTest : MainDispatcherContext() {
 
         // Verify initial state
         var state = viewModel.uiState.value as State.Success
-        assertEquals("1.0", state.value.items[0].model.amount)
+        assertEquals(1, state.value.items[0].model.amount)
 
         // Emit AmountChanged
         events.emit(BasketEvent.AmountChanged(Id(productDto1.id), 2))
         advanceUntilIdle()
 
         state = viewModel.uiState.value as State.Success
-        assertEquals("2.0", state.value.items[0].model.amount)
+        assertEquals(2, state.value.items[0].model.amount)
         job.cancel()
     }
 
@@ -169,8 +169,6 @@ class BasketContentViewModelTest : MainDispatcherContext() {
 
         val viewModel = createViewModel()
         val job = launch { viewModel.uiState.collect {} }
-
-        viewModel.initialize()
         advanceUntilIdle()
 
         // Emit Clear

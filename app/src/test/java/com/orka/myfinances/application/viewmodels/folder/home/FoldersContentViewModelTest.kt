@@ -24,30 +24,33 @@ import org.junit.jupiter.api.Test
 
 class FoldersContentViewModelTest : MainDispatcherContext() {
     private val getTop = mockk<GetTop>()
-    private val add = mockk<Add<Unit, AddFolderRequest>>()
-    private val pinnedCategoriesRepository = mockk<PinnedCategoriesRepository>()
-    private val navigator = mockk<Navigator>(relaxed = true)
-    private val folderEvents = MutableSharedFlow<FolderEvent>()
-    private val events = MutableSharedFlow<PinnedCategoriesEvent>()
+    private val addFolder = mockk<Add<Unit, AddFolderRequest>>()
     private val addTitle = mockk<Add<Id, AddProductTitleRequest>>()
     private val addReceive = mockk<Insert<AddReceiveRequest>>()
+    private val pinnedCategoriesRepository = mockk<PinnedCategoriesRepository>()
     private val getDefaultCategory = mockk<GetDefaultCategory>()
+    private val navigator = mockk<Navigator>(relaxed = true)
+    private val folderEvents = MutableSharedFlow<FolderEvent>()
+    private val pinnedCategoriesFlow = MutableSharedFlow<PinnedCategoriesEvent>()
     private val logger = mockk<Logger>(relaxed = true)
 
     @Test
     fun `initialize success`() = runTest {
-        coEvery { getTop.getTop(any()) } returns folderDtos
+        coEvery { getTop.getTop() } returns folderDtos
+        coEvery { pinnedCategoriesRepository.getAll() } returns emptyList()
+        coEvery { getDefaultCategory.getDefaultCategoryId() } returns null
+
         val viewModel = FoldersContentViewModel(
             getTop = getTop,
-            addFolder = add,
-            pinnedCategoriesRepository = pinnedCategoriesRepository,
-            navigator = navigator,
-            folderFlow = folderEvents,
-            pinnedCategoriesFlow = events,
-            logger = logger,
+            addFolder = addFolder,
             addTitle = addTitle,
             addReceive = addReceive,
+            pinnedCategoriesRepository = pinnedCategoriesRepository,
             getDefaultCategory = getDefaultCategory,
+            navigator = navigator,
+            folderFlow = folderEvents,
+            pinnedCategoriesFlow = pinnedCategoriesFlow,
+            logger = logger,
         )
         
         advanceUntilIdle()
