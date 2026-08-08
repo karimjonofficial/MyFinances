@@ -25,7 +25,7 @@ class DebtsHistoryContentViewModel(
     private val navigator: Navigator
 ) : SearchableMapChunkViewModel<DebtDto, DebtUiModel>(
     get = { size, page -> getDebtsChunk.getDebtsChunk(size, page, true, null) },
-    searchRepository = { size, page, q -> getDebtsChunk.getDebtsChunk(size, page, true, q) },
+    search = { size, page, q -> getDebtsChunk.getDebtsChunk(size, page, true, q) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map = chunk.results

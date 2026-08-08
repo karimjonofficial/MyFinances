@@ -4,13 +4,11 @@ import android.app.Application
 import android.bluetooth.BluetoothManager
 import androidx.core.content.getSystemService
 import androidx.room.Room
-import com.orka.myfinances.MainActivity
 import com.orka.myfinances.application.adapters.PrintersDataSource
 import com.orka.myfinances.application.data.api.InfoApi
 import com.orka.myfinances.application.data.repositories.InfoRepository
 import com.orka.myfinances.application.data.storages.DefaultsStorageImpl
 import com.orka.myfinances.application.data.storages.credentials.CredentialsStorageImpl
-import com.orka.myfinances.application.factories.FormatterImpl
 import com.orka.myfinances.application.factories.HttpLogger
 import com.orka.myfinances.application.factories.httpClient
 import com.orka.myfinances.application.manager.runtime.GuestRuntimeInitializerImpl
@@ -46,11 +44,10 @@ class MyFinancesApplication : Application() {
         POSConnect.init(this)
     }
 
-    fun manager(mainActivity: MainActivity): UiManager {
+    fun manager(): UiManager {
         val bluetoothManager = getSystemService<BluetoothManager>()
         val adapter = bluetoothManager?.adapter
         val printersDataSource = PrintersDataSource(adapter!!)//TODO
-        val formatter = FormatterImpl(mainActivity.resources.configuration.locales[0])
         val credentialsStorage = CredentialsStorageImpl(database.credentialsDao())
         val defaultsStorage = DefaultsStorageImpl(database.defaultsDao())
         val credentialsValidator = CredentialsValidatorImpl(httpClient, credentialsStorage)
@@ -58,7 +55,7 @@ class MyFinancesApplication : Application() {
         this.guestRuntimeInitializer = guestRuntimeInitializer
         val newUserRuntimeInitializer = NewUserRuntimeInitializerImpl(logger)
         this.newUserRuntimeInitializer = newUserRuntimeInitializer
-        val signedInRuntimeInitializer = SignedInRuntimeInitializerImpl(database, printersDataSource, formatter, logger)
+        val signedInRuntimeInitializer = SignedInRuntimeInitializerImpl(database, printersDataSource, logger)
         this.signedInRuntimeInitializer = signedInRuntimeInitializer
         val infoRepository = InfoRepository(InfoApi(httpClient))
         val manager =  UiManager(

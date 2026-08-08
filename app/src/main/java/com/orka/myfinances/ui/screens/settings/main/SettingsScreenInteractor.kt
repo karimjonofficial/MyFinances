@@ -5,6 +5,7 @@ interface SettingsScreenInteractor {
     fun toSelectDefaultCategory()
     fun toPinnedCategories()
     fun toPrinters()
+    fun toDefaultPrinter()
 
     companion object {
         val dummy = object : SettingsScreenInteractor {
@@ -12,6 +13,7 @@ interface SettingsScreenInteractor {
             override fun toSelectDefaultCategory() {}
             override fun toPinnedCategories() {}
             override fun toPrinters() {}
+            override fun toDefaultPrinter() {}
         }
     }
 }

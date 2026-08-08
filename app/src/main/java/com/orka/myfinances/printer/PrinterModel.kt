@@ -1,4 +1,4 @@
-package com.orka.myfinances.data.models.printer
+package com.orka.myfinances.printer
 
 data class PrinterModel(
     val name: String,

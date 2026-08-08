@@ -24,7 +24,7 @@ class OrdersHistoryContentViewModel(
     logger: Logger
 ) : SearchableMapChunkViewModel<OrderDto, HistoryOrderUiModel>(
     get = { size, page -> getOrdersChunk.getOrdersChunk(size, page, true, null) },
-    searchRepository = { size, page, query -> getOrdersChunk.getOrdersChunk(size, page, true, query) },
+    search = { size, page, query -> getOrdersChunk.getOrdersChunk(size, page, true, query) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map =

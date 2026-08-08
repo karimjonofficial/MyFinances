@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.client.list
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -65,6 +66,7 @@ fun ClientsScreen(
                 }
             )
         },
+        contentPadding = PaddingValues(horizontal = 8.dp),
         arrangementSpace = 2.dp,
         item = { client ->
             ClientCard(

@@ -30,4 +30,5 @@ interface Navigator {
     fun navigateToSelectDefaultCategory()
     fun navigateToPinnedCategories()
     fun navigateToPrinters()
+    fun navigateToDefaultPrinter()
 }

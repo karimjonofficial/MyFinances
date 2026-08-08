@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.sale.list
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -18,7 +19,8 @@ fun SaleContent(
 ) {
     LazyColumnWithStickyHeaderContent(
         modifier = modifier,
-        arrangementSpace = 0.dp,
+        contentPadding = PaddingValues(horizontal = 8.dp),
+        arrangementSpace = 2.dp,
         state = state,
         refresh = interactor::refresh,
         loadMore = {

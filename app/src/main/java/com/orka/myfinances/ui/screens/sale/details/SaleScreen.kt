@@ -29,6 +29,7 @@ import com.orka.myfinances.format.LocalFormatter
 import com.orka.myfinances.lib.ui.components.DescriptionCard
 import com.orka.myfinances.lib.ui.components.DividedList
 import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
+import com.orka.myfinances.lib.ui.components.spacer.LazyFooterSpacer
 import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.screens.StatefulScreen
 import com.orka.myfinances.lib.ui.state.State
@@ -176,6 +177,8 @@ fun SaleScreen(
                     DescriptionCard(description = model.description)
                 }
             }
+
+            LazyFooterSpacer()
         }
     }
 }

@@ -3,7 +3,8 @@ package com.orka.myfinances.application.viewmodels.settings
 import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.dtos.folder.FolderDto
 import com.orka.myfinances.data.repositories.defaults.DefaultsEvent
-import com.orka.myfinances.data.repositories.defaults.GetDefaultCategory
+import com.orka.myfinances.data.repositories.defaults.DefaultsRepository
+import com.orka.myfinances.data.repositories.printer.PrinterRepository
 import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.lib.viewmodel.base.refreshable.RefreshableBaseViewModel
@@ -12,7 +13,6 @@ import com.orka.myfinances.printer.PrinterStatus
 import com.orka.myfinances.ui.models.screen.SettingsScreenModel
 import com.orka.myfinances.ui.navigation.Navigator
 import com.orka.myfinances.ui.screens.settings.main.SettingsScreenInteractor
-import com.orka.myfinances.ui.statuses.failure.failure
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,7 +20,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class SettingsScreenViewModel(
-    private val defaultsRepository: GetDefaultCategory,
+    private val defaultsRepository: DefaultsRepository,
+    private val printerRepository: PrinterRepository,
     defaultsFlow: Flow<DefaultsEvent>,
     private val printerStatus: StateFlow<PrinterStatus>,
     private val get: GetById<FolderDto>,
@@ -28,18 +29,20 @@ class SettingsScreenViewModel(
     logger: Logger
 ) : RefreshableBaseViewModel<SettingsScreenModel>(
     produceInitialState = {
-        val id = defaultsRepository.getDefaultCategoryId()
+        val defaultCategoryId = defaultsRepository.getDefaultCategoryId()
+        val defaultCategory = if (defaultCategoryId != null) get.getById(defaultCategoryId)?.name else null
         val status = printerStatus.value
-        val printer = if(status is PrinterStatus.Connected) status.printer.name else null
-        if(id != null) {
-            val dto = get.getById(id)
-            if (dto != null)
-                State.Success(SettingsScreenModel(
-                    defaultCategory = dto.name,
-                    pairedPrinter = printer
-                ))
-            else State.Failure(failure)
-        } else State.Success(SettingsScreenModel(pairedPrinter = printer))
+        val printer = if (status is PrinterStatus.Connected) status.printer.name else null
+        val defaultPrinterId = defaultsRepository.getDefaultPrinter()
+        val defaultPrinter = if (defaultPrinterId != null) printerRepository.getById(defaultPrinterId)?.model?.name else null
+
+        State.Success(
+            value = SettingsScreenModel(
+                defaultCategory = defaultCategory,
+                defaultPrinter = defaultPrinter,
+                pairedPrinter = printer
+            )
+        )
     },
     logger = logger
 ), SettingsScreenInteractor {
@@ -48,8 +51,9 @@ class SettingsScreenViewModel(
     init {
         initialize()
         defaultsFlow.onEach {
-            if(it is DefaultsEvent.Category)
-                initialize()
+            when (it) {
+                DefaultsEvent.Printer, DefaultsEvent.Category -> initialize()
+            }
         }.launchIn(viewModelScope)
         printerStatus.onEach { initialize() }.launchIn(viewModelScope)
     }
@@ -69,6 +73,12 @@ class SettingsScreenViewModel(
     override fun toPrinters() {
         launch {
             navigator.navigateToPrinters()
+        }
+    }
+
+    override fun toDefaultPrinter() {
+        launch {
+            navigator.navigateToDefaultPrinter()
         }
     }
 }

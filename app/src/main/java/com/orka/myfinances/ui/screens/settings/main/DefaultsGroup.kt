@@ -38,14 +38,14 @@ fun LazyListScope.DefaultsGroup(
     item {
         SettingsButton(
             modifier = Modifier.fillMaxWidth(),
-            title = "Default Printer",
+            title = stringResource(R.string.default_printer),
             topClipped = false,
             bottomClipped = true,
             value = str(state.value?.defaultPrinter, R.string.default_printer_is_not_set_yet),
             leadingIcon = painterResource(R.drawable.print),
-            enabled = false,
+            enabled = state is State.Success,
             error = !(loading || state.value?.defaultPrinter != null),
-            onClick = {}//TODO
+            onClick = interactor::toDefaultPrinter
         )
     }
 }

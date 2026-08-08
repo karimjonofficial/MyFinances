@@ -5,20 +5,15 @@ import com.orka.myfinances.application.adapters.PrintersDataSource
 import com.orka.myfinances.application.factories.HttpLogger
 import com.orka.myfinances.application.factories.httpClient
 import com.orka.myfinances.application.manager.navigation.NavigationManager
-import com.orka.myfinances.application.printer.PrinterManager
 import com.orka.myfinances.data.database.AppDatabase
 import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
-import com.orka.myfinances.format.Formatter
 import com.orka.myfinances.managers.SessionManager
 import com.orka.myfinances.runtime.SignedInRuntimeInitializer
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 class SignedInRuntimeInitializerImpl(
     private val database: AppDatabase,
     private val printersDataSource: PrintersDataSource,
-    private val formatter: Formatter,
     private val logger: Logger
 ) : SignedInRuntimeInitializer {
     private var factory: Factory? = null
@@ -28,18 +23,11 @@ class SignedInRuntimeInitializerImpl(
         val logger = HttpLogger(this.logger)
         val httpClient = httpClient(logger, session.credentials, manager::logout)
         val navigator = NavigationManager(this.logger).apply { navigator = this }
-        val printer = PrinterManager(
-            formatter = formatter,
-            scope = CoroutineScope(Dispatchers.Default),
-            printersDao = database.printersDao(),
-            logger = this.logger
-        )
 
         factory = Factory(
             session = session,
             httpClient = httpClient,
             database = database,
-            printer = printer,
             logger = this.logger,
             navigator = navigator,
             printersDataSource = printersDataSource,

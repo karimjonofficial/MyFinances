@@ -1,7 +1,8 @@
 package com.orka.myfinances.data.repositories.printer
 
-import com.orka.myfinances.data.models.printer.PrinterModel
+import com.orka.myfinances.data.dtos.printer.PrinterDto
 import com.orka.myfinances.lib.data.repositories.Get
+import com.orka.myfinances.lib.data.repositories.GetById
 import com.orka.myfinances.lib.data.repositories.Insert
 
-interface PrinterRepository : Get<PrinterModel>, Insert<AddPrinterRequest>
+interface PrinterRepository : Get<PrinterDto>, Insert<AddPrinterRequest>, GetById<PrinterDto>

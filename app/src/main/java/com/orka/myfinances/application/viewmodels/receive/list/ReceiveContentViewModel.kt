@@ -26,7 +26,7 @@ class ReceiveContentViewModel(
     logger: Logger
 ) : SearchableMapChunkViewModel<ReceiveDto, ReceiveUiModel>(
     get = getChunk,
-    searchRepository = searchChunk,
+    search = searchChunk,
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map =

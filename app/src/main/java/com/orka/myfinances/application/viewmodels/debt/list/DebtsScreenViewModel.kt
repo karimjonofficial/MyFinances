@@ -33,7 +33,7 @@ class DebtsScreenViewModel(
     private val navigator: Navigator
 ) : SearchableMapChunkViewModel<DebtDto, DebtUiModel>(
     get = getChunk,
-    searchRepository = searchChunk,
+    search = searchChunk,
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map = chunk.results

@@ -26,7 +26,7 @@ class SaleContentViewModel(
     logger: Logger
 ) : SearchableMapChunkViewModel<SaleDto, SaleUiModel>(
     get = getChunk,
-    searchRepository = searchChunk,
+    search = searchChunk,
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map = chunk.results.groupBy { sale -> sale.dateTime.toLocalDateTime(timeZone).date }

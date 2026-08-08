@@ -27,7 +27,7 @@ class StockItemsContentViewModel(
     logger: Logger
 ) : SearchableMapChunkViewModel<StockItemDto, StockItemUiModel>(
     get = { size, page -> getByCategory.getByCategory(size, page, categoryId, null) },
-    searchRepository = { size, page, q -> getByCategory.getByCategory(size, page, categoryId, q) },
+    search = { size, page, q -> getByCategory.getByCategory(size, page, categoryId, q) },
     map = { chunk ->
         val basketItems = basketRepository.get()
         val content = chunk.results

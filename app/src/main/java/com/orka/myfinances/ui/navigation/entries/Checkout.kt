@@ -38,7 +38,7 @@ fun checkoutEntry(
     val coroutineScope = rememberCoroutineScope()
 
     val selectedClient = retain { mutableStateOf<ClientItemModel?>(null) }
-    val printer = factory.printer()
+    val printer = factory.printerManager()
     val printerStatus = printer.status.collectAsState()
 
     CheckoutScreen(

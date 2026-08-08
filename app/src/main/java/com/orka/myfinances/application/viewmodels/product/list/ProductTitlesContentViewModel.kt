@@ -26,7 +26,7 @@ class ProductTitlesContentViewModel(
     logger: Logger
 ) : SearchableMapChunkViewModel<ProductTitleDto, ProductTitleUiModel>(
     get = { size, page -> getByCategory.getByCategory(size, page, categoryId, null) },
-    searchRepository = { size, page, q -> getByCategory.getByCategory(size, page, categoryId, q) },
+    search = { size, page, q -> getByCategory.getByCategory(size, page, categoryId, q) },
     map = { chunk ->
         val content = chunk.results
             .sortedBy(ProductTitleDto::name)

@@ -23,7 +23,7 @@ class ClientBottomSheetViewModel(
     logger: Logger
 ) : SearchableMapChunkViewModel<ClientDto, ClientItemModel>(
     get = getChunk,
-    searchRepository = searchChunk,
+    search = searchChunk,
     map = { chunk ->
         val map = chunk.results
             .sortedBy { it.firstName }

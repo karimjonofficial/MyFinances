@@ -131,6 +131,7 @@ fun ClientScreen(
                 content = { Text(text = stringResource(R.string.phone_number)) },
             )
 
+            VerticalSpacer(4)
             ListItem(
                 modifier = Modifier.clickable { },
                 leadingContent = {

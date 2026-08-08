@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.order.list.completed
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -27,11 +28,12 @@ fun OrdersHistoryContent(
         modifier = modifier,
         state = state,
         refresh = interactor::refresh,
+        contentPadding = PaddingValues(horizontal = 8.dp),
+        arrangementSpace = 2.dp,
         loadMore = {
             if (searchActive) interactor.searchMore()
             else interactor.loadMore()
         },
-        arrangementSpace = 8.dp,
         item = { item ->
             ListItem(
                 painter = painter,

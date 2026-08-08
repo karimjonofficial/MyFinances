@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.screens.debt.history
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,6 +22,8 @@ fun DebtsHistoryContent(
         modifier = modifier,
         state = state,
         refresh = interactor::refresh,
+        contentPadding = PaddingValues(horizontal = 8.dp),
+        arrangementSpace = 2.dp,
         loadMore = {
             if (searchActive) interactor.searchMore()
             else interactor.loadMore()

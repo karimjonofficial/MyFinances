@@ -1,11 +1,12 @@
 package com.orka.myfinances.application.printer
 
-import com.orka.myfinances.data.database.daos.PrinterDao
+import com.orka.myfinances.application.data.repositories.printer.PrinterRepository
 import com.orka.myfinances.data.dtos.sale.SaleDto
-import com.orka.myfinances.format.Formatter
+import com.orka.myfinances.data.repositories.defaults.GetDefaultPrinter
+import com.orka.myfinances.data.repositories.printer.AddPrinterRequest
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.printer.Printer
-import com.orka.myfinances.data.models.printer.PrinterModel
+import com.orka.myfinances.printer.PrinterModel
 import com.orka.myfinances.printer.PrinterStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,8 +23,8 @@ import kotlin.time.Duration.Companion.seconds
 
 class PrinterManager(
     private val logger: Logger,
-    private val formatter: Formatter,
-    private val printersDao: PrinterDao,
+    private val repository: PrinterRepository,
+    private val getDefaultPrinter: GetDefaultPrinter,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) : Printer {
     private val tag = "BluetoothPrinter"
@@ -31,6 +32,10 @@ class PrinterManager(
 
     private val _status = MutableStateFlow<PrinterStatus>(PrinterStatus.Disconnected)
     val status = _status.asStateFlow()
+
+    init {
+        connectToDefault()
+    }
 
     fun initialize() {
         scope.launch {
@@ -42,9 +47,21 @@ class PrinterManager(
     override fun connect(model: PrinterModel) {
         scope.launch {
             setState(PrinterStatus.Connecting)
-            if(printersDao.getAllPrinters().none { it.address == model.address })
-                printersDao.addPrinter(model.name, model.address)
+            val request = AddPrinterRequest(model.name, model.address)
+            repository.insert(request)
             tryToConnect(model)
+        }
+    }
+
+    override fun connectToDefault() {
+        scope.launch {
+            val id = getDefaultPrinter.getDefaultPrinter()
+            if(id != null) {
+                val dto = repository.getById(id)
+                if (dto != null) {
+                    connect(dto.model)
+                }
+            }
         }
     }
 
@@ -94,7 +111,7 @@ class PrinterManager(
 
                     sale.items.forEach { item ->
                         printer.printText(
-                            "${item.productName} x ${formatter.formatDecimal(item.amount.toDouble())}\n",
+                            "${item.productName} x ${item.amount}\n",
                             POSConst.ALIGNMENT_LEFT,
                             POSConst.FNT_DEFAULT,
                             POSConst.TXT_1WIDTH
@@ -108,7 +125,7 @@ class PrinterManager(
                         POSConst.TXT_1WIDTH
                     )
                         .printText(
-                            "TOTAL: ${formatter.formatDecimal(sale.price.toDouble())} UZS\n",
+                            "TOTAL: ${sale.price} UZS\n",
                             POSConst.ALIGNMENT_RIGHT,
                             POSConst.FNT_BOLD,
                             POSConst.TXT_2WIDTH or POSConst.TXT_1HEIGHT

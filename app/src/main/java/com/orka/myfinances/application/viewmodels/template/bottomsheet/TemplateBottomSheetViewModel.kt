@@ -23,7 +23,7 @@ class TemplateBottomSheetViewModel(
     logger: Logger
 ) : SearchableMapChunkViewModel<TemplateDto, TemplateItemModel>(
     get = getChunk,
-    searchRepository = searchChunk,
+    search = searchChunk,
     map = { chunk ->
         val map = chunk.results
             .sortedBy { it.name }

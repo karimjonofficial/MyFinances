@@ -1,6 +1,7 @@
 package com.orka.myfinances.ui.screens.settings.printers
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.Modifier
@@ -10,28 +11,28 @@ import com.orka.myfinances.lib.ui.components.SingleActionBottomBar
 import com.orka.myfinances.lib.ui.screens.SelectionScreen
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.printer.PrinterStatus
-import com.orka.myfinances.ui.models.ui.PrinterUiModel
+import com.orka.myfinances.ui.models.ui.BluetoothPrinterUiModel
 
 @Composable
 fun PrintersScreen(
     modifier: Modifier = Modifier,
-    state: State<Map<String, List<PrinterUiModel>>>,
+    state: State<Map<String, List<BluetoothPrinterUiModel>>>,
     printerStatus: PrinterStatus,
     interactor: PrintersInteractor
 ) {
-    val printer = retain(keys = arrayOf(printerStatus)) {
-        val value = if (printerStatus is PrinterStatus.Connected) {
-            val printer = printerStatus.printer
+    val printer = retain {
+        mutableStateOf<BluetoothPrinterUiModel?>(null)
+    }
 
-            PrinterUiModel(
-                title = printer.name,
-                description = printer.address,
+    LaunchedEffect(printerStatus) {
+        if(printerStatus is PrinterStatus.Connected) {
+            printer.value = BluetoothPrinterUiModel(
+                title = printerStatus.printer.name,
+                description = printerStatus.printer.address,
                 leadingIconRes = R.drawable.bluetooth_connected,
-                model = printer
+                model = printerStatus.printer
             )
-        } else null
-
-        mutableStateOf(value)
+        }
     }
 
     SelectionScreen(

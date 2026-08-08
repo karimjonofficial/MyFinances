@@ -2,7 +2,8 @@ package com.orka.myfinances.factories
 
 import com.orka.myfinances.application.adapters.PrintersDataSource
 import com.orka.myfinances.application.data.repositories.DefaultsRepository
-import com.orka.myfinances.application.data.repositories.PinnedCategoriesRepositoryImpl
+import com.orka.myfinances.application.data.repositories.PinnedCategoriesRepository
+import com.orka.myfinances.application.data.repositories.printer.PrinterRepository
 import com.orka.myfinances.application.printer.PrinterManager
 import com.orka.myfinances.application.viewmodels.basket.BasketContentViewModel
 import com.orka.myfinances.application.viewmodels.checkout.CheckoutScreenViewModel
@@ -21,7 +22,9 @@ import com.orka.myfinances.application.viewmodels.notification.NotificationsScre
 import com.orka.myfinances.application.viewmodels.order.details.OrderScreenViewModel
 import com.orka.myfinances.application.viewmodels.order.list.completed.OrdersHistoryContentViewModel
 import com.orka.myfinances.application.viewmodels.order.list.incompleted.OrdersListScreenViewModel
-import com.orka.myfinances.application.viewmodels.printers.PrintersViewModel
+import com.orka.myfinances.application.viewmodels.printers.DefaultPrinterViewModel
+import com.orka.myfinances.application.viewmodels.printers.BluetoothPrintersViewModel
+import com.orka.myfinances.application.viewmodels.printers.PrintersHistoryViewModel
 import com.orka.myfinances.application.viewmodels.product.add.AddProductTitleScreenViewModel
 import com.orka.myfinances.application.viewmodels.product.details.ProductTitleScreenViewModel
 import com.orka.myfinances.application.viewmodels.product.edit.EditProductTitleScreenViewModel
@@ -82,12 +85,13 @@ import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.managers.SessionManager
 import com.orka.myfinances.ui.navigation.Navigator
 import io.ktor.client.HttpClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class Factory(
     private val session: Session,
     httpClient: HttpClient,
-    private val printer: PrinterManager,
     private val logger: Logger,
     private val navigator: Navigator,
     private val sessionManager: SessionManager,
@@ -120,7 +124,7 @@ class Factory(
     private val defaultsDao = database.defaultsDao()
 
     private val basketRepository = BasketRepositoryImpl()
-    private val pinnedCategoriesRepository = PinnedCategoriesRepositoryImpl(pinnedCategoriesDao)
+    private val pinnedCategoriesRepository = PinnedCategoriesRepository(pinnedCategoriesDao)
     private val stockRepository = StockRepository(session.branchId, stockApi, stockFlow)
     private val folderRepository = FolderRepository(session.branchId, folderFlow, folderApi)
     private val templateRepository = TemplateRepository(session.branchId, templateApi, templateFlow)
@@ -134,6 +138,14 @@ class Factory(
     private val productTitleRepository = ProductTitleRepository(productTitleApi, productTitleFlow)
     private val saleRepository = SaleRepository(saleApi, saleFlow, stockFlow)
     private val defaultsRepository = DefaultsRepository(defaultsDao)
+    private val printerRepository = PrinterRepository(database.printersDao())
+
+    private val printer = PrinterManager(
+        scope = CoroutineScope(Dispatchers.Default),
+        repository = printerRepository,
+        getDefaultPrinter = defaultsRepository,
+        logger = this.logger
+    )
 
     fun foldersViewModel(): FoldersContentViewModel {
         return FoldersContentViewModel(
@@ -458,6 +470,7 @@ class Factory(
     fun settingsViewModel(): SettingsScreenViewModel {
         return SettingsScreenViewModel(
             defaultsRepository = defaultsRepository,
+            printerRepository = printerRepository,
             get = folderRepository,
             defaultsFlow = defaultsRepository.flow,
             navigator = navigator,
@@ -492,8 +505,8 @@ class Factory(
         )
     }
 
-    fun printersViewModel(): PrintersViewModel {
-        return PrintersViewModel(
+    fun bluetoothPrintersViewModel(): BluetoothPrintersViewModel {
+        return BluetoothPrintersViewModel(
             get = printersDataSource,
             printer = printer,
             flow = printer.status,
@@ -501,7 +514,26 @@ class Factory(
         )
     }
 
-    fun printer(): PrinterManager {
+    fun defaultPrinterViewModel(): DefaultPrinterViewModel {
+        return DefaultPrinterViewModel(
+            printerRepository = printerRepository,
+            getPrinter = defaultsRepository,
+            set = defaultsRepository,
+            defaultsFlow = defaultsRepository.flow,
+            printerFlow = printerRepository.flow,
+            logger = logger
+        )
+    }
+
+    fun printersViewModel(): PrintersHistoryViewModel {
+        return PrintersHistoryViewModel(
+            repository = printerRepository,
+            flow = printerRepository.flow,
+            logger = logger
+        )
+    }
+
+    fun printerManager(): PrinterManager {
         return printer
     }
 }

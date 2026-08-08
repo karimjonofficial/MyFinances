@@ -6,9 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.orka.myfinances.lib.ui.components.lazy.column.LazyColumnWithStickyHeader
 import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.TopAppBar
+import com.orka.myfinances.lib.ui.components.lazy.column.LazyColumnWithStickyHeader
 import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.state.State
@@ -43,6 +43,7 @@ fun <T> LazyColumnWithStickyHeaderScreen(
 fun <T> LazyColumnWithStickyHeaderScreen(
     modifier: Modifier = Modifier,
     topBar: @Composable (State<ChunkUiModel<T>>) -> Unit = {},
+    contentPadding: PaddingValues = PaddingValues(0.dp),
     arrangementSpace: Dp = 0.dp,
     state: State<ChunkUiModel<T>>,
     refresh: () -> Unit,
@@ -55,7 +56,7 @@ fun <T> LazyColumnWithStickyHeaderScreen(
     ) { paddingValues ->
         LazyColumnWithStickyHeaderContent(
             modifier = Modifier.padding(paddingValues),
-            contentPadding = PaddingValues(0.dp),
+            contentPadding = contentPadding,
             arrangementSpace = arrangementSpace,
             state = state,
             refresh = refresh,
@@ -69,6 +70,7 @@ fun <T> LazyColumnWithStickyHeaderScreen(
 fun <T> LazyColumnWithStickyHeaderScreen(
     modifier: Modifier = Modifier,
     topBar: @Composable (State<ChunkUiModel<T>>) -> Unit = {},
+    contentPadding: PaddingValues = PaddingValues(horizontal = 0.dp),
     arrangementSpace: Dp = 0.dp,
     state: State<ChunkUiModel<T>>,
     refresh: () -> Unit,
@@ -83,7 +85,7 @@ fun <T> LazyColumnWithStickyHeaderScreen(
     ) { paddingValues ->
         LazyColumnWithStickyHeaderContent(
             modifier = Modifier.padding(paddingValues),
-            contentPadding = PaddingValues(0.dp),
+            contentPadding = contentPadding,
             arrangementSpace = arrangementSpace,
             state = state,
             refresh = refresh,

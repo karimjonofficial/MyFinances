@@ -24,7 +24,7 @@ class OrdersListScreenViewModel(
     logger: Logger
 ) : SearchableMapChunkViewModel<OrderDto, OrderUiModel>(
     get = { size, page -> getOrdersChunk.getOrdersChunk(size, page, false, null) },
-    searchRepository = { size, page, query -> getOrdersChunk.getOrdersChunk(size, page, false, query) },
+    search = { size, page, query -> getOrdersChunk.getOrdersChunk(size, page, false, query) },
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map =

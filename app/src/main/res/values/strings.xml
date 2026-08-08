@@ -214,4 +214,5 @@
     <string name="printer_is_not_paired">Printer is not paired</string>
     <string name="printers">Printers</string>
     <string name="connect">Connect</string>
+    <string name="default_printer">Default printer</string>
 </resources>

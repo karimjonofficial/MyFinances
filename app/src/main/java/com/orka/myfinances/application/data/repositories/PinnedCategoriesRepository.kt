@@ -3,13 +3,14 @@ package com.orka.myfinances.application.data.repositories
 import com.orka.myfinances.data.database.daos.PinnedCategoriesDao
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.preferences.categories.AddPinnedCategoryRequest
+import com.orka.myfinances.data.repositories.preferences.categories.PinnedCategoriesEvent
 import com.orka.myfinances.data.repositories.preferences.categories.PinnedCategoriesRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asFlow
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class PinnedCategoriesRepositoryImpl(private val dao: PinnedCategoriesDao) : PinnedCategoriesRepository {
+class PinnedCategoriesRepository(private val dao: PinnedCategoriesDao) : PinnedCategoriesRepository {
     private val flow = MutableSharedFlow<PinnedCategoriesEvent>()
     val events = flow.asFlow()
 

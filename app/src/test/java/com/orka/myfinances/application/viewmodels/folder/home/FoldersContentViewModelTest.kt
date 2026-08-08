@@ -1,6 +1,6 @@
 package com.orka.myfinances.application.viewmodels.folder.home
 
-import com.orka.myfinances.application.data.repositories.PinnedCategoriesEvent
+import com.orka.myfinances.data.repositories.preferences.categories.PinnedCategoriesEvent
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.defaults.GetDefaultCategory
 import com.orka.myfinances.data.repositories.folder.AddFolderRequest

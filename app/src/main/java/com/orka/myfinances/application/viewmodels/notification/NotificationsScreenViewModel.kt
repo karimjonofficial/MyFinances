@@ -22,7 +22,7 @@ class NotificationsScreenViewModel(
     logger: Logger,
 ) : SearchableMapChunkViewModel<NotificationDto, NotificationUiModel>(
     get = getChunk,
-    searchRepository = searchChunk,
+    search = searchChunk,
     map = { chunk ->
         val timeZone = TimeZone.currentSystemDefault()
         val map = chunk.results

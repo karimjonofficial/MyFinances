@@ -140,4 +140,8 @@ class NavigationManager(
     override fun navigateToPrinters() {
         navigate(SettingsDestinations.Printer)
     }
+
+    override fun navigateToDefaultPrinter() {
+        navigate(DefaultsSettings.Printer)
+    }
 }

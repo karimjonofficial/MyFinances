@@ -1,7 +1,7 @@
 package com.orka.myfinances.application.viewmodels.select
 
 import androidx.lifecycle.viewModelScope
-import com.orka.myfinances.application.data.repositories.PinnedCategoriesEvent
+import com.orka.myfinances.data.repositories.preferences.categories.PinnedCategoriesEvent
 import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.preferences.categories.AddPinnedCategoryRequest
 import com.orka.myfinances.data.repositories.preferences.categories.PinnedCategoriesRepository

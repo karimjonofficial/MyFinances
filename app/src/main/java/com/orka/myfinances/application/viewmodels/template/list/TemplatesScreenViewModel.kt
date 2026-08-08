@@ -25,7 +25,7 @@ class TemplatesScreenViewModel(
     logger: Logger
 ) : SearchableMapChunkViewModel<TemplateDto, TemplateUiModel>(
     get = getChunk,
-    searchRepository = searchChunk,
+    search = searchChunk,
     map = { chunk ->
         val map = chunk.results
             .sortedBy { it.name }

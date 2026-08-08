@@ -21,9 +21,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val app = application as MyFinancesApplication
-            val manager = viewModel {
-                app.manager(this@MainActivity)
-            }
+            val manager = viewModel { app.manager() }
             val uiState = manager.uiState.collectAsState()
 
             MyFinancesTheme {

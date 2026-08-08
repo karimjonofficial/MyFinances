@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 abstract class SearchableMapChunkViewModel<TData, TUi>(
     get: GetChunk<TData>,
-    private val searchRepository: SearchChunk<TData>,
+    private val search: SearchChunk<TData>,
     map: suspend (Chunk<TData>) -> ChunkUiModel<TUi>,
     exceptionMapper: ExceptionMapper<ChunkUiModel<TUi>> = NetworkExceptionMapper(),
     logger: Logger
@@ -37,7 +37,7 @@ abstract class SearchableMapChunkViewModel<TData, TUi>(
             loadingState = { oldState -> State.Loading(status = Search, value = oldState.value) }
         ) { oldState ->
             if(query.isNotEmpty()) {
-                val chunk = searchRepository.searchChunk(10, 1, query)
+                val chunk = search.searchChunk(10, 1, query)
                 if (chunk != null) {
                     val map = map(chunk)
                     queryState.value = query
@@ -52,7 +52,7 @@ abstract class SearchableMapChunkViewModel<TData, TUi>(
             if(oldState is State.Success) {
                 if (queryState.value != null) {
                     val index = oldState.value.pageIndex
-                    val chunk = searchRepository.searchChunk(10, index + 1, queryState.value!!)
+                    val chunk = search.searchChunk(10, index + 1, queryState.value!!)
                     if (chunk != null) {
                         val map = map(chunk)
                         val oldMap = oldState.value.content

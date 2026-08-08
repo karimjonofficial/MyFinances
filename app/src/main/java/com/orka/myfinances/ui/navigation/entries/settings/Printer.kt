@@ -16,10 +16,10 @@ fun printerEntry(
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val viewModel = viewModel {
-        factory.printersViewModel()
+        factory.bluetoothPrintersViewModel()
     }
     val state = viewModel.uiState.collectAsState()
-    val printer = factory.printer()
+    val printer = factory.printerManager()
     val printerStatus = printer.status.collectAsState()
 
     PrintersScreen(
