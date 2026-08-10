@@ -54,7 +54,7 @@ fun entryProvider(
         is Destination.History -> historyEntry(modifier, destination, session, factory)
         is Destination.Checkout -> checkoutEntry(modifier, destination, session, factory)
         is Destination.AddStockItem -> addReceiveEntry(modifier, destination, session, factory)
-        is Destination.Search -> searchEntry(modifier, session, destination)
+        is Destination.Search -> searchEntry(modifier, destination)
         is Destination.Sale -> saleEntry(modifier, destination, session, factory)
         is Destination.Receive -> receiveEntry(modifier, session, factory, destination)
 

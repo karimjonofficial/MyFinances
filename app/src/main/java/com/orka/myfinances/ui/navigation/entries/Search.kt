@@ -9,7 +9,6 @@ import com.orka.myfinances.ui.screens.search.SearchScreen
 
 fun searchEntry(
     modifier: Modifier = Modifier,
-    session: Session,
     destination: Destination.Search
 ): NavEntry<Destination> = entry(destination) {
     SearchScreen(modifier)
