@@ -83,7 +83,7 @@ fun homeEntry(
                         ids.forEach {
                             item {
                                 val viewModel = viewModel(
-                                    key = "stock_${it.value}",
+                                    key = "stock_${it.value}_${branchId}",
                                     initializer = { factory.stockItemsViewModel(it) }
                                 )
                                 val state = viewModel.uiState.collectAsState()

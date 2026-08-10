@@ -48,50 +48,50 @@ fun entryProvider(
 ): NavEntry<Destination> {
     return when(destination) {
         is Destination.Home -> homeEntry(modifier, destination, session, factory)
-        is Destination.Catalog -> catalogEntry(modifier, destination, factory)
-        is Destination.Category -> categoryEntry(modifier, destination, factory)
-        is Destination.Notifications -> notificationsEntry(modifier, destination, factory)
-        is Destination.History -> historyEntry(modifier, destination, factory)
-        is Destination.Checkout -> checkoutEntry(modifier, destination, factory)
-        is Destination.AddStockItem -> addReceiveEntry(modifier, destination, factory)
-        is Destination.Search -> searchEntry(modifier, destination)
-        is Destination.Sale -> saleEntry(modifier, destination, factory)
-        is Destination.Receive -> receiveEntry(modifier, factory, destination)
+        is Destination.Catalog -> catalogEntry(modifier, session, destination, factory)
+        is Destination.Category -> categoryEntry(modifier, destination, session, factory)
+        is Destination.Notifications -> notificationsEntry(modifier, destination, session, factory)
+        is Destination.History -> historyEntry(modifier, destination, session, factory)
+        is Destination.Checkout -> checkoutEntry(modifier, destination, session, factory)
+        is Destination.AddStockItem -> addReceiveEntry(modifier, destination, session, factory)
+        is Destination.Search -> searchEntry(modifier, session, destination)
+        is Destination.Sale -> saleEntry(modifier, destination, session, factory)
+        is Destination.Receive -> receiveEntry(modifier, session, factory, destination)
 
         is TemplateDestinations -> {
             when(destination) {
-                is TemplateDestinations.Add -> addTemplateEntry(modifier, destination, factory)
-                is TemplateDestinations.List -> templatesEntry(modifier, destination, factory)
-                is TemplateDestinations.Details -> templateEntry(modifier, destination, factory)
+                is TemplateDestinations.Add -> addTemplateEntry(modifier, destination, session, factory)
+                is TemplateDestinations.List -> templatesEntry(modifier, destination, session, factory)
+                is TemplateDestinations.Details -> templateEntry(modifier, destination, session, factory)
             }
         }
 
         is ProductTitleDestinations -> {
             when(destination) {
-                is ProductTitleDestinations.Add -> addProductEntry(modifier, destination, factory)
-                is ProductTitleDestinations.Edit -> editProductEntry(modifier, destination, factory)
-                is ProductTitleDestinations.List -> productTitleEntry(modifier, destination, factory)
+                is ProductTitleDestinations.Add -> addProductEntry(modifier, destination, session, factory)
+                is ProductTitleDestinations.Edit -> editProductEntry(modifier, destination, session, factory)
+                is ProductTitleDestinations.List -> productTitleEntry(modifier, destination, session, factory)
             }
         }
 
         is ClientDestinations -> {
             when(destination) {
-                is ClientDestinations.List -> clientsEntry(modifier, destination, factory)
-                is ClientDestinations.Details -> clientEntry(modifier, destination, factory)
+                is ClientDestinations.List -> clientsEntry(modifier, destination, session, factory)
+                is ClientDestinations.Details -> clientEntry(modifier, session, destination, factory)
             }
         }
 
         is OrderDestinations -> {
             when(destination) {
-                is OrderDestinations.List -> ordersEntry(modifier, destination, factory)
-                is OrderDestinations.Details -> orderEntry(modifier, destination, factory)
+                is OrderDestinations.List -> ordersEntry(modifier, destination, session, factory)
+                is OrderDestinations.Details -> orderEntry(modifier, destination, session, factory)
             }
         }
 
         is DebtDestinations -> {
             when(destination) {
-                is DebtDestinations.List -> debtsEntry(modifier, destination, factory)
-                is DebtDestinations.Details -> debtEntry(modifier, destination, factory)
+                is DebtDestinations.List -> debtsEntry(modifier, destination, session, factory)
+                is DebtDestinations.Details -> debtEntry(modifier, destination, session, factory)
             }
         }
 
@@ -99,19 +99,19 @@ fun entryProvider(
             when(destination) {
                 is HomeSettings -> {
                     when(destination) {
-                        is HomeSettings.PinnedCategories -> pinnedCategoriesEntry(modifier, destination, factory)
+                        is HomeSettings.PinnedCategories -> pinnedCategoriesEntry(modifier, destination, session, factory)
                     }
                 }
 
                 is DefaultsSettings -> {
                     when(destination) {
-                        is DefaultsSettings.Category -> selectDefaultCategoryEntry(modifier, destination, factory)
-                        is DefaultsSettings.Printer -> defaultPrinterEntry(modifier, destination, factory)
+                        is DefaultsSettings.Category -> selectDefaultCategoryEntry(modifier, destination, session, factory)
+                        is DefaultsSettings.Printer -> defaultPrinterEntry(modifier, destination, session, factory)
                     }
                 }
 
-                is SettingsDestinations.Main -> settingsEntry(modifier, destination, factory)
-                is SettingsDestinations.Printer -> printerEntry(modifier, destination, factory)
+                is SettingsDestinations.Main -> settingsEntry(modifier, destination, session, factory)
+                is SettingsDestinations.Printer -> printerEntry(modifier, destination, session, factory)
             }
         }
     }

@@ -16,6 +16,7 @@ class SelectBranchScreenViewModelFactory(
     fun get(companyId: Id): SelectBranchScreenViewModel {
         val branchApi = BranchApi(httpClient)
         val repository = BranchRepository(companyId, branchApi)
+
         return SelectBranchScreenViewModel(
             getBranches = repository,
             getById = repository,

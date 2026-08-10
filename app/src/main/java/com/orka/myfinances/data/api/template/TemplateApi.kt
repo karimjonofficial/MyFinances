@@ -15,10 +15,11 @@ class TemplateApi(
     suspend fun getChunk(
         page: Int,
         pageSize: Int,
+        branchId: Int,
         search: String? = null,
         ordering: String? = null,
         fields: List<Int>? = null,
-        name: String? = null
+        name: String? = null,
     ): ChunkApiModel<TemplateApiModel>? {
         return httpClient.getChunk(
             baseUrl = baseUrl,
@@ -28,7 +29,8 @@ class TemplateApi(
             ordering = ordering,
             extraParameters = mapOf(
                 "fields" to fields,
-                "name" to name
+                "name" to name,
+                "branch" to branchId
             )
         )
     }

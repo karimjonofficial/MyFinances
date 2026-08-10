@@ -11,6 +11,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
+import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.navigation.destination.DebtDestinations
@@ -25,12 +26,21 @@ import kotlinx.coroutines.launch
 fun debtsEntry(
     modifier: Modifier,
     destination: DebtDestinations.List,
+    session: Session,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
-    val viewModel = viewModel { factory.debtsViewModel() }
-    val clientSheetViewModel = viewModel { factory.clientBottomSheetViewModel() }
+    val viewModel = viewModel(
+        key = "debts_${session.branchId.value}",
+        initializer = { factory.debtsViewModel() }
+    )
+    val clientSheetViewModel = viewModel(
+        key = "clients_${session.branchId.value}",
+        initializer = { factory.clientBottomSheetViewModel() }
+    )
+
     val state = viewModel.uiState.collectAsState()
     val clientSheetState = clientSheetViewModel.uiState.collectAsState()
+
     val dialogVisible = rememberSaveable { mutableStateOf(false) }
     val clientSheetVisible = rememberSaveable { mutableStateOf(false) }
     val selectedClient = retain { mutableStateOf<ClientItemModel?>(null) }

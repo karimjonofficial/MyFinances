@@ -31,7 +31,7 @@ class MapSingleByIdViewModelTest : MainDispatcherContext() {
         logger = logger
     ) {
         val uiState = state.asStateFlow()
-        
+
         fun start() {
             initialize()
         }

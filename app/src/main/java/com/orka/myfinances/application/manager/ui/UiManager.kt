@@ -131,7 +131,7 @@ class UiManager(
                 }
             }
         } catch (e: Exception) {
-            setState(UiState.Failure(FailureStatus.Exception(e.message.toString())))
+            setState(UiState.Failure(FailureStatus.Exception(e)))
         }
     }
 }

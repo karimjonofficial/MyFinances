@@ -33,6 +33,7 @@ fun SettingsButton(
     error: Boolean,
     onClick: () -> Unit
 ) {
+    val radiusPercentage = 25
     val valueColor = if(enabled) {
         if(!error) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
     } else {
@@ -40,9 +41,9 @@ fun SettingsButton(
     }
 
     val shape = when {
-        topClipped && bottomClipped -> RoundedCornerShape(50)
-        topClipped -> RoundedCornerShape(topStartPercent = 50, topEndPercent = 50)
-        bottomClipped -> RoundedCornerShape(bottomStartPercent = 50, bottomEndPercent = 50)
+        topClipped && bottomClipped -> RoundedCornerShape(radiusPercentage)
+        topClipped -> RoundedCornerShape(topStartPercent = radiusPercentage, topEndPercent = radiusPercentage)
+        bottomClipped -> RoundedCornerShape(bottomStartPercent = radiusPercentage, bottomEndPercent = radiusPercentage)
         else -> RoundedCornerShape(0.dp)
     }
 

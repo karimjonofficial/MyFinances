@@ -215,4 +215,5 @@
     <string name="printers">Printers</string>
     <string name="connect">Connect</string>
     <string name="default_printer">Default printer</string>
+    <string name="branches">Branches</string>
 </resources>

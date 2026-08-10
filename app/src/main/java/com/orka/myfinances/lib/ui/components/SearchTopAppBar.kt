@@ -12,6 +12,8 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,12 +47,17 @@ fun SearchTopAppBar(
         BackHandler(onBack = closeSearch)
     }
 
+    val currentSearchText by rememberUpdatedState(searchText)
+    val currentOnSearch by rememberUpdatedState(onSearch)
+
     LaunchedEffect(searchMode) {
         if (searchMode) {
-            snapshotFlow { searchText }
+            snapshotFlow { currentSearchText }
                 .drop(1)
                 .debounce(300.milliseconds)
-                .collect { onSearch(it) }
+                .collect {
+                    currentOnSearch(it)
+                }
         }
     }
 

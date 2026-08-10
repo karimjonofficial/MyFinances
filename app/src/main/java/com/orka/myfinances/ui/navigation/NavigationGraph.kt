@@ -28,9 +28,9 @@ fun NavigationGraph(
     navigator: Navigator,
     factory: Factory
 ) {
-    val prevBackStackSize = remember { mutableIntStateOf(backStack.size) }
+    val prevBackStackSize = remember(session.branchId.value) { mutableIntStateOf(backStack.size) }
 
-    val lastActionWasPop = remember(backStack) {
+    val lastActionWasPop = remember(backStack, session.branchId.value) {
         val isPop = backStack.size < prevBackStackSize.intValue
         prevBackStackSize.intValue = backStack.size
         isPop
@@ -52,7 +52,7 @@ fun NavigationGraph(
                 val lifecycleOwner = LocalLifecycleOwner.current
                 val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
                 val isTransitioning = lifecycleState == Lifecycle.State.STARTED
-                
+
                 Box(Modifier.fillMaxSize()) {
                     originalEntry.Content()
 

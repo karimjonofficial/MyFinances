@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
+import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.navigation.destination.Destination
@@ -21,18 +22,19 @@ import com.orka.myfinances.ui.screens.stock.StockItemsContent
 fun categoryEntry(
     modifier: Modifier,
     destination: Destination.Category,
+    session: Session,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val categoryViewModel = viewModel(
-        key = "${destination.id.value}",
+        key = "${destination.id.value}_${session.branchId.value}",
         initializer = { factory.categoryViewModel(destination.id) }
     )
     val stockViewModel = viewModel(
-        key = "stock_${destination.id.value}",
+        key = "stock_${destination.id.value}_${session.branchId.value}",
         initializer = { factory.stockItemsViewModel(destination.id) }
     )
     val productViewModel = viewModel(
-        key = "products_${destination.id.value}",
+        key = "products_${destination.id.value}_${session.branchId.value}",
         initializer = { factory.productTitlesViewModel(destination.id) }
     )
 

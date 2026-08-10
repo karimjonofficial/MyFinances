@@ -1,6 +1,7 @@
 package com.orka.myfinances.data.api.debt
 
 import com.orka.myfinances.data.api.debt.models.response.DebtApiModel
+import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.lib.data.http.getById
 import com.orka.myfinances.lib.data.http.getChunk
 import com.orka.myfinances.lib.data.http.insert

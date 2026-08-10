@@ -21,7 +21,7 @@ class BaseViewModelTest : MainDispatcherContext() {
         logger: Logger
     ) : BaseViewModel<String>(produceSuccess, ExceptionMapper.Default(), logger) {
         val uiState = state.asStateFlow()
-        
+
         fun start() {
             initialize()
         }

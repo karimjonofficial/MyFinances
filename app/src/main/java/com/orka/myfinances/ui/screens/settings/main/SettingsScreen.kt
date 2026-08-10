@@ -35,15 +35,18 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surfaceContainer)
                 .padding(paddingValues),
-            contentPadding = PaddingValues(horizontal = 8.dp)
+            contentPadding = PaddingValues(horizontal = 6.dp)
         ) {
-            item { VerticalSpacer(16) }
+            val topSpace = 12
+            val gapBetweenGroups = 8
+
+            item { VerticalSpacer(topSpace) }
             DefaultsGroup(interactor, state)
 
-            item { VerticalSpacer(8) }
+            item { VerticalSpacer(gapBetweenGroups) }
             HomeContentGroup(interactor, state)
 
-            item { VerticalSpacer(8) }
+            item { VerticalSpacer(gapBetweenGroups) }
             PrinterGroup(interactor, state)
 
             LazyFooterSpacer()

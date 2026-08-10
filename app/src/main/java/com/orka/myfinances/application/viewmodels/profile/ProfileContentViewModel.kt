@@ -47,11 +47,17 @@ class ProfileContentViewModel(
     }
 
     override fun history() {
-        launch { navigator.navigateToHistory() }
+        launch {
+            navigator.navigateToHistory()
+        }
     }
 
     override fun settings() {
-        launch { navigator.navigateToSettings() }
+        launch {
+            logger.log("ProfileInteractor", "Value: ${this@ProfileContentViewModel}")
+            logger.log("ProfileInteractor", "Navigator: $navigator")
+            navigator.navigateToSettings()
+        }
     }
 
     override fun setBranch(branch: BranchItemModel) {

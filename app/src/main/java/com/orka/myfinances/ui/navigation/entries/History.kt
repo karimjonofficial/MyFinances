@@ -7,6 +7,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
 import com.orka.myfinances.R
+import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.lib.ui.models.Tab
@@ -20,6 +21,7 @@ import com.orka.myfinances.ui.screens.sale.list.SaleContent
 fun historyEntry(
     modifier: Modifier,
     destination: Destination.History,
+    session: Session,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val tabs = listOf(
@@ -40,10 +42,22 @@ fun historyEntry(
             title = stringResource(R.string.debts)
         )
     )
-    val saleViewModel = viewModel { factory.salesViewModel() }
-    val receiveViewModel = viewModel { factory.receivesViewModel() }
-    val ordersViewModel = viewModel { factory.ordersHistoryViewModel()}
-    val debtsViewModel = viewModel { factory.debtHistoryViewModel()}
+    val saleViewModel = viewModel(
+        key = "sale_${session.branchId.value}",
+        initializer = { factory.salesViewModel() }
+    )
+    val receiveViewModel = viewModel(
+        key = "receive_${session.branchId.value}",
+        initializer = { factory.receivesViewModel() }
+    )
+    val ordersViewModel = viewModel(
+        key = "orders_${session.branchId.value}",
+        initializer = { factory.ordersHistoryViewModel() }
+    )
+    val debtsViewModel = viewModel(
+        key = "debts_${session.branchId.value}",
+        initializer = { factory.debtHistoryViewModel() }
+    )
 
     val receiveState = receiveViewModel.uiState.collectAsState()
     val saleState = saleViewModel.uiState.collectAsState()

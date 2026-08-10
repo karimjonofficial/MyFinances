@@ -11,6 +11,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
+import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.models.item.ClientItemModel
@@ -24,10 +25,11 @@ import kotlinx.coroutines.launch
 fun checkoutEntry(
     modifier: Modifier = Modifier,
     destination: Destination.Checkout,
+    session: Session,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val viewModel = viewModel(
-        key = destination.index.toString(),
+        key = "checkout_${destination.index}_${session.branchId.value}",
         initializer = { factory.checkoutViewModel() }
     )
     val state = viewModel.uiState.collectAsState()
@@ -53,7 +55,7 @@ fun checkoutEntry(
 
     if (dialogVisible.value) {
         val dialogViewModel = viewModel(
-            key = "dialog_${destination.index}",
+            key = "dialog_${destination.index}_${session.branchId.value}",
             initializer = { factory.addClientViewModel() }
         )
         AddClientDialog(
@@ -63,7 +65,10 @@ fun checkoutEntry(
     }
 
     if (sheetVisible.value) {
-        val clientSheetViewModel = viewModel { factory.clientBottomSheetViewModel() }
+        val clientSheetViewModel = viewModel(
+            key = "clients_${destination.index}_${session.branchId.value}",
+            initializer = { factory.clientBottomSheetViewModel() }
+        )
         val clientSheetState = clientSheetViewModel.uiState.collectAsState()
 
         SelectClientBottomSheet(

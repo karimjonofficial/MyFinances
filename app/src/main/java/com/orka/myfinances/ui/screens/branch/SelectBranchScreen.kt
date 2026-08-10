@@ -28,7 +28,7 @@ fun SelectBranchScreen(
         modifier = modifier,
         topBar = {
             SearchTopAppBar(
-                title = stringResource(R.string.clients),
+                title = stringResource(R.string.branches),
                 onSearch = interactor::search,
                 searchMode = searchMode.value,
                 onSearchModeChange = { searchMode.value = it },
@@ -41,7 +41,7 @@ fun SelectBranchScreen(
         bottomBar = { state ->
             SingleActionBottomBar(
                 buttonText = stringResource(R.string.save),
-                buttonEnabled = state !is State.Loading,
+                buttonEnabled = state !is State.Loading && officeId.value != null,
                 action = {
                     val id = officeId.value
                     if (id != null) interactor.select(id)

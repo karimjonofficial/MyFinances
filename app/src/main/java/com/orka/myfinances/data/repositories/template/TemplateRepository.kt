@@ -33,7 +33,8 @@ class TemplateRepository(
             page = page,
             pageSize = size,
             search = query,
-            ordering = "name"
+            ordering = "name",
+            branchId = branchId.value
         )?.toChunk { it.toDto() }
     }
 

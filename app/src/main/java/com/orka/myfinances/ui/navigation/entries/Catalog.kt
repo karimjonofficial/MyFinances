@@ -11,6 +11,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
+import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.components.dialogs.AddFolderDialog
@@ -23,15 +24,16 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 fun catalogEntry(
     modifier: Modifier,
+    session: Session,
     destination: Destination.Catalog,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val viewModel = viewModel(
-        key = "screen_${destination.id.value}",
+        key = "screen_${destination.id.value}_${session.branchId.value}",
         initializer = { factory.catalogViewModel(destination.id) }
     )
     val sheetViewModel = viewModel(
-        key = "sheet_${destination.id.value}",
+        key = "sheet_${destination.id.value}_${session.branchId.value}",
         initializer = { factory.templateBottomSheetViewModel() }
     )
     val uiState = viewModel.uiState.collectAsState()

@@ -14,7 +14,7 @@ abstract class BaseViewModel<T>(
     initialState = State.Loading(LoadingStatus.Initial),
     logger = logger
 ) {
-    protected fun initialize() {
+    fun initialize() {
         launch {
             tryToInitialize()
         }

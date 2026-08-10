@@ -11,6 +11,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
+import com.orka.myfinances.data.models.Session
 import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.models.item.ProductTitleItemModel
@@ -23,6 +24,7 @@ import kotlinx.coroutines.launch
 fun addReceiveEntry(
     modifier: Modifier,
     destination: Destination.AddStockItem,
+    session: Session,
     factory: Factory
 ): NavEntry<Destination> = entry(destination) {
     val sheetVisible = rememberSaveable { mutableStateOf(false) }
@@ -30,11 +32,11 @@ fun addReceiveEntry(
     val coroutineScope = rememberCoroutineScope()
 
     val viewModel = viewModel(
-        key = "${destination.id.value}",
+        key = "addReceive_${destination.id.value}_${session.branchId.value}",
         initializer = { factory.addReceiveViewModel(destination.id) }
     )
     val sheetViewModel = viewModel(
-        key = "product-title-sheet-${destination.id.value}",
+        key = "product-title-sheet-${destination.id.value}_${session.branchId.value}",
         initializer = { factory.productTitleBottomSheetViewModel(destination.id) }
     )
     val state = viewModel.uiState.collectAsState()

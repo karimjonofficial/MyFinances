@@ -37,7 +37,7 @@ class MapChunkViewModelTest : MainDispatcherContext() {
         logger = logger
     ) {
         val uiState = state.asStateFlow()
-        
+
         fun start() {
             initialize()
         }
@@ -105,7 +105,7 @@ class MapChunkViewModelTest : MainDispatcherContext() {
         advanceUntilIdle()
 
         val chunk2 = Chunk(2, 2, null, 1, listOf("Item 2"))
-        coEvery { getChunk.getChunk(1, 2) } returns chunk2 
+        coEvery { getChunk.getChunk(1, 2) } returns chunk2
 
         viewModel.loadMore()
         advanceUntilIdle()
