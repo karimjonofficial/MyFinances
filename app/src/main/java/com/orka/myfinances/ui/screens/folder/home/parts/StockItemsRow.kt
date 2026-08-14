@@ -39,7 +39,7 @@ fun StockItemsRow(
         )
 
         VerticalSpacer(12)
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             if (chunk != null) {
                 val items = chunk.content.values.flatten()
 
