@@ -8,7 +8,6 @@ import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.SearchChunk
 import com.orka.myfinances.lib.data.repositories.Insert
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
-import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.viewmodel.sourceful.chunk.SearchableMapChunkViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
@@ -29,20 +28,8 @@ class ClientsScreenViewModel(
 ) : SearchableMapChunkViewModel<ClientDto, ClientUiModel>(
     get = getChunk,
     search = searchChunk,
-    map = { chunk ->
-        val map = chunk.results
-            .sortedBy { it.firstName }
-            .groupBy { it.firstName.stickyHeaderKey() }
-            .mapValues { it.value.map { client -> client.toUiModel() } }
-
-        ChunkUiModel(
-            size = chunk.count,
-            pageIndex = chunk.pageIndex,
-            nextPageIndex = chunk.nextPageIndex,
-            previousPageIndex = chunk.previousPageIndex,
-            content = map
-        )
-    },
+    map = { it.toUiModel() },
+    groupBy = { it.firstName.stickyHeaderKey() },
     logger = logger
 ), ClientsScreenInteractor {
     val uiState = state.asStateFlow()

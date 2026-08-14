@@ -38,7 +38,7 @@ fun ProfileOptionButton(
         Icon(
             painter = painter,
             contentDescription = title,
-            tint = MaterialTheme.colorScheme.primary
+            tint = MaterialTheme.colorScheme.secondary
         )
 
         HorizontalSpacer(16)

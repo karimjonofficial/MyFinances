@@ -1,11 +1,9 @@
 package com.orka.myfinances.ui.screens.receive.list
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.orka.myfinances.fixtures.resources.models.receive.receives
 import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
@@ -27,8 +25,6 @@ fun ReceiveContent(
         modifier = modifier,
         state = state,
         refresh = interactor::refresh,
-        contentPadding = PaddingValues(horizontal = 8.dp),
-        arrangementSpace = 2.dp,
         loadMore = {
             if (searchActive) interactor.searchMore()
             else interactor.loadMore()

@@ -4,7 +4,6 @@ import com.orka.myfinances.data.dtos.notification.NotificationDto
 import com.orka.myfinances.data.repositories.notification.ReadNotification
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.SearchChunk
-import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.lib.viewmodel.sourceful.chunk.SearchableMapChunkViewModel
 import com.orka.myfinances.logger.Logger
@@ -23,21 +22,8 @@ class NotificationsScreenViewModel(
 ) : SearchableMapChunkViewModel<NotificationDto, NotificationUiModel>(
     get = getChunk,
     search = searchChunk,
-    map = { chunk ->
-        val timeZone = TimeZone.currentSystemDefault()
-        val map = chunk.results
-            .groupBy { it.dateTime.toLocalDateTime(timeZone).date }
-            .mapKeys { it.key.toString() }
-            .mapValues { it.value.map { model -> model.toUiModel() } }
-
-        ChunkUiModel(
-            size = chunk.count,
-            pageIndex = chunk.pageIndex,
-            nextPageIndex = chunk.nextPageIndex,
-            previousPageIndex = chunk.previousPageIndex,
-            content = map
-        )
-    },
+    map = { it.toUiModel() },
+    groupBy = { it.dateTime.toLocalDateTime(TimeZone.currentSystemDefault()).date.toString() },
     logger = logger
 ), NotificationsScreenInteractor {
     val uiState = state.asStateFlow()

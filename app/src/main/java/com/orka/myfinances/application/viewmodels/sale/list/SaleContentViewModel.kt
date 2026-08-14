@@ -5,7 +5,6 @@ import com.orka.myfinances.data.dtos.sale.SaleDto
 import com.orka.myfinances.data.repositories.sale.SaleEvent
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.SearchChunk
-import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.viewmodel.sourceful.chunk.SearchableMapChunkViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
@@ -27,22 +26,8 @@ class SaleContentViewModel(
 ) : SearchableMapChunkViewModel<SaleDto, SaleUiModel>(
     get = getChunk,
     search = searchChunk,
-    map = { chunk ->
-        val timeZone = TimeZone.currentSystemDefault()
-        val map = chunk.results.groupBy { sale -> sale.dateTime.toLocalDateTime(timeZone).date }
-            .mapKeys { entry -> entry.key.toString() }
-            .mapValues { entry ->
-                entry.value.map { sale -> sale.map() }
-            }
-
-        ChunkUiModel(
-            size = chunk.count,
-            pageIndex = chunk.pageIndex,
-            nextPageIndex = chunk.nextPageIndex,
-            previousPageIndex = chunk.previousPageIndex,
-            content = map
-        )
-    },
+    map = { it.map() },
+    groupBy = { it.dateTime.toLocalDateTime(TimeZone.currentSystemDefault()).date.toString() },
     logger = logger
 ), SaleContentInteractor {
     val uiState = state.asStateFlow()

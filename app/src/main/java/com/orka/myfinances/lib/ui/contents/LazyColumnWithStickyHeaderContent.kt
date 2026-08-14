@@ -1,13 +1,15 @@
 package com.orka.myfinances.lib.ui.contents
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,10 +20,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.lib.ui.components.lazy.column.LazyColumnWithStickyHeader
+import com.orka.myfinances.lib.ui.components.spacer.LazyFooterSpacer
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.state.State
+import com.orka.myfinances.ui.statuses.loading.LoadMore
+import com.orka.myfinances.ui.statuses.loading.Refresh
 
 @Composable
 fun <T> LazyColumnWithStickyHeaderContent(
@@ -78,11 +83,11 @@ fun <T> LazyColumnWithStickyHeaderContent(
     item: @Composable (item: T) -> Unit
 ) {
     val listState = rememberLazyListState()
-
-    if (state.value != null) {
+    val value = state.value
+    if (value != null) {
         PullToRefreshBox(
             modifier = modifier,
-            isRefreshing = state is State.Loading,
+            isRefreshing = state is State.Loading && state.status is Refresh,
             onRefresh = refresh
         ) {
             LaunchedEffect(listState, state) {
@@ -102,19 +107,25 @@ fun <T> LazyColumnWithStickyHeaderContent(
             LazyColumnWithStickyHeader(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = contentPadding,
-                map = state.value!!.content,
+                map = value.content,
                 arrangementSpace = arrangementSpace,
                 listState = listState,
                 footer = {
-                    if (state.value!!.nextPageIndex != null && state is State.Loading) {
+                    if (state is State.Loading && state.status is LoadMore && state.value!!.nextPageIndex != null) {
                         item {
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier
+                                    .animateContentSize()
+                                    .fillMaxWidth()
+                                    .padding(vertical = 8.dp),
                                 horizontalArrangement = Arrangement.Center
                             ) {
-                                CircularProgressIndicator()
+                                LinearProgressIndicator()
                             }
                         }
+                    }
+                    else {
+                        LazyFooterSpacer(32)
                     }
                 },
                 item = item

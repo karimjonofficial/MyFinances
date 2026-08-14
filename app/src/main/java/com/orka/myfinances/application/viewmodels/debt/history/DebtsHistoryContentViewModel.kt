@@ -5,7 +5,6 @@ import com.orka.myfinances.application.viewmodels.debt.list.toUiModel
 import com.orka.myfinances.data.dtos.debt.DebtDto
 import com.orka.myfinances.data.repositories.debt.DebtEvent
 import com.orka.myfinances.data.repositories.debt.GetDebtsChunk
-import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.viewmodel.sourceful.chunk.SearchableMapChunkViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.models.ui.DebtUiModel
@@ -26,23 +25,8 @@ class DebtsHistoryContentViewModel(
 ) : SearchableMapChunkViewModel<DebtDto, DebtUiModel>(
     get = { size, page -> getDebtsChunk.getDebtsChunk(size, page, true, null) },
     search = { size, page, q -> getDebtsChunk.getDebtsChunk(size, page, true, q) },
-    map = { chunk ->
-        val timeZone = TimeZone.currentSystemDefault()
-        val map = chunk.results
-            .groupBy { it.dateTime.toLocalDateTime(timeZone).date }
-            .mapKeys { it.key.toString() }
-            .mapValues { entry ->
-                entry.value.map { model -> model.toUiModel() }
-            }
-
-        ChunkUiModel(
-            size = chunk.count,
-            pageIndex = chunk.pageIndex,
-            nextPageIndex = chunk.nextPageIndex,
-            previousPageIndex = chunk.previousPageIndex,
-            content = map
-        )
-    },
+    map = { it.toUiModel() },
+    groupBy = { it.dateTime.toLocalDateTime(TimeZone.currentSystemDefault()).date.toString() },
     logger = logger
 ), DebtsHistoryContentInteractor {
     val uiState = state.asStateFlow()

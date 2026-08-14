@@ -7,7 +7,6 @@ import com.orka.myfinances.data.repositories.template.TemplateEvent
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.SearchChunk
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
-import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.viewmodel.sourceful.chunk.SearchableMapChunkViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.models.item.TemplateItemModel
@@ -24,20 +23,8 @@ class TemplateBottomSheetViewModel(
 ) : SearchableMapChunkViewModel<TemplateDto, TemplateItemModel>(
     get = getChunk,
     search = searchChunk,
-    map = { chunk ->
-        val map = chunk.results
-            .sortedBy { it.name }
-            .groupBy { it.name.stickyHeaderKey() }
-            .mapValues { it.value.map { item -> item.toItemModel() } }
-
-        ChunkUiModel(
-            size = chunk.count,
-            pageIndex = chunk.pageIndex,
-            nextPageIndex = chunk.nextPageIndex,
-            previousPageIndex = chunk.previousPageIndex,
-            content = map
-        )
-    },
+    map = { it.toItemModel() },
+    groupBy = { it.name.stickyHeaderKey() },
     logger = logger
 ), TemplateBottomSheetInteractor {
     val uiState = state.asStateFlow()

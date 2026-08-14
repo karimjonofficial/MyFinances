@@ -1,13 +1,16 @@
 package com.orka.myfinances.ui.screens.profile
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,10 +23,14 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -31,9 +38,9 @@ import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.branch1
 import com.orka.myfinances.fixtures.resources.models.branches
 import com.orka.myfinances.fixtures.resources.models.user1
+import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.SelectionBottomSheet
 import com.orka.myfinances.lib.ui.components.spacer.FooterSpacer
-import com.orka.myfinances.lib.ui.components.Scaffold
 import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
@@ -50,10 +57,21 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 fun ProfileContent(
     modifier: Modifier,
     state: State<ProfileContentModel>,
+    scrollState: LazyListState,
     interactor: ProfileInteractor,
 ) {
+    val threshold = 850
     val isSheetVisible = rememberSaveable { mutableStateOf(false) }
     val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
+
+    val progress by remember {
+        derivedStateOf {
+            if (scrollState.firstVisibleItemIndex > 0) 1f
+            else {
+                (scrollState.firstVisibleItemScrollOffset.toFloat() / threshold.toFloat()).coerceIn(0f, 1f)
+            }
+        }
+    }
 
     if (isSheetVisible.value) {
         val branches = (state.value?.branches ?: emptyList())
@@ -76,47 +94,66 @@ fun ProfileContent(
 
     LazyColumn(
         modifier = modifier,
+        state = scrollState,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
-            Column(
+            val contentScale = 1f - (progress * 0.2f)
+            val contentAlpha = (1f - (progress - 0.2f) / 0.8f).coerceIn(0f, 1f)
+
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(color = MaterialTheme.colorScheme.surfaceContainer)
-                    .padding(bottom = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .background(color = MaterialTheme.colorScheme.secondaryContainer)
+                    .graphicsLayer {
+                        scaleX = contentScale
+                        scaleY = contentScale
+                        alpha = contentAlpha
+                    },
+                contentAlignment = Alignment.Center
             ) {
-                val branchTitle = when(state) {
-                    is State.Success -> state.value.branchName
-                    is State.Failure -> stringResource(R.string.failure)
-                    is State.Loading -> stringResource(R.string.loading)
-                }
-
-                VerticalSpacer(16)
-                UserIcon(Modifier.size(160.dp))
-
-                VerticalSpacer(8)
-                NameText(state = state)
-                PhoneText(state = state)
-
-                VerticalSpacer(16)
-                FilledTonalButton(
-                    onClick = { isSheetVisible.value = true },
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.filledTonalButtonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary,
-                        contentColor = MaterialTheme.colorScheme.onSecondary
-                    ),
-                    enabled = state is State.Success,
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Icon(
-                        painter = painterResource(R.drawable.location_on),
-                        contentDescription = null
-                    )
+                    val branchTitle = when (state) {
+                        is State.Success -> state.value.branchName
+                        is State.Failure -> stringResource(R.string.failure)
+                        is State.Loading -> stringResource(R.string.loading)
+                    }
 
-                    HorizontalSpacer(8)
-                    Text(text = branchTitle)
+                    VerticalSpacer(16)
+                    UserIcon(Modifier.size(120.dp))
+
+                    VerticalSpacer(8)
+                    NameText(state = state)
+                    PhoneText(state = state)
+
+                    VerticalSpacer(16)
+                    FilledTonalButton(
+                        onClick = { isSheetVisible.value = true },
+                        shape = RoundedCornerShape(50),
+                        colors = ButtonDefaults.filledTonalButtonColors(
+                            containerColor = MaterialTheme.colorScheme.secondary,
+                            contentColor = MaterialTheme.colorScheme.onSecondary
+                        ),
+                        enabled = state is State.Success && progress < 0.3f,
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.location_on),
+                            tint = MaterialTheme.colorScheme.onSecondary,
+                            contentDescription = null
+                        )
+
+                        HorizontalSpacer(8)
+                        Text(
+                            text = branchTitle,
+                            color = MaterialTheme.colorScheme.onSecondary
+                        )
+                    }
+
+                    FooterSpacer()
                 }
             }
         }
@@ -171,9 +208,23 @@ private fun ProfileContentPreview() {
     )
 
     MyFinancesTheme {
+        val scrollState = rememberLazyListState()
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            topBar = { ProfileTopBar(interactor = ProfileInteractor.dummy) },
+            topBar = { 
+                ProfileTopBar(
+                    state = State.Success(
+                        ProfileContentModel(
+                            branches = branches.map { it.toItemModel() },
+                            branchName = branch1.name,
+                            name = "${user1.firstName} ${user1.lastName}",
+                            phone = user1.phone
+                        )
+                    ),
+                    scrollState = scrollState,
+                    interactor = ProfileInteractor.dummy 
+                ) 
+            },
             bottomBar = {
                 NavigationBar {
                     navItems.forEach {
@@ -194,6 +245,7 @@ private fun ProfileContentPreview() {
 
             ProfileContent(
                 modifier = Modifier.scaffoldPadding(paddingValues),
+                scrollState = scrollState,
                 state = State.Success(
                     ProfileContentModel(
                         branches = branches.map { it.toItemModel() },

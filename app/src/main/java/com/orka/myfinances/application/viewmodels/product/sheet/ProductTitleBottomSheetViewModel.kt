@@ -6,7 +6,6 @@ import com.orka.myfinances.data.models.Id
 import com.orka.myfinances.data.repositories.product.title.GetProductTitlesByCategory
 import com.orka.myfinances.data.repositories.product.title.ProductTitleEvent
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
-import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.viewmodel.sourceful.chunk.SearchableMapChunkViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.models.item.ProductTitleItemModel
@@ -23,20 +22,8 @@ class ProductTitleBottomSheetViewModel(
 ) : SearchableMapChunkViewModel<ProductTitleDto, ProductTitleItemModel>(
     get = { size, page -> getByCategory.getByCategory(size, page, categoryId, null) },
     search = { size, page, q -> getByCategory.getByCategory(size, page, categoryId, q) },
-    map = { chunk ->
-        val content = chunk.results
-            .sortedBy(ProductTitleDto::name)
-            .groupBy { it.name.stickyHeaderKey() }
-            .mapValues { (_, titles) -> titles.map(ProductTitleDto::toItemModel) }
-
-        ChunkUiModel(
-            size = chunk.count,
-            pageIndex = chunk.pageIndex,
-            nextPageIndex = chunk.nextPageIndex,
-            previousPageIndex = chunk.previousPageIndex,
-            content = content
-        )
-    },
+    map = { it.toItemModel() },
+    groupBy = { it.name.stickyHeaderKey() },
     logger = logger
 ), ProductTitleBottomSheetInteractor {
     val uiState = state.asStateFlow()

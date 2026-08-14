@@ -2,7 +2,6 @@ package com.orka.myfinances.lib.viewmodel
 
 import com.orka.myfinances.data.repositories.Chunk
 import com.orka.myfinances.lib.data.repositories.GetChunk
-import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.lib.viewmodel.sourceful.chunk.MapChunkViewModel
 import com.orka.myfinances.lib.viewmodel.mappers.NetworkExceptionMapper
@@ -24,15 +23,8 @@ class MapChunkViewModelTest : MainDispatcherContext() {
         logger: Logger
     ) : MapChunkViewModel<String, String>(
         get = get,
-        map = { chunk ->
-            ChunkUiModel(
-                size = chunk.results.size,
-                pageIndex = chunk.pageIndex,
-                nextPageIndex = chunk.nextPageIndex,
-                previousPageIndex = chunk.previousPageIndex,
-                content = mapOf("All" to chunk.results)
-            )
-        },
+        map = { it },
+        groupBy = { "All" },
         exceptionMapper = NetworkExceptionMapper(),
         logger = logger
     ) {

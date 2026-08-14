@@ -37,10 +37,9 @@ fun SettingsScreen(
                 .padding(paddingValues),
             contentPadding = PaddingValues(horizontal = 6.dp)
         ) {
-            val topSpace = 12
             val gapBetweenGroups = 8
 
-            item { VerticalSpacer(topSpace) }
+            item { VerticalSpacer(gapBetweenGroups) }
             DefaultsGroup(interactor, state)
 
             item { VerticalSpacer(gapBetweenGroups) }

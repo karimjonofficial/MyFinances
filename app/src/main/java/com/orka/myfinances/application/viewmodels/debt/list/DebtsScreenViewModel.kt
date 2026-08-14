@@ -8,7 +8,6 @@ import com.orka.myfinances.data.repositories.debt.DebtEvent
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.SearchChunk
 import com.orka.myfinances.lib.data.repositories.Insert
-import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.lib.viewmodel.sourceful.chunk.SearchableMapChunkViewModel
 import com.orka.myfinances.logger.Logger
@@ -34,23 +33,8 @@ class DebtsScreenViewModel(
 ) : SearchableMapChunkViewModel<DebtDto, DebtUiModel>(
     get = getChunk,
     search = searchChunk,
-    map = { chunk ->
-        val timeZone = TimeZone.currentSystemDefault()
-        val map = chunk.results
-            .groupBy { it.dateTime.toLocalDateTime(timeZone).date }
-            .mapKeys { it.key.toString() }
-            .mapValues { entry ->
-                entry.value.map { model -> model.toUiModel() }
-            }
-
-        ChunkUiModel(
-            size = chunk.count,
-            pageIndex = chunk.pageIndex,
-            nextPageIndex = chunk.nextPageIndex,
-            previousPageIndex = chunk.previousPageIndex,
-            content = map
-        )
-    },
+    map = { it.toUiModel() },
+    groupBy = { it.dateTime.toLocalDateTime(TimeZone.currentSystemDefault()).date.toString() },
     logger = logger
 ), DebtsScreenInteractor {
     val uiState = state.asStateFlow()

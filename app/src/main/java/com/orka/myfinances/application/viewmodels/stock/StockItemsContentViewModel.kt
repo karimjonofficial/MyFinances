@@ -7,7 +7,6 @@ import com.orka.myfinances.data.repositories.basket.BasketRepository
 import com.orka.myfinances.data.repositories.stock.GetStockItemsByCategory
 import com.orka.myfinances.data.repositories.stock.StockEvent
 import com.orka.myfinances.lib.extensions.stickyHeaderKey
-import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.lib.viewmodel.sourceful.chunk.SearchableMapChunkViewModel
 import com.orka.myfinances.logger.Logger
@@ -28,27 +27,13 @@ class StockItemsContentViewModel(
 ) : SearchableMapChunkViewModel<StockItemDto, StockItemUiModel>(
     get = { size, page -> getByCategory.getByCategory(size, page, categoryId, null) },
     search = { size, page, q -> getByCategory.getByCategory(size, page, categoryId, q) },
-    map = { chunk ->
+    map = {
         val basketItems = basketRepository.get()
-        val content = chunk.results
-            .sortedBy { it.product.title.name }
-            .groupBy { it.product.title.name.stickyHeaderKey() }
-            .mapValues { (_, stockItems) ->
-                stockItems.map {
-                    it.toUiModel(
-                        basketAmount = basketItems.find { basketItem -> basketItem.id == Id(it.product.id) }?.amount
-                    )
-                }
-            }
-
-        ChunkUiModel(
-            size = chunk.count,
-            pageIndex = chunk.pageIndex,
-            nextPageIndex = chunk.nextPageIndex,
-            previousPageIndex = chunk.previousPageIndex,
-            content = content
+        it.toUiModel(
+            basketAmount = basketItems.find { basketItem -> basketItem.id == Id(it.product.id) }?.amount
         )
     },
+    groupBy = { it.product.title.name.stickyHeaderKey() },
     logger = logger
 ), StockContentInteractor {
     val uiState = state.asStateFlow()

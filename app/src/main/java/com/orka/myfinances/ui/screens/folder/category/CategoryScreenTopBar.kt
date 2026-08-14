@@ -43,17 +43,17 @@ fun CategoryScreenTopBar(
                 )
             }
 
-            IconButton(onClick = { onAddProductClick() }) {
-                Icon(
-                    painter = painterResource(R.drawable.add),
-                    contentDescription = stringResource(R.string.add)
-                )
-            }
-
             IconButton(onClick = { onAddReceive() }) {
                 Icon(
                     painter = painterResource(R.drawable.download),
                     contentDescription = stringResource(R.string.download)
+                )
+            }
+
+            IconButton(onClick = { onAddProductClick() }) {
+                Icon(
+                    painter = painterResource(R.drawable.add),
+                    contentDescription = stringResource(R.string.add)
                 )
             }
         }

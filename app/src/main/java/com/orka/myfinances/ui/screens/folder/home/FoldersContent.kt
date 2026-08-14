@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -56,7 +57,13 @@ fun FoldersContent(
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 item {
                     val carouselState = rememberCarouselState { 3 }
-                    FoldersContentCarousel(state = carouselState)
+
+                    VerticalSpacer(2)
+                    FoldersContentCarousel(
+                        modifier = Modifier.height(260.dp),
+                        state = carouselState,
+                        itemCount = 3
+                    )
                 }
 
                 item {

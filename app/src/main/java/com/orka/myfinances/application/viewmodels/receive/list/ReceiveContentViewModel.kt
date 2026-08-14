@@ -5,7 +5,6 @@ import com.orka.myfinances.data.dtos.receive.ReceiveDto
 import com.orka.myfinances.data.repositories.receive.ReceiveEvent
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.SearchChunk
-import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.viewmodel.sourceful.chunk.SearchableMapChunkViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.navigation.Navigator
@@ -27,25 +26,8 @@ class ReceiveContentViewModel(
 ) : SearchableMapChunkViewModel<ReceiveDto, ReceiveUiModel>(
     get = getChunk,
     search = searchChunk,
-    map = { chunk ->
-        val timeZone = TimeZone.currentSystemDefault()
-        val map =
-            chunk.results.groupBy { receive -> receive.dateTime.toLocalDateTime(timeZone).date }
-                .mapKeys { entry -> entry.key.toString() }
-                .mapValues { entry ->
-                    entry.value.map { receive ->
-                        receive.toUiModel()
-                    }
-                }
-
-        ChunkUiModel(
-            size = chunk.count,
-            pageIndex = chunk.pageIndex,
-            nextPageIndex = chunk.nextPageIndex,
-            previousPageIndex = chunk.previousPageIndex,
-            content = map
-        )
-    },
+    map = { it.toUiModel() },
+    groupBy = { it.dateTime.toLocalDateTime(TimeZone.currentSystemDefault()).date.toString() },
     logger = logger
 ), ReceiveContentInteractor {
     val uiState = state.asStateFlow()

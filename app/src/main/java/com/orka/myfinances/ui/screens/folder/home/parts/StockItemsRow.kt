@@ -58,7 +58,7 @@ fun StockItemsRow(
                     }
 
                     StockItemCard(
-                        modifier = Modifier.size(150.dp, 300.dp),
+                        modifier = Modifier.size(140.dp, 280.dp),
                         item = item.model,
                         onIncrease = { interactor.addToBasket(item.id) },
                         onDecrease = { interactor.removeFromBasket(item.id) }

@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.navigation.entries.home
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import com.orka.myfinances.application.viewmodels.basket.BasketContentViewModel
@@ -15,7 +16,8 @@ fun HomeScreenTopBar(
     onAddFolder: () -> Unit,
     foldersViewModel: FoldersContentViewModel,
     basketViewModel: BasketContentViewModel,
-    profileViewModel: ProfileContentViewModel
+    profileViewModel: ProfileContentViewModel,
+    profileScrollState: LazyListState
 ) {
     when (index) {
         0 -> {
@@ -35,6 +37,14 @@ fun HomeScreenTopBar(
             )
         }
 
-        2 -> ProfileTopBar(interactor = profileViewModel)
+        2 -> {
+            val profileState = profileViewModel.uiState.collectAsState()
+
+            ProfileTopBar(
+                state = profileState.value,
+                scrollState = profileScrollState,
+                interactor = profileViewModel
+            )
+        }
     }
 }

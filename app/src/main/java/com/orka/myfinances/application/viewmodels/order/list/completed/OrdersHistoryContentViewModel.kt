@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.orka.myfinances.data.dtos.order.OrderDto
 import com.orka.myfinances.data.repositories.order.GetOrdersChunk
 import com.orka.myfinances.data.repositories.order.OrderEvent
-import com.orka.myfinances.lib.ui.models.ChunkUiModel
 import com.orka.myfinances.lib.viewmodel.sourceful.chunk.SearchableMapChunkViewModel
 import com.orka.myfinances.logger.Logger
 import com.orka.myfinances.ui.models.ui.HistoryOrderUiModel
@@ -25,25 +24,8 @@ class OrdersHistoryContentViewModel(
 ) : SearchableMapChunkViewModel<OrderDto, HistoryOrderUiModel>(
     get = { size, page -> getOrdersChunk.getOrdersChunk(size, page, true, null) },
     search = { size, page, query -> getOrdersChunk.getOrdersChunk(size, page, true, query) },
-    map = { chunk ->
-        val timeZone = TimeZone.currentSystemDefault()
-        val map =
-            chunk.results.groupBy { orders -> orders.createdAt.toLocalDateTime(timeZone).date }
-                .mapKeys { entry -> entry.key.toString() }
-                .mapValues { entry ->
-                    entry.value.map { order ->
-                        order.toUiModel()
-                    }
-                }
-
-        ChunkUiModel(
-            size = chunk.count,
-            pageIndex = chunk.pageIndex,
-            nextPageIndex = chunk.nextPageIndex,
-            previousPageIndex = chunk.previousPageIndex,
-            content = map
-        )
-    },
+    map = { it.toUiModel() },
+    groupBy = { it.createdAt.toLocalDateTime(TimeZone.currentSystemDefault()).date.toString() },
     logger = logger
 ), OrdersHistoryInteractor {
     val uiState = state.asStateFlow()

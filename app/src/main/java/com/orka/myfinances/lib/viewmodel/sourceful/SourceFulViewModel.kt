@@ -8,8 +8,8 @@ import com.orka.myfinances.lib.viewmodel.mappers.NetworkExceptionMapper
 import com.orka.myfinances.logger.Logger
 
 abstract class SourceFulViewModel<TData, TUi>(
-    private val loadData: suspend () -> TData?,
-    private val map: suspend (TData) -> TUi,
+    loadData: suspend () -> TData?,
+    map: suspend (TData) -> TUi,
     exceptionMapper: ExceptionMapper<TUi> = NetworkExceptionMapper(),
     logger: Logger
 ) : RefreshableBaseViewModel<TUi>(

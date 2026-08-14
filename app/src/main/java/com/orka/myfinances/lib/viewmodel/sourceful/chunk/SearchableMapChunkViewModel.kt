@@ -1,6 +1,5 @@
 package com.orka.myfinances.lib.viewmodel.sourceful.chunk
 
-import com.orka.myfinances.data.repositories.Chunk
 import com.orka.myfinances.lib.data.repositories.GetChunk
 import com.orka.myfinances.lib.data.repositories.SearchChunk
 import com.orka.myfinances.lib.ui.models.ChunkUiModel
@@ -21,12 +20,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 abstract class SearchableMapChunkViewModel<TData, TUi>(
     get: GetChunk<TData>,
     private val search: SearchChunk<TData>,
-    map: suspend (Chunk<TData>) -> ChunkUiModel<TUi>,
+    map: suspend (TData) -> TUi,
+    groupBy: (TData) -> String,
     exceptionMapper: ExceptionMapper<ChunkUiModel<TUi>> = NetworkExceptionMapper(),
     logger: Logger
 ) : MapChunkViewModel<TData, TUi>(
     get = get,
     map = map,
+    groupBy = groupBy,
     exceptionMapper = exceptionMapper,
     logger = logger
 ), Paginated, PaginatedSearchable {
@@ -39,9 +40,9 @@ abstract class SearchableMapChunkViewModel<TData, TUi>(
             if(query.isNotEmpty()) {
                 val chunk = search.searchChunk(10, 1, query)
                 if (chunk != null) {
-                    val map = map(chunk)
+                    val uiModel = chunk.toUiModel()
                     queryState.value = query
-                    State.Success(value = map)
+                    State.Success(value = uiModel)
                 } else State.Failure(status = LoadedAbsentPage, value = oldState.value)
             } else produceInitialState()
         }
@@ -51,15 +52,21 @@ abstract class SearchableMapChunkViewModel<TData, TUi>(
         tryTransition(loadingState = { oldState -> State.Loading(status = LoadMore, value = oldState.value) }) { oldState ->
             if(oldState is State.Success) {
                 if (queryState.value != null) {
+                    val size = 10
                     val index = oldState.value.pageIndex
-                    val chunk = search.searchChunk(10, index + 1, queryState.value!!)
+                    val newPage = index + 1
+                    val chunk = search.searchChunk(size, newPage, queryState.value!!)
                     if (chunk != null) {
-                        val map = map(chunk)
                         val oldMap = oldState.value.content
-                        val newValue = map.copy(
-                            content = oldMap + map.content
+                        val newMap = chunk.results.toUiMap()
+                        val value = ChunkUiModel(
+                            size = size,
+                            pageIndex = newPage,
+                            nextPageIndex = chunk.nextPageIndex,
+                            previousPageIndex = chunk.previousPageIndex,
+                            content = oldMap.merge(newMap)
                         )
-                        State.Success(value = newValue)
+                        State.Success(value = value)
                     } else State.Failure(status = LoadedAbsentPage, value = oldState.value)
                 } else State.Failure(status = CalledSearchMoreWithNullQuery, value = oldState.value)
             } else State.Failure(status = ExecutedFromFailure, value = oldState.value)

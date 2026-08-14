@@ -1,5 +1,6 @@
 package com.orka.myfinances.ui.navigation.entries.home
 
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetState
@@ -53,6 +54,8 @@ fun homeEntry(
         initializer = { factory.profileViewModel() }
     )
 
+    val profileScrollState = rememberLazyListState()
+
     HomeScreen(
         modifier = modifier,
         topBar = {
@@ -61,7 +64,8 @@ fun homeEntry(
                 onAddFolder = { addFolderDialogVisible.value = true },
                 foldersViewModel = foldersViewModel,
                 basketViewModel = basketViewModel,
-                profileViewModel = profileViewModel
+                profileViewModel = profileViewModel,
+                profileScrollState = profileScrollState
             )
         },
         content = { contentModifier, index ->
@@ -163,6 +167,7 @@ fun homeEntry(
                     ProfileContent(
                         modifier = contentModifier,
                         state = profileState.value,
+                        scrollState = profileScrollState,
                         interactor = profileViewModel
                     )
                 }

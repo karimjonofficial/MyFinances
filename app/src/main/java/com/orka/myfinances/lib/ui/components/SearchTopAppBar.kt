@@ -98,13 +98,14 @@ fun SearchTopAppBar(
             modifier = modifier,
             title = { Text(text = title) },
             actions = {
+                actions()
+
                 IconButton(onClick = { onSearchModeChange(true) }) {
                     Icon(
                         painter = painterResource(R.drawable.search),
                         contentDescription = null
                     )
                 }
-                actions()
             }
         )
     }

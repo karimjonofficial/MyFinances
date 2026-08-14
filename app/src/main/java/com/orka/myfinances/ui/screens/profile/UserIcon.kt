@@ -15,7 +15,7 @@ fun UserIcon(modifier: Modifier = Modifier) {
     Icon(
         modifier = modifier
             .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.surfaceVariant),
+            .background(MaterialTheme.colorScheme.secondaryContainer),
         painter = painterResource(R.drawable.account_circle_outlined),
         tint = MaterialTheme.colorScheme.secondary,
         contentDescription = null
