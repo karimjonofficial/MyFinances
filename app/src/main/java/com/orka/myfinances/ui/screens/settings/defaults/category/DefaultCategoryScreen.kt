@@ -14,7 +14,7 @@ import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.models.item.CategoryItemModel
 
 @Composable
-fun SelectDefaultCategory(
+fun DefaultCategoryScreen(
     modifier: Modifier = Modifier,
     state: State<Map<String, List<CategoryItemModel>>>,
     selectedState: State<Id?>,

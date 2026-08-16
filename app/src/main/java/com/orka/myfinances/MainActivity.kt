@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.orka.myfinances.application.MyFinancesApplication
 import com.orka.myfinances.application.printer.getPermissions
@@ -16,6 +17,8 @@ import com.orka.myfinances.ui.theme.MyFinancesTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        installSplashScreen()
         enableEdgeToEdge()
         getPermissions()
 

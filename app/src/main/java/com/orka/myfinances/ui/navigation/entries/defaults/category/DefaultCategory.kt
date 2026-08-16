@@ -9,7 +9,7 @@ import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.navigation.destination.DefaultsSettings
 import com.orka.myfinances.ui.navigation.destination.Destination
-import com.orka.myfinances.ui.screens.settings.defaults.category.SelectDefaultCategory
+import com.orka.myfinances.ui.screens.settings.defaults.category.DefaultCategoryScreen
 
 fun selectDefaultCategoryEntry(
     modifier: Modifier,
@@ -29,7 +29,7 @@ fun selectDefaultCategoryEntry(
     val categoriesState = categoryItemsViewModel.uiState.collectAsState()
     val selectedState = defaultCategoryViewModel.uiState.collectAsState()
 
-    SelectDefaultCategory(
+    DefaultCategoryScreen(
         modifier = modifier,
         state = categoriesState.value,
         selectedState = selectedState.value,

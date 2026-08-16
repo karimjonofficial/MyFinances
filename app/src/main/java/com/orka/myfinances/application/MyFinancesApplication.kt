@@ -52,11 +52,8 @@ class MyFinancesApplication : Application() {
         val defaultsStorage = DefaultsStorageImpl(database.defaultsDao())
         val credentialsValidator = CredentialsValidatorImpl(httpClient, credentialsStorage)
         val guestRuntimeInitializer = GuestRuntimeInitializerImpl(logger)
-        this.guestRuntimeInitializer = guestRuntimeInitializer
         val newUserRuntimeInitializer = NewUserRuntimeInitializerImpl(logger)
-        this.newUserRuntimeInitializer = newUserRuntimeInitializer
         val signedInRuntimeInitializer = SignedInRuntimeInitializerImpl(database, printersDataSource, logger)
-        this.signedInRuntimeInitializer = signedInRuntimeInitializer
         val infoRepository = InfoRepository(InfoApi(httpClient))
         val manager =  UiManager(
             credentialsStorage = credentialsStorage,
@@ -68,7 +65,12 @@ class MyFinancesApplication : Application() {
             infoRepository = infoRepository,
             logger = logger
         )
+
+        this.signedInRuntimeInitializer = signedInRuntimeInitializer
+        this.newUserRuntimeInitializer = newUserRuntimeInitializer
+        this.guestRuntimeInitializer = guestRuntimeInitializer
         manager.initialize()
+
         return manager
     }
 }

@@ -92,7 +92,7 @@ fun homeEntry(
                                 )
                                 val state = viewModel.uiState.collectAsState()
 
-                                VerticalSpacer(16)
+                                VerticalSpacer(24)
                                 StockItemsRow(
                                     title = stringResource(R.string.pinned_category),
                                     state = state.value,

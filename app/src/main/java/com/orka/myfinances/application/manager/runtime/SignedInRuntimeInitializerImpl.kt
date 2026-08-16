@@ -22,7 +22,7 @@ class SignedInRuntimeInitializerImpl(
     override fun initialize(session: Session, manager: SessionManager) {
         val logger = HttpLogger(this.logger)
         val httpClient = httpClient(logger, session.credentials, manager::logout)
-        val navigator = NavigationManager(this.logger).apply { navigator = this }
+        val navigator = NavigationManager(this.logger).apply { this@SignedInRuntimeInitializerImpl.navigator = this }
 
         factory = Factory(
             session = session,
@@ -39,19 +39,13 @@ class SignedInRuntimeInitializerImpl(
         val factory = this.factory
         if(factory == null)
             throw Exception()
-        else {
-            this.factory = null
-            return factory
-        }
+        else return factory
     }
 
     fun navigator(): NavigationManager {
         val navigator = this.navigator
         if(navigator == null)
             throw Exception()
-        else {
-            this.navigator = null
-            return navigator
-        }
+        else return navigator
     }
 }

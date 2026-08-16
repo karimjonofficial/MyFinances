@@ -114,7 +114,10 @@ fun StockItemCard(
         if (item.basketAmount == null) {
             Button(
                 onClick = onIncrease,
-                modifier = Modifier.fillMaxWidth().height(36.dp),
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .fillMaxWidth()
+                    .height(36.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary

@@ -36,8 +36,10 @@ import com.orka.myfinances.application.viewmodels.receive.details.ReceiveScreenV
 import com.orka.myfinances.application.viewmodels.receive.list.ReceiveContentViewModel
 import com.orka.myfinances.application.viewmodels.sale.details.SaleScreenViewModel
 import com.orka.myfinances.application.viewmodels.sale.list.SaleContentViewModel
+import com.orka.myfinances.application.viewmodels.defaults.template.DefaultTemplateViewModel
 import com.orka.myfinances.application.viewmodels.select.CategoryItemsViewModel
 import com.orka.myfinances.application.viewmodels.select.SelectedCategoriesViewModel
+import com.orka.myfinances.application.viewmodels.select.TemplateItemsViewModel
 import com.orka.myfinances.application.viewmodels.settings.SettingsScreenViewModel
 import com.orka.myfinances.application.viewmodels.stock.StockItemsContentViewModel
 import com.orka.myfinances.application.viewmodels.template.add.AddTemplateScreenViewModel
@@ -472,6 +474,7 @@ class Factory(
             defaultsRepository = defaultsRepository,
             printerRepository = printerRepository,
             get = folderRepository,
+            getTemplate = templateRepository,
             defaultsFlow = defaultsRepository.flow,
             navigator = navigator,
             printerStatus = printer.status,
@@ -489,9 +492,27 @@ class Factory(
         )
     }
 
+    fun selectDefaultTemplateViewModel(): DefaultTemplateViewModel {
+        return DefaultTemplateViewModel(
+            getDefaultTemplate = defaultsRepository,
+            setDefaultTemplate = defaultsRepository,
+            flow = defaultsRepository.flow,
+            navigator = navigator,
+            logger = logger
+        )
+    }
+
     fun categoryItemsViewModel(): CategoryItemsViewModel {
         return CategoryItemsViewModel(
             get = folderRepository,
+            logger = logger
+        )
+    }
+
+    fun templateItemsViewModel(): TemplateItemsViewModel {
+        return TemplateItemsViewModel(
+            getChunk = templateRepository,
+            searchChunk = templateRepository,
             logger = logger
         )
     }

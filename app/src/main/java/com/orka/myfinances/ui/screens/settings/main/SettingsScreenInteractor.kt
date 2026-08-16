@@ -3,6 +3,7 @@ package com.orka.myfinances.ui.screens.settings.main
 interface SettingsScreenInteractor {
     fun refresh()
     fun toSelectDefaultCategory()
+    fun toSelectDefaultTemplate()
     fun toPinnedCategories()
     fun toPrinters()
     fun toDefaultPrinter()
@@ -11,6 +12,7 @@ interface SettingsScreenInteractor {
         val dummy = object : SettingsScreenInteractor {
             override fun refresh() {}
             override fun toSelectDefaultCategory() {}
+            override fun toSelectDefaultTemplate() {}
             override fun toPinnedCategories() {}
             override fun toPrinters() {}
             override fun toDefaultPrinter() {}

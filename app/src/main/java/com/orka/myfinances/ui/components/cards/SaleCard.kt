@@ -24,13 +24,14 @@ fun SaleCard(
     onClick: () -> Unit
 ) {
     val formatter = LocalFormatter.current
+
     ListItem(
         modifier = modifier,
         painter = painterResource(R.drawable.shopping_bag_outlined),
         headlineText = sale.title,
         supportingText = stringResource(R.string.items_f, formatter.formatNumber(sale.size)),
         price = stringResource(R.string.uzs_f, formatter.formatNumber(sale.price)),
-        dateTime = formatter.formatDateTime(sale.dateTime),
+        dateTime = formatter.formatTime(sale.dateTime),
         onClick = onClick
     )
 }

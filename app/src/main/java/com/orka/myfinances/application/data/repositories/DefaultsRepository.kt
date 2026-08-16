@@ -36,4 +36,16 @@ class DefaultsRepository(private val dao: DefaultsDao) : DefaultsRepository {
         else dao.setDefaultPrinterId(id.value)
         events.emit(DefaultsEvent.Printer)
     }
+
+    override suspend fun getDefaultTemplateId(): Id? {
+        val id = dao.getDefaultTemplateId()
+        return if(id != null) Id(id) else null
+    }
+
+    override suspend fun setDefaultTemplateId(id: Id) {
+        if(getDefaultTemplateId() == null)
+            dao.insertDefaultTemplateId(id.value)
+        else dao.setDefaultTemplateId(id.value)
+        events.emit(DefaultsEvent.Template)
+    }
 }

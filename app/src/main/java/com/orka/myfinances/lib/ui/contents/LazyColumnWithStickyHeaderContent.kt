@@ -84,6 +84,7 @@ fun <T> LazyColumnWithStickyHeaderContent(
 ) {
     val listState = rememberLazyListState()
     val value = state.value
+
     if (value != null) {
         PullToRefreshBox(
             modifier = modifier,

@@ -15,9 +15,10 @@ import com.orka.myfinances.lib.ui.contents.LazyColumnWithStickyHeaderContent
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.lib.ui.components.SelectionItem
+import com.orka.myfinances.lib.ui.models.ChunkUiModel
 
 @Composable
-fun <T: SelectionItemModel> SelectionScreen(
+fun <T : SelectionItemModel> SelectionScreen(
     modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit,
     bottomBar: @Composable (State<Map<String, List<T>>>) -> Unit = {},
@@ -60,7 +61,49 @@ fun <T: SelectionItemModel> SelectionScreen(
 }
 
 @Composable
-fun <T: SelectionItemModel> SelectionScreen(
+fun <T : SelectionItemModel> PaginatedSelectionScreen(
+    modifier: Modifier = Modifier,
+    title: String,
+    bottomBar: @Composable (State<ChunkUiModel<T>>) -> Unit = {},
+    state: State<ChunkUiModel<T>>,
+    isSelected: (T) -> Boolean,
+    onSelect: (T, selected: Boolean) -> Unit,
+    loadMore: () -> Unit,
+    refresh: () -> Unit
+) {
+    Scaffold(
+        modifier = modifier,
+        topBar = { TopAppBar(title = title) },
+        bottomBar = { bottomBar(state) }
+    ) { paddingValues ->
+        val modifier = Modifier
+            .scaffoldPadding(paddingValues)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
+
+        LazyColumnWithStickyHeaderContent(
+            modifier = modifier,
+            arrangementSpace = 2.dp,
+            contentPadding = PaddingValues(horizontal = 4.dp),
+            state = state,
+            loadMore = loadMore,
+            refresh = refresh,
+            item = {
+                val selected = isSelected(it)
+
+                SelectionItem(
+                    model = it,
+                    selected = selected,
+                    onClick = { item, selected ->
+                        onSelect(item, selected)
+                    }
+                )
+            }
+        )
+    }
+}
+
+@Composable
+fun <T : SelectionItemModel> SelectionScreen(
     modifier: Modifier = Modifier,
     title: String,
     bottomBar: @Composable (State<Map<String, List<T>>>) -> Unit = {},

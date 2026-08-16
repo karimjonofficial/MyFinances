@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -68,7 +69,10 @@ fun ProfileContent(
         derivedStateOf {
             if (scrollState.firstVisibleItemIndex > 0) 1f
             else {
-                (scrollState.firstVisibleItemScrollOffset.toFloat() / threshold.toFloat()).coerceIn(0f, 1f)
+                (scrollState.firstVisibleItemScrollOffset.toFloat() / threshold.toFloat()).coerceIn(
+                    0f,
+                    1f
+                )
             }
         }
     }
@@ -104,7 +108,14 @@ fun ProfileContent(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(color = MaterialTheme.colorScheme.secondaryContainer)
+                    .background(
+                        brush = Brush.radialGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.secondary.copy(alpha = .25f),
+                                MaterialTheme.colorScheme.secondary.copy(alpha = .075f)
+                            )
+                        )
+                    )
                     .graphicsLayer {
                         scaleX = contentScale
                         scaleY = contentScale
@@ -211,7 +222,7 @@ private fun ProfileContentPreview() {
         val scrollState = rememberLazyListState()
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            topBar = { 
+            topBar = {
                 ProfileTopBar(
                     state = State.Success(
                         ProfileContentModel(
@@ -222,8 +233,8 @@ private fun ProfileContentPreview() {
                         )
                     ),
                     scrollState = scrollState,
-                    interactor = ProfileInteractor.dummy 
-                ) 
+                    interactor = ProfileInteractor.dummy
+                )
             },
             bottomBar = {
                 NavigationBar {

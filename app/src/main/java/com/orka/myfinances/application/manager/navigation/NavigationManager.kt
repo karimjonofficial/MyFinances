@@ -133,6 +133,10 @@ class NavigationManager(
         navigate(DefaultsSettings.Category)
     }
 
+    override fun navigateToSelectDefaultTemplate() {
+        navigate(DefaultsSettings.Template)
+    }
+
     override fun navigateToPinnedCategories() {
         navigate(HomeSettings.PinnedCategories)
     }

@@ -22,6 +22,7 @@ import com.orka.myfinances.ui.navigation.entries.debt.debtEntry
 import com.orka.myfinances.ui.navigation.entries.debt.debtsEntry
 import com.orka.myfinances.ui.navigation.entries.defaults.category.selectDefaultCategoryEntry
 import com.orka.myfinances.ui.navigation.entries.defaults.printer.defaultPrinterEntry
+import com.orka.myfinances.ui.navigation.entries.defaults.template.selectDefaultTemplateEntry
 import com.orka.myfinances.ui.navigation.entries.historyEntry
 import com.orka.myfinances.ui.navigation.entries.home.homeEntry
 import com.orka.myfinances.ui.navigation.entries.notificationsEntry
@@ -107,6 +108,7 @@ fun entryProvider(
                     when(destination) {
                         is DefaultsSettings.Category -> selectDefaultCategoryEntry(modifier, destination, session, factory)
                         is DefaultsSettings.Printer -> defaultPrinterEntry(modifier, destination, session, factory)
+                        is DefaultsSettings.Template -> selectDefaultTemplateEntry(modifier, destination, session, factory)
                     }
                 }
 

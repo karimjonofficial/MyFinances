@@ -1,6 +1,8 @@
 package com.orka.myfinances.ui.screens.folder.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,10 +10,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -29,8 +33,8 @@ import com.orka.myfinances.lib.ui.preview.DefaultPreview
 import com.orka.myfinances.lib.ui.preview.ScaffoldPreview
 import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.components.buttons.OptionButton
-import com.orka.myfinances.ui.resources.stockItemsState
 import com.orka.myfinances.ui.models.content.FoldersContentModel
+import com.orka.myfinances.ui.resources.stockItemsState
 import com.orka.myfinances.ui.screens.folder.home.parts.FoldersContentCarousel
 import com.orka.myfinances.ui.screens.folder.home.parts.StockItemsRow
 import com.orka.myfinances.ui.screens.folder.toUiModel
@@ -58,12 +62,26 @@ fun FoldersContent(
                 item {
                     val carouselState = rememberCarouselState { 3 }
 
-                    VerticalSpacer(2)
-                    FoldersContentCarousel(
-                        modifier = Modifier.height(260.dp),
-                        state = carouselState,
-                        itemCount = 3
-                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                brush = Brush.radialGradient(
+                                    colors = listOf(
+                                        MaterialTheme.colorScheme.secondary.copy(alpha = .25f),
+                                        MaterialTheme.colorScheme.secondary.copy(alpha = .05f)
+                                    )
+                                )
+                            ),
+                    ) {
+                        VerticalSpacer(4)
+                        FoldersContentCarousel(
+                            modifier = Modifier.height(280.dp),
+                            state = carouselState,
+                            itemCount = 3
+                        )
+                        VerticalSpacer(8)
+                    }
                 }
 
                 item {
@@ -102,7 +120,7 @@ fun FoldersContent(
                     )
                 }
 
-                if(model.pinnedCategories != null) {
+                if (model.pinnedCategories != null) {
                     pinnedCategoriesContent(model.pinnedCategories)
                 }
 
@@ -145,7 +163,7 @@ private fun FoldersContentPreview() {
             interactor = FoldersContentInteractor.dummy
         ) {
             item {
-                VerticalSpacer(16)
+                VerticalSpacer(24)
                 StockItemsRow(
                     title = "Pinned Category",
                     state = stockItemsState,
@@ -154,7 +172,7 @@ private fun FoldersContentPreview() {
             }
 
             item {
-                VerticalSpacer(16)
+                VerticalSpacer(24)
                 StockItemsRow(
                     title = "Pinned Category",
                     state = stockItemsState,

@@ -26,9 +26,6 @@ class NewUserRuntimeInitializerImpl(private val logger: Logger) : NewUserRuntime
         val factory = this.factory
         if(factory == null)
             throw Exception()
-        else {
-            this.factory = null
-            return factory
-        }
+        else return factory
     }
 }

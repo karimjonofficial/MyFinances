@@ -6,15 +6,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.carousel.CarouselState
@@ -36,29 +33,26 @@ fun FoldersContentCarousel(
     state: CarouselState,
     itemCount: Int
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+    ) {
         HorizontalMultiBrowseCarousel(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(horizontal = 4.dp),
             state = state,
             preferredItemWidth = 280.dp,
-            itemSpacing = 12.dp,
-            contentPadding = PaddingValues(horizontal = 16.dp)
+            itemSpacing = 4.dp
         ) {
-            Card(
-                modifier = Modifier.maskClip(MaterialTheme.shapes.extraLarge),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant
-                )
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.furniture),
-                    contentScale = ContentScale.Crop,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
+            Image(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .maskClip(MaterialTheme.shapes.medium),
+                painter = painterResource(R.drawable.furniture),
+                contentScale = ContentScale.Crop,
+                contentDescription = null
+            )
         }
 
         VerticalSpacer(8)

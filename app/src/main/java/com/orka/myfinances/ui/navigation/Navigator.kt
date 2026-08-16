@@ -28,6 +28,7 @@ interface Navigator {
     fun navigateToSale(id: Id)
     fun navigateToReceive(id: Id)
     fun navigateToSelectDefaultCategory()
+    fun navigateToSelectDefaultTemplate()
     fun navigateToPinnedCategories()
     fun navigateToPrinters()
     fun navigateToDefaultPrinter()

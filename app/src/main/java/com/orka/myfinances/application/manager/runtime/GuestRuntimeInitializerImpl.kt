@@ -25,11 +25,8 @@ class GuestRuntimeInitializerImpl(private val logger: Logger) : GuestRuntimeInit
 
     fun factory(): LoginScreenViewModelFactory {
         val factory = this.factory
-        if(factory == null)
+        if (factory == null)
             throw Exception()
-        else {
-            this.factory = null
-            return factory
-        }
+        else return factory
     }
 }

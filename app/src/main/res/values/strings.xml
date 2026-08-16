@@ -175,6 +175,8 @@
     <string name="defaults">Defaults</string>
     <string name="default_category">Default Category</string>
     <string name="default_category_is_not_set_yet">Default category is not set yet</string>
+    <string name="default_template">Default Template</string>
+    <string name="default_template_is_not_set_yet">Default template is not set yet</string>
     <string name="fill_the_lines_below_to_add_a_product">Fill the lines below to add a product</string>
     <string name="pinned_categories">Pinned Categories</string>
     <string name="could_not_add">Could not add</string>

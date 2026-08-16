@@ -38,6 +38,22 @@ fun LazyListScope.DefaultsGroup(
     item {
         SettingsButton(
             modifier = Modifier.fillMaxWidth(),
+            title = stringResource(R.string.default_template),
+            topClipped = false,
+            bottomClipped = false,
+            value = str(state.value?.defaultTemplate, R.string.default_template_is_not_set_yet),
+            leadingIcon = painterResource(R.drawable.article),
+            error = !(loading || state.value?.defaultTemplate != null),
+            enabled = state is State.Success,
+            onClick = interactor::toSelectDefaultTemplate,
+        )
+    }
+
+    item { VerticalSpacer(2) }
+
+    item {
+        SettingsButton(
+            modifier = Modifier.fillMaxWidth(),
             title = stringResource(R.string.default_printer),
             topClipped = false,
             bottomClipped = true,
