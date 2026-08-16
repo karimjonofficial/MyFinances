@@ -1,6 +1,5 @@
 package com.orka.myfinances.ui.screens.folder.home.parts
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
