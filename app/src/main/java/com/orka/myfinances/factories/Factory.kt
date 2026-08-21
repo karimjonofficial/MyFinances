@@ -36,8 +36,10 @@ import com.orka.myfinances.application.viewmodels.receive.details.ReceiveScreenV
 import com.orka.myfinances.application.viewmodels.receive.list.ReceiveContentViewModel
 import com.orka.myfinances.application.viewmodels.sale.details.SaleScreenViewModel
 import com.orka.myfinances.application.viewmodels.sale.list.SaleContentViewModel
+import com.orka.myfinances.application.viewmodels.defaults.client.DefaultClientViewModel
 import com.orka.myfinances.application.viewmodels.defaults.template.DefaultTemplateViewModel
 import com.orka.myfinances.application.viewmodels.select.CategoryItemsViewModel
+import com.orka.myfinances.application.viewmodels.select.ClientItemsViewModel
 import com.orka.myfinances.application.viewmodels.select.SelectedCategoriesViewModel
 import com.orka.myfinances.application.viewmodels.select.TemplateItemsViewModel
 import com.orka.myfinances.application.viewmodels.settings.SettingsScreenViewModel
@@ -475,6 +477,7 @@ class Factory(
             printerRepository = printerRepository,
             get = folderRepository,
             getTemplate = templateRepository,
+            getClient = clientRepository,
             defaultsFlow = defaultsRepository.flow,
             navigator = navigator,
             printerStatus = printer.status,
@@ -502,6 +505,16 @@ class Factory(
         )
     }
 
+    fun selectDefaultClientViewModel(): DefaultClientViewModel {
+        return DefaultClientViewModel(
+            getDefaultClient = defaultsRepository,
+            setDefaultClient = defaultsRepository,
+            flow = defaultsRepository.flow,
+            navigator = navigator,
+            logger = logger
+        )
+    }
+
     fun categoryItemsViewModel(): CategoryItemsViewModel {
         return CategoryItemsViewModel(
             get = folderRepository,
@@ -513,6 +526,14 @@ class Factory(
         return TemplateItemsViewModel(
             getChunk = templateRepository,
             searchChunk = templateRepository,
+            logger = logger
+        )
+    }
+
+    fun clientItemsViewModel(): ClientItemsViewModel {
+        return ClientItemsViewModel(
+            getChunk = clientRepository,
+            searchChunk = clientRepository,
             logger = logger
         )
     }

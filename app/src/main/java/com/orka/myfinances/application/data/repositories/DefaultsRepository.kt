@@ -48,4 +48,16 @@ class DefaultsRepository(private val dao: DefaultsDao) : DefaultsRepository {
         else dao.setDefaultTemplateId(id.value)
         events.emit(DefaultsEvent.Template)
     }
+
+    override suspend fun getDefaultClientId(): Id? {
+        val id = dao.getDefaultClientId()
+        return if(id != null) Id(id) else null
+    }
+
+    override suspend fun setDefaultClientId(id: Id) {
+        if(getDefaultClientId() == null)
+            dao.insertDefaultClientId(id.value)
+        else dao.setDefaultClientId(id.value)
+        events.emit(DefaultsEvent.Client)
+    }
 }

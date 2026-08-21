@@ -137,6 +137,10 @@ class NavigationManager(
         navigate(DefaultsSettings.Template)
     }
 
+    override fun navigateToSelectDefaultClient() {
+        navigate(DefaultsSettings.Client)
+    }
+
     override fun navigateToPinnedCategories() {
         navigate(HomeSettings.PinnedCategories)
     }

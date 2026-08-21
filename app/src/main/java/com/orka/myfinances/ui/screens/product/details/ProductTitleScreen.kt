@@ -2,15 +2,13 @@ package com.orka.myfinances.ui.screens.product.details
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -21,13 +19,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orka.myfinances.R
 import com.orka.myfinances.fixtures.resources.models.product.productTitle1
@@ -40,6 +36,7 @@ import com.orka.myfinances.lib.ui.components.spacer.HorizontalSpacer
 import com.orka.myfinances.lib.ui.components.spacer.LazyFooterSpacer
 import com.orka.myfinances.lib.ui.components.spacer.VerticalSpacer
 import com.orka.myfinances.lib.ui.extensions.scaffoldPadding
+import com.orka.myfinances.lib.ui.preview.DefaultPreview
 import com.orka.myfinances.lib.ui.screens.FailureScreen
 import com.orka.myfinances.lib.ui.screens.LoadingScreen
 import com.orka.myfinances.lib.ui.state.State
@@ -96,42 +93,51 @@ fun ProductTitleScreen(
 
             is State.Success<*> -> {
                 val productTitle = state.value as ProductTitleScreenModel
-                LazyColumn(
-                    modifier = m,
-                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
-                ) {
-                    item { HeroImage() }
+                LazyColumn(modifier = m) {
+                    item {
+                        HeroImage(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(16 / 12f)
+                        )
+                    }
 
                     item {
                         VerticalSpacer(16)
-                        TitleSection(productTitle = productTitle)
+                        TitleSection(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            productTitle = productTitle
+                        )
                     }
 
                     item {
                         VerticalSpacer(8)
-                        PricingSection(productTitle = productTitle)
-                    }
-
-                    item {
-                        VerticalSpacer(8)
-                        HorizontalDivider()
+                        PricingSection(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            productTitle = productTitle
+                        )
                     }
 
                     if (productTitle.properties?.isNotEmpty() ?: false) {
                         item {
                             VerticalSpacer(16)
                             DividedList(
+                                modifier = Modifier.padding(horizontal = 8.dp),
                                 title = stringResource(R.string.specifications),
                                 items = productTitle.properties,
                                 itemTitle = { it.name },
                                 itemSupportingText = { it.value }
                             )
                         }
-                        if (!productTitle.description.isNullOrBlank()) {
-                            item {
-                                VerticalSpacer(8)
-                                DescriptionCard(description = productTitle.description)
-                            }
+                    }
+
+                    if (!productTitle.description.isNullOrBlank()) {
+                        item {
+                            VerticalSpacer(8)
+                            DescriptionCard(
+                                modifier = Modifier.padding(horizontal = 8.dp),
+                                description = productTitle.description
+                            )
                         }
                     }
 
@@ -140,6 +146,7 @@ fun ProductTitleScreen(
 
                 if (dialogVisible.value) {
                     val price = productTitle.salePrice
+
                     ReceiveDialog(
                         dismissRequest = { dialogVisible.value = false },
                         price = price,
@@ -161,12 +168,9 @@ fun ProductTitleScreen(
 @Composable
 private fun HeroImage(modifier: Modifier = Modifier) {
     Image(
+        modifier = modifier,
         painter = painterResource(R.drawable.headphone),
         contentDescription = null,
-        modifier = modifier
-            .fillMaxWidth()
-            .aspectRatio(16 / 12f)
-            .clip(RoundedCornerShape(16.dp)),
         contentScale = ContentScale.Crop
     )
 }
@@ -222,7 +226,7 @@ private fun PricingSection(
     }
 }
 
-@Preview
+@DefaultPreview
 @Composable
 private fun ProductTitleScreenPreview() {
     MyFinancesTheme {

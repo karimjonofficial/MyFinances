@@ -4,6 +4,7 @@ interface SettingsScreenInteractor {
     fun refresh()
     fun toSelectDefaultCategory()
     fun toSelectDefaultTemplate()
+    fun toSelectDefaultClient()
     fun toPinnedCategories()
     fun toPrinters()
     fun toDefaultPrinter()
@@ -13,6 +14,7 @@ interface SettingsScreenInteractor {
             override fun refresh() {}
             override fun toSelectDefaultCategory() {}
             override fun toSelectDefaultTemplate() {}
+            override fun toSelectDefaultClient() {}
             override fun toPinnedCategories() {}
             override fun toPrinters() {}
             override fun toDefaultPrinter() {}

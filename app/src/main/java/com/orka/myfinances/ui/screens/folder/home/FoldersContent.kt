@@ -1,8 +1,6 @@
 package com.orka.myfinances.ui.screens.folder.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,12 +8,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.carousel.rememberCarouselState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -60,28 +57,21 @@ fun FoldersContent(
         ) {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 item {
-                    val carouselState = rememberCarouselState { 3 }
-
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                brush = Brush.radialGradient(
-                                    colors = listOf(
-                                        MaterialTheme.colorScheme.secondary.copy(alpha = .25f),
-                                        MaterialTheme.colorScheme.secondary.copy(alpha = .05f)
-                                    )
-                                )
-                            ),
-                    ) {
-                        VerticalSpacer(4)
-                        FoldersContentCarousel(
-                            modifier = Modifier.height(280.dp),
-                            state = carouselState,
-                            itemCount = 3
+                    val images = remember {
+                        listOf(
+                            R.drawable.furniture,
+                            R.drawable.headphone,
+                            R.drawable.sneakers,
+                            R.drawable.t_shirt
                         )
-                        VerticalSpacer(8)
                     }
+                    val pagerState = rememberPagerState { images.size }
+
+                    FoldersContentCarousel(
+                        modifier = Modifier.height(300.dp),
+                        state = pagerState,
+                        images = images
+                    )
                 }
 
                 item {
@@ -111,8 +101,9 @@ fun FoldersContent(
                     }
                 }
 
+
                 item {
-                    VerticalSpacer(24)
+                    VerticalSpacer(16)
                     FoldersList(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         items = model.folders,

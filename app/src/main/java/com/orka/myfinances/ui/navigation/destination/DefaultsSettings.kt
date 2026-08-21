@@ -4,4 +4,5 @@ sealed interface DefaultsSettings : SettingsDestinations {
     data object Category : DefaultsSettings
     data object Printer : DefaultsSettings
     data object Template : DefaultsSettings
+    data object Client : DefaultsSettings
 }

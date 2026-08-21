@@ -54,6 +54,22 @@ fun LazyListScope.DefaultsGroup(
     item {
         SettingsButton(
             modifier = Modifier.fillMaxWidth(),
+            title = stringResource(R.string.default_client),
+            topClipped = false,
+            bottomClipped = false,
+            value = str(state.value?.defaultClient, R.string.default_client_is_not_set_yet),
+            leadingIcon = painterResource(R.drawable.person),
+            error = !(loading || state.value?.defaultClient != null),
+            enabled = state is State.Success,
+            onClick = interactor::toSelectDefaultClient,
+        )
+    }
+
+    item { VerticalSpacer(2) }
+
+    item {
+        SettingsButton(
+            modifier = Modifier.fillMaxWidth(),
             title = stringResource(R.string.default_printer),
             topClipped = false,
             bottomClipped = true,

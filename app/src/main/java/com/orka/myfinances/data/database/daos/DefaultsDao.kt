@@ -46,6 +46,16 @@ interface DefaultsDao {
     @Query("UPDATE defaults SET value = :id WHERE name = 'template'")
     suspend fun setDefaultTemplateId(id: Int?)
 
+    //Client
+    @Query("SELECT value FROM defaults where name = 'client'")
+    suspend fun getDefaultClientId(): Int?
+
+    @Query("INSERT INTO defaults (name, value) VALUES ('client', :id)")
+    suspend fun insertDefaultClientId(id: Int)
+
+    @Query("UPDATE defaults SET value = :id WHERE name = 'client'")
+    suspend fun setDefaultClientId(id: Int?)
+
     //Main
     @Query("DELETE FROM defaults")
     suspend fun clear()

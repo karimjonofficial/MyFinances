@@ -15,7 +15,7 @@ import com.orka.myfinances.lib.ui.state.State
 import com.orka.myfinances.ui.models.item.TemplateItemModel
 
 @Composable
-fun DefaultTemplate(
+fun DefaultTemplateScreen(
     modifier: Modifier = Modifier,
     state: State<ChunkUiModel<TemplateItemModel>>,
     selectedState: State<Id?>,

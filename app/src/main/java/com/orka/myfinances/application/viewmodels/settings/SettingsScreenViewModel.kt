@@ -1,6 +1,7 @@
 package com.orka.myfinances.application.viewmodels.settings
 
 import androidx.lifecycle.viewModelScope
+import com.orka.myfinances.data.dtos.client.ClientDto
 import com.orka.myfinances.data.dtos.folder.FolderDto
 import com.orka.myfinances.data.dtos.template.TemplateDto
 import com.orka.myfinances.data.repositories.defaults.DefaultsEvent
@@ -27,6 +28,7 @@ class SettingsScreenViewModel(
     private val printerStatus: StateFlow<PrinterStatus>,
     private val get: GetById<FolderDto>,
     private val getTemplate: GetById<TemplateDto>,
+    private val getClient: GetById<ClientDto>,
     private val navigator: Navigator,
     logger: Logger
 ) : RefreshableBaseViewModel<SettingsScreenModel>(
@@ -37,6 +39,9 @@ class SettingsScreenViewModel(
         val defaultTemplateId = defaultsRepository.getDefaultTemplateId()
         val defaultTemplate = if (defaultTemplateId != null) getTemplate.getById(defaultTemplateId)?.name else null
 
+        val defaultClientId = defaultsRepository.getDefaultClientId()
+        val defaultClient = if (defaultClientId != null) getClient.getById(defaultClientId)?.let { "${it.firstName} ${it.lastName ?: ""}".trim() } else null
+
         val status = printerStatus.value
         val printer = if (status is PrinterStatus.Connected) status.printer.name else null
         val defaultPrinterId = defaultsRepository.getDefaultPrinter()
@@ -46,6 +51,7 @@ class SettingsScreenViewModel(
             value = SettingsScreenModel(
                 defaultCategory = defaultCategory,
                 defaultTemplate = defaultTemplate,
+                defaultClient = defaultClient,
                 defaultPrinter = defaultPrinter,
                 pairedPrinter = printer
             )
@@ -59,7 +65,7 @@ class SettingsScreenViewModel(
         initialize()
         defaultsFlow.onEach {
             when (it) {
-                DefaultsEvent.Printer, DefaultsEvent.Category, DefaultsEvent.Template -> initialize()
+                DefaultsEvent.Printer, DefaultsEvent.Category, DefaultsEvent.Template, DefaultsEvent.Client -> initialize()
             }
         }.launchIn(viewModelScope)
         printerStatus.onEach { initialize() }.launchIn(viewModelScope)
@@ -74,6 +80,12 @@ class SettingsScreenViewModel(
     override fun toSelectDefaultTemplate() {
         launch {
             navigator.navigateToSelectDefaultTemplate()
+        }
+    }
+
+    override fun toSelectDefaultClient() {
+        launch {
+            navigator.navigateToSelectDefaultClient()
         }
     }
 

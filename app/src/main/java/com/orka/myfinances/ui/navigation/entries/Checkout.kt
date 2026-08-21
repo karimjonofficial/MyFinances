@@ -49,8 +49,7 @@ fun checkoutEntry(
         printerStatus = printerStatus.value,
         selectedClient = selectedClient.value,
         interactor = viewModel,
-        onOpenClients = { sheetVisible.value = true },
-        onOpenAddClient = { dialogVisible.value = true }
+        onOpenClients = { sheetVisible.value = true }
     )
 
     if (dialogVisible.value) {

@@ -29,6 +29,7 @@ interface Navigator {
     fun navigateToReceive(id: Id)
     fun navigateToSelectDefaultCategory()
     fun navigateToSelectDefaultTemplate()
+    fun navigateToSelectDefaultClient()
     fun navigateToPinnedCategories()
     fun navigateToPrinters()
     fun navigateToDefaultPrinter()

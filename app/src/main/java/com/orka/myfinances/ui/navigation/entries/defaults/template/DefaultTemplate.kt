@@ -9,7 +9,7 @@ import com.orka.myfinances.factories.Factory
 import com.orka.myfinances.lib.ui.entry.entry
 import com.orka.myfinances.ui.navigation.destination.DefaultsSettings
 import com.orka.myfinances.ui.navigation.destination.Destination
-import com.orka.myfinances.ui.screens.settings.defaults.template.DefaultTemplate
+import com.orka.myfinances.ui.screens.settings.defaults.template.DefaultTemplateScreen
 
 fun selectDefaultTemplateEntry(
     modifier: Modifier,
@@ -29,7 +29,7 @@ fun selectDefaultTemplateEntry(
     val templatesState = templateItemsViewModel.uiState.collectAsState()
     val selectedState = defaultTemplateViewModel.uiState.collectAsState()
 
-    DefaultTemplate(
+    DefaultTemplateScreen(
         modifier = modifier,
         state = templatesState.value,
         selectedState = selectedState.value,

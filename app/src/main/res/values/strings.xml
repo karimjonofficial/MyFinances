@@ -177,6 +177,8 @@
     <string name="default_category_is_not_set_yet">Default category is not set yet</string>
     <string name="default_template">Default Template</string>
     <string name="default_template_is_not_set_yet">Default template is not set yet</string>
+    <string name="default_client">Default Client</string>
+    <string name="default_client_is_not_set_yet">Default client is not set yet</string>
     <string name="fill_the_lines_below_to_add_a_product">Fill the lines below to add a product</string>
     <string name="pinned_categories">Pinned Categories</string>
     <string name="could_not_add">Could not add</string>
@@ -218,4 +220,14 @@
     <string name="connect">Connect</string>
     <string name="default_printer">Default printer</string>
     <string name="branches">Branches</string>
+    <string name="expand">Expand</string>
+    <string name="collapse">Collapse</string>
+    <string name="transaction">Transaction</string>
+    <string name="payment">Payment</string>
+    <string name="paid">Paid</string>
+    <string name="debt">Debt</string>
+    <string name="delivery_date">Delivery date</string>
+    <string name="original_price">Original price</string>
+    <string name="sell_on_debt">Sell on debt</string>
+    <string name="create_order">Create order</string>
 </resources>
